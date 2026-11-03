@@ -1,0 +1,477 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-5-cuoc-dua-refresh",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-5-cuoc-dua-refresh"
+  },
+  "exercises": [
+    {
+      "title": "5.5-1 — The refresh race: read the real run",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.5 (real run):<pre>grace window = 10 s (LabFlow ID default):\n  tab A → new token lfid_rt_n7li…\n  tab B → new token lfid_rt_n7li… (raced=true)\n  same token? true → both tabs stay signed in\n\ngrace window = 0 (naive rotation — the false positive):\n  tab A → new token lfid_rt_2EKL…\n  tab B → REUSE_DETECTED ← the real user just got logged out\n\nrotation throughput (memory store, macOS arm64): 150,730 rotations/s (0.007 ms each)</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.5 (chạy thật):<pre>grace window = 10 s (LabFlow ID default):\n  tab A → new token lfid_rt_n7li…\n  tab B → new token lfid_rt_n7li… (raced=true)\n  same token? true → both tabs stay signed in\n\ngrace window = 0 (naive rotation — the false positive):\n  tab A → new token lfid_rt_2EKL…\n  tab B → REUSE_DETECTED ← the real user just got logged out\n\nrotation throughput (memory store, macOS arm64): 150,730 rotations/s (0.007 ms each)</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The grace window is the whole difference.|||Cửa sổ ân hạn là toàn bộ khác biệt.",
+        "A race is milliseconds; a replay is much later.|||Một cuộc đua là mili giây; một lần phát lại muộn hơn nhiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-1 — The refresh race: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. With the 10-second grace window, two tabs refresh at once. What happens?Với cửa sổ ân hạn 10 giây, hai tab refresh cùng lúc. Chuyện gì xảy ra?\n2. With the grace window set to zero (naive rotation), the same race gives what?Với cửa sổ ân hạn đặt bằng không (xoay vòng ngây thơ), cùng cuộc đua cho gì?\n3. Why is a false positive here so damaging?Vì sao một cảnh báo giả ở đây gây hại đến thế?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-1 — The refresh race: read the real run — answer key\n\n1. With the 10-second grace window, two tabs refresh at once. What happens?Với cửa sổ ân hạn 10 giây, hai tab refresh cùng lúc. Chuyện gì xảy ra?\n   Answer: b) Both tabs get the same new token (the second from the grace window) and stay signed in\n   Within the grace window, a second use of the just-rotated token returns the first request’s new child, so a race is not mistaken for theft (5.5).VI: Trong cửa sổ ân hạn, một lần dùng thứ hai của token vừa xoay trả về cái con của request đầu, nên một cuộc đua không bị nhầm là trộm (5.5).\n\n2. With the grace window set to zero (naive rotation), the same race gives what?Với cửa sổ ân hạn đặt bằng không (xoay vòng ngây thơ), cùng cuộc đua cho gì?\n   Answer: c) REUSE_DETECTED — the real user is logged out (a false positive)\n   Without a grace window, the second request looks exactly like reuse, so the family is revoked and an honest user is logged out (5.5).VI: Không có cửa sổ ân hạn, request thứ hai trông đúng như tái dùng, nên họ bị thu hồi và một người ngay thẳng bị đăng xuất (5.5).\n\n3. Why is a false positive here so damaging?Vì sao một cảnh báo giả ở đây gây hại đến thế?\n   Answer: a) A control that logs real users out gets turned off — losing the protection\n   A detector that fires on normal use (two tabs) gets disabled by the team, losing reuse detection entirely — so the false positive removes the feature (5.5).VI: Một bộ phát hiện nổ khi dùng bình thường (hai tab) bị đội tắt, mất hẳn phát hiện tái dùng — nên cảnh báo giả gỡ mất tính năng (5.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Both tabs get the same new token (the second from the grace window) and stay signed in</p><p>Within the grace window, a second use of the just-rotated token returns the first request’s new child, so a race is not mistaken for theft (5.5).</p><p><i>VI: Trong cửa sổ ân hạn, một lần dùng thứ hai của token vừa xoay trả về cái con của request đầu, nên một cuộc đua không bị nhầm là trộm (5.5).</i></p></li><li><p><b>c)</b> REUSE_DETECTED — the real user is logged out (a false positive)</p><p>Without a grace window, the second request looks exactly like reuse, so the family is revoked and an honest user is logged out (5.5).</p><p><i>VI: Không có cửa sổ ân hạn, request thứ hai trông đúng như tái dùng, nên họ bị thu hồi và một người ngay thẳng bị đăng xuất (5.5).</i></p></li><li><p><b>a)</b> A control that logs real users out gets turned off — losing the protection</p><p>A detector that fires on normal use (two tabs) gets disabled by the team, losing reuse detection entirely — so the false positive removes the feature (5.5).</p><p><i>VI: Một bộ phát hiện nổ khi dùng bình thường (hai tab) bị đội tắt, mất hẳn phát hiện tái dùng — nên cảnh báo giả gỡ mất tính năng (5.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>With the 10-second grace window, two tabs refresh at once. What happens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với cửa sổ ân hạn 10 giây, hai tab refresh cùng lúc. Chuyện gì xảy ra?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The second request is rejected as expired"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Both tabs get the same new token (the second from the grace window) and stay signed in"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The second tab triggers REUSE_DETECTED"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both tabs get different tokens and the family is revoked"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Within the grace window, a second use of the just-rotated token returns the first request’s new child, so a race is not mistaken for theft (5.5).</p><p><i>VI: Trong cửa sổ ân hạn, một lần dùng thứ hai của token vừa xoay trả về cái con của request đầu, nên một cuộc đua không bị nhầm là trộm (5.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>With the grace window set to zero (naive rotation), the same race gives what?</p><p style=\"opacity:.75;font-size:.92em\"><i>Với cửa sổ ân hạn đặt bằng không (xoay vòng ngây thơ), cùng cuộc đua cho gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The same token to both tabs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "EXPIRED for the second tab"
+              },
+              {
+                "ma": "c",
+                "noiDung": "REUSE_DETECTED — the real user is logged out (a false positive)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing changes — grace does not matter"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Without a grace window, the second request looks exactly like reuse, so the family is revoked and an honest user is logged out (5.5).</p><p><i>VI: Không có cửa sổ ân hạn, request thứ hai trông đúng như tái dùng, nên họ bị thu hồi và một người ngay thẳng bị đăng xuất (5.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a false positive here so damaging?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một cảnh báo giả ở đây gây hại đến thế?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A control that logs real users out gets turned off — losing the protection"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It gradually fills the database with revoked refresh tokens"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It noticeably slows down every single request to the server"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It only annoys users a little, with no real security cost"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A detector that fires on normal use (two tabs) gets disabled by the team, losing reuse detection entirely — so the false positive removes the feature (5.5).</p><p><i>VI: Một bộ phát hiện nổ khi dùng bình thường (hai tab) bị đội tắt, mất hẳn phát hiện tái dùng — nên cảnh báo giả gỡ mất tính năng (5.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Setting the grace window to zero.|||Đặt cửa sổ ân hạn bằng không."
+        },
+        {
+          "loi": "Making the grace window minutes long.|||Làm cửa sổ ân hạn dài vài phút."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "refresh race",
+          "vi": "cuộc đua refresh"
+        },
+        {
+          "en": "false positive",
+          "vi": "cảnh báo giả"
+        }
+      ]
+    },
+    {
+      "title": "5.5-2 — Write raceOutcome(graceMs, gapMs): does the second tab stay in?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Two tabs refresh with the same cookie; <code>gapMs</code> is how far behind the second request is. With a grace window of <code>graceMs</code>, return <code>'BOTH_STAY_IN'</code> if the second arrives within the window (<code>gapMs &lt;= graceMs</code> — it gets the first’s new token), otherwise <code>'REUSE_FLAGGED'</code> (treated as theft, the family is revoked). With <code>graceMs = 0</code> any race is flagged.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hai tab refresh với cùng cookie; <code>gapMs</code> là request thứ hai đến sau bao xa. Với cửa sổ ân hạn <code>graceMs</code>, trả <code>'BOTH_STAY_IN'</code> nếu cái thứ hai đến trong cửa sổ (<code>gapMs &lt;= graceMs</code> — nó nhận token mới của cái đầu), còn lại <code>'REUSE_FLAGGED'</code> (coi là trộm, họ bị thu hồi). Với <code>graceMs = 0</code> mọi cuộc đua bị báo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "raceOutcome(10000, 50)",
+          "output": "\"BOTH_STAY_IN\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare gapMs with graceMs.|||So gapMs với graceMs.",
+        "graceMs = 0 ⇒ every race is flagged.|||graceMs = 0 ⇒ mọi cuộc đua bị báo."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'BOTH_STAY_IN' | 'REUSE_FLAGGED' */\nfunction raceOutcome(graceMs, gapMs) {\n  // Write your solution here\n  return 'BOTH_STAY_IN';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction raceOutcome(graceMs, gapMs) {\n  return gapMs <= graceMs ? 'BOTH_STAY_IN' : 'REUSE_FLAGGED';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A real race is milliseconds, so a short window keeps both tabs signed in; set the window to zero and the same race is a false positive that logs the user out (5.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Một cuộc đua thật là mili giây, nên một cửa sổ ngắn giữ cả hai tab đăng nhập; đặt cửa sổ bằng không và cùng cuộc đua là một cảnh báo giả đăng xuất người dùng (5.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Grace 10 s, 50 ms race",
+              "vi": "Grace 10 s, đua 50 ms"
+            },
+            "goi": "raceOutcome(10000, 50)",
+            "mongDoi": "BOTH_STAY_IN"
+          },
+          {
+            "moTa": {
+              "en": "No grace — false positive",
+              "vi": "Không grace — cảnh báo giả"
+            },
+            "goi": "raceOutcome(0, 50)",
+            "mongDoi": "REUSE_FLAGGED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Exactly at the window",
+              "vi": "Đúng biên cửa sổ"
+            },
+            "goi": "raceOutcome(10000, 10000)",
+            "mongDoi": "BOTH_STAY_IN",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "11 s later — a replay",
+              "vi": "Sau 11 s — một lần phát lại"
+            },
+            "goi": "raceOutcome(10000, 11000)",
+            "mongDoi": "REUSE_FLAGGED",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using < instead of <= at the boundary.|||Dùng < thay vì <= ở biên."
+        },
+        {
+          "loi": "Returning BOTH_STAY_IN when graceMs is 0.|||Trả BOTH_STAY_IN khi graceMs là 0."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "grace window",
+          "vi": "cửa sổ ân hạn"
+        }
+      ]
+    },
+    {
+      "title": "5.5-3 — The race timeline",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Put the grace-window race in order (what happens, first to last, in a handled race).</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp cuộc đua cửa sổ ân hạn theo thứ tự (chuyện gì xảy ra, đầu tới cuối, trong một cuộc đua được xử lý).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The first request caches the child for the window.|||Request đầu cache cái con cho cửa sổ.",
+        "The second request reads the cache.|||Request thứ hai đọc cache."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-3 — The race timeline\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-3 — The race timeline — answer key\n\n1. First to lastTrước tới sau\n   Answer: m1) Tab A refreshes first: it rotates the token, marks it used, and caches the new child  →  m4) Tab B arrives a moment later with the same, now-used cookie  →  m3) Within the grace window, the server returns the cached child to tab B  →  m2) Both tabs now hold the same new token and stay signed in\n   The first request caches its result; the second, within the window, gets the same new token — so a race ends with both tabs in, not a false theft alarm (5.5).VI: Request đầu cache kết quả của nó; cái thứ hai, trong cửa sổ, nhận cùng token mới — nên một cuộc đua kết thúc với cả hai tab đăng nhập, không phải một báo động trộm giả (5.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The first request caches its result; the second, within the window, gets the same new token — so a race ends with both tabs in, not a false theft alarm (5.5).</p><p><i>VI: Request đầu cache kết quả của nó; cái thứ hai, trong cửa sổ, nhận cùng token mới — nên một cuộc đua kết thúc với cả hai tab đăng nhập, không phải một báo động trộm giả (5.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Tab A refreshes first: it rotates the token, marks it used, and caches the new child"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Both tabs now hold the same new token and stay signed in"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Within the grace window, the server returns the cached child to tab B"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Tab B arrives a moment later with the same, now-used cookie"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m4",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>The first request caches its result; the second, within the window, gets the same new token — so a race ends with both tabs in, not a false theft alarm (5.5).</p><p><i>VI: Request đầu cache kết quả của nó; cái thứ hai, trong cửa sổ, nhận cùng token mới — nên một cuộc đua kết thúc với cả hai tab đăng nhập, không phải một báo động trộm giả (5.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the second request mints a second token.|||Tưởng request thứ hai đúc một token thứ hai."
+        },
+        {
+          "loi": "Thinking the race revokes the family.|||Tưởng cuộc đua thu hồi họ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "grace window",
+          "vi": "cửa sổ ân hạn"
+        }
+      ]
+    },
+    {
+      "title": "5.5-4 — Grace vs no grace",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each second request with the outcome under a 10-second grace window vs none.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi request thứ hai với kết quả dưới cửa sổ ân hạn 10 giây đối lại không có.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Within grace is a race; without grace it is flagged.|||Trong ân hạn là đua; không ân hạn thì bị báo.",
+        "A late replay is theft under any window.|||Một lần phát lại muộn là trộm dưới mọi cửa sổ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-4 — Grace vs no grace\n\nAnswer in the answer panel (no code needed).\n\n1. Case → outcomeTrường hợp → kết quả\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.5-4 — Grace vs no grace — answer key\n\n1. Case → outcomeTrường hợp → kết quả\n   - r1.q: both tabs get the same token, stay in\n   - r2.q: REUSE_DETECTED — user logged out\n   - r3.q: REUSE_DETECTED (both)\n   The short grace window turns a race into one shared token; with no window the same race is a false positive; a genuine replay is theft either way (5.5).VI: Cửa sổ ân hạn ngắn biến một cuộc đua thành một token chung; không cửa sổ thì cùng cuộc đua là một cảnh báo giả; một lần phát lại thật là trộm dù sao (5.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The short grace window turns a race into one shared token; with no window the same race is a false positive; a genuine replay is theft either way (5.5).</p><p><i>VI: Cửa sổ ân hạn ngắn biến một cuộc đua thành một token chung; không cửa sổ thì cùng cuộc đua là một cảnh báo giả; một lần phát lại thật là trộm dù sao (5.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Case → outcome</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường hợp → kết quả</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Second request"
+              },
+              {
+                "ma": "q",
+                "ten": "Outcome",
+                "luaChon": [
+                  "both tabs get the same token, stay in",
+                  "REUSE_DETECTED — user logged out",
+                  "REUSE_DETECTED (both)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "50 ms after the first, grace 10 s (a race)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "50 ms after the first, grace 0 (naive)"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "11 s after the first (a replay)"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "both tabs get the same token, stay in",
+              "r2.q": "REUSE_DETECTED — user logged out",
+              "r3.q": "REUSE_DETECTED (both)"
+            },
+            "giaiThich": "<p>The short grace window turns a race into one shared token; with no window the same race is a false positive; a genuine replay is theft either way (5.5).</p><p><i>VI: Cửa sổ ân hạn ngắn biến một cuộc đua thành một token chung; không cửa sổ thì cùng cuộc đua là một cảnh báo giả; một lần phát lại thật là trộm dù sao (5.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking grace 0 handles the race.|||Tưởng grace 0 xử lý được cuộc đua."
+        },
+        {
+          "loi": "Thinking an 11 s replay is a race.|||Tưởng một lần phát lại 11 s là một cuộc đua."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

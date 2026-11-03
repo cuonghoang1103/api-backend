@@ -156,7 +156,7 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Upload** (chủ ý chạm R2 thật): `node --env-file=.env scripts/upload-academy-slides.mjs --dir <SCRATCH>/final --prefix AUTH/v1 --decks <deck,…>`
   ⇒ `images/academy/AUTH/v1/<deck>/NNN.webp`. **KHÔNG GET URL media.cuongthai.com trước khi đẩy.** Dựng lại deck đã đẩy ⇒ `AUTH/v2`
   + ghi `VER` trong `_slides.mjs`. Hiện (01/11): 11 deck Mục 0 + Ch1 ở v1 — 127 ảnh (00-8 11, 00-9 11, 00-1 12, 00-2 12, 00-3 13,
-  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9); Ch3 6 deck ở v1 — 66 ảnh (03-1 11, 03-2 12, 03-3 11, 03-4 12, 03-5 11, lab-3 9); Ch4 6 deck ở v1 — 67 ảnh (04-1 11, 04-2 11, 04-3 12, 04-4 12, 04-5 12, lab-4 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
+  01-1 11, 01-2 11, 01-3 13, 01-4 12, 01-5 12, lab-1 9); Ch2 6 deck ở v1 — 68 ảnh (02-1 11, 02-2 12, 02-3 12, 02-4 12, 02-5 12, lab-2 9); Ch3 6 deck ở v1 — 66 ảnh (03-1 11, 03-2 12, 03-3 11, 03-4 12, 03-5 11, lab-3 9); Ch4 6 deck ở v1 — 67 ảnh (04-1 11, 04-2 11, 04-3 12, 04-4 12, 04-5 12, lab-4 9); Ch5 6 deck ở v1 — 64 ảnh (05-1 11, 05-2 11, 05-3 11, 05-4 11, 05-5 11, lab-5 9). Deck import thẳng `OUT`/`CODE` từ `sNN/_ma.mjs` (không chép tay output) ⇒ chụp lại
   output là phải render + đẩy lại (lên v2).
 - Không sửa `_render-slides.mjs`, `_pg-chung.mjs`, `_tst-chung.mjs`, `_api-chung.mjs`.
 
@@ -234,6 +234,9 @@ node scripts/tst/sinh-ma.mjs $S/map1.json                   # ⇒ authentication
 - **Chương 4 (03/11/2026):** +6 module, 23 đề ⇒ track 29 module / 112 đề, lời giải 576/576, nội dung 0 lỗi, gitleaks sạch. Đề viết hàm thuần JS
   (realm vm không Buffer/crypto): `signingInput`, `looksLikeJwt`, `algToUse` (thuật toán từ KHOÁ), `checkTime` (exp/nbf + skew), `checkClaims` (7 claim),
   `findVerifyKey` (kid trong JWKS), `publicJwkOnly` (bỏ trường d), `storageRisk`; lab: `chooseAlg` · `verifyClaims` · `verifyToken` (ghép cả bộ, trừ phần crypto).
+- **Chương 5 (03/11/2026):** +6 module, 23 đề ⇒ track 35 module / 135 đề, lời giải 658/658, nội dung 0 lỗi, gitleaks sạch. Đề viết hàm thuần JS:
+  `tokenPlan`, `rotateState` (máy trạng thái xoay), `reuseOrRace` (đua/trộm theo cửa sổ ân hạn), `endSessionScope`, `groupDevices` (GROUP BY family thuần JS),
+  `canRevokeDevice` (chống IDOR), `raceOutcome`; lab: `rotateState` · `rotateAction` (cả quyết định rotate) · `groupDevices`.
 
 ## 11. Kế hoạch toàn khoá (giữ slug; mỗi chương + Lab + quiz 10 câu)
 
@@ -325,4 +328,15 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   ký/kiểm per giây HS256 ~790k/~780k · EdDSA ~34k/~11,9k · ES256 ~48,5k/~17,6k · RS256 ~1,76k/~60k; alg:none + nhầm lẫn HS/RS ⇒ ALG_MISMATCH;
   exp==now hết hạn ở skew 0, qua ở skew 60 khi trễ 30 s; JWKS OKP/Ed25519 không trường d; XSS đọc localStorage + cookie thường, không đọc HttpOnly.
   Môi trường soạn: container `auth2-pg` (postgres:17, cổng 4832) cho `POST /token`; demo4 phần lớn không cần CSDL.
-- **TẠM DỪNG sau Ch4 ngày 03/11 (theo yêu cầu chủ kênh); tiếp theo là Ch5** (làm mới, xoay vòng, thu hồi, §11) — chưa bắt đầu.
+- **03/11/2026 — Ch5 trọn:** 5 bài + Lab 5 (`auth-5-7-lab-xoay-vong`, máy chấm `scripts/cham-lab-5.mjs` 8 phép, kho trong bộ nhớ +
+  đồng hồ giả — không CSDL) + quiz 10 câu (A3 B2 C2 D3); bài 29–37k ký tự (5.1 36,7k · 5.2 35k · 5.3 ~34k · 5.4 ~33k · 5.5 ~32k · Lab);
+  6 deck 64 slide AUTH/v1 (đã đẩy, 0 lệch tiêu đề giang↔deck — đã sửa cả 4 lệch nhỏ của Ch4); Code Lab +6 module/23 đề (track 35 module/135 đề,
+  lời giải 658/658, nội dung 0 lỗi, gitleaks sạch); liên kết chéo: cặp hợp đồng nodejs 8.2 ↔ Ch5 ĐÃ hai chiều sẵn (thẻ ngược nodejs-8-2→auth-5-2
+  giữ slug) + 3 một chiều "đọc thêm" (nodejs 8.4 ↔ 5.3, api-design 6.2 ↔ 5.4, api-design 8.3 ↔ 5.5); video YouTube 5.1–5.5 đã có + Lab 5 mới
+  (`auth-5-7-lab-xoay-vong`, 70/70 sống); `_labflow-id` = v0.5 (`src/refresh/` rotation+reuse+grace, `sql/003_refresh.sql`, `POST /refresh` +
+  `/me/devices`, `demo5/`, `test/refresh.test.js` ⇒ npm test 32 pass). Số đo chính (macOS arm64, Node 22.23.3, PostgreSQL 17.11): access JWT
+  376 ký tự 15 phút vs refresh opaque `lfid_rt_` 30 ngày (lưu digest SHA-256); xoay vòng theo họ r0→r1→r2, phát lại r0 ⇒ REUSE_DETECTED thu hồi
+  CẢ HỌ (r2 sống cũng REVOKED); năm sự kiện ⇒ 4 REVOKED + 1 EXPIRED; danh sách thiết bị GROUP BY family (thu hồi giới hạn theo chủ, {"revoked":0}
+  khi đoán); cuộc đua: grace 10 s ⇒ hai tab CÙNG token, grace 0 ⇒ REUSE_DETECTED (cảnh báo giả); ~150k lần xoay/s. Chuẩn: RFC 9700 (BCP 240)
+  §2.2.2/§4.14 + OWASP. Môi trường soạn: `auth2-pg` (postgres:17, 4832) cho `POST /refresh`/`/me/devices`; demo thuần lớp không cần CSDL.
+- **TẠM DỪNG sau Ch5 ngày 03/11 (theo yêu cầu chủ kênh); tiếp theo là Ch6** (vòng đời tài khoản: đăng ký, xác minh email, đặt lại mật khẩu, dò tài khoản, §11) — chưa bắt đầu.

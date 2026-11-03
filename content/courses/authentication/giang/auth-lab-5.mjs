@@ -1,0 +1,32 @@
+/** Giảng theo slide — Lab 5 Lớp refresh token của LabFlow ID (deck auth-lab-5, 9 slide). */
+import { walkAuth } from '../_slides.mjs';
+
+export default walkAuth('auth-lab-5', 'LabFlow ID’s refresh-token layer', 'Lớp refresh token của LabFlow ID', [
+  [1, 'LabFlow ID’s refresh-token layer',
+    `<p>You write the layer that rotates refresh tokens, detects reuse as theft, survives the browser race, and lists and revokes devices. A grader drives it with a fake clock through every one of those paths.</p>`,
+    `<p>Bạn viết cái lớp xoay refresh token, phát hiện tái dùng như trộm, sống qua cuộc đua trình duyệt, và liệt kê rồi thu hồi thiết bị. Một máy chấm điều khiển nó bằng đồng hồ giả qua từng đường đó.</p>`],
+  [2, 'Your task — refreshLayer',
+    `<p>Export refreshLayer({ store, now, graceMs, familyTtlMs }) returning issue, rotate, revokeFamily, revokeAll, revokeDevice, listDevices. Store only the token's digest; rotate on every use; a reused token revokes the family.</p>`,
+    `<p>Xuất refreshLayer({ store, now, graceMs, familyTtlMs }) trả về issue, rotate, revokeFamily, revokeAll, revokeDevice, listDevices. Chỉ lưu digest của token; xoay mỗi lần dùng; một token tái dùng thu hồi họ.</p>`],
+  [3, 'The starter',
+    `<p>The starter throws "not implemented". It scores zero: the very first check needs issue and rotate to work, so a layer that does nothing fails from the start.</p>`,
+    `<p>Bản khởi đầu ném "not implemented". Nó được không điểm: phép chấm đầu tiên cần issue và rotate chạy được, nên một lớp không làm gì trượt ngay từ đầu.</p>`],
+  [4, 'Eight checks, ten points, pass is seven',
+    `<p>T1 issue + rotate; T2 store a digest, not the token; T3 reuse revokes the family; T4 the race within grace; T5 reuse after grace is theft; T6 invalid/expired/revoked; T7 one device row per family; T8 revoke one and all.</p>`,
+    `<p>T1 issue + rotate; T2 lưu digest, không phải token; T3 tái dùng thu hồi họ; T4 cuộc đua trong ân hạn; T5 tái dùng sau ân hạn là trộm; T6 invalid/expired/revoked; T7 một dòng thiết bị cho mỗi họ; T8 thu hồi một và tất cả.</p>`],
+  [5, 'A first attempt that scores 3.5',
+    `<p>The naive attempt rotates and hands out new tokens, and even has a devices page. But it never marks a token used, so it cannot tell a rotated token from a stolen one — no reuse detection, no grace.</p>`,
+    `<p>Lần thử ngây thơ xoay và phát token mới, và thậm chí có một trang thiết bị. Nhưng nó không bao giờ đánh dấu token đã dùng, nên không phân biệt được một token đã xoay với một cái bị trộm — không phát hiện tái dùng, không ân hạn.</p>`],
+  [6, 'Where it fails',
+    `<p>No reuse detection (T3), the race gives two different tokens (T4), no theft after grace (T5), a revoked token still refreshes (T6, T8). It passes only the plumbing: issue, store a digest, and the devices query.</p>`,
+    `<p>Không phát hiện tái dùng (T3), cuộc đua cho hai token khác nhau (T4), không trộm sau ân hạn (T5), một token đã thu hồi vẫn refresh (T6, T8). Nó chỉ qua phần ống nước: issue, lưu digest, và query thiết bị.</p>`],
+  [7, 'The reference — src/refresh/layer.js',
+    `<p>The reference is LabFlow ID’s real layer, shown line by line in lessons 5.1, 5.2 and 5.5. It scores ten out of ten: rotation, reuse detection, the grace window, and family revocation.</p>`,
+    `<p>Bản tham khảo là lớp thật của LabFlow ID, hiện từng dòng ở bài 5.1, 5.2 và 5.5. Nó được mười trên mười: xoay vòng, phát hiện tái dùng, cửa sổ ân hạn, và thu hồi họ.</p>`],
+  [8, 'Hints, light to strong',
+    `<p>Mark the presented token used and record its replacement. On a used token, check the grace window before you cry theft. Revoke the whole family on reuse. Group the devices query by family, not by token.</p>`,
+    `<p>Đánh dấu token được trình đã dùng và ghi lại cái thay nó. Trên một token đã dùng, kiểm cửa sổ ân hạn trước khi hô trộm. Thu hồi cả họ khi tái dùng. Gộp query thiết bị theo họ, không theo token.</p>`],
+  [9, 'Checklist before you submit',
+    `<p>Score at least seven out of ten twice in a row; a reused token revokes the family; the race within grace returns one shared token; tokens are stored as digests; and you can explain T3 and T4 in your own words.</p>`,
+    `<p>Đạt ít nhất bảy trên mười hai lần liên tiếp; một token tái dùng thu hồi họ; cuộc đua trong ân hạn trả một token chung; token lưu dạng digest; và bạn giải thích được T3 và T4 bằng lời của mình.</p>`],
+]);

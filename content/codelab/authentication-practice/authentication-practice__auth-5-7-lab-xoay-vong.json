@@ -1,0 +1,376 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-7-lab-xoay-vong",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-7-lab-xoay-vong"
+  },
+  "exercises": [
+    {
+      "title": "Lab 5·1 — rotateState(rec, now): classify a presented token",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Part one of rotate. Return, in order: <code>'INVALID'</code> (rec null); <code>'REVOKED'</code> (<code>rec.revokedAt</code> set); <code>'EXPIRED'</code> (<code>now &gt;= rec.expiresAt</code>); <code>'USED'</code> (<code>rec.usedAt</code> set); otherwise <code>'LIVE'</code>. Times are epoch ms.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nửa đầu của rotate. Trả, theo thứ tự: <code>'INVALID'</code> (rec null); <code>'REVOKED'</code> (có <code>rec.revokedAt</code>); <code>'EXPIRED'</code> (<code>now &gt;= rec.expiresAt</code>); <code>'USED'</code> (có <code>rec.usedAt</code>); còn lại <code>'LIVE'</code>. Thời gian là epoch ms.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+          "output": "\"LIVE\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order: null, revoked, expired, used, live.|||Thứ tự: null, revoked, expired, used, live.",
+        "Revoked and expired BEFORE used.|||Revoked và expired TRƯỚC used."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'INVALID' | 'REVOKED' | 'EXPIRED' | 'USED' | 'LIVE' */\nfunction rotateState(rec, now) {\n  // Write your solution here\n  if (!rec) return 'INVALID';\n  if (rec.usedAt) return 'USED';\n  return 'LIVE';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rotateState(rec, now) {\n  if (!rec) return 'INVALID';\n  if (rec.revokedAt) return 'REVOKED';\n  if (now >= rec.expiresAt) return 'EXPIRED';\n  if (rec.usedAt) return 'USED';\n  return 'LIVE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order is the safety: a dead token is rejected cleanly and never mistaken for the already-used case that triggers reuse detection (5.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự chính là an toàn: một token chết bị từ chối gọn và không bao giờ bị nhầm với trường hợp đã-dùng kích hoạt phát hiện tái dùng (5.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Live",
+              "vi": "Sống"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "LIVE"
+          },
+          {
+            "moTa": {
+              "en": "Used",
+              "vi": "Đã dùng"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696430000,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "USED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked wins",
+              "vi": "Revoked thắng"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696430000,\"revokedAt\":1793696440000}, 1793696460000)",
+            "mongDoi": "REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Expired",
+              "vi": "Hết hạn"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1793696450000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Invalid",
+              "vi": "Lạ"
+            },
+            "goi": "rotateState(null, 1793696460000)",
+            "mongDoi": "INVALID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Checking used before revoked/expired.|||Kiểm used trước revoked/expired."
+        },
+        {
+          "loi": "Using > instead of >= at expiry.|||Dùng > thay vì >= ở hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rotation",
+          "vi": "xoay vòng"
+        }
+      ]
+    },
+    {
+      "title": "Lab 5·2 — rotateAction(rec, now, graceMs): the whole decision",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 16,
+      "points": 30,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The full rotate decision (minus the database writes). Return: <code>'REJECT_INVALID'</code> (rec null); <code>'REJECT_REVOKED'</code>; <code>'REJECT_EXPIRED'</code> (<code>now &gt;= expiresAt</code>); if <code>rec.usedAt</code> is set, <code>'RACE'</code> when <code>now − usedAt &lt;= graceMs</code> else <code>'REVOKE_FAMILY'</code>; otherwise <code>'ROTATE'</code>. This is lessons 5.2 + 5.5 in one function.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Toàn bộ quyết định rotate (trừ việc ghi cơ sở dữ liệu). Trả: <code>'REJECT_INVALID'</code> (rec null); <code>'REJECT_REVOKED'</code>; <code>'REJECT_EXPIRED'</code> (<code>now &gt;= expiresAt</code>); nếu có <code>rec.usedAt</code>, <code>'RACE'</code> khi <code>now − usedAt &lt;= graceMs</code> còn không <code>'REVOKE_FAMILY'</code>; còn lại <code>'ROTATE'</code>. Đây là bài 5.2 + 5.5 trong một hàm.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000, 10000)",
+          "output": "\"ROTATE\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Reject dead tokens first; then the used-token branch.|||Từ chối token chết trước; rồi nhánh token đã dùng.",
+        "A used token within grace is a RACE, else REVOKE_FAMILY.|||Một token đã dùng trong ân hạn là RACE, còn không REVOKE_FAMILY."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'REJECT_INVALID' | 'REJECT_REVOKED' | 'REJECT_EXPIRED' | 'RACE' | 'REVOKE_FAMILY' | 'ROTATE' */\nfunction rotateAction(rec, now, graceMs) {\n  // Write your solution here\n  if (!rec) return 'REJECT_INVALID';\n  if (rec.usedAt) return 'REVOKE_FAMILY';\n  return 'ROTATE';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rotateAction(rec, now, graceMs) {\n  if (!rec) return 'REJECT_INVALID';\n  if (rec.revokedAt) return 'REJECT_REVOKED';\n  if (now >= rec.expiresAt) return 'REJECT_EXPIRED';\n  if (rec.usedAt) return now - rec.usedAt <= graceMs ? 'RACE' : 'REVOKE_FAMILY';\n  return 'ROTATE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reject invalid/revoked/expired cleanly, then split a used token into the legitimate race (within grace) and theft (after it) — the single decision behind LabFlow ID’s rotate (5.2, 5.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Từ chối invalid/revoked/expired gọn, rồi tách một token đã dùng thành cuộc đua hợp lệ (trong ân hạn) và trộm (sau đó) — quyết định duy nhất sau rotate của LabFlow ID (5.2, 5.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Live ⇒ ROTATE",
+              "vi": "Sống ⇒ ROTATE"
+            },
+            "goi": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000, 10000)",
+            "mongDoi": "ROTATE"
+          },
+          {
+            "moTa": {
+              "en": "Used 50 ms ago ⇒ RACE",
+              "vi": "Đã dùng 50 ms trước ⇒ RACE"
+            },
+            "goi": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696460000,\"revokedAt\":null}, 1793696460050, 10000)",
+            "mongDoi": "RACE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Used 11 s ago ⇒ REVOKE_FAMILY",
+              "vi": "Đã dùng 11 s trước ⇒ REVOKE_FAMILY"
+            },
+            "goi": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696460000,\"revokedAt\":null}, 1793696471000, 10000)",
+            "mongDoi": "REVOKE_FAMILY",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked",
+              "vi": "Đã thu hồi"
+            },
+            "goi": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":1793696440000}, 1793696460000, 10000)",
+            "mongDoi": "REJECT_REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Expired",
+              "vi": "Hết hạn"
+            },
+            "goi": "rotateAction({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1793696450000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000, 10000)",
+            "mongDoi": "REJECT_EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Invalid",
+              "vi": "Lạ"
+            },
+            "goi": "rotateAction(null, 1793696460000, 10000)",
+            "mongDoi": "REJECT_INVALID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Treating a used token within grace as reuse (missing the race).|||Coi một token đã dùng trong ân hạn là tái dùng (sót cuộc đua)."
+        },
+        {
+          "loi": "Checking usedAt before revoked/expired.|||Kiểm usedAt trước revoked/expired."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "reuse detection",
+          "vi": "phát hiện tái dùng"
+        },
+        {
+          "en": "grace window",
+          "vi": "cửa sổ ân hạn"
+        }
+      ]
+    },
+    {
+      "title": "Lab 5·3 — groupDevices(rows, now): the devices page",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Build the devices list. Keep only live rows (<code>revokedAt</code> null and <code>expiresAt &gt; now</code>), group by <code>familyId</code>, and return <code>{ familyId, userAgent, tokens }</code> per family (<code>tokens</code> = row count, <code>userAgent</code> = the first row’s), sorted by <code>familyId</code> ascending.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng danh sách thiết bị. Giữ chỉ các dòng sống (<code>revokedAt</code> null và <code>expiresAt &gt; now</code>), gộp theo <code>familyId</code>, và trả <code>{ familyId, userAgent, tokens }</code> cho mỗi họ (<code>tokens</code> = số dòng, <code>userAgent</code> = của dòng đầu), sắp theo <code>familyId</code> tăng dần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_c\",\"userAgent\":\"g\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000}], 1793696460000)",
+          "output": "[{\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"tokens\":2},{\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"tokens\":1}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Skip revoked/expired rows.|||Bỏ các dòng revoked/expired.",
+        "Group into an object, then sort the keys.|||Gộp vào một object, rồi sắp các khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ [{ familyId, userAgent, tokens }] for live families, sorted by familyId */\nfunction groupDevices(rows, now) {\n  // Write your solution here\n  return rows.map(function (r) { return { familyId: r.familyId, userAgent: r.userAgent, tokens: 1 }; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction groupDevices(rows, now) {\n  var fam = {};\n  for (var i = 0; i < rows.length; i++) {\n    var r = rows[i];\n    if (r.revokedAt || r.expiresAt <= now) continue;\n    if (!fam[r.familyId]) fam[r.familyId] = { familyId: r.familyId, userAgent: r.userAgent, tokens: 0 };\n    fam[r.familyId].tokens++;\n  }\n  return Object.keys(fam).sort().map(function (k) { return fam[k]; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A family is one device; grouping rotated tokens into one entry and filtering to live rows is the whole devices page (5.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Một họ là một thiết bị; gộp các token đã xoay thành một mục và lọc còn các dòng sống là cả trang thiết bị (5.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "2 live families (one revoked skipped)",
+              "vi": "2 họ sống (bỏ một đã thu hồi)"
+            },
+            "goi": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_c\",\"userAgent\":\"g\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000}], 1793696460000)",
+            "mongDoi": [
+              {
+                "familyId": "fam_a",
+                "userAgent": "laptop",
+                "tokens": 2
+              },
+              {
+                "familyId": "fam_b",
+                "userAgent": "phone",
+                "tokens": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No tokens",
+              "vi": "Không token"
+            },
+            "goi": "groupDevices([], 1793696460000)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "One device",
+              "vi": "Một thiết bị"
+            },
+            "goi": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_z\",\"userAgent\":\"tablet\",\"expiresAt\":1796288400000,\"revokedAt\":null}], 1793696460000)",
+            "mongDoi": [
+              {
+                "familyId": "fam_z",
+                "userAgent": "tablet",
+                "tokens": 1
+              }
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "lab",
+      "mistakesJson": [
+        {
+          "loi": "Counting revoked/expired rows.|||Đếm các dòng revoked/expired."
+        },
+        {
+          "loi": "One entry per token instead of per family.|||Một mục cho mỗi token thay vì mỗi họ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "family = device",
+          "vi": "họ = thiết bị"
+        }
+      ]
+    }
+  ]
+}

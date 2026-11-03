@@ -23,7 +23,7 @@ export default walkAuth('auth-04-4', 'Keys, kid, JWKS, and rotating without down
   [7, 'Drop the old key when its tokens are gone',
     `<p>Fifteen minutes after the switch, every token the old key signed has expired. Remove it from the JWKS and old tokens become UNKNOWN_KID. The whole rotation never refused a live token.</p>`,
     `<p>Mười lăm phút sau khi chuyển, mọi token khoá cũ đã ký đều hết hạn. Gỡ nó khỏi JWKS và token cũ thành UNKNOWN_KID. Cả cuộc xoay vòng không bao giờ khước từ một token còn sống.</p>`],
-  [8, 'Trap: kid is attacker input',
+  [8, 'Trap: the kid is attacker input too',
     `<p>kid is a hint from the token, so it is attacker-controlled. A verifier that reads keys/&lt;kid&gt; from disk lets the attacker point kid at a file they know and HMAC with its bytes. Keep kid a key in a fixed object.</p>`,
     `<p>kid là một gợi ý từ token, nên do kẻ tấn công kiểm soát. Một bộ xác minh đọc keys/&lt;kid&gt; từ đĩa cho kẻ tấn công trỏ kid vào một tệp họ biết và HMAC bằng byte của nó. Giữ kid là một khoá trong một object cố định.</p>`],
   [9, 'Cross-check with jose',

@@ -69,6 +69,7 @@ export default {
     'auth-5-3-nam-su-kien': { yt: 'No_4N6o8e7k', credit: 'Scalable Scripts — NodeJS Revoke JWT Tokens' },          // NodeJS Revoke JWT Tokens
     'auth-5-4-danh-sach-thiet-bi': { yt: 'pkKn8q5AvsY', credit: 'Sheryians Coding School — Complete Authentication System | JWT, Refresh Token, OTP, Logout All Devices' },   // Complete Authentication System | JWT, Refresh Token, OTP, Logout All Devices
     'auth-5-5-cuoc-dua-refresh': { yt: 'KzJKziZd6dg', credit: 'Thapa Technical — Refreshing Access Token When It Expires (Session + JWT)' },     // Refreshing Access Token When It Expires (Session + JWT)
+    'auth-5-7-lab-xoay-vong': { yt: 'uV3ntFQ9mus', credit: 'ByteDistrict — JWT Token Rotation and Refresh Tokens Securely' }, // 03/11/2026: JWT Token Rotation and Refresh Tokens Securely — Lab 5 (dựng lớp refresh)
 
     /* ── Chương 6 — Vòng đời tài khoản ── */
     'auth-6-1-dang-ky': { yt: '72h76ufOXeE', credit: 'Desi Programmer — Node JS Auth | Reset Password , Verify Account , Send Email and Other Features' },           // Node JS Auth | Reset Password, Verify Account, Send Email and Other Features

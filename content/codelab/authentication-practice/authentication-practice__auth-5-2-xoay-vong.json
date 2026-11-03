@@ -1,0 +1,522 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-2-xoay-vong",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-2-xoay-vong"
+  },
+  "exercises": [
+    {
+      "title": "5.2-1 — Rotation and reuse: read the real run",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.5 (real run):<pre>An signs in → refresh token r0, family fam_Pq4AHiK…\nshe refreshes twice (r0→r1→r2); the family so far:\n  #1 rt_6Wu7Xc… fam fam_Pq4… used=yes revoked=no \n  #2 rt_akJaBW… fam fam_Pq4… used=yes revoked=no \n  #3 rt_-7oD3Y… fam fam_Pq4… used=no  revoked=no \n\na thief copied r0 earlier and now replays it (long after it was rotated):\n  rotate(r0) → REUSE_DETECTED · family fam_Pq4AHiK… revoked\n\nthe family after reuse detection — every token revoked, including the live r2:\n  #1 rt_6Wu7Xc… fam fam_Pq4… used=yes revoked=YES\n  #2 rt_akJaBW… fam fam_Pq4… used=yes revoked=YES\n  #3 rt_-7oD3Y… fam fam_Pq4… used=no  revoked=YES\n\nso An’s next real refresh also fails (she must sign in again):\n  rotate(r2) → REVOKED\n\nThe cost: the real user is signed out too. That is the point — a reuse means one of the two copies is a\nthief, and you cannot tell which, so you end the family and make everyone re-authenticate.</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.5 (chạy thật):<pre>An signs in → refresh token r0, family fam_Pq4AHiK…\nshe refreshes twice (r0→r1→r2); the family so far:\n  #1 rt_6Wu7Xc… fam fam_Pq4… used=yes revoked=no \n  #2 rt_akJaBW… fam fam_Pq4… used=yes revoked=no \n  #3 rt_-7oD3Y… fam fam_Pq4… used=no  revoked=no \n\na thief copied r0 earlier and now replays it (long after it was rotated):\n  rotate(r0) → REUSE_DETECTED · family fam_Pq4AHiK… revoked\n\nthe family after reuse detection — every token revoked, including the live r2:\n  #1 rt_6Wu7Xc… fam fam_Pq4… used=yes revoked=YES\n  #2 rt_akJaBW… fam fam_Pq4… used=yes revoked=YES\n  #3 rt_-7oD3Y… fam fam_Pq4… used=no  revoked=YES\n\nso An’s next real refresh also fails (she must sign in again):\n  rotate(r2) → REVOKED\n\nThe cost: the real user is signed out too. That is the point — a reuse means one of the two copies is a\nthief, and you cannot tell which, so you end the family and make everyone re-authenticate.</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only one token in a family is live at a time.|||Chỉ một token trong một họ sống tại một thời điểm.",
+        "Reuse revokes the family, not just the token.|||Tái dùng thu hồi họ, không chỉ token."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2-1 — Rotation and reuse: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. After An refreshes twice, how many tokens are live, and which?Sau khi An refresh hai lần, bao nhiêu token sống, và cái nào?\n2. The thief replays r0 long after it was rotated. What does the server do?Kẻ cắp phát lại r0 lâu sau khi nó bị xoay. Máy chủ làm gì?\n3. After reuse detection, An’s next real refresh (with r2) returns what?Sau phát hiện tái dùng, lần refresh thật kế của An (với r2) trả về gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2-1 — Rotation and reuse: read the real run — answer key\n\n1. After An refreshes twice, how many tokens are live, and which?Sau khi An refresh hai lần, bao nhiêu token sống, và cái nào?\n   Answer: c) One — r2; r0 and r1 are marked used\n   Rotation marks each used token and mints the next; only the one token whose used flag is empty (r2) is accepted (5.2).VI: Xoay vòng đánh dấu mỗi token đã dùng và đúc cái kế; chỉ một token mà cờ đã-dùng còn trống (r2) được chấp nhận (5.2).\n\n2. The thief replays r0 long after it was rotated. What does the server do?Kẻ cắp phát lại r0 lâu sau khi nó bị xoay. Máy chủ làm gì?\n   Answer: d) Revokes the whole family (REUSE_DETECTED) — including the live r2\n   An already-used token coming back never happens on the honest path, so it is treated as theft and the whole family is revoked (5.2).VI: Một token đã dùng quay lại không bao giờ xảy ra trên đường ngay thẳng, nên bị coi là trộm và cả họ bị thu hồi (5.2).\n\n3. After reuse detection, An’s next real refresh (with r2) returns what?Sau phát hiện tái dùng, lần refresh thật kế của An (với r2) trả về gì?\n   Answer: b) REVOKED — the family was revoked, so even the live token is dead\n   Reuse revokes every token of the family, including r2, so the real user is signed out and must re-authenticate (5.2).VI: Tái dùng thu hồi mọi token của họ, kể cả r2, nên người thật bị đăng xuất và phải xác thực lại (5.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> One — r2; r0 and r1 are marked used</p><p>Rotation marks each used token and mints the next; only the one token whose used flag is empty (r2) is accepted (5.2).</p><p><i>VI: Xoay vòng đánh dấu mỗi token đã dùng và đúc cái kế; chỉ một token mà cờ đã-dùng còn trống (r2) được chấp nhận (5.2).</i></p></li><li><p><b>d)</b> Revokes the whole family (REUSE_DETECTED) — including the live r2</p><p>An already-used token coming back never happens on the honest path, so it is treated as theft and the whole family is revoked (5.2).</p><p><i>VI: Một token đã dùng quay lại không bao giờ xảy ra trên đường ngay thẳng, nên bị coi là trộm và cả họ bị thu hồi (5.2).</i></p></li><li><p><b>b)</b> REVOKED — the family was revoked, so even the live token is dead</p><p>Reuse revokes every token of the family, including r2, so the real user is signed out and must re-authenticate (5.2).</p><p><i>VI: Tái dùng thu hồi mọi token của họ, kể cả r2, nên người thật bị đăng xuất và phải xác thực lại (5.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>After An refreshes twice, how many tokens are live, and which?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi An refresh hai lần, bao nhiêu token sống, và cái nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Three — r0, r1 and r2 all work"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Two — r1 and r2"
+              },
+              {
+                "ma": "c",
+                "noiDung": "One — r2; r0 and r1 are marked used"
+              },
+              {
+                "ma": "d",
+                "noiDung": "None — refreshing expires them all"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Rotation marks each used token and mints the next; only the one token whose used flag is empty (r2) is accepted (5.2).</p><p><i>VI: Xoay vòng đánh dấu mỗi token đã dùng và đúc cái kế; chỉ một token mà cờ đã-dùng còn trống (r2) được chấp nhận (5.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The thief replays r0 long after it was rotated. What does the server do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Kẻ cắp phát lại r0 lâu sau khi nó bị xoay. Máy chủ làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Ignores it because r0 was already used"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Rejects only r0 and lets r2 keep working"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Issues the thief a new token in the family"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Revokes the whole family (REUSE_DETECTED) — including the live r2"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>An already-used token coming back never happens on the honest path, so it is treated as theft and the whole family is revoked (5.2).</p><p><i>VI: Một token đã dùng quay lại không bao giờ xảy ra trên đường ngay thẳng, nên bị coi là trộm và cả họ bị thu hồi (5.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After reuse detection, An’s next real refresh (with r2) returns what?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau phát hiện tái dùng, lần refresh thật kế của An (với r2) trả về gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A new token — r2 was still valid"
+              },
+              {
+                "ma": "b",
+                "noiDung": "REVOKED — the family was revoked, so even the live token is dead"
+              },
+              {
+                "ma": "c",
+                "noiDung": "RACE — it is treated as a browser race"
+              },
+              {
+                "ma": "d",
+                "noiDung": "EXPIRED — r2 timed out"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Reuse revokes every token of the family, including r2, so the real user is signed out and must re-authenticate (5.2).</p><p><i>VI: Tái dùng thu hồi mọi token của họ, kể cả r2, nên người thật bị đăng xuất và phải xác thực lại (5.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking only the replayed token is rejected.|||Tưởng chỉ token bị phát lại bị từ chối."
+        },
+        {
+          "loi": "Thinking the live token survives a reuse.|||Tưởng token sống sót sau một lần tái dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rotation",
+          "vi": "xoay vòng"
+        },
+        {
+          "en": "reuse detection",
+          "vi": "phát hiện tái dùng"
+        }
+      ]
+    },
+    {
+      "title": "5.2-2 — Write rotateState(rec, now): the state of a presented token",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The first half of rotation: classify the row a presented refresh token maps to. Return, in order: <code>'INVALID'</code> if <code>rec</code> is null; <code>'REVOKED'</code> if <code>rec.revokedAt</code> is set; <code>'EXPIRED'</code> if <code>now &gt;= rec.expiresAt</code>; <code>'USED'</code> if <code>rec.usedAt</code> is set (already rotated — a race or theft, decided next); otherwise <code>'LIVE'</code>. <code>now</code>, <code>expiresAt</code>, <code>usedAt</code>, <code>revokedAt</code> are epoch ms (or null).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Nửa đầu của xoay vòng: phân loại dòng mà một refresh token được trình ánh xạ tới. Trả, theo thứ tự: <code>'INVALID'</code> nếu <code>rec</code> null; <code>'REVOKED'</code> nếu có <code>rec.revokedAt</code>; <code>'EXPIRED'</code> nếu <code>now &gt;= rec.expiresAt</code>; <code>'USED'</code> nếu có <code>rec.usedAt</code> (đã xoay — một cuộc đua hoặc trộm, quyết định sau); còn lại <code>'LIVE'</code>. <code>now</code>, <code>expiresAt</code>, <code>usedAt</code>, <code>revokedAt</code> là epoch ms (hoặc null).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+          "output": "\"LIVE\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Order: null, revoked, expired, used, live.|||Thứ tự: null, revoked, expired, used, live.",
+        "Check revoked and expired BEFORE used, so a dead token is not a “race”.|||Kiểm revoked và expired TRƯỚC used, để một token chết không thành \"cuộc đua\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'INVALID' | 'REVOKED' | 'EXPIRED' | 'USED' | 'LIVE' */\nfunction rotateState(rec, now) {\n  // Write your solution here\n  if (!rec) return 'INVALID';\n  if (rec.usedAt) return 'USED';\n  return 'LIVE';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction rotateState(rec, now) {\n  if (!rec) return 'INVALID';\n  if (rec.revokedAt) return 'REVOKED';\n  if (now >= rec.expiresAt) return 'EXPIRED';\n  if (rec.usedAt) return 'USED';\n  return 'LIVE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The order is the safety: a revoked or expired token must be rejected cleanly, never mistaken for the already-used case that triggers reuse detection (5.2, 5.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Thứ tự chính là an toàn: một token đã thu hồi hay hết hạn phải bị từ chối gọn, không bao giờ bị nhầm với trường hợp đã-dùng kích hoạt phát hiện tái dùng (5.2, 5.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "A live token",
+              "vi": "Token sống"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "LIVE"
+          },
+          {
+            "moTa": {
+              "en": "Already rotated",
+              "vi": "Đã xoay"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696430000,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "USED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Family revoked",
+              "vi": "Họ đã thu hồi"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":null,\"revokedAt\":1793696440000}, 1793696460000)",
+            "mongDoi": "REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Revoked AND used ⇒ REVOKED",
+              "vi": "Thu hồi VÀ đã dùng ⇒ REVOKED"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1796288400000,\"usedAt\":1793696430000,\"revokedAt\":1793696440000}, 1793696460000)",
+            "mongDoi": "REVOKED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Past expiry",
+              "vi": "Quá hạn"
+            },
+            "goi": "rotateState({\"userId\":\"usr_1\",\"familyId\":\"fam_1\",\"createdAt\":1793696400000,\"expiresAt\":1793696450000,\"usedAt\":null,\"revokedAt\":null}, 1793696460000)",
+            "mongDoi": "EXPIRED",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown token",
+              "vi": "Token lạ"
+            },
+            "goi": "rotateState(null, 1793696460000)",
+            "mongDoi": "INVALID",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking used before revoked/expired — a revoked token would look like a race.|||Kiểm used trước revoked/expired — một token đã thu hồi sẽ trông như một cuộc đua."
+        },
+        {
+          "loi": "Using > instead of >= at expiry.|||Dùng > thay vì >= ở hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rotation",
+          "vi": "xoay vòng"
+        }
+      ]
+    },
+    {
+      "title": "5.2-3 — Write reuseOrRace(rec, now, graceMs): a used token — race or theft?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>When <code>rotateState</code> returns <code>'USED'</code>, decide whether it is the legitimate browser race (lesson 5.5) or theft. Given a <code>rec</code> whose <code>usedAt</code> is set: return <code>'RACE'</code> if it was rotated within the grace window (<code>now − rec.usedAt &lt;= graceMs</code>), otherwise <code>'REUSE'</code>. A real race is milliseconds; a replay is much later.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Khi <code>rotateState</code> trả <code>'USED'</code>, quyết định đó là cuộc đua trình duyệt hợp lệ (bài 5.5) hay trộm. Cho một <code>rec</code> có <code>usedAt</code>: trả <code>'RACE'</code> nếu nó được xoay trong cửa sổ ân hạn (<code>now − rec.usedAt &lt;= graceMs</code>), còn lại <code>'REUSE'</code>. Một cuộc đua thật là mili giây; một lần phát lại muộn hơn nhiều.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "reuseOrRace({\"usedAt\":1793696400000}, 1793696400050, 10000)",
+          "output": "\"RACE\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Compare now − usedAt with graceMs.|||So now − usedAt với graceMs.",
+        "Within grace ⇒ race; after ⇒ reuse.|||Trong ân hạn ⇒ đua; sau ⇒ tái dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** rec.usedAt is set ⇒ 'RACE' | 'REUSE' */\nfunction reuseOrRace(rec, now, graceMs) {\n  // Write your solution here\n  return 'REUSE';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction reuseOrRace(rec, now, graceMs) {\n  return now - rec.usedAt <= graceMs ? 'RACE' : 'REUSE';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A browser race is over in milliseconds, so a used token seen within the short grace window is the same login refreshing twice; later than that, a copy is loose and it is theft (5.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Một cuộc đua trình duyệt xong trong mili giây, nên một token đã dùng thấy trong cửa sổ ân hạn ngắn là cùng một lần đăng nhập refresh hai lần; muộn hơn, một bản đang lọt ra ngoài và đó là trộm (5.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "50 ms later (race)",
+              "vi": "Sau 50 ms (đua)"
+            },
+            "goi": "reuseOrRace({\"usedAt\":1793696400000}, 1793696400050, 10000)",
+            "mongDoi": "RACE"
+          },
+          {
+            "moTa": {
+              "en": "Exactly at grace",
+              "vi": "Đúng biên ân hạn"
+            },
+            "goi": "reuseOrRace({\"usedAt\":1793696400000}, 1793696410000, 10000)",
+            "mongDoi": "RACE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "11 s later (reuse)",
+              "vi": "Sau 11 s (tái dùng)"
+            },
+            "goi": "reuseOrRace({\"usedAt\":1793696400000}, 1793696411000, 10000)",
+            "mongDoi": "REUSE",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "An hour later (reuse)",
+              "vi": "Một giờ sau (tái dùng)"
+            },
+            "goi": "reuseOrRace({\"usedAt\":1793696400000}, 1793700000000, 10000)",
+            "mongDoi": "REUSE",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using < instead of <= at the boundary.|||Dùng < thay vì <= ở biên."
+        },
+        {
+          "loi": "Treating every used token as reuse (no grace).|||Coi mọi token đã dùng là tái dùng (không ân hạn)."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "grace window",
+          "vi": "cửa sổ ân hạn"
+        }
+      ]
+    },
+    {
+      "title": "5.2-4 — A token comes in → the response",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each presented refresh token with the server’s response.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi refresh token được trình với phản hồi của máy chủ.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Within grace is a race; after grace is theft.|||Trong ân hạn là đua; sau ân hạn là trộm.",
+        "Revoked and expired are their own codes.|||Revoked và expired là mã riêng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2-4 — A token comes in → the response\n\nAnswer in the answer panel (no code needed).\n\n1. Token → responseToken → phản hồi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.2-4 — A token comes in → the response — answer key\n\n1. Token → responseToken → phản hồi\n   - r1.q: rotate: mark used, mint the next\n   - r2.q: return the child the first request minted (race)\n   - r3.q: revoke the whole family (REUSE_DETECTED)\n   - r4.q: REVOKED\n   - r5.q: EXPIRED\n   The live token rotates; a used token is a race within grace or theft after it; a revoked/expired token is rejected cleanly (5.2, 5.5).VI: Token sống thì xoay; một token đã dùng là đua trong ân hạn hoặc trộm sau đó; một token đã thu hồi/hết hạn bị từ chối gọn (5.2, 5.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The live token rotates; a used token is a race within grace or theft after it; a revoked/expired token is rejected cleanly (5.2, 5.5).</p><p><i>VI: Token sống thì xoay; một token đã dùng là đua trong ân hạn hoặc trộm sau đó; một token đã thu hồi/hết hạn bị từ chối gọn (5.2, 5.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Token → response</p><p style=\"opacity:.75;font-size:.92em\"><i>Token → phản hồi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Token presented"
+              },
+              {
+                "ma": "q",
+                "ten": "Response",
+                "luaChon": [
+                  "rotate: mark used, mint the next",
+                  "return the child the first request minted (race)",
+                  "revoke the whole family (REUSE_DETECTED)",
+                  "REVOKED",
+                  "EXPIRED"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "the current token (used flag empty)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "an already-rotated token, within grace"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "an already-rotated token, after grace"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "a token from a revoked family"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "a token past the 30 days"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "rotate: mark used, mint the next",
+              "r2.q": "return the child the first request minted (race)",
+              "r3.q": "revoke the whole family (REUSE_DETECTED)",
+              "r4.q": "REVOKED",
+              "r5.q": "EXPIRED"
+            },
+            "giaiThich": "<p>The live token rotates; a used token is a race within grace or theft after it; a revoked/expired token is rejected cleanly (5.2, 5.5).</p><p><i>VI: Token sống thì xoay; một token đã dùng là đua trong ân hạn hoặc trộm sau đó; một token đã thu hồi/hết hạn bị từ chối gọn (5.2, 5.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a used token is always theft.|||Tưởng một token đã dùng luôn là trộm."
+        },
+        {
+          "loi": "Thinking an expired token triggers reuse detection.|||Tưởng một token hết hạn kích hoạt phát hiện tái dùng."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

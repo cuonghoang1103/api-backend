@@ -1,0 +1,524 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-4-danh-sach-thiet-bi",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-4-danh-sach-thiet-bi"
+  },
+  "exercises": [
+    {
+      "title": "5.4-1 — The devices page: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.5 (real run):<pre>$ curl -s -b laptop.jar localhost:4800/me/devices   (every live family, one row per device)\n  fam_eJ8mAlD…  ua=labpc  ip=::1\n  fam_i9aKDEG…  ua=phone  ip=::1\n  fam_QEivbL4…  ua=laptop  ip=::1\n\n$ curl -s -X POST localhost:4800/me/devices/revoke -d {\"familyId\":\"&lt;phone&gt;\"}  (revoke just the phone)\n{\"ok\":true,\"revoked\":1}\n\n$ # the phone can no longer refresh:\n{\"error\":\"REVOKED\"}\n$ # and it is gone from the list:\n  2 devices left: labpc, laptop</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.5 (chạy thật):<pre>$ curl -s -b laptop.jar localhost:4800/me/devices   (every live family, one row per device)\n  fam_eJ8mAlD…  ua=labpc  ip=::1\n  fam_i9aKDEG…  ua=phone  ip=::1\n  fam_QEivbL4…  ua=laptop  ip=::1\n\n$ curl -s -X POST localhost:4800/me/devices/revoke -d {\"familyId\":\"&lt;phone&gt;\"}  (revoke just the phone)\n{\"ok\":true,\"revoked\":1}\n\n$ # the phone can no longer refresh:\n{\"error\":\"REVOKED\"}\n$ # and it is gone from the list:\n  2 devices left: labpc, laptop</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Group by family, not by token.|||Gộp theo họ, không theo token.",
+        "Scope the revoke to the signed-in user.|||Giới hạn lệnh thu hồi theo người đăng nhập."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4-1 — The devices page: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. Three logins, each refreshed many times, show as three rows. Why not dozens?Ba lần đăng nhập, mỗi cái refresh nhiều lần, hiện thành ba dòng. Vì sao không hàng chục?\n2. An revokes the phone and the phone’s next /refresh returns REVOKED. What about the laptop?An thu hồi điện thoại và lần /refresh kế của điện thoại trả về REVOKED. Còn laptop thì sao?\n3. An guesses a family_id that is not hers and tries to revoke it. The server returns {\"revoked\":0}. Why?An đoán một family_id không phải của cô và thử thu hồi nó. Máy chủ trả {\"revoked\":0}. Vì sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4-1 — The devices page: read the real run — answer key\n\n1. Three logins, each refreshed many times, show as three rows. Why not dozens?Ba lần đăng nhập, mỗi cái refresh nhiều lần, hiện thành ba dòng. Vì sao không hàng chục?\n   Answer: b) It groups by family_id, and every rotation stays in its family\n   A family is one login on one device; GROUP BY family_id collapses its many rotated tokens into one device row (5.4).VI: Một họ là một lần đăng nhập trên một thiết bị; GROUP BY family_id gộp nhiều token đã xoay của nó thành một dòng thiết bị (5.4).\n\n2. An revokes the phone and the phone’s next /refresh returns REVOKED. What about the laptop?An thu hồi điện thoại và lần /refresh kế của điện thoại trả về REVOKED. Còn laptop thì sao?\n   Answer: c) It keeps working — only the phone’s family was revoked\n   The revoke targets one family by id; other devices (families) are untouched, so only the phone is cut off (5.4).VI: Lệnh thu hồi nhắm một họ theo id; các thiết bị (họ) khác không bị đụng, nên chỉ điện thoại bị cắt (5.4).\n\n3. An guesses a family_id that is not hers and tries to revoke it. The server returns {\"revoked\":0}. Why?An đoán một family_id không phải của cô và thử thu hồi nó. Máy chủ trả {\"revoked\":0}. Vì sao?\n   Answer: b) The revoke is scoped to her user id, so another family matches nothing\n   revokeFamilyForUser(userId, familyId) only touches families belonging to the caller — the BOLA/IDOR defence from Mục 0 on a device id (5.4).VI: revokeFamilyForUser(userId, familyId) chỉ đụng các họ thuộc về người gọi — phòng BOLA/IDOR từ Mục 0 trên một device id (5.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> It groups by family_id, and every rotation stays in its family</p><p>A family is one login on one device; GROUP BY family_id collapses its many rotated tokens into one device row (5.4).</p><p><i>VI: Một họ là một lần đăng nhập trên một thiết bị; GROUP BY family_id gộp nhiều token đã xoay của nó thành một dòng thiết bị (5.4).</i></p></li><li><p><b>c)</b> It keeps working — only the phone’s family was revoked</p><p>The revoke targets one family by id; other devices (families) are untouched, so only the phone is cut off (5.4).</p><p><i>VI: Lệnh thu hồi nhắm một họ theo id; các thiết bị (họ) khác không bị đụng, nên chỉ điện thoại bị cắt (5.4).</i></p></li><li><p><b>b)</b> The revoke is scoped to her user id, so another family matches nothing</p><p>revokeFamilyForUser(userId, familyId) only touches families belonging to the caller — the BOLA/IDOR defence from Mục 0 on a device id (5.4).</p><p><i>VI: revokeFamilyForUser(userId, familyId) chỉ đụng các họ thuộc về người gọi — phòng BOLA/IDOR từ Mục 0 trên một device id (5.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Three logins, each refreshed many times, show as three rows. Why not dozens?</p><p style=\"opacity:.75;font-size:.92em\"><i>Ba lần đăng nhập, mỗi cái refresh nhiều lần, hiện thành ba dòng. Vì sao không hàng chục?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Old tokens are permanently deleted from the table on each rotation"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It groups by family_id, and every rotation stays in its family"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The page is capped and only shows the three newest tokens per user"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The browser caches the device list and never re-fetches it"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A family is one login on one device; GROUP BY family_id collapses its many rotated tokens into one device row (5.4).</p><p><i>VI: Một họ là một lần đăng nhập trên một thiết bị; GROUP BY family_id gộp nhiều token đã xoay của nó thành một dòng thiết bị (5.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>An revokes the phone and the phone’s next /refresh returns REVOKED. What about the laptop?</p><p style=\"opacity:.75;font-size:.92em\"><i>An thu hồi điện thoại và lần /refresh kế của điện thoại trả về REVOKED. Còn laptop thì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It is also revoked — revoking one revokes all"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It must re-enter the password"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It keeps working — only the phone’s family was revoked"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Its access token is revoked but not the refresh token"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The revoke targets one family by id; other devices (families) are untouched, so only the phone is cut off (5.4).</p><p><i>VI: Lệnh thu hồi nhắm một họ theo id; các thiết bị (họ) khác không bị đụng, nên chỉ điện thoại bị cắt (5.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>An guesses a family_id that is not hers and tries to revoke it. The server returns {\"revoked\":0}. Why?</p><p style=\"opacity:.75;font-size:.92em\"><i>An đoán một family_id không phải của cô và thử thu hồi nó. Máy chủ trả {\"revoked\":0}. Vì sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The server rate-limited her for too many revoke attempts"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The revoke is scoped to her user id, so another family matches nothing"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The family she guessed had already expired on its own"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The family_id she guessed simply happened to be spelled wrong"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>revokeFamilyForUser(userId, familyId) only touches families belonging to the caller — the BOLA/IDOR defence from Mục 0 on a device id (5.4).</p><p><i>VI: revokeFamilyForUser(userId, familyId) chỉ đụng các họ thuộc về người gọi — phòng BOLA/IDOR từ Mục 0 trên một device id (5.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Listing one row per token.|||Liệt kê một dòng cho mỗi token."
+        },
+        {
+          "loi": "Revoking by family_id without an ownership check.|||Thu hồi theo family_id mà không kiểm sở hữu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "devices page",
+          "vi": "trang thiết bị"
+        },
+        {
+          "en": "IDOR / BOLA"
+        }
+      ]
+    },
+    {
+      "title": "5.4-2 — Write groupDevices(rows, now): one row per live family",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 14,
+      "points": 20,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Build the devices list from refresh rows. Keep only <strong>live</strong> rows (<code>revokedAt</code> is null and <code>expiresAt &gt; now</code>), group them by <code>familyId</code>, and return one object per family: <code>{ familyId, userAgent, tokens }</code> where <code>tokens</code> is how many rows that family has. Sort the result by <code>familyId</code> ascending. Use the first row’s <code>userAgent</code> for the family.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Dựng danh sách thiết bị từ các dòng refresh. Giữ chỉ các dòng <strong>sống</strong> (<code>revokedAt</code> null và <code>expiresAt &gt; now</code>), gộp chúng theo <code>familyId</code>, và trả một object cho mỗi họ: <code>{ familyId, userAgent, tokens }</code> trong đó <code>tokens</code> là số dòng của họ đó. Sắp kết quả theo <code>familyId</code> tăng dần. Dùng <code>userAgent</code> của dòng đầu cho họ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_c\",\"userAgent\":\"labpc\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000},{\"userId\":\"usr_1\",\"familyId\":\"fam_d\",\"userAgent\":\"old\",\"expiresAt\":1793696399000,\"revokedAt\":null}], 1793696460000)",
+          "output": "[{\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"tokens\":3},{\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"tokens\":1}]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Skip revoked and expired rows.|||Bỏ các dòng revoked và expired.",
+        "Group into an object keyed by familyId, then sort the keys.|||Gộp vào một object khoá theo familyId, rồi sắp các khoá."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ [{ familyId, userAgent, tokens }] for live families, sorted by familyId */\nfunction groupDevices(rows, now) {\n  // Write your solution here\n  return rows.map(function (r) { return { familyId: r.familyId, userAgent: r.userAgent, tokens: 1 }; });\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction groupDevices(rows, now) {\n  var fam = {};\n  for (var i = 0; i < rows.length; i++) {\n    var r = rows[i];\n    if (r.revokedAt || r.expiresAt <= now) continue;\n    if (!fam[r.familyId]) fam[r.familyId] = { familyId: r.familyId, userAgent: r.userAgent, tokens: 0 };\n    fam[r.familyId].tokens++;\n  }\n  return Object.keys(fam).sort().map(function (k) { return fam[k]; });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A family is one device; grouping its rotated tokens into one entry is the whole devices page, and filtering to live rows keeps revoked or expired logins off the list (5.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Một họ là một thiết bị; gộp các token đã xoay của nó thành một mục là cả trang thiết bị, và lọc còn các dòng sống giữ các lần đăng nhập đã thu hồi/hết hạn khỏi danh sách (5.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "3 logins incl. a revoked + expired one",
+              "vi": "3 lần đăng nhập gồm một revoked + expired"
+            },
+            "goi": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_b\",\"userAgent\":\"phone\",\"expiresAt\":1796288400000,\"revokedAt\":null},{\"userId\":\"usr_1\",\"familyId\":\"fam_c\",\"userAgent\":\"labpc\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000},{\"userId\":\"usr_1\",\"familyId\":\"fam_d\",\"userAgent\":\"old\",\"expiresAt\":1793696399000,\"revokedAt\":null}], 1793696460000)",
+            "mongDoi": [
+              {
+                "familyId": "fam_a",
+                "userAgent": "laptop",
+                "tokens": 3
+              },
+              {
+                "familyId": "fam_b",
+                "userAgent": "phone",
+                "tokens": 1
+              }
+            ]
+          },
+          {
+            "moTa": {
+              "en": "No tokens",
+              "vi": "Không token"
+            },
+            "goi": "groupDevices([], 1793696460000)",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "One device",
+              "vi": "Một thiết bị"
+            },
+            "goi": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_x\",\"userAgent\":\"tablet\",\"expiresAt\":1796288400000,\"revokedAt\":null}], 1793696460000)",
+            "mongDoi": [
+              {
+                "familyId": "fam_x",
+                "userAgent": "tablet",
+                "tokens": 1
+              }
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Only a revoked device",
+              "vi": "Chỉ một thiết bị đã thu hồi"
+            },
+            "goi": "groupDevices([{\"userId\":\"usr_1\",\"familyId\":\"fam_y\",\"userAgent\":\"g\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000}], 1793696460000)",
+            "mongDoi": [],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Counting revoked/expired rows as live devices.|||Đếm các dòng revoked/expired là thiết bị sống."
+        },
+        {
+          "loi": "Returning one entry per token instead of per family.|||Trả một mục cho mỗi token thay vì mỗi họ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "family = device",
+          "vi": "họ = thiết bị"
+        }
+      ]
+    },
+    {
+      "title": "5.4-3 — Write canRevokeDevice(row, userId, familyId): the ownership check",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Before revoking a device, confirm it belongs to the caller. Return <code>true</code> only when <code>row</code> exists, <code>row.userId</code> equals <code>userId</code> (from the session), <code>row.familyId</code> equals the requested <code>familyId</code>, and the family is not already revoked (<code>row.revokedAt</code> is null). Otherwise <code>false</code>. A guessed id that is not the caller’s must return false — the IDOR/BOLA defence (Mục 0).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trước khi thu hồi một thiết bị, xác nhận nó thuộc về người gọi. Trả <code>true</code> chỉ khi <code>row</code> tồn tại, <code>row.userId</code> bằng <code>userId</code> (từ phiên), <code>row.familyId</code> bằng <code>familyId</code> được yêu cầu, và họ chưa bị thu hồi (<code>row.revokedAt</code> null). Còn lại <code>false</code>. Một id đoán không phải của người gọi phải trả false — phòng IDOR/BOLA (Mục 0).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canRevokeDevice({\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null}, \"usr_1\", \"fam_a\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Take the user id from the session, not the request.|||Lấy user id từ phiên, không từ request.",
+        "Both userId and familyId must match, and the row must be live.|||Cả userId và familyId phải khớp, và dòng phải sống."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only if the family belongs to userId and is live */\nfunction canRevokeDevice(row, userId, familyId) {\n  // Write your solution here\n  return !!row;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction canRevokeDevice(row, userId, familyId) {\n  return !!(row && row.userId === userId && row.familyId === familyId && !row.revokedAt);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The session names the owner, not the request, so a guessed family id that is not yours fails this check — the same ownership rule as reading a resource by id (BOLA/IDOR, Mục 0; 5.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Phiên nêu chủ, không phải request, nên một family id đoán không phải của bạn trượt phép kiểm này — cùng luật sở hữu như đọc một tài nguyên theo id (BOLA/IDOR, Mục 0; 5.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Owner, right family",
+              "vi": "Chủ, đúng họ"
+            },
+            "goi": "canRevokeDevice({\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null}, \"usr_1\", \"fam_a\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "Not the owner",
+              "vi": "Không phải chủ"
+            },
+            "goi": "canRevokeDevice({\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null}, \"usr_2\", \"fam_a\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Guessed family id",
+              "vi": "family id đoán"
+            },
+            "goi": "canRevokeDevice({\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":null}, \"usr_1\", \"fam_guess\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Already revoked",
+              "vi": "Đã thu hồi"
+            },
+            "goi": "canRevokeDevice({\"userId\":\"usr_1\",\"familyId\":\"fam_a\",\"userAgent\":\"laptop\",\"expiresAt\":1796288400000,\"revokedAt\":1793696400000}, \"usr_1\", \"fam_a\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "No such family",
+              "vi": "Không có họ"
+            },
+            "goi": "canRevokeDevice(null, \"usr_1\", \"fam_a\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking only familyId — anyone could revoke anyone’s device.|||Chỉ kiểm familyId — ai cũng thu hồi được thiết bị của người khác."
+        },
+        {
+          "loi": "Forgetting the null row case.|||Quên trường hợp row null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "scoped revoke",
+          "vi": "thu hồi có giới hạn"
+        },
+        {
+          "en": "IDOR / BOLA"
+        }
+      ]
+    },
+    {
+      "title": "5.4-4 — The “is this you?” fields",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each devices-page column with what it tells the user.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi cột trang thiết bị với điều nó nói với người dùng.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Time, place, device, and the revoke handle.|||Thời gian, nơi, thiết bị, và tay cầm thu hồi.",
+        "family_id is not shown to be read, but to be revoked.|||family_id không hiện để đọc, mà để thu hồi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4-4 — The “is this you?” fields\n\nAnswer in the answer panel (no code needed).\n\n1. Column → meaningCột → nghĩa\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.4-4 — The “is this you?” fields — answer key\n\n1. Column → meaningCột → nghĩa\n   - r1.q: when this login started\n   - r2.q: roughly where from\n   - r3.q: on what device/browser\n   - r4.q: which family to revoke\n   Each column helps the user recognise or reject a login; family_id is the handle for the revoke (5.4).VI: Mỗi cột giúp người dùng nhận ra hoặc khước từ một lần đăng nhập; family_id là tay cầm cho lệnh thu hồi (5.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each column helps the user recognise or reject a login; family_id is the handle for the revoke (5.4).</p><p><i>VI: Mỗi cột giúp người dùng nhận ra hoặc khước từ một lần đăng nhập; family_id là tay cầm cho lệnh thu hồi (5.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Column → meaning</p><p style=\"opacity:.75;font-size:.92em\"><i>Cột → nghĩa</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Column"
+              },
+              {
+                "ma": "q",
+                "ten": "Tells the user",
+                "luaChon": [
+                  "when this login started",
+                  "roughly where from",
+                  "on what device/browser",
+                  "which family to revoke"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "created_at"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "ip"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "user_agent"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "family_id"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "when this login started",
+              "r2.q": "roughly where from",
+              "r3.q": "on what device/browser",
+              "r4.q": "which family to revoke"
+            },
+            "giaiThich": "<p>Each column helps the user recognise or reject a login; family_id is the handle for the revoke (5.4).</p><p><i>VI: Mỗi cột giúp người dùng nhận ra hoặc khước từ một lần đăng nhập; family_id là tay cầm cho lệnh thu hồi (5.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking ip tells the device.|||Tưởng ip nói thiết bị."
+        },
+        {
+          "loi": "Thinking user_agent is the revoke key.|||Tưởng user_agent là khoá thu hồi."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -1,0 +1,502 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-3-nam-su-kien",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-3-nam-su-kien"
+  },
+  "exercises": [
+    {
+      "title": "5.3-1 — Five events: read the real run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.5 (real run):<pre>1. sign-out (this device)        → next refresh: REVOKED\n2. sign-out everywhere / pw change → next refresh: REVOKED\n3. refresh reuse (theft)          → next refresh: REVOKED\n4. absolute expiry (30 days)      → next refresh: EXPIRED\n5. admin/devices-page revoke      → next refresh: REVOKED\n\nEvery path ends with a refresh that no longer works, so the next 15-minute access token is never minted.\nThe access token already out there still works until it expires (≤ 15 min) — the window you accept for\nskipping a per-request lookup (lesson 4.3). Shorten the access token to shrink it.</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.5 (chạy thật):<pre>1. sign-out (this device)        → next refresh: REVOKED\n2. sign-out everywhere / pw change → next refresh: REVOKED\n3. refresh reuse (theft)          → next refresh: REVOKED\n4. absolute expiry (30 days)      → next refresh: EXPIRED\n5. admin/devices-page revoke      → next refresh: REVOKED\n\nEvery path ends with a refresh that no longer works, so the next 15-minute access token is never minted.\nThe access token already out there still works until it expires (≤ 15 min) — the window you accept for\nskipping a per-request lookup (lesson 4.3). Shorten the access token to shrink it.</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which event needs no action?|||Sự kiện nào không cần hành động?",
+        "A password change is user-wide.|||Đổi mật khẩu là trên toàn người dùng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-1 — Five events: read the real run\n\nAnswer in the answer panel (no code needed).\n\n1. Four events end with REVOKED and one with EXPIRED. Why is expiry different?Bốn sự kiện kết thúc bằng REVOKED và một bằng EXPIRED. Vì sao hết hạn khác?\n2. A password change ends the session. What is its scope?Đổi mật khẩu kết thúc phiên. Phạm vi của nó là gì?\n3. After any of these events, can the already-issued access token still call the API?Sau bất kỳ sự kiện nào, access token đã phát còn gọi API được không?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-1 — Five events: read the real run — answer key\n\n1. Four events end with REVOKED and one with EXPIRED. Why is expiry different?Bốn sự kiện kết thúc bằng REVOKED và một bằng EXPIRED. Vì sao hết hạn khác?\n   Answer: a) Expiry is passive — the family’s 30 days simply passed\n   Four events actively revoke the family (REVOKED); expiry just lets the row’s expires_at pass, so EXPIRED is the right, different code (5.3).VI: Bốn sự kiện chủ động thu hồi họ (REVOKED); hết hạn chỉ để expires_at của dòng qua, nên EXPIRED là mã đúng, khác (5.3).\n\n2. A password change ends the session. What is its scope?Đổi mật khẩu kết thúc phiên. Phạm vi của nó là gì?\n   Answer: c) All of the user’s families — no session may survive it\n   A credential change must revoke every family, or a stolen password leaves old sessions working; /me/password calls revokeAll (5.3).VI: Đổi thông tin xác thực phải thu hồi mọi họ, không thì một mật khẩu bị trộm để các phiên cũ chạy; /me/password gọi revokeAll (5.3).\n\n3. After any of these events, can the already-issued access token still call the API?Sau bất kỳ sự kiện nào, access token đã phát còn gọi API được không?\n   Answer: c) Yes, until it expires (≤ 15 min) — it is stateless\n   Ending the family stops NEW access tokens; the one already out there is verified by signature with no lookup, so it lingers ≤ 15 min (4.3, 5.3).VI: Kết thúc họ ngừng access token MỚI; cái đã ở ngoài kia được kiểm bằng chữ ký không tra, nên nó nán ≤ 15 phút (4.3, 5.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> Expiry is passive — the family’s 30 days simply passed</p><p>Four events actively revoke the family (REVOKED); expiry just lets the row’s expires_at pass, so EXPIRED is the right, different code (5.3).</p><p><i>VI: Bốn sự kiện chủ động thu hồi họ (REVOKED); hết hạn chỉ để expires_at của dòng qua, nên EXPIRED là mã đúng, khác (5.3).</i></p></li><li><p><b>c)</b> All of the user’s families — no session may survive it</p><p>A credential change must revoke every family, or a stolen password leaves old sessions working; /me/password calls revokeAll (5.3).</p><p><i>VI: Đổi thông tin xác thực phải thu hồi mọi họ, không thì một mật khẩu bị trộm để các phiên cũ chạy; /me/password gọi revokeAll (5.3).</i></p></li><li><p><b>c)</b> Yes, until it expires (≤ 15 min) — it is stateless</p><p>Ending the family stops NEW access tokens; the one already out there is verified by signature with no lookup, so it lingers ≤ 15 min (4.3, 5.3).</p><p><i>VI: Kết thúc họ ngừng access token MỚI; cái đã ở ngoài kia được kiểm bằng chữ ký không tra, nên nó nán ≤ 15 phút (4.3, 5.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Four events end with REVOKED and one with EXPIRED. Why is expiry different?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bốn sự kiện kết thúc bằng REVOKED và một bằng EXPIRED. Vì sao hết hạn khác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Expiry is passive — the family’s 30 days simply passed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Expiry revokes the family faster than the other four events do"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Expiry only affects the access token, not the refresh token"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Expiry is a bug; it really ought to return REVOKED like the others"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Four events actively revoke the family (REVOKED); expiry just lets the row’s expires_at pass, so EXPIRED is the right, different code (5.3).</p><p><i>VI: Bốn sự kiện chủ động thu hồi họ (REVOKED); hết hạn chỉ để expires_at của dòng qua, nên EXPIRED là mã đúng, khác (5.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A password change ends the session. What is its scope?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đổi mật khẩu kết thúc phiên. Phạm vi của nó là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only the one device on which the password was actually changed"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the access token; the refresh families keep working"
+              },
+              {
+                "ma": "c",
+                "noiDung": "All of the user’s families — no session may survive it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing at all until the existing tokens expire on their own"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>A credential change must revoke every family, or a stolen password leaves old sessions working; /me/password calls revokeAll (5.3).</p><p><i>VI: Đổi thông tin xác thực phải thu hồi mọi họ, không thì một mật khẩu bị trộm để các phiên cũ chạy; /me/password gọi revokeAll (5.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After any of these events, can the already-issued access token still call the API?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau bất kỳ sự kiện nào, access token đã phát còn gọi API được không?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, forever — an access token like this one never expires"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No — revoking the refresh family blocks the access token too"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Yes, until it expires (≤ 15 min) — it is stateless"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No — the API re-checks the refresh family on every request"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Ending the family stops NEW access tokens; the one already out there is verified by signature with no lookup, so it lingers ≤ 15 min (4.3, 5.3).</p><p><i>VI: Kết thúc họ ngừng access token MỚI; cái đã ở ngoài kia được kiểm bằng chữ ký không tra, nên nó nán ≤ 15 phút (4.3, 5.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking logout blocks the access token instantly.|||Tưởng đăng xuất chặn access token tức thì."
+        },
+        {
+          "loi": "Thinking a password change only affects one device.|||Tưởng đổi mật khẩu chỉ ảnh hưởng một thiết bị."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "server-side revocation",
+          "vi": "thu hồi phía máy chủ"
+        },
+        {
+          "en": "absolute expiry",
+          "vi": "hết hạn tuyệt đối"
+        }
+      ]
+    },
+    {
+      "title": "5.3-2 — Write endSessionScope(event): what each event revokes",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the revocation scope for a session-ending event: <code>'sign-out'</code> ⇒ <code>'one-family'</code>; <code>'sign-out-everywhere'</code> and <code>'password-change'</code> ⇒ <code>'all-families'</code>; <code>'reuse-detected'</code> and <code>'device-revoke'</code> ⇒ <code>'one-family'</code>; <code>'expiry'</code> ⇒ <code>'none'</code> (passive — no action); anything else ⇒ <code>'unknown'</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về phạm vi thu hồi cho một sự kiện kết thúc phiên: <code>'sign-out'</code> ⇒ <code>'one-family'</code>; <code>'sign-out-everywhere'</code> và <code>'password-change'</code> ⇒ <code>'all-families'</code>; <code>'reuse-detected'</code> và <code>'device-revoke'</code> ⇒ <code>'one-family'</code>; <code>'expiry'</code> ⇒ <code>'none'</code> (thụ động — không hành động); còn lại ⇒ <code>'unknown'</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "endSessionScope(\"sign-out\")",
+          "output": "\"one-family\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A credential change is user-wide.|||Đổi thông tin xác thực là trên toàn người dùng.",
+        "Expiry needs no revocation.|||Hết hạn không cần thu hồi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'one-family' | 'all-families' | 'none' | 'unknown' */\nfunction endSessionScope(event) {\n  // Write your solution here\n  return 'one-family';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction endSessionScope(event) {\n  if (event === 'sign-out') return 'one-family';\n  if (event === 'sign-out-everywhere') return 'all-families';\n  if (event === 'password-change') return 'all-families';\n  if (event === 'reuse-detected') return 'one-family';\n  if (event === 'device-revoke') return 'one-family';\n  if (event === 'expiry') return 'none';\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A leaked password must end every session, so its scope is all families; a lost device or a detected theft ends one; expiry ends a family on its own, so it revokes nothing (5.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Một mật khẩu bị lộ phải kết thúc mọi phiên, nên phạm vi là mọi họ; một thiết bị mất hay một lần trộm bị phát hiện kết thúc một họ; hết hạn tự kết thúc một họ, nên nó không thu hồi gì (5.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Sign out this device",
+              "vi": "Đăng xuất thiết bị này"
+            },
+            "goi": "endSessionScope(\"sign-out\")",
+            "mongDoi": "one-family"
+          },
+          {
+            "moTa": {
+              "en": "Password change",
+              "vi": "Đổi mật khẩu"
+            },
+            "goi": "endSessionScope(\"password-change\")",
+            "mongDoi": "all-families",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Theft detected",
+              "vi": "Phát hiện trộm"
+            },
+            "goi": "endSessionScope(\"reuse-detected\")",
+            "mongDoi": "one-family",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Absolute expiry",
+              "vi": "Hết hạn tuyệt đối"
+            },
+            "goi": "endSessionScope(\"expiry\")",
+            "mongDoi": "none",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown event",
+              "vi": "Sự kiện lạ"
+            },
+            "goi": "endSessionScope(\"account-deleted\")",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Making a password change “one-family”.|||Cho đổi mật khẩu \"một họ\"."
+        },
+        {
+          "loi": "Making expiry revoke something.|||Cho hết hạn thu hồi cái gì đó."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sign out everywhere",
+          "vi": "đăng xuất mọi nơi"
+        }
+      ]
+    },
+    {
+      "title": "5.3-3 — Order the five events by scope",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order these session-ending events from the WIDEST scope to the narrowest (all users’ families → one family → no action).</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các sự kiện kết thúc phiên từ phạm vi RỘNG nhất tới hẹp nhất (mọi họ của người dùng → một họ → không hành động).</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A password change is user-wide.|||Đổi mật khẩu là trên toàn người dùng.",
+        "Expiry needs no server action.|||Hết hạn không cần hành động máy chủ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-3 — Order the five events by scope\n\nAnswer in the answer panel (no code needed).\n\n1. Widest → narrowestRộng → hẹp\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-3 — Order the five events by scope — answer key\n\n1. Widest → narrowestRộng → hẹp\n   Answer: m4) Password change — revoke all of the user’s families  →  m1) Sign out this device — revoke one family  →  m3) Device-page revoke — revoke one chosen family  →  m2) Expiry — no action, the 30 days simply pass\n   A credential change is the widest (all families); sign-out and a device revoke each end one; expiry ends a family by itself, needing no action (5.3).VI: Đổi thông tin xác thực rộng nhất (mọi họ); đăng xuất và thu hồi thiết bị mỗi cái kết thúc một; hết hạn tự kết thúc một họ, không cần hành động (5.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>A credential change is the widest (all families); sign-out and a device revoke each end one; expiry ends a family by itself, needing no action (5.3).</p><p><i>VI: Đổi thông tin xác thực rộng nhất (mọi họ); đăng xuất và thu hồi thiết bị mỗi cái kết thúc một; hết hạn tự kết thúc một họ, không cần hành động (5.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Widest → narrowest</p><p style=\"opacity:.75;font-size:.92em\"><i>Rộng → hẹp</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Sign out this device — revoke one family"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Expiry — no action, the 30 days simply pass"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Device-page revoke — revoke one chosen family"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Password change — revoke all of the user’s families"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>A credential change is the widest (all families); sign-out and a device revoke each end one; expiry ends a family by itself, needing no action (5.3).</p><p><i>VI: Đổi thông tin xác thực rộng nhất (mọi họ); đăng xuất và thu hồi thiết bị mỗi cái kết thúc một; hết hạn tự kết thúc một họ, không cần hành động (5.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting expiry first.|||Đặt hết hạn đầu tiên."
+        },
+        {
+          "loi": "Thinking sign-out is user-wide.|||Tưởng đăng xuất là trên toàn người dùng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "family scope",
+          "vi": "phạm vi họ"
+        }
+      ]
+    },
+    {
+      "title": "5.3-4 — Event → next-refresh code",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "session management"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each event with what the next refresh returns.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi sự kiện với cái lần refresh kế trả về.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only one event is passive.|||Chỉ một sự kiện là thụ động.",
+        "Revocation ⇒ REVOKED; a timeout ⇒ EXPIRED.|||Thu hồi ⇒ REVOKED; một mốc hết hạn ⇒ EXPIRED."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-4 — Event → next-refresh code\n\nAnswer in the answer panel (no code needed).\n\n1. Event → codeSự kiện → mã\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.3-4 — Event → next-refresh code — answer key\n\n1. Event → codeSự kiện → mã\n   - r1.q: REVOKED\n   - r2.q: REVOKED\n   - r3.q: REVOKED\n   - r4.q: EXPIRED\n   - r5.q: REVOKED\n   Four events revoke the family (REVOKED); only expiry is passive and returns EXPIRED (5.3).VI: Bốn sự kiện thu hồi họ (REVOKED); chỉ hết hạn là thụ động và trả EXPIRED (5.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Four events revoke the family (REVOKED); only expiry is passive and returns EXPIRED (5.3).</p><p><i>VI: Bốn sự kiện thu hồi họ (REVOKED); chỉ hết hạn là thụ động và trả EXPIRED (5.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Event → code</p><p style=\"opacity:.75;font-size:.92em\"><i>Sự kiện → mã</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Event"
+              },
+              {
+                "ma": "q",
+                "ten": "Next refresh",
+                "luaChon": [
+                  "REVOKED",
+                  "REVOKED",
+                  "REVOKED",
+                  "EXPIRED",
+                  "REVOKED"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "sign out (this device)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "password change"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "theft detected (reuse)"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "absolute expiry (30 days)"
+                }
+              },
+              {
+                "ma": "r5",
+                "o": {
+                  "x": "devices-page revoke"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "REVOKED",
+              "r2.q": "REVOKED",
+              "r3.q": "REVOKED",
+              "r4.q": "EXPIRED",
+              "r5.q": "REVOKED"
+            },
+            "giaiThich": "<p>Four events revoke the family (REVOKED); only expiry is passive and returns EXPIRED (5.3).</p><p><i>VI: Bốn sự kiện thu hồi họ (REVOKED); chỉ hết hạn là thụ động và trả EXPIRED (5.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking expiry says REVOKED.|||Tưởng hết hạn nói REVOKED."
+        },
+        {
+          "loi": "Thinking sign-out says EXPIRED.|||Tưởng đăng xuất nói EXPIRED."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

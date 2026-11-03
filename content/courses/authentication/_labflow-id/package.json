@@ -1,6 +1,6 @@
 {
   "name": "labflow-id",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "description": "LabFlow ID — the identity service of the LabFlow platform, built step by step in the Authentication course (cuongthai.com/courses/authentication)",
   "type": "module",

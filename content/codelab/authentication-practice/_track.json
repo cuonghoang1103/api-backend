@@ -182,6 +182,42 @@
       "name": "Lab 4 — LabFlow ID’s JWT verifier",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 4·1 — chooseAlg(header, keyring): the algorithm from the key · Lab 4·2 — verifyClaims(payload, cfg): the seven claims · Lab 4·3 — verifyToken(header, payload, cfg): put it together"
+    },
+    {
+      "slug": "auth-5-1-hai-token",
+      "name": "5.1 Two tokens",
+      "level": "BEGINNER",
+      "description": "Luyện: 5.1-1 — Two tokens: read the real runs · 5.1-2 — Write tokenPlan(kind): the plan for each token · 5.1-3 — The sign-in and refresh flow · 5.1-4 — Access vs refresh"
+    },
+    {
+      "slug": "auth-5-2-xoay-vong",
+      "name": "5.2 Rotation and reuse",
+      "level": "BEGINNER",
+      "description": "Luyện: 5.2-1 — Rotation and reuse: read the real run · 5.2-2 — Write rotateState(rec, now): the state of a presented token · 5.2-3 — Write reuseOrRace(rec, now, graceMs): a used token — race or theft? · 5.2-4 — A token comes in → the response"
+    },
+    {
+      "slug": "auth-5-3-nam-su-kien",
+      "name": "5.3 Five events",
+      "level": "BEGINNER",
+      "description": "Luyện: 5.3-1 — Five events: read the real run · 5.3-2 — Write endSessionScope(event): what each event revokes · 5.3-3 — Order the five events by scope · 5.3-4 — Event → next-refresh code"
+    },
+    {
+      "slug": "auth-5-4-danh-sach-thiet-bi",
+      "name": "5.4 The devices page",
+      "level": "BEGINNER",
+      "description": "Luyện: 5.4-1 — The devices page: read the real run · 5.4-2 — Write groupDevices(rows, now): one row per live family · 5.4-3 — Write canRevokeDevice(row, userId, familyId): the ownership check · 5.4-4 — The “is this you?” fields"
+    },
+    {
+      "slug": "auth-5-5-cuoc-dua-refresh",
+      "name": "5.5 The refresh race",
+      "level": "BEGINNER",
+      "description": "Luyện: 5.5-1 — The refresh race: read the real run · 5.5-2 — Write raceOutcome(graceMs, gapMs): does the second tab stay in? · 5.5-3 — The race timeline · 5.5-4 — Grace vs no grace"
+    },
+    {
+      "slug": "auth-5-7-lab-xoay-vong",
+      "name": "Lab 5 — The refresh layer",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 5·1 — rotateState(rec, now): classify a presented token · Lab 5·2 — rotateAction(rec, now, graceMs): the whole decision · Lab 5·3 — groupDevices(rows, now): the devices page"
     }
   ]
 }

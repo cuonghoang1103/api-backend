@@ -65,3 +65,19 @@ Thẻ hai chiều: `auth-4-2` → `api-6-1-xac-thuc` (trong bài, `lienKet`), v�
 (cùng bài toán trạng thái qua nhiều tiến trình; api-8-3 đã hai chiều với auth-3-5), `auth-4-5-cat-token-o-dau` → `nodejs/nodejs-8-4-cookie-csrf-thu-hoi`
 (đánh đổi XSS↔CSRF nhìn từ phía cookie; nodejs-8-4 đã hai chiều với auth-3-1), `auth-4-1-giai-ma-bang-tay` → `api-design/api-6-1-xac-thuc` (thêm một thẻ tới cùng api-6-1).
 Academy ứng viên chưa chèn: SDN302 5.2 (`sdn302-5-2-jwt-cors` đã trỏ auth-4-2 từ phía nodejs; phía auth để Ch5/Ch8), testing 5.2 ↔ Lab 4.
+
+## Chương 5 (03/11/2026) — thẻ ngược CÓ SẴN (slug giữ) đã là hai chiều; +4 một chiều "đọc thêm/so sánh"
+
+Cặp hai chiều của hợp đồng §11 (**nodejs 8.2 ↔ Ch5**) ĐÃ hai chiều sẵn: `nodejs/s08-auth.mjs` (bài `nodejs-8-2-jwt-access-refresh`)
+có thẻ ngược trỏ `auth-5-2-xoay-vong` (và `auth-4-2`) từ bản cũ — slug giữ nên vẫn đúng với bài mới. Phía auth: `auth-5-1-hai-token`
+và `auth-5-2-xoay-vong` đều `lienKet` tới `nodejs-8-2-jwt-access-refresh`. KHÔNG thêm lại thẻ ngược.
+
+Thẻ một chiều "đọc thêm / so sánh" phía auth (bên kia đã có cặp hai chiều Ch3/Mục 0 riêng, không chèn ngược):
+| Authentication | Bài kia | Giống | Authentication thêm (đo thật, Node 22.23.3 + PostgreSQL 17.11) |
+|---|---|---|---|
+| `auth-5-3-nam-su-kien` | `nodejs/nodejs-8-4-cookie-csrf-thu-hoi` | làm sao thật sự kết thúc một phiên | năm sự kiện thu hồi họ refresh ở máy chủ; đo cửa sổ access token còn lại ≤ 15 phút (nodejs thu hồi JWT bằng tokenVersion) |
+| `auth-5-4-danh-sach-thiet-bi` | `api-design/api-6-2-phan-quyen` | kiểm sở hữu cấp đối tượng (BOLA/IDOR) | thu hồi thiết bị phải xác minh họ thuộc người gọi; trang thiết bị = GROUP BY family |
+| `auth-5-5-cuoc-dua-refresh` | `api-design/api-8-3-mo-rong` | trạng thái một tiến trình hỏng khi có nhiều bản chạy | cache cửa sổ ân hạn phải dùng chung (Redis) khi >1 tiến trình; cảnh báo giả giết cả tính năng |
+
+Nguồn chuẩn mới dùng ở Ch5: **RFC 9700** (BCP 240, OAuth 2.0 Security BCP) §2.2.2/§4.14 — refresh token phải ràng theo người gửi hoặc
+XOAY VÒNG, và tái dùng một token đã xoay phải vô hiệu cả chuỗi (phát hiện tái dùng); OWASP Session Management Cheat Sheet.

@@ -1,0 +1,480 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-5-1-hai-token",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-5-1-hai-token"
+  },
+  "exercises": [
+    {
+      "title": "5.1-1 — Two tokens: read the real runs",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.5 (real runs):<pre>ACCESS token (a JWT — Chapter 4):\n  shape    : 3 base64url parts, 376 chars\n  readable : {\"sub\":\"usr_1\",\"role\":\"STUDENT\"}\n  lifetime : 15 minutes · stateless (no DB lookup) · cannot be revoked before it expires\n\nREFRESH token (opaque, Chapter 5):\n  shape    : lfid_rt_XEhu… — one opaque secret, no readable claims\n  stored   : only its SHA-256 digest 9979aa15ee6762d3… (never the token, lesson 1.3)\n  lifetime : 30 days · stateful (one row) · revocable instantly, and rotated on every use\n\nwhy not one token for both jobs:\n  long-lived JWT  ⇒ a stolen token is valid for 30 days and cannot be revoked (4.3)\n  short-lived refresh ⇒ the user would re-enter their password every 15 minutes\n  so: a short access token for every request, a long refresh token used only at /refresh</pre><pre>$ curl -s localhost:4800/sign-in  (returns an access token; sets a refresh cookie)\nHTTP/1.1 200 OK\nSet-Cookie: __Host-lfid_rt=lfid_rt_MX8Iw8…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000\n{\"ok\":true,\"access_token\":\"eyJhbGciOiJFZERTQSIs…\",\"token_type\":\"Bearer\",\"expires_in\":900,\"mustChangePassword\":false}\n\n$ # the refresh token stored in the cookie jar (only its first chars shown):\n__Host-lfid_rt\tlfid_rt_MX8Iw8zm…\n\n$ curl -s -X POST localhost:4800/refresh  (rotates the refresh token, mints a new access token)\nHTTP/1.1 200 OK\nSet-Cookie: __Host-lfid_rt=lfid_rt_EOSo-P…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000\n{\"ok\":true,\"access_token\":\"eyJhbGciOiJFZERTQSIs…\",\"token_type\":\"Bearer\",\"expires_in\":900}\n\n$ # the refresh cookie CHANGED — the old one is now used and would be rejected (rotation):\n__Host-lfid_rt\tlfid_rt_EOSo-PYX…</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.5 (chạy thật):<pre>ACCESS token (a JWT — Chapter 4):\n  shape    : 3 base64url parts, 376 chars\n  readable : {\"sub\":\"usr_1\",\"role\":\"STUDENT\"}\n  lifetime : 15 minutes · stateless (no DB lookup) · cannot be revoked before it expires\n\nREFRESH token (opaque, Chapter 5):\n  shape    : lfid_rt_XEhu… — one opaque secret, no readable claims\n  stored   : only its SHA-256 digest 9979aa15ee6762d3… (never the token, lesson 1.3)\n  lifetime : 30 days · stateful (one row) · revocable instantly, and rotated on every use\n\nwhy not one token for both jobs:\n  long-lived JWT  ⇒ a stolen token is valid for 30 days and cannot be revoked (4.3)\n  short-lived refresh ⇒ the user would re-enter their password every 15 minutes\n  so: a short access token for every request, a long refresh token used only at /refresh</pre><pre>$ curl -s localhost:4800/sign-in  (returns an access token; sets a refresh cookie)\nHTTP/1.1 200 OK\nSet-Cookie: __Host-lfid_rt=lfid_rt_MX8Iw8…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000\n{\"ok\":true,\"access_token\":\"eyJhbGciOiJFZERTQSIs…\",\"token_type\":\"Bearer\",\"expires_in\":900,\"mustChangePassword\":false}\n\n$ # the refresh token stored in the cookie jar (only its first chars shown):\n__Host-lfid_rt\tlfid_rt_MX8Iw8zm…\n\n$ curl -s -X POST localhost:4800/refresh  (rotates the refresh token, mints a new access token)\nHTTP/1.1 200 OK\nSet-Cookie: __Host-lfid_rt=lfid_rt_EOSo-P…; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000\n{\"ok\":true,\"access_token\":\"eyJhbGciOiJFZERTQSIs…\",\"token_type\":\"Bearer\",\"expires_in\":900}\n\n$ # the refresh cookie CHANGED — the old one is now used and would be rejected (rotation):\n__Host-lfid_rt\tlfid_rt_EOSo-PYX…</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Which token can be revoked?|||Token nào thu hồi được?",
+        "The refresh token is random — store its digest.|||Refresh token là ngẫu nhiên — lưu digest của nó."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-1 — Two tokens: read the real runs\n\nAnswer in the answer panel (no code needed).\n\n1. Why is the access token short (15 min) and the refresh token long (30 days)?Vì sao access token ngắn (15 phút) và refresh token dài (30 ngày)?\n2. How is the refresh token stored on the server?Refresh token được lưu phía máy chủ thế nào?\n3. After /refresh, the refresh cookie value changed. Why must it change?Sau /refresh, giá trị cookie refresh đổi. Vì sao nó phải đổi?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-1 — Two tokens: read the real runs — answer key\n\n1. Why is the access token short (15 min) and the refresh token long (30 days)?Vì sao access token ngắn (15 phút) và refresh token dài (30 ngày)?\n   Answer: c) A stolen access token cannot be revoked, so short caps the damage\n   The access token is stateless and un-revocable, so 15 minutes limits a stolen one; the refresh token is a revocable row, so it can be long without that risk (5.1).VI: Access token không trạng thái và không thu hồi được, nên 15 phút giới hạn một cái bị trộm; refresh token là một dòng thu hồi được, nên nó dài mà không rủi ro đó (5.1).\n\n2. How is the refresh token stored on the server?Refresh token được lưu phía máy chủ thế nào?\n   Answer: b) Only as its SHA-256 digest, never the token itself\n   Like a session id, the refresh token is random, so the database keeps only its digest; a leaked table is a list of digests, not working tokens (5.1).VI: Như một id phiên, refresh token là ngẫu nhiên, nên cơ sở dữ liệu chỉ giữ digest của nó; một bảng bị lộ là danh sách digest, không phải token dùng được (5.1).\n\n3. After /refresh, the refresh cookie value changed. Why must it change?Sau /refresh, giá trị cookie refresh đổi. Vì sao nó phải đổi?\n   Answer: d) Rotation — the old token is retired and a new one issued\n   Every /refresh rotates the refresh token: the old one is spent (and rejected if reused), a new one is set (5.2).VI: Mỗi /refresh xoay refresh token: cái cũ bị tiêu (và bị từ chối nếu tái dùng), một cái mới được đặt (5.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> A stolen access token cannot be revoked, so short caps the damage</p><p>The access token is stateless and un-revocable, so 15 minutes limits a stolen one; the refresh token is a revocable row, so it can be long without that risk (5.1).</p><p><i>VI: Access token không trạng thái và không thu hồi được, nên 15 phút giới hạn một cái bị trộm; refresh token là một dòng thu hồi được, nên nó dài mà không rủi ro đó (5.1).</i></p></li><li><p><b>b)</b> Only as its SHA-256 digest, never the token itself</p><p>Like a session id, the refresh token is random, so the database keeps only its digest; a leaked table is a list of digests, not working tokens (5.1).</p><p><i>VI: Như một id phiên, refresh token là ngẫu nhiên, nên cơ sở dữ liệu chỉ giữ digest của nó; một bảng bị lộ là danh sách digest, không phải token dùng được (5.1).</i></p></li><li><p><b>d)</b> Rotation — the old token is retired and a new one issued</p><p>Every /refresh rotates the refresh token: the old one is spent (and rejected if reused), a new one is set (5.2).</p><p><i>VI: Mỗi /refresh xoay refresh token: cái cũ bị tiêu (và bị từ chối nếu tái dùng), một cái mới được đặt (5.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Why is the access token short (15 min) and the refresh token long (30 days)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao access token ngắn (15 phút) và refresh token dài (30 ngày)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The access token is larger, so it has to expire sooner than a refresh token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The refresh token is a JWT, so naturally it lives much longer"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A stolen access token cannot be revoked, so short caps the damage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Both lifetimes are arbitrary and could just as well be swapped around"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The access token is stateless and un-revocable, so 15 minutes limits a stolen one; the refresh token is a revocable row, so it can be long without that risk (5.1).</p><p><i>VI: Access token không trạng thái và không thu hồi được, nên 15 phút giới hạn một cái bị trộm; refresh token là một dòng thu hồi được, nên nó dài mà không rủi ro đó (5.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>How is the refresh token stored on the server?</p><p style=\"opacity:.75;font-size:.92em\"><i>Refresh token được lưu phía máy chủ thế nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "As plaintext in a column, so it can be re-sent to the client"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only as its SHA-256 digest, never the token itself"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Inside the access token’s payload, next to the claims"
+              },
+              {
+                "ma": "d",
+                "noiDung": "As a signed JWT carrying the user’s claims and role"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Like a session id, the refresh token is random, so the database keeps only its digest; a leaked table is a list of digests, not working tokens (5.1).</p><p><i>VI: Như một id phiên, refresh token là ngẫu nhiên, nên cơ sở dữ liệu chỉ giữ digest của nó; một bảng bị lộ là danh sách digest, không phải token dùng được (5.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After /refresh, the refresh cookie value changed. Why must it change?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau /refresh, giá trị cookie refresh đổi. Vì sao nó phải đổi?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The browser clears and rewrites cookies on every POST request"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The access token replaced the refresh token in the same cookie"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The server rotates its JWT signing key on each refresh"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Rotation — the old token is retired and a new one issued"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Every /refresh rotates the refresh token: the old one is spent (and rejected if reused), a new one is set (5.2).</p><p><i>VI: Mỗi /refresh xoay refresh token: cái cũ bị tiêu (và bị từ chối nếu tái dùng), một cái mới được đặt (5.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "“Make the access token last 30 days for convenience.”|||\"Cho access token sống 30 ngày cho tiện.\""
+        },
+        {
+          "loi": "Storing the refresh token in the clear.|||Lưu refresh token dạng thô."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "access token"
+        },
+        {
+          "en": "refresh token"
+        }
+      ]
+    },
+    {
+      "title": "5.1-2 — Write tokenPlan(kind): the plan for each token",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the storage plan for a token. <code>'access'</code> ⇒ <code>{ store: 'memory', lifetimeSec: 900, revocable: false, sentOn: 'every-request' }</code>; <code>'refresh'</code> ⇒ <code>{ store: 'httponly-cookie', lifetimeSec: 2592000, revocable: true, sentOn: 'refresh-only' }</code> (30 days = 2,592,000 s); anything else ⇒ <code>{ store: 'unknown', lifetimeSec: 0, revocable: false, sentOn: 'never' }</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về kế hoạch cất một token. <code>'access'</code> ⇒ <code>{ store: 'memory', lifetimeSec: 900, revocable: false, sentOn: 'every-request' }</code>; <code>'refresh'</code> ⇒ <code>{ store: 'httponly-cookie', lifetimeSec: 2592000, revocable: true, sentOn: 'refresh-only' }</code> (30 ngày = 2.592.000 s); còn lại ⇒ <code>{ store: 'unknown', lifetimeSec: 0, revocable: false, sentOn: 'never' }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tokenPlan(\"access\")",
+          "output": "{\"store\":\"memory\",\"lifetimeSec\":900,\"revocable\":false,\"sentOn\":\"every-request\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Access is short, in memory, not revocable.|||Access thì ngắn, trong bộ nhớ, không thu hồi được.",
+        "Refresh is long, in an HttpOnly cookie, revocable.|||Refresh thì dài, trong cookie HttpOnly, thu hồi được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { store, lifetimeSec, revocable, sentOn } */\nfunction tokenPlan(kind) {\n  // Write your solution here\n  return { store: 'memory', lifetimeSec: 900, revocable: false, sentOn: 'every-request' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tokenPlan(kind) {\n  if (kind === 'access') return { store: 'memory', lifetimeSec: 900, revocable: false, sentOn: 'every-request' };\n  if (kind === 'refresh') return { store: 'httponly-cookie', lifetimeSec: 2592000, revocable: true, sentOn: 'refresh-only' };\n  return { store: 'unknown', lifetimeSec: 0, revocable: false, sentOn: 'never' };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Each token’s plan follows its job: the access token is cheap and short so it rides everywhere in memory; the refresh token is long and revocable so it hides in an HttpOnly cookie, used only at /refresh (5.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Kế hoạch mỗi token theo việc của nó: access token rẻ và ngắn nên đi khắp nơi trong bộ nhớ; refresh token dài và thu hồi được nên nấp trong một cookie HttpOnly, chỉ dùng ở /refresh (5.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "Access token",
+              "vi": "Access token"
+            },
+            "goi": "tokenPlan(\"access\")",
+            "mongDoi": {
+              "store": "memory",
+              "lifetimeSec": 900,
+              "revocable": false,
+              "sentOn": "every-request"
+            }
+          },
+          {
+            "moTa": {
+              "en": "Refresh token",
+              "vi": "Refresh token"
+            },
+            "goi": "tokenPlan(\"refresh\")",
+            "mongDoi": {
+              "store": "httponly-cookie",
+              "lifetimeSec": 2592000,
+              "revocable": true,
+              "sentOn": "refresh-only"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "Unknown kind",
+              "vi": "Loại lạ"
+            },
+            "goi": "tokenPlan(\"id_token\")",
+            "mongDoi": {
+              "store": "unknown",
+              "lifetimeSec": 0,
+              "revocable": false,
+              "sentOn": "never"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the refresh token in memory or localStorage.|||Đặt refresh token trong bộ nhớ hay localStorage."
+        },
+        {
+          "loi": "Marking the access token revocable.|||Đánh dấu access token thu hồi được."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "access token"
+        },
+        {
+          "en": "refresh token"
+        }
+      ]
+    },
+    {
+      "title": "5.1-3 — The sign-in and refresh flow",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Put the two-token flow in order.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp luồng hai token theo thứ tự.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The refresh token is used only when the access token expires.|||Refresh token chỉ dùng khi access token hết hạn.",
+        "Rotation happens on /refresh.|||Xoay vòng xảy ra ở /refresh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-3 — The sign-in and refresh flow\n\nAnswer in the answer panel (no code needed).\n\n1. First to lastTrước tới sau\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-3 — The sign-in and refresh flow — answer key\n\n1. First to lastTrước tới sau\n   Answer: m4) Sign in: the server verifies the password (Chapter 2)  →  m1) It returns a 15-minute access token in the body and sets a refresh cookie  →  m2) The client sends the access token on every request until it expires  →  m5) On a 401, the client POSTs /refresh with the cookie  →  m3) The server rotates the refresh token and returns a new access token\n   The access token does the everyday work; only when it expires does the refresh token come out, once, to buy a new one — then it rotates (5.1, 5.2).VI: Access token làm việc hằng ngày; chỉ khi nó hết hạn refresh token mới xuất hiện, một lần, để mua một cái mới — rồi nó xoay (5.1, 5.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The access token does the everyday work; only when it expires does the refresh token come out, once, to buy a new one — then it rotates (5.1, 5.2).</p><p><i>VI: Access token làm việc hằng ngày; chỉ khi nó hết hạn refresh token mới xuất hiện, một lần, để mua một cái mới — rồi nó xoay (5.1, 5.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First to last</p><p style=\"opacity:.75;font-size:.92em\"><i>Trước tới sau</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "It returns a 15-minute access token in the body and sets a refresh cookie"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The client sends the access token on every request until it expires"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The server rotates the refresh token and returns a new access token"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Sign in: the server verifies the password (Chapter 2)"
+              },
+              {
+                "ma": "m5",
+                "noiDung": "On a 401, the client POSTs /refresh with the cookie"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m2",
+              "m5",
+              "m3"
+            ],
+            "giaiThich": "<p>The access token does the everyday work; only when it expires does the refresh token come out, once, to buy a new one — then it rotates (5.1, 5.2).</p><p><i>VI: Access token làm việc hằng ngày; chỉ khi nó hết hạn refresh token mới xuất hiện, một lần, để mua một cái mới — rồi nó xoay (5.1, 5.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sending the refresh token on every request.|||Gửi refresh token ở mọi request."
+        },
+        {
+          "loi": "Refreshing before the access token expires.|||Refresh trước khi access token hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "rotation",
+          "vi": "xoay vòng"
+        }
+      ]
+    },
+    {
+      "title": "5.1-4 — Access vs refresh",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "refresh token"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each token with its properties.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi token với các tính chất của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One is stateless, one is a row.|||Một cái không trạng thái, một cái là một dòng.",
+        "Revocable means “a row you can flag”.|||Thu hồi được nghĩa là \"một dòng bạn đánh dấu được\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-4 — Access vs refresh\n\nAnswer in the answer panel (no code needed).\n\n1. Token → propertiesToken → tính chất\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 5.1-4 — Access vs refresh — answer key\n\n1. Token → propertiesToken → tính chất\n   - r1.q: a JWT, 15 min, stateless, not revocable\n   - r2.q: an opaque secret, 30 days, a row, revocable\n   The access token is verified by signature with no lookup (so it cannot be revoked); the refresh token is a row, so it can be revoked and rotated (5.1).VI: Access token xác minh bằng chữ ký không tra (nên không thu hồi được); refresh token là một dòng, nên thu hồi và xoay được (5.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The access token is verified by signature with no lookup (so it cannot be revoked); the refresh token is a row, so it can be revoked and rotated (5.1).</p><p><i>VI: Access token xác minh bằng chữ ký không tra (nên không thu hồi được); refresh token là một dòng, nên thu hồi và xoay được (5.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Token → properties</p><p style=\"opacity:.75;font-size:.92em\"><i>Token → tính chất</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Token"
+              },
+              {
+                "ma": "q",
+                "ten": "Properties",
+                "luaChon": [
+                  "a JWT, 15 min, stateless, not revocable",
+                  "an opaque secret, 30 days, a row, revocable"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "access token"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "refresh token"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "a JWT, 15 min, stateless, not revocable",
+              "r2.q": "an opaque secret, 30 days, a row, revocable"
+            },
+            "giaiThich": "<p>The access token is verified by signature with no lookup (so it cannot be revoked); the refresh token is a row, so it can be revoked and rotated (5.1).</p><p><i>VI: Access token xác minh bằng chữ ký không tra (nên không thu hồi được); refresh token là một dòng, nên thu hồi và xoay được (5.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a JWT can be revoked.|||Tưởng một JWT thu hồi được."
+        },
+        {
+          "loi": "Thinking the refresh token is a JWT.|||Tưởng refresh token là một JWT."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

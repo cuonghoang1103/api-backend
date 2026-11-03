@@ -11,7 +11,7 @@ export default walkAuth('auth-04-2', 'The token tells the server how to check it
   [3, 'Who decides the lock on the door?',
     `<p>Imagine a door whose lock is chosen by a note taped to it by the visitor. “Use the paper lock,” says the note, and a careless guard obeys. The fix is obvious once stated: the building decides the lock, not the visitor.</p>`,
     `<p>Hình dung một cánh cửa mà ổ khoá do một tờ giấy khách dán lên quyết định. "Dùng ổ khoá giấy nhé," tờ giấy ghi, và một người gác bất cẩn làm theo. Cách sửa hiển nhiên khi đã nói ra: toà nhà quyết định ổ khoá, không phải khách.</p>`],
-  [4, 'The naive verifier',
+  [4, 'The naive verifier — the habit both attacks exploit',
     `<p>This is the verifier tutorials teach: read alg from the header, then verify with that algorithm and one blob of key material. It is the single habit both attacks exploit.</p>`,
     `<p>Đây là bộ xác minh mà các hướng dẫn dạy: đọc alg từ header, rồi kiểm bằng thuật toán đó và một cục key material duy nhất. Đó là thói quen duy nhất mà cả hai cú tấn công khai thác.</p>`],
   [5, 'Attack 1 — alg: none',

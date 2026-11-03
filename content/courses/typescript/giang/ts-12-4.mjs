@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 12.4 Typed context & generic components (deck ts-12-4, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-12-4', 'Typed context & generic components', 'Context có kiểu & component generic', [
+  [1, 'Typed context & generic components',
+    `<p>Two patterns put Chapter 6’s generics to work in React: a typed context that forces consumers to handle the "no provider" case, and a generic component that adapts to whatever data you give it. Both are the generics and unions you already know, now wearing a UI.</p>`,
+    `<p>Hai pattern đưa generic của Chương 6 vào làm việc trong React: một context có kiểu buộc bên tiêu thụ xử lý trường hợp "không provider", và một component generic thích ứng với bất cứ dữ liệu nào bạn đưa vào. Cả hai là generic và union bạn đã biết, giờ khoác một UI.</p>`],
+  [2, 'A typed context forces the null check',
+    `<p>createContext is generic. Type it with the value union — including the null used when a consumer sits outside any provider — and useContext returns that union. Read theme.color without checking and it is TS18047 "possibly null": a component reading a context it is not wrapped in is a real bug, now caught at compile time.</p>`,
+    `<p>createContext là generic. Gõ kiểu nó bằng union giá trị — gồm cả null dùng khi một bên tiêu thụ nằm ngoài mọi provider — và useContext trả về union đó. Đọc theme.color mà không kiểm là TS18047 "possibly null": một component đọc một context nó không được bọc trong đó là một lỗi thật, giờ bị bắt lúc biên dịch.</p>`],
+  [3, 'The guard hook returns a non-null value',
+    `<p>The common fix is a small hook that reads the context, throws a clear error if it is null, and returns a non-null Theme. After the throw, control-flow analysis gives every caller a plain Theme — no consumer ever writes the check. Export the hook, not the context, and there is no way to bypass the guard.</p>`,
+    `<p>Cách sửa phổ biến là một hook nhỏ đọc context, ném một lỗi rõ ràng nếu nó là null, và trả về một Theme không-null. Sau phép ném, phân tích luồng điều khiển cho mọi chỗ gọi một Theme thuần — không bên tiêu thụ nào phải viết phép kiểm. Hãy xuất hook, đừng xuất context, và không có cách nào lách qua chốt chặn.</p>`],
+  [4, 'A generic component adapts to its data',
+    `<p>Components take type parameters too. A List&lt;T&gt; renders any array and infers T from the items you pass, so the render callback is typed to match. Pass [1, 2, 3] and T is number — n.toFixed(0) is valid; pass a User[] and render receives a User. One component, correctly typed for every element type.</p>`,
+    `<p>Component cũng nhận tham số kiểu. Một List&lt;T&gt; render bất kỳ mảng nào và suy T từ các item bạn truyền, nên callback render được gõ kiểu khớp theo. Truyền [1, 2, 3] và T là number — n.toFixed(0) hợp lệ; truyền một User[] và render nhận một User. Một component, có kiểu đúng cho mọi kiểu phần tử.</p>`],
+  [5, 'At a glance — and the plausible-default trap',
+    `<p>createContext&lt;T | null&gt;(null) makes useContext return T | null; generic components infer T from props. The trap: a plausible default — createContext&lt;Ctx&gt;({ login: () =&gt; {} }) — avoids the union and looks tidy, but a component outside the provider now gets a working object whose login does nothing. No throw, no error, a dead button. Keep null in the type and throw in the hook.</p>`,
+    `<p>createContext&lt;T | null&gt;(null) làm useContext trả về T | null; component generic suy T từ props. Bẫy: một mặc định nghe hợp lý — createContext&lt;Ctx&gt;({ login: () =&gt; {} }) — tránh union và trông gọn, nhưng một component ngoài provider giờ nhận một object chạy được mà login chẳng làm gì. Không ném, không lỗi, một nút chết. Hãy giữ null trong kiểu và ném trong hook.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: a consumer reads user.fullName when User has only name — TS2339; read user.name and it runs. That closes Chapter 12 and the typed-frontend arc: props, hooks, events, context — every one a generic or a union from earlier chapters. Next: Lab 12, a typed BookingForm.</p>`,
+    `<p>Luyện tập: một bên tiêu thụ đọc user.fullName khi User chỉ có name — TS2339; đọc user.name và nó chạy. Điều đó khép lại Chương 12 và cả mạch frontend-có-kiểu: props, hook, sự kiện, context — mỗi cái là một generic hay một union từ các chương trước. Tiếp: Lab 12, một BookingForm có kiểu.</p>`],
+]);

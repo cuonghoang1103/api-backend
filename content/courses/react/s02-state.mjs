@@ -619,6 +619,11 @@ ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useS
   <span class="lc-body"><span class="lc-title">useState is a generic — TypeScript 6.1: Why generics</span><span class="lc-sub">Same: a type parameter keeps the type — useState(0) gives a number setter, useState&lt;User | null&gt;(null) keeps the shape, just as firstOf&lt;T&gt; returns the element type. Different: here you write the generic function and tsc infers T; the TypeScript chapter also adds constraints, keyof, generic classes, and the inference traps behind a hook like useState.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-2-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Typing this hook — TypeScript 12.2: Typing hooks</span><span class="lc-sub">Same: useState holds a value and gives a setter. Different: there the setter is typed from the initial value, so setCount("three") is TS2345, and a nullable useState&lt;User | null&gt;(null) forces the loading branch (reading it unchecked is TS18047) — measured with tsc on a React model.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.1</span>
@@ -789,6 +794,11 @@ ${LINK('https://react.dev/reference/react/useState', '📄', 'react.dev — useS
   <span class="lc-body"><span class="lc-title">useState là một generic — TypeScript 6.1: Vì sao cần generics</span><span class="lc-sub">Giống: một tham số kiểu giữ lại kiểu — useState(0) cho một setter number, useState&lt;User | null&gt;(null) giữ dáng, y như firstOf&lt;T&gt; trả kiểu phần tử. Khác: ở đây bạn viết hàm generic và tsc suy T; chương TypeScript còn thêm ràng buộc, keyof, class generic, và các bẫy suy kiểu đằng sau một hook như useState.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-2-hooks" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gõ kiểu hook này — TypeScript 12.2: Gõ kiểu hooks</span><span class="lc-sub">Giống: useState giữ một giá trị và cho một setter. Khác: ở đó setter được gõ kiểu từ giá trị đầu, nên setCount("three") là TS2345, và một useState&lt;User | null&gt;(null) nullable buộc nhánh loading (đọc chưa kiểm là TS18047) — đo thật bằng tsc trên một mô hình React.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
 </div>
 `,
     },
@@ -951,6 +961,11 @@ ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.
   <span class="lc-body"><span class="lc-title">Why the handler lost this — TypeScript 3.4: this, the parameter you did not know you had</span><span class="lc-sub">Same: a method handed over as a callback (onClick={this.handleClick}) loses this and throws “Cannot read properties of undefined”. Different: there you see why (this is set by the call), measured in Node; a this parameter makes tsc refuse plain calls (TS2684), but callbacks in map/setTimeout still slip through — the closure design avoids this entirely.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-3-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Typing these events — TypeScript 12.3: Typing events</span><span class="lc-sub">Same: a handler reads an event and its target. Different: there the event type makes e.target.value a checked string — reading e.value is TS2339 and assigning the string value to a number is TS2322, so you parse it — the same lesson as Express params, measured with tsc.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 2 · Bài 2.2</span>
@@ -1100,6 +1115,11 @@ ${LINK('https://react.dev/reference/react-dom/components/input', '📄', 'react.
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-3-4-this" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Vì sao handler mất this — TypeScript 3.4: this, tham số bạn không biết mình có</span><span class="lc-sub">Giống: method bị đưa đi làm callback (onClick={this.handleClick}) mất this và ném “Cannot read properties of undefined”. Khác: bên đó thấy được vì sao (this do lời gọi quyết định), đo trong Node; tham số this khiến tsc từ chối lời gọi trần (TS2684), nhưng callback trong map/setTimeout vẫn lọt — thiết kế closure né hẳn this.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-3-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gõ kiểu các sự kiện này — TypeScript 12.3: Gõ kiểu sự kiện</span><span class="lc-sub">Giống: một handler đọc một sự kiện và target của nó. Khác: ở đó kiểu sự kiện làm e.target.value thành một string được kiểm — đọc e.value là TS2339 và gán value string cho một number là TS2322, nên bạn phân tích nó — cùng bài học với params Express, đo thật bằng tsc.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

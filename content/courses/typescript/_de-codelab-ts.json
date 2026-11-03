@@ -7229,5 +7229,409 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-12-1-a",
+    "bai": "typescript-12-1-components-props",
+    "tieuDe": "Read a declared prop|||Đọc một prop đã khai",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>The component is typed <code>FC&lt;{ code: string; seats: number }&gt;</code>, but it reads <code>props.name</code> — a prop that was not declared (TS2339). Read the declared <code>props.code</code> instead.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Component kiểu <code>FC&lt;{ code: string; seats: number }&gt;</code>, nhưng nó đọc <code>props.name</code> — một prop không được khai (TS2339). Đọc <code>props.code</code> đã khai thay vào đó.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\n// Wrong: the props type has code and seats, not name.\nexport const LabCard: FC<LabProps> = (props) => h('div', { title: props.name });\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "kiem/dung.ts": "import { LabCard } from '../src/card.ts';\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n",
+      "test/card.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard reads code', () => { assert.equal(LabCard({ code: 'BE-201', seats: 40 }).props.title, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/card.ts",
+        "src/react.ts",
+        "kiem/dung.ts",
+        "test/card.test.ts"
+      ],
+      "chay": [
+        "node --test test/card.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { title: props.code });\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still reads props.name (TS2339)",
+        "tep": {
+          "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { title: props.name });\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-1-b",
+    "bai": "typescript-12-1-components-props",
+    "tieuDe": "Pass every required prop|||Truyền đủ mọi prop bắt buộc",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>The component declares <code>{ code: string; seats: number }</code>, but <code>kiem/dung.ts</code> calls it with only <code>{ code }</code> — a missing required prop (TS2741). Make the component usable by giving <code>LabProps</code> only what the call provides, or add the field in the fixed call. Here: fix the component so its props match what a card needs — keep both <code>code</code> and <code>seats</code> — and the test already passes both.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>|||<p>Component khai <code>{ code: string; seats: number }</code>, nhưng <code>kiem/dung.ts</code> gọi nó với chỉ <code>{ code }</code> — một prop bắt buộc bị thiếu (TS2741). Ở đây: sửa để component trả về cả <code>code</code> và <code>seats</code>; <code>kiem/dung.ts</code> đã truyền đủ hai prop.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>",
+    "khoiDau": {
+      "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\n// The component only renders code; render seats too so both props are used.\nexport const LabCard: FC<LabProps> = (props) => h('div', { 'data-code': props.code });\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "kiem/dung.ts": "import { LabCard } from '../src/card.ts';\n// A required prop missing here would be TS2741 — both are provided.\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n",
+      "test/card.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard renders code and seats', () => { const el = LabCard({ code: 'BE-201', seats: 40 }); assert.equal(el.props['data-code'], 'BE-201'); assert.equal(el.props['data-seats'], 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/card.ts",
+        "src/react.ts",
+        "kiem/dung.ts",
+        "test/card.test.ts"
+      ],
+      "chay": [
+        "node --test test/card.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { 'data-code': props.code, 'data-seats': props.seats });\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "renders only code — the seats test fails",
+        "tep": {
+          "src/card.ts": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { 'data-code': props.code });\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-2-a",
+    "bai": "typescript-12-2-hooks",
+    "tieuDe": "The setter is typed|||Setter có kiểu",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>useState(0) infers a number, so the setter only takes a number — calling it with a string is TS2345. Set the count to a number.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>useState(0) suy ra một number, nên setter chỉ nhận một number — gọi nó với một string là TS2345. Đặt count bằng một number.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/counter.ts": "import { useState } from './react.ts';\nexport function next(): number {\n  const [count, setCount] = useState(0);\n  // Wrong: the setter takes a number, not a string.\n  setCount('one');\n  return count + 1;\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/counter.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { next } from '../src/counter.ts';\ntest('next counts from 0', () => { assert.equal(next(), 1); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/counter.ts",
+        "src/react.ts",
+        "test/counter.test.ts"
+      ],
+      "chay": [
+        "node --test test/counter.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/counter.ts": "import { useState } from './react.ts';\nexport function next(): number {\n  const [count, setCount] = useState(0);\n  setCount(count + 1);\n  return count + 1;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "setCount('one') kept (TS2345)",
+        "tep": {
+          "src/counter.ts": "import { useState } from './react.ts';\nexport function next(): number { const [count, setCount] = useState(0); setCount('one'); return count + 1; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-2-b",
+    "bai": "typescript-12-2-hooks",
+    "tieuDe": "Narrow a nullable state|||Thu hẹp một state nullable",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p>The state is <code>useState&lt;User | null&gt;(null)</code>, so reading <code>user.name</code> directly is TS18047 (\"possibly null\"). Narrow with a null check and return a fallback when the user is not loaded.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>State là <code>useState&lt;User | null&gt;(null)</code>, nên đọc <code>user.name</code> trực tiếp là TS18047 (\"possibly null\"). Thu hẹp bằng một phép kiểm null và trả về một giá trị dự phòng khi user chưa tải.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/profile.ts": "import { useState } from './react.ts';\ntype User = { id: number; name: string };\nexport function label(): string {\n  const [user] = useState<User | null>(null);\n  // Wrong: user may be null.\n  return user.name;\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/profile.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { label } from '../src/profile.ts';\ntest('label falls back when user is null', () => { assert.equal(label(), 'guest'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/profile.ts",
+        "src/react.ts",
+        "test/profile.test.ts"
+      ],
+      "chay": [
+        "node --test test/profile.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/profile.ts": "import { useState } from './react.ts';\ntype User = { id: number; name: string };\nexport function label(): string {\n  const [user] = useState<User | null>(null);\n  return user === null ? 'guest' : user.name;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads user.name without narrowing (TS18047)",
+        "tep": {
+          "src/profile.ts": "import { useState } from './react.ts';\ntype User = { id: number; name: string };\nexport function label(): string { const [user] = useState<User | null>(null); return user.name; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-3-a",
+    "bai": "typescript-12-3-events",
+    "tieuDe": "Read the value from the target|||Đọc value từ target",
+    "doKho": "EASY",
+    "phut": 7,
+    "moTa": "<p>The event is a <code>ChangeEvent</code>, so the value lives at <code>e.target.value</code> — reading <code>e.value</code> is TS2339. Read it from the target.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Sự kiện là một <code>ChangeEvent</code>, nên value nằm ở <code>e.target.value</code> — đọc <code>e.value</code> là TS2339. Đọc nó từ target.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/change.ts": "import type { ChangeEvent } from './react.ts';\nexport function upper(e: ChangeEvent): string {\n  // Wrong: the value is under target.\n  return e.value.toUpperCase();\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/change.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { upper } from '../src/change.ts';\ntest('upper reads the target value', () => { assert.equal(upper({ target: { value: 'be-201' } }), 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/change.ts",
+        "src/react.ts",
+        "test/change.test.ts"
+      ],
+      "chay": [
+        "node --test test/change.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/change.ts": "import type { ChangeEvent } from './react.ts';\nexport function upper(e: ChangeEvent): string {\n  return e.target.value.toUpperCase();\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads e.value (TS2339)",
+        "tep": {
+          "src/change.ts": "import type { ChangeEvent } from './react.ts';\nexport function upper(e: ChangeEvent): string { return e.value.toUpperCase(); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-3-b",
+    "bai": "typescript-12-3-events",
+    "tieuDe": "Parse the value to a number|||Phân tích value thành number",
+    "doKho": "MEDIUM",
+    "phut": 8,
+    "moTa": "<p>An input value is always a string, so assigning <code>e.target.value</code> straight to a <code>number</code> is TS2322. Parse it with <code>Number()</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Value của một input luôn là một string, nên gán <code>e.target.value</code> thẳng cho một <code>number</code> là TS2322. Phân tích nó bằng <code>Number()</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/seats.ts": "import type { ChangeEvent } from './react.ts';\nexport function seats(e: ChangeEvent): number {\n  // Wrong: value is a string; assigning it to a number is refused.\n  const n: number = e.target.value;\n  return n;\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/seats.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { seats } from '../src/seats.ts';\ntest('seats parses to a number', () => { assert.strictEqual(seats({ target: { value: '40' } }), 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/seats.ts",
+        "src/react.ts",
+        "test/seats.test.ts"
+      ],
+      "chay": [
+        "node --test test/seats.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/seats.ts": "import type { ChangeEvent } from './react.ts';\nexport function seats(e: ChangeEvent): number {\n  return Number(e.target.value);\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "assigns the string value to a number (TS2322)",
+        "tep": {
+          "src/seats.ts": "import type { ChangeEvent } from './react.ts';\nexport function seats(e: ChangeEvent): number { const n: number = e.target.value; return n; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-4-a",
+    "bai": "typescript-12-4-context-generics",
+    "tieuDe": "Guard a nullable context|||Gác một context nullable",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p>The context is <code>createContext&lt;Theme | null&gt;(null)</code>, so <code>useContext</code> returns <code>Theme | null</code> — reading <code>theme.color</code> directly is TS18047. Throw if it is null, then return the color.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Context là <code>createContext&lt;Theme | null&gt;(null)</code>, nên <code>useContext</code> trả về <code>Theme | null</code> — đọc <code>theme.color</code> trực tiếp là TS18047. Ném nếu nó null, rồi trả về color.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/theme.ts": "import { createContext, useContext } from './react.ts';\ntype Theme = { color: string };\nconst ThemeContext = createContext<Theme | null>({ color: 'blue' });\nexport function color(): string {\n  const theme = useContext(ThemeContext);\n  // Wrong: theme may be null.\n  return theme.color;\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/theme.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { color } from '../src/theme.ts';\ntest('color reads the provided theme', () => { assert.equal(color(), 'blue'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/theme.ts",
+        "src/react.ts",
+        "test/theme.test.ts"
+      ],
+      "chay": [
+        "node --test test/theme.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/theme.ts": "import { createContext, useContext } from './react.ts';\ntype Theme = { color: string };\nconst ThemeContext = createContext<Theme | null>({ color: 'blue' });\nexport function color(): string {\n  const theme = useContext(ThemeContext);\n  if (theme === null) throw new Error('no ThemeProvider');\n  return theme.color;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "reads theme.color without the null check (TS18047)",
+        "tep": {
+          "src/theme.ts": "import { createContext, useContext } from './react.ts';\ntype Theme = { color: string };\nconst ThemeContext = createContext<Theme | null>({ color: 'blue' });\nexport function color(): string { const theme = useContext(ThemeContext); return theme.color; }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-12-4-b",
+    "bai": "typescript-12-4-context-generics",
+    "tieuDe": "A generic List infers its type|||List generic suy kiểu của nó",
+    "doKho": "MEDIUM",
+    "phut": 9,
+    "moTa": "<p>Make <code>List&lt;T&gt;</code> generic so <code>render</code> receives the element type. With the stub it is typed <code>unknown</code>, so <code>n.toFixed(0)</code> is TS2339 (\"toFixed does not exist on unknown\"). Give <code>ListProps</code> and <code>List</code> a type parameter so <code>T</code> is inferred from <code>items</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Làm <code>List&lt;T&gt;</code> generic để <code>render</code> nhận đúng kiểu phần tử. Với bản stub nó là <code>unknown</code>, nên <code>n.toFixed(0)</code> là TS2339. Cho <code>ListProps</code> và <code>List</code> một tham số kiểu để <code>T</code> được suy từ <code>items</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/list.ts": "import type { ReactNode } from './react.ts';\n// The stub is not generic: items is unknown[], so render's item is unknown.\ntype ListProps = { items: unknown[]; render: (item: unknown) => ReactNode };\nexport function List(props: ListProps): ReactNode[] {\n  return props.items.map(props.render);\n}\nexport const out = List({ items: [1, 2, 3], render: (n) => 'n=' + n.toFixed(0) });\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "test/list.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { out } from '../src/list.ts';\ntest('List maps a typed render over items', () => { assert.deepEqual(out, ['n=1', 'n=2', 'n=3']); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/list.ts",
+        "src/react.ts",
+        "test/list.test.ts"
+      ],
+      "chay": [
+        "node --test test/list.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/list.ts": "import type { ReactNode } from './react.ts';\ntype ListProps<T> = { items: T[]; render: (item: T) => ReactNode };\nexport function List<T>(props: ListProps<T>): ReactNode[] {\n  return props.items.map(props.render);\n}\nexport const out = List({ items: [1, 2, 3], render: (n) => 'n=' + n.toFixed(0) });\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "keeps unknown[] — n.toFixed is TS2339",
+        "tep": {
+          "src/list.ts": "import type { ReactNode } from './react.ts';\ntype ListProps = { items: unknown[]; render: (item: unknown) => ReactNode };\nexport function List(props: ListProps): ReactNode[] { return props.items.map(props.render); }\nexport const out = List({ items: [1, 2, 3], render: (n) => 'n=' + n.toFixed(0) });\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-12",
+    "bai": "typescript-12-6-lab-form-co-kieu",
+    "tieuDe": "Lab 12 — a typed form hook|||Lab 12 — một hook form có kiểu",
+    "doKho": "HARD",
+    "phut": 22,
+    "moTa": "<p>The lab in miniature. Type <code>CreateBooking</code> (lab, seats) and <code>BookingFormProps</code> (onSubmit), type the hook’s return so <code>lab</code> is a string and <code>seats</code> a number, and parse the seat input with <code>Number()</code>. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test green.</p>|||<p>Lab thu nhỏ. Gõ kiểu <code>CreateBooking</code> (lab, seats) và <code>BookingFormProps</code> (onSubmit), gõ giá trị trả về của hook để <code>lab</code> là string và <code>seats</code> là number, và phân tích ô seats bằng <code>Number()</code>. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/form.ts": "import { h } from './react.ts';\n\n// A teammate stubbed the types with any and forgot to parse seats to a number.\nexport type CreateBooking = any;\nexport type BookingFormProps = any;\n\nexport function useBookingForm() {\n  const form: any = {\n    lab: '',\n    seats: 0,\n    onLabChange(e: any) { form.lab = e.target.value; },\n    onSeatsChange(e: any) { form.seats = e.target.value; },\n    submit() { return { lab: form.lab, seats: form.seats }; },\n  };\n  return form;\n}\n"
+    },
+    "coDinh": {
+      "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+      "kiem/dung.ts": "import type { CreateBooking, BookingFormProps } from '../src/form.ts';\nconst booking: CreateBooking = { lab: 'BE-201', seats: 40 };\nconst props: BookingFormProps = { onSubmit: (b: CreateBooking) => { void b; } };\nexport { booking, props };\n",
+      "kiem/sai.ts": "import type { CreateBooking, BookingFormProps } from '../src/form.ts';\nexport const s1: CreateBooking = { lab: 'BE-201' }; // expect TS2741\nexport const s2: CreateBooking = { lab: 'BE-201', seats: 40, id: 'bk_1' }; // expect TS2353\nexport const s3: CreateBooking = { lab: 'BE-201', seats: 'forty' }; // expect TS2322\nexport const s4: BookingFormProps = {}; // expect TS2741\n",
+      "test/form.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { useBookingForm } from '../src/form.ts';\ntest('the hook collects typed values', () => { const f = useBookingForm(); f.onLabChange({ target: { value: 'BE-201' } }); f.onSeatsChange({ target: { value: '40' } }); const b = f.submit(); assert.equal(b.lab, 'BE-201'); assert.strictEqual(b.seats, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/form.ts",
+        "src/react.ts",
+        "kiem/dung.ts",
+        "test/form.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/form.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/form.ts": "import type { ChangeEvent } from './react.ts';\n\nexport type CreateBooking = { lab: string; seats: number };\nexport type BookingFormProps = { onSubmit: (booking: CreateBooking) => void };\nexport type BookingForm = {\n  lab: string;\n  seats: number;\n  onLabChange(e: ChangeEvent): void;\n  onSeatsChange(e: ChangeEvent): void;\n  submit(): CreateBooking;\n};\n\nexport function useBookingForm(): BookingForm {\n  const form: BookingForm = {\n    lab: '',\n    seats: 0,\n    onLabChange(e) { form.lab = e.target.value; },\n    onSeatsChange(e) { form.seats = Number(e.target.value); },\n    submit() { return { lab: form.lab, seats: form.seats }; },\n  };\n  return form;\n}\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "the any stub kept — wrong uses slip and seats stays a string",
+        "tep": {
+          "src/form.ts": "import { h } from './react.ts';\nexport type CreateBooking = any;\nexport type BookingFormProps = any;\nexport function useBookingForm() { const form: any = { lab: '', seats: 0, onLabChange(e: any) { form.lab = e.target.value; }, onSeatsChange(e: any) { form.seats = e.target.value; }, submit() { return { lab: form.lab, seats: form.seats }; } }; return form; }\n"
+        }
+      },
+      {
+        "nhan": "seats optional — the S1 wrong use slips through",
+        "tep": {
+          "src/form.ts": "import type { ChangeEvent } from './react.ts';\nexport type CreateBooking = { lab: string; seats?: number };\nexport type BookingFormProps = { onSubmit: (booking: CreateBooking) => void };\nexport type BookingForm = { lab: string; seats: number; onLabChange(e: ChangeEvent): void; onSeatsChange(e: ChangeEvent): void; submit(): CreateBooking };\nexport function useBookingForm(): BookingForm { const form: BookingForm = { lab: '', seats: 0, onLabChange(e) { form.lab = e.target.value; }, onSeatsChange(e) { form.seats = Number(e.target.value); }, submit() { return { lab: form.lab, seats: form.seats }; } }; return form; }\n"
+        }
+      }
+    ]
   }
 ]

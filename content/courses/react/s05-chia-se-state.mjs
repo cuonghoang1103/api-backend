@@ -703,6 +703,11 @@ ${SD.tachEn}
   <span class="lc-body"><span class="lc-title">You met this in FER202 — lesson 7.1: Prop drilling &amp; the Context API</span><span class="lc-sub">If you took FER202 on Academy, this part will feel familiar. Same: prop drilling and Context in three steps: create, provide, read. Different: Courses measures which components Context re-renders. In this lesson we add: a measured re-render storm, splitting frequently-changing context from stable context, when Context is enough. If you have not taken FER202, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN FER202 LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Typing a context — TypeScript 12.4: Typed context &amp; generic components</span><span class="lc-sub">Same: a context carries a value to any component below a provider. Different: there the context <em>type</em> carries the <code>| null</code> for "outside the provider", so reading it unchecked is TS18047 and a guard hook turns that into one clear error — measured with tsc on a React model, alongside generic components.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -1021,6 +1026,11 @@ ${SD.tachVi}
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 7.1: Prop drilling &amp; Context API</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: prop drilling và Context ba bước: tạo, cung cấp, đọc. Khác: Courses đo xem Context làm component nào render lại. Ở bài này mình học thêm: cơn bão render đo thật, tách context đổi thường xuyên khỏi context ít đổi, khi nào Context là đủ. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-4-context-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gõ kiểu một context — TypeScript 12.4: Context có kiểu &amp; component generic</span><span class="lc-sub">Giống: một context mang một giá trị tới mọi component dưới một provider. Khác: ở đó <em>kiểu</em> context mang cái <code>| null</code> cho "ngoài provider", nên đọc nó chưa kiểm là TS18047 và một hook gác biến điều đó thành một lỗi rõ ràng — đo thật bằng tsc trên một mô hình React, cùng với component generic.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

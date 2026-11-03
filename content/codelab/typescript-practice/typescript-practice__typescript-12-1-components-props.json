@@ -1,0 +1,306 @@
+{
+  "trackSlug": "typescript-practice",
+  "moduleSlug": "typescript-12-1-components-props",
+  "lesson": {
+    "course": "typescript",
+    "slug": "typescript-12-1-components-props"
+  },
+  "exercises": [
+    {
+      "title": "Read a declared prop",
+      "language": "typescript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 7,
+      "points": 10,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-12-1-components-props"
+      ],
+      "problemHtml": "<p>The component is typed <code>FC&lt;{ code: string; seats: number }&gt;</code>, but it reads <code>props.name</code> — a prop that was not declared (TS2339). Read the declared <code>props.code</code> instead.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/card.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/card.ts</code>, <code>src/react.ts</code>, <code>kiem/dung.ts</code>, <code>test/card.test.ts</code>.</li>\n  <li><code>node --test test/card.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component kiểu <code>FC&lt;{ code: string; seats: number }&gt;</code>, nhưng nó đọc <code>props.name</code> — một prop không được khai (TS2339). Đọc <code>props.code</code> đã khai thay vào đó.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/card.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/card.ts</code>, <code>src/react.ts</code>, <code>kiem/dung.ts</code>, <code>test/card.test.ts</code>.</li>\n  <li><code>node --test test/card.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/card.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/card.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/card.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/card.ts",
+          "language": "typescript",
+          "code": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\n// Wrong: the props type has code and seats, not name.\nexport const LabCard: FC<LabProps> = (props) => h('div', { title: props.name });\n"
+        },
+        {
+          "name": "src/react.ts",
+          "language": "typescript",
+          "code": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LabCard } from '../src/card.ts';\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n"
+        },
+        {
+          "name": "test/card.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard reads code', () => { assert.equal(LabCard({ code: 'BE-201', seats: 40 }).props.title, 'BE-201'); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/card.ts",
+          "language": "typescript",
+          "code": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { title: props.code });\n"
+        },
+        {
+          "name": "src/react.ts",
+          "language": "typescript",
+          "code": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LabCard } from '../src/card.ts';\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n"
+        },
+        {
+          "name": "test/card.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard reads code', () => { assert.equal(LabCard({ code: 'BE-201', seats: 40 }).props.title, 'BE-201'); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — still reads props.name (TS2339) — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — still reads props.name (TS2339) — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+          "kiem/dung.ts": "import { LabCard } from '../src/card.ts';\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n",
+          "test/card.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard reads code', () => { assert.equal(LabCard({ code: 'BE-201', seats: 40 }).props.title, 'BE-201'); });\n"
+        },
+        "tepHoc": [
+          "src/card.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/card.ts",
+              "src/react.ts",
+              "kiem/dung.ts",
+              "test/card.test.ts"
+            ],
+            "moTa": "tsc (strict): src/card.ts + src/card.ts, src/react.ts, kiem/dung.ts, test/card.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/card.test.ts",
+            "moTa": "node --test test/card.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "still reads props.name (TS2339) — caught by: tsc (strict): src/card.ts + src/card.ts, src/react.ts, kiem/dung.ts, test/card.test.ts compile with 0 errors; node --test test/card.test.ts exits 0|||still reads props.name (TS2339) — máy chấm bắt ở: tsc (strict): src/card.ts + src/card.ts, src/react.ts, kiem/dung.ts, test/card.test.ts compile with 0 errors; node --test test/card.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    },
+    {
+      "title": "Pass every required prop",
+      "language": "typescript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 7,
+      "points": 20,
+      "concepts": [
+        "tsc --noEmit (strict)",
+        "node --test (types stripped)"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "typescript",
+        "tsc",
+        "labflow-ts",
+        "typescript-12-1-components-props"
+      ],
+      "problemHtml": "<p>The component declares <code>{ code: string; seats: number }</code>, but <code>kiem/dung.ts</code> calls it with only <code>{ code }</code> — a missing required prop (TS2741). Make the component usable by giving <code>LabProps</code> only what the call provides, or add the field in the fixed call. Here: fix the component so its props match what a card needs — keep both <code>code</code> and <code>seats</code> — and the test already passes both.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts and the test passes.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Edit <code>src/card.ts</code>. The other files (tests, <code>kiem/…</code>, helpers) belong to the grader: it always uses the original copy.</li>\n  <li><code>tsc</code> with the course tsconfig (strict, noUncheckedIndexedAccess, nodenext) reports <b>0 errors</b> on your files + <code>src/card.ts</code>, <code>src/react.ts</code>, <code>kiem/dung.ts</code>, <code>test/card.test.ts</code>.</li>\n  <li><code>node --test test/card.test.ts</code> exits with code 0 — Node 22 runs the .ts files by stripping the types.</li>\n  <li>No forbidden shortcut in your files: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "problemHtmlVi": "<p>Component khai <code>{ code: string; seats: number }</code>, nhưng <code>kiem/dung.ts</code> gọi nó với chỉ <code>{ code }</code> — một prop bắt buộc bị thiếu (TS2741). Ở đây: sửa để component trả về cả <code>code</code> và <code>seats</code>; <code>kiem/dung.ts</code> đã truyền đủ hai prop.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts và test qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Sửa <code>src/card.ts</code>. Các tệp còn lại (test, <code>kiem/…</code>, tệp phụ) là của máy chấm: nó luôn dùng bản gốc.</li>\n  <li><code>tsc</code> với tsconfig của khoá (strict, noUncheckedIndexedAccess, nodenext) báo <b>0 lỗi</b> trên tệp của bạn + <code>src/card.ts</code>, <code>src/react.ts</code>, <code>kiem/dung.ts</code>, <code>test/card.test.ts</code>.</li>\n  <li><code>node --test test/card.test.ts</code> thoát với mã 0 — Node 22 chạy tệp .ts bằng cách bỏ kiểu.</li>\n  <li>Không dùng lối tắt bị cấm trong tệp của bạn: <code>\\bany\\b</code>, <code>@ts-ignore</code>, <code>@ts-nocheck</code>, <code>@ts-expect-error</code>, <code>[\\w$)\\]]!(?=[.\\[;,)\\s])</code>.</li>\n</ul>",
+      "inputSpec": "Your file(s): src/card.ts (TypeScript, the course tsconfig).|||Tệp của bạn: src/card.ts (TypeScript, tsconfig của khoá).",
+      "outputSpec": "tsc clean where it must be clean, refused where it must be refused, and the program/tests still run.|||tsc sạch ở chỗ phải sạch, từ chối ở chỗ phải từ chối, và chương trình/test vẫn chạy đúng.",
+      "constraints": "Graded in your browser with TypeScript 6.0.3 (the JavaScript build of the compiler; the course uses tsc 7.0.2 — same language, same checks).|||Chấm ngay trong trình duyệt bằng TypeScript 6.0.3 (bản JavaScript của trình biên dịch; khoá dùng tsc 7.0.2 — cùng ngôn ngữ, cùng phép kiểm).\nRun-time checks: node:test + node:assert/strict only, no file system or network.|||Kiểm lúc chạy: chỉ node:test + node:assert/strict, không có hệ thống tệp hay mạng.",
+      "examplesJson": [
+        {
+          "input": "node --test test/card.test.ts",
+          "output": "exit code 0 (all tests pass)",
+          "explanation": "The tests are fixed: make the types honest without changing what the code does.|||Bộ test cố định: làm kiểu trung thực mà không đổi việc code làm."
+        }
+      ],
+      "hintsJson": [
+        "Press Run first: every check is listed with what tsc or Node reported. Start from the first red one — fixing one type often fixes several lines.|||Bấm Chạy trước: mỗi kiểm ghi rõ tsc hoặc Node đã báo gì. Bắt đầu từ kiểm đỏ đầu tiên — sửa một kiểu thường sửa được nhiều dòng.",
+        "Types are erased at run time: the tests (and any printed output) only pass if the code still DOES the right thing — a cast (as) or a ! that lies to tsc still crashes or prints the wrong value.|||Kiểu bị xoá lúc chạy: test (và output) chỉ xanh khi code vẫn LÀM đúng — một phép ép kiểu (as) hay dấu ! nói dối tsc vẫn sập hoặc in sai.",
+        "Shortcuts are refused here: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — this check reads your files as text, so these spellings are refused even where tsc would accept them.|||Lối tắt bị cấm ở bài này: any · @ts-ignore · @ts-nocheck · @ts-expect-error · /[\\w$)\\]]!(?=[.\\[;,)\\s])/ — kiểm này đọc tệp của bạn như văn bản, nên các cách viết này bị từ chối kể cả khi tsc chấp nhận."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/card.ts",
+          "language": "typescript",
+          "code": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\n// The component only renders code; render seats too so both props are used.\nexport const LabCard: FC<LabProps> = (props) => h('div', { 'data-code': props.code });\n"
+        },
+        {
+          "name": "src/react.ts",
+          "language": "typescript",
+          "code": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LabCard } from '../src/card.ts';\n// A required prop missing here would be TS2741 — both are provided.\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n"
+        },
+        {
+          "name": "test/card.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard renders code and seats', () => { const el = LabCard({ code: 'BE-201', seats: 40 }); assert.equal(el.props['data-code'], 'BE-201'); assert.equal(el.props['data-seats'], 40); });\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/card.ts",
+          "language": "typescript",
+          "code": "import type { FC } from './react.ts';\nimport { h } from './react.ts';\ntype LabProps = { code: string; seats: number };\nexport const LabCard: FC<LabProps> = (props) => h('div', { 'data-code': props.code, 'data-seats': props.seats });\n"
+        },
+        {
+          "name": "src/react.ts",
+          "language": "typescript",
+          "code": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n"
+        },
+        {
+          "name": "kiem/dung.ts",
+          "language": "typescript",
+          "code": "import { LabCard } from '../src/card.ts';\n// A required prop missing here would be TS2741 — both are provided.\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n"
+        },
+        {
+          "name": "test/card.test.ts",
+          "language": "typescript",
+          "code": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard renders code and seats', () => { const el = LabCard({ code: 'BE-201', seats: 40 }); assert.equal(el.props['data-code'], 'BE-201'); assert.equal(el.props['data-seats'], 40); });\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The reference solution is in the Solution tab, with comments on every type it adds. It passes because the grader checks the same three things as the course's own checker (scripts/ts/kiem-de-ts.mjs): the files compile under the strict course tsconfig, every wrong call in the grader's files is refused with the expected error code, and the program still behaves the same when Node strips the types and runs it.</p><p>The usual wrong answers — renders only code — the seats test fails — each fail at least one of those checks: see \"Common mistakes\".</p>",
+      "solutionExplanationHtmlVi": "<p>Lời giải tham khảo ở tab Lời giải, có chú thích cho từng kiểu thêm vào. Nó đạt vì máy chấm kiểm đúng ba điều như máy chấm của khoá (scripts/ts/kiem-de-ts.mjs): các tệp biên dịch sạch với tsconfig strict của khoá, mọi lời gọi sai trong tệp của máy chấm bị từ chối với đúng mã lỗi, và chương trình vẫn chạy y như cũ khi Node bỏ kiểu rồi chạy.</p><p>Các bài làm sai hay gặp — renders only code — the seats test fails — đều trượt ít nhất một kiểm: xem \"Lỗi hay gặp\".</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "ts",
+        "phienBan": 1,
+        "tsconfig": {
+          "target": "es2024",
+          "module": "nodenext",
+          "types": [
+            "node"
+          ],
+          "strict": true,
+          "noUncheckedIndexedAccess": true,
+          "noEmit": true,
+          "allowImportingTsExtensions": true,
+          "erasableSyntaxOnly": true,
+          "verbatimModuleSyntax": true,
+          "skipLibCheck": true
+        },
+        "coDinh": {
+          "src/react.ts": "export type ReactNode = El | string | number | boolean | null;\nexport type El = { tag: string; props: Record<string, unknown>; children: ReactNode[] };\nexport type FC<P> = (props: P) => El;\nexport function h(tag: string, props: Record<string, unknown> = {}, ...children: ReactNode[]): El {\n  return { tag, props, children };\n}\nexport function useState<S>(initial: S): [S, (next: S) => void] {\n  const cell = { value: initial };\n  return [cell.value, (next: S) => { cell.value = next; }];\n}\nexport type Ref<T> = { current: T | null };\nexport function useRef<T>(initial: T | null): Ref<T> { return { current: initial }; }\nexport type ChangeEvent = { target: { value: string } };\nexport type Context<T> = { readonly defaultValue: T };\nexport function createContext<T>(defaultValue: T): Context<T> { return { defaultValue }; }\nexport function useContext<T>(ctx: Context<T>): T { return ctx.defaultValue; }\n",
+          "kiem/dung.ts": "import { LabCard } from '../src/card.ts';\n// A required prop missing here would be TS2741 — both are provided.\nconst el = LabCard({ code: 'BE-201', seats: 40 });\nexport { el };\n",
+          "test/card.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { LabCard } from '../src/card.ts';\ntest('LabCard renders code and seats', () => { const el = LabCard({ code: 'BE-201', seats: 40 }); assert.equal(el.props['data-code'], 'BE-201'); assert.equal(el.props['data-seats'], 40); });\n"
+        },
+        "tepHoc": [
+          "src/card.ts"
+        ],
+        "timeoutMs": 5000,
+        "kiem": [
+          {
+            "kiem": "sach",
+            "tep": [
+              "src/card.ts",
+              "src/react.ts",
+              "kiem/dung.ts",
+              "test/card.test.ts"
+            ],
+            "moTa": "tsc (strict): src/card.ts + src/card.ts, src/react.ts, kiem/dung.ts, test/card.test.ts compile with 0 errors · biên dịch sạch"
+          },
+          {
+            "kiem": "chay",
+            "lenh": "node --test test/card.test.ts",
+            "moTa": "node --test test/card.test.ts exits 0 · chạy như Node 22"
+          },
+          {
+            "kiem": "cam",
+            "mau": [
+              "\\bany\\b",
+              "@ts-ignore",
+              "@ts-nocheck",
+              "@ts-expect-error",
+              "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+            ],
+            "moTa": "no forbidden shortcut (any, @ts-ignore, @ts-nocheck, @ts-expect-error, …) · không dùng lối tắt bị cấm"
+          }
+        ]
+      },
+      "gradeKind": "ts",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "renders only code — the seats test fails — caught by: node --test test/card.test.ts exits 0|||renders only code — the seats test fails — máy chấm bắt ở: node --test test/card.test.ts exits 0"
+        },
+        {
+          "loi": "Silencing tsc with any, @ts-ignore or @ts-expect-error instead of fixing the type — the \"no forbidden shortcut\" check fails.|||Bịt miệng tsc bằng any, @ts-ignore hay @ts-expect-error thay vì sửa kiểu — kiểm \"không dùng lối tắt bị cấm\" trượt."
+        }
+      ]
+    }
+  ]
+}

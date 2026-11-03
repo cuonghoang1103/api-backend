@@ -374,6 +374,36 @@
       "name": "11.6 Lab 11 — A typed handler with an error envelope",
       "level": "ADVANCED",
       "description": "1 đề: Lab 11 — a typed POST /bookings handler (CreateBooking body + ApiResult envelope)"
+    },
+    {
+      "slug": "typescript-12-1-components-props",
+      "name": "12.1 — Components & props",
+      "level": "ADVANCED",
+      "description": "2 đề: Read a declared prop · Pass every required prop"
+    },
+    {
+      "slug": "typescript-12-2-hooks",
+      "name": "12.2 — Typing hooks",
+      "level": "ADVANCED",
+      "description": "2 đề: The setter is typed · Narrow a nullable state"
+    },
+    {
+      "slug": "typescript-12-3-events",
+      "name": "12.3 — Typing events",
+      "level": "ADVANCED",
+      "description": "2 đề: Read the value from the target · Parse the value to a number"
+    },
+    {
+      "slug": "typescript-12-4-context-generics",
+      "name": "12.4 — Typed context & generic components",
+      "level": "ADVANCED",
+      "description": "2 đề: Guard a nullable context · A generic List infers its type"
+    },
+    {
+      "slug": "typescript-12-6-lab-form-co-kieu",
+      "name": "12.6 Lab 12 — A typed component & hook",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 12 — a typed BookingForm hook (CreateBooking + typed handlers)"
     }
   ]
 }

@@ -1118,6 +1118,11 @@ ${SD.sortEn}
   <span class="lc-body"><span class="lc-title">The same rules for a data model — TypeScript 4.1: Object shapes</span><span class="lc-sub">Same: an object described by a shape with required, optional (?) and read-only properties; tsc catches a missing or misspelled property before anything runs. Different: there the shape is LabFlow’s data model — the typo check only works on a fresh literal (through a variable it became TS2741, and “optional to silence it” gave 0 errors and −12 free seats), and readonly does not stop push on a shared array.</span></span>
   <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Typing these props — TypeScript 12.1: Components &amp; props</span><span class="lc-sub">Same: a component is a function of a props object, and a wrong prop is a problem before anything renders. Different: there JSX checks props in a running app; in the TypeScript chapter a props <em>type</em> makes reading an undeclared prop TS2339 and calling without a required one TS2741 — a self-contained React model measured with tsc and Node.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 1 · Bài 1.2</span>
@@ -1377,6 +1382,11 @@ ${SD.sortVi}
 <a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-4-1-dang-object" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Cùng luật cho mô hình dữ liệu — TypeScript 4.1: Dáng object</span><span class="lc-sub">Giống: object được mô tả bằng một dáng có thuộc tính bắt buộc, optional (?) và chỉ đọc; tsc bắt thuộc tính thiếu hay gõ sai trước khi chạy. Khác: ở đó dáng là mô hình dữ liệu LabFlow — bộ bắt lỗi gõ chỉ chạy với literal tươi (qua một biến thì thành TS2741, và “cho optional để hết lỗi” ra 0 lỗi cùng −12 chỗ trống), và readonly không chặn push vào mảng dùng chung.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-12-1-components-props" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gõ kiểu các props này — TypeScript 12.1: Component &amp; props</span><span class="lc-sub">Giống: một component là một hàm của một object props, và một prop sai là vấn đề trước khi vẽ ra. Khác: ở đó JSX kiểm props trong một app đang chạy; trong chương TypeScript một <em>kiểu</em> props làm đọc một prop không khai thành TS2339 và gọi mà thiếu một prop bắt buộc thành TS2741 — một mô hình React tự-chứa đo thật bằng tsc và Node.</span></span>
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>

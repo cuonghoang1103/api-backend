@@ -362,9 +362,17 @@ typescript: 'typescript-practice',
   `demo11/` (16 demo gồm handler có kiểu, res.json, envelope narrowing, readonly config, service T|undefined). LabFlow TS: `npm test` giữ **60**.
   **2 cặp liên kết chéo hai chiều** (nodejs `nodejs-5-2-dinh-tuyen` ↔ 11.1 Handler<P,Q,B,T>; api-design `api-2-3-envelope` ↔ 11.3 ApiResult discriminated union).
   Ảnh chụp `_labflow-ts` cuối Ch11 (verify sạch: npm ci + tsc 0 lỗi + 60 test + lab11 4.5/8/9.5/10): Soạn MỘT phiên, KHÔNG fork.
-- **⏸ (chạy LIÊN TỤC — làm tiếp Chương 12 rồi báo chủ kênh gom deploy).** Chương 12 (§9 — React: form đặt phòng + client API dùng chung kiểu; Lab 12 component + hook có kiểu).
-  ⚠ KHÔNG cài @types/react vào `_labflow-ts` — dùng mô hình kiểu tự-chứa của bề mặt React (props, một "hook" useState-như, event), đo thật bằng tsc + Node với @types/node (như Ch11 đã làm với Express).
-  Làm y Ch5–11: MỘT phiên KHÔNG fork, `git rev-parse HEAD` lại ngay trước commit-tree. Không phiên nào đang giữ thư mục tạm: `$S/ts/lab/labflow-ts` dựng lại từ `_labflow-ts` + `npm ci` là đủ.
+- 04/11/2026 — **Chương 12 trọn** (thay placeholder cũ một tệp — placeholder dùng @types/react + JSX với output CHƯA đo): 4 bài (slug giữ: 12.1 components-props,
+  12.2 hooks, 12.3 events, 12.4 context-generics) + Lab 12 (MỚI `typescript-12-6-lab-form-co-kieu`) + quiz 10 câu (slug giữ `typescript-12-5-quiz`); tệp chương `s12-typing-react.mjs` soạn lại.
+  **KHÔNG cài @types/react, KHÔNG JSX** — mô hình kiểu TỰ-CHỨA của bề mặt React (`react.ts`: `FC/El`, `useState/useRef`, `ChangeEvent`, `createContext/useContext`), đúng dáng @types/react, đo thật tsc 7.0.2 + Node 22.23.3 với @types/node (mọi demo chạy được).
+  5 deck / **33 slide** đẩy `TS/v1` (ts-12-1..4 mỗi cái 6, ts-lab-12 **9**; 0 lỗi kiem-slide). **9 đề Code Lab `ts`** (ts-cl-12-1 a–b, 12-2 a–b, 12-3 a–b, 12-4 a–b, ts-cl-lab-12; 10 sai mẫu)
+  — kiem-de-ts **168/168** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **10/10 đề ch12 xanh** (lời giải đạt mọi kiểm, khởi đầu trượt; KHÔNG cần MA_THEM_TS6 — mã 2339/2741/2345/2322/2353/18047 khớp 6↔7); track +5 module (⇒ **66 module / 168 đề**).
+  Lab 12 (máy chấm `cham-lab-12.mjs`, chạy hook THẬT): BookingForm — hook `useBookingForm` (state + handler thay đổi + submit dựng CreateBooking) + component `FC<BookingFormProps>`, seats parse `Number()`.
+  A biên dịch · B cách dùng đúng · C no any/as/! · D hook thu đúng + seats là number · E 8 cách dùng sai. Số đo: any stub **3** · hook any **7.5** · seats optional **9.5** · tham khảo **10**.
+  `demo12/` (demo mô hình React tự-chứa: props/TS2339+TS2741, useState setter/TS2345, nullable/TS18047, ChangeEvent/TS2339+TS2322, context null/TS18047, generic List). LabFlow TS: `npm test` giữ **60**.
+  **4 cặp liên kết chéo hai chiều** (react `rx-1-2-props` ↔ 12.1 props có kiểu; `rx-2-1-use-state` ↔ 12.2 hook có kiểu; `rx-2-2-su-kien` ↔ 12.3 sự kiện có kiểu; `rx-5-1-context` ↔ 12.4 context có kiểu).
+  Soạn MỘT phiên, KHÔNG fork; `git rev-parse HEAD` lại ngay trước commit-tree.
+- **⏸ Tiếp theo: Chương 13–16** (chờ chủ kênh soát Ch10–12 + gom deploy). Làm y Ch5–12: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

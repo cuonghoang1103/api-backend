@@ -8,8 +8,10 @@ import type { Metadata } from 'next';
 // Description rewritten 2026-08-08 with the page: the old one ("building web,
 // AI, and embedded products") described nothing a reader could check. The page
 // now leads with counted evidence, so the snippet should too.
+// 03/11/2026: the site is introduced as the owner's personal website, and the
+// page now lists the real products (CT Work is on the App Store).
 const DESCRIPTION =
-  'About CuongThai — a learning and career platform with curricula, graded exercises, past exam papers, language practice and AI tools — and about Cuong Hoang, the full-stack developer who builds and runs it, with the production incidents he has fixed.';
+  'The personal website of Cuong Hoang, a Software Engineering student at FPT University: study materials turned into curricula, graded exercises, past exam papers, language practice and AI tools — plus the products he builds and runs, including CT Work on the App Store, and the production incidents he has fixed.';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -47,13 +49,14 @@ const PERSON_LD = {
   alternateName: 'CuongHoang',
   url: 'https://cuongthai.com/about',
   jobTitle: 'Full-Stack Developer',
+  affiliation: { '@type': 'CollegeOrUniversity', name: 'FPT University' },
   email: 'mailto:cuongthaihnhe176322@gmail.com',
   knowsLanguage: ['vi', 'en'],
   knowsAbout: [
     'TypeScript', 'Node.js', 'Express', 'Next.js', 'React',
     'PostgreSQL', 'Prisma', 'Redis', 'Docker', 'Nginx',
     'WebSocket', 'Large Language Models', 'Retrieval-Augmented Generation',
-    'Three.js', 'ESP32',
+    'Spring Boot', 'Three.js', 'ESP32',
   ],
   sameAs: [
     'https://github.com/cuonghoang1103',

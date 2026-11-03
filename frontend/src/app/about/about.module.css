@@ -384,6 +384,22 @@
 
 .bio p { font-size: 1.075rem; line-height: 1.75; color: var(--ab-ink-2); margin: 0 0 1.1rem; max-width: 40rem; }
 .bio p:first-child { font-size: 1.25rem; color: var(--ab-ink); line-height: 1.6; }
+.glance + .bio p:first-child { font-size: 1.075rem; color: var(--ab-ink-2); line-height: 1.75; }
+
+/* Education · Experience · Currently — the three owner slots, as ruled rows. */
+.glance { margin: 0.5rem 0 2rem; border-top: 1px solid var(--ab-line); max-width: 44rem; }
+.glanceRow {
+  display: grid;
+  grid-template-columns: 8.5rem minmax(0, 1fr);
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--ab-line);
+}
+@media (max-width: 639px) { .glanceRow { grid-template-columns: minmax(0, 1fr); gap: 0.25rem; } }
+.glanceRow dt { font-size: 0.8rem; font-weight: 700; color: var(--ab-ink-3); padding-top: 0.2rem; }
+.glanceRow dd { margin: 0; font-size: 1rem; line-height: 1.65; color: var(--ab-ink); }
+.inlineLink { font-weight: 600; color: var(--ab-accent); text-decoration: none; white-space: nowrap; }
+.inlineLink:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 .skills { display: grid; gap: 0.6rem 1.5rem; grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
 .skill { font-size: 0.85rem; }
@@ -427,6 +443,169 @@
 
 .hire { display: grid; gap: 0.75rem; grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 768px) { .hire { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+.feature[data-static='true']:hover { transform: none; box-shadow: none; border-color: var(--ab-line); }
+
+/* ── Hero "new" pill (CT Work on the App Store) ───────────────────────── */
+.newPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  max-width: 100%;
+  margin-top: 1.25rem;
+  padding: 0.35rem 0.85rem 0.35rem 0.4rem;
+  border-radius: 999px;
+  border: 1px solid var(--ab-line);
+  background: var(--ab-card);
+  color: var(--ab-ink);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s ease;
+}
+.newPill:hover { border-color: color-mix(in srgb, var(--ab-accent) 50%, var(--ab-line)); }
+.newPill > span:nth-of-type(2) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.newPill svg { flex-shrink: 0; color: var(--ab-ink-3); }
+.newTag {
+  flex-shrink: 0;
+  padding: 0.12rem 0.5rem;
+  border-radius: 999px;
+  background: var(--ab-accent);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+.newIcon { width: 20px; height: 20px; border-radius: 5px; flex-shrink: 0; }
+
+/* ── Latest writing ───────────────────────────────────────────────────── */
+.subLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ab-accent);
+  text-decoration: none;
+}
+.posts { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ab-line); }
+.post {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 1rem 0.25rem;
+  border-bottom: 1px solid var(--ab-line);
+  color: var(--ab-ink);
+  text-decoration: none;
+}
+.post:hover .postTitle { text-decoration: underline; text-underline-offset: 4px; }
+.post:hover .mapArrow { transform: translateX(3px); color: var(--ab-ink); }
+.postDate { font-size: 0.8rem; color: var(--ab-ink-3); font-variant-numeric: tabular-nums; }
+.postTitle { font-weight: 600; line-height: 1.45; }
+@media (max-width: 639px) {
+  .post { grid-template-columns: minmax(0, 1fr) auto; gap: 0.25rem 0.75rem; }
+  .postDate { grid-column: 1 / -1; }
+}
+
+/* ── What I've built ──────────────────────────────────────────────────── */
+.products {
+  display: grid;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* 2 columns: an odd one out at the end takes the full row. */
+  .product:last-child:nth-child(even) { grid-column: 1 / -1; }
+}
+/* Wide screens: featured row, then two halves, then three thirds — no orphan. */
+@media (min-width: 1024px) {
+  .products { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .product { grid-column: span 3; }
+  .product:last-child:nth-child(even) { grid-column: span 2; }
+  .product[data-size='third'] { grid-column: span 2; }
+}
+.product {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 22px;
+  border: 1px solid var(--ab-line);
+  background: var(--ab-card);
+  min-width: 0;
+}
+.product[data-featured='true'] {
+  border-color: color-mix(in srgb, var(--ab-accent) 35%, var(--ab-line));
+  background:
+    radial-gradient(28rem 14rem at 100% 0%, color-mix(in srgb, #4f5bd5 10%, transparent), transparent 70%),
+    var(--ab-card);
+}
+@media (min-width: 768px) {
+  .product[data-featured='true'] { grid-column: 1 / -1 !important; padding: 2rem; }
+  .product[data-featured='true'] .productWhat { font-size: 1.05rem; max-width: 46rem; }
+}
+.productHead { display: flex; align-items: center; gap: 0.9rem; }
+.productIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--ab-line);
+}
+.productLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  font-family: var(--font-fraunces), 'Fraunces Variable', Georgia, serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ab-accent);
+  background: color-mix(in srgb, var(--ab-accent) 12%, transparent);
+}
+.productName {
+  margin: 0;
+  font-family: var(--font-fraunces), 'Fraunces Variable', Georgia, serif;
+  font-size: 1.45rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.productKind { font-size: 0.85rem; color: var(--ab-ink-3); margin-top: 2px; }
+.productWhat { margin: 0; font-size: 0.95rem; line-height: 1.65; color: var(--ab-ink-2); }
+.productFacts { margin: 0; display: grid; gap: 0.45rem; font-size: 0.85rem; }
+.productFacts > div { display: grid; grid-template-columns: 5.5rem minmax(0, 1fr); gap: 0.75rem; }
+.productFacts dt { color: var(--ab-ink-3); }
+.productFacts dd { margin: 0; color: var(--ab-ink); }
+.statusDot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 0.45rem;
+  border-radius: 50%;
+  vertical-align: 0.1em;
+  background: #10b981;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #10b981 22%, transparent);
+}
+.statusDot[data-state='testing'] { background: #f59e0b; box-shadow: 0 0 0 3px color-mix(in srgb, #f59e0b 22%, transparent); }
+.storeRow { display: flex; flex-wrap: wrap; align-items: center; margin: -0.25rem 0 -0.75rem; }
+.productLinks { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+
+.cvMeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+  margin: 0.6rem 0 0;
+  font-size: 0.75rem;
+  color: var(--ab-ink-3);
+}
+.cvMeta a { margin-left: 0.3rem; color: var(--ab-ink-2); text-decoration: underline; text-underline-offset: 3px; }
 
 /* ── Contact ──────────────────────────────────────────────────────────── */
 .contactGrid { display: grid; gap: 2.5rem; }

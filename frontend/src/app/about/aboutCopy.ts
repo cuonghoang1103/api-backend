@@ -3,10 +3,10 @@
  *
  * Owner facts below come only from what the site already said before the
  * redesign — the old /about (`messages/*.json` → hero.*, about.*), the JSON-LD
- * `Person` in `about/layout.tsx`, and `ContactSection` (location). Anything the
- * site never stated is `null` in `OWNER_TODO` and renders as a dashed
- * placeholder for the owner (dev builds, or `/about?placeholders=1`), never as
- * made-up text for visitors.
+ * `Person` in `about/layout.tsx`, and `ContactSection` (location), plus what the
+ * owner told us on 03/11/2026 for `OWNER_TODO` (education, experience, now, why).
+ * A slot set to `null` renders as a dashed placeholder for the owner (dev
+ * builds, or `/about?placeholders=1`), never as made-up text for visitors.
  */
 import type { Bi } from './aboutData';
 
@@ -15,7 +15,7 @@ export const OWNER = {
   handle: 'CuongHoang',
   photo: '/images/avatar.png',
   email: 'cuongthaihnhe176322@gmail.com',
-  role: { en: 'Full-stack developer · AI builder', vi: 'Full-stack developer · AI builder' } as Bi,
+  role: { en: 'Software Engineering student · Full-stack developer · AI builder', vi: 'Sinh viên Kỹ thuật phần mềm · Full-stack developer · AI builder' } as Bi,
   location: { en: 'Hà Nội, Vietnam', vi: 'Hà Nội, Việt Nam' } as Bi,
   languages: { en: 'Vietnamese, English', vi: 'Tiếng Việt, tiếng Anh' } as Bi,
   socials: [
@@ -27,18 +27,27 @@ export const OWNER = {
 };
 
 /**
- * TODO(owner): fill these in — each `null` shows as a dashed placeholder to you
- * (dev / `?placeholders=1`) and is hidden from visitors until it has a value.
+ * The four "About me" slots. Filled 03/11/2026 from facts the owner gave; set a
+ * slot back to `null` to hide it (it then shows as a dashed placeholder to you in
+ * dev / `?placeholders=1`, never to visitors).
  */
 export const OWNER_TODO: Record<'education' | 'experience' | 'currently' | 'story', Bi | null> = {
-  /** e.g. { en: 'Software Engineering, FPT University (2023–)', vi: 'Kỹ thuật phần mềm, ĐH FPT (2023–)' } */
-  education: null,
-  /** Years / roles. The old page claimed both "3+ years" and "~6 yrs", so neither is reused here. */
-  experience: null,
-  /** What you are working on or studying right now. */
-  currently: null,
-  /** One or two sentences on why you started building this site. */
-  story: null,
+  education: {
+    en: 'Software Engineering at FPT University, semester 5 (Fall 2026). I specialise in Node.js and Spring Boot, and I am heading toward AI engineering, then MLOps.',
+    vi: 'Kỹ thuật phần mềm, Đại học FPT, đang học kỳ 5 (Fall 2026). Chuyên ngành hẹp Node.js và Spring Boot; mình đang hướng tới AI Engineer, rồi MLOps.',
+  },
+  experience: {
+    en: 'No employer yet, so my experience is what I have built and still run: CT Work (web, desktop, iOS), the CuongMini AI tools and this platform. I also mentor three junior students through their PRJ301 project.',
+    vi: 'Mình chưa đi làm ở công ty nào, nên kinh nghiệm là những gì mình tự làm và vẫn đang vận hành: CT Work (web, desktop, iOS), bộ công cụ AI CuongMini và chính nền tảng này. Mình cũng kèm ba bạn khoá dưới làm đồ án PRJ301.',
+  },
+  currently: {
+    en: 'Studying semester 5, writing courses and recording video lessons for this site, and looking after CT Work, which has just come out on the App Store (November 2026).',
+    vi: 'Đang học kỳ 5, soạn khoá học và quay video bài giảng cho trang, và chăm CT Work vừa lên App Store (tháng 11/2026).',
+  },
+  story: {
+    en: 'This is my personal website. It began as a place to keep and organise my study materials and notes, and I turn them into courses and practice, for myself and for other students. It is also my workshop: where I build real products end to end and ship them, on the web, the desktop, iOS and as AI tools.',
+    vi: 'Đây là trang web cá nhân của mình. Ban đầu nó là chỗ cất và sắp xếp tài liệu học, ghi chép của mình, rồi mình biến chúng thành khoá học và bài luyện, cho mình và cho các bạn sinh viên khác. Nó cũng là xưởng của mình: nơi mình tự làm sản phẩm thật từ đầu đến cuối và đưa ra dùng, trên web, máy tính, iOS và thành công cụ AI.',
+  },
 };
 
 export const PLACEHOLDER_LABEL: Record<keyof typeof OWNER_TODO, Bi> = {
@@ -53,8 +62,11 @@ const C = {
     pageLabel: 'About',
     heroTitle: 'A place to learn software, and the person who builds it.',
     heroBody:
-      'CuongThai is a learning and career platform: curricula, graded exercises, past exam papers, language practice and AI tools, in one place. One developer designs, writes and runs all of it.',
+      'This is my personal website. I keep my study materials here and turn them into curricula, graded exercises, past exam papers, language practice and AI tools, for me and for other students. It is also where I build and ship real products. One developer designs, writes and runs all of it.',
+    heroNew: 'New',
+    heroNewText: 'CT Work is on the App Store',
     jumpSite: 'About this website',
+    jumpWork: 'What I’ve built',
     jumpMe: 'About me',
     jumpContact: 'Contact',
     mapTitle: 'How the site is organised',
@@ -69,6 +81,26 @@ const C = {
     countedAt: 'Counted',
     codeTitle: 'Built in the open',
     codeBody: 'Counted from the repository on',
+    codeGate: 'Type checks gate every deploy, which then smoke-tests the core routes before it counts as done.',
+    postsTitle: 'Latest writing',
+    postsAll: 'All articles',
+    hanzi: 'kanji & hanzi',
+    repos: 'curated repositories',
+
+    workTitle: 'What I’ve built',
+    workLead:
+      'I have not worked for a company yet, so this is my experience: products I designed, built, shipped and still run myself. Every link below goes to the real thing.',
+    platforms: 'Runs on',
+    status: 'Status',
+    openWeb: 'Open on the web',
+    desktopApp: 'Desktop app',
+    caseStudy: 'Case study',
+    releases: 'Releases on GitHub',
+    moreProjects: 'More projects',
+    studioTitle: 'The studio page',
+    studioBody: 'The same products, told for clients: case studies, the stack in production and how a project is run.',
+    mentorTitle: 'Mentoring',
+    mentorBody: 'I mentor three junior students through their PRJ301 project: the plan and task board on CT Work, step-by-step guides, and code review.',
     stackTitle: 'What it runs on',
     open: 'Open',
 
@@ -79,6 +111,9 @@ const C = {
     meBuilding: 'Building this site since',
     meOpenTo: 'Open to work, collaboration, or a question about anything on this site.',
     viewCv: 'View CV',
+    downloadCv: 'Download CV',
+    cvUpdated: 'Updated',
+    cvOther: 'Other formats:',
     skillsTitle: 'Skills, self-assessed',
     skillsNote: 'My own estimate, not a test score.',
     incidentsTitle: 'Production incidents I have fixed',
@@ -109,8 +144,11 @@ const C = {
     pageLabel: 'Giới thiệu',
     heroTitle: 'Nơi học phần mềm, và người đang xây nó.',
     heroBody:
-      'CuongThai là nền tảng học tập và nghề nghiệp: chương trình học, bài tập chấm tự động, đề thi thật, luyện ngoại ngữ và công cụ AI, gom về một chỗ. Một lập trình viên thiết kế, viết và vận hành toàn bộ.',
+      'Đây là trang web cá nhân của mình. Mình cất tài liệu học ở đây rồi biến chúng thành chương trình học, bài tập chấm tự động, đề thi thật, luyện ngoại ngữ và công cụ AI, cho mình và cho các bạn sinh viên khác. Đây cũng là nơi mình làm và đưa sản phẩm thật ra dùng. Một lập trình viên thiết kế, viết và vận hành toàn bộ.',
+    heroNew: 'Mới',
+    heroNewText: 'CT Work đã có trên App Store',
     jumpSite: 'Về trang web',
+    jumpWork: 'Sản phẩm mình làm',
     jumpMe: 'Về mình',
     jumpContact: 'Liên hệ',
     mapTitle: 'Trang web được sắp xếp thế nào',
@@ -125,6 +163,26 @@ const C = {
     countedAt: 'Đếm lúc',
     codeTitle: 'Xây dựng công khai',
     codeBody: 'Đếm từ kho mã ngày',
+    codeGate: 'Kiểm kiểu chặn mọi lần deploy, rồi deploy tự kiểm các route lõi trước khi được coi là xong.',
+    postsTitle: 'Bài viết mới',
+    postsAll: 'Xem tất cả bài viết',
+    hanzi: 'chữ Hán & Kanji',
+    repos: 'kho mã tuyển chọn',
+
+    workTitle: 'Sản phẩm mình làm',
+    workLead:
+      'Mình chưa đi làm ở công ty nào, nên đây là kinh nghiệm của mình: những sản phẩm mình tự thiết kế, viết, phát hành và vẫn đang tự vận hành. Mọi liên kết dưới đây dẫn tới sản phẩm thật.',
+    platforms: 'Chạy trên',
+    status: 'Trạng thái',
+    openWeb: 'Mở trên web',
+    desktopApp: 'App máy tính',
+    caseStudy: 'Case study',
+    releases: 'Bản phát hành trên GitHub',
+    moreProjects: 'Xem thêm dự án',
+    studioTitle: 'Trang studio',
+    studioBody: 'Cũng những sản phẩm này, kể cho khách hàng: case study, công nghệ đang chạy production và cách một dự án được làm.',
+    mentorTitle: 'Kèm học',
+    mentorBody: 'Mình kèm ba bạn khoá dưới làm đồ án PRJ301: lập kế hoạch và bảng việc trên CT Work, viết hướng dẫn từng bước, và review code.',
     stackTitle: 'Chạy trên nền gì',
     open: 'Mở',
 
@@ -135,6 +193,9 @@ const C = {
     meBuilding: 'Bắt đầu xây trang này từ',
     meOpenTo: 'Sẵn sàng nhận việc, hợp tác, hoặc trả lời câu hỏi về bất cứ thứ gì trên trang.',
     viewCv: 'Xem CV',
+    downloadCv: 'Tải CV',
+    cvUpdated: 'Cập nhật',
+    cvOther: 'Định dạng khác:',
     skillsTitle: 'Kỹ năng, tự đánh giá',
     skillsNote: 'Do mình tự ước lượng, không phải điểm bài kiểm tra.',
     incidentsTitle: 'Sự cố production mình đã xử lý',

@@ -5,9 +5,16 @@
  *   1. About this website — what CuongThai is and what you can do here, with
  *      live counts from GET /api/v1/about/stats and the repo counts in
  *      `codebaseStats.json`.
- *   2. About me — the owner, using only what the site already stated (see
- *      `aboutCopy.ts`). Unknown facts are placeholders for the owner, hidden
- *      from visitors.
+ *   2. What I've built — the real products, with verified store/release links
+ *      (`aboutProducts.ts`, `lib/appLinks.ts`), CT Work's App Store badge first.
+ *   3. About me — the owner (see `aboutCopy.ts`). A slot set to null is a
+ *      placeholder for the owner, hidden from visitors.
+ *
+ * 03/11/2026: everything real from the pre-redesign page is carried over — CV
+ * view/download, latest articles, kanji/hanzi + curated-repo counts, the
+ * "type checks gate every deploy" line. Dropped on purpose: the services grid
+ * (made-up metrics such as "Uptime 99.97%", "Accuracy 98.5%"), "MVP in 2–4
+ * weeks", and the decorative terminal/ticker.
  *
  * The 08/08/2026 rule still holds: every number must be COUNTED. A count that
  * failed to load hides its figure — it is never replaced by 0 or a guess.
@@ -18,9 +25,12 @@
 import Link from 'next/link';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, ArrowUpRight, Check, Copy, Plus } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, Check, Copy, Download, Plus } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
-import { contactApi } from '@/lib/api';
+import { blogApi, contactApi } from '@/lib/api';
+import type { Post } from '@/types';
+import AppStoreBadge from '@/components/brand/AppStoreBadge';
+import { CTWORK_APP_STORE } from '@/lib/appLinks';
 import { useAboutStats, usePublicCv, fmt, type AboutStats } from '@/components/about/useAboutData';
 import Footer from '@/components/home/Footer';
 import codebase from '@/data/codebaseStats.json';
@@ -28,6 +38,7 @@ import { MENU_HUE, MENU_LABEL, MENU_ORDER, type MenuId } from '@/components/layo
 import { NAV_TREE, type NavItem } from '@/components/layout/nav/navTree';
 import { INCIDENTS, SELF_ASSESSED_SKILLS, TECH_STACK, tx } from './aboutData';
 import { BIO, OWNER, OWNER_TODO, PLACEHOLDER_LABEL, aboutCopy } from './aboutCopy';
+import { BUILT } from './aboutProducts';
 import s from './about.module.css';
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -41,16 +52,23 @@ function findItem(href: string): { item: NavItem; menu: MenuId } | null {
 }
 
 /** The features shown under "What you can do here", each tied to a live count. */
-const FEATURES: { href: string; stat?: keyof AboutStats; unit?: { en: string; vi: string } }[] = [
+const FEATURES: {
+  href: string;
+  stat?: keyof AboutStats;
+  unit?: { en: string; vi: string };
+  /** A second, smaller count under the first (kept from the old page's ticker). */
+  stat2?: keyof AboutStats;
+  unit2?: 'hanzi';
+}[] = [
   { href: '/academy', stat: 'courses', unit: { en: 'subjects & courses', vi: 'môn & khoá học' } },
   { href: '/courses', stat: 'lessons', unit: { en: 'lessons', vi: 'bài học' } },
   { href: '/code-lab', stat: 'exercises', unit: { en: 'graded exercises', vi: 'bài tập chấm tự động' } },
   { href: '/exam', stat: 'examQuestions', unit: { en: 'exam questions', vi: 'câu hỏi thi' } },
-  { href: '/language', stat: 'vocabWords', unit: { en: 'words to learn', vi: 'từ vựng' } },
+  { href: '/language', stat: 'vocabWords', unit: { en: 'words to learn', vi: 'từ vựng' }, stat2: 'hanziChars', unit2: 'hanzi' },
   { href: '/interview', stat: 'interviewQuestions', unit: { en: 'interview questions', vi: 'câu hỏi phỏng vấn' } },
   { href: '/roadmap', stat: 'roadmapNodes', unit: { en: 'roadmap steps', vi: 'mốc lộ trình' } },
+  { href: '/repos', stat: 'curatedRepos', unit: { en: 'curated repositories', vi: 'kho mã tuyển chọn' } },
   { href: '/work' },
-  { href: '/chat' },
 ];
 
 const CODE_COUNTS: { key: keyof typeof codebase; label: { en: string; vi: string } }[] = [
@@ -66,7 +84,8 @@ const CODE_COUNTS: { key: keyof typeof codebase; label: { en: string; vi: string
 
 const HIRE = ['/about/studio', '/about/nhan-du-an', '/about/quy-trinh'];
 
-type SectionId = 'site' | 'me' | 'contact';
+type SectionId = 'site' | 'work' | 'me' | 'contact';
+const SECTIONS: SectionId[] = ['site', 'work', 'me', 'contact'];
 
 export default function AboutPage() {
   const { locale } = useTranslation();
@@ -85,9 +104,9 @@ export default function AboutPage() {
 
   // ── Sticky section switch follows the scroll ───────────────────────────
   const [active, setActive] = useState<SectionId>('site');
-  const refs = { site: useRef<HTMLElement>(null), me: useRef<HTMLElement>(null), contact: useRef<HTMLElement>(null) };
+  const refs = { site: useRef<HTMLElement>(null), work: useRef<HTMLElement>(null), me: useRef<HTMLElement>(null), contact: useRef<HTMLElement>(null) };
   useEffect(() => {
-    const els = (['site', 'me', 'contact'] as SectionId[]).map((id) => refs[id].current).filter(Boolean) as HTMLElement[];
+    const els = SECTIONS.map((id) => refs[id].current).filter(Boolean) as HTMLElement[];
     const io = new IntersectionObserver(
       (entries) => {
         const vis = entries.filter((e) => e.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
@@ -161,6 +180,19 @@ export default function AboutPage() {
 
   const [openIncident, setOpenIncident] = useState<number | null>(0);
 
+  // Latest articles — the old page showed them; a failed fetch just hides the block.
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  useEffect(() => {
+    let alive = true;
+    blogApi.getPosts({ size: 3 })
+      .then((res) => { if (alive) setPosts(Array.isArray(res.data?.data) ? (res.data.data as Post[]).slice(0, 3) : []); })
+      .catch(() => { if (alive) setPosts([]); });
+    return () => { alive = false; };
+  }, []);
+  const dateFmt = (iso?: string) => (iso
+    ? new Date(iso).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    : '');
+
   const Placeholder = ({ k }: { k: keyof typeof OWNER_TODO }) => (
     <span className={s.placeholder} title={c.placeholderHint}>+ {PLACEHOLDER_LABEL[k][lang]}</span>
   );
@@ -198,9 +230,23 @@ export default function AboutPage() {
               transition={{ duration: 0.5, delay: 0.18, ease: EASE }}
             >
               <a href="#site" className={s.jumpLink} data-primary="true">{c.jumpSite} <ArrowRight size={16} aria-hidden /></a>
+              <a href="#work" className={s.jumpLink}>{c.jumpWork}</a>
               <a href="#me" className={s.jumpLink}>{c.jumpMe}</a>
               <a href="#contact" className={s.jumpLink}>{c.jumpContact}</a>
             </motion.div>
+            <motion.a
+              href="#work"
+              className={s.newPill}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.26, ease: EASE }}
+            >
+              <span className={s.newTag}>{c.heroNew}</span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/images/ct-work/ct-work-app-icon-192.png" alt="" width={20} height={20} className={s.newIcon} />
+              <span>{c.heroNewText}</span>
+              <ArrowRight size={14} aria-hidden />
+            </motion.a>
           </div>
 
           <nav className={s.map} aria-label={c.mapTitle}>
@@ -232,7 +278,7 @@ export default function AboutPage() {
       {/* ── Sticky section switch ──────────────────────────────────────── */}
       <div className={s.subnav}>
         <div className={`${s.wrap} ${s.subnavInner}`}>
-          {([['site', c.jumpSite], ['me', c.jumpMe], ['contact', c.jumpContact]] as [SectionId, string][]).map(([id, label]) => (
+          {([['site', c.jumpSite], ['work', c.jumpWork], ['me', c.jumpMe], ['contact', c.jumpContact]] as [SectionId, string][]).map(([id, label]) => (
             <a key={id} href={`#${id}`} className={s.subnavLink} aria-current={active === id ? 'true' : undefined}>
               {active === id && (
                 <motion.span layoutId="about-subnav-pill" className={s.subnavPill} transition={reduce ? { duration: 0 } : { type: 'spring', stiffness: 420, damping: 36 }} />
@@ -271,6 +317,9 @@ export default function AboutPage() {
                           <span className={s.featureStat}>
                             <div className={s.featureNum}>{n(value)}</div>
                             <div className={s.featureUnit}>{f.unit[lang]}</div>
+                            {f.stat2 && typeof stats?.[f.stat2] === 'number' && (stats[f.stat2] as number) > 0 && (
+                              <div className={s.featureUnit}>+ {n(stats[f.stat2] as number)} {c.hanzi}</div>
+                            )}
                           </span>
                         )}
                       </div>
@@ -291,6 +340,7 @@ export default function AboutPage() {
               <h3 className={s.h3}>{c.codeTitle}</h3>
               <span className={s.meta}>{c.codeBody} {codeCountedOn}</span>
             </div>
+            <p className={s.body} style={{ marginBottom: '1.25rem' }}>{c.codeGate}</p>
             <div className={s.counts}>
               {CODE_COUNTS.map(({ key, label }) => {
                 const v = codebase[key];
@@ -304,6 +354,26 @@ export default function AboutPage() {
               })}
             </div>
           </div>
+
+          {posts && posts.length > 0 && (
+            <div className={s.sub}>
+              <div className={s.subHead}>
+                <h3 className={s.h3}>{c.postsTitle}</h3>
+                <Link href="/tech-trends" className={s.subLink}>{c.postsAll} <ArrowRight size={14} aria-hidden /></Link>
+              </div>
+              <ul className={s.posts}>
+                {posts.map((p) => (
+                  <li key={p.id}>
+                    <Link href={`/blog/${p.slug}`} className={s.post}>
+                      <span className={s.postDate}>{dateFmt(p.publishedAt ?? p.createdAt)}</span>
+                      <span className={s.postTitle}>{p.title}</span>
+                      <ArrowRight size={16} className={s.mapArrow} aria-hidden />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           <div className={s.sub}>
             <div className={s.subHead}><h3 className={s.h3}>{c.stackTitle}</h3></div>
@@ -319,7 +389,86 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── 2. About me ───────────────────────────────────────────────── */}
+      {/* ── 2. What I've built ───────────────────────────────────────── */}
+      <section id="work" ref={refs.work} className={s.section}>
+        <div className={s.wrap}>
+          <motion.h2 className={`${s.display} ${s.h2}`} {...reveal()}>{c.workTitle}</motion.h2>
+          <motion.p className={s.lead} {...reveal(1)}>{c.workLead}</motion.p>
+
+          <div className={s.products}>
+            {BUILT.map((pr, i) => (
+              <motion.article
+                key={pr.id}
+                className={s.product}
+                data-featured={pr.appStore ? 'true' : undefined}
+                data-size={i >= 3 ? 'third' : undefined}
+                aria-labelledby={`built-${pr.id}`}
+                {...reveal(i % 2)}
+              >
+                <div className={s.productHead}>
+                  {pr.icon
+                    // eslint-disable-next-line @next/next/no-img-element
+                    ? <img src={pr.icon} alt="" width={48} height={48} className={s.productIcon} />
+                    : <span className={s.productLetter} aria-hidden>{pr.name[0]}</span>}
+                  <div style={{ minWidth: 0 }}>
+                    <h3 id={`built-${pr.id}`} className={s.productName}>{pr.name}</h3>
+                    <div className={s.productKind}>{pr.kind[lang]}</div>
+                  </div>
+                </div>
+                <p className={s.productWhat}>{pr.what[lang]}</p>
+                <dl className={s.productFacts}>
+                  <div><dt>{c.platforms}</dt><dd>{pr.platforms[lang]}</dd></div>
+                  <div>
+                    <dt>{c.status}</dt>
+                    <dd><span className={s.statusDot} data-state={pr.state} aria-hidden />{pr.status[lang]}</dd>
+                  </div>
+                </dl>
+                {pr.appStore && (
+                  <div className={s.storeRow}>
+                    <AppStoreBadge href={pr.appStore} lang={lang} appName={pr.name} height={48} />
+                  </div>
+                )}
+                <div className={s.productLinks}>
+                  {pr.links.map((l) => (l.external
+                    ? (
+                      <a key={l.href} href={l.href} target="_blank" rel="noopener noreferrer" className={s.chip}>
+                        {l.label[lang]} <ArrowUpRight size={13} aria-hidden />
+                      </a>
+                    )
+                    : l.href.startsWith('#')
+                      ? <a key={l.href} href={l.href} className={s.chip}>{l.label[lang]} <ArrowRight size={13} aria-hidden /></a>
+                      : <Link key={l.href} href={l.href} className={s.chip}>{l.label[lang]} <ArrowRight size={13} aria-hidden /></Link>))}
+                </div>
+              </motion.article>
+            ))}
+          </div>
+
+          <div className={s.hire} style={{ marginTop: '1rem' }}>
+            <div className={s.feature} data-static="true" style={{ ['--hue' as string]: MENU_HUE.community }}>
+              <div>
+                <div className={s.featureTitle}>{c.mentorTitle}</div>
+                <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{c.mentorBody}</p>
+              </div>
+            </div>
+            <Link href="/about/studio" className={s.feature} style={{ ['--hue' as string]: MENU_HUE.about }}>
+              <div>
+                <div className={s.featureTitle}>{c.studioTitle}</div>
+                <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{c.studioBody}</p>
+              </div>
+              <span className={s.featureOpen}>{c.open} <ArrowRight size={14} aria-hidden /></span>
+            </Link>
+            <Link href="/projects" className={s.feature} style={{ ['--hue' as string]: MENU_HUE.community }}>
+              <div>
+                <div className={s.featureTitle}>{c.moreProjects}</div>
+                <p className={s.featureDesc} style={{ margin: '0.3rem 0 0' }}>{findItem('/projects')?.item.desc[lang]}</p>
+              </div>
+              <span className={s.featureOpen}>{c.open} <ArrowRight size={14} aria-hidden /></span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3. About me ───────────────────────────────────────────────── */}
       <section id="me" ref={refs.me} className={s.section}>
         <div className={s.wrap}>
           <motion.h2 className={`${s.display} ${s.h2}`} {...reveal()}>{c.meTitle}</motion.h2>
@@ -334,16 +483,6 @@ export default function AboutPage() {
                   <div className={s.fact}><dt>{c.meLocation}</dt><dd>{OWNER.location[lang]}</dd></div>
                   <div className={s.fact}><dt>{c.meLanguages}</dt><dd>{OWNER.languages[lang]}</dd></div>
                   <div className={s.fact}><dt>{c.meBuilding}</dt><dd>{firstCommit}</dd></div>
-                  {(['education', 'experience', 'currently'] as const).map((k) => {
-                    const v = OWNER_TODO[k];
-                    if (!v && !showTodo) return null;
-                    return (
-                      <div key={k} className={s.fact}>
-                        <dt>{PLACEHOLDER_LABEL[k][lang]}</dt>
-                        <dd>{v ? v[lang] : <Placeholder k={k} />}</dd>
-                      </div>
-                    );
-                  })}
                 </dl>
                 <div className={s.socials}>
                   {OWNER.socials.map((so) => (
@@ -352,16 +491,56 @@ export default function AboutPage() {
                     </a>
                   ))}
                   {cv?.available && <Link href="/cv/xem" className={s.chip}>{c.viewCv}</Link>}
+                  {cv?.available && (
+                    <a href="/api/v1/cv/public/download/pdf" className={s.chip}>
+                      <Download size={13} aria-hidden /> {c.downloadCv} · PDF
+                    </a>
+                  )}
                 </div>
+                {cv?.available && (
+                  <p className={s.cvMeta}>
+                    {cv.updatedAt && <span>{c.cvUpdated} {new Date(cv.updatedAt).toLocaleDateString(lang === 'vi' ? 'vi-VN' : 'en-GB')}</span>}
+                    {cv.formats.some((f) => f !== 'pdf') && (
+                      <span>
+                        {c.cvOther}{' '}
+                        {cv.formats.filter((f) => f !== 'pdf').map((f) => (
+                          <a key={f} href={`/api/v1/cv/public/download/${f}`}>{f.toUpperCase()}</a>
+                        ))}
+                      </span>
+                    )}
+                  </p>
+                )}
               </div>
             </aside>
 
             <div>
               <div className={s.bio}>
-                {BIO.map((p, i) => <motion.p key={i} {...reveal(i)}>{p[lang]}</motion.p>)}
+                <motion.p {...reveal(0)}>{BIO[0][lang]}</motion.p>
                 {OWNER_TODO.story
-                  ? <motion.p {...reveal(3)}>{OWNER_TODO.story[lang]}</motion.p>
+                  ? <motion.p {...reveal(1)}>{OWNER_TODO.story[lang]}</motion.p>
                   : showTodo && <p><Placeholder k="story" /></p>}
+              </div>
+
+              <dl className={s.glance}>
+                {(['education', 'experience', 'currently'] as const).map((k, i) => {
+                  const v = OWNER_TODO[k];
+                  if (!v && !showTodo) return null;
+                  return (
+                    <motion.div key={k} className={s.glanceRow} {...reveal(i)}>
+                      <dt>{PLACEHOLDER_LABEL[k][lang]}</dt>
+                      <dd>
+                        {v ? v[lang] : <Placeholder k={k} />}
+                        {k === 'experience' && v && (
+                          <> <a href="#work" className={s.inlineLink}>{c.jumpWork} →</a></>
+                        )}
+                      </dd>
+                    </motion.div>
+                  );
+                })}
+              </dl>
+
+              <div className={s.bio}>
+                {BIO.slice(1).map((p, i) => <motion.p key={i} {...reveal(i)}>{p[lang]}</motion.p>)}
                 <p>{c.meOpenTo}</p>
               </div>
 

@@ -45,6 +45,7 @@ import {
   xinDiemCuoi,
 } from '../llm/gateway.js';
 import { checkBudget, budgetMessage } from '../llm/budget.js';
+import { CAU_BAO_TRI, MA_LOI_BAO_TRI, chanBoiBaoTri } from './cuongMiniBaoTri.js';
 import { nenNguCanh, tinhMoc } from './compact.js';
 import { MAX_VIET_TIEP, gopVietTiep } from './vietTiep.js';
 import { chuPdfKhongDoc, sangAnthropic, stopSangFinish, toolSangAnthropic } from './anthropic.js';
@@ -978,6 +979,17 @@ export async function runAgentTurn(
 ): Promise<void> {
   if (!gatewayConfigured()) {
     emit({ type: 'error', error: 'Máy chủ chưa cấu hình khoá AI.', code: 'LLM_UNCONFIGURED' });
+    return;
+  }
+
+  // ⛔ CÔNG TẮC TỔNG "chặn tất cả (trừ admin + CT Work)" — bảo trì CuongMini.
+  //
+  // AI Code (`agent_code`) KHÔNG đi qua `llmComplete`; nó có vòng gọi cổng
+  // riêng (rambo → chính hãng → cổng dự phòng modelapi). Chốt đứng Ở ĐÂY, TRƯỚC
+  // mọi lựa chọn cổng, để lượt của người thường bị chặn mà KHÔNG rơi về cổng dự
+  // phòng. Admin dùng được bình thường. Mặc định TẮT.
+  if (await chanBoiBaoTri('agent_code', input.userId)) {
+    emit({ type: 'error', error: CAU_BAO_TRI, code: MA_LOI_BAO_TRI });
     return;
   }
 

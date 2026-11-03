@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { anhTuyetDoi } from '@/lib/anhTuyetDoi';
-import { Ban, ChevronLeft, ChevronRight, Code2, Crown, Kanban, Loader2, LockOpen, Search, ShieldBan, Users, X } from 'lucide-react';
+import { AlertTriangle, Ban, ChevronLeft, ChevronRight, Code2, Crown, Kanban, KeyRound, Loader2, LockOpen, Power, Search, ShieldBan, Users, X } from 'lucide-react';
 
 type PhamVi = 'AI_CODE' | 'CTWORK';
 interface DongChan {
@@ -16,9 +16,10 @@ interface DongChan {
   phamVi: PhamVi; lyDo: string | null; chanBoi: string | null; luc: string;
 }
 
-const API = '/api/v1/admin/cong-anthropic/chan';
-async function goi<T>(duong: string, init?: RequestInit): Promise<T> {
-  const r = await fetch(`${API}${duong}`, {
+const API_GOC = '/api/v1/admin/cong-anthropic';
+const API = `${API_GOC}/chan`;
+async function goiTai<T>(url: string, init?: RequestInit): Promise<T> {
+  const r = await fetch(url, {
     credentials: 'include', ...init,
     headers: { 'Content-Type': 'application/json', ...(init?.headers ?? {}) },
   });
@@ -26,6 +27,27 @@ async function goi<T>(duong: string, init?: RequestInit): Promise<T> {
   if (!r.ok || j.success === false) throw new Error(j.message ?? `Lỗi ${r.status}`);
   return j.data as T;
 }
+const goi = <T,>(duong: string, init?: RequestInit) => goiTai<T>(`${API}${duong}`, init);
+const goiGoc = <T,>(duong: string, init?: RequestInit) => goiTai<T>(`${API_GOC}${duong}`, init);
+
+/** Công tắc tổng bảo trì CuongMini. */
+interface TrangThaiBaoTri { bat: boolean; nguon: 'env' | 'admin' }
+/** Mức dùng key (USD tự đo). */
+interface TokenGom { vao: number; ra: number; cacheDoc: number; cacheGhi: number }
+interface DongKey { keyId: number | null; nhan: string; duoiKhoa: string | null; usd: number; luot: number; token: TokenGom }
+interface DongViec { viec: string; usd: number; luot: number; token: TokenGom }
+interface MucDungKey { soNgay: number; tu: string; theoKey: DongKey[]; theoViec: DongViec[] }
+
+/** Nhãn tiếng Việt cho từng việc trong sổ cổng chính hãng (đồng bộ TEN_VIEC ở aiThongKe.ts). */
+const TEN_VIEC: Record<string, string> = {
+  agent_code: 'AI Code (app/CLI)', agent_taitro: 'AI Code — admin tài trợ', exam_tutor: 'CuongMini trong phòng thi',
+  exam_grade: 'Chấm bài phòng thi', thu_ket_noi: 'Thử kết nối', tim_web: 'Tìm web', language_tutor: 'Trò chuyện ngoại ngữ',
+  work_setup: 'Create with CuongMini (CT Work)', work_ai: 'Trợ lý CT Work', admin_thong_ke: 'AI thống kê (admin)',
+};
+const tenViec = (v: string) => TEN_VIEC[v] ?? v;
+const KY = [7, 30, 90] as const;
+const usd = (n: number) => `$${n.toFixed(n >= 1 ? 2 : 4)}`;
+const soGon = (n: number) => n >= 1_000_000 ? `${(n / 1_000_000).toFixed(1)}M` : n >= 1_000 ? `${(n / 1_000).toFixed(1)}k` : String(n);
 
 const PHAM_VI: Array<{ id: PhamVi; ten: string; mo: string; Icon: typeof Code2 }> = [
   { id: 'AI_CODE', ten: 'AI Code · CLI · VS Code', mo: 'Chặn dùng CuongMini trong app desktop AI Code, CuongMini CLI và extension VS Code.', Icon: Code2 },
@@ -66,6 +88,29 @@ export default function ChanCuongMiniAdmin() {
   const timDoi = useDoi(timDs);
   const [trangDs, setTrangDs] = useState(1);
   const [dsNguoi, setDsNguoi] = useState<TrangNguoi | null>(null);
+  // Công tắc tổng bảo trì + mức dùng key.
+  const [baoTri, setBaoTri] = useState<TrangThaiBaoTri | null>(null);
+  const [dangDoiBaoTri, setDangDoiBaoTri] = useState(false);
+  const [kySoNgay, setKySoNgay] = useState<(typeof KY)[number]>(30);
+  const [mucKey, setMucKey] = useState<MucDungKey | null>(null);
+
+  useEffect(() => {
+    goiGoc<TrangThaiBaoTri>('/bao-tri').then(setBaoTri).catch((e) => toast.error((e as Error).message));
+  }, []);
+
+  useEffect(() => {
+    setMucKey(null);
+    goiGoc<MucDungKey>(`/muc-dung-key?soNgay=${kySoNgay}`).then(setMucKey).catch((e) => toast.error((e as Error).message));
+  }, [kySoNgay]);
+
+  const doiBaoTri = async (bat: boolean) => {
+    if (bat && !window.confirm('BẬT "Chặn tất cả"?\n\nMọi dịch vụ AI của NGƯỜI DÙNG THƯỜNG (trợ giảng, chat, codelab, thi, ngoại ngữ, ghi chú, phỏng vấn, AI Code…) sẽ bị chặn ngay. CHỈ còn admin và AI trong CT Work chạy được.')) return;
+    setDangDoiBaoTri(true);
+    try {
+      setBaoTri(await goiGoc<TrangThaiBaoTri>('/bao-tri', { method: 'PUT', body: JSON.stringify({ bat }) }));
+      toast.success(bat ? 'Đã BẬT chặn tất cả (trừ admin + CT Work)' : 'Đã TẮT — AI chạy lại bình thường');
+    } catch (e) { toast.error((e as Error).message); } finally { setDangDoiBaoTri(false); }
+  };
 
   const nap = useCallback(async () => {
     setDs(null);
@@ -130,6 +175,43 @@ export default function ChanCuongMiniAdmin() {
         <div>
           <h2 className="text-lg font-bold text-text-primary">Chặn CuongMini</h2>
           <p className="text-sm text-text-muted">Chặn người dùng lạm dụng, phụ thuộc quá mức hoặc xúc phạm CuongMini. Người bị chặn vẫn dùng mọi phần khác của web bình thường.</p>
+        </div>
+      </div>
+
+      {/* ⛔ CÔNG TẮC TỔNG — chặn tất cả (trừ admin + CT Work) */}
+      <div className={`rounded-2xl border p-4 ${baoTri?.bat ? 'border-red-500/60 bg-red-500/10' : 'border-darkborder bg-darkcard'}`}>
+        <div className="flex items-start gap-3">
+          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${baoTri?.bat ? 'bg-red-500/20 text-red-400' : 'bg-amber-500/10 text-amber-400'}`}><Power className="w-5 h-5" /></div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="font-bold text-text-primary">⛔ Chặn tất cả (trừ admin + CT Work)</h3>
+              {baoTri && (
+                <span className={`text-[11px] font-semibold rounded-md px-1.5 py-0.5 ${baoTri.bat ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/15 text-emerald-400'}`}>
+                  {baoTri.bat ? 'ĐANG BẬT' : 'Đang tắt'}
+                </span>
+              )}
+              {baoTri?.nguon === 'env' && <span className="text-[11px] rounded-md bg-slate-500/20 text-slate-300 px-1.5 py-0.5">khoá cứng bằng env</span>}
+            </div>
+            <p className="text-sm text-text-muted mt-1">
+              Khi BẬT: mọi dịch vụ AI cho người dùng thường (trợ giảng, chat, codelab, thi, ngoại ngữ, ghi chú, phỏng vấn, AI Code…)
+              bị chặn ngay với câu <em>“CuongMini đã quá tải hoặc đang bảo trì xin vui lòng thử lại sau”</em>, không rơi về cổng dự phòng.
+              <strong className="text-text-secondary"> Vẫn chạy:</strong> tài khoản admin · AI trong CT Work · AI thống kê của admin.
+            </p>
+            {baoTri?.bat && (
+              <div className="mt-2 flex items-center gap-2 text-sm text-red-300">
+                <AlertTriangle className="w-4 h-4 shrink-0" />
+                <span>Người dùng thường đang bị chặn — chỉ admin + CT Work dùng được.</span>
+              </div>
+            )}
+          </div>
+          <button
+            onClick={() => void doiBaoTri(!baoTri?.bat)}
+            disabled={dangDoiBaoTri || baoTri === null || baoTri?.nguon === 'env'}
+            title={baoTri?.nguon === 'env' ? 'Đang bị khoá bằng biến môi trường CUONGMINI_BAO_TRI' : undefined}
+            className={`shrink-0 rounded-xl px-4 py-2 text-sm font-semibold inline-flex items-center gap-2 disabled:opacity-50 ${baoTri?.bat ? 'bg-emerald-600 hover:bg-emerald-500 text-white' : 'bg-red-600 hover:bg-red-500 text-white'}`}>
+            {dangDoiBaoTri ? <Loader2 className="w-4 h-4 animate-spin" /> : <Power className="w-4 h-4" />}
+            {baoTri?.bat ? 'Tắt — mở lại AI' : 'Bật — chặn tất cả'}
+          </button>
         </div>
       </div>
 
@@ -289,6 +371,77 @@ export default function ChanCuongMiniAdmin() {
                 className="rounded-lg border border-darkborder px-2 py-1 disabled:opacity-40" aria-label="Trang trước"><ChevronLeft className="w-4 h-4" /></button>
               <button onClick={() => setTrangDs((t) => t + 1)} disabled={dsNguoi.trang >= Math.ceil(dsNguoi.tong / dsNguoi.co)}
                 className="rounded-lg border border-darkborder px-2 py-1 disabled:opacity-40" aria-label="Trang sau"><ChevronRight className="w-4 h-4" /></button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* MỨC DÙNG KEY — theo key + theo việc (USD tự đo) */}
+      <div className="rounded-2xl border border-darkborder bg-darkcard overflow-hidden">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b border-darkborder">
+          <div className="text-sm font-semibold text-text-primary flex items-center gap-2">
+            <KeyRound className="w-4 h-4 text-blue-400" /> Mức dùng key
+          </div>
+          <div className="flex items-center gap-1 rounded-lg bg-darkbg border border-darkborder p-0.5">
+            {KY.map((k) => (
+              <button key={k} onClick={() => setKySoNgay(k)}
+                className={`rounded-md px-2.5 py-1 text-xs font-medium ${kySoNgay === k ? 'bg-blue-500/20 text-blue-300' : 'text-text-muted hover:text-text-primary'}`}>
+                {k} ngày
+              </button>
+            ))}
+          </div>
+        </div>
+        <p className="px-4 pt-3 text-xs text-text-muted">
+          USD tự đo (ước lượng — usage × bảng giá trong mã), không phải số dư thật. Chỉ gồm lưu lượng cổng Claude chính hãng + rambo
+          (AI Code, thi, CT Work, AI thống kê…); lưu lượng modelapi (chat, gia sư…) ghi ở sổ khác.
+        </p>
+        {mucKey === null ? (
+          <div className="p-8 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-text-muted" /></div>
+        ) : (
+          <div className="grid lg:grid-cols-2 gap-4 p-4">
+            <div>
+              <div className="text-xs uppercase tracking-wide text-text-muted mb-2">Theo key</div>
+              {mucKey.theoKey.length === 0 ? (
+                <div className="text-sm text-text-muted py-4">Chưa có lượt nào trong kỳ.</div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead className="text-xs uppercase tracking-wide text-text-muted">
+                    <tr><th className="text-left py-1.5">Key</th><th className="text-right py-1.5">USD</th><th className="text-right py-1.5">Lượt</th><th className="text-right py-1.5">Token (vào/ra)</th></tr>
+                  </thead>
+                  <tbody>
+                    {mucKey.theoKey.map((r) => (
+                      <tr key={r.keyId ?? 'null'} className="border-t border-darkborder">
+                        <td className="py-1.5 text-text-primary">{r.nhan}{r.duoiKhoa && <span className="text-text-muted"> ·…{r.duoiKhoa}</span>}</td>
+                        <td className="py-1.5 text-right text-text-secondary tabular-nums">{usd(r.usd)}</td>
+                        <td className="py-1.5 text-right text-text-muted tabular-nums">{r.luot}</td>
+                        <td className="py-1.5 text-right text-text-muted tabular-nums">{soGon(r.token.vao)}/{soGon(r.token.ra)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <div>
+              <div className="text-xs uppercase tracking-wide text-text-muted mb-2">Theo việc / dịch vụ</div>
+              {mucKey.theoViec.length === 0 ? (
+                <div className="text-sm text-text-muted py-4">Chưa có lượt nào trong kỳ.</div>
+              ) : (
+                <table className="w-full text-sm">
+                  <thead className="text-xs uppercase tracking-wide text-text-muted">
+                    <tr><th className="text-left py-1.5">Việc</th><th className="text-right py-1.5">USD</th><th className="text-right py-1.5">Lượt</th><th className="text-right py-1.5">Token (vào/ra)</th></tr>
+                  </thead>
+                  <tbody>
+                    {mucKey.theoViec.map((r) => (
+                      <tr key={r.viec} className="border-t border-darkborder">
+                        <td className="py-1.5 text-text-primary">{tenViec(r.viec)}</td>
+                        <td className="py-1.5 text-right text-text-secondary tabular-nums">{usd(r.usd)}</td>
+                        <td className="py-1.5 text-right text-text-muted tabular-nums">{r.luot}</td>
+                        <td className="py-1.5 text-right text-text-muted tabular-nums">{soGon(r.token.vao)}/{soGon(r.token.ra)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         )}

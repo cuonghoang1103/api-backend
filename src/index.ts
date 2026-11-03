@@ -955,6 +955,14 @@ async function startServer(): Promise<void> {
       logger.warn('Không nạp được công tắc rambo (giữ TẮT)', { error: ramboErr instanceof Error ? ramboErr.message : String(ramboErr) });
     }
 
+    // Công tắc tổng "chặn tất cả (trừ admin + CT Work)" — bảo trì CuongMini (03/11/2026, mặc định TẮT).
+    try {
+      const { napCuongMiniBaoTri } = await import(path.join(__dirname, 'services', 'agent', 'cuongMiniBaoTri.js'));
+      napCuongMiniBaoTri();
+    } catch (baoTriErr) {
+      logger.warn('Không nạp được công tắc bảo trì CuongMini (giữ TẮT)', { error: baoTriErr instanceof Error ? baoTriErr.message : String(baoTriErr) });
+    }
+
     // Start cron jobs (Mục #6: auto-train + cleanup)
     // CRON_DISABLED=1: chạy thêm một backend phụ (worktree, cổng khác) để thử
     // mà không nhân đôi việc định kỳ của backend chính đang chạy cùng DB.

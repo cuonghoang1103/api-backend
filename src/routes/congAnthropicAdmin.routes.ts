@@ -23,7 +23,8 @@ import { datTranModel, docTranModel } from '../services/agent/tranModel.js';
 import { datCongTacRambo, trangThaiRambo } from '../services/llm/congTacRambo.js';
 import { GiaHanLoi, datMaGiaHan, dsYeuCauAdmin, duyetYeuCau, trangThaiMa } from '../services/agent/maGiaHanTien.js';
 import { priceOf, ramboSonic, thuRambo } from '../services/llm/gateway.js';
-import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
+import { dsKeyAdmin, dsTranRieng, hanMucNguoiAdmin, mucDungKey, timNguoi, tongQuanDung } from '../services/agent/anthropicChinhHang/thongKe.js';
+import { datVaLuuCuongMiniBaoTri, trangThaiBaoTri } from '../services/agent/cuongMiniBaoTri.js';
 import { CAU_HOI_SAN, traLoiThongKe } from '../services/agent/anthropicChinhHang/aiThongKe.js';
 import { doiChieu, dsAdminKey } from '../services/agent/anthropicChinhHang/doiChieu.js';
 import { dauThangVn } from '../services/agent/anthropicChinhHang/hanMuc.js';
@@ -455,6 +456,26 @@ router.delete('/chan/:id/:phamVi', boc(async (req, res) => {
   if (!laPhamViChan(p)) throw new BadRequestError('phamVi phải là AI_CODE hoặc CTWORK');
   await moChanNguoi(userId, p, adminId(req) ?? null);
   res.json({ success: true, data: await dsChan(p) });
+}));
+
+/* ─── CÔNG TẮC TỔNG "chặn tất cả (trừ admin + CT Work)" — bảo trì CuongMini (03/11/2026) ───────────
+   Mặc định TẮT. Env CUONGMINI_BAO_TRI (nếu đặt) thắng công tắc này. Xem src/services/agent/cuongMiniBaoTri.ts. */
+router.get('/bao-tri', boc(async (_req, res) => {
+  res.json({ success: true, data: trangThaiBaoTri() });
+}));
+
+/** Body: { bat: boolean } — BẬT ⇒ mọi AI của người thường bị chặn; chừa admin + CT Work (work_*) + admin_thong_ke. */
+router.put('/bao-tri', boc(async (req, res) => {
+  const bat = (req.body as { bat?: unknown })?.bat === true;
+  await datVaLuuCuongMiniBaoTri(bat);
+  logger.info('[cong-anthropic] admin đổi công tắc bảo trì CuongMini', { adminId: adminId(req), bat });
+  res.json({ success: true, data: trangThaiBaoTri() });
+}));
+
+/* ─── MỨC DÙNG KEY — chi theo key + theo việc (USD TỰ ĐO, không phải số dư thật). Kỳ 7/30/90 ngày. ─── */
+router.get('/muc-dung-key', boc(async (req, res) => {
+  const soNgay = Number(req.query.soNgay) || 30;
+  res.json({ success: true, data: await mucDungKey(soNgay) });
 }));
 
 export default router;

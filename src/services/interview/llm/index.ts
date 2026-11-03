@@ -39,6 +39,7 @@ import {
   type LlmEndpoint,
   type LlmPurpose,
 } from '../../llm/gateway.js';
+import { CAU_BAO_TRI, MA_LOI_BAO_TRI, chanBoiBaoTri } from '../../agent/cuongMiniBaoTri.js';
 import { toOpenAiContent, type ClaudeContentBlock } from '../../claudeChat.js';
 
 export interface LLMMessage {
@@ -810,6 +811,16 @@ export async function llmComplete(opts: {
 
   const isBackground = isBackgroundFeature(opts.feature);
   const purpose = opts.purpose ?? purposeFor(opts.step, opts.feature);
+
+  // ⛔ CÔNG TẮC TỔNG "chặn tất cả (trừ admin + CT Work)" — bảo trì CuongMini.
+  //
+  // Đứng ĐẦU hàm, TRƯỚC khi xin slot máy nhà / chọn endpoint / model / cổng dự
+  // phòng: một lượt bị chặn thì không mở lấy một kết nối mạng nào. Chừa: purpose
+  // work_* (CT Work) + admin_thong_ke, và tài khoản admin. Mặc định TẮT.
+  if (await chanBoiBaoTri(purpose, opts.userId)) {
+    logger.warn('llm: chặn vì CuongMini đang bảo trì (công tắc tổng)', { purpose, userId: opts.userId ?? null, step: opts.step, feature: opts.feature ?? null });
+    throw new LLMError(CAU_BAO_TRI, false, 503, MA_LOI_BAO_TRI);
+  }
 
   // Công tắc tổng: việc chạy nền phải được bật ra mặt mới đi tiếp.
   //

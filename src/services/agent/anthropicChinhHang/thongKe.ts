@@ -126,6 +126,61 @@ export async function tongQuanDung(soNgay = 30, luc = new Date()) {
   };
 }
 
+/**
+ * MỨC DÙNG KEY (03/11/2026) — bảng gọn cho tab "Chặn CuongMini": chi theo KEY và theo VIỆC/dịch vụ
+ * trong `soNgay` gần nhất. TẤT CẢ là SỐ TỰ ĐO (usage × bảng giá trong mã) từ `anthropic_usage_logs` —
+ * không phải số dư thật. Lưu ý: sổ này chỉ ghi đường cổng Claude chính hãng + rambo (AI Code, thi,
+ * CT Work, AI thống kê…); lưu lượng modelapi (chat, gia sư…) ghi ở sổ khác, không hiện ở đây.
+ */
+export async function mucDungKey(soNgay = 30, luc = new Date()) {
+  const n = Math.min(366, Math.max(1, soNgay));
+  const tu = new Date(luc.getTime() - n * 86_400_000);
+  const [theoKeyRaw, theoViec, keys] = await Promise.all([
+    prisma.anthropicUsage.groupBy({
+      by: ['keyId'],
+      where: { createdAt: { gte: tu } },
+      _sum: { costUsd: true, inputTokens: true, outputTokens: true, cacheDocTokens: true, cacheGhiTokens: true },
+      _count: true,
+    }),
+    prisma.anthropicUsage.groupBy({
+      by: ['viec'],
+      where: { createdAt: { gte: tu } },
+      _sum: { costUsd: true, inputTokens: true, outputTokens: true, cacheDocTokens: true, cacheGhiTokens: true },
+      _count: true,
+    }),
+    prisma.anthropicKey.findMany({ select: { id: true, nhan: true, duoiKhoa: true } }),
+  ]);
+  const byKey = new Map(keys.map((k) => [k.id, k]));
+  const tok = (s: { inputTokens: number | null; outputTokens: number | null; cacheDocTokens: number | null; cacheGhiTokens: number | null }) => ({
+    vao: s.inputTokens ?? 0, ra: s.outputTokens ?? 0, cacheDoc: s.cacheDocTokens ?? 0, cacheGhi: s.cacheGhiTokens ?? 0,
+  });
+  return {
+    soNgay: n,
+    tu: tu.toISOString(),
+    theoKey: theoKeyRaw
+      .map((r) => {
+        const k = r.keyId != null ? byKey.get(r.keyId) : undefined;
+        return {
+          keyId: r.keyId,
+          nhan: k?.nhan ?? (r.keyId == null ? '(không gắn key)' : `#${r.keyId}`),
+          duoiKhoa: k?.duoiKhoa ?? null,
+          usd: Math.round((r._sum.costUsd ?? 0) * 10_000) / 10_000,
+          luot: r._count,
+          token: tok(r._sum),
+        };
+      })
+      .sort((a, b) => b.usd - a.usd),
+    theoViec: theoViec
+      .map((r) => ({
+        viec: r.viec,
+        usd: Math.round((r._sum.costUsd ?? 0) * 10_000) / 10_000,
+        luot: r._count,
+        token: tok(r._sum),
+      }))
+      .sort((a, b) => b.usd - a.usd),
+  };
+}
+
 /** Một người: gói, đã dùng / trần (free + cao), trần riêng nếu có. */
 export async function hanMucNguoiAdmin(userId: number) {
   const [goi, free, cao, rieng] = await Promise.all([

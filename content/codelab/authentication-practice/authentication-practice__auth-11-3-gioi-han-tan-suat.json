@@ -1,0 +1,384 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-3-gioi-han-tan-suat",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-3-gioi-han-tan-suat"
+  },
+  "exercises": [
+    {
+      "title": "11.3-1 — The counter must be shared",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A rate-limit counter in process memory lets N instances allow N times the limit; it must be shared (Redis), fail open, and tell the client.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một cái đếm giới hạn trong bộ nhớ tiến trình để N instance cho N lần giới hạn; nó phải chung (Redis), hỏng mở, và báo client.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Each instance counts only its own slice of traffic.|||Mỗi instance chỉ đếm lát lưu lượng của nó.",
+        "The protection must never become the outage.|||Bảo vệ không bao giờ được thành sự cố."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.3-1 — The counter must be shared\n\nAnswer in the answer panel (no code needed).\n\n1. An in-memory limiter is set to 100/min on 4 instances. What is the real limit?Một bộ giới hạn trong bộ nhớ đặt 100/phút trên 4 instance. Giới hạn thật là bao nhiêu?\n2. Redis (the rate-limit store) goes down. What should the limiter do?Redis (kho giới hạn) sập. Bộ giới hạn nên làm gì?\n3. How should the client learn it is being rate-limited?Client nên biết nó đang bị giới hạn ra sao?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.3-1 — The counter must be shared — answer key\n\n1. An in-memory limiter is set to 100/min on 4 instances. What is the real limit?Một bộ giới hạn trong bộ nhớ đặt 100/phút trên 4 instance. Giới hạn thật là bao nhiêu?\n   Answer: b) About 400/min — each instance counts only its own share of the traffic; share one counter in Redis\n   Each node allows up to 100 of its ~1/4 of traffic ⇒ ~400; the counter must be shared (11.3).VI: Mỗi node cho tới 100 của ~1/4 lưu lượng ⇒ ~400; cái đếm phải chung (11.3).\n\n2. Redis (the rate-limit store) goes down. What should the limiter do?Redis (kho giới hạn) sập. Bộ giới hạn nên làm gì?\n   Answer: c) Fail open — allow the request — because failing closed turns a cache outage into a total login outage\n   Failing closed means nobody can log in when the counter cannot be read; fail open (11.3).VI: Hỏng đóng nghĩa là không ai đăng nhập được khi cái đếm không đọc được; hỏng mở (11.3).\n\n3. How should the client learn it is being rate-limited?Client nên biết nó đang bị giới hạn ra sao?\n   Answer: d) A 429 response with a Retry-After header, so a well-behaved client backs off instead of retrying harder\n   A limit the client cannot see is one it cannot back off from; return 429 + Retry-After (11.3).VI: Một giới hạn client không thấy là một cái nó không lùi được; trả 429 + Retry-After (11.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> About 400/min — each instance counts only its own share of the traffic; share one counter in Redis</p><p>Each node allows up to 100 of its ~1/4 of traffic ⇒ ~400; the counter must be shared (11.3).</p><p><i>VI: Mỗi node cho tới 100 của ~1/4 lưu lượng ⇒ ~400; cái đếm phải chung (11.3).</i></p></li><li><p><b>c)</b> Fail open — allow the request — because failing closed turns a cache outage into a total login outage</p><p>Failing closed means nobody can log in when the counter cannot be read; fail open (11.3).</p><p><i>VI: Hỏng đóng nghĩa là không ai đăng nhập được khi cái đếm không đọc được; hỏng mở (11.3).</i></p></li><li><p><b>d)</b> A 429 response with a Retry-After header, so a well-behaved client backs off instead of retrying harder</p><p>A limit the client cannot see is one it cannot back off from; return 429 + Retry-After (11.3).</p><p><i>VI: Một giới hạn client không thấy là một cái nó không lùi được; trả 429 + Retry-After (11.3).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>An in-memory limiter is set to 100/min on 4 instances. What is the real limit?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bộ giới hạn trong bộ nhớ đặt 100/phút trên 4 instance. Giới hạn thật là bao nhiêu?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "25/min — the limit is divided evenly across the four instances"
+              },
+              {
+                "ma": "b",
+                "noiDung": "About 400/min — each instance counts only its own share of the traffic; share one counter in Redis"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Unlimited — an in-memory counter does not actually count anything"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Exactly 100/min — the load balancer keeps every instance consistent"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>Each node allows up to 100 of its ~1/4 of traffic ⇒ ~400; the counter must be shared (11.3).</p><p><i>VI: Mỗi node cho tới 100 của ~1/4 lưu lượng ⇒ ~400; cái đếm phải chung (11.3).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Redis (the rate-limit store) goes down. What should the limiter do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Redis (kho giới hạn) sập. Bộ giới hạn nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Block every request until Redis recovers, to stay on the safe side"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Crash the process so the load balancer removes the instance"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Fail open — allow the request — because failing closed turns a cache outage into a total login outage"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Silently drop the request without any status code"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Failing closed means nobody can log in when the counter cannot be read; fail open (11.3).</p><p><i>VI: Hỏng đóng nghĩa là không ai đăng nhập được khi cái đếm không đọc được; hỏng mở (11.3).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How should the client learn it is being rate-limited?</p><p style=\"opacity:.75;font-size:.92em\"><i>Client nên biết nó đang bị giới hạn ra sao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A 200 OK with an empty response body, to avoid alarming the client or revealing the rate limit"
+              },
+              {
+                "ma": "b",
+                "noiDung": "No response at all — just drop the connection so the attacker learns nothing about the limit"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A plain 500 Internal Server Error, so the client simply knows that something somewhere went wrong"
+              },
+              {
+                "ma": "d",
+                "noiDung": "A 429 response with a Retry-After header, so a well-behaved client backs off instead of retrying harder"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A limit the client cannot see is one it cannot back off from; return 429 + Retry-After (11.3).</p><p><i>VI: Một giới hạn client không thấy là một cái nó không lùi được; trả 429 + Retry-After (11.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Using an in-memory counter across many instances.|||Dùng một cái đếm trong bộ nhớ qua nhiều instance."
+        },
+        {
+          "loi": "Failing closed when the store is down.|||Hỏng đóng khi kho sập."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "shared counter",
+          "vi": "cái đếm chung"
+        },
+        {
+          "en": "fail open",
+          "vi": "hỏng mở"
+        }
+      ]
+    },
+    {
+      "title": "11.3-2 — Write effectiveLimit(limit, instances): the real cap",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>With an in-memory counter, each of <code>instances</code> nodes enforces the full <code>limit</code> on its own share of the traffic, so the real cap across the fleet is <code>limit × instances</code>. Return that. If <code>instances</code> is not a finite number ≥ 1, return just <code>limit</code> (a single process, or a bad config).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Với một cái đếm trong bộ nhớ, mỗi trong <code>instances</code> node thực thi trọn <code>limit</code> trên phần lưu lượng của nó, nên trần thật trên cả cụm là <code>limit × instances</code>. Trả cái đó. Nếu <code>instances</code> không phải một số hữu hạn ≥ 1, trả chỉ <code>limit</code> (một tiến trình, hoặc một cấu hình sai).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "effectiveLimit(100, 4)",
+          "output": "400",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Multiply the limit by the instance count.|||Nhân giới hạn với số instance.",
+        "Guard a non-finite or < 1 instance count.|||Chặn một số instance không hữu hạn hoặc < 1."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ the real per-minute cap across the fleet with an in-memory counter */\nfunction effectiveLimit(limit, instances) {\n  // Write your solution here\n  return limit;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction effectiveLimit(limit, instances) {\n  // The in-memory-counter bug: with N instances, each enforces the full limit on its own share, so the real\n  // cap across the fleet is limit × instances. A non-positive instance count means a bad config ⇒ just the limit.\n  if (!Number.isFinite(instances) || instances < 1) return limit;\n  return limit * instances;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The in-memory limiter leaks the limit by a factor of N; a shared counter (Redis) holds the real cap (11.3).</p>",
+      "solutionExplanationHtmlVi": "<p>Bộ giới hạn trong bộ nhớ để lọt giới hạn gấp N lần; một cái đếm chung (Redis) giữ trần thật (11.3).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "100 × 4 ⇒ 400",
+              "vi": "100 × 4 ⇒ 400"
+            },
+            "goi": "effectiveLimit(100, 4)",
+            "mongDoi": 400
+          },
+          {
+            "moTa": {
+              "en": "single instance ⇒ 100",
+              "vi": "một instance ⇒ 100"
+            },
+            "goi": "effectiveLimit(100, 1)",
+            "mongDoi": 100,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "bad count ⇒ just the limit",
+              "vi": "số sai ⇒ chỉ giới hạn"
+            },
+            "goi": "effectiveLimit(50, 0)",
+            "mongDoi": 50,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "30 × 10 ⇒ 300",
+              "vi": "30 × 10 ⇒ 300"
+            },
+            "goi": "effectiveLimit(30, 10)",
+            "mongDoi": 300,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the limit unchanged for many instances.|||Trả giới hạn không đổi cho nhiều instance."
+        },
+        {
+          "loi": "Crashing or returning NaN for a bad instance count.|||Sập hoặc trả NaN cho một số instance sai."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fixed window",
+          "vi": "cửa sổ cố định"
+        }
+      ]
+    },
+    {
+      "title": "11.3-3 — Rate-limit choice → why",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each rate-limit design choice to the reason for it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi lựa chọn thiết kế giới hạn tần suất với lý do của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "One choice is about scaling, one about resilience, one about the client.|||Một lựa chọn về mở rộng, một về chịu lỗi, một về client.",
+        "Failing open protects availability.|||Hỏng mở bảo vệ tính sẵn sàng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.3-3 — Rate-limit choice → why\n\nAnswer in the answer panel (no code needed).\n\n1. Choice → reasonLựa chọn → lý do\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.3-3 — Rate-limit choice → why — answer key\n\n1. Choice → reasonLựa chọn → lý do\n   - r1.q: so the limit holds across instances\n   - r2.q: so a cache outage is not a login outage\n   - r3.q: so the client can back off\n   Shared counter holds the limit; fail open keeps logins working; 429 + Retry-After lets the client wait (11.3).VI: Cái đếm chung giữ giới hạn; hỏng mở giữ đăng nhập chạy; 429 + Retry-After để client đợi (11.3).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Shared counter holds the limit; fail open keeps logins working; 429 + Retry-After lets the client wait (11.3).</p><p><i>VI: Cái đếm chung giữ giới hạn; hỏng mở giữ đăng nhập chạy; 429 + Retry-After để client đợi (11.3).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Choice → reason</p><p style=\"opacity:.75;font-size:.92em\"><i>Lựa chọn → lý do</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Choice"
+              },
+              {
+                "ma": "q",
+                "ten": "Reason",
+                "luaChon": [
+                  "so the limit holds across instances",
+                  "so a cache outage is not a login outage",
+                  "so the client can back off"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "counter in Redis"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "fail open"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "429 + Retry-After"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "so the limit holds across instances",
+              "r2.q": "so a cache outage is not a login outage",
+              "r3.q": "so the client can back off"
+            },
+            "giaiThich": "<p>Shared counter holds the limit; fail open keeps logins working; 429 + Retry-After lets the client wait (11.3).</p><p><i>VI: Cái đếm chung giữ giới hạn; hỏng mở giữ đăng nhập chạy; 429 + Retry-After để client đợi (11.3).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Matching Redis to the client back-off reason.|||Ghép Redis với lý do client lùi lại."
+        },
+        {
+          "loi": "Thinking 429 is about scaling.|||Tưởng 429 về mở rộng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "Retry-After",
+          "vi": "Retry-After"
+        }
+      ]
+    }
+  ]
+}

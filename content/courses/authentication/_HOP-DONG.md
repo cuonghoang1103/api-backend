@@ -406,5 +406,18 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   bấm-duyệt vào được, number-match chỉ vào ~1/100. Pre-hijack: gắn-theo-email giữ attacker; check-then-act dùng token 2 lần, atomic = 1.
   Máy chấm Lab 10: tham-khảo 10/10, yếu (khoá tài khoản sau 5 lần) 3/10, khởi đầu 1/10. Chuẩn: OWASP Credential Stuffing + OAT-008, OWASP MFA
   + Session Management, NIST SP 800-63B, USENIX Security 2022 (pre-hijacking).
-- **TẠM DỪNG sau Ch10 ngày 04/11 — ĐÃ XONG đợt Ch8→Ch9→Ch10 liên tục theo yêu cầu chủ kênh (báo chủ kênh).** Tiếp theo (khi được yêu cầu) là
-  Ch11 (vận hành: bí mật tới tiến trình, xoay khoá 2 bản sống, rate limit Redis, audit log, 6 tín hiệu + runbook — v0.11).
+- **04/11/2026 — Ch11 trọn:** 5 bài + Lab 11 (`auth-11-7-lab-audit-runbook`, máy chấm `scripts/cham-lab-11.mjs` 6 phép 10 điểm đạt 7, hai hàm
+  thuần safeAudit + triage — không CSDL) + quiz 10 câu (A3 B2 C3 D2, slug `auth-11-6-quiz`); depth-audit đạt (content-check 89 bài 0 lỗi); 6 deck
+  48 slide AUTH/v1 (đã đẩy, 0 lỗi kiem-slide); Code Lab +6 module/18 đề (track 258 đề, 0 lỗi nội dung + 0 cảnh báo đáp-án-dài, máy chấm trình
+  duyệt 1036/1036); liên kết chéo (auth 1.5 ↔ 11.1/11.4, auth 4.4 ↔ 11.2, auth 10.1 ↔ 11.3, auth 5.2 ↔ 11.5); video YouTube 11.1–11.5 đã có,
+  Lab 11 dùng tạm id 11.1 credit rỗng (ĐỪNG bịa id). `_labflow-id` = v0.11 (vận hành): `src/secrets/load.js` (loadConfig fail-fast +
+  redactedConfig che giá trị), `src/ops/rotation.js` (xoay khoá chồng lấn — canVerify/rotate 3 pha, kid chọn khoá), `src/ops/ratelimit.js`
+  (cửa sổ cố định, cái đếm CHUNG), `src/ops/audit.js` (safeAudit allow-list + severity, strip bí mật theo tên/giá trị + bỏ object lồng),
+  `src/ops/triage.js` (runbook sáu tín hiệu ⇒ page/investigate/auto/ignore, lạ ⇒ investigate); `demo11/` 5 kịch bản; `test/ops.test.js` ⇒
+  npm test **54 pass**. **Số đo thật (macOS arm64, Node 22.23.3, không CSDL, không mạng):** thiếu bí mật ⇒ missing list + từ chối khởi động,
+  banner che [set]; xoay k1→k2 token k1 vẫn xác minh qua introduce+activate, ngừng chỉ sau retire; rate limit 5/cửa sổ ip-A chặn cái 6, ip-B
+  độc lập, reset cửa sổ sau; audit raw có token+mật khẩu+cookie ⇒ safeAudit 0 chuỗi bí mật; sáu tín hiệu ⇒ reuse/5xx page, nước-mới/đã-lộ
+  investigate, sai-burst/admin auto. Máy chấm Lab 11: tham-khảo 10/10, yếu (log mọi thứ + page mọi thứ) 2/10, khởi đầu 2/10. Chuẩn: OWASP
+  Secrets Management/Logging/DoS, NIST SP 800-57, Twelve-Factor.
+- **TẠM DỪNG sau Ch11 ngày 04/11 (đang chạy Ch11→Ch12 theo yêu cầu chủ kênh — xong Ch12 báo để khoá khoá trọn).** Tiếp theo là Ch12
+  (chẩn đoán + soát mã người khác + **dự án cuối khoá** mục 12 + thi cuối khoá 20 câu — v1.0).

@@ -118,6 +118,7 @@ export default {
     'auth-11-3-gioi-han-tan-suat': { yt: 'sdYcxzTjdbo', credit: 'Josh tried upstash — Protect Your API With Rate Limiting | Full Guide (2024)' },   // Protect Your API With Rate Limiting | Full Guide (2024)
     'auth-11-4-nhat-ky-kiem-toan': { yt: 'IGZyF-fWybQ', credit: 'ThreatLocker — MFA is Not Enough: How to Stop Phishing and Session Hijacking Attacks' },   // MFA is Not Enough: How to Stop Phishing and Session Hijacking Attacks
     'auth-11-5-giam-sat': { yt: 'n9zMCr9ROW0', credit: 'T-Minus365 — Why Your MFA Can Still Be Hacked (How I’d Implement MFA in 2026)' },            // Why Your MFA Can Still Be Hacked (How I'd Implement MFA in 2026)
+    'auth-11-7-lab-audit-runbook': { yt: 'DIVQdzgWEiY', credit: '' },  // 04/11/2026: Lab 11 (viết safeAudit + triage) — dùng tạm video secrets của 11.1 tới khi có bản ghi riêng; CHẠY verify-youtube-videos --fix-credits
 
     /* ── Chương 12 — Chẩn đoán, và bắt đầu từ đâu ── */
     'auth-12-1-nam-phut-dau': { yt: '-Wi4klZ01tQ', credit: 'ASP.NET MVC — Fix: ASP.NET core JWT authentication always throwing 401 unauthorized after token generated' },   // Fix: ASP.NET core JWT authentication always throwing 401 unauthorized after token generated

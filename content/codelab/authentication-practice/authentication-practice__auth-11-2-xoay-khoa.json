@@ -1,0 +1,362 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-2-xoay-khoa",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-2-xoay-khoa"
+  },
+  "exercises": [
+    {
+      "title": "11.2-1 — Rotate with an overlap",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Rotate a signing key without logging everyone out: both keys live for a window, the new one signs, the old one still verifies.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xoay một khoá ký mà không đá mọi người ra: cả hai khoá sống trong một cửa sổ, cái mới ký, cái cũ vẫn xác minh.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "kid in the header selects which key verifies a token.|||kid trong header chọn khoá nào xác minh một token.",
+        "Retire the old key only after its tokens expire.|||Cho khoá cũ nghỉ chỉ sau khi token của nó hết hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.2-1 — Rotate with an overlap\n\nAnswer in the answer panel (no code needed).\n\n1. You swap the signing key and restart. What breaks?Bạn tráo khoá ký và khởi động lại. Cái gì hỏng?\n2. Why publish the new key in JWKS (introduce) before signing with it (activate)?Vì sao công bố khoá mới trong JWKS (introduce) trước khi ký bằng nó (activate)?\n3. How long must the overlap last before you may retire the old key?Cửa sổ phải kéo dài bao lâu trước khi bạn được cho khoá cũ nghỉ?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.2-1 — Rotate with an overlap — answer key\n\n1. You swap the signing key and restart. What breaks?Bạn tráo khoá ký và khởi động lại. Cái gì hỏng?\n   Answer: d) Every token signed with the old key is instantly invalid, logging out every user; use an overlap instead\n   A hard swap invalidates all old-key tokens at once; keep both keys live during an overlap (11.2).VI: Một cú tráo cứng vô hiệu mọi token khoá cũ cùng lúc; giữ cả hai khoá sống trong một cửa sổ (11.2).\n\n2. Why publish the new key in JWKS (introduce) before signing with it (activate)?Vì sao công bố khoá mới trong JWKS (introduce) trước khi ký bằng nó (activate)?\n   Answer: b) So JWKS clients fetch the new key before they see a token signed with it — otherwise they reject an unknown kid\n   A verifier without the new key rejects a token carrying its kid; introduce first gives it time (11.2).VI: Một bộ xác minh thiếu khoá mới từ chối một token mang kid của nó; giới thiệu trước cho nó thời gian (11.2).\n\n3. How long must the overlap last before you may retire the old key?Cửa sổ phải kéo dài bao lâu trước khi bạn được cho khoá cũ nghỉ?\n   Answer: c) At least the maximum lifetime of a token the old key signed — 15 minutes for 15-minute access tokens\n   Retire sooner and you invalidate still-valid old tokens; the overlap ≥ the token lifetime (11.2).VI: Nghỉ sớm hơn và bạn vô hiệu token cũ còn hợp lệ; cửa sổ ≥ vòng đời token (11.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Every token signed with the old key is instantly invalid, logging out every user; use an overlap instead</p><p>A hard swap invalidates all old-key tokens at once; keep both keys live during an overlap (11.2).</p><p><i>VI: Một cú tráo cứng vô hiệu mọi token khoá cũ cùng lúc; giữ cả hai khoá sống trong một cửa sổ (11.2).</i></p></li><li><p><b>b)</b> So JWKS clients fetch the new key before they see a token signed with it — otherwise they reject an unknown kid</p><p>A verifier without the new key rejects a token carrying its kid; introduce first gives it time (11.2).</p><p><i>VI: Một bộ xác minh thiếu khoá mới từ chối một token mang kid của nó; giới thiệu trước cho nó thời gian (11.2).</i></p></li><li><p><b>c)</b> At least the maximum lifetime of a token the old key signed — 15 minutes for 15-minute access tokens</p><p>Retire sooner and you invalidate still-valid old tokens; the overlap ≥ the token lifetime (11.2).</p><p><i>VI: Nghỉ sớm hơn và bạn vô hiệu token cũ còn hợp lệ; cửa sổ ≥ vòng đời token (11.2).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>You swap the signing key and restart. What breaks?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bạn tráo khoá ký và khởi động lại. Cái gì hỏng?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Nothing at all breaks — restarting the service is the standard, correct way to rotate a signing key"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Only the tokens that were issued in the last minute or so become invalid; everything older keeps working"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The JWKS discovery endpoint stops responding, so clients can no longer fetch any verification keys"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Every token signed with the old key is instantly invalid, logging out every user; use an overlap instead"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A hard swap invalidates all old-key tokens at once; keep both keys live during an overlap (11.2).</p><p><i>VI: Một cú tráo cứng vô hiệu mọi token khoá cũ cùng lúc; giữ cả hai khoá sống trong một cửa sổ (11.2).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why publish the new key in JWKS (introduce) before signing with it (activate)?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao công bố khoá mới trong JWKS (introduce) trước khi ký bằng nó (activate)?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because activate cannot technically run until introduce finishes"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So JWKS clients fetch the new key before they see a token signed with it — otherwise they reject an unknown kid"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So the old key can be deleted a little sooner than usual"
+              },
+              {
+                "ma": "d",
+                "noiDung": "To make the JWKS document smaller and faster to download"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A verifier without the new key rejects a token carrying its kid; introduce first gives it time (11.2).</p><p><i>VI: Một bộ xác minh thiếu khoá mới từ chối một token mang kid của nó; giới thiệu trước cho nó thời gian (11.2).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>How long must the overlap last before you may retire the old key?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cửa sổ phải kéo dài bao lâu trước khi bạn được cho khoá cũ nghỉ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "As short as possible, to reduce the attack surface immediately"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Exactly one minute, regardless of the token lifetime"
+              },
+              {
+                "ma": "c",
+                "noiDung": "At least the maximum lifetime of a token the old key signed — 15 minutes for 15-minute access tokens"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Until the next scheduled deploy, whenever that happens"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Retire sooner and you invalidate still-valid old tokens; the overlap ≥ the token lifetime (11.2).</p><p><i>VI: Nghỉ sớm hơn và bạn vô hiệu token cũ còn hợp lệ; cửa sổ ≥ vòng đời token (11.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Rotating by a hard swap and restart.|||Xoay bằng một cú tráo cứng và khởi động lại."
+        },
+        {
+          "loi": "Retiring the old key before its tokens expire.|||Cho khoá cũ nghỉ trước khi token của nó hết hạn."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "overlap window",
+          "vi": "cửa sổ chồng lấn"
+        },
+        {
+          "en": "kid",
+          "vi": "kid"
+        }
+      ]
+    },
+    {
+      "title": "11.2-2 — Write canVerify(ring, kid): is this key still live?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>A keyring is <code>{ active, live }</code>: <code>active</code> is the kid that signs, <code>live</code> is the array of kids that may still verify. Return <code>true</code> if a token whose header <code>kid</code> is given can still be verified — that is, if <code>kid</code> is in <code>ring.live</code>. A missing ring or a non-array <code>live</code> ⇒ <code>false</code>.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một keyring là <code>{ active, live }</code>: <code>active</code> là kid ký, <code>live</code> là mảng kid còn xác minh được. Trả <code>true</code> nếu một token có header <code>kid</code> cho trước còn xác minh được — tức là nếu <code>kid</code> trong <code>ring.live</code>. Một ring thiếu hoặc <code>live</code> không phải mảng ⇒ <code>false</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canVerify({\"active\":\"k2\",\"live\":[\"k1\",\"k2\"]}, \"k1\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Array.prototype.includes answers the membership question.|||Array.prototype.includes trả lời câu hỏi thành viên.",
+        "Guard against a missing ring before reading .live.|||Chặn một ring thiếu trước khi đọc .live."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if a token with this kid can still be verified */\nfunction canVerify(ring, kid) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction canVerify(ring, kid) {\n  // A token with this kid can still be verified if the kid is in the ring's list of live keys.\n  return Boolean(ring && Array.isArray(ring.live) && ring.live.includes(kid));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>During an overlap both the old and new kid are in ring.live, so tokens from both verify side by side (11.2).</p>",
+      "solutionExplanationHtmlVi": "<p>Trong một cửa sổ cả kid cũ và mới đều trong ring.live, nên token từ cả hai xác minh song song (11.2).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "old key live in overlap ⇒ true",
+              "vi": "khoá cũ sống trong cửa sổ ⇒ true"
+            },
+            "goi": "canVerify({\"active\":\"k2\",\"live\":[\"k1\",\"k2\"]}, \"k1\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "old key retired ⇒ false",
+              "vi": "khoá cũ đã nghỉ ⇒ false"
+            },
+            "goi": "canVerify({\"active\":\"k2\",\"live\":[\"k2\"]}, \"k1\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "new key ⇒ true",
+              "vi": "khoá mới ⇒ true"
+            },
+            "goi": "canVerify({\"active\":\"k2\",\"live\":[\"k1\",\"k2\"]}, \"k2\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "no ring ⇒ false",
+              "vi": "không ring ⇒ false"
+            },
+            "goi": "canVerify(null, \"k1\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Checking ring.active instead of ring.live.|||Kiểm ring.active thay vì ring.live."
+        },
+        {
+          "loi": "Crashing when ring is null.|||Sập khi ring là null."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "keyring",
+          "vi": "keyring"
+        }
+      ]
+    },
+    {
+      "title": "11.2-3 — Order the three rotation phases",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the three phases of a signing-key rotation.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp ba pha của một lần xoay khoá ký.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Clients must learn the key before it signs anything.|||Client phải học khoá trước khi nó ký gì.",
+        "Retire comes only after the old tokens expire.|||Retire đến chỉ sau khi token cũ hết hạn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.2-3 — Order the three rotation phases\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.2-3 — Order the three rotation phases — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m2) Introduce — add the new key to JWKS, but keep signing with the old one  →  m1) Activate — switch signing to the new key; the old key stays live for verify  →  m3) Retire — drop the old key, after its tokens have expired\n   Introduce (clients learn the key), activate (sign new), retire (after old tokens expire) (11.2).VI: Introduce (client học khoá), activate (ký mới), retire (sau khi token cũ hết hạn) (11.2).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Introduce (clients learn the key), activate (sign new), retire (after old tokens expire) (11.2).</p><p><i>VI: Introduce (client học khoá), activate (ký mới), retire (sau khi token cũ hết hạn) (11.2).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Activate — switch signing to the new key; the old key stays live for verify"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Introduce — add the new key to JWKS, but keep signing with the old one"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Retire — drop the old key, after its tokens have expired"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Introduce (clients learn the key), activate (sign new), retire (after old tokens expire) (11.2).</p><p><i>VI: Introduce (client học khoá), activate (ký mới), retire (sau khi token cũ hết hạn) (11.2).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Activating before introducing.|||Activate trước introduce."
+        },
+        {
+          "loi": "Retiring the old key immediately.|||Cho khoá cũ nghỉ ngay."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "introduce/activate/retire",
+          "vi": "introduce/activate/retire"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,393 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-5-giam-sat",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-5-giam-sat"
+  },
+  "exercises": [
+    {
+      "title": "11.5-1 — Signals and the runbook",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Watch six signals, each a number with a threshold; the runbook routes each to page, investigate, auto or ignore.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Giám sát sáu tín hiệu, mỗi cái một con số với một ngưỡng; runbook định tuyến mỗi cái tới page, investigate, auto hay ignore.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only two signals are worth waking someone for.|||Chỉ hai tín hiệu đáng đánh thức ai đó.",
+        "The unknown leans toward a human look.|||Cái lạ nghiêng về một cái nhìn của con người."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.5-1 — Signals and the runbook\n\nAnswer in the answer panel (no code needed).\n\n1. Monitoring fires a refresh-reuse spike. What should the runbook do?Giám sát nổ một đợt tái-dùng-refresh. Runbook nên làm gì?\n2. Your runbook pages the on-call on every signal, including routine admin actions. What is the risk?Runbook của bạn page người trực mọi tín hiệu, gồm cả hành động admin thường lệ. Rủi ro là gì?\n3. A brand-new signal nobody has classified fires. What is the safe default?Một tín hiệu hoàn toàn mới chưa ai phân loại nổ. Mặc định an toàn là gì?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.5-1 — Signals and the runbook — answer key\n\n1. Monitoring fires a refresh-reuse spike. What should the runbook do?Giám sát nổ một đợt tái-dùng-refresh. Runbook nên làm gì?\n   Answer: c) Page the on-call now — replayed refresh tokens are an active session-theft campaign that needs a human this minute\n   Refresh-reuse is stolen tokens being replayed (Ch5); it is one of the two page-worthy signals (11.5).VI: Tái-dùng-refresh là token bị trộm đang phát lại (Ch5); nó là một trong hai tín hiệu đáng-page (11.5).\n\n2. Your runbook pages the on-call on every signal, including routine admin actions. What is the risk?Runbook của bạn page người trực mọi tín hiệu, gồm cả hành động admin thường lệ. Rủi ro là gì?\n   Answer: a) Alert fatigue — the on-call tunes out the pager and misses the one real alert; it is the Ch10 fatigue attack on your team\n   Paging on everything trains the team to ignore the pager; page only for a human-now (11.5, 10.4).VI: Page mọi thứ huấn luyện đội lờ chuông; page chỉ cho việc-cần-người-ngay (11.5, 10.4).\n\n3. A brand-new signal nobody has classified fires. What is the safe default?Một tín hiệu hoàn toàn mới chưa ai phân loại nổ. Mặc định an toàn là gì?\n   Answer: a) Investigate — give it a human look, never silently ignore; the unplanned signal is the one worth seeing\n   triage() defaults the unknown to investigate; fail toward attention (11.5).VI: triage() mặc định cái lạ là investigate; hỏng về phía chú ý (11.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Page the on-call now — replayed refresh tokens are an active session-theft campaign that needs a human this minute</p><p>Refresh-reuse is stolen tokens being replayed (Ch5); it is one of the two page-worthy signals (11.5).</p><p><i>VI: Tái-dùng-refresh là token bị trộm đang phát lại (Ch5); nó là một trong hai tín hiệu đáng-page (11.5).</i></p></li><li><p><b>a)</b> Alert fatigue — the on-call tunes out the pager and misses the one real alert; it is the Ch10 fatigue attack on your team</p><p>Paging on everything trains the team to ignore the pager; page only for a human-now (11.5, 10.4).</p><p><i>VI: Page mọi thứ huấn luyện đội lờ chuông; page chỉ cho việc-cần-người-ngay (11.5, 10.4).</i></p></li><li><p><b>a)</b> Investigate — give it a human look, never silently ignore; the unplanned signal is the one worth seeing</p><p>triage() defaults the unknown to investigate; fail toward attention (11.5).</p><p><i>VI: triage() mặc định cái lạ là investigate; hỏng về phía chú ý (11.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Monitoring fires a refresh-reuse spike. What should the runbook do?</p><p style=\"opacity:.75;font-size:.92em\"><i>Giám sát nổ một đợt tái-dùng-refresh. Runbook nên làm gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Auto-record it and move on, because the credential-stuffing defence has already handled the whole thing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Investigate it on the next business day, treating it as a routine low-priority housekeeping item"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Page the on-call now — replayed refresh tokens are an active session-theft campaign that needs a human this minute"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Ignore it entirely, since a spike of refresh-token reuse is just normal, expected background noise"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Refresh-reuse is stolen tokens being replayed (Ch5); it is one of the two page-worthy signals (11.5).</p><p><i>VI: Tái-dùng-refresh là token bị trộm đang phát lại (Ch5); nó là một trong hai tín hiệu đáng-page (11.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Your runbook pages the on-call on every signal, including routine admin actions. What is the risk?</p><p style=\"opacity:.75;font-size:.92em\"><i>Runbook của bạn page người trực mọi tín hiệu, gồm cả hành động admin thường lệ. Rủi ro là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Alert fatigue — the on-call tunes out the pager and misses the one real alert; it is the Ch10 fatigue attack on your team"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The physical pager hardware will eventually wear out from receiving far too many notifications a day"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The audit log fills up with page events until the log store runs out of disk space and stops writing"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Nothing is wrong with this at all — more alerts always and everywhere mean more safety for the service"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Paging on everything trains the team to ignore the pager; page only for a human-now (11.5, 10.4).</p><p><i>VI: Page mọi thứ huấn luyện đội lờ chuông; page chỉ cho việc-cần-người-ngay (11.5, 10.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>A brand-new signal nobody has classified fires. What is the safe default?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một tín hiệu hoàn toàn mới chưa ai phân loại nổ. Mặc định an toàn là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Investigate — give it a human look, never silently ignore; the unplanned signal is the one worth seeing"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Ignore it, because it has no runbook entry yet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Page immediately, to be maximally cautious about everything"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Auto-record it and move on without any human review"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>triage() defaults the unknown to investigate; fail toward attention (11.5).</p><p><i>VI: triage() mặc định cái lạ là investigate; hỏng về phía chú ý (11.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Paging on routine signals.|||Page các tín hiệu thường lệ."
+        },
+        {
+          "loi": "Ignoring an unknown signal.|||Bỏ qua một tín hiệu lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "runbook",
+          "vi": "runbook"
+        },
+        {
+          "en": "alert fatigue",
+          "vi": "mệt mỏi cảnh báo"
+        }
+      ]
+    },
+    {
+      "title": "11.5-2 — Write triage(signal): the runbook as a function",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Route a signal to <code>'page'</code>, <code>'investigate'</code>, <code>'auto'</code> or <code>'ignore'</code> from <code>signal.name</code>: <code>refresh_reuse_spike</code> / <code>error_5xx_spike</code> ⇒ <code>page</code>; <code>failed_login_burst</code> / <code>admin_action</code> ⇒ <code>auto</code>; <code>new_country_logins</code> / <code>breached_pw_rate</code> ⇒ <code>investigate</code>. A signal with no name ⇒ <code>ignore</code>. An UNKNOWN name ⇒ <code>investigate</code> (never silently ignore a signal nobody classified).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Định tuyến một tín hiệu tới <code>'page'</code>, <code>'investigate'</code>, <code>'auto'</code> hay <code>'ignore'</code> từ <code>signal.name</code>: <code>refresh_reuse_spike</code> / <code>error_5xx_spike</code> ⇒ <code>page</code>; <code>failed_login_burst</code> / <code>admin_action</code> ⇒ <code>auto</code>; <code>new_country_logins</code> / <code>breached_pw_rate</code> ⇒ <code>investigate</code>. Một tín hiệu không tên ⇒ <code>ignore</code>. Một tên LẠ ⇒ <code>investigate</code> (không bao giờ im lặng bỏ qua một tín hiệu chưa ai phân loại).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "triage({\"name\":\"refresh_reuse_spike\"})",
+          "output": "\"page\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A lookup table maps the known names; default the rest.|||Một bảng tra ánh xạ các tên biết; mặc định phần còn lại.",
+        "A nameless signal ⇒ ignore; an unknown name ⇒ investigate.|||Một tín hiệu không tên ⇒ ignore; một tên lạ ⇒ investigate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const RUNBOOK = { refresh_reuse_spike: 'page', failed_login_burst: 'auto', new_country_logins: 'investigate', error_5xx_spike: 'page', breached_pw_rate: 'investigate', admin_action: 'auto' };\n/** ⇒ 'page' | 'investigate' | 'auto' | 'ignore' */\nfunction triage(signal) {\n  // Write your solution here\n  return 'ignore';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const RUNBOOK = { refresh_reuse_spike: 'page', failed_login_burst: 'auto', new_country_logins: 'investigate', error_5xx_spike: 'page', breached_pw_rate: 'investigate', admin_action: 'auto' };\n// Reference solution\nfunction triage(signal) {\n  // Route a monitoring signal to a runbook action. A nameless signal is a pipeline bug ⇒ ignore; an unknown\n  // NAME gets a human look ⇒ investigate (never silently ignore the signal you did not plan for).\n  const name = signal && signal.name;\n  if (!name) return 'ignore';\n  return RUNBOOK[name] || 'investigate';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The runbook is a function so the on-call policy is written down and testable; page rarely, never ignore the unknown (11.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Runbook là một hàm để chính sách trực được viết sẵn và test được; page hiếm, không bao giờ bỏ qua cái lạ (11.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "reuse spike ⇒ page",
+              "vi": "đợt tái-dùng ⇒ page"
+            },
+            "goi": "triage({\"name\":\"refresh_reuse_spike\"})",
+            "mongDoi": "page"
+          },
+          {
+            "moTa": {
+              "en": "already handled ⇒ auto",
+              "vi": "đã xử lý ⇒ auto"
+            },
+            "goi": "triage({\"name\":\"failed_login_burst\"})",
+            "mongDoi": "auto",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "ambiguous ⇒ investigate",
+              "vi": "mơ hồ ⇒ investigate"
+            },
+            "goi": "triage({\"name\":\"new_country_logins\"})",
+            "mongDoi": "investigate",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown ⇒ investigate",
+              "vi": "lạ ⇒ investigate"
+            },
+            "goi": "triage({\"name\":\"totally_new\"})",
+            "mongDoi": "investigate",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "no name ⇒ ignore",
+              "vi": "không tên ⇒ ignore"
+            },
+            "goi": "triage({})",
+            "mongDoi": "ignore",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning ignore for an unknown name.|||Trả ignore cho một tên lạ."
+        },
+        {
+          "loi": "Paging for a failed-login burst the stuffing defence handled.|||Page cho một đợt đăng-nhập-sai mà phòng thủ nhồi đã xử lý."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page/investigate/auto/ignore",
+          "vi": "page/investigate/auto/ignore"
+        }
+      ]
+    },
+    {
+      "title": "11.5-3 — Signal → action",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each signal to its runbook action.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi tín hiệu với hành động runbook của nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only the active-theft signal pages here.|||Chỉ tín hiệu trộm-đang-diễn-ra page ở đây.",
+        "The stuffing defence already handled the failed-login burst.|||Phòng thủ nhồi đã xử lý đợt đăng-nhập-sai."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.5-3 — Signal → action\n\nAnswer in the answer panel (no code needed).\n\n1. Signal → actionTín hiệu → hành động\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.5-3 — Signal → action — answer key\n\n1. Signal → actionTín hiệu → hành động\n   - r1.q: page\n   - r2.q: investigate\n   - r3.q: auto\n   Reuse spike pages (active theft); new-country investigates; failed-login burst is auto (already throttled) (11.5).VI: Đợt tái-dùng page (trộm đang diễn ra); nước-mới investigate; đợt đăng-nhập-sai auto (đã kìm) (11.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Reuse spike pages (active theft); new-country investigates; failed-login burst is auto (already throttled) (11.5).</p><p><i>VI: Đợt tái-dùng page (trộm đang diễn ra); nước-mới investigate; đợt đăng-nhập-sai auto (đã kìm) (11.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Signal → action</p><p style=\"opacity:.75;font-size:.92em\"><i>Tín hiệu → hành động</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Signal"
+              },
+              {
+                "ma": "q",
+                "ten": "Action",
+                "luaChon": [
+                  "page",
+                  "investigate",
+                  "auto"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "refresh-reuse spike"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "new-country logins"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "failed-login burst"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "page",
+              "r2.q": "investigate",
+              "r3.q": "auto"
+            },
+            "giaiThich": "<p>Reuse spike pages (active theft); new-country investigates; failed-login burst is auto (already throttled) (11.5).</p><p><i>VI: Đợt tái-dùng page (trộm đang diễn ra); nước-mới investigate; đợt đăng-nhập-sai auto (đã kìm) (11.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Paging on the failed-login burst.|||Page đợt đăng-nhập-sai."
+        },
+        {
+          "loi": "Ignoring the refresh-reuse spike.|||Bỏ qua đợt tái-dùng-refresh."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "page",
+          "vi": "page"
+        }
+      ]
+    }
+  ]
+}

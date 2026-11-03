@@ -1,0 +1,377 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-1-bi-mat",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-1-bi-mat"
+  },
+  "exercises": [
+    {
+      "title": "11.1-1 — Secrets never touch the repo",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Secrets reach the process from the environment, never the repo; a missing one fails fast; a committed one is forever.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Bí mật tới tiến trình từ môi trường, không bao giờ kho mã; một cái thiếu hỏng nhanh; một cái đã commit là vĩnh viễn.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Config that varies between deploys lives in the environment.|||Cấu hình thay đổi giữa các lần deploy sống trong môi trường.",
+        "Rotation is the only fix for a committed secret.|||Xoay là cách sửa duy nhất cho một bí mật đã commit."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.1-1 — Secrets never touch the repo\n\nAnswer in the answer panel (no code needed).\n\n1. A required secret is missing at startup. What is the right behaviour?Một bí mật bắt buộc thiếu lúc khởi động. Hành vi đúng là gì?\n2. A secret was committed and removed in the next commit. Is it safe?Một bí mật bị commit và gỡ trong commit sau. Nó an toàn chưa?\n3. Why is a NEXT_PUBLIC_ third-party key dangerous?Vì sao một khoá bên thứ ba NEXT_PUBLIC_ nguy hiểm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.1-1 — Secrets never touch the repo — answer key\n\n1. A required secret is missing at startup. What is the right behaviour?Một bí mật bắt buộc thiếu lúc khởi động. Hành vi đúng là gì?\n   Answer: c) Refuse to start with a clear error — a loud startup failure beats a mysterious 500 later in a request\n   Fail fast; half-configured fails later and harder to trace. A random or hardcoded secret is worse (11.1).VI: Hỏng nhanh; nửa-cấu-hình hỏng sau và khó lần hơn. Một secret ngẫu nhiên hay hardcode còn tệ hơn (11.1).\n\n2. A secret was committed and removed in the next commit. Is it safe?Một bí mật bị commit và gỡ trong commit sau. Nó an toàn chưa?\n   Answer: c) No — it is in the git history on every clone and fork forever; the only fix is to rotate it\n   The earlier commit still holds it everywhere; rotate the secret (11.1).VI: Commit trước vẫn giữ nó ở mọi nơi; xoay bí mật (11.1).\n\n3. Why is a NEXT_PUBLIC_ third-party key dangerous?Vì sao một khoá bên thứ ba NEXT_PUBLIC_ nguy hiểm?\n   Answer: d) It is baked into the frontend bundle and shipped to every browser — it is not a secret at all\n   A key in the client bundle is public; keep third-party keys server-side behind a proxy (11.1, GIPHY pattern).VI: Một khoá trong bundle client là công khai; giữ khoá bên thứ ba ở máy chủ sau một proxy (11.1, mẫu GIPHY).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> Refuse to start with a clear error — a loud startup failure beats a mysterious 500 later in a request</p><p>Fail fast; half-configured fails later and harder to trace. A random or hardcoded secret is worse (11.1).</p><p><i>VI: Hỏng nhanh; nửa-cấu-hình hỏng sau và khó lần hơn. Một secret ngẫu nhiên hay hardcode còn tệ hơn (11.1).</i></p></li><li><p><b>c)</b> No — it is in the git history on every clone and fork forever; the only fix is to rotate it</p><p>The earlier commit still holds it everywhere; rotate the secret (11.1).</p><p><i>VI: Commit trước vẫn giữ nó ở mọi nơi; xoay bí mật (11.1).</i></p></li><li><p><b>d)</b> It is baked into the frontend bundle and shipped to every browser — it is not a secret at all</p><p>A key in the client bundle is public; keep third-party keys server-side behind a proxy (11.1, GIPHY pattern).</p><p><i>VI: Một khoá trong bundle client là công khai; giữ khoá bên thứ ba ở máy chủ sau một proxy (11.1, mẫu GIPHY).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A required secret is missing at startup. What is the right behaviour?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bí mật bắt buộc thiếu lúc khởi động. Hành vi đúng là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Start and generate a random secret for this run so the process can boot"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Start and log the whole environment so an operator can spot the gap"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Refuse to start with a clear error — a loud startup failure beats a mysterious 500 later in a request"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Start and fall back to a hardcoded default secret baked into the code"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Fail fast; half-configured fails later and harder to trace. A random or hardcoded secret is worse (11.1).</p><p><i>VI: Hỏng nhanh; nửa-cấu-hình hỏng sau và khó lần hơn. Một secret ngẫu nhiên hay hardcode còn tệ hơn (11.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A secret was committed and removed in the next commit. Is it safe?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một bí mật bị commit và gỡ trong commit sau. Nó an toàn chưa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Yes, because the latest commit no longer contains the secret value"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Yes, as long as the repository is private and not public"
+              },
+              {
+                "ma": "c",
+                "noiDung": "No — it is in the git history on every clone and fork forever; the only fix is to rotate it"
+              },
+              {
+                "ma": "d",
+                "noiDung": "No, but only if somebody had already cloned the repository before"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The earlier commit still holds it everywhere; rotate the secret (11.1).</p><p><i>VI: Commit trước vẫn giữ nó ở mọi nơi; xoay bí mật (11.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why is a NEXT_PUBLIC_ third-party key dangerous?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một khoá bên thứ ba NEXT_PUBLIC_ nguy hiểm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It makes the bundle slightly larger to download"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It expires faster than a server-side environment variable"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It can only be read on the server, which is too slow"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is baked into the frontend bundle and shipped to every browser — it is not a secret at all"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>A key in the client bundle is public; keep third-party keys server-side behind a proxy (11.1, GIPHY pattern).</p><p><i>VI: Một khoá trong bundle client là công khai; giữ khoá bên thứ ba ở máy chủ sau một proxy (11.1, mẫu GIPHY).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a later commit removes a secret from history.|||Tưởng một commit sau gỡ một bí mật khỏi lịch sử."
+        },
+        {
+          "loi": "Shipping a key in the client bundle.|||Ship một khoá trong bundle client."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "fail fast",
+          "vi": "hỏng nhanh"
+        },
+        {
+          "en": "Twelve-Factor config",
+          "vi": "cấu hình Twelve-Factor"
+        }
+      ]
+    },
+    {
+      "title": "11.1-2 — Write missingKeys(env): fail-fast startup check",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the list of REQUIRED secrets (<code>DATABASE_URL</code>, <code>JWT_SIGNING_KEY</code>, <code>SESSION_SECRET</code>) that are absent or blank in <code>env</code> — keeping their original order. A value is \"missing\" if it is undefined, empty, or only whitespace. The caller refuses to start when this list is non-empty.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả danh sách các bí mật BẮT BUỘC (<code>DATABASE_URL</code>, <code>JWT_SIGNING_KEY</code>, <code>SESSION_SECRET</code>) vắng hoặc trống trong <code>env</code> — giữ thứ tự gốc. Một giá trị là \"thiếu\" nếu nó undefined, rỗng, hoặc chỉ khoảng trắng. Người gọi từ chối khởi động khi danh sách này không rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "missingKeys({\"JWT_SIGNING_KEY\":\"k\"})",
+          "output": "[\"DATABASE_URL\",\"SESSION_SECRET\"]",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Filter the REQUIRED list by whether env has a non-blank value.|||Lọc danh sách REQUIRED theo việc env có một giá trị không-trống.",
+        "Trim and compare to the empty string to catch whitespace-only.|||Trim và so với chuỗi rỗng để bắt chỉ-khoảng-trắng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const REQUIRED = ['DATABASE_URL', 'JWT_SIGNING_KEY', 'SESSION_SECRET'];\n/** ⇒ array of required keys missing or blank in env (original order) */\nfunction missingKeys(env) {\n  // Write your solution here\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const REQUIRED = ['DATABASE_URL', 'JWT_SIGNING_KEY', 'SESSION_SECRET'];\n// Reference solution\nfunction missingKeys(env) {\n  // Which required secrets are absent or blank? The caller refuses to start if this is non-empty.\n  const e = env || {};\n  return REQUIRED.filter((k) => !e[k] || String(e[k]).trim() === '');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Checking required secrets at startup turns a missing one into a loud, clear failure instead of a 3am 500 (11.1).</p>",
+      "solutionExplanationHtmlVi": "<p>Kiểm bí mật bắt buộc lúc khởi động biến một cái thiếu thành một lỗi ồn, rõ thay vì một 500 lúc 3h sáng (11.1).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "two missing (order kept)",
+              "vi": "thiếu hai (giữ thứ tự)"
+            },
+            "goi": "missingKeys({\"JWT_SIGNING_KEY\":\"k\"})",
+            "mongDoi": [
+              "DATABASE_URL",
+              "SESSION_SECRET"
+            ]
+          },
+          {
+            "moTa": {
+              "en": "all set ⇒ []",
+              "vi": "đủ ⇒ []"
+            },
+            "goi": "missingKeys({\"DATABASE_URL\":\"d\",\"JWT_SIGNING_KEY\":\"k\",\"SESSION_SECRET\":\"s\"})",
+            "mongDoi": [],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "whitespace ⇒ missing",
+              "vi": "khoảng trắng ⇒ thiếu"
+            },
+            "goi": "missingKeys({\"DATABASE_URL\":\"   \",\"JWT_SIGNING_KEY\":\"k\",\"SESSION_SECRET\":\"s\"})",
+            "mongDoi": [
+              "DATABASE_URL"
+            ],
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "empty env ⇒ all three",
+              "vi": "env rỗng ⇒ cả ba"
+            },
+            "goi": "missingKeys({})",
+            "mongDoi": [
+              "DATABASE_URL",
+              "JWT_SIGNING_KEY",
+              "SESSION_SECRET"
+            ],
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning the keys that ARE present instead of missing.|||Trả các khoá CÓ mặt thay vì thiếu."
+        },
+        {
+          "loi": "Treating a whitespace-only value as present.|||Coi một giá trị chỉ-khoảng-trắng là có mặt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "required secret",
+          "vi": "bí mật bắt buộc"
+        }
+      ]
+    },
+    {
+      "title": "11.1-3 — Order a safe startup",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order a safe process startup, from reading config to serving traffic.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp một lần khởi động an toàn, từ đọc cấu hình tới phục vụ lưu lượng.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Validation comes before serving.|||Kiểm đến trước phục vụ.",
+        "The banner never prints a value.|||Banner không bao giờ in một giá trị."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.1-3 — Order a safe startup\n\nAnswer in the answer panel (no code needed).\n\n1. Start → serveKhởi động → phục vụ\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.1-3 — Order a safe startup — answer key\n\n1. Start → serveKhởi động → phục vụ\n   Answer: m4) Read secrets from the environment (never the repo)  →  m1) Check the required ones; if any are missing, refuse to start with a clear error  →  m3) Log a redacted banner — which config is set, never its value  →  m2) Begin serving traffic\n   Read, validate (fail fast), log a redacted banner, then serve — never serve half-configured (11.1).VI: Đọc, kiểm (hỏng nhanh), log banner đã che, rồi phục vụ — không bao giờ phục vụ nửa-cấu-hình (11.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Read, validate (fail fast), log a redacted banner, then serve — never serve half-configured (11.1).</p><p><i>VI: Đọc, kiểm (hỏng nhanh), log banner đã che, rồi phục vụ — không bao giờ phục vụ nửa-cấu-hình (11.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Start → serve</p><p style=\"opacity:.75;font-size:.92em\"><i>Khởi động → phục vụ</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Check the required ones; if any are missing, refuse to start with a clear error"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Begin serving traffic"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Log a redacted banner — which config is set, never its value"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Read secrets from the environment (never the repo)"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m1",
+              "m3",
+              "m2"
+            ],
+            "giaiThich": "<p>Read, validate (fail fast), log a redacted banner, then serve — never serve half-configured (11.1).</p><p><i>VI: Đọc, kiểm (hỏng nhanh), log banner đã che, rồi phục vụ — không bao giờ phục vụ nửa-cấu-hình (11.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Serving before validating the config.|||Phục vụ trước khi kiểm cấu hình."
+        },
+        {
+          "loi": "Logging the raw secret values.|||Log các giá trị bí mật thô."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "redacted banner",
+          "vi": "banner đã che"
+        }
+      ]
+    }
+  ]
+}

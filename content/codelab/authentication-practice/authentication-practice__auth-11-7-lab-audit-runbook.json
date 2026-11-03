@@ -1,0 +1,363 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-7-lab-audit-runbook",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-7-lab-audit-runbook"
+  },
+  "exercises": [
+    {
+      "title": "Lab 11-1 — Keep enough, leak nothing, page rarely",
+      "language": "text",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 8,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Lab 11: the audit entry keeps enough and leaks nothing; the runbook pages rarely and never ignores the unknown.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Lab 11: mục audit giữ đủ và không rò gì; runbook page hiếm và không bao giờ bỏ qua cái lạ.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Severity drives the response, not the sort order.|||Severity dẫn phản ứng, không phải thứ tự sắp.",
+        "The unknown signal leans toward investigate.|||Tín hiệu lạ nghiêng về investigate."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11-1 — Keep enough, leak nothing, page rarely\n\nAnswer in the answer panel (no code needed).\n\n1. The \"yeu\" attempt logs the whole event and pages on every signal. Why does it score only 2/10?Bản \"yếu\" log cả sự kiện và page mọi tín hiệu. Vì sao nó chỉ đạt 2/10?\n2. Why must a security event like refresh_reuse_detected get a high severity?Vì sao một sự kiện bảo mật như refresh_reuse_detected phải nhận một severity cao?\n3. What should triage() return for a signal name nobody has classified?triage() nên trả gì cho một tên tín hiệu chưa ai phân loại?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11-1 — Keep enough, leak nothing, page rarely — answer key\n\n1. The \"yeu\" attempt logs the whole event and pages on every signal. Why does it score only 2/10?Bản \"yếu\" log cả sự kiện và page mọi tín hiệu. Vì sao nó chỉ đạt 2/10?\n   Answer: c) It leaks a token and password into the log forever and causes alert fatigue — it only keeps the safe fields right (T1)\n   Logging everything leaks secrets; paging on everything deafens the on-call. It passes only T1 (Lab 11, 11.4/11.5).VI: Log mọi thứ rò bí mật; page mọi thứ làm điếc người trực. Nó chỉ qua T1 (Lab 11, 11.4/11.5).\n\n2. Why must a security event like refresh_reuse_detected get a high severity?Vì sao một sự kiện bảo mật như refresh_reuse_detected phải nhận một severity cao?\n   Answer: a) The severity drives the response — alert tells monitoring and the runbook this is a takeover signal worth paging on\n   Severity is what monitoring and the runbook act on; a reuse event is an alert (Lab 11, 11.4).VI: Severity là cái giám sát và runbook hành động theo; một sự kiện tái-dùng là một alert (Lab 11, 11.4).\n\n3. What should triage() return for a signal name nobody has classified?triage() nên trả gì cho một tên tín hiệu chưa ai phân loại?\n   Answer: d) investigate — give it a human look, never silently ignore the signal you did not plan for\n   Default the unknown to investigate; fail toward attention (Lab 11, 11.5).VI: Mặc định cái lạ là investigate; hỏng về phía chú ý (Lab 11, 11.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>c)</b> It leaks a token and password into the log forever and causes alert fatigue — it only keeps the safe fields right (T1)</p><p>Logging everything leaks secrets; paging on everything deafens the on-call. It passes only T1 (Lab 11, 11.4/11.5).</p><p><i>VI: Log mọi thứ rò bí mật; page mọi thứ làm điếc người trực. Nó chỉ qua T1 (Lab 11, 11.4/11.5).</i></p></li><li><p><b>a)</b> The severity drives the response — alert tells monitoring and the runbook this is a takeover signal worth paging on</p><p>Severity is what monitoring and the runbook act on; a reuse event is an alert (Lab 11, 11.4).</p><p><i>VI: Severity là cái giám sát và runbook hành động theo; một sự kiện tái-dùng là một alert (Lab 11, 11.4).</i></p></li><li><p><b>d)</b> investigate — give it a human look, never silently ignore the signal you did not plan for</p><p>Default the unknown to investigate; fail toward attention (Lab 11, 11.5).</p><p><i>VI: Mặc định cái lạ là investigate; hỏng về phía chú ý (Lab 11, 11.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The \"yeu\" attempt logs the whole event and pages on every signal. Why does it score only 2/10?</p><p style=\"opacity:.75;font-size:.92em\"><i>Bản \"yếu\" log cả sự kiện và page mọi tín hiệu. Vì sao nó chỉ đạt 2/10?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "It accidentally challenges far too many perfectly legitimate monitoring signals that should pass through"
+              },
+              {
+                "ma": "b",
+                "noiDung": "It prevents the audit log from being written to disk at all, so no record of any event survives"
+              },
+              {
+                "ma": "c",
+                "noiDung": "It leaks a token and password into the log forever and causes alert fatigue — it only keeps the safe fields right (T1)"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It is far too slow to evaluate the whole event object on each and every request the service handles"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>Logging everything leaks secrets; paging on everything deafens the on-call. It passes only T1 (Lab 11, 11.4/11.5).</p><p><i>VI: Log mọi thứ rò bí mật; page mọi thứ làm điếc người trực. Nó chỉ qua T1 (Lab 11, 11.4/11.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why must a security event like refresh_reuse_detected get a high severity?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một sự kiện bảo mật như refresh_reuse_detected phải nhận một severity cao?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The severity drives the response — alert tells monitoring and the runbook this is a takeover signal worth paging on"
+              },
+              {
+                "ma": "b",
+                "noiDung": "A higher severity makes the log entry sort to the top of the file"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The severity changes which fields are kept in the entry"
+              },
+              {
+                "ma": "d",
+                "noiDung": "It makes the entry take more storage so it is kept longer"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Severity is what monitoring and the runbook act on; a reuse event is an alert (Lab 11, 11.4).</p><p><i>VI: Severity là cái giám sát và runbook hành động theo; một sự kiện tái-dùng là một alert (Lab 11, 11.4).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>What should triage() return for a signal name nobody has classified?</p><p style=\"opacity:.75;font-size:.92em\"><i>triage() nên trả gì cho một tên tín hiệu chưa ai phân loại?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "auto, and record it without any review"
+              },
+              {
+                "ma": "b",
+                "noiDung": "ignore, because there is no runbook entry for it yet"
+              },
+              {
+                "ma": "c",
+                "noiDung": "page, to be maximally cautious about every unknown"
+              },
+              {
+                "ma": "d",
+                "noiDung": "investigate — give it a human look, never silently ignore the signal you did not plan for"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Default the unknown to investigate; fail toward attention (Lab 11, 11.5).</p><p><i>VI: Mặc định cái lạ là investigate; hỏng về phía chú ý (Lab 11, 11.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking \"log everything\" is thorough and safe.|||Tưởng \"log mọi thứ\" là kỹ và an toàn."
+        },
+        {
+          "loi": "Ignoring an unclassified signal.|||Bỏ qua một tín hiệu chưa phân loại."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "severity",
+          "vi": "severity"
+        },
+        {
+          "en": "fail toward attention",
+          "vi": "hỏng về phía chú ý"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11-2 — Write severityFor(action): the audit severity",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return the severity an audit entry carries for an <code>action</code>: <code>refresh_reuse_detected</code> / <code>mfa_disabled</code> ⇒ <code>'alert'</code>; <code>password_reset</code> / <code>email_changed</code> / <code>admin_action</code> ⇒ <code>'warn'</code>; anything else (including <code>login_ok</code>, <code>logout</code>, or an unknown action) ⇒ <code>'info'</code>. The severity is what the runbook acts on.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả severity một mục audit mang cho một <code>action</code>: <code>refresh_reuse_detected</code> / <code>mfa_disabled</code> ⇒ <code>'alert'</code>; <code>password_reset</code> / <code>email_changed</code> / <code>admin_action</code> ⇒ <code>'warn'</code>; còn lại (gồm <code>login_ok</code>, <code>logout</code>, hay một action lạ) ⇒ <code>'info'</code>. Severity là cái runbook hành động theo.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "severityFor(\"refresh_reuse_detected\")",
+          "output": "\"alert\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "A lookup table maps the alert/warn actions; default to info.|||Một bảng tra ánh xạ các action alert/warn; mặc định info.",
+        "An unknown action is info, never dropped.|||Một action lạ là info, không bao giờ bỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const SEVERITY = { refresh_reuse_detected: 'alert', mfa_disabled: 'alert', password_reset: 'warn', email_changed: 'warn', admin_action: 'warn', login_failed: 'info', login_ok: 'info', logout: 'info' };\n/** ⇒ 'alert' | 'warn' | 'info' */\nfunction severityFor(action) {\n  // Write your solution here\n  return 'info';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const SEVERITY = { refresh_reuse_detected: 'alert', mfa_disabled: 'alert', password_reset: 'warn', email_changed: 'warn', admin_action: 'warn', login_failed: 'info', login_ok: 'info', logout: 'info' };\n// Reference solution\nfunction severityFor(action) {\n  // The severity an audit entry carries for a given action. Anything unlisted is 'info' (never dropped, just quiet).\n  return SEVERITY[action] || 'info';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>refresh_reuse and mfa_disabled are takeover signals (alert); routine logins are info — the severity drives the runbook (Lab 11, 11.4).</p>",
+      "solutionExplanationHtmlVi": "<p>refresh_reuse và mfa_disabled là tín hiệu chiếm tài khoản (alert); đăng nhập thường lệ là info — severity dẫn runbook (Lab 11, 11.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "takeover signal ⇒ alert",
+              "vi": "tín hiệu chiếm ⇒ alert"
+            },
+            "goi": "severityFor(\"refresh_reuse_detected\")",
+            "mongDoi": "alert"
+          },
+          {
+            "moTa": {
+              "en": "sensitive change ⇒ warn",
+              "vi": "thay đổi nhạy cảm ⇒ warn"
+            },
+            "goi": "severityFor(\"password_reset\")",
+            "mongDoi": "warn",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "routine ⇒ info",
+              "vi": "thường lệ ⇒ info"
+            },
+            "goi": "severityFor(\"login_ok\")",
+            "mongDoi": "info",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown ⇒ info",
+              "vi": "lạ ⇒ info"
+            },
+            "goi": "severityFor(\"some_new_action\")",
+            "mongDoi": "info",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Returning undefined for an unknown action instead of info.|||Trả undefined cho một action lạ thay vì info."
+        },
+        {
+          "loi": "Marking a routine login as alert.|||Đánh dấu một đăng nhập thường lệ là alert."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "alert/warn/info",
+          "vi": "alert/warn/info"
+        }
+      ]
+    },
+    {
+      "title": "Lab 11-3 — Grade each attempt",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order these three Lab 11 attempts from the lowest grade to the highest.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp ba lần thử Lab 11 này từ điểm thấp nhất tới cao nhất.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Both weak attempts score the same here.|||Cả hai lần thử yếu cùng điểm ở đây.",
+        "Only the reference leaks nothing and pages rarely.|||Chỉ bản tham khảo không rò gì và page hiếm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11-3 — Grade each attempt\n\nAnswer in the answer panel (no code needed).\n\n1. Lowest → highestThấp → cao\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 11-3 — Grade each attempt — answer key\n\n1. Lowest → highestThấp → cao\n   Answer: m2) The empty starter (returns the event unchanged, triage always ignore) — 2/10  →  m1) The \"yeu\" attempt (logs the whole event, pages on everything) — 2/10  →  m3) The reference (allow-list audit + severity, runbook that pages rarely) — 10/10\n   Starter and yeu both score 2 (different failures); the reference keeps enough, leaks nothing, pages rarely (Lab 11).VI: Khởi đầu và yếu đều 2 (lỗi khác nhau); bản tham khảo giữ đủ, không rò gì, page hiếm (Lab 11).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Starter and yeu both score 2 (different failures); the reference keeps enough, leaks nothing, pages rarely (Lab 11).</p><p><i>VI: Khởi đầu và yếu đều 2 (lỗi khác nhau); bản tham khảo giữ đủ, không rò gì, page hiếm (Lab 11).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Lowest → highest</p><p style=\"opacity:.75;font-size:.92em\"><i>Thấp → cao</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "The \"yeu\" attempt (logs the whole event, pages on everything) — 2/10"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "The empty starter (returns the event unchanged, triage always ignore) — 2/10"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "The reference (allow-list audit + severity, runbook that pages rarely) — 10/10"
+              }
+            ],
+            "dapAn": [
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Starter and yeu both score 2 (different failures); the reference keeps enough, leaks nothing, pages rarely (Lab 11).</p><p><i>VI: Khởi đầu và yếu đều 2 (lỗi khác nhau); bản tham khảo giữ đủ, không rò gì, page hiếm (Lab 11).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking the yeu attempt passes.|||Tưởng lần thử yếu đạt."
+        },
+        {
+          "loi": "Thinking the starter leaks secrets like the yeu one.|||Tưởng bản khởi đầu rò bí mật như bản yếu."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "pass = 7/10",
+          "vi": "đạt = 7/10"
+        }
+      ]
+    }
+  ]
+}

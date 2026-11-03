@@ -1,0 +1,399 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-11-4-nhat-ky-kiem-toan",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-11-4-nhat-ky-kiem-toan"
+  },
+  "exercises": [
+    {
+      "title": "11.4-1 — Write enough, leak nothing",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>An audit log reconstructs an incident (who/what/when/where/outcome) and must never contain a secret.</p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Một nhật ký kiểm toán tái dựng một sự cố (ai/gì/khi/đâu/kết quả) và không bao giờ được chứa một bí mật.</p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "A logged secret is read by everyone with log access.|||Một bí mật bị log được đọc bởi mọi ai có quyền log.",
+        "The attacker will try to erase their tracks.|||Kẻ tấn công sẽ cố xoá dấu vết."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.4-1 — Write enough, leak nothing\n\nAnswer in the answer panel (no code needed).\n\n1. Which belongs in an audit entry, and which must never?Cái nào thuộc về một mục audit, và cái nào không bao giờ?\n2. Why an allow-list, not a deny-list, for what an entry may contain?Vì sao một allow-list, không phải deny-list, cho cái một mục được chứa?\n3. Why ship audit entries off the server to append-only storage?Vì sao chuyển các mục audit ra khỏi máy chủ tới kho chỉ-thêm?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.4-1 — Write enough, leak nothing — answer key\n\n1. Which belongs in an audit entry, and which must never?Cái nào thuộc về một mục audit, và cái nào không bao giờ?\n   Answer: d) Keep actor, action, outcome, time, ip, request id; never a token, password, cookie, OTP or recovery code\n   Write what reconstructs the incident; never a secret — a logged secret is a second breach (11.4).VI: Ghi cái tái dựng sự cố; không bao giờ một bí mật — một bí mật bị log là một vụ rò thứ hai (11.4).\n\n2. Why an allow-list, not a deny-list, for what an entry may contain?Vì sao một allow-list, không phải deny-list, cho cái một mục được chứa?\n   Answer: a) A deny-list misses any new sensitive field a teammate adds later; an allow-list only passes fields you named safe\n   A deny-list blocks only what you listed; a new field is logged by default. Allow-list is safe by construction (11.4, 1.5).VI: Một deny-list chỉ chặn cái bạn liệt kê; một trường mới được log mặc định. Allow-list an toàn theo cấu trúc (11.4, 1.5).\n\n3. Why ship audit entries off the server to append-only storage?Vì sao chuyển các mục audit ra khỏi máy chủ tới kho chỉ-thêm?\n   Answer: b) So an attacker who compromises the box cannot edit or delete the record of their own actions\n   A log the attacker can delete is not an audit log; it must be tamper-evident (11.4).VI: Một log kẻ tấn công xoá được không phải một nhật ký kiểm toán; nó phải chống-sửa (11.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>d)</b> Keep actor, action, outcome, time, ip, request id; never a token, password, cookie, OTP or recovery code</p><p>Write what reconstructs the incident; never a secret — a logged secret is a second breach (11.4).</p><p><i>VI: Ghi cái tái dựng sự cố; không bao giờ một bí mật — một bí mật bị log là một vụ rò thứ hai (11.4).</i></p></li><li><p><b>a)</b> A deny-list misses any new sensitive field a teammate adds later; an allow-list only passes fields you named safe</p><p>A deny-list blocks only what you listed; a new field is logged by default. Allow-list is safe by construction (11.4, 1.5).</p><p><i>VI: Một deny-list chỉ chặn cái bạn liệt kê; một trường mới được log mặc định. Allow-list an toàn theo cấu trúc (11.4, 1.5).</i></p></li><li><p><b>b)</b> So an attacker who compromises the box cannot edit or delete the record of their own actions</p><p>A log the attacker can delete is not an audit log; it must be tamper-evident (11.4).</p><p><i>VI: Một log kẻ tấn công xoá được không phải một nhật ký kiểm toán; nó phải chống-sửa (11.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which belongs in an audit entry, and which must never?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cái nào thuộc về một mục audit, và cái nào không bao giờ?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Keep the password but hash it first so it is safe to store in logs"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Keep everything, including the token and password, for completeness"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Keep only the timestamp; everything else is a privacy risk"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Keep actor, action, outcome, time, ip, request id; never a token, password, cookie, OTP or recovery code"
+              }
+            ],
+            "dapAn": [
+              "d"
+            ],
+            "giaiThich": "<p>Write what reconstructs the incident; never a secret — a logged secret is a second breach (11.4).</p><p><i>VI: Ghi cái tái dựng sự cố; không bao giờ một bí mật — một bí mật bị log là một vụ rò thứ hai (11.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>Why an allow-list, not a deny-list, for what an entry may contain?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một allow-list, không phải deny-list, cho cái một mục được chứa?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "A deny-list misses any new sensitive field a teammate adds later; an allow-list only passes fields you named safe"
+              },
+              {
+                "ma": "b",
+                "noiDung": "An allow-list is simply faster for the CPU to evaluate per request"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A deny-list cannot be written for objects with nested fields"
+              },
+              {
+                "ma": "d",
+                "noiDung": "An allow-list lets you keep more fields in the log overall"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>A deny-list blocks only what you listed; a new field is logged by default. Allow-list is safe by construction (11.4, 1.5).</p><p><i>VI: Một deny-list chỉ chặn cái bạn liệt kê; một trường mới được log mặc định. Allow-list an toàn theo cấu trúc (11.4, 1.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why ship audit entries off the server to append-only storage?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao chuyển các mục audit ra khỏi máy chủ tới kho chỉ-thêm?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "So the logs load faster in the dashboard"
+              },
+              {
+                "ma": "b",
+                "noiDung": "So an attacker who compromises the box cannot edit or delete the record of their own actions"
+              },
+              {
+                "ma": "c",
+                "noiDung": "So the timestamps are more accurate across time zones"
+              },
+              {
+                "ma": "d",
+                "noiDung": "So the local disk does not fill up with log files"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>A log the attacker can delete is not an audit log; it must be tamper-evident (11.4).</p><p><i>VI: Một log kẻ tấn công xoá được không phải một nhật ký kiểm toán; nó phải chống-sửa (11.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Logging the whole event \"for completeness\".|||Log cả sự kiện \"cho đầy đủ\"."
+        },
+        {
+          "loi": "Keeping the audit log only on the compromised box.|||Giữ nhật ký kiểm toán chỉ trên máy bị xâm nhập."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audit log",
+          "vi": "nhật ký kiểm toán"
+        },
+        {
+          "en": "allow-list",
+          "vi": "allow-list"
+        }
+      ]
+    },
+    {
+      "title": "11.4-2 — Write isSensitive(name): must this field be dropped?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return <code>true</code> if a field named <code>name</code> must be dropped from an audit entry because it holds a secret. Normalise the name — lowercase, strip <code>_</code> and <code>-</code> — then check it against the sensitive set (<code>password</code>, <code>newPassword</code>, <code>token</code>, <code>accessToken</code>, <code>refreshToken</code>, <code>cookie</code>, <code>authorization</code>, <code>secret</code>, <code>otp</code>, <code>totp</code>, <code>recoveryCode</code>, <code>sessionId</code>, <code>apiKey</code>). So <code>\"recovery_code\"</code>, <code>\"RECOVERY-CODE\"</code> and <code>\"recoveryCode\"</code> all match.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả <code>true</code> nếu một trường tên <code>name</code> phải bị bỏ khỏi một mục audit vì nó giữ một bí mật. Chuẩn hoá tên — chữ thường, bỏ <code>_</code> và <code>-</code> — rồi so với tập nhạy cảm (<code>password</code>, <code>newPassword</code>, <code>token</code>, <code>accessToken</code>, <code>refreshToken</code>, <code>cookie</code>, <code>authorization</code>, <code>secret</code>, <code>otp</code>, <code>totp</code>, <code>recoveryCode</code>, <code>sessionId</code>, <code>apiKey</code>). Nên <code>\"recovery_code\"</code>, <code>\"RECOVERY-CODE\"</code> và <code>\"recoveryCode\"</code> đều khớp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "isSensitive(\"token\")",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Lowercase and remove underscores and dashes before comparing.|||Chữ thường và bỏ gạch dưới, gạch ngang trước khi so.",
+        "A Set makes the membership check simple.|||Một Set làm phép kiểm thành viên đơn giản."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const SENSITIVE = new Set(['password', 'newpassword', 'token', 'accesstoken', 'refreshtoken', 'cookie', 'authorization', 'secret', 'otp', 'totp', 'recoverycode', 'sessionid', 'apikey']);\n/** ⇒ true if a field with this name must be dropped from an audit entry */\nfunction isSensitive(name) {\n  // Write your solution here\n  return false;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "const SENSITIVE = new Set(['password', 'newpassword', 'token', 'accesstoken', 'refreshtoken', 'cookie', 'authorization', 'secret', 'otp', 'totp', 'recoverycode', 'sessionid', 'apikey']);\n// Reference solution\nfunction isSensitive(name) {\n  // A field value must never be logged if its NAME is sensitive — regardless of case, underscores or dashes.\n  const key = String(name).toLowerCase().replace(/[_-]/g, '');\n  return SENSITIVE.has(key);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Stripping by a normalised name catches every spelling of a secret field — the core of safe audit logging (11.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Strip theo tên đã chuẩn hoá bắt mọi cách viết của một trường bí mật — lõi của log kiểm toán an toàn (11.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "token ⇒ true",
+              "vi": "token ⇒ true"
+            },
+            "goi": "isSensitive(\"token\")",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "any case/dash ⇒ true",
+              "vi": "mọi hoa thường/gạch ⇒ true"
+            },
+            "goi": "isSensitive(\"RECOVERY-CODE\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "underscore ⇒ true",
+              "vi": "gạch dưới ⇒ true"
+            },
+            "goi": "isSensitive(\"new_password\")",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "ip is safe ⇒ false",
+              "vi": "ip an toàn ⇒ false"
+            },
+            "goi": "isSensitive(\"ip\")",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "actor is safe ⇒ false",
+              "vi": "actor an toàn ⇒ false"
+            },
+            "goi": "isSensitive(\"actor\")",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Comparing case-sensitively, so TOKEN slips through.|||So phân biệt hoa thường, nên TOKEN lọt."
+        },
+        {
+          "loi": "Not stripping underscores, so recovery_code slips through.|||Không bỏ gạch dưới, nên recovery_code lọt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "normalise",
+          "vi": "chuẩn hoá"
+        }
+      ]
+    },
+    {
+      "title": "11.4-3 — Field → audit",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each field to whether an audit entry keeps or drops it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi trường với việc một mục audit giữ hay bỏ nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Keep what reconstructs the incident.|||Giữ cái tái dựng sự cố.",
+        "Drop anything that is a secret.|||Bỏ bất cứ gì là một bí mật."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.4-3 — Field → audit\n\nAnswer in the answer panel (no code needed).\n\n1. Field → auditTrường → audit\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 11.4-3 — Field → audit — answer key\n\n1. Field → auditTrường → audit\n   - r1.q: keep\n   - r2.q: keep\n   - r3.q: drop\n   - r4.q: drop\n   Keep actor and ip (reconstruct the incident); drop token and newPassword (secrets) (11.4).VI: Giữ actor và ip (tái dựng sự cố); bỏ token và newPassword (bí mật) (11.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Keep actor and ip (reconstruct the incident); drop token and newPassword (secrets) (11.4).</p><p><i>VI: Giữ actor và ip (tái dựng sự cố); bỏ token và newPassword (bí mật) (11.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Field → audit</p><p style=\"opacity:.75;font-size:.92em\"><i>Trường → audit</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Field"
+              },
+              {
+                "ma": "q",
+                "ten": "Audit",
+                "luaChon": [
+                  "keep",
+                  "drop"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "actor (user id)"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "ip"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "token"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "newPassword"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "keep",
+              "r2.q": "keep",
+              "r3.q": "drop",
+              "r4.q": "drop"
+            },
+            "giaiThich": "<p>Keep actor and ip (reconstruct the incident); drop token and newPassword (secrets) (11.4).</p><p><i>VI: Giữ actor và ip (tái dựng sự cố); bỏ token và newPassword (bí mật) (11.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Keeping the token \"to debug later\".|||Giữ token \"để debug sau\"."
+        },
+        {
+          "loi": "Dropping the ip and losing the investigative trail.|||Bỏ ip và mất vết điều tra."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "PII",
+          "vi": "PII"
+        }
+      ]
+    }
+  ]
+}

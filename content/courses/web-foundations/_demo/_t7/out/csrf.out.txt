@@ -1,0 +1,14 @@
+--- session cookie with SameSite=Lax ---
+An is logged in at http://localhost:3457, then opens http://127.0.0.1:<port>/ (a different site).
+The page auto-submits <form method="post" action="http://localhost:3457/api/transfer">.
+Server log:
+  POST /api/transfer (no cookie)
+Response shown to An: {"error":"Log in first"}
+
+--- session cookie with SameSite=None; Secure ---
+An is logged in at http://localhost:3457, then opens http://127.0.0.1:<port>/ (a different site).
+The page auto-submits <form method="post" action="http://localhost:3457/api/transfer">.
+Server log:
+  POST /api/transfer cookie: sid=…
+  → TRANSFER 5000000 to attacker from An's account
+Response shown to An: {"ok":true,"from":"An","to":"attacker","amount":"5000000"}

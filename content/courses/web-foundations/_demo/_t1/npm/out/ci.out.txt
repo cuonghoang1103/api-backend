@@ -1,0 +1,32 @@
+$ rm -rf node_modules
+$ node index.js
+node:internal/modules/cjs/loader:1433
+  throw err;
+  ^
+
+Error: Cannot find module 'dayjs'
+Require stack:
+- /Users/lan/shop/index.js
+    at Object.<anonymous> (/Users/lan/shop/index.js:2:15)
+    at Object..js (node:internal/modules/cjs/loader:1913:10) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [
+    '/Users/lan/shop/index.js'
+  ]
+}
+
+Node.js v22.23.3
+$ npm ci
+
+added 31 packages, and audited 32 packages in …s
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+$ node index.js
+Hello, world!
+Launch day: Tuesday 1 December 2026
+Days from 2026-11-02: 29

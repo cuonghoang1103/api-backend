@@ -248,7 +248,7 @@ MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M ph�
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Việt) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 2.2 (tiếng Anh) — Ghi nhận thay đổi vào kho chứa</span><span class="lc-sub">Sơ đồ vòng đời tracked / untracked / staged trong sách chính thức.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -257,6 +257,21 @@ MM a.txt          <span class="tok-comment"># M trái = đã staging (a2), M ph�
 
 <div class="pitfall"><strong>Lỗi kinh điển của người mới:</strong> bạn <code>git add file.js</code>, rồi sửa tiếp <code>file.js</code>, rồi <code>git commit</code>. Chỉ phiên bản bạn đã staging được commit — những sửa đổi cuối vẫn nằm ở thư mục làm việc. Không có gì cảnh báo bạn cả. Thói quen phòng nó: chạy <code>git diff --staged</code> ngay trước khi commit và đọc xem thứ gì thật sự sắp được ghi.</div>
 <p class="note-ct"><strong>Mang điều này theo suốt các chương sau:</strong> khi một lệnh Git làm bạn rối, hãy hỏi "lệnh này đụng vào cây nào trong ba cây?". <code>git checkout</code>, <code>git restore</code>, <code>git reset</code> và <code>git stash</code> đều bí hiểm cho tới khi bạn nhận ra chúng chỉ khác nhau ở <em>chỗ chúng đổi cây nào</em> — một bảng mà bạn sẽ dựng ở Chương 4.</p>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-3-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.3 — Git: a time machine</span><span class="lc-sub">The three areas with real diffs, safe undo (restore, revert), .gitignore and a .env committed by mistake</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-3-git" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.3 — Git: cỗ máy thời gian</span><span class="lc-sub">Ba vùng với diff thật, hoàn tác an toàn (restore, revert), .gitignore và một .env lỡ commit</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -283,8 +298,8 @@ ${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
 </div>
 <p>You can see all of it with plumbing commands. This is real output from the playground repository:</p>
 <pre><code class="language-bash">git cat-file -p HEAD</code></pre>
-<div class="out">tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
-parent 8f3c1a2d9e0b4f6a1c3d5e7f9a0b2c4d6e8f0a12
+<div class="out">tree 35851ad2cd574d3202c81cf9d9f6a2724be2498d
+parent 4196002e673c428eedaefcdc60e0ca1525f9ce7e
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 committer Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 
@@ -380,8 +395,8 @@ ${slide('git-01', 5, 'Một commit là một tấm ảnh trọn dự án')}
 </div>
 <p>Bạn xem được tất cả bằng các lệnh cấp thấp. Đây là output thật từ kho nháp:</p>
 <pre><code class="language-bash">git cat-file -p HEAD</code></pre>
-<div class="out">tree 4b825dc642cb6eb9a060e54bf8d69288fbee4904
-parent 8f3c1a2d9e0b4f6a1c3d5e7f9a0b2c4d6e8f0a12
+<div class="out">tree 35851ad2cd574d3202c81cf9d9f6a2724be2498d
+parent 4196002e673c428eedaefcdc60e0ca1525f9ce7e
 author Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 committer Nguyen Van An &lt;an@example.com&gt; 1755820800 +0700
 
@@ -497,7 +512,7 @@ ${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
 index 7c4a1b2..9e8f3d1 100644
 --- a/src/auth.js
 +++ b/src/auth.js
-@@ -12,7 +12,7 @@ function login(email, password) {
+@@ -12,7 +12,7 @@ async function login(email, password) {
    const user = await findUser(email);
    if (!user) return null;
 -  if (user.password === password) {
@@ -515,7 +530,7 @@ index 7c4a1b2..9e8f3d1 100644
 git diff --stat            <span class="tok-comment"># just the summary: which files, how many lines</span></code></pre>
 <div class="out"> src/auth.js      | 2 +-
  src/routes.js    | 14 ++++++++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)</div>
+ 2 files changed, 13 insertions(+), 3 deletions(-)</div>
 
 <h3>Choosing what to stage</h3>
 <pre><code class="language-bash">git add src/auth.js          <span class="tok-comment"># one file</span>
@@ -529,7 +544,7 @@ git add -A                   <span class="tok-comment"># everything, including d
 ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>When one file contains two unrelated changes, stage them separately. <code>-p</code> (patch) walks you through hunk by hunk:</p>
 <pre><code class="language-bash">git add -p src/auth.js</code></pre>
-<div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
+<div class="out">@@ -12,7 +12,7 @@ async function login(email, password) {
 -  if (user.password === password) {
 +  if (await bcrypt.compare(password, user.passwordHash)) {
 (1/2) Stage this hunk [y,n,q,a,d,j,J,g,/,s,e,?]?</div>
@@ -609,7 +624,7 @@ ${slide('git-01', 10, 'Đọc một diff trong 10 giây')}
 index 7c4a1b2..9e8f3d1 100644
 --- a/src/auth.js
 +++ b/src/auth.js
-@@ -12,7 +12,7 @@ function login(email, password) {
+@@ -12,7 +12,7 @@ async function login(email, password) {
    const user = await findUser(email);
    if (!user) return null;
 -  if (user.password === password) {
@@ -627,7 +642,7 @@ index 7c4a1b2..9e8f3d1 100644
 git diff --stat            <span class="tok-comment"># chỉ phần tóm tắt: file nào, bao nhiêu dòng</span></code></pre>
 <div class="out"> src/auth.js      | 2 +-
  src/routes.js    | 14 ++++++++++++--
- 2 files changed, 14 insertions(+), 2 deletions(-)</div>
+ 2 files changed, 13 insertions(+), 3 deletions(-)</div>
 
 <h3>Chọn thứ đưa vào staging</h3>
 <pre><code class="language-bash">git add src/auth.js          <span class="tok-comment"># một file</span>
@@ -641,7 +656,7 @@ git add -A                   <span class="tok-comment"># mọi thứ, kể cả 
 ${slide('git-01', 11, 'add -p: một file, hai commit gọn')}
 <p>Khi một file chứa hai thay đổi không liên quan, hãy đưa chúng vào staging riêng. <code>-p</code> (patch) dắt bạn đi qua từng đoạn:</p>
 <pre><code class="language-bash">git add -p src/auth.js</code></pre>
-<div class="out">@@ -12,7 +12,7 @@ function login(email, password) {
+<div class="out">@@ -12,7 +12,7 @@ async function login(email, password) {
 -  if (user.password === password) {
 +  if (await bcrypt.compare(password, user.passwordHash)) {
 (1/2) Stage this hunk [y,n,q,a,d,j,J,g,/,s,e,?]?</div>
@@ -959,7 +974,7 @@ ${slide('git-01', 14, 'Bốn nhóm không bao giờ commit')}
   <div class="lz-layer"><span class="lz-k">Build output</span><span class="lz-v"><code>dist/</code>, <code>build/</code>, <code>.next/</code>, <code>target/</code>, <code>*.o</code>. Derived from the sources; committing it guarantees merge conflicts nobody can resolve meaningfully.</span></div>
   <div class="lz-layer"><span class="lz-k">Local and machine noise</span><span class="lz-v"><code>.DS_Store</code>, <code>Thumbs.db</code>, <code>*.log</code>, editor folders, coverage reports. Yours alone, useless to everyone else.</span></div>
 </div>
-<div class="callout danger">A committed secret is <strong>not</strong> fixed by deleting the line in a later commit. The old commit still contains it, it is in every clone, and on a public repository the bots that scrape GitHub for keys find it within minutes. The correct response is: <strong>rotate the credential immediately</strong>, then clean the history (Chapter 8.4). Rotate first — history cleaning takes minutes, and the key is live the whole time.</div>
+<div class="callout danger">A committed secret is <strong>not</strong> fixed by deleting the line in a later commit. The old commit still contains it, it is in every clone, and on a public repository the bots that scrape GitHub for keys find it within minutes. The correct response is: <strong>rotate the credential immediately</strong>, then clean the history (Chapter 8.3). Rotate first — history cleaning takes minutes, and the key is live the whole time.</div>
 
 <h3>The syntax, completely</h3>
 <pre><code><span class="tok-comment"># A comment.</span>
@@ -992,7 +1007,7 @@ git status</code></pre>
 git rm --cached -r node_modules/   <span class="tok-comment"># same, for a directory</span>
 git commit -m <span class="tok-string">"chore: stop tracking .env, it is now ignored"</span></code></pre>
 <div class="callout danger"><code>git rm --cached</code> untracks. <code>git rm</code> without the flag <strong>deletes the file from your disk as well</strong>. For a <code>.env</code> holding the only copy of your local database password, that difference is your evening.</div>
-<p>And note what this does <em>not</em> do: the secret is still in the earlier commit, and still in everyone's clone. Untracking stops it going forward; Chapter 8.4 removes it from the past.</p>
+<p>And note what this does <em>not</em> do: the secret is still in the earlier commit, and still in everyone's clone. Untracking stops it going forward; Chapter 8.3 removes it from the past.</p>
 
 <h3>Three levels of ignore, for three different purposes</h3>
 <div class="kv-grid">
@@ -1093,7 +1108,7 @@ ${slide('git-01', 14, 'Bốn nhóm không bao giờ commit')}
   <div class="lz-layer"><span class="lz-k">Sản phẩm build</span><span class="lz-v"><code>dist/</code>, <code>build/</code>, <code>.next/</code>, <code>target/</code>, <code>*.o</code>. Suy ra từ mã nguồn; commit chúng là bảo đảm có xung đột hợp nhất mà không ai giải quyết một cách có nghĩa được.</span></div>
   <div class="lz-layer"><span class="lz-k">Rác của máy và của bạn</span><span class="lz-v"><code>.DS_Store</code>, <code>Thumbs.db</code>, <code>*.log</code>, thư mục của trình soạn thảo, báo cáo độ phủ. Chỉ của riêng bạn, vô dụng với mọi người khác.</span></div>
 </div>
-<div class="callout danger">Một bí mật đã commit <strong>KHÔNG</strong> được sửa bằng cách xoá dòng đó ở một commit sau. Commit cũ vẫn chứa nó, nó nằm trong mọi bản clone, và trên kho công khai thì các bot quét GitHub tìm khoá sẽ thấy trong vài phút. Phản ứng đúng là: <strong>xoay (rotate) chứng chỉ ngay lập tức</strong>, rồi mới dọn lịch sử (Chương 8.4). Xoay trước — dọn lịch sử mất vài phút, và cái khoá thì sống suốt khoảng thời gian đó.</div>
+<div class="callout danger">Một bí mật đã commit <strong>KHÔNG</strong> được sửa bằng cách xoá dòng đó ở một commit sau. Commit cũ vẫn chứa nó, nó nằm trong mọi bản clone, và trên kho công khai thì các bot quét GitHub tìm khoá sẽ thấy trong vài phút. Phản ứng đúng là: <strong>xoay (rotate) chứng chỉ ngay lập tức</strong>, rồi mới dọn lịch sử (Chương 8.3). Xoay trước — dọn lịch sử mất vài phút, và cái khoá thì sống suốt khoảng thời gian đó.</div>
 
 <h3>Cú pháp, đầy đủ</h3>
 <pre><code><span class="tok-comment"># Một dòng chú thích.</span>
@@ -1126,7 +1141,7 @@ git status</code></pre>
 git rm --cached -r node_modules/   <span class="tok-comment"># tương tự, cho một thư mục</span>
 git commit -m <span class="tok-string">"chore: ngừng theo dõi .env, nay đã ignore"</span></code></pre>
 <div class="callout danger"><code>git rm --cached</code> bỏ theo dõi. <code>git rm</code> không có cờ thì <strong>xoá luôn file khỏi đĩa của bạn</strong>. Với một <code>.env</code> giữ bản sao duy nhất mật khẩu database cục bộ, khác biệt đó là cả buổi tối của bạn.</div>
-<p>Và hãy để ý điều nó <em>không</em> làm: bí mật vẫn nằm trong commit trước đó, và vẫn nằm trong bản clone của mọi người. Bỏ theo dõi chỉ chặn nó đi tiếp; Chương 8.4 mới gỡ nó khỏi quá khứ.</p>
+<p>Và hãy để ý điều nó <em>không</em> làm: bí mật vẫn nằm trong commit trước đó, và vẫn nằm trong bản clone của mọi người. Bỏ theo dõi chỉ chặn nó đi tiếp; Chương 8.3 mới gỡ nó khỏi quá khứ.</p>
 
 <h3>Ba tầng ignore, cho ba mục đích khác nhau</h3>
 <div class="kv-grid">

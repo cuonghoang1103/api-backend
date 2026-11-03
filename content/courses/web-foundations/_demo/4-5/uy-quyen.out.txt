@@ -1,0 +1,3 @@
+delete item 2
+delete item 1
+items left: 0

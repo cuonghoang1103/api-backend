@@ -1,0 +1,652 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-7-2-cookies-sessions",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-7-2-cookies-sessions"
+  },
+  "exercises": [
+    {
+      "title": "Đọc header Cookie",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "header Cookie",
+        "decodeURIComponent"
+      ],
+      "prerequisites": [
+        "split",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "cookie"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>parseCookies(header)</code> cho header <code>Cookie</code> mà trình duyệt gửi, ví dụ <code>sid=abc123; theme=dark</code>. Trả object tên → giá trị: tách theo <code>;</code>, trim; tách tên/giá trị ở dấu <code>=</code> ĐẦU TIÊN; giá trị được <code>decodeURIComponent</code> (giải mã hỏng thì giữ nguyên); bỏ mục không có <code>=</code> hoặc tên rỗng; tên lặp ⇒ giữ giá trị ĐẦU TIÊN (trình duyệt gửi cookie cụ thể hơn trước). Vắng/rỗng ⇒ <code>{}</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách ở \"=\" đầu tiên (giá trị base64 có \"=\").</li>\n  <li>Giải mã an toàn.</li>\n  <li>Tên lặp giữ giá trị đầu.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "header: string | undefined.",
+      "outputSpec": "object.",
+      "constraints": "Không dùng thư viện cookie của npm.",
+      "examplesJson": [
+        {
+          "input": "parseCookies(\"sid=abc; theme=dark\")",
+          "output": "{ sid: \"abc\", theme: \"dark\" }",
+          "explanation": "Đúng thứ app của bài làm ở parseCookies."
+        }
+      ],
+      "hintsJson": [
+        "const i = part.indexOf(\"=\"); if (i <= 0) continue;",
+        "try { v = decodeURIComponent(v); } catch {}"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — đọc header Cookie\nfunction parseCookies(header) {\n  return Object.fromEntries(header.split('; ').map((p) => p.split('=')));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — \"a=1; b=2\" → { a: \"1\", b: \"2\" }; tách ở \"=\" đầu, giải mã an toàn\nfunction parseCookies(header) {\n  const out = {};\n  for (const raw of (header ?? '').split(';')) {\n    const part = raw.trim();\n    const i = part.indexOf('=');\n    if (i <= 0) continue;                                    // không có \"=\" hoặc tên rỗng\n    const name = part.slice(0, i).trim();\n    let value = part.slice(i + 1).trim();\n    try { value = decodeURIComponent(value); } catch { /* giữ nguyên chuỗi hỏng */ }\n    if (!(name in out)) out[name] = value;                   // tên lặp: giữ cái đầu\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>App ở bài dùng một dòng <code>Object.fromEntries(… split(\"=\"))</code> — đủ cho id phiên base64url, nhưng hỏng với giá trị có <code>=</code> (base64 thường) hay ký tự mã hoá. Thư viện <code>cookie</code> của npm (Express dùng) làm đúng những việc trong bài này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>split(\"=\") cắt mất phần sau dấu = thứ hai.</li>\n  <li>decodeURIComponent ném URIError với \"%E0%A4%A\".</li>\n  <li>Header vắng ⇒ TypeError.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cookie",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Basic header|||Header cơ bản",
+            "goi": "parseCookies(\"sid=abc123; theme=dark\")",
+            "mongDoi": {
+              "sid": "abc123",
+              "theme": "dark"
+            }
+          },
+          {
+            "moTa": "= inside values, decoding, junk|||Dấu = trong giá trị, giải mã, rác",
+            "goi": "parseCookies(\"token=YWJj==; name=%C4%90%E1%BB%A9c; junk; =x;  bad=%E0%A4%A \")",
+            "mongDoi": {
+              "token": "YWJj==",
+              "name": "Đức",
+              "bad": "%E0%A4%A"
+            }
+          },
+          {
+            "moTa": "Duplicates keep the first; empty header|||Tên lặp giữ cái đầu; header rỗng",
+            "goi": "[parseCookies(\"a=1; a=2\"), parseCookies(\"\"), parseCookies(undefined)]",
+            "mongDoi": [
+              {
+                "a": "1"
+              },
+              {},
+              {}
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split(\"=\") cắt mất phần sau dấu = thứ hai."
+        },
+        {
+          "loi": "decodeURIComponent ném URIError với \"%E0%A4%A\"."
+        },
+        {
+          "loi": "Header vắng ⇒ TypeError."
+        }
+      ]
+    },
+    {
+      "title": "Dựng Set-Cookie",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "Set-Cookie",
+        "HttpOnly",
+        "SameSite",
+        "Max-Age"
+      ],
+      "prerequisites": [
+        "mảng",
+        "join"
+      ],
+      "tags": [
+        "javascript",
+        "cookie"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>serializeCookie(name, value, opts = {})</code> trả giá trị header <code>Set-Cookie</code>: <code>name=&lt;encodeURIComponent(value)&gt;</code>, rồi các thuộc tính theo ĐÚNG thứ tự <code>HttpOnly</code>, <code>Secure</code>, <code>SameSite=&lt;…&gt;</code>, <code>Path=&lt;…&gt;</code>, <code>Max-Age=&lt;…&gt;</code>, nối bằng <code>\"; \"</code>, chỉ thêm khi có trong <code>opts</code> (<code>httpOnly</code>, <code>secure</code>: boolean; <code>sameSite</code>: <code>\"Strict\" | \"Lax\" | \"None\"</code>; <code>path</code>; <code>maxAge</code>: số giây, kể cả 0). <code>sameSite: \"None\"</code> mà thiếu <code>secure</code> ⇒ ném <code>TypeError</code> (trình duyệt sẽ từ chối cookie đó).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự cờ cố định.</li>\n  <li>maxAge 0 vẫn in (dùng để xoá cookie).</li>\n  <li>None không Secure ⇒ TypeError.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "name, value: string; opts?: object.",
+      "outputSpec": "string.",
+      "constraints": "Không cần Domain hay Expires.",
+      "examplesJson": [
+        {
+          "input": "serializeCookie(\"sid\", \"abc\", { httpOnly: true, sameSite: \"Lax\", path: \"/\", maxAge: 3600 })",
+          "output": "\"sid=abc; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600\"",
+          "explanation": "Đúng header app của bài gửi."
+        }
+      ],
+      "hintsJson": [
+        "const parts = [name + \"=\" + encodeURIComponent(value)];",
+        "if (opts.maxAge !== undefined) parts.push(\"Max-Age=\" + opts.maxAge);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — dựng Set-Cookie\nfunction serializeCookie(name, value, opts = {}) {\n  let s = name + '=' + value;\n  if (opts.maxAge) s += '; Max-Age=' + opts.maxAge;\n  return s;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — tên=giá trị rồi các cờ theo thứ tự cố định\nfunction serializeCookie(name, value, opts = {}) {\n  if (opts.sameSite === 'None' && !opts.secure) {\n    throw new TypeError('SameSite=None requires Secure');  // trình duyệt từ chối cookie này\n  }\n  const parts = [name + '=' + encodeURIComponent(value)];\n  if (opts.httpOnly) parts.push('HttpOnly');\n  if (opts.secure) parts.push('Secure');\n  if (opts.sameSite) parts.push('SameSite=' + opts.sameSite);\n  if (opts.path) parts.push('Path=' + opts.path);\n  if (opts.maxAge !== undefined) parts.push('Max-Age=' + opts.maxAge);   // 0 nghĩa là \"xoá ngay\"\n  return parts.join('; ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>if (opts.maxAge)</code> là lỗi kinh điển: 0 là falsy nên cookie đăng xuất không bao giờ nhận <code>Max-Age=0</code> và trình duyệt cứ giữ nó. Mã hoá giá trị tránh cho dấu <code>;</code> hay dấu cách phá header.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>if (opts.maxAge) bỏ mất Max-Age=0.</li>\n  <li>Không mã hoá giá trị có \";\".</li>\n  <li>Cho phép SameSite=None không Secure.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson cookie|||Cookie của bài",
+            "goi": "serializeCookie(\"sid\", \"abc\", { httpOnly: true, sameSite: \"Lax\", path: \"/\", maxAge: 3600 })",
+            "mongDoi": "sid=abc; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600"
+          },
+          {
+            "moTa": "Logout cookie: Max-Age=0; value encoded|||Cookie đăng xuất: Max-Age=0; giá trị được mã hoá",
+            "goi": "[serializeCookie(\"sid\", \"\", { httpOnly: true, path: \"/\", maxAge: 0 }), serializeCookie(\"note\", \"a; b\")]",
+            "mongDoi": [
+              "sid=; HttpOnly; Path=/; Max-Age=0",
+              "note=a%3B%20b"
+            ]
+          },
+          {
+            "moTa": "Fixed order; None needs Secure|||Thứ tự cố định; None cần Secure",
+            "goi": "serializeCookie(\"x\", \"1\", { maxAge: 60, path: \"/a\", sameSite: \"None\", secure: true, httpOnly: true })",
+            "mongDoi": "x=1; HttpOnly; Secure; SameSite=None; Path=/a; Max-Age=60"
+          },
+          {
+            "moTa": "SameSite=None without Secure throws|||SameSite=None không Secure thì ném lỗi",
+            "goi": "serializeCookie(\"x\", \"1\", { sameSite: \"None\" })",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "if (opts.maxAge) bỏ mất Max-Age=0."
+        },
+        {
+          "loi": "Không mã hoá giá trị có \";\"."
+        },
+        {
+          "loi": "Cho phép SameSite=None không Secure."
+        }
+      ]
+    },
+    {
+      "title": "Đọc ngược Set-Cookie",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "thuộc tính cookie",
+        "mặc định"
+      ],
+      "prerequisites": [
+        "split",
+        "toLowerCase"
+      ],
+      "tags": [
+        "javascript",
+        "cookie"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>parseSetCookie(header)</code> trả <code>{ name, value, httpOnly, secure, sameSite, path, maxAge }</code> như trình duyệt hiểu: phần đầu là <code>tên=giá trị</code> (tách ở <code>=</code> đầu); các thuộc tính sau không phân biệt hoa thường tên. Mặc định: <code>httpOnly: false</code>, <code>secure: false</code>, <code>sameSite: \"Lax\"</code> (mặc định của trình duyệt hiện đại), <code>path: \"/\"</code>, <code>maxAge: null</code> (cookie theo phiên trình duyệt). Giá trị SameSite chuẩn hoá thành <code>\"Strict\" | \"Lax\" | \"None\"</code>; giá trị lạ ⇒ <code>\"Lax\"</code>. <code>Max-Age</code> là số nguyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên thuộc tính không phân biệt hoa thường.</li>\n  <li>Mặc định đúng như trình duyệt.</li>\n  <li>maxAge là number.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "header: string.",
+      "outputSpec": "object.",
+      "constraints": "Bỏ qua Domain, Expires và thuộc tính lạ.",
+      "examplesJson": [
+        {
+          "input": "parseSetCookie(\"sid=xyz; HttpOnly; samesite=strict\")",
+          "output": "{ name: \"sid\", value: \"xyz\", httpOnly: true, secure: false, sameSite: \"Strict\", path: \"/\", maxAge: null }",
+          "explanation": "samesite=strict → \"Strict\"."
+        }
+      ],
+      "hintsJson": [
+        "const [first, ...attrs] = header.split(\";\").map((s) => s.trim());",
+        "const [k, v] = a.split(\"=\"); switch (k.toLowerCase()) { … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — đọc ngược Set-Cookie\nfunction parseSetCookie(header) {\n  const [name, value] = header.split('=');\n  return { name, value, httpOnly: header.includes('HttpOnly') };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — \"tên=giá trị; Cờ; Thuộc-tính=giá trị\" → object với mặc định của trình duyệt\nfunction parseSetCookie(header) {\n  const [first, ...attrs] = header.split(';').map((s) => s.trim());\n  const i = first.indexOf('=');\n  const out = { name: first.slice(0, i), value: first.slice(i + 1), httpOnly: false, secure: false, sameSite: 'Lax', path: '/', maxAge: null };\n  for (const a of attrs) {\n    const j = a.indexOf('=');\n    const key = (j < 0 ? a : a.slice(0, j)).trim().toLowerCase();\n    const val = j < 0 ? '' : a.slice(j + 1).trim();\n    if (key === 'httponly') out.httpOnly = true;\n    else if (key === 'secure') out.secure = true;\n    else if (key === 'path') out.path = val || '/';\n    else if (key === 'max-age') out.maxAge = parseInt(val, 10);\n    else if (key === 'samesite') {\n      const v = val.toLowerCase();\n      out.sameSite = v === 'strict' ? 'Strict' : v === 'none' ? 'None' : 'Lax';\n    }\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là cách DevTools điền cột HttpOnly, Secure, SameSite trong tab Application. <code>header.includes(\"HttpOnly\")</code> của code khởi đầu sai với chữ thường và nhầm cả khi giá trị cookie tình cờ chứa chữ đó.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>includes(\"HttpOnly\") — nhầm với giá trị, trượt với \"httponly\".</li>\n  <li>Quên mặc định SameSite=Lax.</li>\n  <li>maxAge là chuỗi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson cookie|||Cookie của bài",
+            "goi": "parseSetCookie(\"sid=tNtMMY6E7GUf3Zn-iOVJPO5ZlGkIhmB8Lb9U5Fqalds; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600\")",
+            "mongDoi": {
+              "name": "sid",
+              "value": "tNtMMY6E7GUf3Zn-iOVJPO5ZlGkIhmB8Lb9U5Fqalds",
+              "httpOnly": true,
+              "secure": false,
+              "sameSite": "Lax",
+              "path": "/",
+              "maxAge": 3600
+            }
+          },
+          {
+            "moTa": "Defaults for a bare cookie|||Mặc định cho cookie trần",
+            "goi": "parseSetCookie(\"theme=dark\")",
+            "mongDoi": {
+              "name": "theme",
+              "value": "dark",
+              "httpOnly": false,
+              "secure": false,
+              "sameSite": "Lax",
+              "path": "/",
+              "maxAge": null
+            }
+          },
+          {
+            "moTa": "Case-insensitive, = in value, odd SameSite|||Không phân biệt hoa thường, = trong giá trị, SameSite lạ",
+            "goi": "[parseSetCookie(\"t=YQ==; secure; SAMESITE=none; path=/api; httponly\"), parseSetCookie(\"x=1; SameSite=weird\").sameSite]",
+            "mongDoi": [
+              {
+                "name": "t",
+                "value": "YQ==",
+                "httpOnly": true,
+                "secure": true,
+                "sameSite": "None",
+                "path": "/api",
+                "maxAge": null
+              },
+              "Lax"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "includes(\"HttpOnly\") — nhầm với giá trị, trượt với \"httponly\"."
+        },
+        {
+          "loi": "Quên mặc định SameSite=Lax."
+        },
+        {
+          "loi": "maxAge là chuỗi."
+        }
+      ]
+    },
+    {
+      "title": "Kho phiên có hạn dùng",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "phiên",
+        "hạn dùng",
+        "thu hồi"
+      ],
+      "prerequisites": [
+        "Map",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "phiên"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>createSessionStore(ttlMs, newId)</code> (<code>newId()</code> cho sẵn, trả id mới) trả object: <code>create(userId, now)</code> → id, lưu <code>{ userId, expires: now + ttlMs }</code>; <code>get(id, now)</code> → <code>userId</code> hoặc <code>null</code> nếu không có / đã hết hạn (<code>now &gt;= expires</code>; xoá luôn phiên hết hạn); <code>touch(id, now)</code> gia hạn phiên còn sống thêm <code>ttlMs</code> tính từ <code>now</code>, trả boolean; <code>destroy(id)</code>; <code>destroyAllFor(userId)</code> xoá mọi phiên của người đó (đăng xuất mọi thiết bị), trả số phiên đã xoá; <code>size()</code> số phiên đang lưu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Hết hạn ⇒ null và bị xoá.</li>\n  <li>touch chỉ gia hạn phiên còn sống.</li>\n  <li>destroyAllFor trả số đã xoá.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "ttlMs: number; newId: () => string.",
+      "outputSpec": "object.",
+      "constraints": "Không dùng Date.now().",
+      "examplesJson": [
+        {
+          "input": "create(1, 0) → \"s1\"; get(\"s1\", 3600000) với ttl 1 giờ",
+          "output": "null",
+          "explanation": "Đúng mốc expires là đã hết hạn."
+        }
+      ],
+      "hintsJson": [
+        "const map = new Map(); // id → { userId, expires }",
+        "for (const [id, s] of map) if (s.userId === userId) { map.delete(id); n++; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — kho phiên\nfunction createSessionStore(ttlMs, newId) {\n  const map = new Map();\n  return {\n    create(userId, now) { const id = newId(); map.set(id, userId); return id; },\n    get(id, now) { return map.get(id) ?? null; },\n    touch(id, now) { return true; },\n    destroy(id) {},\n    destroyAllFor(userId) { return 0; },\n    size() { return map.size; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — sự thật nằm trên máy chủ: hết hạn, gia hạn, đăng xuất một nơi hay mọi nơi\nfunction createSessionStore(ttlMs, newId) {\n  const map = new Map();                                     // id → { userId, expires }\n  const alive = (id, now) => {\n    const s = map.get(id);\n    if (!s) return null;\n    if (now >= s.expires) { map.delete(id); return null; }   // hết hạn thì dọn luôn\n    return s;\n  };\n  return {\n    create(userId, now) {\n      const id = newId();\n      map.set(id, { userId, expires: now + ttlMs });\n      return id;\n    },\n    get(id, now) { return alive(id, now)?.userId ?? null; },\n    touch(id, now) {\n      const s = alive(id, now);\n      if (!s) return false;\n      s.expires = now + ttlMs;                               // gia hạn trượt khi người dùng còn hoạt động\n      return true;\n    },\n    destroy(id) { map.delete(id); },\n    destroyAllFor(userId) {\n      let n = 0;\n      for (const [id, s] of map) if (s.userId === userId) { map.delete(id); n++; }\n      return n;\n    },\n    size() { return map.size; },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là thứ JWT không làm được dễ dàng (Bài 7.3): máy chủ quyết định phiên nào còn sống, nên \"đăng xuất mọi thiết bị\" chỉ là một vòng lặp. Trong production kho này nằm ở Redis hay cơ sở dữ liệu để nhiều máy chủ dùng chung và không mất khi khởi động lại.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không kiểm hạn ⇒ phiên sống mãi.</li>\n  <li>touch hồi sinh phiên đã hết hạn.</li>\n  <li>Xoá trong khi duyệt bằng chỉ số mảng — bỏ sót phần tử.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Session_Management_Cheat_Sheet.html#session-expiration",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Create, get, expire exactly at ttl|||Tạo, đọc, hết hạn đúng mốc ttl",
+            "chuanBi": "let n = 0; const S = createSessionStore(3600000, () => \"s\" + (++n)); const id = S.create(7, 0);",
+            "goi": "[id, S.get(id, 3599999), S.get(id, 3600000), S.size()]",
+            "mongDoi": [
+              "s1",
+              7,
+              null,
+              0
+            ]
+          },
+          {
+            "moTa": "touch extends only live sessions|||touch chỉ gia hạn phiên còn sống",
+            "chuanBi": "let n = 0; const S = createSessionStore(1000, () => \"s\" + (++n)); const a = S.create(1, 0); const b = S.create(2, 0);",
+            "goi": "[S.touch(a, 900), S.get(a, 1500), S.touch(b, 1000), S.get(b, 1000)]",
+            "mongDoi": [
+              true,
+              1,
+              false,
+              null
+            ]
+          },
+          {
+            "moTa": "Log out everywhere|||Đăng xuất mọi thiết bị",
+            "chuanBi": "let n = 0; const S = createSessionStore(1000, () => \"s\" + (++n)); S.create(1, 0); S.create(1, 0); const other = S.create(2, 0); const mine = S.create(1, 0);",
+            "goi": "[S.destroyAllFor(1), S.get(mine, 10), S.get(other, 10), S.size()]",
+            "mongDoi": [
+              3,
+              null,
+              2,
+              1
+            ]
+          },
+          {
+            "moTa": "destroy and unknown ids|||destroy và id lạ",
+            "chuanBi": "let n = 0; const S = createSessionStore(1000, () => \"s\" + (++n)); const a = S.create(1, 0); S.destroy(a);",
+            "goi": "[S.get(a, 1), S.get(\"nope\", 1), S.touch(\"nope\", 1)]",
+            "mongDoi": [
+              null,
+              null,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không kiểm hạn ⇒ phiên sống mãi."
+        },
+        {
+          "loi": "touch hồi sinh phiên đã hết hạn."
+        },
+        {
+          "loi": "Xoá trong khi duyệt bằng chỉ số mảng — bỏ sót phần tử."
+        }
+      ]
+    },
+    {
+      "title": "Trình duyệt có gửi cookie không? (SameSite)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "SameSite",
+        "same-site vs cross-site",
+        "điều hướng cấp cao"
+      ],
+      "prerequisites": [
+        "toán tử logic"
+      ],
+      "tags": [
+        "javascript",
+        "cookie",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>willSend(cookie, request)</code> mô phỏng trình duyệt: <code>cookie</code> là <code>{ sameSite, secure }</code>; <code>request</code> là <code>{ crossSite, topLevel, method, https }</code> (<code>topLevel</code>: người dùng điều hướng cả trang, vd bấm link hay gửi form; <code>false</code> cho fetch, ảnh, iframe). Luật: <code>secure</code> mà <code>https</code> false ⇒ không gửi. Cùng site ⇒ gửi. Khác site: <code>Strict</code> ⇒ không; <code>Lax</code> ⇒ chỉ khi <code>topLevel</code> VÀ method an toàn (GET, HEAD); <code>None</code> ⇒ gửi nếu <code>secure</code>, không thì cookie không hợp lệ ⇒ không gửi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Secure chỉ qua HTTPS.</li>\n  <li>Lax: chỉ điều hướng cấp cao bằng GET/HEAD.</li>\n  <li>None cần Secure.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "cookie: { sameSite, secure }; request: { crossSite, topLevel, method, https }.",
+      "outputSpec": "boolean.",
+      "constraints": "method có thể viết thường.",
+      "examplesJson": [
+        {
+          "input": "willSend({ sameSite: \"Lax\", secure: false }, { crossSite: true, topLevel: true, method: \"POST\", https: false })",
+          "output": "false",
+          "explanation": "Form chuyển tiền trong bài: Lax chặn ⇒ 401."
+        }
+      ],
+      "hintsJson": [
+        "if (cookie.secure && !request.https) return false;",
+        "if (!request.crossSite) return true;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — trình duyệt có gửi cookie không?\nfunction willSend(cookie, request) {\n  return cookie.sameSite !== 'Strict';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — SameSite quyết định cookie có đi cùng request do trang KHÁC khởi động không\nfunction willSend(cookie, request) {\n  if (cookie.secure && !request.https) return false;           // Secure: chỉ qua HTTPS\n  if (!request.crossSite) return true;                          // cùng site: luôn gửi\n  const safe = ['GET', 'HEAD'].includes(request.method.toUpperCase());\n  switch (cookie.sameSite) {\n    case 'Strict': return false;\n    case 'Lax': return request.topLevel && safe;                // bấm link: được; POST/fetch khác site: không\n    case 'None': return cookie.secure === true;                 // None không Secure là cookie hỏng\n    default: return request.topLevel && safe;                   // không ghi gì: trình duyệt coi như Lax\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai dòng trong output CSRF của bài chính là hai lời gọi hàm này: Lax + POST khác site ⇒ <code>false</code> ⇒ máy chủ thấy \"(no cookie)\" ⇒ 401; None + Secure ⇒ <code>true</code> ⇒ tiền chuyển đi. Lax vẫn gửi cho GET cấp cao — lý do GET không bao giờ được đổi dữ liệu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cho Lax gửi cookie với POST khác site.</li>\n  <li>Quên rằng fetch khác site không phải điều hướng cấp cao.</li>\n  <li>Cho None hoạt động khi thiếu Secure.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie#samesitesamesite-value",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The CSRF demo: Lax blocks, None sends|||Demo CSRF: Lax chặn, None gửi",
+            "goi": "[willSend({ sameSite: \"Lax\", secure: false }, { crossSite: true, topLevel: true, method: \"POST\", https: false }), willSend({ sameSite: \"None\", secure: true }, { crossSite: true, topLevel: true, method: \"POST\", https: true })]",
+            "mongDoi": [
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": "Lax: link click yes, fetch no|||Lax: bấm link có, fetch không",
+            "goi": "[willSend({ sameSite: \"Lax\", secure: true }, { crossSite: true, topLevel: true, method: \"get\", https: true }), willSend({ sameSite: \"Lax\", secure: true }, { crossSite: true, topLevel: false, method: \"GET\", https: true })]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Strict, same-site, Secure over http, broken None|||Strict, cùng site, Secure qua http, None hỏng",
+            "goi": "[willSend({ sameSite: \"Strict\", secure: true }, { crossSite: true, topLevel: true, method: \"GET\", https: true }), willSend({ sameSite: \"Strict\", secure: false }, { crossSite: false, topLevel: false, method: \"POST\", https: false }), willSend({ sameSite: \"Lax\", secure: true }, { crossSite: false, topLevel: true, method: \"GET\", https: false }), willSend({ sameSite: \"None\", secure: false }, { crossSite: true, topLevel: true, method: \"GET\", https: true })]",
+            "mongDoi": [
+              false,
+              true,
+              false,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho Lax gửi cookie với POST khác site."
+        },
+        {
+          "loi": "Quên rằng fetch khác site không phải điều hướng cấp cao."
+        },
+        {
+          "loi": "Cho None hoạt động khi thiếu Secure."
+        }
+      ]
+    },
+    {
+      "title": "Chặn CSRF: Origin + token",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "CSRF token",
+        "header Origin",
+        "so sánh thời gian cố định"
+      ],
+      "prerequisites": [
+        "object",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.2 — Cookie và phiên.</em> Các bài dựng lại từng mảnh mà app 80 dòng của bài (và <code>express-session</code>) làm.</p><p>Viết <code>checkCsrf(req, session, allowedOrigins)</code> trả <code>\"ok\"</code>, <code>\"bad-origin\"</code> hoặc <code>\"bad-token\"</code>. <code>req</code> là <code>{ method, headers, body }</code> (tên header có thể hoa thường lộn xộn), <code>session</code> là <code>{ csrfToken }</code>. Luật: method an toàn (GET, HEAD, OPTIONS) ⇒ <code>\"ok\"</code>. Với method khác: nếu có header <code>Origin</code> mà không nằm trong <code>allowedOrigins</code> ⇒ <code>\"bad-origin\"</code>; rồi token lấy từ header <code>X-CSRF-Token</code> hoặc <code>body._csrf</code> phải bằng <code>session.csrfToken</code> (không rỗng), so bằng hàm so sánh thời gian cố định tự viết (duyệt hết chuỗi, không thoát sớm) ⇒ khác ⇒ <code>\"bad-token\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Method an toàn bỏ qua.</li>\n  <li>Origin sai ⇒ bad-origin (kiểm trước token).</li>\n  <li>Token từ header hoặc body.</li>\n  <li>Token rỗng/thiếu ⇒ bad-token.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "req: object; session: object; allowedOrigins: string[].",
+      "outputSpec": "\"ok\" | \"bad-origin\" | \"bad-token\".",
+      "constraints": "Không so token bằng === trực tiếp — tự viết so sánh thời gian cố định.",
+      "examplesJson": [
+        {
+          "input": "form từ http://127.0.0.1:5000 POST /api/transfer",
+          "output": "\"bad-origin\"",
+          "explanation": "Trang \"trúng thưởng\" trong bài bị chặn ngay cả khi SameSite=None."
+        }
+      ],
+      "hintsJson": [
+        "const h = Object.fromEntries(Object.entries(req.headers ?? {}).map(([k, v]) => [k.toLowerCase(), v]));",
+        "let diff = a.length ^ b.length; for (let i = 0; i < Math.max(a.length, b.length); i++) diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0); return diff === 0;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — chặn CSRF\nfunction checkCsrf(req, session, allowedOrigins) {\n  if (req.body._csrf === session.csrfToken) return 'ok';\n  return 'bad-token';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.2 — hai lớp: Origin phải là của ta, VÀ token mà site khác không đọc được phải khớp\nfunction safeEqual(a, b) {\n  let diff = a.length ^ b.length;\n  for (let i = 0; i < Math.max(a.length, b.length); i++) {\n    diff |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0); // không thoát sớm\n  }\n  return diff === 0;\n}\n\nfunction checkCsrf(req, session, allowedOrigins) {\n  if (['GET', 'HEAD', 'OPTIONS'].includes(req.method.toUpperCase())) return 'ok';\n  const h = Object.fromEntries(Object.entries(req.headers ?? {}).map(([k, v]) => [k.toLowerCase(), v]));\n  if (h.origin !== undefined && !allowedOrigins.includes(h.origin)) return 'bad-origin';\n  const sent = String(h['x-csrf-token'] ?? req.body?._csrf ?? '');\n  const expected = String(session?.csrfToken ?? '');\n  if (!sent || !expected || !safeEqual(sent, expected)) return 'bad-token';\n  return 'ok';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trang của kẻ tấn công gửi được form tới bạn nhưng không ĐỌC được trang của bạn (chính sách cùng origin, Bài 7.5), nên nó không biết token nằm trong form thật. Kiểm <code>Origin</code> chặn sớm phần lớn request khác site; token là lớp dự phòng khi Origin vắng (vài trình duyệt cũ, một số điều hướng).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chấp nhận token rỗng khi session cũng chưa có token (\"\" === \"\").</li>\n  <li>Bỏ qua Origin vì \"đã có token\".</li>\n  <li>Kiểm CSRF cả cho GET — làm hỏng link thường.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.2 Cookies and sessions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Cross-Site_Request_Forgery_Prevention_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Safe methods pass|||Method an toàn được qua",
+            "goi": "checkCsrf({ method: \"get\", headers: { Origin: \"https://evil.example\" }, body: {} }, { csrfToken: \"t1\" }, [\"https://shop.example\"])",
+            "mongDoi": "ok"
+          },
+          {
+            "moTa": "The prize page is stopped by Origin|||Trang trúng thưởng bị chặn bởi Origin",
+            "goi": "checkCsrf({ method: \"POST\", headers: { origin: \"http://127.0.0.1:5000\" }, body: { to: \"attacker\", _csrf: \"t1\" } }, { csrfToken: \"t1\" }, [\"http://localhost:3457\"])",
+            "mongDoi": "bad-origin"
+          },
+          {
+            "moTa": "Token from header or body|||Token từ header hoặc body",
+            "goi": "[checkCsrf({ method: \"DELETE\", headers: { Origin: \"https://shop.example\", \"X-CSRF-Token\": \"t1\" }, body: {} }, { csrfToken: \"t1\" }, [\"https://shop.example\"]), checkCsrf({ method: \"POST\", headers: {}, body: { _csrf: \"t1\" } }, { csrfToken: \"t1\" }, [\"https://shop.example\"])]",
+            "mongDoi": [
+              "ok",
+              "ok"
+            ]
+          },
+          {
+            "moTa": "Wrong, missing or empty tokens|||Token sai, thiếu hoặc rỗng",
+            "goi": "[checkCsrf({ method: \"POST\", headers: {}, body: { _csrf: \"t2\" } }, { csrfToken: \"t1\" }, []), checkCsrf({ method: \"POST\", headers: {}, body: {} }, { csrfToken: \"t1\" }, []), checkCsrf({ method: \"POST\", headers: {}, body: { _csrf: \"\" } }, { csrfToken: \"\" }, []), checkCsrf({ method: \"PUT\", headers: {}, body: { _csrf: \"t1x\" } }, { csrfToken: \"t1\" }, [])]",
+            "mongDoi": [
+              "bad-token",
+              "bad-token",
+              "bad-token",
+              "bad-token"
+            ]
+          },
+          {
+            "moTa": "No === between the two tokens|||Không so hai token bằng ===",
+            "kiem": "ma-nguon",
+            "tep": "main.js",
+            "khop": "(sent|expected)\\s*===\\s*(sent|expected)",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chấp nhận token rỗng khi session cũng chưa có token (\"\" === \"\")."
+        },
+        {
+          "loi": "Bỏ qua Origin vì \"đã có token\"."
+        },
+        {
+          "loi": "Kiểm CSRF cả cho GET — làm hỏng link thường."
+        }
+      ]
+    }
+  ]
+}

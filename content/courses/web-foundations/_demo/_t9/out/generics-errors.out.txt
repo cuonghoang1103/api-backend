@@ -1,0 +1,6 @@
+$ npx tsc --noEmit --strict generics-errors.ts
+generics-errors.ts(6,10): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ id: number; }[]'.
+  Type 'string' is not assignable to type '{ id: number; }'.
+generics-errors.ts(9,13): error TS18048: 'pen' is possibly 'undefined'.
+generics-errors.ts(10,18): error TS2339: Property 'colour' does not exist on type '{ id: number; name: string; price: number; }'.
+(exit code 2)

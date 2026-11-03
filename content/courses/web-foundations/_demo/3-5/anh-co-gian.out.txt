@@ -1,0 +1,3 @@
+c1 column 300 · image 800×400 ← overflows
+c2 column 300 · image 300×150 · fits
+table 398 in a 300 wrapper: scrolls by itself, page stays still: true

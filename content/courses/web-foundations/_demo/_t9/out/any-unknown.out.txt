@@ -1,0 +1,10 @@
+$ npx tsc --noEmit --strict any-unknown.ts
+any-unknown.ts(6,13): error TS18046: 'fromServer' is of type 'unknown'.
+(exit code 2)
+
+$ node --experimental-strip-types any-run.ts
+any-run.ts:3
+console.log(fromServerAny.name.toUpperCase());
+                               ^
+
+TypeError: Cannot read properties of undefined (reading 'toUpperCase')

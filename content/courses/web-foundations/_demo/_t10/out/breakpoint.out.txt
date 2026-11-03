@@ -1,0 +1,5 @@
+[breakpoint on cart.js line 7 (return total + shipping), then click "Add pen"]
+paused at cart.js:7 in cartTotal()
+  items = [{"name":"Notebook","price":25000,"qty":2},{"name":"Pen","price":"5000","qty":1}]
+  shipping = "15000"
+  total = 55000

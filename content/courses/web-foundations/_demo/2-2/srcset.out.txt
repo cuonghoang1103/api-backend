@@ -1,0 +1,3 @@
+viewport 360px → /2-2/anh/s.svg
+viewport 700px → /2-2/anh/m.svg
+viewport 1200px → /2-2/anh/l.svg

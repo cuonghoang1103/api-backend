@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Margin collapse</title>
+<style>
+  body { margin: 0; }
+  .a, .b { height: 40px; background: #e8eef7; }
+  .a { margin-bottom: 30px; }
+  .b { margin-top: 20px; }
+  .wrap { background: #ffe6cc; }
+  .wrap h2 { margin: 24px 0 0; }
+  .fix { display: flow-root; background: #d9f2e0; }
+  .fix h2 { margin: 24px 0 0; }
+</style></head>
+<body>
+  <div class="a">30px below</div>
+  <div class="b">20px above</div>
+  <div style="height:40px"></div>
+  <div class="wrap" id="w1"><h2>h2 with margin-top 24px</h2></div>
+  <div class="fix" id="w2"><h2>h2 with margin-top 24px</h2></div>
+<script>
+  const r = (s) => document.querySelector(s).getBoundingClientRect();
+  console.log('gap between .a and .b:', r('.b').top - r('.a').bottom, 'px (not 50)');
+  const h1 = document.querySelector('#w1 h2'), h2 = document.querySelector('#w2 h2');
+  console.log('wrap top to h2 top, plain div :', h1.getBoundingClientRect().top - r('#w1').top, 'px — the margin escaped the parent');
+  console.log('wrap top to h2 top, flow-root :', h2.getBoundingClientRect().top - r('#w2').top, 'px — contained');
+</script>
+</body>
+</html>

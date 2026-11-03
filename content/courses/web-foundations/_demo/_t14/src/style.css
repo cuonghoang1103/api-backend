@@ -1,0 +1,9 @@
+/* readable source CSS — the build minifies it */
+body {
+  font-family: system-ui, sans-serif;
+  margin: 2rem;
+}
+
+h1 {
+  color: #2563eb;
+}

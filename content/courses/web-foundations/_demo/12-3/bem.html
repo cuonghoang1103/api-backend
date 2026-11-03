@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x260">
+<title>BEM: block, element, modifier</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 16px; display: flex; gap: 16px; }
+  /* Block */
+  .product-card { width: 220px; border: 1px solid #cbd5e1; border-radius: 10px; padding: 14px; }
+  /* Elements: block__element */
+  .product-card__title { margin: 0 0 6px; font-size: 18px; }
+  .product-card__price { color: #16a34a; font-weight: 700; }
+  .product-card__button { margin-top: 10px; padding: 6px 12px; border: 0; border-radius: 6px; background: #2563eb; color: #fff; }
+  /* Modifiers: block--modifier, element--modifier */
+  .product-card--featured { border-color: #f59e0b; box-shadow: 0 0 0 3px #fde68a; }
+  .product-card__button--disabled { background: #9ca3af; cursor: not-allowed; }
+  /* the footer can use .title freely — nothing in this file is called just ".title" */
+  .site-footer__title { font-size: 12px; text-transform: uppercase; }
+</style>
+</head>
+<body>
+  <article class="product-card">
+    <h3 class="product-card__title">Keyboard</h3>
+    <div class="product-card__price">450.000đ</div>
+    <button class="product-card__button">Add to cart</button>
+  </article>
+  <article class="product-card product-card--featured">
+    <h3 class="product-card__title">Mouse</h3>
+    <div class="product-card__price">250.000đ</div>
+    <button class="product-card__button product-card__button--disabled" disabled>Sold out</button>
+  </article>
+  <script>
+    const sel = [...document.styleSheets[0].cssRules].map((r) => r.selectorText).filter(Boolean);
+    const spec = (s) => (s.match(/\.[\w-]+/g) || []).length;
+    console.log('selectors:', sel.length, '| every one is a single class:', sel.every((s) => spec(s) === 1 || s === 'body'));
+  </script>
+</body>
+</html>

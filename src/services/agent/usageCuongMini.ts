@@ -111,7 +111,7 @@ export async function xemUsageAdmin(luc = new Date()): Promise<UsageAdmin> {
     keys: keys.map((k, i) => ({
       ten: /^Key …/.test(k.nhan) ? `Key #${i + 1}` : k.nhan, trangThai: k.trangThai, nganSachUsd: k.nganSachThangUsd, daDungUsd: k.daDungUsd,
       conPhanTram: k.nganSachThangUsd > 0 ? Math.max(0, Math.round(((k.nganSachThangUsd - k.daDungUsd) / k.nganSachThangUsd) * 1000) / 10) : null,
-      boQua: k.boQua, lamMoiLuc: k.chuKy.lamMoiLuc,
+      boQua: k.boQua, lamMoiLuc: k.chuKy.lamMoiLuc ?? '', // '' = không làm mới (gói credit tới hết hạn)
     })),
     theoModel: [...gop.entries()].map(([ten, g]) => ({ ten, homNayUsd: r4(g.homNayUsd), thangUsd: r4(g.thangUsd), buocHomNay: g.buocHomNay }))
       .sort((a, b) => b.thangUsd - a.thangUsd || b.buocHomNay - a.buocHomNay),

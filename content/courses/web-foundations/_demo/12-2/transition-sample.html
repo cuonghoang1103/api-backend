@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="cho-xong">
+<title>Measuring a transition frame by frame</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 20px; }
+  .bar { width: 100px; height: 24px; background: #2563eb; border-radius: 6px;
+         transition: width 1000ms linear; }
+  .bar.ease { transition-timing-function: ease; }
+  .bar.wide { width: 300px; }
+</style>
+</head>
+<body>
+  <div class="bar" id="linear"></div><br>
+  <div class="bar ease" id="ease"></div>
+  <script>
+    const bars = [...document.querySelectorAll('.bar')];
+    requestAnimationFrame(() => {
+      bars.forEach((b) => b.classList.add('wide'));            // start both transitions together
+      const t0 = performance.now();
+      const at = [0, 250, 500, 750, 1000];
+      const rows = [];
+      const sample = () => {
+        const t = performance.now() - t0;
+        while (at.length && t >= at[0]) {
+          const mark = at.shift();
+          rows.push('t≈' + String(mark).padStart(4) + 'ms   linear ' + bars[0].getBoundingClientRect().width.toFixed(0).padStart(3) +
+                    'px   ease ' + bars[1].getBoundingClientRect().width.toFixed(0).padStart(3) + 'px');
+        }
+        if (at.length) requestAnimationFrame(sample);
+        else { rows.forEach((r) => console.log(r)); window.__xong = true; }
+      };
+      sample();
+    });
+  </script>
+</body>
+</html>

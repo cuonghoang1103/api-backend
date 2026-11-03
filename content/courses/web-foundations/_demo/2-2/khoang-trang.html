@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Whitespace</title><meta name="chup" content="640x260"></head>
+<body>
+  <p>This    sentence
+     has many     spaces
+     and three line breaks in the file.</p>
+  <p>First line<br>Second line (with br)</p>
+  <pre>  pre keeps
+    every    space</pre>
+<script>
+  const [p] = document.querySelectorAll('p');
+  console.log('source  :', JSON.stringify(p.textContent));
+  console.log('rendered:', JSON.stringify(p.innerText));
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+loaded {src: 'cat.png', width: 120}
+failed: not an image: notes.txt
+pyramid done: a.png b.png c.png

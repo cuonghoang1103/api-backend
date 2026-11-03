@@ -1,0 +1,13 @@
+$ node server.mjs   (log during the browser run)
+API on http://localhost:3456
+GET /api/products/1
+GET /api/products/1
+GET /old-products
+GET /api/products
+GET /api/products/999
+GET /api/admin/stats
+POST /api/products
+GET /api/crash
+GET /api/products/2
+GET /api/products/2
+GET /api/products?q=desk+lamp&category=home

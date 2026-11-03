@@ -1,0 +1,5 @@
+all fails fast: broken after about 50 ms
+race: fast
+allSettled: ['fulfilled', 'rejected']
+any: first success = b
+all: ['user', 'posts', 'likes'] after about 200 ms

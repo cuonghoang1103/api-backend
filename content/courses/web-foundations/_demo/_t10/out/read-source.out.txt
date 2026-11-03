@@ -1,0 +1,13 @@
+$ node -e "const ms = require('ms'); console.log(ms('2 days'), ms('1.5h'), ms(90000), ms('two days'))"
+172800000 5400000 2m undefined
+
+$ grep -n "function parse" -A 8 node_modules/ms/index.js     (how does it read "1.5h"?)
+47:function parse(str) {
+48-  str = String(str);
+49-  if (str.length > 100) {
+50-    return;
+51-  }
+52-  var match = /^((?:\d+)?\.?\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|years?|yrs?|y)?$/i.exec(
+53-    str
+54-  );
+55-  if (!match) {

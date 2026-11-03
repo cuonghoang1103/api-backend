@@ -1,0 +1,5 @@
+ok   200  /
+ok   200  /robots.txt
+ok   200  /products/42
+all checks passed
+exit code: 0

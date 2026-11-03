@@ -1,0 +1,1 @@
+reduce = true | spinner 1e-05s x 1 | card transition 1e-05s

@@ -1,0 +1,24 @@
+--- 1. sha256, no salt ---
+an@example.com     8d969eef6ecad3c29a3a6292…
+binh@example.com   8d969eef6ecad3c29a3a6292…
+lan@example.com    7968449f48db07e60771cb51…
+cracked: an@example.com     → 123456
+cracked: binh@example.com   → 123456
+cracked: lan@example.com    → sunflower2009
+
+--- 2. sha256 with a salt per user ---
+an@example.com     salt bf5d2e7c44cd3a79 hash 5380ff7a3ba17f46416fa62d… | in table? false
+binh@example.com   salt 458d6b2f7c4cf99c hash 79155aab7fe777e66118615a… | in table? false
+
+--- 3. how many guesses per second? (this laptop, one CPU core) ---
+sha256          : 1,917,183 hashes in 1 second
+bcrypt cost 10  : 75 ms per hash → 13.3 hashes per second
+bcrypt cost 12  : 278 ms per hash → 3.6 hashes per second
+scrypt (Node)   : 38 ms per hash
+
+--- 4. bcrypt: salt and cost are stored inside the hash ---
+hash #1: $2a$10$RFFthUmbL7xyCto/rg1Sh.6p0uzSWd.RJQT2xi3OoN.rCi0HnuKEe
+hash #2: $2a$10$RVIcMqSX0wuMdld/algJ3uicdyi8YX3emA2xEjwvu6dey9m8Tjvlq (same password, new salt)
+parts  : $2a$ = algorithm, 10$ = cost (2^10 rounds), next 22 chars = salt, last 31 = hash
+compare("correct horse battery", hash #1): true
+compare("Correct horse battery", hash #1): false

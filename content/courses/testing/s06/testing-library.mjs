@@ -231,5 +231,35 @@ ${ra(gon(OUT['61-th']))}
 <li>Ở đây dùng jsdom; happy-dom nhanh hơn nhưng thêm CORS vào <code>fetch</code>.</li>
 </ul>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-3-testing-library" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.3 — Testing UI the way users see it</span><span class="lc-sub">Queries by role, getBy/queryBy/findBy and user-event, run with jsdom</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-3-testing-library" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.3 — Kiểm thử giao diện như người dùng thấy</span><span class="lc-sub">Truy vấn theo vai trò, getBy/queryBy/findBy và user-event, chạy với jsdom</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-3-semantic-html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.3 — why roles exist</span><span class="lc-sub">The accessibility tree that getByRole queries, measured on two identical-looking pages</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-3-semantic-html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.3 — vai trò từ đâu mà có</span><span class="lc-sub">Cây trợ năng mà getByRole truy vấn, đo trên hai trang trông giống hệt nhau</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

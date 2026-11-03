@@ -1,0 +1,12 @@
+{"name":"Book","price":100,"tags":["a","b"],"added":"1970-01-01T00:00:00.000Z"}
+string
+{
+  "a": 1,
+  "b": [
+    1,
+    2
+  ]
+}
+b string
+SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+{a: {b: 1}}

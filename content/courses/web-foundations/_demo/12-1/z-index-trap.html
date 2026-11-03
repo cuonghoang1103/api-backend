@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x340">
+<title>z-index: 9999 still loses</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; }
+  header { position: relative; z-index: 10; background: #1e293b; color: #fff; padding: 14px 18px; height: 60px; }
+  main { position: relative; z-index: 1; padding: 18px; }            /* creates a stacking context */
+  .modal { position: absolute; top: -40px; left: 120px; z-index: 9999; width: 360px; padding: 16px;
+           background: #fef3c7; border: 3px solid #d97706; border-radius: 10px; }
+</style>
+</head>
+<body>
+  <header>Site header (z-index: 10)</header>
+  <main>
+    <p>Page content (main has z-index: 1)</p>
+    <div class="modal">Modal (z-index: 9999) — why am I under the header?</div>
+  </main>
+  <script>
+    const m = document.querySelector('.modal').getBoundingClientRect();
+    const x = m.left + 30, y = m.top + 10;                   // a point where modal and header overlap
+    const winner = document.elementFromPoint(x, y);
+    console.log('at the overlap, the element on top is:', winner.tagName.toLowerCase(), '"' + winner.textContent.slice(0, 18) + '…"');
+    console.log('modal z-index:', getComputedStyle(document.querySelector('.modal')).zIndex,
+      '| but it competes inside <main>, whose z-index is', getComputedStyle(document.querySelector('main')).zIndex);
+  </script>
+</body>
+</html>

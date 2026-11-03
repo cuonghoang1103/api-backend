@@ -1605,6 +1605,21 @@ Keep-Alive: timeout=5
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 6.2 — HTTP methods, measured</span><span class="lc-sub">POST twice, PUT vs PATCH in real output, a prefetch that deletes, forms that turn PUT into GET</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-2-http-methods" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 6.2 — HTTP method, đo thật</span><span class="lc-sub">POST hai lần, PUT và PATCH bằng output thật, prefetch tự xoá, form biến PUT thành GET</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 1.3 ─────────────────────────── */
@@ -2526,6 +2541,21 @@ Keep-Alive: timeout=5
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã gặp phần này ở SDN302 — bài 4.1: Một REST API đầy đủ với Express, Mongoose &amp; MVC</span><span class="lc-sub">Nếu bạn đã học SDN302 trên Academy, bảng mã trạng thái (200/201/400/401/403/404/500) và lời khuyên "đừng trả 200 cho lỗi" sẽ quen. Giống: các mã cơ bản và một hình dạng lỗi thống nhất. Khác: SDN302 liệt kê các mã; ở đây mã nào cũng được kích hoạt trên API thật và được chọn theo một thứ tự câu hỏi cố định. Bài này thêm: 201 + Location, 400 so với 422, 409 cho xung đột trạng thái, 410, 415, và những gì một lỗi 500 không được làm lộ. Chưa học SDN302 thì bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 6.3 — status codes for beginners</span><span class="lc-sub">Fourteen real codes from one API, what fetch sees for each, one requestJson helper</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-6-3-status-codes" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 6.3 — mã trạng thái cho người mới</span><span class="lc-sub">Mười bốn mã thật từ một API, fetch thấy gì với từng mã, một hàm requestJson</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

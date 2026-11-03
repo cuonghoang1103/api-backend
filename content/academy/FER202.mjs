@@ -647,6 +647,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.1 — Closure: a function that remembers</span><span class="lc-sub">Closures from zero, run in Chromium: counters, the var-in-a-loop puzzle, private state</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.1 — Closure: hàm nhớ được nơi nó sinh ra</span><span class="lc-sub">Closure từ số 0, chạy trong Chromium: bộ đếm, câu đố var trong vòng lặp, state riêng tư</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -745,6 +760,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 0.3: JavaScript cần cho React</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: destructuring, spread và import/export. Khác: Courses giải thích "chép" bằng spread thật ra là chép nông và nối thẳng vào chuyện cập nhật state. Ở đó có thêm: spread chép rồi sửa nghĩa là gì, cùng giá trị hay cùng object, closure, async/await.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-4-map-set-immutable" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.4 — Map, Set and immutability</span><span class="lc-sub">Mutate vs replace, shallow vs deep copies, why React needs new references</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-4-map-set-immutable" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.4 — Map, Set và tính bất biến</span><span class="lc-sub">Sửa tại chỗ hay thay mới, chép nông và chép sâu, vì sao React cần tham chiếu mới</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,
@@ -1355,6 +1385,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-3-prototype-class" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.3 — Prototype and class</span><span class="lc-sub">The prototype chain behind class/extends, measured in the browser</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-3-prototype-class" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.3 — Prototype và class</span><span class="lc-sub">Chuỗi prototype đằng sau class/extends, đo ngay trong trình duyệt</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         ...ch5Extra,
@@ -1721,6 +1766,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 13.1: Compound component, headless hook</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: cùng mục tiêu: component dùng lại được mà không phải thêm một prop cho mỗi mong muốn. Khác: Academy dừng ở children và render props; Courses đi tiếp tới các mẫu thiết kế người ta dùng trong thư viện UI. Ở đó có thêm: compound component, headless hook (hành vi không kèm giao diện), bàn phím và ARIA cho tab.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-1-position-stacking" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.1 — Position and the stacking context</span><span class="lc-sub">Why z-index: 9999 still loses, with screenshots from Chromium</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-1-position-stacking" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.1 — Position và ngữ cảnh xếp chồng</span><span class="lc-sub">Vì sao z-index: 9999 vẫn thua, kèm ảnh chụp từ Chromium</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,
@@ -2371,6 +2431,21 @@ count = 1;              <span class="tok-comment">// ok</span>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá React (Courses) — bài 6.1: Gọi API trong effect và vì sao đau</span><span class="lc-sub">Sau này đi làm, hay khi muốn học sâu phần này, hãy học tiếp khoá React ở Courses. Giống bài này: fetch trong useEffect rồi lưu vào state. Khác: Courses chỉ ra mẫu này sai ở đâu khi chạy thật. Ở đó có thêm: fetch không ném lỗi với 404, cuộc đua giữa hai request đo trong Chromium thật, AbortController, API giả bằng MSW.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 5.4 — fetch without React</span><span class="lc-sub">res.ok, four loading states, POST JSON to a real server, timeouts</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-4-fetch-apis" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 5.4 — fetch khi chưa có React</span><span class="lc-sub">res.ok, bốn trạng thái tải, POST JSON tới máy chủ thật, giới hạn thời gian</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

@@ -50,7 +50,8 @@ export default {
   type: 'DOCUMENT',
   isFreePreview: true,
   description: 'Phạm vi (scope), closure là gì và vì sao biến không mất, state riêng tư, hàm sinh hàm, handler sự kiện, bẫy var trong vòng lặp, closure giữ BIẾN chứ không giữ giá trị, once/memoize — mọi ví dụ chạy thật trong Chromium.',
-  content: `${G}
+  content: `
+${G}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1</span>
 <h2>A closure is a function plus the variables it was born with</h2>

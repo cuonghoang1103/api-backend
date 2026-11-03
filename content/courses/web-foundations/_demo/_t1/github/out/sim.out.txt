@@ -1,0 +1,128 @@
+### 1. 'Create repository' on the host = an empty bare repository
+$ git init --bare -q --initial-branch=main github.com/an/ct-shop.git
+
+$ ls github.com/an/ct-shop.git
+config
+description
+HEAD
+hooks
+info
+objects
+refs
+
+### 2. An: a local project with one commit, then connect it to the remote
+$ git status --short --ignored
+!! .env
+
+$ git check-ignore -v .env
+.gitignore:3:.env	.env
+
+$ git remote add origin github.com/an/ct-shop.git
+
+$ git remote -v
+origin	github.com/an/ct-shop.git (fetch)
+origin	github.com/an/ct-shop.git (push)
+
+$ git push -u origin main
+To github.com/an/ct-shop.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+
+$ git status -sb
+## main...origin/main
+
+### 3. Committed is not pushed
+$ git status -sb
+## main...origin/main [ahead 1]
+
+$ git push
+To github.com/an/ct-shop.git
+   8161c6f..6ea36d0  main -> main
+
+$ git status -sb
+## main...origin/main
+
+### 4. Binh clones the project
+$ git clone github.com/an/ct-shop.git binh
+Cloning into 'binh'...
+done.
+
+$ git log --oneline
+6ea36d0 Add home page
+8161c6f Initial commit: README and .gitignore
+
+$ git push
+To github.com/an/ct-shop.git
+   6ea36d0..a8272b6  main -> main
+
+### 5. An, meanwhile, commits without pulling first — push is rejected
+$ git push
+To github.com/an/ct-shop.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'github.com/an/ct-shop.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+$ git pull --rebase
+From github.com/an/ct-shop
+   6ea36d0..a8272b6  main       -> origin/main
+Rebasing (1/1)
+Successfully rebased and updated refs/heads/main.
+
+$ git log --oneline --graph
+* 4d21e2a Document how to run
+* a8272b6 Add shipping note
+* 6ea36d0 Add home page
+* 8161c6f Initial commit: README and .gitignore
+
+$ git push
+To github.com/an/ct-shop.git
+   a8272b6..4d21e2a  main -> main
+
+### 6. A pull request is a branch on the remote, waiting to be merged
+$ git switch -c feature/cart
+Switched to a new branch 'feature/cart'
+
+$ git push -u origin feature/cart
+To github.com/an/ct-shop.git
+ * [new branch]      feature/cart -> feature/cart
+branch 'feature/cart' set up to track 'origin/feature/cart'.
+
+$ git branch -a
+* feature/cart
+  main
+  remotes/origin/HEAD -> origin/main
+  remotes/origin/feature/cart
+  remotes/origin/main
+
+$ git ls-remote --heads origin
+12c727d9c69294252e0e45a69990f1d54ae96f0c	refs/heads/feature/cart
+4d21e2a00d865d078c3989a1a4d1e558879a211d	refs/heads/main
+
+### 7. Merging the pull request = a merge commit on main, pushed by the host
+$ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+
+$ git merge --no-ff feature/cart -m "Merge pull request #1 from an/feature/cart"
+Merge made by the 'ort' strategy.
+ index.html | 1 +
+ 1 file changed, 1 insertion(+)
+
+$ git push
+To github.com/an/ct-shop.git
+   4d21e2a..31ceb3a  main -> main
+
+$ git log --oneline --graph
+*   31ceb3a Merge pull request #1 from an/feature/cart
+|\  
+| * 12c727d Add cart button
+|/  
+* 4d21e2a Document how to run
+* a8272b6 Add shipping note
+* 6ea36d0 Add home page
+* 8161c6f Initial commit: README and .gitignore
+

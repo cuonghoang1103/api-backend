@@ -1637,6 +1637,21 @@ cat: /opt/datlich/.env: Permission denied</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitHub — gỡ dữ liệu nhạy cảm khỏi một kho mã</span><span class="lc-sub">docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository — kể cả đoạn nói về các bản xem đã lưu đệm và các bản fork sống sót qua một lần viết lại.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Authentication — xoay khoá, và giữ hai khoá cùng hiệu lực</span><span class="lc-sub">/courses/authentication/learn${REF} — cơ chế làm cho việc xoay khoá không gây gián đoạn, thứ mà Bài 4.5 áp dụng vào đây.</span></span></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.2 — Environment variables and secrets</span><span class="lc-sub">A VITE_ secret found in the built bundle, fail-fast config, rotate before cleaning history</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.2 — Biến môi trường và bí mật</span><span class="lc-sub">Bí mật VITE_ nằm trong bundle đã dựng, cấu hình chết sớm, xoay khoá trước khi dọn lịch sử</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -2040,6 +2055,21 @@ $ grep -rlF "$GIA_TRI_CU" /opt/datlich /home/deploy/bin       # tim theo GIA TRI
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Key Management Cheat Sheet</span><span class="lc-sub">cheatsheetseries.owasp.org/cheatsheets/Key_Management_Cheat_Sheet.html — chu kỳ xoay khoá, và phân biệt giữa xoay có kế hoạch với xoay khẩn cấp.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">PostgreSQL — ALTER ROLE ... PASSWORD</span><span class="lc-sub">postgresql.org/docs/current/sql-alterrole.html — và vì sao tạo một vai trò THỨ HAI thường là cách xoay gọn hơn đổi một mật khẩu.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Authentication — phiên, refresh token và thu hồi</span><span class="lc-sub">/courses/authentication/learn${REF} — cách xoay bốn giai đoạn ở dạng đầy đủ, kể cả chuyện một mã định danh khoá mua được gì cho bạn.</span></span></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.2 — Environment variables and secrets</span><span class="lc-sub">A VITE_ secret found in the built bundle, fail-fast config, rotate before cleaning history</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-2-env-secrets" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.2 — Biến môi trường và bí mật</span><span class="lc-sub">Bí mật VITE_ nằm trong bundle đã dựng, cấu hình chết sớm, xoay khoá trước khi dọn lịch sử</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },

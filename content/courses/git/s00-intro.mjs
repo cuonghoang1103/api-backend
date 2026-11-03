@@ -1145,7 +1145,7 @@ git diff HEAD~1</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Getting-Started-About-Version-Control" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 1.1 (tiếng Việt) — Về Quản Lý Phiên Bản</span><span class="lc-sub">Ba thế hệ VCS, kèm những sơ đồ kinh điển.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 1.1 (tiếng Anh) — Về Quản Lý Phiên Bản</span><span class="lc-sub">Ba thế hệ VCS, kèm những sơ đồ kinh điển.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/about" target="_blank" rel="noopener">
   <span class="lc-ico">⚡</span>

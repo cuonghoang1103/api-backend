@@ -1,0 +1,704 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-1-1-terminal",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-1-1-terminal"
+  },
+  "exercises": [
+    {
+      "title": "Tính đường dẫn tuyệt đối",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "đường dẫn tuyệt đối/tương đối",
+        ". và .."
+      ],
+      "prerequisites": [
+        "split",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Viết <code>resolvePath(cwd, input, home = \"/Users/lan\")</code> trả đường dẫn tuyệt đối đã chuẩn hoá: <code>input</code> bắt đầu bằng <code>/</code> ⇒ tính từ gốc; bằng <code>~</code> ⇒ từ <code>home</code>; còn lại ⇒ từ <code>cwd</code>. Đoạn <code>.</code> bỏ qua, <code>..</code> lên một cấp (ở gốc thì vẫn ở gốc), dấu <code>/</code> lặp hoặc ở cuối bị bỏ. Gốc là <code>\"/\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba điểm xuất phát.</li>\n  <li>Xử lý . và ..</li>\n  <li>Không có / thừa.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "cwd: string (tuyệt đối); input: string; home?: string.",
+      "outputSpec": "string.",
+      "constraints": "Không dùng thư viện path.",
+      "examplesJson": [
+        {
+          "input": "resolvePath(\"/Users/lan/projects/shop/src\", \"../../notes.txt\")",
+          "output": "\"/Users/lan/projects/notes.txt\"",
+          "explanation": "Đúng phép thử trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const start = input.startsWith(\"/\") ? [] : input.startsWith(\"~\") ? home.split(\"/\") : cwd.split(\"/\");",
+        "for (const part of input.replace(/^~/, \"\").split(\"/\")) { if (part === \"..\") stack.pop(); else if (part && part !== \".\") stack.push(part); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — đường dẫn tuyệt đối\nfunction resolvePath(cwd, input, home = '/Users/lan') {\n  return cwd + '/' + input;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — xếp các đoạn vào ngăn xếp: tên thì đẩy vào, \"..\" thì lấy ra, \".\" và \"\" thì bỏ qua\nfunction resolvePath(cwd, input, home = '/Users/lan') {\n  let base;\n  if (input.startsWith('/')) base = '';\n  else if (input === '~' || input.startsWith('~/')) { base = home; input = input.slice(1); }\n  else base = cwd;\n  const stack = [];\n  for (const part of (base + '/' + input).split('/')) {\n    if (part === '' || part === '.') continue;\n    if (part === '..') stack.pop();            // ở gốc thì pop trên mảng rỗng — vẫn ở gốc\n    else stack.push(part);\n  }\n  return '/' + stack.join('/');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là việc shell (và <code>import</code>, <code>src=\"…\"</code>) làm với mọi đường dẫn tương đối: ghép với thư mục hiện tại rồi rút gọn. Lỗi \"No such file\" trong bài đến từ chỗ ghép sai cwd.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên trường hợp ~.</li>\n  <li>\"..\" ở gốc làm hỏng kết quả.</li>\n  <li>Để lại \"/\" cuối.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Path_(computing)",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Relative paths from the lesson|||Đường dẫn tương đối trong bài",
+            "goi": "[resolvePath(\"/Users/lan/projects/shop/src\", \"../index.html\"), resolvePath(\"/Users/lan/projects/shop/src\", \"../../notes.txt\"), resolvePath(\"/Users/lan/projects/shop/src\", \"notes.txt\")]",
+            "mongDoi": [
+              "/Users/lan/projects/shop/index.html",
+              "/Users/lan/projects/notes.txt",
+              "/Users/lan/projects/shop/src/notes.txt"
+            ]
+          },
+          {
+            "moTa": "Absolute, home and dots|||Tuyệt đối, nhà và dấu chấm",
+            "goi": "[resolvePath(\"/tmp\", \"/Users/lan/./projects//blog/\"), resolvePath(\"/tmp\", \"~\"), resolvePath(\"/tmp\", \"~/projects/../x\")]",
+            "mongDoi": [
+              "/Users/lan/projects/blog",
+              "/Users/lan",
+              "/Users/lan/x"
+            ]
+          },
+          {
+            "moTa": "Cannot go above the root|||Không lên quá gốc",
+            "goi": "[resolvePath(\"/a\", \"../../..\"), resolvePath(\"/\", \".\")]",
+            "mongDoi": [
+              "/",
+              "/"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên trường hợp ~."
+        },
+        {
+          "loi": "\"..\" ở gốc làm hỏng kết quả."
+        },
+        {
+          "loi": "Để lại \"/\" cuối."
+        }
+      ]
+    },
+    {
+      "title": "Tách dòng lệnh thành đối số",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "đối số",
+        "dấu nháy",
+        "ký tự thoát"
+      ],
+      "prerequisites": [
+        "vòng lặp chuỗi"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Viết <code>splitArgs(line)</code> như shell: khoảng trắng (dấu cách, tab) ngăn đối số; trong <code>\"…\"</code> hoặc <code>'…'</code> khoảng trắng là chữ thường và dấu nháy bị bỏ; <code>\\\\</code> trước một ký tự (ngoài nháy) giữ ký tự đó nguyên văn. Phần dính nhau là một đối số (<code>a\"b c\"d</code> ⇒ <code>\"ab cd\"</code>). Nháy không đóng ⇒ ném <code>SyntaxError(\"unterminated quote\")</code>. <code>\"\"</code> là một đối số rỗng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dấu cách ngăn đối số.</li>\n  <li>Nháy đơn và kép.</li>\n  <li>Gạch chéo ngược.</li>\n  <li>Nháy không đóng ⇒ lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "line: string.",
+      "outputSpec": "string[].",
+      "constraints": "Không cần xử lý $biến hay *.",
+      "examplesJson": [
+        {
+          "input": "splitArgs(\"mkdir my project\")",
+          "output": "[\"mkdir\", \"my\", \"project\"]",
+          "explanation": "Vì vậy nó tạo hai thư mục."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt từng ký tự với trạng thái quote (null, \"'\" hoặc '\"') và cờ \"đang có đối số\".",
+        "Đối số rỗng \"\" phải được giữ: dùng cờ started thay vì kiểm cur !== \"\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — tách dòng lệnh\nfunction splitArgs(line) {\n  return line.split(' ');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — máy trạng thái: ngoài nháy / trong nháy; \"started\" để giữ được đối số rỗng \"\"\nfunction splitArgs(line) {\n  const args = [];\n  let cur = '', started = false, quote = null;\n  for (let i = 0; i < line.length; i++) {\n    const ch = line[i];\n    if (quote) {\n      if (ch === quote) quote = null; else cur += ch;\n    } else if (ch === '\"' || ch === \"'\") {\n      quote = ch; started = true;\n    } else if (ch === '\\\\' && i + 1 < line.length) {\n      cur += line[++i]; started = true;\n    } else if (ch === ' ' || ch === '\\t') {\n      if (started) { args.push(cur); cur = ''; started = false; }\n    } else {\n      cur += ch; started = true;\n    }\n  }\n  if (quote) throw new SyntaxError('unterminated quote');\n  if (started) args.push(cur);\n  return args;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chương trình (<code>mkdir</code>, <code>git</code>, <code>node</code>) không bao giờ thấy dòng bạn gõ — nó nhận MẢNG đối số do shell tách sẵn (chính là <code>process.argv</code> ở Bài 1.5). <code>mkdir my project</code> nhận hai đối số, nên tạo hai thư mục.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>split(\" \") — nhiều dấu cách sinh đối số rỗng.</li>\n  <li>Bỏ mất đối số \"\".</li>\n  <li>Giữ lại dấu nháy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.gnu.org/software/bash/manual/html_node/Quoting.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Spaces split, quotes join|||Dấu cách tách, nháy giữ",
+            "goi": "[splitArgs(\"mkdir my project\"), splitArgs('mkdir \"my project\"'), splitArgs(\"cd   'my project'  \")]",
+            "mongDoi": [
+              [
+                "mkdir",
+                "my",
+                "project"
+              ],
+              [
+                "mkdir",
+                "my project"
+              ],
+              [
+                "cd",
+                "my project"
+              ]
+            ]
+          },
+          {
+            "moTa": "Backslash, glued parts, empty argument|||Gạch chéo ngược, phần dính, đối số rỗng",
+            "goi": "[splitArgs(\"cd my\\\\ project\"), splitArgs('echo a\"b c\"d'), splitArgs('git commit -m \"\"')]",
+            "mongDoi": [
+              [
+                "cd",
+                "my project"
+              ],
+              [
+                "echo",
+                "ab cd"
+              ],
+              [
+                "git",
+                "commit",
+                "-m",
+                ""
+              ]
+            ]
+          },
+          {
+            "moTa": "Unterminated quote|||Nháy không đóng",
+            "goi": "splitArgs('echo \"hello')",
+            "mongDoi": {
+              "loi": "SyntaxError",
+              "thongDiep": "unterminated quote"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "split(\" \") — nhiều dấu cách sinh đối số rỗng."
+        },
+        {
+          "loi": "Bỏ mất đối số \"\"."
+        },
+        {
+          "loi": "Giữ lại dấu nháy."
+        }
+      ]
+    },
+    {
+      "title": "Mở rộng ký tự đại diện",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "glob",
+        "tệp ẩn"
+      ],
+      "prerequisites": [
+        "regex",
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Viết <code>expandGlob(pattern, names)</code> như bash: <code>*</code> khớp chuỗi bất kỳ (kể cả rỗng), <code>?</code> khớp đúng một ký tự, ký tự khác khớp chính nó. Tên bắt đầu bằng <code>.</code> chỉ khớp khi mẫu cũng bắt đầu bằng <code>.</code>. Trả các tên khớp đã sắp xếp; KHÔNG khớp gì ⇒ trả <code>[pattern]</code> nguyên văn (vì thế <code>ls *.py</code> báo \"No such file *.py\"). Mẫu không có <code>*</code>/<code>?</code> ⇒ <code>[pattern]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>* và ?.</li>\n  <li>Tệp ẩn.</li>\n  <li>Không khớp ⇒ giữ nguyên mẫu.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "pattern: string; names: string[].",
+      "outputSpec": "string[].",
+      "constraints": "Thoát các ký tự đặc biệt của regex (., +, (…) trong mẫu.",
+      "examplesJson": [
+        {
+          "input": "expandGlob(\"*.js\", [\"a.js\", \"b.js\", \"c.css\", \"notes.txt\"])",
+          "output": "[\"a.js\", \"b.js\"]",
+          "explanation": "echo *.js trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const re = new RegExp(\"^\" + pattern.replace(/[.+^${}()|[\\]\\\\$]/g, \"\\\\$&\").replace(/\\*/g, \".*\").replace(/\\?/g, \".\") + \"$\");",
+        "names.filter((n) => re.test(n) && (!n.startsWith(\".\") || pattern.startsWith(\".\")))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — mở rộng *\nfunction expandGlob(pattern, names) {\n  return names.filter((n) => n.includes(pattern.replace('*', '')));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — đổi mẫu glob thành regex có neo; tệp ẩn chỉ khớp mẫu bắt đầu bằng \".\"\nfunction expandGlob(pattern, names) {\n  if (!/[*?]/.test(pattern)) return [pattern];\n  const body = pattern\n    .replace(/[.+^$(){}|[\\]\\\\]/g, '\\\\$&')\n    .replace(/\\*/g, '.*')\n    .replace(/\\?/g, '.');\n  const re = new RegExp('^' + body + '$');\n  const hits = names.filter((n) => re.test(n) && (!n.startsWith('.') || pattern.startsWith('.'))).sort();\n  return hits.length ? hits : [pattern];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Shell mở rộng mẫu TRƯỚC khi chạy lệnh: <code>ls</code> nhận <code>a.js b.js</code>, không bao giờ thấy dấu sao. Khi không khớp, bash để nguyên <code>*.py</code> và <code>ls</code> báo không có tệp tên đúng là \"*.py\". Đó cũng là lý do <code>find -name \"*.js\"</code> phải đặt mẫu trong nháy.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không neo ^…$ (\"x.json\" khớp \"*.js\").</li>\n  <li>Không thoát dấu chấm.</li>\n  <li>* khớp cả .env.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.gnu.org/software/bash/manual/html_node/Pattern-Matching.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson's folder|||Thư mục trong bài",
+            "goi": "(() => { const n = [\"a.js\", \"b.js\", \"c.css\", \"notes.txt\", \"x.json\"]; return [expandGlob(\"*.js\", n), expandGlob(\"*.css\", n), expandGlob(\"*.py\", n)]; })()",
+            "mongDoi": [
+              [
+                "a.js",
+                "b.js"
+              ],
+              [
+                "c.css"
+              ],
+              [
+                "*.py"
+              ]
+            ]
+          },
+          {
+            "moTa": "? and hidden files|||? và tệp ẩn",
+            "goi": "(() => { const n = [\".env\", \".gitignore\", \"a1.txt\", \"a12.txt\", \"index.html\"]; return [expandGlob(\"a?.txt\", n), expandGlob(\"*\", n), expandGlob(\".*\", n)]; })()",
+            "mongDoi": [
+              [
+                "a1.txt"
+              ],
+              [
+                "a1.txt",
+                "a12.txt",
+                "index.html"
+              ],
+              [
+                ".env",
+                ".gitignore"
+              ]
+            ]
+          },
+          {
+            "moTa": "Special characters and plain names|||Ký tự đặc biệt và tên thường",
+            "goi": "[expandGlob(\"(draft)*\", [\"(draft) a.md\", \"draft b.md\"]), expandGlob(\"index.html\", [\"index.html\"])]",
+            "mongDoi": [
+              [
+                "(draft) a.md"
+              ],
+              [
+                "index.html"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không neo ^…$ (\"x.json\" khớp \"*.js\")."
+        },
+        {
+          "loi": "Không thoát dấu chấm."
+        },
+        {
+          "loi": "* khớp cả .env."
+        }
+      ]
+    },
+    {
+      "title": "sort | uniq -c | sort -r",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ống",
+        "đếm dòng giống nhau"
+      ],
+      "prerequisites": [
+        "sort",
+        "Map"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Viết ba \"lệnh\" nhận và trả mảng dòng, rồi <code>pipe(text, ...steps)</code> nối chúng: <code>sortLines(lines)</code> sắp theo bảng mã (như <code>sort</code>, chữ hoa trước chữ thường); <code>uniqCount(lines)</code> gộp các dòng GIỐNG NHAU LIỀN NHAU thành <code>\"&lt;số&gt; &lt;dòng&gt;\"</code> (chỉ liền nhau — giống <code>uniq</code> thật); <code>topN(n)</code> trả một bước lấy n dòng đầu. <code>pipe</code> tách <code>text</code> theo <code>\\\\n</code> (bỏ dòng rỗng cuối), cho chảy qua các bước, nối lại bằng <code>\\\\n</code>. Thêm <code>sortByCount(lines)</code> sắp dòng dạng <code>\"&lt;số&gt; &lt;chữ&gt;\"</code> theo số giảm dần (bằng nhau giữ thứ tự).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>uniq chỉ gộp dòng liền nhau.</li>\n  <li>pipe nối các bước.</li>\n  <li>Sắp theo số, không theo chuỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text; các hàm bước.",
+      "outputSpec": "string.",
+      "constraints": "Mỗi bước là hàm (lines) => lines.",
+      "examplesJson": [
+        {
+          "input": "pipe(\"apple\\nbanana\\napple\\ncherry\\napple\\n\", sortLines, uniqCount, sortByCount, topN(1))",
+          "output": "\"3 apple\"",
+          "explanation": "Đúng chuỗi lệnh trong bài."
+        }
+      ],
+      "hintsJson": [
+        "uniqCount: duyệt, so với dòng trước; đổi dòng thì đẩy nhóm cũ.",
+        "sortByCount: [...lines].sort((a, b) => parseInt(b) - parseInt(a))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — sort | uniq -c\nfunction sortLines(lines) { return lines; }\nfunction uniqCount(lines) { return lines; }\nfunction sortByCount(lines) { return lines; }\nfunction topN(n) { return (lines) => lines; }\nfunction pipe(text, ...steps) { return text; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — mỗi lệnh nhỏ làm MỘT việc; ống nối output của lệnh này vào input lệnh sau\nfunction sortLines(lines) {\n  return [...lines].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0));     // theo mã ký tự, như sort mặc định với LC_ALL=C\n}\nfunction uniqCount(lines) {\n  const out = [];\n  for (let i = 0; i < lines.length; ) {\n    let j = i;\n    while (j < lines.length && lines[j] === lines[i]) j++;            // chỉ những dòng LIỀN NHAU\n    out.push((j - i) + ' ' + lines[i]);\n    i = j;\n  }\n  return out;\n}\nfunction sortByCount(lines) {\n  return [...lines].sort((a, b) => parseInt(b, 10) - parseInt(a, 10));\n}\nfunction topN(n) {\n  return (lines) => lines.slice(0, n);\n}\nfunction pipe(text, ...steps) {\n  let lines = text.split('\\n');\n  if (lines.at(-1) === '') lines.pop();\n  for (const step of steps) lines = step(lines);\n  return lines.join('\\n');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>uniq</code> chỉ gộp dòng LIỀN NHAU — vì thế luôn <code>sort</code> trước. Sắp kết quả <code>\"10 x\"</code> và <code>\"9 y\"</code> theo chuỗi sẽ đặt 10 sau 9; <code>sort -rn</code> (số) hay <code>parseInt</code> sửa điều đó. Triết lý Unix: công cụ nhỏ, ghép bằng ống.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>uniq gộp cả dòng không liền nhau.</li>\n  <li>Sắp \"10\" sau \"9\".</li>\n  <li>Đếm dòng rỗng cuối tệp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.gnu.org/software/coreutils/manual/html_node/uniq-invocation.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The fruits pipeline|||Chuỗi lệnh fruits",
+            "goi": "[pipe(\"apple\\nbanana\\napple\\ncherry\\napple\\n\", sortLines, uniqCount), pipe(\"apple\\nbanana\\napple\\ncherry\\napple\\n\", sortLines, uniqCount, sortByCount, topN(1))]",
+            "mongDoi": [
+              "3 apple\n1 banana\n1 cherry",
+              "3 apple"
+            ]
+          },
+          {
+            "moTa": "uniq without sort only merges neighbours|||uniq không sort chỉ gộp dòng kề",
+            "goi": "pipe(\"a\\na\\nb\\na\\n\", uniqCount)",
+            "mongDoi": "2 a\n1 b\n1 a"
+          },
+          {
+            "moTa": "Numbers sort as numbers; byte order|||Sắp số theo số; theo mã ký tự",
+            "goi": "[sortByCount([\"9 x\", \"10 y\", \"2 z\"]), sortLines([\"banana\", \"Apple\", \"apple\"])]",
+            "mongDoi": [
+              [
+                "10 y",
+                "9 x",
+                "2 z"
+              ],
+              [
+                "Apple",
+                "apple",
+                "banana"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "uniq gộp cả dòng không liền nhau."
+        },
+        {
+          "loi": "Sắp \"10\" sau \"9\"."
+        },
+        {
+          "loi": "Đếm dòng rỗng cuối tệp."
+        }
+      ]
+    },
+    {
+      "title": "find -name trên một cây thư mục",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "duyệt cây",
+        "đệ quy"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "Object.entries"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Cây thư mục là object lồng: thư mục là object, tệp là chuỗi (nội dung). Viết <code>find(tree, start, opts)</code> trả mảng đường dẫn (bắt đầu bằng <code>start</code>, ví dụ <code>\"projects\"</code>) như <code>find</code>: duyệt mọi mục, sắp tên theo thứ tự chữ ở mỗi cấp, thư mục được liệt kê TRƯỚC nội dung của nó. Lọc theo <code>opts.type</code> (<code>\"f\"</code> tệp / <code>\"d\"</code> thư mục) và <code>opts.name</code> (mẫu glob chỉ có <code>*</code>, so với TÊN chứ không phải đường dẫn). Không có opts ⇒ mọi mục, kể cả chính <code>start</code>. Viết thêm <code>grepR(tree, start, word)</code> trả <code>\"&lt;đường dẫn&gt;:&lt;số dòng&gt;:&lt;dòng&gt;\"</code> cho mọi dòng chứa <code>word</code> (phân biệt hoa thường).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự giống find.</li>\n  <li>Lọc type và name.</li>\n  <li>grep -rn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "tree: object; start: string; opts?: { type?, name? }.",
+      "outputSpec": "string[].",
+      "constraints": "start là một khoá cấp trên của tree.",
+      "examplesJson": [
+        {
+          "input": "find(tree, \"projects\", { name: \"*.js\" })",
+          "output": "[\"projects/shop/src/app.js\"]",
+          "explanation": "find projects -name \"*.js\" trong bài."
+        }
+      ],
+      "hintsJson": [
+        "function walk(node, path, out) { out.push({ path, isDir: typeof node === \"object\" }); if (typeof node === \"object\") for (const k of Object.keys(node).sort()) walk(node[k], path + \"/\" + k, out); }",
+        "Mẫu tên: new RegExp(\"^\" + name.replace(/[.]/g, \"\\\\.\").replace(/\\*/g, \".*\") + \"$\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — find và grep -rn\nfunction find(tree, start, opts = {}) {\n  return Object.keys(tree[start]);\n}\nfunction grepR(tree, start, word) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — duyệt cây theo chiều sâu, tên sắp theo chữ cái, thư mục trước nội dung\nfunction walk(node, path, out) {\n  const isDir = typeof node === 'object';\n  out.push({ path, isDir, node });\n  if (isDir) for (const k of Object.keys(node).sort()) walk(node[k], path + '/' + k, out);\n}\nfunction find(tree, start, opts = {}) {\n  const all = [];\n  walk(tree[start], start, all);\n  const re = opts.name ? new RegExp('^' + opts.name.replace(/[.+^$(){}|[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '.*') + '$') : null;\n  return all\n    .filter((e) => !opts.type || (opts.type === 'd') === e.isDir)\n    .filter((e) => !re || re.test(e.path.split('/').pop()))\n    .map((e) => e.path);\n}\nfunction grepR(tree, start, word) {\n  const all = [];\n  walk(tree[start], start, all);\n  const out = [];\n  for (const e of all) {\n    if (e.isDir) continue;\n    e.node.split('\\n').forEach((line, i) => { if (line.includes(word)) out.push(e.path + ':' + (i + 1) + ':' + line); });\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>find</code> trả lời \"tệp ở đâu\", <code>grep -rn</code> trả lời \"chữ này ở đâu\" — với đúng định dạng <code>tệp:dòng</code> mà trình soạn thảo và thông báo lỗi dùng. \"Search in files\" của VS Code làm cùng hai việc này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So mẫu với cả đường dẫn.</li>\n  <li>Không sắp tên.</li>\n  <li>Đánh số dòng từ 0.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.gnu.org/software/findutils/manual/html_mono/find.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "find by name and type|||find theo tên và loại",
+            "goi": "(() => { const t = { projects: { \"notes.txt\": \"TODO: write the about page\", shop: { \"index.html\": \"<h1>Shop</h1>\", src: { \"app.js\": \"console.log('shop ready');\" } }, blog: {} } }; return [find(t, \"projects\", { name: \"*.js\" }), find(t, \"projects\", { type: \"f\" }), find(t, \"projects\", { type: \"d\" })]; })()",
+            "mongDoi": [
+              [
+                "projects/shop/src/app.js"
+              ],
+              [
+                "projects/notes.txt",
+                "projects/shop/index.html",
+                "projects/shop/src/app.js"
+              ],
+              [
+                "projects",
+                "projects/blog",
+                "projects/shop",
+                "projects/shop/src"
+              ]
+            ]
+          },
+          {
+            "moTa": "Everything, in find order|||Tất cả, đúng thứ tự find",
+            "goi": "find({ p: { b: { \"z.txt\": \"\" }, \"a.txt\": \"\" } }, \"p\")",
+            "mongDoi": [
+              "p",
+              "p/a.txt",
+              "p/b",
+              "p/b/z.txt"
+            ]
+          },
+          {
+            "moTa": "grep -rn is case-sensitive|||grep -rn phân biệt hoa thường",
+            "goi": "(() => { const t = { projects: { \"notes.txt\": \"buy milk\\nTODO: shop page\", shop: { \"index.html\": \"<h1>Shop</h1>\", src: { \"app.js\": \"// shop\\nconsole.log('shop ready');\" } } } }; return grepR(t, \"projects\", \"shop\"); })()",
+            "mongDoi": [
+              "projects/notes.txt:2:TODO: shop page",
+              "projects/shop/src/app.js:1:// shop",
+              "projects/shop/src/app.js:2:console.log('shop ready');"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So mẫu với cả đường dẫn."
+        },
+        {
+          "loi": "Không sắp tên."
+        },
+        {
+          "loi": "Đánh số dòng từ 0."
+        }
+      ]
+    },
+    {
+      "title": "Một shell thu nhỏ",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "thư mục làm việc",
+        "mã thoát",
+        "thông báo lỗi"
+      ],
+      "prerequisites": [
+        "object lồng",
+        "switch"
+      ],
+      "tags": [
+        "javascript",
+        "terminal"
+      ],
+      "problemHtml": "<p><em>Bài 1.1 — Terminal.</em> Mỗi bài là một việc shell làm cho bạn sau mỗi lần nhấn Enter — tự viết lại để hiểu vì sao output trong bài lại như vậy.</p><p>Viết <code>createShell(home = \"/Users/lan\")</code> trả <code>{ run }</code>; hệ thống tệp trong bộ nhớ, ban đầu chỉ có các thư mục <code>/Users/lan</code>. <code>run(line)</code> tách đối số theo dấu cách (đơn giản) và trả <code>{ out, code }</code> (out là chuỗi, các dòng nối <code>\\\\n</code>). Lệnh: <code>pwd</code>; <code>cd [dir]</code> (không đối số ⇒ home, <code>-</code> ⇒ thư mục trước và in nó, <code>~</code>, <code>..</code>, tương đối/tuyệt đối); <code>mkdir [-p] dir…</code>; <code>touch file…</code>; <code>ls [-a] [dir]</code> (tên sắp xếp, mỗi dòng một tên; tên bắt đầu bằng <code>.</code> chỉ hiện với <code>-a</code>); <code>rm [-r] path</code>; <code>rmdir dir</code>. Lỗi (code 1), đúng chữ: <code>\"cd: X: No such file or directory\"</code>, <code>\"mkdir: X: File exists\"</code>, <code>\"mkdir: X: No such file or directory\"</code> (thiếu cha, không -p), <code>\"ls: X: No such file or directory\"</code>, <code>\"rm: X: is a directory\"</code> (thiếu -r), <code>\"rm: X: No such file or directory\"</code>, <code>\"rmdir: X: Directory not empty\"</code>. X là đối số như người dùng gõ. Lệnh lạ ⇒ <code>\"bash: X: command not found\"</code>, code 127. Thành công: code 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>cwd và cd - nhớ thư mục trước.</li>\n  <li>Đúng thông báo và mã thoát.</li>\n  <li>ls ẩn tệp chấm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "line: string.",
+      "outputSpec": "{ out, code }.",
+      "constraints": "Tự viết hàm tính đường dẫn (có thể chép từ bài 1).\nKhông cần nháy hay *.",
+      "examplesJson": [
+        {
+          "input": "sh.run(\"mkdir my project\"); sh.run(\"ls\")",
+          "output": "{ out: \"my\\nproject\", code: 0 }",
+          "explanation": "Hai thư mục, như trong bài."
+        }
+      ],
+      "hintsJson": [
+        "Lưu cây: const root = { Users: { lan: {} } }; thư mục = object, tệp = null hoặc \"\".",
+        "Hàm lookup(absPath) đi từng đoạn; parentOf(absPath) cho mkdir/touch/rm."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — một shell thu nhỏ\nfunction createShell(home = '/Users/lan') {\n  return { run: (line) => ({ out: '', code: 0 }) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.1 — hệ thống tệp = object lồng (thư mục) + chuỗi (tệp); mọi đường dẫn được tính về tuyệt đối trước\nfunction createShell(home = '/Users/lan') {\n  const root = {};\n  let node = root;\n  for (const p of home.split('/').filter(Boolean)) node = node[p] = {};\n  let cwd = home, prev = home;\n\n  const resolve = (input) => {\n    let base = cwd;\n    if (input.startsWith('/')) base = '';\n    else if (input === '~' || input.startsWith('~/')) { base = home; input = input.slice(1); }\n    const stack = [];\n    for (const part of (base + '/' + input).split('/')) {\n      if (!part || part === '.') continue;\n      if (part === '..') stack.pop(); else stack.push(part);\n    }\n    return '/' + stack.join('/');\n  };\n  const lookup = (abs) => {\n    let n = root;\n    for (const p of abs.split('/').filter(Boolean)) {\n      if (typeof n !== 'object' || n === null || !(p in n)) return undefined;\n      n = n[p];\n    }\n    return n;\n  };\n  const split = (abs) => { const i = abs.lastIndexOf('/'); return [abs.slice(0, i) || '/', abs.slice(i + 1)]; };\n  const isDir = (n) => typeof n === 'object' && n !== null;\n  const ok = (out = '') => ({ out, code: 0 });\n  const fail = (out, code = 1) => ({ out, code });\n\n  const cmds = {\n    pwd: () => ok(cwd),\n    cd: (args) => {\n      const target = args[0] === undefined ? home : args[0] === '-' ? prev : resolve(args[0]);\n      if (!isDir(lookup(target))) return fail('cd: ' + args[0] + ': No such file or directory');\n      prev = cwd; cwd = target;\n      return ok(args[0] === '-' ? cwd : '');\n    },\n    mkdir: (args) => {\n      const p = args[0] === '-p';\n      for (const a of p ? args.slice(1) : args) {\n        const abs = resolve(a);\n        if (lookup(abs) !== undefined) { if (p && isDir(lookup(abs))) continue; return fail('mkdir: ' + a + ': File exists'); }\n        if (p) { let n = root; for (const s of abs.split('/').filter(Boolean)) n = n[s] ??= {}; continue; }\n        const [dir, name] = split(abs);\n        const parent = lookup(dir);\n        if (!isDir(parent)) return fail('mkdir: ' + a + ': No such file or directory');\n        parent[name] = {};\n      }\n      return ok();\n    },\n    touch: (args) => {\n      for (const a of args) {\n        const [dir, name] = split(resolve(a));\n        const parent = lookup(dir);\n        if (!isDir(parent)) return fail('touch: ' + a + ': No such file or directory');\n        if (!(name in parent)) parent[name] = '';\n      }\n      return ok();\n    },\n    ls: (args) => {\n      const all = args[0] === '-a';\n      const target = (all ? args[1] : args[0]) ?? '.';\n      const n = lookup(resolve(target));\n      if (n === undefined) return fail('ls: ' + target + ': No such file or directory');\n      if (!isDir(n)) return ok(target);\n      const names = Object.keys(n).filter((k) => all || !k.startsWith('.')).sort();\n      return ok((all ? ['.', '..', ...names] : names).join('\\n'));\n    },\n    rm: (args) => {\n      const r = args[0] === '-r';\n      const a = r ? args[1] : args[0];\n      const abs = resolve(a);\n      const n = lookup(abs);\n      if (n === undefined) return fail('rm: ' + a + ': No such file or directory');\n      if (isDir(n) && !r) return fail('rm: ' + a + ': is a directory');\n      const [dir, name] = split(abs);\n      delete lookup(dir)[name];\n      return ok();\n    },\n    rmdir: (args) => {\n      const abs = resolve(args[0]);\n      const n = lookup(abs);\n      if (!isDir(n)) return fail('rmdir: ' + args[0] + ': No such file or directory');\n      if (Object.keys(n).length) return fail('rmdir: ' + args[0] + ': Directory not empty');\n      const [dir, name] = split(abs);\n      delete lookup(dir)[name];\n      return ok();\n    },\n  };\n\n  function run(line) {\n    const [cmd, ...args] = line.trim().split(/\\s+/);\n    if (!Object.hasOwn(cmds, cmd)) return fail('bash: ' + cmd + ': command not found', 127);\n    return cmds[cmd](args);\n  }\n  return { run };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Gộp mọi thứ của bài: đường dẫn tính từ cwd, <code>cd -</code> nhớ thư mục trước, <code>rmdir</code> từ chối thư mục không rỗng còn <code>rm -r</code> thì không, tệp chấm bị ẩn, và mã thoát 0/1/127 mà <code>&amp;&amp;</code>, CI và <code>npm test</code> đọc.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>cd thất bại mà vẫn đổi cwd.</li>\n  <li>mkdir -p báo lỗi khi thư mục đã có.</li>\n  <li>ls -a thiếu . và ..</li>\n  <li>Lệnh lạ trả code 1.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.1 The terminal.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Navigate like the lesson|||Di chuyển như trong bài",
+            "goi": "(() => { const sh = createShell(); const r = (l) => sh.run(l).out; sh.run(\"mkdir -p projects/shop/src projects/blog\"); sh.run(\"cd projects/shop/src\"); const a = r(\"pwd\"); sh.run(\"cd ../..\"); const b = r(\"pwd\"); sh.run(\"cd blog\"); sh.run(\"cd ../shop\"); return [a, b, r(\"cd -\"), r(\"pwd\"), (sh.run(\"cd\"), r(\"pwd\"))]; })()",
+            "mongDoi": [
+              "/Users/lan/projects/shop/src",
+              "/Users/lan/projects",
+              "/Users/lan/projects/blog",
+              "/Users/lan/projects/blog",
+              "/Users/lan"
+            ]
+          },
+          {
+            "moTa": "mkdir my project, hidden files|||mkdir my project, tệp ẩn",
+            "goi": "(() => { const sh = createShell(); sh.run(\"mkdir my project\"); sh.run(\"touch .env index.html\"); return [sh.run(\"ls\").out, sh.run(\"ls -a\").out]; })()",
+            "mongDoi": [
+              "index.html\nmy\nproject",
+              ".\n..\n.env\nindex.html\nmy\nproject"
+            ]
+          },
+          {
+            "moTa": "Errors and exit codes|||Lỗi và mã thoát",
+            "goi": "(() => { const sh = createShell(); sh.run(\"mkdir old\"); sh.run(\"touch old/a.html\"); return [sh.run(\"cd shop\"), sh.run(\"mkdir old\"), sh.run(\"mkdir x/y\"), sh.run(\"rmdir old\"), sh.run(\"rm old\"), sh.run(\"rm -r old\"), sh.run(\"ls old\"), sh.run(\"nodee -v\")]; })()",
+            "mongDoi": [
+              {
+                "out": "cd: shop: No such file or directory",
+                "code": 1
+              },
+              {
+                "out": "mkdir: old: File exists",
+                "code": 1
+              },
+              {
+                "out": "mkdir: x/y: No such file or directory",
+                "code": 1
+              },
+              {
+                "out": "rmdir: old: Directory not empty",
+                "code": 1
+              },
+              {
+                "out": "rm: old: is a directory",
+                "code": 1
+              },
+              {
+                "out": "",
+                "code": 0
+              },
+              {
+                "out": "ls: old: No such file or directory",
+                "code": 1
+              },
+              {
+                "out": "bash: nodee: command not found",
+                "code": 127
+              }
+            ]
+          },
+          {
+            "moTa": "A failed cd does not move you|||cd hỏng không đổi chỗ",
+            "goi": "(() => { const sh = createShell(); sh.run(\"touch file.txt\"); sh.run(\"cd file.txt\"); sh.run(\"cd nowhere\"); return sh.run(\"pwd\"); })()",
+            "mongDoi": {
+              "out": "/Users/lan",
+              "code": 0
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "cd thất bại mà vẫn đổi cwd."
+        },
+        {
+          "loi": "mkdir -p báo lỗi khi thư mục đã có."
+        },
+        {
+          "loi": "ls -a thiếu . và .."
+        },
+        {
+          "loi": "Lệnh lạ trả code 1."
+        }
+      ]
+    }
+  ]
+}

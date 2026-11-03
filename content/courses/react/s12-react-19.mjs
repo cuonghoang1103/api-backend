@@ -1036,6 +1036,21 @@ ${LINK('https://react.dev/reference/react/useDeferredValue', '📄', 'react.dev 
 ${LINK('https://reactrouter.com/api/hooks/useSearchParams', '🧭', 'React Router — useSearchParams', 'setSearchParams và các tuỳ chọn điều hướng (flushSync).')}
 ${LINK('https://web.dev/articles/inp', '⏱', 'web.dev — Interaction to Next Paint', 'Chỉ số đứng sau Event Timing; 200 ms là "tốt".')}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.2 — Transitions and animations</span><span class="lc-sub">Cheap vs expensive properties, transitionend, reduced motion — measured</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.2 — Transition và animation</span><span class="lc-sub">Thuộc tính rẻ và đắt, transitionend, giảm chuyển động — có số đo</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };
 

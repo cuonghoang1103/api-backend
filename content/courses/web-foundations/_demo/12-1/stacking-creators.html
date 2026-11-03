@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Which properties create a stacking context?</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; }
+  .row { position: relative; height: 40px; margin: 6px 0; }
+  .parent { position: absolute; inset: 0; }
+  .child { position: absolute; inset: 0; z-index: 999; background: rgba(37, 99, 235, .3); }
+  .cover { position: absolute; inset: 0; z-index: 5; background: rgba(220, 38, 38, .3); }
+</style>
+</head>
+<body>
+  <div id="rows"></div>
+  <script>
+    const tests = {
+      'nothing special': '',
+      'opacity: 0.99': 'opacity:.99',
+      'transform: translateX(0)': 'transform:translateX(0)',
+      'filter: blur(0)': 'filter:blur(0)',
+      'z-index: 1 (positioned)': 'z-index:1',
+      'isolation: isolate': 'isolation:isolate',
+      'will-change: transform': 'will-change:transform',
+    };
+    const rows = document.getElementById('rows');
+    for (const [label, css] of Object.entries(tests)) {
+      const row = document.createElement('div');
+      row.className = 'row';
+      row.innerHTML = '<div class="parent" style="' + css + '"><div class="child"></div></div><div class="cover"></div>';
+      rows.append(row);
+      const r = row.getBoundingClientRect();
+      const top = document.elementFromPoint(r.left + 10, r.top + 10).className;
+      console.log(label.padEnd(26), '→ child z-index 999 on top of cover z-index 5?', top === 'child' ? 'yes' : 'NO — trapped in a stacking context');
+    }
+  </script>
+</body>
+</html>

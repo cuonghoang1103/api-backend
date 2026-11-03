@@ -1,0 +1,6 @@
+a type property = submit
+form submitted by a
+b type property = button
+c type property = submit
+form submitted by c
+total submits: 2

@@ -1,0 +1,24 @@
+$ curl -s 'http://localhost:3456/api/products?category=office'
+{"items":[{"id":1,"name":"Notebook","price":25000,"category":"office"},{"id":3,"name":"Pen","price":5000,"category":"office"},{"id":5,"name":"Stapler","price":45000,"category":"office"}],"page":1,"limit":10,"total":3}
+
+$ curl -s 'http://localhost:3456/api/products?category=office&sort=-price'
+{"items":[{"id":5,"name":"Stapler","price":45000,"category":"office"},{"id":1,"name":"Notebook","price":25000,"category":"office"},{"id":3,"name":"Pen","price":5000,"category":"office"}],"page":1,"limit":10,"total":3}
+
+$ curl -s 'http://localhost:3456/api/products?page=2&limit=2'
+{"items":[{"id":3,"name":"Pen","price":5000,"category":"office"},{"id":4,"name":"Mug","price":60000,"category":"home"}],"page":2,"limit":2,"total":7}
+
+$ curl -s 'http://localhost:3456/api/products?q=desk%20lamp'
+{"items":[{"id":2,"name":"Desk lamp","price":299000,"category":"other"}],"page":1,"limit":10,"total":1}
+
+$ curl -sS 'http://localhost:3456/api/products?q=desk lamp' 2>&1
+curl: (3) URL rejected: Malformed input to a URL function
+
+$ curl -s http://localhost:3456/api/products/abc
+{"error":"Product abc not found"}
+
+$ curl -s 'http://localhost:3456/api/products?limit=abc'
+{"items":[],"page":1,"limit":null,"total":7}
+
+$ curl -s 'http://localhost:3456/api/products?limit=1000' | grep -o '"limit":[0-9]*'
+"limit":50
+

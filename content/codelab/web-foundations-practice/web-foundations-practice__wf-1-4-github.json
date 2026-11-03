@@ -1,0 +1,629 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-1-4-github",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-1-4-github"
+  },
+  "exercises": [
+    {
+      "title": "Đọc URL của remote",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "URL HTTPS",
+        "URL SSH kiểu scp",
+        "regex có nhóm"
+      ],
+      "prerequisites": [
+        "regex",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Viết <code>parseRemote(url)</code> trả <code>{ protocol, host, owner, repo }</code> cho ba dạng URL GitHub đưa ra: <code>https://github.com/an/ct-shop.git</code> (protocol <code>\"https\"</code>), <code>git@github.com:an/ct-shop.git</code> và <code>ssh://git@github.com/an/ct-shop.git</code> (cả hai protocol <code>\"ssh\"</code>). Đuôi <code>.git</code> và dấu <code>/</code> cuối là tuỳ chọn và không thuộc tên repo. Dạng khác ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhận đủ ba dạng.</li>\n  <li>Bỏ .git và / cuối.</li>\n  <li>Sai dạng ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "url: string.",
+      "outputSpec": "object | null.",
+      "constraints": "owner và repo không chứa \"/\".",
+      "examplesJson": [
+        {
+          "input": "parseRemote(\"git@github.com:an/ct-shop.git\")",
+          "output": "{ protocol: \"ssh\", host: \"github.com\", owner: \"an\", repo: \"ct-shop\" }",
+          "explanation": "Dạng SSH trong bước 7 của bài."
+        }
+      ],
+      "hintsJson": [
+        "Ba regex, mỗi dạng một cái; nhóm cuối: ([^/]+?)(?:\\.git)?\\/?$",
+        "Dạng scp: /^git@([^:]+):([^/]+)\\/([^/]+?)(?:\\.git)?\\/?$/"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — đọc URL remote\nfunction parseRemote(url) {\n  const parts = url.split('/');\n  return { protocol: 'https', host: parts[2], owner: parts[3], repo: parts[4] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — đọc URL remote: ba dạng, ba regex\nconst FORMS = [\n  ['https', /^https:\\/\\/([^/]+)\\/([^/]+)\\/([^/]+?)(?:\\.git)?\\/?$/],\n  ['ssh', /^git@([^:]+):([^/]+)\\/([^/]+?)(?:\\.git)?\\/?$/],            // dạng scp: git@host:owner/repo\n  ['ssh', /^ssh:\\/\\/git@([^/]+)\\/([^/]+)\\/([^/]+?)(?:\\.git)?\\/?$/],\n];\n\nfunction parseRemote(url) {\n  for (const [protocol, re] of FORMS) {\n    const m = re.exec(url.trim());\n    if (m) return { protocol, host: m[1], owner: m[2], repo: m[3] };\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dạng <code>git@github.com:an/repo</code> trông lạ vì nó mượn cú pháp của lệnh <code>scp</code>: dấu hai chấm ngăn tên máy với đường dẫn. Nhóm lười <code>+?</code> cùng <code>(?:\\.git)?</code> là cách để <code>.git</code> không lọt vào tên repo.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Nhóm tham lam — repo thành \"ct-shop.git\".</li>\n  <li>Chỉ nhận dạng HTTPS.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.github.com/en/get-started/git-basics/about-remote-repositories",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "HTTPS and SSH forms|||Dạng HTTPS và SSH",
+            "goi": "[parseRemote(\"https://github.com/an/ct-shop.git\"), parseRemote(\"git@github.com:an/ct-shop.git\")]",
+            "mongDoi": [
+              {
+                "protocol": "https",
+                "host": "github.com",
+                "owner": "an",
+                "repo": "ct-shop"
+              },
+              {
+                "protocol": "ssh",
+                "host": "github.com",
+                "owner": "an",
+                "repo": "ct-shop"
+              }
+            ]
+          },
+          {
+            "moTa": "ssh:// URL, no .git, trailing slash|||URL ssh://, không .git, có / cuối",
+            "goi": "[parseRemote(\"ssh://git@gitlab.com/team/web-app\"), parseRemote(\"https://github.com/an/my.site/\")]",
+            "mongDoi": [
+              {
+                "protocol": "ssh",
+                "host": "gitlab.com",
+                "owner": "team",
+                "repo": "web-app"
+              },
+              {
+                "protocol": "https",
+                "host": "github.com",
+                "owner": "an",
+                "repo": "my.site"
+              }
+            ]
+          },
+          {
+            "moTa": "Not a remote URL ⇒ null|||Không phải URL remote ⇒ null",
+            "goi": "[parseRemote(\"github.com/an/x\"), parseRemote(\"https://github.com/an\")]",
+            "mongDoi": [
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhóm tham lam — repo thành \"ct-shop.git\"."
+        },
+        {
+          "loi": "Chỉ nhận dạng HTTPS."
+        }
+      ]
+    },
+    {
+      "title": "Dòng git status -sb",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "upstream",
+        "ahead/behind",
+        "định dạng chuỗi"
+      ],
+      "prerequisites": [
+        "template string",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Viết <code>statusLine(branch, upstream, ahead, behind)</code> trả đúng dòng đầu mà <code>git status -sb</code> in: không có upstream (<code>null</code>) ⇒ <code>\"## main\"</code>; có upstream ⇒ <code>\"## main...origin/main\"</code>, thêm <code>\" [ahead 1]\"</code>, <code>\" [behind 2]\"</code> hoặc <code>\" [ahead 1, behind 2]\"</code> khi khác 0.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba trường hợp ngoặc vuông đúng định dạng.</li>\n  <li>Không có upstream thì không có \"...\" và ngoặc.</li>\n  <li>Số 0 không hiện.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "branch: string; upstream: string | null; ahead, behind: số.",
+      "outputSpec": "string.",
+      "constraints": "ahead, behind là số nguyên ≥ 0.",
+      "examplesJson": [
+        {
+          "input": "statusLine(\"main\", \"origin/main\", 1, 0)",
+          "output": "\"## main...origin/main [ahead 1]\"",
+          "explanation": "Đúng output ở bước 3 của bài."
+        }
+      ],
+      "hintsJson": [
+        "const parts = []; if (ahead) parts.push(\"ahead \" + ahead); …",
+        "parts.length ? \" [\" + parts.join(\", \") + \"]\" : \"\""
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — status -sb\nfunction statusLine(branch, upstream, ahead, behind) {\n  return '## ' + branch + '...' + upstream;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — dòng đầu của git status -sb\nfunction statusLine(branch, upstream, ahead, behind) {\n  if (!upstream) return '## ' + branch;                 // chưa push -u: không có nhánh theo dõi\n  const parts = [];\n  if (ahead) parts.push('ahead ' + ahead);\n  if (behind) parts.push('behind ' + behind);\n  return '## ' + branch + '...' + upstream + (parts.length ? ' [' + parts.join(', ') + ']' : '');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một dòng này trả lời hai câu quan trọng nhất trước khi gập laptop: còn commit chưa push không (ahead), và có việc của người khác chưa pull không (behind). Không có upstream nghĩa là nhánh chưa từng được <code>push -u</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>In \"[ahead 0]\".</li>\n  <li>Quên trường hợp chưa có upstream.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-status#_short_format",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson outputs|||Các output của bài",
+            "goi": "[statusLine(\"main\", \"origin/main\", 0, 0), statusLine(\"main\", \"origin/main\", 1, 0)]",
+            "mongDoi": [
+              "## main...origin/main",
+              "## main...origin/main [ahead 1]"
+            ]
+          },
+          {
+            "moTa": "Behind, and both|||Behind, và cả hai",
+            "goi": "[statusLine(\"main\", \"origin/main\", 0, 2), statusLine(\"feature/cart\", \"origin/feature/cart\", 3, 1)]",
+            "mongDoi": [
+              "## main...origin/main [behind 2]",
+              "## feature/cart...origin/feature/cart [ahead 3, behind 1]"
+            ]
+          },
+          {
+            "moTa": "No upstream yet|||Chưa có upstream",
+            "goi": "statusLine(\"feature/x\", null, 2, 0)",
+            "mongDoi": "## feature/x"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "In \"[ahead 0]\"."
+        },
+        {
+          "loi": "Quên trường hợp chưa có upstream."
+        }
+      ]
+    },
+    {
+      "title": "Đếm ahead / behind",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tổ tiên chung",
+        "lịch sử tuyến tính"
+      ],
+      "prerequisites": [
+        "mảng",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Lịch sử mỗi bên là mảng mã commit từ cũ tới mới (giả định lịch sử thẳng, không có merge). Viết <code>aheadBehind(local, remote)</code> trả <code>{ ahead, behind, base }</code>: <code>base</code> là commit chung MỚI NHẤT (<code>null</code> nếu không có), <code>ahead</code> = số commit của local sau <code>base</code>, <code>behind</code> = số commit của remote sau <code>base</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tìm commit chung mới nhất.</li>\n  <li>Không có gì chung ⇒ base null, đếm toàn bộ.</li>\n  <li>Không sửa mảng vào.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "local, remote: string[] (cũ → mới).",
+      "outputSpec": "{ ahead, behind, base }.",
+      "constraints": "Lịch sử tuyến tính.",
+      "examplesJson": [
+        {
+          "input": "aheadBehind([\"8161c6f\",\"6ea36d0\",\"b1\"], [\"8161c6f\",\"6ea36d0\",\"a8272b6\"])",
+          "output": "{ ahead: 1, behind: 1, base: \"6ea36d0\" }",
+          "explanation": "Đúng lúc An push bị từ chối ở bước 5."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt i từ 0 khi local[i] === remote[i]; base là phần tử cuối cùng bằng nhau.",
+        "ahead = local.length - (i), behind = remote.length - (i)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — ahead/behind\nfunction aheadBehind(local, remote) {\n  return { ahead: local.length - remote.length, behind: 0, base: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — ahead/behind: đi chung tới khi rẽ nhánh\nfunction aheadBehind(local, remote) {\n  let i = 0;\n  while (i < local.length && i < remote.length && local[i] === remote[i]) i++;   // tiền tố chung\n  return {\n    ahead: local.length - i,                    // commit chỉ có ở máy bạn\n    behind: remote.length - i,                  // commit chỉ có trên remote\n    base: i > 0 ? local[i - 1] : null,          // commit chung mới nhất\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi cả ahead lẫn behind đều lớn hơn 0, hai bên đã <em>rẽ nhánh</em> — đúng tình huống push bị từ chối. <code>git pull --rebase</code> đưa behind về 0 (lấy commit của remote) rồi đặt commit của bạn lên trên, nên lúc đó chỉ còn ahead.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lấy hiệu độ dài — sai khi hai bên rẽ nhánh.</li>\n  <li>Dùng includes cho từng commit — chậm và sai thứ tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-rev-list#Documentation/git-rev-list.txt---left-right",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Diverged: ahead 1, behind 1|||Rẽ nhánh: ahead 1, behind 1",
+            "goi": "aheadBehind([\"8161c6f\", \"6ea36d0\", \"b1\"], [\"8161c6f\", \"6ea36d0\", \"a8272b6\"])",
+            "mongDoi": {
+              "ahead": 1,
+              "behind": 1,
+              "base": "6ea36d0"
+            }
+          },
+          {
+            "moTa": "Only ahead, only behind, equal|||Chỉ ahead, chỉ behind, bằng nhau",
+            "goi": "[aheadBehind([\"a\", \"b\", \"c\"], [\"a\"]), aheadBehind([\"a\"], [\"a\", \"b\"]), aheadBehind([\"a\", \"b\"], [\"a\", \"b\"])]",
+            "mongDoi": [
+              {
+                "ahead": 2,
+                "behind": 0,
+                "base": "a"
+              },
+              {
+                "ahead": 0,
+                "behind": 1,
+                "base": "a"
+              },
+              {
+                "ahead": 0,
+                "behind": 0,
+                "base": "b"
+              }
+            ]
+          },
+          {
+            "moTa": "Nothing in common|||Không có gì chung",
+            "goi": "aheadBehind([\"x\"], [\"a\", \"b\"])",
+            "mongDoi": {
+              "ahead": 1,
+              "behind": 2,
+              "base": null
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy hiệu độ dài — sai khi hai bên rẽ nhánh."
+        },
+        {
+          "loi": "Dùng includes cho từng commit — chậm và sai thứ tự."
+        }
+      ]
+    },
+    {
+      "title": "Push sẽ ra sao?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "fast-forward",
+        "rejected (fetch first)",
+        "up-to-date"
+      ],
+      "prerequisites": [
+        "mảng",
+        "điều kiện"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Viết <code>pushResult(local, remote, branch = \"main\")</code> (lịch sử cũ → mới, mã commit 7 ký tự) trả đúng dòng git in ra: hai bên giống nhau ⇒ <code>\"Everything up-to-date\"</code>; remote rỗng ⇒ <code>\" * [new branch]      main -&gt; main\"</code>; remote là tiền tố của local ⇒ fast-forward <code>\"   8161c6f..6ea36d0  main -&gt; main\"</code> (cũ..mới); còn lại ⇒ <code>\" ! [rejected]        main -&gt; main (fetch first)\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đủ bốn trường hợp.</li>\n  <li>Khoảng trắng đúng như git (3 dấu cách đầu dòng fast-forward; cột 20 cho nhãn).</li>\n  <li>Tham số branch tuỳ chọn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "local, remote: string[]; branch?: string.",
+      "outputSpec": "string.",
+      "constraints": "Lịch sử tuyến tính, không cần xét force.",
+      "examplesJson": [
+        {
+          "input": "pushResult([\"8161c6f\",\"6ea36d0\"], [\"8161c6f\"])",
+          "output": "\"   8161c6f..6ea36d0  main -> main\"",
+          "explanation": "Bước 3 của bài."
+        }
+      ],
+      "hintsJson": [
+        "Nhãn đệm tới 18 ký tự: \"[new branch]\".padEnd(18) và \"[rejected]\".padEnd(18).",
+        "Tiền tố: remote.every((c, i) => local[i] === c) && local.length > remote.length."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — kết quả push\nfunction pushResult(local, remote, branch = 'main') {\n  return 'Everything up-to-date';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — kết quả push: chỉ nhận khi remote không mất commit nào\nfunction pushResult(local, remote, branch = 'main') {\n  const ref = branch + ' -> ' + branch;\n  if (local.length === remote.length && local.every((c, i) => c === remote[i])) return 'Everything up-to-date';\n  if (remote.length === 0) return ' * ' + '[new branch]'.padEnd(18) + ref;\n  const isPrefix = remote.length < local.length && remote.every((c, i) => local[i] === c);\n  if (isPrefix) return '   ' + remote[remote.length - 1] + '..' + local[local.length - 1] + '  ' + ref;   // fast-forward\n  return ' ! ' + '[rejected]'.padEnd(18) + ref + ' (fetch first)';      // remote có commit bạn chưa có\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Quy tắc của push chỉ có một câu: remote chỉ được <em>tiến lên</em> (fast-forward), không bao giờ mất commit. Nếu remote có thứ local không chứa, nhận push là xoá công sức của người khác — nên git từ chối và bảo bạn fetch trước.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi local dài hơn là được push — sai khi rẽ nhánh.</li>\n  <li>Sai khoảng trắng — so sánh output thất bại.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-push#_note_about_fast_forwards",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Fast-forward and new branch|||Fast-forward và nhánh mới",
+            "goi": "[pushResult([\"8161c6f\", \"6ea36d0\"], [\"8161c6f\"]), pushResult([\"12c727d\"], [], \"feature/cart\")]",
+            "mongDoi": [
+              "   8161c6f..6ea36d0  main -> main",
+              " * [new branch]      feature/cart -> feature/cart"
+            ]
+          },
+          {
+            "moTa": "Rejected when the remote has new work|||Bị từ chối khi remote có việc mới",
+            "goi": "pushResult([\"8161c6f\", \"6ea36d0\", \"b1aaaaa\"], [\"8161c6f\", \"6ea36d0\", \"a8272b6\"])",
+            "mongDoi": " ! [rejected]        main -> main (fetch first)"
+          },
+          {
+            "moTa": "Up to date; behind-only is also rejected|||Đã khớp; chỉ đi sau cũng bị từ chối",
+            "goi": "[pushResult([\"a\"], [\"a\"]), pushResult([\"a\"], [\"a\", \"b\"])]",
+            "mongDoi": [
+              "Everything up-to-date",
+              " ! [rejected]        main -> main (fetch first)"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi local dài hơn là được push — sai khi rẽ nhánh."
+        },
+        {
+          "loi": "Sai khoảng trắng — so sánh output thất bại."
+        }
+      ]
+    },
+    {
+      "title": "Soát lời nhắn commit",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "dòng tiêu đề",
+        "thân commit",
+        "kiểm tra quy tắc"
+      ],
+      "prerequisites": [
+        "split",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Viết <code>lintCommit(message)</code> trả mảng vấn đề (rỗng = tốt), theo thứ tự: tiêu đề (dòng 1, đã trim) rỗng ⇒ <code>\"empty subject\"</code> (và dừng); dài hơn 72 ký tự ⇒ <code>\"subject longer than 72\"</code>; kết thúc bằng dấu chấm ⇒ <code>\"subject ends with a period\"</code>; là một trong <code>\"update\" \"fix\" \"wip\" \"changes\" \"asdf\"</code> (không phân biệt hoa thường) ⇒ <code>\"subject says nothing\"</code>; có thân mà dòng 2 không trống ⇒ <code>\"missing blank line after subject\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự năm quy tắc.</li>\n  <li>Tiêu đề rỗng thì chỉ báo một lỗi.</li>\n  <li>Không có thân thì bỏ quy tắc cuối.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "message: string.",
+      "outputSpec": "string[].",
+      "constraints": "Độ dài tính bằng số ký tự của dòng đầu đã trim.",
+      "examplesJson": [
+        {
+          "input": "lintCommit(\"Add home page\")",
+          "output": "[]",
+          "explanation": "Một tiêu đề ngắn, nói rõ làm gì."
+        }
+      ],
+      "hintsJson": [
+        "const lines = message.split(\"\\n\"); const subject = lines[0].trim();",
+        "Có thân khi lines.length > 1 và có dòng nào từ dòng 2 trở đi không rỗng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — soát lời nhắn commit\nfunction lintCommit(message) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — soát lời nhắn commit: tiêu đề ngắn, có nghĩa, cách thân một dòng trống\nconst VAGUE = ['update', 'fix', 'wip', 'changes', 'asdf'];\n\nfunction lintCommit(message) {\n  const lines = message.split('\\n');\n  const subject = lines[0].trim();\n  if (subject === '') return ['empty subject'];\n  const problems = [];\n  if (subject.length > 72) problems.push('subject longer than 72');\n  if (subject.endsWith('.')) problems.push('subject ends with a period');\n  if (VAGUE.includes(subject.toLowerCase())) problems.push('subject says nothing');\n  const hasBody = lines.slice(1).some((l) => l.trim() !== '');\n  if (hasBody && lines[1].trim() !== '') problems.push('missing blank line after subject');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tiêu đề commit hiện ở mọi nơi: <code>git log --oneline</code>, trang lịch sử GitHub, tiêu đề pull request. Dưới 72 ký tự để không bị cắt; dòng trống để git tách tiêu đề khỏi thân. Một tiêu đề \"fix\" không giúp ai sáu tháng sau.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đếm độ dài cả thông điệp thay vì dòng đầu.</li>\n  <li>Báo thiếu dòng trống khi không có thân.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cbea.ms/git-commit/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Good messages from the lesson|||Lời nhắn tốt trong bài",
+            "goi": "[lintCommit(\"Add home page\"), lintCommit(\"Document how to run\\n\\nExplain npm run dev.\")]",
+            "mongDoi": [
+              [],
+              []
+            ]
+          },
+          {
+            "moTa": "Several problems in order|||Nhiều vấn đề theo thứ tự",
+            "goi": "lintCommit(\"Fix.\\nmore text\")",
+            "mongDoi": [
+              "subject ends with a period",
+              "missing blank line after subject"
+            ]
+          },
+          {
+            "moTa": "Vague, too long, empty|||Mơ hồ, quá dài, rỗng",
+            "goi": "[lintCommit(\"WIP\"), lintCommit(\"x\".repeat(73)), lintCommit(\"   \\n\\nbody\")]",
+            "mongDoi": [
+              [
+                "subject says nothing"
+              ],
+              [
+                "subject longer than 72"
+              ],
+              [
+                "empty subject"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đếm độ dài cả thông điệp thay vì dòng đầu."
+        },
+        {
+          "loi": "Báo thiếu dòng trống khi không có thân."
+        }
+      ]
+    },
+    {
+      "title": "Khớp mẫu .gitignore",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "glob",
+        "phủ định !",
+        "mẫu thư mục",
+        "luật cuối thắng"
+      ],
+      "prerequisites": [
+        "regex",
+        "split"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 1.4 — GitHub: mã của bạn trên đám mây.</em> Các output trong bài (status -sb, push bị từ chối, .gitignore) đều do đúng những quy tắc này sinh ra.</p><p>Viết <code>isIgnored(path, gitignore)</code>: <code>path</code> là đường dẫn file từ gốc dự án (vd <code>\"src/app.log\"</code>), <code>gitignore</code> là nội dung file. Quy tắc (bản rút gọn của git): bỏ dòng trống và dòng <code>#</code>; <code>!mẫu</code> là phủ định (bỏ-bỏ-qua); mẫu kết thúc bằng <code>/</code> chỉ khớp THƯ MỤC (một thành phần thư mục trong đường dẫn); mẫu không chứa <code>/</code> (ngoài dấu cuối) khớp với BẤT KỲ thành phần nào của đường dẫn; mẫu có <code>/</code> ở đầu hoặc giữa thì neo từ gốc và khớp tiền tố theo thành phần; <code>*</code> khớp mọi ký tự trừ <code>/</code>, <code>?</code> khớp một ký tự trừ <code>/</code>. Dòng khớp CUỐI CÙNG quyết định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phủ định và luật cuối thắng.</li>\n  <li>Mẫu thư mục chỉ khớp thư mục.</li>\n  <li>Mẫu có / được neo gốc.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "path: string; gitignore: string.",
+      "outputSpec": "boolean.",
+      "constraints": "Không cần ** và không cần ký tự thoát.",
+      "examplesJson": [
+        {
+          "input": "isIgnored(\".env\", \"node_modules/\\ndist/\\n.env\")",
+          "output": "true",
+          "explanation": "Đúng .gitignore của bài."
+        }
+      ],
+      "hintsJson": [
+        "globToRe(p) = new RegExp(\"^\" + p.replace(/[.+^${}()|[\\]\\\\]/g, \"\\\\$&\").replace(/\\*/g, \"[^/]*\").replace(/\\?/g, \"[^/]\") + \"$\")",
+        "Thành phần: const parts = path.split(\"/\"); thư mục = parts.slice(0, -1); file = parts.at(-1)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — .gitignore\nfunction isIgnored(path, gitignore) {\n  return gitignore.split('\\n').includes(path);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.4 — .gitignore: duyệt mọi dòng, dòng khớp cuối cùng quyết định\nconst globToRe = (p) => new RegExp('^' + p.replace(/[.+^${}()|[\\]\\\\]/g, '\\\\$&').replace(/\\*/g, '[^/]*').replace(/\\?/g, '[^/]') + '$');\n\nfunction matches(pattern, path) {\n  const parts = path.split('/');\n  const dirOnly = pattern.endsWith('/');\n  let p = dirOnly ? pattern.slice(0, -1) : pattern;\n  const anchored = p.includes('/');                      // có / ở đầu hoặc giữa ⇒ neo gốc\n  if (p.startsWith('/')) p = p.slice(1);\n  if (!anchored) {\n    const re = globToRe(p);\n    const candidates = dirOnly ? parts.slice(0, -1) : parts; // mẫu thư mục chỉ xét thành phần thư mục\n    return candidates.some((seg) => re.test(seg));\n  }\n  const pp = p.split('/');\n  const limit = dirOnly ? parts.length - 1 : parts.length;  // mẫu thư mục không được khớp chính tên file\n  if (pp.length > limit) return false;\n  return pp.every((seg, i) => globToRe(seg).test(parts[i])); // khớp tiền tố theo thành phần\n}\n\nfunction isIgnored(path, gitignore) {\n  let ignored = false;\n  for (const raw of gitignore.split(/\\r?\\n/)) {\n    const line = raw.trim();\n    if (!line || line.startsWith('#')) continue;\n    const negate = line.startsWith('!');\n    if (matches(negate ? line.slice(1) : line, path)) ignored = !negate;   // luật sau đè luật trước\n  }\n  return ignored;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai quy tắc làm người mới bối rối nhất: luật sau đè luật trước (nên <code>!keep.log</code> phải đứng SAU <code>*.log</code>), và mẫu không có <code>/</code> khớp ở mọi tầng thư mục (<code>node_modules/</code> bỏ qua cả <code>packages/a/node_modules</code>). Khi nghi ngờ, <code>git check-ignore -v &amp;lt;file&amp;gt;</code> cho biết đúng dòng nào thắng — như ở bước 2 của bài.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt !keep.log trước *.log — không có tác dụng.</li>\n  <li>Coi mọi mẫu là neo gốc — node_modules lồng nhau lọt vào commit.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.4 GitHub.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/gitignore#_pattern_format",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson .gitignore|||.gitignore của bài",
+            "chuanBi": "const G = \"node_modules/\\ndist/\\n.env\\n\";",
+            "goi": "[\".env\", \"node_modules/react/index.js\", \"dist/assets/a.js\", \"src/main.js\", \"README.md\"].map((p) => isIgnored(p, G))",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Wildcards and negation: the last match wins|||Ký tự đại diện và phủ định: dòng khớp cuối thắng",
+            "chuanBi": "const G = \"# logs\\n*.log\\n!keep.log\\n.env*\\n!.env.example\";",
+            "goi": "[\"app.log\", \"src/debug.log\", \"keep.log\", \".env.local\", \".env.example\"].map((p) => isIgnored(p, G))",
+            "mongDoi": [
+              true,
+              true,
+              false,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Directory-only and anchored patterns|||Mẫu chỉ-thư-mục và mẫu neo gốc",
+            "chuanBi": "const G = \"build/\\n/secret.txt\\ndocs/*.pdf\";",
+            "goi": "[\"build\", \"src/build/x.js\", \"secret.txt\", \"src/secret.txt\", \"docs/a.pdf\", \"docs/sub/a.pdf\"].map((p) => isIgnored(p, G))",
+            "mongDoi": [
+              false,
+              true,
+              true,
+              false,
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt !keep.log trước *.log — không có tác dụng."
+        },
+        {
+          "loi": "Coi mọi mẫu là neo gốc — node_modules lồng nhau lọt vào commit."
+        }
+      ]
+    }
+  ]
+}

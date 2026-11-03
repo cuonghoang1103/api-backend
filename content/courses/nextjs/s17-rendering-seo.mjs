@@ -583,6 +583,36 @@ export async function generateMetadata({ params }) {
   <span class="lc-body"><span class="lc-title">web.dev — Core Web Vitals</span><span class="lc-sub">LCP, CLS, INP giải thích, kèm ngưỡng mục tiêu.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.2 — Transitions and animations</span><span class="lc-sub">Cheap vs expensive properties, transitionend, reduced motion — measured</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-2-transition-animation" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.2 — Transition và animation</span><span class="lc-sub">Thuộc tính rẻ và đắt, transitionend, giảm chuyển động — có số đo</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-4-performance" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.4 — Measuring performance</span><span class="lc-sub">LCP 12.3 s → 1.2 s, CLS 0.209 → 0, Lighthouse 64 → 99 on one page, measured</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-4-performance" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.4 — Đo hiệu năng</span><span class="lc-sub">LCP 12,3 s → 1,2 s, CLS 0,209 → 0, Lighthouse 64 → 99 trên cùng một trang, đo thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

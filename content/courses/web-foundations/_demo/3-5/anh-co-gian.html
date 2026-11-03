@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Fluid images</title>
+<style>
+  .col { width: 300px; border: 2px dashed #1f4e8c; }
+  .bad, .good { display: block; }
+  .good { max-width: 100%; height: auto; }
+  .scroller { overflow-x: auto; width: 300px; }
+  table { border-collapse: collapse; }
+  th { padding: 4px 30px; border: 1px solid #ccc; white-space: nowrap; }
+</style></head>
+<body>
+  <div class="col" id="c1"><img class="bad" src="../2-2/anh/m.svg" alt=""></div>
+  <div class="col" id="c2"><img class="good" src="../2-2/anh/m.svg" alt=""></div>
+  <div class="scroller" id="c3"><table><tr><th>Name</th><th>Email</th><th>Phone</th><th>City</th></tr></table></div>
+<script>
+  addEventListener('load', () => {
+    for (const id of ['c1', 'c2']) {
+      const e = document.getElementById(id), i = e.querySelector('img').getBoundingClientRect();
+      console.log(id, 'column', e.clientWidth, '· image', i.width + '×' + i.height, e.scrollWidth > e.clientWidth ? '← overflows' : '· fits');
+    }
+    const s = document.getElementById('c3');
+    console.log('table', s.scrollWidth, 'in a', s.clientWidth, 'wrapper: scrolls by itself, page stays still:', document.documentElement.scrollWidth <= innerWidth);
+  });
+</script>
+</body>
+</html>

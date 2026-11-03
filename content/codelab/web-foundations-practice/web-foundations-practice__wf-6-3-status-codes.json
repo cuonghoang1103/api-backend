@@ -1,0 +1,819 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-6-3-status-codes",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-6-3-status-codes"
+  },
+  "exercises": [
+    {
+      "title": "Họ của một mã",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "họ mã trạng thái"
+      ],
+      "prerequisites": [
+        "Number.isInteger",
+        "Math.floor"
+      ],
+      "tags": [
+        "javascript",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>statusFamily(code)</code> trả <code>\"informational\"</code> (1xx), <code>\"success\"</code> (2xx), <code>\"redirect\"</code> (3xx), <code>\"client-error\"</code> (4xx), <code>\"server-error\"</code> (5xx). Không phải số nguyên từ 100 tới 599 ⇒ <code>\"invalid\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dựa vào chữ số đầu.</li>\n  <li>Ngoài 100–599 hoặc không nguyên ⇒ invalid.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "code: number.",
+      "outputSpec": "string.",
+      "constraints": "Không liệt kê từng mã — mã lạ như 418 vẫn phải đúng họ.",
+      "examplesJson": [
+        {
+          "input": "statusFamily(418)",
+          "output": "\"client-error\"",
+          "explanation": "Chưa gặp 418 bao giờ vẫn biết đó là lỗi phía client."
+        }
+      ],
+      "hintsJson": [
+        "if (!Number.isInteger(code) || code < 100 || code > 599) return \"invalid\";",
+        "const names = [, \"informational\", \"success\", …]; return names[Math.floor(code / 100)];"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — họ của một mã\nfunction statusFamily(code) {\n  if (code === 200) return 'success';\n  return 'client-error';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — chữ số đầu là họ; mã chưa gặp vẫn xếp đúng họ\nconst FAMILIES = [null, 'informational', 'success', 'redirect', 'client-error', 'server-error'];\nfunction statusFamily(code) {\n  if (!Number.isInteger(code) || code < 100 || code > 599) return 'invalid';\n  return FAMILIES[Math.floor(code / 100)];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đặc tả yêu cầu client hiểu mọi mã lạ như mã x00 cùng họ — nên phân loại theo chữ số đầu là đúng chuẩn, không phải đường tắt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Liệt kê 200, 201, 204… và quên 206, 418.</li>\n  <li>Nhận 99 hay 600 như mã hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc9110#name-status-codes",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "One code per family|||Mỗi họ một mã",
+            "goi": "[101, 204, 304, 422, 503].map(statusFamily)",
+            "mongDoi": [
+              "informational",
+              "success",
+              "redirect",
+              "client-error",
+              "server-error"
+            ]
+          },
+          {
+            "moTa": "Unknown codes by first digit|||Mã lạ theo chữ số đầu",
+            "goi": "[218, 418, 451, 599].map(statusFamily)",
+            "mongDoi": [
+              "success",
+              "client-error",
+              "client-error",
+              "server-error"
+            ]
+          },
+          {
+            "moTa": "Out of range or not an integer|||Ngoài khoảng hoặc không nguyên",
+            "goi": "[99, 600, 200.5, NaN].map(statusFamily)",
+            "mongDoi": [
+              "invalid",
+              "invalid",
+              "invalid",
+              "invalid"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Liệt kê 200, 201, 204… và quên 206, 418."
+        },
+        {
+          "loi": "Nhận 99 hay 600 như mã hợp lệ."
+        }
+      ]
+    },
+    {
+      "title": "res.ok tự viết",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "res.ok"
+      ],
+      "prerequisites": [
+        "so sánh"
+      ],
+      "tags": [
+        "javascript",
+        "fetch"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>isOk(status)</code> trả đúng như <code>res.ok</code> của fetch: <code>true</code> khi và chỉ khi <code>status</code> từ 200 tới 299.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>200–299 ⇒ true, còn lại false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "status: number.",
+      "outputSpec": "boolean.",
+      "constraints": "304 không phải ok (dù fetch thường không bao giờ cho bạn thấy 304).",
+      "examplesJson": [
+        {
+          "input": "isOk(204)",
+          "output": "true",
+          "explanation": "Thành công dù không có phần thân."
+        }
+      ],
+      "hintsJson": [
+        "status >= 200 && status <= 299",
+        "Không cần if — trả thẳng biểu thức."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — res.ok\nfunction isOk(status) {\n  return status === 200;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — res.ok: mọi mã 2xx. 201 và 204 cũng là thành công;\n// 3xx/4xx/5xx thì không. fetch KHÔNG ném lỗi cho 4xx/5xx — kiểm ok là việc của bạn.\nfunction isOk(status) {\n  return status >= 200 && status <= 299;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>So <code>=== 200</code> là lỗi rất hay gặp: POST thành công trả 201, DELETE trả 204, và mã của bạn báo \"lỗi\" cho cả hai.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>status === 200 — 201/204 thành lỗi.</li>\n  <li>status < 400 — coi 3xx là thành công.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Response/ok",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "200, 201, 204, 299 are ok|||200, 201, 204, 299 là ok",
+            "goi": "[200, 201, 204, 299].map(isOk)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "199, 301, 304, 404, 500 are not|||199, 301, 304, 404, 500 thì không",
+            "goi": "[199, 301, 304, 404, 500].map(isOk)",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Edges: 300 and 100 are not ok|||Biên: 300 và 100 không ok",
+            "goi": "[isOk(300), isOk(100), isOk(206)]",
+            "mongDoi": [
+              false,
+              false,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "status === 200 — 201/204 thành lỗi."
+        },
+        {
+          "loi": "status < 400 — coi 3xx là thành công."
+        }
+      ]
+    },
+    {
+      "title": "401 hay 403?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "xác thực",
+        "phân quyền"
+      ],
+      "prerequisites": [
+        "object",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>authStatus(user, allowedRoles)</code>: <code>user</code> là <code>null</code> (chưa đăng nhập) hoặc <code>{ name, role, expired? }</code>. Trả <code>401</code> nếu chưa đăng nhập HOẶC phiên đã hết hạn (<code>expired === true</code>); <code>403</code> nếu đã đăng nhập mà <code>role</code> không nằm trong <code>allowedRoles</code>; còn lại <code>200</code>. <code>allowedRoles</code> rỗng nghĩa là mọi người đã đăng nhập đều được.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chưa đăng nhập / hết hạn ⇒ 401.</li>\n  <li>Sai vai trò ⇒ 403.</li>\n  <li>Danh sách rỗng ⇒ ai đăng nhập cũng được.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "user: object | null; allowedRoles: string[].",
+      "outputSpec": "200 | 401 | 403.",
+      "constraints": "Kiểm 401 TRƯỚC 403.",
+      "examplesJson": [
+        {
+          "input": "authStatus({ name: \"An\", role: \"user\" }, [\"admin\"])",
+          "output": "403",
+          "explanation": "Biết là ai, nhưng không được phép — đăng nhập lại cũng vô ích."
+        }
+      ],
+      "hintsJson": [
+        "if (!user || user.expired) return 401;",
+        "if (allowedRoles.length && !allowedRoles.includes(user.role)) return 403;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — 401 hay 403\nfunction authStatus(user, allowedRoles) {\n  if (!allowedRoles.includes(user.role)) return 401;\n  return 200;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — 401 = \"bạn là ai?\"; 403 = \"tôi biết bạn, và không\"\nfunction authStatus(user, allowedRoles) {\n  if (!user || user.expired === true) return 401;                       // đăng nhập (lại) sẽ giúp\n  if (allowedRoles.length > 0 && !allowedRoles.includes(user.role)) return 403;  // đăng nhập lại vô ích\n  return 200;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thứ tự quan trọng: với người chưa đăng nhập, ta chưa biết vai trò nên không thể nói 403. Front-end dựa vào phân biệt này: 401 ⇒ chuyển tới trang đăng nhập (hoặc làm mới token), 403 ⇒ hiện \"không có quyền\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả 403 cho người chưa đăng nhập.</li>\n  <li>Đọc user.role khi user là null ⇒ TypeError.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/403",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Not logged in or expired: 401|||Chưa đăng nhập hoặc hết hạn: 401",
+            "goi": "[authStatus(null, [\"admin\"]), authStatus({ name: \"An\", role: \"admin\", expired: true }, [\"admin\"])]",
+            "mongDoi": [
+              401,
+              401
+            ]
+          },
+          {
+            "moTa": "Wrong role: 403, right role: 200|||Sai vai trò: 403, đúng vai trò: 200",
+            "goi": "[authStatus({ name: \"An\", role: \"user\" }, [\"admin\"]), authStatus({ name: \"Lan\", role: \"admin\" }, [\"admin\", \"editor\"])]",
+            "mongDoi": [
+              403,
+              200
+            ]
+          },
+          {
+            "moTa": "Empty list: any logged-in user|||Danh sách rỗng: ai đăng nhập cũng được",
+            "goi": "[authStatus({ name: \"An\", role: \"user\" }, []), authStatus(null, [])]",
+            "mongDoi": [
+              200,
+              401
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả 403 cho người chưa đăng nhập."
+        },
+        {
+          "loi": "Đọc user.role khi user là null ⇒ TypeError."
+        }
+      ]
+    },
+    {
+      "title": "Chọn mã cho một POST",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "415",
+        "400",
+        "422",
+        "201"
+      ],
+      "prerequisites": [
+        "try/catch",
+        "JSON.parse"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "validation"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>createStatus(contentType, rawBody)</code> quyết định như <code>POST /api/products</code> của bài, trả <code>{ status, errors }</code>: Content-Type không bắt đầu bằng <code>application/json</code> (không phân biệt hoa thường, cho phép <code>; charset=…</code>) ⇒ 415; JSON hỏng ⇒ 400; giá trị sai ⇒ 422 với <code>errors</code> là mảng chứa <code>\"name is required\"</code> (name không phải chuỗi khác rỗng sau trim) và/hoặc <code>\"price must be a whole number ≥ 0\"</code>, đúng thứ tự đó; hợp lệ ⇒ 201. <code>errors</code> rỗng với mọi mã khác 422. Phần thân hợp lệ nhưng không phải object (vd <code>[]</code>, <code>5</code>) ⇒ 422 với cả hai lỗi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>415 trước 400 trước 422.</li>\n  <li>Content-Type không phân biệt hoa thường, có thể có charset.</li>\n  <li>Hai thông điệp lỗi đúng chữ, đúng thứ tự.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "contentType: string | undefined; rawBody: string.",
+      "outputSpec": "{ status, errors }.",
+      "constraints": "Một hàm tự đủ.",
+      "examplesJson": [
+        {
+          "input": "createStatus(\"application/json\", '{\"name\":\"\",\"price\":-5}')",
+          "output": "{ status: 422, errors: [\"name is required\", \"price must be a whole number ≥ 0\"] }",
+          "explanation": "Đúng output curl trong bài."
+        }
+      ],
+      "hintsJson": [
+        "(contentType ?? \"\").toLowerCase().startsWith(\"application/json\")",
+        "let data; try { data = JSON.parse(rawBody); } catch { return { status: 400, errors: [] }; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — chọn mã cho một POST\nfunction createStatus(contentType, rawBody) {\n  const data = JSON.parse(rawBody);\n  if (!data.name) return { status: 400, errors: ['name is required'] };\n  return { status: 200, errors: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — 415 (định dạng) → 400 (không đọc nổi) → 422 (giá trị sai) → 201\nfunction createStatus(contentType, rawBody) {\n  if (!(contentType ?? '').toLowerCase().startsWith('application/json')) return { status: 415, errors: [] };\n  let data;\n  try { data = JSON.parse(rawBody); } catch { return { status: 400, errors: [] }; }\n  const obj = data !== null && typeof data === 'object' && !Array.isArray(data) ? data : {};\n  const errors = [];\n  if (typeof obj.name !== 'string' || obj.name.trim() === '') errors.push('name is required');\n  if (!Number.isInteger(obj.price) || obj.price < 0) errors.push('price must be a whole number ≥ 0');\n  if (errors.length) return { status: 422, errors };\n  return { status: 201, errors: [] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mỗi mã nói với client một điều khác: 415 — đổi định dạng; 400 — sửa cú pháp; 422 — sửa giá trị (và đây là danh sách); 201 — xong, kèm Location. Trả 500 khi <code>JSON.parse</code> ném (như code khởi đầu) là biến lỗi của người dùng thành \"máy chủ hỏng\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để JSON.parse ném ra ngoài ⇒ 500.</li>\n  <li>Dừng ở lỗi đầu tiên — form chỉ tô đỏ được một ô mỗi lần.</li>\n  <li>So Content-Type bằng === — \"application/json; charset=utf-8\" bị từ chối.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/422",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "415 for a form body|||415 cho phần thân dạng form",
+            "goi": "[createStatus(\"application/x-www-form-urlencoded\", \"name=Glue\"), createStatus(undefined, \"{}\")]",
+            "mongDoi": [
+              {
+                "status": 415,
+                "errors": []
+              },
+              {
+                "status": 415,
+                "errors": []
+              }
+            ]
+          },
+          {
+            "moTa": "400 for broken JSON|||400 cho JSON hỏng",
+            "goi": "createStatus(\"application/json\", \"{oops\")",
+            "mongDoi": {
+              "status": 400,
+              "errors": []
+            }
+          },
+          {
+            "moTa": "422 lists every problem in order|||422 liệt kê mọi lỗi đúng thứ tự",
+            "goi": "[createStatus(\"application/json\", '{\"name\":\"\",\"price\":-5}'), createStatus(\"application/json\", '{\"name\":\"Pen\",\"price\":2.5}'), createStatus(\"application/json\", \"[]\")]",
+            "mongDoi": [
+              {
+                "status": 422,
+                "errors": [
+                  "name is required",
+                  "price must be a whole number ≥ 0"
+                ]
+              },
+              {
+                "status": 422,
+                "errors": [
+                  "price must be a whole number ≥ 0"
+                ]
+              },
+              {
+                "status": 422,
+                "errors": [
+                  "name is required",
+                  "price must be a whole number ≥ 0"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "201 with charset and upper case|||201 với charset và chữ hoa",
+            "goi": "createStatus(\"Application/JSON; charset=utf-8\", '{\"name\":\"Tape\",\"price\":15000}')",
+            "mongDoi": {
+              "status": 201,
+              "errors": []
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để JSON.parse ném ra ngoài ⇒ 500."
+        },
+        {
+          "loi": "Dừng ở lỗi đầu tiên — form chỉ tô đỏ được một ô mỗi lần."
+        },
+        {
+          "loi": "So Content-Type bằng === — \"application/json; charset=utf-8\" bị từ chối."
+        }
+      ]
+    },
+    {
+      "title": "Có nên tự thử lại?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "thử lại",
+        "lỗi tạm thời",
+        "idempotent"
+      ],
+      "prerequisites": [
+        "includes",
+        "toán tử logic"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "độ tin cậy"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>shouldRetry(method, status, attempt)</code>: <code>status</code> là <code>0</code> khi không có response (fetch ném lỗi mạng). Thử lại khi: <code>attempt</code> (số lần đã thử, bắt đầu từ 1) nhỏ hơn 3, VÀ method idempotent (GET, HEAD, OPTIONS, PUT, DELETE — không phân biệt hoa thường), VÀ lỗi là tạm thời: <code>0</code>, <code>408</code>, <code>429</code>, <code>502</code>, <code>503</code>, <code>504</code>. Mọi 4xx khác và 500 ⇒ không.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tối đa 3 lần thử (attempt 1, 2 được thử lại; 3 thì không).</li>\n  <li>Chỉ method idempotent.</li>\n  <li>Chỉ lỗi tạm thời.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string; status: number; attempt: number.",
+      "outputSpec": "boolean.",
+      "constraints": "500 không thử lại: một lỗi lập trình sẽ lỗi y hệt lần sau.",
+      "examplesJson": [
+        {
+          "input": "shouldRetry(\"GET\", 503, 1)",
+          "output": "true",
+          "explanation": "Máy chủ đang bận — lát nữa có thể được."
+        },
+        {
+          "input": "shouldRetry(\"POST\", 503, 1)",
+          "output": "false",
+          "explanation": "POST có thể đã được xử lý."
+        }
+      ],
+      "hintsJson": [
+        "const TRANSIENT = [0, 408, 429, 502, 503, 504];",
+        "return attempt < 3 && IDEMPOTENT.includes(m) && TRANSIENT.includes(status);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — có nên tự thử lại?\nfunction shouldRetry(method, status, attempt) {\n  return status >= 400;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — thử lại khi: còn lượt, lặp lại vô hại, và lỗi có thể tự hết\nconst IDEMPOTENT = ['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE'];\nconst TRANSIENT = [0, 408, 429, 502, 503, 504];          // 0 = không có response (lỗi mạng)\nfunction shouldRetry(method, status, attempt) {\n  return attempt < 3 && IDEMPOTENT.includes(method.toUpperCase()) && TRANSIENT.includes(status);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba điều kiện, mỗi cái chặn một thảm hoạ: không giới hạn lượt ⇒ vòng lặp vô tận đập vào máy chủ đang quá tải; không kiểm method ⇒ đơn hàng đôi; không kiểm mã ⇒ thử lại 404/422 vô ích mãi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thử lại mọi status >= 400.</li>\n  <li>Quên lỗi mạng (status 0).</li>\n  <li>Không giới hạn số lần.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/503",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Transient errors on GET retry|||Lỗi tạm thời với GET được thử lại",
+            "goi": "[0, 408, 429, 502, 503, 504].map((s) => shouldRetry(\"GET\", s, 1))",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Permanent errors never retry|||Lỗi vĩnh viễn không thử lại",
+            "goi": "[400, 401, 404, 422, 500].map((s) => shouldRetry(\"GET\", s, 1))",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "POST/PATCH never; at most 3 attempts|||POST/PATCH không bao giờ; tối đa 3 lần",
+            "goi": "[shouldRetry(\"POST\", 503, 1), shouldRetry(\"patch\", 0, 1), shouldRetry(\"put\", 503, 2), shouldRetry(\"GET\", 503, 3)]",
+            "mongDoi": [
+              false,
+              false,
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thử lại mọi status >= 400."
+        },
+        {
+          "loi": "Quên lỗi mạng (status 0)."
+        },
+        {
+          "loi": "Không giới hạn số lần."
+        }
+      ]
+    },
+    {
+      "title": "Chờ bao lâu trước khi thử lại?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Retry-After",
+        "exponential backoff"
+      ],
+      "prerequisites": [
+        "Number",
+        "Math.min"
+      ],
+      "tags": [
+        "javascript",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p>Viết <code>retryDelayMs(attempt, retryAfter)</code>: nếu <code>retryAfter</code> (giá trị header <code>Retry-After</code>, chuỗi hoặc <code>undefined</code>) là một số nguyên giây không âm, chờ đúng số giây đó (đổi ra ms), tối đa 60 000 ms. Ngược lại dùng chờ tăng dần: <code>200 × 2^(attempt − 1)</code> ms, tối đa 5 000 ms. <code>attempt</code> bắt đầu từ 1.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tôn trọng Retry-After (giây).</li>\n  <li>Trần 60 000 ms cho Retry-After.</li>\n  <li>Không có (hoặc sai) ⇒ 200, 400, 800… trần 5 000.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "attempt: number; retryAfter?: string.",
+      "outputSpec": "number (ms).",
+      "constraints": "Retry-After dạng ngày giờ HTTP coi như không có (đơn giản hoá).",
+      "examplesJson": [
+        {
+          "input": "retryDelayMs(1, \"60\")",
+          "output": "60000",
+          "explanation": "Máy chủ nói \"thử lại sau 60 giây\" — như output 429 của bài."
+        }
+      ],
+      "hintsJson": [
+        "/^\\d+$/.test(retryAfter ?? \"\")",
+        "Math.min(200 * 2 ** (attempt - 1), 5000)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — chờ bao lâu\nfunction retryDelayMs(attempt, retryAfter) {\n  return 1000;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — máy chủ nói thì nghe máy chủ; không thì chờ tăng gấp đôi mỗi lần\nfunction retryDelayMs(attempt, retryAfter) {\n  if (/^\\d+$/.test(String(retryAfter ?? '').trim())) {\n    return Math.min(Number(retryAfter) * 1000, 60000);         // Retry-After tính bằng GIÂY\n  }\n  return Math.min(200 * 2 ** (attempt - 1), 5000);             // 200, 400, 800, 1600, 3200, rồi 5000\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thử lại ngay lập tức làm máy chủ đang quá tải càng quá tải hơn — hàng nghìn client cùng làm vậy là tự đánh sập nó. Chờ tăng dần (exponential backoff) giãn các lượt ra; thực tế còn thêm một chút ngẫu nhiên (jitter) để client không thử lại cùng lúc.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi Retry-After là mili giây.</li>\n  <li>Không có trần — lần thử thứ 20 chờ vài ngày.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Retry-After",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Retry-After in seconds, capped|||Retry-After tính giây, có trần",
+            "goi": "[retryDelayMs(1, \"60\"), retryDelayMs(4, \"2\"), retryDelayMs(1, \"3600\"), retryDelayMs(1, \"0\")]",
+            "mongDoi": [
+              60000,
+              2000,
+              60000,
+              0
+            ]
+          },
+          {
+            "moTa": "Backoff doubles up to 5 s|||Chờ tăng gấp đôi tới 5 giây",
+            "goi": "[1, 2, 3, 4, 5, 6, 10].map((a) => retryDelayMs(a))",
+            "mongDoi": [
+              200,
+              400,
+              800,
+              1600,
+              3200,
+              5000,
+              5000
+            ]
+          },
+          {
+            "moTa": "Invalid Retry-After falls back to backoff|||Retry-After sai thì dùng chờ tăng dần",
+            "goi": "[retryDelayMs(2, \"soon\"), retryDelayMs(2, \"-5\"), retryDelayMs(2, \"Wed, 21 Oct 2026 07:28:00 GMT\")]",
+            "mongDoi": [
+              400,
+              400,
+              400
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi Retry-After là mili giây."
+        },
+        {
+          "loi": "Không có trần — lần thử thứ 20 chờ vài ngày."
+        }
+      ]
+    },
+    {
+      "title": "requestJson và HttpError",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "lớp lỗi riêng",
+        "res.ok",
+        "Content-Type",
+        "204"
+      ],
+      "prerequisites": [
+        "async/await",
+        "class",
+        "fetch"
+      ],
+      "tags": [
+        "javascript",
+        "fetch",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.3 — Mã trạng thái.</em> Các bài là những quyết định mà máy chủ (chọn mã nào) và client (làm gì với mã đó) đưa ra mỗi ngày.</p><p><em>Máy chấm thay <code>fetch</code> bằng một máy chủ GIẢ trả dữ liệu cố định (không có mạng thật).</em></p><p>Viết lớp <code>HttpError</code> (kế thừa <code>Error</code>, <code>name</code> là <code>\"HttpError\"</code>, <code>message</code> là <code>\"HTTP &lt;status&gt;\"</code>, có thêm <code>status</code> và <code>body</code>) và hàm <code>requestJson(url, init)</code>: gọi <code>fetch</code>; đọc phần thân — JSON nếu Content-Type chứa <code>application/json</code>, chữ nếu không, <code>null</code> nếu status là 204; nếu <code>!res.ok</code> ném <code>HttpError</code> mang status và phần thân đã đọc; ngược lại trả phần thân. Lỗi mạng (fetch ném) để nguyên cho nó bay ra.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>HttpError đúng name/message/status/body.</li>\n  <li>JSON hay chữ theo Content-Type — trang HTML lỗi không gây SyntaxError.</li>\n  <li>204 ⇒ null.</li>\n  <li>Lỗi mạng không bị nuốt.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "url: string; init?: object.",
+      "outputSpec": "Promise của dữ liệu.",
+      "constraints": "Chỉ đọc phần thân MỘT lần.",
+      "examplesJson": [
+        {
+          "input": "await requestJson(\"/api/products/999\")",
+          "output": "ném HttpError: HTTP 404, status 404, body { error: \"Product 999 not found\" }",
+          "explanation": "Client hiển thị được body.error."
+        }
+      ],
+      "hintsJson": [
+        "class HttpError extends Error { constructor(status, body) { super(\"HTTP \" + status); this.name = \"HttpError\"; this.status = status; this.body = body; } }",
+        "const isJson = (res.headers.get(\"Content-Type\") ?? \"\").includes(\"application/json\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — requestJson và HttpError\nclass HttpError extends Error {}\n\nasync function requestJson(url, init) {\n  const res = await fetch(url, init);\n  return res.json();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.3 — một chỗ duy nhất biến mọi response thành dữ liệu hoặc một lỗi có nghĩa\nclass HttpError extends Error {\n  constructor(status, body) {\n    super('HTTP ' + status);\n    this.name = 'HttpError';\n    this.status = status;\n    this.body = body;\n  }\n}\n\nasync function requestJson(url, init) {\n  const res = await fetch(url, init);                       // chỉ ném khi KHÔNG có response\n  const type = res.headers.get('Content-Type') ?? '';\n  const body = res.status === 204 ? null\n    : type.includes('application/json') ? await res.json()\n    : await res.text();                                     // trang lỗi HTML ⇒ chữ, không SyntaxError\n  if (!res.ok) throw new HttpError(res.status, body);\n  return body;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây chính là hàm ở Bước 6 của bài. Component chỉ cần <code>try/catch</code> và hỏi <code>err instanceof HttpError</code> — có status thì là lỗi HTTP, không có thì là mất mạng. Đọc <code>res.json()</code> mà không nhìn Content-Type là cách nhận \"Unexpected token '<'\" khi proxy trả trang 502.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gọi res.json() cho mọi response — 502 HTML ném SyntaxError, mất status.</li>\n  <li>Đọc body hai lần (text rồi json) ⇒ TypeError.</li>\n  <li>Quên this.name ⇒ err.name là \"Error\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.3 Status codes.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Response/ok",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "fetchGia": {
+          "/api/products/1": {
+            "json": {
+              "id": 1,
+              "name": "Notebook"
+            },
+            "headers": {
+              "Content-Type": "application/json; charset=utf-8"
+            }
+          },
+          "/api/products/999": {
+            "status": 404,
+            "json": {
+              "error": "Product 999 not found"
+            },
+            "headers": {
+              "Content-Type": "application/json"
+            }
+          },
+          "DELETE /api/products/1": {
+            "status": 204,
+            "text": "",
+            "headers": {}
+          },
+          "/api/crash": {
+            "status": 502,
+            "text": "<!doctype html><h1>502 Bad Gateway</h1>",
+            "headers": {
+              "Content-Type": "text/html"
+            }
+          },
+          "/api/hello": {
+            "text": "hello",
+            "headers": {
+              "Content-Type": "text/plain"
+            }
+          },
+          "/api/offline": {
+            "loiMang": true
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "200 JSON returns data|||200 JSON trả dữ liệu",
+            "goi": "await requestJson(\"/api/products/1\")",
+            "mongDoi": {
+              "id": 1,
+              "name": "Notebook"
+            }
+          },
+          {
+            "moTa": "404 throws HttpError \"HTTP 404\"|||404 ném HttpError \"HTTP 404\"",
+            "goi": "await requestJson(\"/api/products/999\")",
+            "mongDoi": {
+              "loi": "HttpError",
+              "thongDiep": "^HTTP 404$"
+            }
+          },
+          {
+            "moTa": "The error carries status and body|||Lỗi mang status và body",
+            "goi": "await requestJson(\"/api/products/999\").catch((e) => [e instanceof Error, e.status, e.body])",
+            "mongDoi": [
+              true,
+              404,
+              {
+                "error": "Product 999 not found"
+              }
+            ]
+          },
+          {
+            "moTa": "HTML 502 page: HttpError with text, not SyntaxError|||Trang 502 HTML: HttpError kèm chữ, không SyntaxError",
+            "goi": "await requestJson(\"/api/crash\").catch((e) => [e.name, e.status, e.body])",
+            "mongDoi": [
+              "HttpError",
+              502,
+              "<!doctype html><h1>502 Bad Gateway</h1>"
+            ]
+          },
+          {
+            "moTa": "204 gives null; text/plain gives text|||204 cho null; text/plain cho chữ",
+            "goi": "[await requestJson(\"/api/products/1\", { method: \"DELETE\" }), await requestJson(\"/api/hello\")]",
+            "mongDoi": [
+              null,
+              "hello"
+            ]
+          },
+          {
+            "moTa": "Network errors are not swallowed|||Lỗi mạng không bị nuốt",
+            "goi": "await requestJson(\"/api/offline\")",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi res.json() cho mọi response — 502 HTML ném SyntaxError, mất status."
+        },
+        {
+          "loi": "Đọc body hai lần (text rồi json) ⇒ TypeError."
+        },
+        {
+          "loi": "Quên this.name ⇒ err.name là \"Error\"."
+        }
+      ]
+    }
+  ]
+}

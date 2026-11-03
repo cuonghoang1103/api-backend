@@ -52,7 +52,8 @@ export default {
   type: 'DOCUMENT',
   isFreePreview: true,
   description: 'Chuỗi prototype và cách tra thuộc tính, hàm constructor và new làm gì, class (constructor, method, getter, static, #private), extends/super, method khác arrow field, vì sao không sửa prototype có sẵn — chạy thật trong Chromium.',
-  content: `${G}
+  content: `
+${G}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.3</span>
 <h2>Objects inherit by pointing at other objects</h2>

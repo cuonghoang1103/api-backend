@@ -1,0 +1,1 @@
+- text: My Blog HomeAbout Why semantic HTML matters Screen readers and search engines read the structure. Like © 2026 My Blog

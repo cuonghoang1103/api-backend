@@ -7,8 +7,38 @@
   "docsUrl": "https://developer.mozilla.org/vi/docs/Learn",
   "status": "PUBLISHED",
   "level": "BEGINNER",
-  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 11 JS nâng cao.",
+  "description": "Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. Chương 1 công cụ + Chương 2 HTML + Chương 3 CSS + Chương 4 JavaScript + Chương 5 JS bất đồng bộ & modules + Chương 6 HTTP & API + Chương 7 xác thực & bảo mật + Chương 8 dữ liệu & SQL + Chương 9 TypeScript + Chương 10 tư duy & gỡ lỗi + Chương 11 JS nâng cao + Chương 12 CSS nâng cao + Chương 13 kiểm thử + Chương 14 đưa lên mạng.",
   "modules": [
+    {
+      "slug": "wf-1-1-terminal",
+      "name": "1.1 Terminal",
+      "level": "BEGINNER",
+      "description": "Tính đường dẫn tuyệt đối từ cwd (., .., ~), tách một dòng lệnh thành đối số như shell (dấu cách, nháy, gạch chéo ngược), mở rộng ký tự đại diện *.js, sort | uniq -c, find -name trên một cây thư mục, và một shell thu nhỏ có pwd/cd/ls/mkdir/touch/rm — 6 bài."
+    },
+    {
+      "slug": "wf-1-2-vscode",
+      "name": "1.2 VS Code: tính năng trình soạn thảo",
+      "level": "BEGINNER",
+      "description": "Bật/tắt chú thích (Ctrl+/), dời dòng (Alt+↑↓), chọn lần xuất hiện kế (Ctrl+D), khớp tên file kiểu Ctrl+P, đọc settings.json có chú thích (JSONC), đổi tên định danh bỏ qua chuỗi và chú thích — 6 bài."
+    },
+    {
+      "slug": "wf-1-3-git",
+      "name": "1.3 Git cục bộ",
+      "level": "BEGINNER",
+      "description": "Đọc git status --short thành các nhóm, tính HEAD~n và mã rút gọn trong log, luật .gitignore (thư mục/, *.log, !, #), diff theo dòng, quét bí mật trong phần đã stage trước khi commit, và một git thu nhỏ có đủ ba vùng — 6 bài."
+    },
+    {
+      "slug": "wf-1-4-github",
+      "name": "1.4 GitHub: remote, push, pull",
+      "level": "BEGINNER",
+      "description": "Đọc URL remote HTTPS/SSH, dựng dòng git status -sb, đếm ahead/behind, quyết định push (up-to-date / fast-forward / rejected), soát lời nhắn commit, khớp mẫu .gitignore — 6 bài."
+    },
+    {
+      "slug": "wf-1-5-node-npm",
+      "name": "1.5 Node & npm",
+      "level": "BEGINNER",
+      "description": "Đọc và so sánh phiên bản semver, kiểm khoảng ^ ~ >= * x (kể cả ^0.x), chọn bản lớn nhất thoả khoảng, mô phỏng npm start/test/run và \"Missing script\", đếm phụ thuộc bắc cầu như \"added 29 packages\", và tự sinh package-lock từ một registry giả — 6 bài."
+    },
     {
       "slug": "wf-2-1-html-basics",
       "name": "2.1 HTML là gì: phần tử, thẻ, thuộc tính",
@@ -130,6 +160,156 @@
       "description": "export có tên và export default, import đúng dạng, đường dẫn tương đối có đuôi .js, tách một tệp lớn thành module, module chạy một lần và trạng thái dùng chung, gom export qua index.js, ghép một ứng dụng nhỏ nhiều module — 7 bài, máy chấm nạp module thật."
     },
     {
+      "slug": "wf-6-1-request-response",
+      "name": "6.1 Request và response",
+      "level": "BEGINNER",
+      "description": "Đọc dòng request và dòng trạng thái, gom header không phân biệt hoa thường, tách các phần của URL, dựng một request thô có Content-Length, đọc trọn một thông điệp HTTP kể cả phần thân chunked — 6 bài."
+    },
+    {
+      "slug": "wf-6-2-http-methods",
+      "name": "6.2 HTTP method",
+      "level": "BEGINNER",
+      "description": "Method an toàn và idempotent, khi nào được tự thử lại, method + đường dẫn → hành động (kèm 404/405), PUT thay thế và PATCH sửa một phần, dựng header Allow, rồi cả một kho sản phẩm trong bộ nhớ trả đúng 201/204/404/405 — 7 bài."
+    },
+    {
+      "slug": "wf-6-3-status-codes",
+      "name": "6.3 Mã trạng thái",
+      "level": "BEGINNER",
+      "description": "Họ mã theo chữ số đầu, res.ok, chọn 401 hay 403, chọn 415/400/422/201 cho một POST, quyết định có tự thử lại, tính thời gian chờ theo Retry-After, và hàm requestJson ném HttpError — 7 bài."
+    },
+    {
+      "slug": "wf-6-4-headers-json",
+      "name": "6.4 Header, JSON và phần thân",
+      "level": "INTERMEDIATE",
+      "description": "Tra header không phân biệt hoa thường, tách Content-Type và charset, parse JSON không ném lỗi, đọc Cache-Control, hồi sinh chuỗi ngày giờ thành Date, chọn định dạng theo Accept có trọng số q, và trả 304 theo ETag/If-None-Match — 7 bài."
+    },
+    {
+      "slug": "wf-6-5-rest-params-query",
+      "name": "6.5 REST, tham số và query string",
+      "level": "INTERMEDIATE",
+      "description": "Dựng và đọc query string bằng URLSearchParams, khớp route có :tham số, kiểm page/limit/sort và trả lỗi rõ, lọc-sắp-chia trang danh sách, chặn IDOR bằng kiểm chủ sở hữu, và bộ định tuyến trả 200/404/405 kèm Allow — 7 bài."
+    },
+    {
+      "slug": "wf-7-1-auth-basics",
+      "name": "7.1 Xác thực và phân quyền",
+      "level": "INTERMEDIATE",
+      "description": "Tách header Authorization, lọc trường client không được gửi (role, id), bảng quyền theo vai trò và chủ sở hữu, luật theo route trả 401/403/200, giới hạn đăng nhập sai theo cửa sổ thời gian, và luồng đăng nhập hoàn chỉnh với cùng một câu báo lỗi và 429 — 6 bài."
+    },
+    {
+      "slug": "wf-7-2-cookies-sessions",
+      "name": "7.2 Cookie và phiên",
+      "level": "INTERMEDIATE",
+      "description": "Đọc header Cookie, dựng Set-Cookie đúng thứ tự cờ, đọc ngược Set-Cookie, kho phiên có hạn dùng và \"đăng xuất mọi thiết bị\", mô phỏng luật SameSite Strict/Lax/None của trình duyệt, và kiểm CSRF bằng Origin + token — 6 bài."
+    },
+    {
+      "slug": "wf-7-3-jwt",
+      "name": "7.3 JWT",
+      "level": "INTERMEDIATE",
+      "description": "Tách ba phần của JWT, giải mã header/payload (không cần khoá), kiểm hết hạn có độ lệch đồng hồ, kiểm nbf/iss/aud, từ chối alg none và thuật toán ngoài danh sách, và xoay vòng refresh token có phát hiện dùng lại — 6 bài."
+    },
+    {
+      "slug": "wf-7-4-passwords",
+      "name": "7.4 Lưu mật khẩu",
+      "level": "INTERMEDIATE",
+      "description": "Luật mật khẩu kiểu NIST (dài, không ép ký tự, chặn mật khẩu phổ biến), đọc chuỗi bcrypt, quyết định khi nào hash lại, đổi số lần đoán thành thời gian dễ đọc, so sánh thời gian cố định, và đếm chi phí tấn công từ điển khi có và không có muối — 6 bài."
+    },
+    {
+      "slug": "wf-7-5-https-cors",
+      "name": "7.5 HTTPS và CORS",
+      "level": "INTERMEDIATE",
+      "description": "Lấy origin của một URL, so cùng origin, nhận ra request cần preflight, dựng header CORS theo danh sách cho phép (kèm credentials), trả lời preflight, kiểm một chứng chỉ (hạn dùng, tên miền có *), và mô phỏng trình duyệt quyết định trang có đọc được response — 7 bài."
+    },
+    {
+      "slug": "wf-8-1-databases",
+      "name": "8.1 Vì sao cần cơ sở dữ liệu",
+      "level": "BEGINNER",
+      "description": "Kiểu dữ liệu kiểu SQLite, đổi kết quả cột/giá trị thành object, mô phỏng mất cập nhật khi hai request đọc-đổi-ghi xen kẽ, kiểm ràng buộc NOT NULL/UNIQUE/CHECK đúng thông báo của SQLite, tìm dòng vi phạm khoá ngoại, và dựng một bảng nhỏ trong bộ nhớ — 6 bài."
+    },
+    {
+      "slug": "wf-8-2-select",
+      "name": "8.2 SELECT",
+      "level": "INTERMEDIATE",
+      "description": "Đổi mẫu LIKE thành RegExp, logic ba giá trị của NULL, ORDER BY nhiều khoá với NULL đứng trước khi tăng dần, phân trang LIMIT/OFFSET, GROUP BY kèm count/sum/avg (count(cột) bỏ NULL), và một bộ chạy truy vấn theo đúng thứ tự thực thi của SQL — 6 bài, dữ liệu là bảng posts của blog.sql."
+    },
+    {
+      "slug": "wf-8-3-crud",
+      "name": "8.3 INSERT, UPDATE, DELETE và giao dịch",
+      "level": "INTERMEDIATE",
+      "description": "Dựng câu INSERT và UPDATE có tham số với tên cột kiểm theo danh sách cho phép, phát hiện UPDATE/DELETE thiếu WHERE, chuyển tiền tất-cả-hoặc-không, tìm kiếm LIKE thoát % và _, và tự viết tagged template sql`…` như $queryRaw — 6 bài."
+    },
+    {
+      "slug": "wf-8-4-relationships-joins",
+      "name": "8.4 Quan hệ và JOIN",
+      "level": "INTERMEDIATE",
+      "description": "INNER JOIN và LEFT JOIN bằng chỉ mục Map, đếm dòng con kể cả 0, gom dòng phẳng của JOIN thành object lồng như ORM, nhiều-nhiều qua bảng nối, mô phỏng ON DELETE CASCADE/RESTRICT/SET NULL, và tìm N+1 trong nhật ký truy vấn — 6 bài."
+    },
+    {
+      "slug": "wf-8-5-orm-prisma",
+      "name": "8.5 ORM với Prisma",
+      "level": "INTERMEDIATE",
+      "description": "Đổi lỗi Prisma (P2002, P2025, P2003) thành response HTTP, áp select lồng nhau, dựng bộ lọc where như Prisma (equals, gt/gte/lt/lte, contains, in, not, AND/OR/NOT), findMany có orderBy/skip/take, dịch where sang SQL có tham số, và lập kế hoạch db push (phát hiện bước phá huỷ) — 6 bài."
+    },
+    {
+      "slug": "wf-9-1-why-typescript",
+      "name": "9.1 Vì sao TypeScript",
+      "level": "BEGINNER",
+      "description": "Gọi đúng tên kiểu của giá trị (null, mảng, NaN…), tự kiểm một món hàng theo hình dạng CartItem, tính tổng giỏ hàng mà KHÔNG để \"5000\" nối chuỗi, đọc một dòng lỗi tsc, tổng hợp cả output tsc thành báo cáo, và tự suy kiểu một giá trị JSON như tsc --declaration — 6 bài."
+    },
+    {
+      "slug": "wf-9-2-basic-types",
+      "name": "9.2 Kiểu cơ bản",
+      "level": "BEGINNER",
+      "description": "Thu hẹp string | number để định dạng giá, type guard cho union literal SortDir, mô phỏng kiểu literal const vs let, đọc unknown an toàn, nhãn trạng thái với nhánh đủ (never), và đổi giá trị form (luôn là chuỗi) sang number/boolean/date kèm lỗi rõ ràng — 6 bài."
+    },
+    {
+      "slug": "wf-9-3-interfaces",
+      "name": "9.3 interface và type",
+      "level": "BEGINNER",
+      "description": "pick/omit lúc chạy (Pick/Omit), đếm theo khoá (Record), áp PATCH theo Partial mà giữ id readonly, render union phân biệt bằng kind, kiểm một Record<Genre, number> thiếu hay thừa khoá, và một bộ kiểm hình dạng theo cấu trúc có trường tuỳ chọn và kiểm thuộc tính thừa — 6 bài."
+    },
+    {
+      "slug": "wf-9-4-functions-generics",
+      "name": "9.4 Hàm và generic",
+      "level": "INTERMEDIATE",
+      "description": "Tham số mặc định + kiểm số đối số (priceWithTax), first/last<T>, findById<T extends { id: number }>, groupBy<T, K>, getJson<T> với vị từ kiểu không nói dối, memoize<A, R> và pipe — 6 bài, mỗi bài kèm chữ ký TypeScript."
+    },
+    {
+      "slug": "wf-9-5-ts-in-practice",
+      "name": "9.5 TypeScript trong dự án thật",
+      "level": "INTERMEDIATE",
+      "description": "Soát package.json có đủ script dev/typecheck/build/start, soát tsconfig (strict, rootDir/outDir, NodeNext), nạp cấu hình từ env và hỏng sớm, tìm cú pháp TypeScript không xoá được mà Node từ chối, và tự viết bộ kiểm schema kiểu zod với safeParse + issues — 6 bài."
+    },
+    {
+      "slug": "wf-10-1-think-like-a-programmer",
+      "name": "10.1 Tư duy như lập trình viên",
+      "level": "BEGINNER",
+      "description": "Sáu bài toán nhỏ mà ca biên mới là phần khó: đảo từ với khoảng trắng thừa, viết hoa tiêu đề trừ từ nhỏ, ba từ hay gặp nhất, N khách chi nhiều nhất, nén chuỗi lặp, và kiểm ngoặc cân bằng kèm vị trí lỗi đầu tiên — 6 bài."
+    },
+    {
+      "slug": "wf-10-2-reading-errors-debugging",
+      "name": "10.2 Đọc lỗi & gỡ lỗi",
+      "level": "INTERMEDIATE",
+      "description": "Đọc một dòng stack trace, tìm khung đầu tiên thuộc mã của bạn (bỏ node:internal và node_modules), gợi ý theo tên lỗi, chỉ đúng chỗ undefined trên đường dẫn a.b.c, bisect lịch sử commit đếm số lần chạy kiểm, và tự viết trace() ghi mọi lời gọi có thụt lề — 6 bài."
+    },
+    {
+      "slug": "wf-10-3-git-workflow",
+      "name": "10.3 Quy trình Git",
+      "level": "INTERMEDIATE",
+      "description": "Soát thông điệp commit, đặt tên nhánh từ tiêu đề việc, đọc các khối xung đột <<<<<<< ======= >>>>>>>, gỡ xung đột theo ours/theirs/both, quyết định push/pull/merge từ hai lịch sử, và tự viết phép gộp ba bên theo dòng — 6 bài."
+    },
+    {
+      "slug": "wf-10-4-keep-learning",
+      "name": "10.4 Cách tiếp tục học",
+      "level": "INTERMEDIATE",
+      "description": "Sắp số cho đúng (sort mặc định so chuỗi), sortBy theo khoá với hàm so sánh đúng hợp đồng, tự viết ms() sau khi đọc mã nguồn thư viện, soát một câu hỏi trước khi gửi, che bí mật trước khi chia sẻ log, và tự động thu nhỏ một ca lỗi — 6 bài."
+    },
+    {
+      "slug": "wf-10-5-full-stack-picture",
+      "name": "10.5 Bức tranh full-stack",
+      "level": "INTERMEDIATE",
+      "description": "Đoán tầng có lỗi từ triệu chứng, đọc cookie sid, khớp route kèm tham số và 404/405 + Allow, kiểm phần thân ghi chú (422), che log theo tầng, và ghép cả máy chủ ghi chú (đăng nhập, phiên, GET/POST/DELETE theo người dùng) trong một hàm handle() — 6 bài."
+    },
+    {
       "slug": "wf-11-1-closure",
       "name": "11.1 Closure: hàm nhớ được nơi nó sinh ra",
       "level": "INTERMEDIATE",
@@ -158,6 +338,78 @@
       "name": "11.5 Biểu thức chính quy, vừa đủ dùng",
       "level": "INTERMEDIATE",
       "description": "Số di động Việt Nam có neo, đuôi ảnh không phân biệt hoa thường, đổi ngày bằng nhóm có tên, rút điểm bằng matchAll, slugify tiếng Việt, đếm từ nguyên vẹn có hiểu Unicode — 6 bài."
+    },
+    {
+      "slug": "wf-12-1-position-stacking",
+      "name": "12.1 Position và ngữ cảnh xếp chồng",
+      "level": "INTERMEDIATE",
+      "description": "Huy hiệu ở góc thẻ, header dính, thông báo cố định góc màn hình, lớp phủ toàn màn hình, đưa modal ra khỏi ngữ cảnh xếp chồng, thang z-index bằng token — 6 bài, chấm bằng giá trị CSS đã tính."
+    },
+    {
+      "slug": "wf-12-2-transition-animation",
+      "name": "12.2 Chuyển cảnh và hoạt hình",
+      "level": "INTERMEDIATE",
+      "description": "Nút đổi màu mượt, gọi tên thuộc tính thay vì all, accordion bằng grid 0fr→1fr, spinner @keyframes, ngăn kéo trượt bằng transform, khối prefers-reduced-motion — 6 bài."
+    },
+    {
+      "slug": "wf-12-3-css-architecture",
+      "name": "12.3 Đặt tên và tổ chức CSS",
+      "level": "INTERMEDIATE",
+      "description": "Đổi tên theo BEM, gỡ id và !important khỏi thanh điều hướng, xếp lớp bằng @layer, giá trị mặc định dễ đè bằng :where(), sửa va chạm tên toàn cục, tự viết hàm tính độ đặc hiệu — 6 bài."
+    },
+    {
+      "slug": "wf-12-4-tokens-theming",
+      "name": "12.4 Token thiết kế và chế độ sáng/tối",
+      "level": "INTERMEDIATE",
+      "description": "Khai báo token trên :root, component chỉ dùng token, sửa bẫy thiếu đơn vị, theme tối bằng [data-theme], nút chuyển theme bằng JavaScript, hàm tính tỉ lệ tương phản WCAG — 6 bài."
+    },
+    {
+      "slug": "wf-13-1-why-test",
+      "name": "13.1 Kiểm thử để làm gì",
+      "level": "BEGINNER",
+      "description": "Sửa lỗi hồi quy ở giá trị biên, viết bảng ca kiểm phủ đủ biên, tự viết expect().toBe(), luật miễn phí ship sau mã giảm giá, đọc báo cáo đỏ, chạy cả bảng ca kiểm — 6 bài."
+    },
+    {
+      "slug": "wf-13-2-unit-tests",
+      "name": "13.2 Những unit test đầu tiên",
+      "level": "BEGINNER",
+      "description": "Hàm xếp loại nhiều biên, so sâu kiểu toEqual, toBeCloseTo đúng quy tắc Vitest, bọc lời gọi để kiểm ném lỗi, định dạng tên it.each, và một describe/it tí hon — 6 bài."
+    },
+    {
+      "slug": "wf-13-3-testing-library",
+      "name": "13.3 Kiểm thử giao diện theo cách người dùng thấy",
+      "level": "INTERMEDIATE",
+      "description": "Gắn nhãn cho ô nhập, đổi div thành button thật, thông báo role=\"status\"/\"alert\", bộ đếm có nút khoá ở 0, form khoá nút tới khi hợp lệ, tab có ARIA — 6 bài chấm bằng tương tác thật."
+    },
+    {
+      "slug": "wf-13-4-mocking-ci",
+      "name": "13.4 Giả lập và chạy test trong CI",
+      "level": "INTERMEDIATE",
+      "description": "Tiêm fetch để test được, hàm giả tự ghi lời gọi (vi.fn tí hon), đường lỗi 404/500/mất mạng, debounce trên đồng hồ ảo, tiêm thời gian cho lời chào, retry có chờ — 6 bài, không một byte mạng thật."
+    },
+    {
+      "slug": "wf-14-1-build",
+      "name": "14.1 Bản dựng production thật ra làm gì",
+      "level": "INTERMEDIATE",
+      "description": "Tên file có mã băm, thu gọn CSS, thay import.meta.env lúc dựng, tree-shaking trên đồ thị module, thứ tự đóng gói theo phụ thuộc, viết lại index.html trỏ tới file đã dựng — 6 bài."
+    },
+    {
+      "slug": "wf-14-2-env-secrets",
+      "name": "14.2 Biến môi trường và bí mật",
+      "level": "INTERMEDIATE",
+      "description": "Đọc .env, lọc biến công khai VITE_, cấu hình chết sớm khi thiếu biến, soát bundle tìm bí mật, che bí mật trong log, đối chiếu .env.example — 6 bài."
+    },
+    {
+      "slug": "wf-14-3-deploy",
+      "name": "14.3 Deploy và kiểm chứng",
+      "level": "INTERMEDIATE",
+      "description": "Giải đường dẫn an toàn, SPA fallback, chính sách Cache-Control, luật chuyển hướng kiểu _redirects, smoke-test sau deploy, chọn bản để rollback — 6 bài."
+    },
+    {
+      "slug": "wf-14-4-performance",
+      "name": "14.4 Hiệu năng: đo và sửa",
+      "level": "INTERMEDIATE",
+      "description": "Xếp hạng Core Web Vitals, CLS theo cửa sổ phiên, TBT từ tác vụ dài, chọn ảnh từ srcset, ngân sách dung lượng trang, chia việc dài để nhường luồng chính, soát thẻ img — 7 bài."
     }
   ]
 }

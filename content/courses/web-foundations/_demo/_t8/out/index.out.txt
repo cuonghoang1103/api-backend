@@ -1,0 +1,15 @@
+-- table events: 300000 rows, user_id between 0 and 9999
+sqlite> EXPLAIN QUERY PLAN SELECT count(*) FROM events WHERE user_id = 4242;
+QUERY PLAN
+`--SCAN events
+sqlite> .timer on
+sqlite> SELECT count(*) FROM events WHERE user_id = 4242;   -- run 20 times, average:
+  about 19.7 ms per query (including starting sqlite3)
+
+sqlite> CREATE INDEX idx_events_user ON events(user_id);
+sqlite> EXPLAIN QUERY PLAN SELECT count(*) FROM events WHERE user_id = 4242;
+QUERY PLAN
+`--SEARCH events USING COVERING INDEX idx_events_user (user_id=?)
+sqlite> SELECT count(*) FROM events WHERE user_id = 4242;   -- run 20 times, average:
+  about 4.8 ms per query (including starting sqlite3)
+-- file size: 13860 KB with the index

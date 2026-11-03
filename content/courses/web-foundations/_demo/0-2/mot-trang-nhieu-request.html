@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="560x260">
+<meta name="cho" content="600">
+<title>One page, many requests</title>
+<link rel="stylesheet" href="trang/style.css">
+</head>
+<body>
+  <h1>One page</h1>
+  <div class="cards">
+    <img src="trang/logo.svg" alt="CuongThai logo">
+    <img src="trang/photo.svg" alt="A profile picture">
+  </div>
+  <p id="note">(waiting for JavaScript…)</p>
+  <script src="trang/app.js"></script>
+  <script>
+    addEventListener('load', () => {
+      // the same list DevTools → Network shows, read from inside the page
+      const nav = performance.getEntriesByType('navigation')[0];
+      console.log('1. ' + new URL(nav.name).pathname + '  (the HTML document)');
+      performance.getEntriesByType('resource').forEach((r, i) => {
+        console.log((i + 2) + '. ' + new URL(r.name).pathname + '  (' + r.initiatorType + ')');
+      });
+      console.log('requests for this one page:', 1 + performance.getEntriesByType('resource').length);
+    });
+  </script>
+</body>
+</html>

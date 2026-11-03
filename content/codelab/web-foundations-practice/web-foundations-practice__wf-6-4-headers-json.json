@@ -1,0 +1,759 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-6-4-headers-json",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-6-4-headers-json"
+  },
+  "exercises": [
+    {
+      "title": "Tra một header",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "header không phân biệt hoa thường"
+      ],
+      "prerequisites": [
+        "Object.keys",
+        "toLowerCase"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "header"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>getHeader(headers, name)</code>: <code>headers</code> là một object mà tên có thể viết hoa thường lộn xộn (<code>{ \"Content-Type\": … }</code> hay <code>{ \"content-type\": … }</code>). Trả giá trị của header <code>name</code> bất kể hoa thường; không có ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So tên không phân biệt hoa thường.</li>\n  <li>Không có ⇒ null (không phải undefined).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "headers: object; name: string.",
+      "outputSpec": "string hoặc null.",
+      "constraints": "Không sửa object vào.",
+      "examplesJson": [
+        {
+          "input": "getHeader({ \"Content-Type\": \"text/csv\" }, \"content-type\")",
+          "output": "\"text/csv\"",
+          "explanation": "Content-Type và content-type là một header."
+        }
+      ],
+      "hintsJson": [
+        "const key = Object.keys(headers).find((k) => k.toLowerCase() === name.toLowerCase());",
+        "return key === undefined ? null : headers[key];"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — tra một header\nfunction getHeader(headers, name) {\n  return headers[name];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — tên header không phân biệt hoa thường (HTTP/2 còn luôn gửi chữ thường),\n// nên tra theo tên đã chuẩn hoá chứ không tra thẳng headers[name].\nfunction getHeader(headers, name) {\n  const wanted = name.toLowerCase();\n  const key = Object.keys(headers).find((k) => k.toLowerCase() === wanted);\n  return key === undefined ? null : headers[key];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đó là việc <code>res.headers.get()</code> của fetch và <code>req.get()</code> của Express làm giúp bạn. Khi nhận header dưới dạng object thường (log, mock), tra thẳng <code>headers[\"Content-Type\"]</code> sẽ trượt với <code>content-type</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>headers[name] — trượt khi khác hoa thường.</li>\n  <li>Trả undefined thay vì null.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Headers/get",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Any case matches|||Hoa thường nào cũng khớp",
+            "goi": "[getHeader({ \"Content-Type\": \"text/csv\" }, \"content-type\"), getHeader({ etag: \"\\\"abc\\\"\" }, \"ETag\")]",
+            "mongDoi": [
+              "text/csv",
+              "\"abc\""
+            ]
+          },
+          {
+            "moTa": "Missing header is null|||Header vắng là null",
+            "goi": "getHeader({ Accept: \"*/*\" }, \"Authorization\")",
+            "mongDoi": null
+          },
+          {
+            "moTa": "Empty value is still a value|||Giá trị rỗng vẫn là giá trị",
+            "goi": "getHeader({ \"X-Empty\": \"\" }, \"x-empty\")",
+            "mongDoi": ""
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "headers[name] — trượt khi khác hoa thường."
+        },
+        {
+          "loi": "Trả undefined thay vì null."
+        }
+      ]
+    },
+    {
+      "title": "Tách Content-Type",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "media type",
+        "tham số charset"
+      ],
+      "prerequisites": [
+        "split",
+        "trim"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "header"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>parseContentType(value)</code> cho giá trị như <code>\"application/json; charset=utf-8\"</code>. Trả <code>{ type, charset }</code>: <code>type</code> viết thường, đã trim; <code>charset</code> viết thường, bỏ nháy nếu có, <code>null</code> nếu không có. <code>value</code> rỗng hoặc vắng ⇒ <code>{ type: null, charset: null }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>type thường, trim.</li>\n  <li>charset thường, bỏ nháy, null nếu vắng.</li>\n  <li>Tên tham số không phân biệt hoa thường (Charset=…).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: string | undefined.",
+      "outputSpec": "{ type, charset }.",
+      "constraints": "Bỏ qua các tham số khác (boundary…).",
+      "examplesJson": [
+        {
+          "input": "parseContentType(\"Application/JSON; Charset=\\\"UTF-8\\\"\")",
+          "output": "{ type: \"application/json\", charset: \"utf-8\" }",
+          "explanation": "Mọi thứ về chữ thường, nháy bị bỏ."
+        }
+      ],
+      "hintsJson": [
+        "const [type, ...params] = value.split(\";\");",
+        "for (const p of params) { const [k, v] = p.split(\"=\"); if (k.trim().toLowerCase() === \"charset\") … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — tách Content-Type\nfunction parseContentType(value) {\n  return { type: value, charset: null };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — Content-Type = media type + tham số (charset, boundary, ...)\nfunction parseContentType(value) {\n  if (!value || !value.trim()) return { type: null, charset: null };\n  const [type, ...params] = value.split(';');\n  let charset = null;\n  for (const p of params) {\n    const i = p.indexOf('=');\n    if (i < 0) continue;\n    if (p.slice(0, i).trim().toLowerCase() === 'charset') {\n      charset = p.slice(i + 1).trim().replace(/^\"(.*)\"$/, '$1').toLowerCase();\n    }\n  }\n  return { type: type.trim().toLowerCase(), charset };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>So <code>Content-Type === \"application/json\"</code> là lỗi kinh điển: máy chủ thật gửi <code>application/json; charset=utf-8</code>. Tách media type ra rồi mới so; <code>charset</code> cho biết cách đổi byte thành chữ (thiếu nó, tiếng Việt có thể hiện thành ký tự rác).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So cả chuỗi — \"; charset=utf-8\" làm trượt.</li>\n  <li>Quên bỏ nháy \"UTF-8\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Type",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "JSON with charset|||JSON có charset",
+            "goi": "parseContentType(\"application/json; charset=utf-8\")",
+            "mongDoi": {
+              "type": "application/json",
+              "charset": "utf-8"
+            }
+          },
+          {
+            "moTa": "Case, quotes and other params|||Hoa thường, nháy và tham số khác",
+            "goi": "[parseContentType(\"Text/HTML; Charset=\\\"UTF-8\\\"\"), parseContentType(\"multipart/form-data; boundary=----x\")]",
+            "mongDoi": [
+              {
+                "type": "text/html",
+                "charset": "utf-8"
+              },
+              {
+                "type": "multipart/form-data",
+                "charset": null
+              }
+            ]
+          },
+          {
+            "moTa": "Empty or missing|||Rỗng hoặc vắng",
+            "goi": "[parseContentType(\"\"), parseContentType(undefined), parseContentType(\"text/csv\")]",
+            "mongDoi": [
+              {
+                "type": null,
+                "charset": null
+              },
+              {
+                "type": null,
+                "charset": null
+              },
+              {
+                "type": "text/csv",
+                "charset": null
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So cả chuỗi — \"; charset=utf-8\" làm trượt."
+        },
+        {
+          "loi": "Quên bỏ nháy \"UTF-8\"."
+        }
+      ]
+    },
+    {
+      "title": "Parse JSON không ném lỗi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "JSON.parse",
+        "try/catch",
+        "kết quả có nhãn"
+      ],
+      "prerequisites": [
+        "try/catch"
+      ],
+      "tags": [
+        "javascript",
+        "json"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>safeJsonParse(text)</code> trả <code>{ ok: true, value }</code> khi <code>text</code> là JSON hợp lệ, hoặc <code>{ ok: false, reason }</code> khi không: <code>reason</code> là <code>\"html\"</code> nếu chữ (sau khi bỏ khoảng trắng đầu) bắt đầu bằng <code>&lt;</code> — tức là bạn nhận một trang HTML — và <code>\"syntax\"</code> cho mọi lỗi cú pháp khác. Chuỗi rỗng là <code>\"syntax\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không bao giờ ném.</li>\n  <li>Phân biệt trang HTML với JSON sai cú pháp.</li>\n  <li>Giá trị JSON nguyên thuỷ (5, \"x\", null) vẫn hợp lệ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "{ ok, value } | { ok, reason }.",
+      "constraints": "Không dùng regex để \"đoán\" JSON hợp lệ — để JSON.parse quyết định.",
+      "examplesJson": [
+        {
+          "input": "safeJsonParse(\"<!doctype html><h1>502</h1>\")",
+          "output": "{ ok: false, reason: \"html\" }",
+          "explanation": "Thông điệp \"Unexpected token '<'\" trong bài."
+        }
+      ],
+      "hintsJson": [
+        "try { return { ok: true, value: JSON.parse(text) }; } catch { … }",
+        "text.trimStart().startsWith(\"<\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — parse JSON không ném lỗi\nfunction safeJsonParse(text) {\n  return { ok: true, value: JSON.parse(text) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — không ném; nói rõ VÌ SAO hỏng (HTML hay cú pháp)\nfunction safeJsonParse(text) {\n  try {\n    return { ok: true, value: JSON.parse(text) };\n  } catch {\n    const html = text.trimStart().startsWith('<');           // proxy/dev server trả trang lỗi HTML\n    return { ok: false, reason: html ? 'html' : 'syntax' };\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi <code>reason === \"html\"</code>, vấn đề không nằm ở JSON mà ở chỗ máy chủ đã không trả JSON (sai URL, API sập, bị chuyển tới trang đăng nhập) — đi xem status và Network tab. Kết quả có nhãn <code>ok</code> buộc người gọi xử lý cả hai nhánh.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả null khi lỗi — không phân biệt được với JSON \"null\" hợp lệ.</li>\n  <li>Ném lại lỗi ra ngoài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/JSON_bad_parse",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Valid JSON, including primitives and null|||JSON hợp lệ, kể cả nguyên thuỷ và null",
+            "goi": "[safeJsonParse('{\"id\":1}'), safeJsonParse(\"5\"), safeJsonParse(\"null\")]",
+            "mongDoi": [
+              {
+                "ok": true,
+                "value": {
+                  "id": 1
+                }
+              },
+              {
+                "ok": true,
+                "value": 5
+              },
+              {
+                "ok": true,
+                "value": null
+              }
+            ]
+          },
+          {
+            "moTa": "HTML page is reported as html|||Trang HTML được báo là html",
+            "goi": "[safeJsonParse(\"<!doctype html><h1>502 Bad Gateway</h1>\"), safeJsonParse(\"\\n  <html>\")]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "html"
+              },
+              {
+                "ok": false,
+                "reason": "html"
+              }
+            ]
+          },
+          {
+            "moTa": "JS-style objects are syntax errors|||Object kiểu JS là lỗi cú pháp",
+            "goi": "[\"{'name': 'Pen'}\", \"{name: 1}\", '{\"a\":1,}', \"\"].map(safeJsonParse)",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "syntax"
+              },
+              {
+                "ok": false,
+                "reason": "syntax"
+              },
+              {
+                "ok": false,
+                "reason": "syntax"
+              },
+              {
+                "ok": false,
+                "reason": "syntax"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả null khi lỗi — không phân biệt được với JSON \"null\" hợp lệ."
+        },
+        {
+          "loi": "Ném lại lỗi ra ngoài."
+        }
+      ]
+    },
+    {
+      "title": "Đọc Cache-Control",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Cache-Control",
+        "chỉ thị"
+      ],
+      "prerequisites": [
+        "split",
+        "Number"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "cache"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>parseCacheControl(value)</code> biến <code>\"public, max-age=600, no-cache\"</code> thành <code>{ public: true, \"max-age\": 600, \"no-cache\": true }</code>. Tên chỉ thị viết thường, trim; chỉ thị không có <code>=</code> ⇒ <code>true</code>; giá trị là số nguyên ⇒ number, giá trị trong nháy ⇒ bỏ nháy, còn lại giữ chuỗi. Rỗng/vắng ⇒ <code>{}</code>. Phần tử rỗng (dấu phẩy thừa) bị bỏ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách theo dấu phẩy.</li>\n  <li>Cờ ⇒ true; số ⇒ number.</li>\n  <li>Tên thường.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: string | undefined.",
+      "outputSpec": "object.",
+      "constraints": "Không cần xử lý dấu phẩy nằm trong nháy.",
+      "examplesJson": [
+        {
+          "input": "parseCacheControl(\"public, max-age=31536000, immutable\")",
+          "output": "{ public: true, \"max-age\": 31536000, immutable: true }",
+          "explanation": "Header cho tệp có mã băm trong tên (Bài 14.1)."
+        }
+      ],
+      "hintsJson": [
+        "for (const part of value.split(\",\")) { const p = part.trim(); if (!p) continue; … }",
+        "/^\\d+$/.test(v) ? Number(v) : v.replace(/^\"(.*)\"$/, \"$1\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — đọc Cache-Control\nfunction parseCacheControl(value) {\n  return {};\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — Cache-Control là danh sách chỉ thị, cách nhau bởi dấu phẩy\nfunction parseCacheControl(value) {\n  const out = {};\n  for (const part of (value ?? '').split(',')) {\n    const p = part.trim();\n    if (!p) continue;                                       // dấu phẩy thừa\n    const i = p.indexOf('=');\n    if (i < 0) { out[p.toLowerCase()] = true; continue; }   // cờ: no-store, immutable\n    const name = p.slice(0, i).trim().toLowerCase();\n    const v = p.slice(i + 1).trim();\n    out[name] = /^\\d+$/.test(v) ? Number(v) : v.replace(/^\"(.*)\"$/, '$1');\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đọc được header này là đọc được câu trả lời cho \"vì sao trang vẫn hiện dữ liệu cũ\": <code>max-age</code> cho phép dùng lại không hỏi, <code>no-cache</code> bắt hỏi lại mỗi lần, <code>no-store</code> cấm giữ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Giữ \"600\" là chuỗi — so sánh max-age > 60 sai kiểu.</li>\n  <li>Không trim — \" max-age\" thành tên khác.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Cache-Control",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Flags and numbers|||Cờ và số",
+            "goi": "parseCacheControl(\"public, max-age=31536000, immutable\")",
+            "mongDoi": {
+              "public": true,
+              "max-age": 31536000,
+              "immutable": true
+            }
+          },
+          {
+            "moTa": "Case, spaces, quotes, extra commas|||Hoa thường, khoảng trắng, nháy, phẩy thừa",
+            "goi": "parseCacheControl(\" No-Cache ,, private=\\\"set-cookie\\\", MAX-AGE = 0 ,\")",
+            "mongDoi": {
+              "no-cache": true,
+              "private": "set-cookie",
+              "max-age": 0
+            }
+          },
+          {
+            "moTa": "Empty or missing|||Rỗng hoặc vắng",
+            "goi": "[parseCacheControl(\"\"), parseCacheControl(undefined)]",
+            "mongDoi": [
+              {},
+              {}
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Giữ \"600\" là chuỗi — so sánh max-age > 60 sai kiểu."
+        },
+        {
+          "loi": "Không trim — \" max-age\" thành tên khác."
+        }
+      ]
+    },
+    {
+      "title": "Hồi sinh ngày giờ từ JSON",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "JSON.parse reviver",
+        "ISO 8601"
+      ],
+      "prerequisites": [
+        "regex",
+        "Date"
+      ],
+      "tags": [
+        "javascript",
+        "json"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>JSON biến <code>Date</code> thành chuỗi ISO, và parse xong nó VẪN là chuỗi. Viết <code>parseWithDates(text)</code> dùng tham số thứ hai (reviver) của <code>JSON.parse</code>: mọi giá trị CHUỖI có dạng ISO đầy đủ <code>YYYY-MM-DDTHH:mm:ss(.sss)Z</code> (giờ UTC, có chữ <code>Z</code>) trở thành <code>Date</code>, ở bất kỳ độ sâu nào; chuỗi khác giữ nguyên (kể cả <code>\"2026-11-02\"</code> chỉ có ngày).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Dùng reviver của JSON.parse.</li>\n  <li>Chỉ chuỗi ISO có giờ và Z.</li>\n  <li>Mọi độ sâu, cả trong mảng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string (JSON hợp lệ).",
+      "outputSpec": "giá trị đã parse.",
+      "constraints": "Không duyệt object bằng tay — reviver đã duyệt giúp.",
+      "examplesJson": [
+        {
+          "input": "parseWithDates('{\"createdAt\":\"2026-11-02T09:30:00.000Z\"}').createdAt instanceof Date",
+          "output": "true",
+          "explanation": "Ngược với output trong bài: typeof … là \"string\"."
+        }
+      ],
+      "hintsJson": [
+        "JSON.parse(text, (key, value) => …)",
+        "const ISO = /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$/;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — hồi sinh ngày giờ\nfunction parseWithDates(text) {\n  return JSON.parse(text);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — reviver được gọi cho MỌI giá trị, từ trong ra ngoài\nconst ISO = /^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$/;\nfunction parseWithDates(text) {\n  return JSON.parse(text, (key, value) =>\n    typeof value === 'string' && ISO.test(value) ? new Date(value) : value);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không hồi sinh thì <code>order.createdAt.getFullYear()</code> ném TypeError vì đó là chuỗi. Nhiều dự án làm việc này một lần ở hàm gọi API thay vì rải <code>new Date(…)</code> khắp component. Giữ nguyên chuỗi chỉ-ngày là cố ý: <code>new Date(\"2026-11-02\")</code> hiểu là nửa đêm UTC, dễ lệch một ngày ở múi giờ Việt Nam.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Biến mọi chuỗi chứa \"-\" thành Date.</li>\n  <li>Quên rằng mảng cũng được duyệt.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#using_the_reviver_parameter",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "ISO strings become Date|||Chuỗi ISO thành Date",
+            "goi": "parseWithDates('{\"id\":7,\"createdAt\":\"2026-11-02T09:30:00.000Z\"}')",
+            "mongDoi": {
+              "id": 7,
+              "createdAt": {
+                "$js": "Date",
+                "iso": "2026-11-02T09:30:00.000Z"
+              }
+            }
+          },
+          {
+            "moTa": "Nested and inside arrays|||Lồng nhau và trong mảng",
+            "goi": "parseWithDates('{\"log\":[{\"at\":\"2026-01-01T00:00:00Z\"},{\"at\":\"oops\"}]}').log.map((x) => x.at instanceof Date)",
+            "mongDoi": [
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Other strings stay strings|||Chuỗi khác giữ nguyên",
+            "goi": "parseWithDates('[\"2026-11-02\",\"2026-11-02T09:30:00\",\"hello\",5]')",
+            "mongDoi": [
+              "2026-11-02",
+              "2026-11-02T09:30:00",
+              "hello",
+              5
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Biến mọi chuỗi chứa \"-\" thành Date."
+        },
+        {
+          "loi": "Quên rằng mảng cũng được duyệt."
+        }
+      ]
+    },
+    {
+      "title": "Thương lượng nội dung (Accept)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "Accept",
+        "trọng số q",
+        "ký tự đại diện"
+      ],
+      "prerequisites": [
+        "split",
+        "sort",
+        "parseFloat"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "header"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>negotiate(accept, available)</code>: <code>available</code> là mảng định dạng máy chủ có, theo thứ tự ưu tiên của máy chủ. <code>accept</code> như <code>\"text/csv, application/json;q=0.8, */*;q=0.1\"</code>. Mỗi mục có trọng số <code>q</code> (mặc định 1; <code>q=0</code> nghĩa là \"không nhận\"). Mỗi định dạng có sẵn lấy q của mục khớp CỤ THỂ NHẤT: <code>type/sub</code> chính xác > <code>type/*</code> > <code>*/*</code>. Trả định dạng có q lớn nhất (> 0); bằng nhau ⇒ cái đứng trước trong <code>available</code>. Không khớp gì ⇒ <code>null</code> (máy chủ sẽ trả 406). <code>accept</code> rỗng/vắng ⇒ phần tử đầu của <code>available</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc q (mặc định 1).</li>\n  <li>Khớp cụ thể nhất thắng, kể cả khi q của nó thấp hơn.</li>\n  <li>q=0 loại bỏ.</li>\n  <li>Hoà ⇒ theo thứ tự available.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "accept: string | undefined; available: string[].",
+      "outputSpec": "string hoặc null.",
+      "constraints": "Không phân biệt hoa thường khi so định dạng; trả đúng chuỗi trong available.",
+      "examplesJson": [
+        {
+          "input": "negotiate(\"text/csv\", [\"application/json\", \"text/csv\"])",
+          "output": "\"text/csv\"",
+          "explanation": "Như curl -H \"Accept: text/csv\" trong bài."
+        },
+        {
+          "input": "negotiate(\"image/*\", [\"application/json\"])",
+          "output": "null",
+          "explanation": "406 Not Acceptable."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi mục: const [range, ...params] = part.split(\";\"); q = parseFloat(param \"q=\") hoặc 1.",
+        "Độ cụ thể: range === type ? 3 : range === major + \"/*\" ? 2 : range === \"*/*\" ? 1 : 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — thương lượng nội dung\nfunction negotiate(accept, available) {\n  return available.find((t) => accept.includes(t)) ?? null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — Accept: client nói thích gì (kèm q), máy chủ chọn cái tốt nhất mình có\nfunction negotiate(accept, available) {\n  if (!accept || !accept.trim()) return available[0] ?? null;\n  const ranges = accept.split(',').map((part) => {\n    const [range, ...params] = part.split(';').map((s) => s.trim().toLowerCase());\n    const qParam = params.find((p) => p.startsWith('q='));\n    return { range, q: qParam ? parseFloat(qParam.slice(2)) : 1 };\n  }).filter((r) => r.range);\n  let best = null;\n  let bestQ = 0;\n  for (const type of available) {\n    const t = type.toLowerCase();\n    const major = t.split('/')[0];\n    let spec = 0;\n    let q = 0;\n    for (const r of ranges) {\n      const s = r.range === t ? 3 : r.range === major + '/*' ? 2 : r.range === '*/*' ? 1 : 0;\n      if (s > spec) { spec = s; q = r.q; }                  // mục cụ thể nhất quyết định q\n    }\n    if (q > bestQ) { best = type; bestQ = q; }              // \">\" giữ cái đứng trước khi hoà\n  }\n  return best;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình duyệt gửi Accept kiểu <code>text/html,application/xhtml+xml,…,*/*;q=0.8</code>; fetch gửi <code>*/*</code>. \"Cụ thể nhất thắng\" nghĩa là <code>text/csv;q=0, */*</code> vẫn từ chối CSV dù <code>*/*</code> có q=1. Express gói việc này trong <code>res.format()</code> và <code>req.accepts()</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng includes trên chuỗi Accept — bỏ qua q và */*.</li>\n  <li>Lấy q lớn nhất trong mọi mục khớp thay vì mục cụ thể nhất.</li>\n  <li>Coi q=0 là \"ưu tiên thấp\" thay vì \"không nhận\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Content_negotiation",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Exact match and default|||Khớp chính xác và mặc định",
+            "goi": "[negotiate(\"text/csv\", [\"application/json\", \"text/csv\"]), negotiate(\"\", [\"application/json\", \"text/csv\"]), negotiate(undefined, [\"text/csv\"])]",
+            "mongDoi": [
+              "text/csv",
+              "application/json",
+              "text/csv"
+            ]
+          },
+          {
+            "moTa": "Weights decide|||Trọng số quyết định",
+            "goi": "[negotiate(\"text/csv;q=0.5, application/json\", [\"text/csv\", \"application/json\"]), negotiate(\"text/csv, application/json;q=0.8\", [\"application/json\", \"text/csv\"])]",
+            "mongDoi": [
+              "application/json",
+              "text/csv"
+            ]
+          },
+          {
+            "moTa": "Wildcards; ties keep server order|||Ký tự đại diện; hoà thì theo thứ tự máy chủ",
+            "goi": "[negotiate(\"*/*\", [\"application/json\", \"text/csv\"]), negotiate(\"text/*\", [\"application/json\", \"text/csv\", \"text/html\"])]",
+            "mongDoi": [
+              "application/json",
+              "text/csv"
+            ]
+          },
+          {
+            "moTa": "Most specific wins, q=0 refuses, nothing gives null|||Cụ thể nhất thắng, q=0 từ chối, không khớp trả null",
+            "goi": "[negotiate(\"text/csv;q=0, */*\", [\"text/csv\", \"application/json\"]), negotiate(\"image/*\", [\"application/json\"]), negotiate(\"Application/JSON\", [\"application/json\"])]",
+            "mongDoi": [
+              "application/json",
+              null,
+              "application/json"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng includes trên chuỗi Accept — bỏ qua q và */*."
+        },
+        {
+          "loi": "Lấy q lớn nhất trong mọi mục khớp thay vì mục cụ thể nhất."
+        },
+        {
+          "loi": "Coi q=0 là \"ưu tiên thấp\" thay vì \"không nhận\"."
+        }
+      ]
+    },
+    {
+      "title": "GET có điều kiện: ETag → 304",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "ETag",
+        "If-None-Match",
+        "304",
+        "ETag yếu"
+      ],
+      "prerequisites": [
+        "split",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "cache"
+      ],
+      "problemHtml": "<p><em>Bài 6.4 — Header và JSON.</em> Mỗi bài là một việc nhỏ mà máy chủ hoặc trình duyệt làm với header và phần thân của mọi thông điệp.</p><p>Viết <code>conditionalGet(reqHeaders, etag, data)</code> như máy chủ của bài: <code>reqHeaders</code> là object header của request (tên CÓ THỂ hoa thường lộn xộn), <code>etag</code> là ETag hiện tại (có nháy, vd <code>\"8c508e8ba06f\"</code>). Nếu <code>If-None-Match</code> khớp ⇒ <code>{ status: 304, headers: { ETag: etag }, body: null }</code>. Ngược lại ⇒ <code>{ status: 200, headers: { ETag: etag, \"Cache-Control\": \"no-cache\" }, body: data }</code>. \"Khớp\" là: giá trị là <code>*</code>, hoặc một trong danh sách cách nhau bởi dấu phẩy bằng <code>etag</code> sau khi bỏ tiền tố yếu <code>W/</code> ở CẢ HAI phía.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên header không phân biệt hoa thường.</li>\n  <li>Danh sách nhiều ETag.</li>\n  <li>W/ được bỏ khi so (so sánh yếu).</li>\n  <li>* luôn khớp.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "reqHeaders: object; etag: string; data: any.",
+      "outputSpec": "{ status, headers, body }.",
+      "constraints": "304 không có phần thân.",
+      "examplesJson": [
+        {
+          "input": "conditionalGet({ \"If-None-Match\": \"\\\"a1\\\"\" }, \"\\\"a1\\\"\", {…})",
+          "output": "{ status: 304, headers: { ETag: \"\\\"a1\\\"\" }, body: null }",
+          "explanation": "Client đã có đúng phiên bản này."
+        }
+      ],
+      "hintsJson": [
+        "const key = Object.keys(reqHeaders).find((k) => k.toLowerCase() === \"if-none-match\");",
+        "const strip = (t) => t.trim().replace(/^W\\//, \"\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — GET có điều kiện\nfunction conditionalGet(reqHeaders, etag, data) {\n  if (reqHeaders['If-None-Match'] === etag) return { status: 304 };\n  return { status: 200, body: data };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.4 — \"tôi có phiên bản này rồi\" ⇒ 304 không phần thân\nfunction conditionalGet(reqHeaders, etag, data) {\n  const key = Object.keys(reqHeaders).find((k) => k.toLowerCase() === 'if-none-match');\n  const value = key === undefined ? '' : String(reqHeaders[key]).trim();\n  const strip = (t) => t.trim().replace(/^W\\//, '');        // so sánh yếu: bỏ W/\n  const matches = value === '*' || (value !== '' && value.split(',').some((t) => strip(t) === strip(etag)));\n  if (matches) return { status: 304, headers: { ETag: etag }, body: null };\n  return { status: 200, headers: { ETag: etag, 'Cache-Control': 'no-cache' }, body: data };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình duyệt tự gửi <code>If-None-Match</code> (bài đã đo bằng DevTools Protocol). Danh sách xuất hiện khi bộ đệm giữ nhiều phiên bản; <code>W/</code> là ETag \"yếu\" — nghĩa là tương đương về nội dung, đủ cho 304. Proxy như nginx hay đổi ETag mạnh thành yếu khi nén gzip, nên so sánh yếu là bắt buộc ở đây.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tra reqHeaders[\"If-None-Match\"] — trượt với chữ thường.</li>\n  <li>So cả chuỗi danh sách với một ETag.</li>\n  <li>Gửi phần thân kèm 304.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.4 Headers, JSON and the message body.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/If-None-Match",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Same ETag gives 304, different gives 200|||Cùng ETag cho 304, khác cho 200",
+            "goi": "[conditionalGet({ \"If-None-Match\": \"\\\"a1\\\"\" }, \"\\\"a1\\\"\", { id: 1 }), conditionalGet({ \"if-none-match\": \"\\\"old\\\"\" }, \"\\\"a1\\\"\", { id: 1 })]",
+            "mongDoi": [
+              {
+                "status": 304,
+                "headers": {
+                  "ETag": "\"a1\""
+                },
+                "body": null
+              },
+              {
+                "status": 200,
+                "headers": {
+                  "ETag": "\"a1\"",
+                  "Cache-Control": "no-cache"
+                },
+                "body": {
+                  "id": 1
+                }
+              }
+            ]
+          },
+          {
+            "moTa": "No header: 200|||Không có header: 200",
+            "goi": "conditionalGet({ Accept: \"*/*\" }, \"\\\"a1\\\"\", \"x\").status",
+            "mongDoi": 200
+          },
+          {
+            "moTa": "Lists, weak tags and *|||Danh sách, ETag yếu và *",
+            "goi": "[conditionalGet({ \"IF-NONE-MATCH\": \"\\\"x\\\", W/\\\"a1\\\"\" }, \"\\\"a1\\\"\", 1).status, conditionalGet({ \"If-None-Match\": \"\\\"a1\\\"\" }, \"W/\\\"a1\\\"\", 1).status, conditionalGet({ \"If-None-Match\": \"*\" }, \"\\\"zz\\\"\", 1).status]",
+            "mongDoi": [
+              304,
+              304,
+              304
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tra reqHeaders[\"If-None-Match\"] — trượt với chữ thường."
+        },
+        {
+          "loi": "So cả chuỗi danh sách với một ETag."
+        },
+        {
+          "loi": "Gửi phần thân kèm 304."
+        }
+      ]
+    }
+  ]
+}

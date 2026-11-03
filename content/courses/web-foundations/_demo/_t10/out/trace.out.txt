@@ -1,0 +1,5 @@
+$ node top-words.mjs --trace
+1. words   ["the","cache","is","fast","the","cache","is","small","a","small","cache","is","a","fast","cache"]
+2. kept    ["cache","fast","cache","small","small","cache","fast","cache"]
+3. counts  [["cache",4],["fast",2],["small",2]]
+4. top 3   [{"word":"cache","count":4},{"word":"fast","count":2},{"word":"small","count":2}]

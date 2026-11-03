@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>fetch errors</title><meta name="cho-xong"></head>
+<body>
+<script>
+  (async () => {
+    // 1. 404: the promise does NOT reject
+    const res = await fetch('api/nope.json');
+    console.log('404 → resolved anyway. ok =', res.ok, 'status =', res.status);
+
+    // 2. reading a non-JSON body as JSON throws
+    try {
+      await res.json();
+    } catch (err) {
+      console.log('res.json() on the 404 page →', err.name);
+    }
+
+    // 3. no server at all: THIS rejects
+    try {
+      await fetch('http://127.0.0.1:9/api');
+    } catch (err) {
+      console.log('network failure →', err.name + ':', err.message);
+    }
+    window.__xong = true;
+  })();
+</script>
+</body>
+</html>

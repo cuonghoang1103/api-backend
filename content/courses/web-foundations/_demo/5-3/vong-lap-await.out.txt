@@ -1,0 +1,8 @@
+forEach: "done" printed before anything was saved
+  saved 3
+  saved 2
+  saved 1
+  saved 1
+  saved 2
+  saved 3
+for...of: done after all three, in order

@@ -1,0 +1,14 @@
+$ node -p "const l = require('./package-lock.json').packages['node_modules/dayjs']; JSON.stringify({ version: l.version, resolved: l.resolved, integrity: l.integrity.slice(0, 20) + '…' }, null, 2)"
+{
+  "version": "1.11.13",
+  "resolved": "https://registry.npmjs.org/dayjs/-/dayjs-1.11.13.tgz",
+  "integrity": "sha512-oaMBel6gjolK8…"
+}
+
+# what does "^1.11.13" allow? (semver, the library npm itself uses)
+$ node -e "const s = require('semver'); for (const v of ['1.11.13', '1.11.23', '1.12.0', '2.0.0', '1.11.12']) console.log(v.padEnd(8), '^1.11.13 →', s.satisfies(v, '^1.11.13'), '  ~1.11.13 →', s.satisfies(v, '~1.11.13'))"
+1.11.13  ^1.11.13 → true   ~1.11.13 → true
+1.11.23  ^1.11.13 → true   ~1.11.13 → true
+1.12.0   ^1.11.13 → true   ~1.11.13 → false
+2.0.0    ^1.11.13 → false   ~1.11.13 → false
+1.11.12  ^1.11.13 → false   ~1.11.13 → false

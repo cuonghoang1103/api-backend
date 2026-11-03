@@ -1,0 +1,755 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-6-2-http-methods",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-6-2-http-methods"
+  },
+  "exercises": [
+    {
+      "title": "Method an toàn",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "safe method"
+      ],
+      "prerequisites": [
+        "mảng",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>isSafe(method)</code> trả <code>true</code> cho method an toàn — không đổi trạng thái máy chủ: <code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>TRACE</code>. Không phân biệt hoa thường (<code>\"get\"</code> cũng là GET).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bốn method an toàn.</li>\n  <li>Không phân biệt hoa thường.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string.",
+      "outputSpec": "boolean.",
+      "constraints": "Không dùng chuỗi if/else cho từng method — một danh sách là đủ.",
+      "examplesJson": [
+        {
+          "input": "isSafe(\"get\")",
+          "output": "true",
+          "explanation": "Method được chuẩn hoá về chữ hoa."
+        }
+      ],
+      "hintsJson": [
+        "method.toUpperCase()",
+        "[\"GET\", \"HEAD\", \"OPTIONS\", \"TRACE\"].includes(…)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — method an toàn\nfunction isSafe(method) {\n  return method === 'GET';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — an toàn = không đổi trạng thái máy chủ.\n// Trình duyệt, bot và bản xem trước link tự gửi các method này mà không hỏi ai,\n// nên máy chủ KHÔNG BAO GIỜ được để chúng xoá hay sửa dữ liệu.\nconst SAFE = ['GET', 'HEAD', 'OPTIONS', 'TRACE'];\nfunction isSafe(method) {\n  return SAFE.includes(method.toUpperCase());\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trình duyệt, bot, bản xem trước link đều dựa vào danh sách này: chúng tự gửi GET/HEAD mà không hỏi ai. Đó là lý do bài học cấm mọi GET làm đổi dữ liệu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So khớp chữ thường — \"Get\" lọt.</li>\n  <li>Coi PUT là an toàn vì \"lặp lại vẫn thế\" — đó là idempotent, không phải an toàn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Safe/HTTP",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "GET, HEAD, OPTIONS are safe|||GET, HEAD, OPTIONS an toàn",
+            "goi": "[\"GET\", \"HEAD\", \"OPTIONS\", \"TRACE\"].map(isSafe)",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Writing methods are not|||Method ghi thì không",
+            "goi": "[\"POST\", \"PUT\", \"PATCH\", \"DELETE\"].map(isSafe)",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Case-insensitive|||Không phân biệt hoa thường",
+            "goi": "[isSafe(\"get\"), isSafe(\"Head\"), isSafe(\"delete\")]",
+            "mongDoi": [
+              true,
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So khớp chữ thường — \"Get\" lọt."
+        },
+        {
+          "loi": "Coi PUT là an toàn vì \"lặp lại vẫn thế\" — đó là idempotent, không phải an toàn."
+        }
+      ]
+    },
+    {
+      "title": "Method idempotent",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "idempotent"
+      ],
+      "prerequisites": [
+        "hàm",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>isIdempotent(method)</code>: các method an toàn (GET, HEAD, OPTIONS, TRACE) cộng <code>PUT</code> và <code>DELETE</code>. POST và PATCH không. Không phân biệt hoa thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>An toàn ⇒ idempotent.</li>\n  <li>Thêm PUT, DELETE.</li>\n  <li>POST, PATCH ⇒ false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string.",
+      "outputSpec": "boolean.",
+      "constraints": "Một danh sách hằng, không lặp lại logic của isSafe bằng tay.",
+      "examplesJson": [
+        {
+          "input": "isIdempotent(\"DELETE\")",
+          "output": "true",
+          "explanation": "Xoá hai lần: trạng thái như xoá một lần (dù lần hai trả 404)."
+        }
+      ],
+      "hintsJson": [
+        "const m = method.toUpperCase();",
+        "[\"GET\", \"HEAD\", \"OPTIONS\", \"TRACE\", \"PUT\", \"DELETE\"].includes(m)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — method idempotent\nfunction isIdempotent(method) {\n  return method !== 'POST';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — idempotent = lặp lại vẫn để lại cùng TRẠNG THÁI\nconst IDEMPOTENT = ['GET', 'HEAD', 'OPTIONS', 'TRACE', 'PUT', 'DELETE'];\nfunction isIdempotent(method) {\n  return IDEMPOTENT.includes(method.toUpperCase());\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Idempotent nói về tác dụng, không về response: DELETE lần hai trả 404 nhưng sản phẩm đằng nào cũng đã mất. PATCH bị loại vì một bản vá có thể tương đối (\"cộng 1 vào tồn kho\").</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cho PATCH là idempotent vì ví dụ của bạn tình cờ đặt giá trị tuyệt đối.</li>\n  <li>Quên các method an toàn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/Idempotent",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "PUT and DELETE are idempotent|||PUT và DELETE idempotent",
+            "goi": "[isIdempotent(\"PUT\"), isIdempotent(\"DELETE\"), isIdempotent(\"GET\")]",
+            "mongDoi": [
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "POST and PATCH are not|||POST và PATCH thì không",
+            "goi": "[isIdempotent(\"POST\"), isIdempotent(\"PATCH\")]",
+            "mongDoi": [
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Case-insensitive|||Không phân biệt hoa thường",
+            "goi": "[isIdempotent(\"put\"), isIdempotent(\"patch\")]",
+            "mongDoi": [
+              true,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho PATCH là idempotent vì ví dụ của bạn tình cờ đặt giá trị tuyệt đối."
+        },
+        {
+          "loi": "Quên các method an toàn."
+        }
+      ]
+    },
+    {
+      "title": "Được tự thử lại không?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "thử lại",
+        "idempotency key"
+      ],
+      "prerequisites": [
+        "object",
+        "toLowerCase"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "độ tin cậy"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>canAutoRetry(method, headers)</code>: <code>true</code> nếu method idempotent (GET, HEAD, OPTIONS, TRACE, PUT, DELETE), HOẶC nếu là POST/PATCH mà <code>headers</code> có <code>Idempotency-Key</code> khác rỗng (tên header không phân biệt hoa thường). <code>headers</code> có thể vắng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Idempotent ⇒ true.</li>\n  <li>POST/PATCH có Idempotency-Key không rỗng ⇒ true.</li>\n  <li>Tên header không phân biệt hoa thường.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string; headers?: object.",
+      "outputSpec": "boolean.",
+      "constraints": "Một hàm tự đủ.",
+      "examplesJson": [
+        {
+          "input": "canAutoRetry(\"POST\", { \"idempotency-key\": \"order-7f3\" })",
+          "output": "true",
+          "explanation": "Máy chủ sẽ không xử lý cùng khoá hai lần."
+        }
+      ],
+      "hintsJson": [
+        "Object.entries(headers ?? {}).some(([k, v]) => k.toLowerCase() === \"idempotency-key\" && v !== \"\")",
+        "Kết hợp với danh sách idempotent."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — được tự thử lại không?\nfunction canAutoRetry(method, headers) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — chỉ tự thử lại khi lặp lại không gây hại\nfunction canAutoRetry(method, headers = {}) {\n  const m = method.toUpperCase();\n  if (['GET', 'HEAD', 'OPTIONS', 'TRACE', 'PUT', 'DELETE'].includes(m)) return true;\n  const hasKey = Object.entries(headers).some(([k, v]) => k.toLowerCase() === 'idempotency-key' && String(v).trim() !== '');\n  return (m === 'POST' || m === 'PATCH') && hasKey;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một lớp bọc fetch \"thử lại cho chắc\" mà không có luật này sẽ tạo đơn hàng thứ hai trên mạng chậm. Idempotency key (Stripe, PayPal dùng) biến POST thành thứ lặp lại được an toàn: máy chủ nhớ khoá và trả lại kết quả cũ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thử lại mọi request lỗi.</li>\n  <li>Chỉ tìm \"Idempotency-Key\" đúng hoa thường.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.stripe.com/api/idempotent_requests",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Idempotent methods retry|||Method idempotent được thử lại",
+            "goi": "[canAutoRetry(\"GET\"), canAutoRetry(\"DELETE\", {}), canAutoRetry(\"put\")]",
+            "mongDoi": [
+              true,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "POST without a key does not|||POST không có khoá thì không",
+            "goi": "[canAutoRetry(\"POST\"), canAutoRetry(\"POST\", { \"Content-Type\": \"application/json\" }), canAutoRetry(\"PATCH\", { \"Idempotency-Key\": \"\" })]",
+            "mongDoi": [
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "POST with a key (any case) does|||POST có khoá (hoa thường gì cũng được) thì có",
+            "goi": "[canAutoRetry(\"POST\", { \"Idempotency-Key\": \"order-7f3\" }), canAutoRetry(\"post\", { \"idempotency-key\": \"a1\" })]",
+            "mongDoi": [
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thử lại mọi request lỗi."
+        },
+        {
+          "loi": "Chỉ tìm \"Idempotency-Key\" đúng hoa thường."
+        }
+      ]
+    },
+    {
+      "title": "Method + đường dẫn → hành động",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tập hợp",
+        "phần tử",
+        "404 vs 405"
+      ],
+      "prerequisites": [
+        "split",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "rest"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>routeAction(method, path)</code> cho API sản phẩm: <code>/api/products</code> (tập hợp) và <code>/api/products/&lt;số&gt;</code> (phần tử, id chỉ gồm chữ số). Trả một trong: <code>\"list\"</code> (GET tập hợp), <code>\"create\"</code> (POST tập hợp), <code>\"read\"</code> (GET phần tử), <code>\"replace\"</code> (PUT), <code>\"update\"</code> (PATCH), <code>\"delete\"</code> (DELETE phần tử); đường dẫn đúng mà method không hợp ⇒ <code>\"not-allowed\"</code>; đường dẫn không khớp ⇒ <code>\"not-found\"</code>. Bỏ query string (phần sau <code>?</code>) trước khi so; method không phân biệt hoa thường.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phân biệt tập hợp và phần tử.</li>\n  <li>not-allowed khác not-found.</li>\n  <li>Bỏ query string.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string; path: string.",
+      "outputSpec": "string.",
+      "constraints": "HEAD xử lý như GET.",
+      "examplesJson": [
+        {
+          "input": "routeAction(\"PATCH\", \"/api/products/2\")",
+          "output": "\"update\"",
+          "explanation": "Phần tử + PATCH."
+        },
+        {
+          "input": "routeAction(\"POST\", \"/api/products/1\")",
+          "output": "\"not-allowed\"",
+          "explanation": "Địa chỉ có, method không — máy chủ trả 405."
+        }
+      ],
+      "hintsJson": [
+        "const p = path.split(\"?\")[0];",
+        "const isItem = /^\\/api\\/products\\/\\d+$/.test(p);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — method + đường dẫn → hành động\nfunction routeAction(method, path) {\n  if (method === 'GET') return 'list';\n  return 'not-found';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — đường dẫn gọi tên đồ vật, method gọi tên hành động\nfunction routeAction(method, path) {\n  const m = method.toUpperCase() === 'HEAD' ? 'GET' : method.toUpperCase();\n  const p = path.split('?')[0];\n  const table = /^\\/api\\/products$/.test(p)\n    ? { GET: 'list', POST: 'create' }                                       // tập hợp\n    : /^\\/api\\/products\\/\\d+$/.test(p)\n      ? { GET: 'read', PUT: 'replace', PATCH: 'update', DELETE: 'delete' } // một phần tử\n      : null;\n  if (!table) return 'not-found';                                          // 404\n  return table[m] ?? 'not-allowed';                                        // 405\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai địa chỉ, sáu hành động — đúng bảng ở Bước 1 của bài. Phân biệt 404 và 405 giúp client biết sửa gì: sai địa chỉ hay sai method. Express làm việc tra bảng này cho bạn với <code>app.get('/api/products/:id', …)</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không bỏ query — \"/api/products?page=2\" thành not-found.</li>\n  <li>Trả not-found cho POST /api/products/1 (phải là not-allowed).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/405",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The six actions|||Sáu hành động",
+            "goi": "[[\"GET\",\"/api/products\"],[\"POST\",\"/api/products\"],[\"GET\",\"/api/products/3\"],[\"PUT\",\"/api/products/3\"],[\"PATCH\",\"/api/products/3\"],[\"DELETE\",\"/api/products/3\"]].map(([m, p]) => routeAction(m, p))",
+            "mongDoi": [
+              "list",
+              "create",
+              "read",
+              "replace",
+              "update",
+              "delete"
+            ]
+          },
+          {
+            "moTa": "405 vs 404|||405 và 404",
+            "goi": "[routeAction(\"POST\", \"/api/products/1\"), routeAction(\"DELETE\", \"/api/products\"), routeAction(\"GET\", \"/api/product\"), routeAction(\"GET\", \"/api/products/abc\")]",
+            "mongDoi": [
+              "not-allowed",
+              "not-allowed",
+              "not-found",
+              "not-found"
+            ]
+          },
+          {
+            "moTa": "Query ignored, HEAD = GET, lower-case method|||Bỏ query, HEAD = GET, method chữ thường",
+            "goi": "[routeAction(\"GET\", \"/api/products?page=2&limit=5\"), routeAction(\"HEAD\", \"/api/products/1\"), routeAction(\"patch\", \"/api/products/9\")]",
+            "mongDoi": [
+              "list",
+              "read",
+              "update"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không bỏ query — \"/api/products?page=2\" thành not-found."
+        },
+        {
+          "loi": "Trả not-found cho POST /api/products/1 (phải là not-allowed)."
+        }
+      ]
+    },
+    {
+      "title": "PUT thay thế, PATCH sửa một phần",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "PUT",
+        "PATCH",
+        "không đột biến"
+      ],
+      "prerequisites": [
+        "spread",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "rest"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>applyUpdate(method, stored, body)</code> trả sản phẩm MỚI (không sửa <code>stored</code>). <code>PUT</code>: phần thân thành sản phẩm — <code>{ id: stored.id, name: body.name, price: body.price, category: body.category ?? \"other\" }</code>. <code>PATCH</code>: giữ mọi trường cũ, đè các trường có trong <code>body</code>. Cả hai: <code>id</code> luôn lấy từ <code>stored</code>, kể cả khi body cố đổi nó. Method khác ⇒ ném <code>TypeError</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>PUT bỏ trường vắng (category về \"other\").</li>\n  <li>PATCH giữ trường cũ.</li>\n  <li>id không đổi.</li>\n  <li>Không sửa stored.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method: string; stored: object; body: object.",
+      "outputSpec": "object mới.",
+      "constraints": "Đúng như máy chủ trong bài (server.mjs).",
+      "examplesJson": [
+        {
+          "input": "applyUpdate(\"PUT\", { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { name: \"Desk lamp\", price: 299000 })",
+          "output": "{ id: 2, name: \"Desk lamp\", price: 299000, category: \"other\" }",
+          "explanation": "Output curl thật trong bài: category bị mất."
+        }
+      ],
+      "hintsJson": [
+        "PATCH: { ...stored, ...body, id: stored.id }",
+        "Đặt id SAU spread để body không đè được."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — PUT và PATCH\nfunction applyUpdate(method, stored, body) {\n  return Object.assign(stored, body);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — PUT = phiên bản mới đầy đủ; PATCH = chỉ các trường gửi lên\nfunction applyUpdate(method, stored, body) {\n  const m = method.toUpperCase();\n  if (m === 'PUT') return { id: stored.id, name: body.name, price: body.price, category: body.category ?? 'other' };\n  if (m === 'PATCH') return { ...stored, ...body, id: stored.id };   // id gán sau cùng\n  throw new TypeError('applyUpdate: expected PUT or PATCH, got ' + method);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây chính là hai dòng của server.mjs mà bài trích. <code>Object.assign(stored, body)</code> ở code khởi đầu sai hai lần: nó sửa luôn bản đang lưu (đột biến) và để body đổi được id.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đột biến stored.</li>\n  <li>Để body.id đè id thật.</li>\n  <li>Dùng PATCH cho PUT — form chỉ có tên làm mất trường khác ở chiều ngược lại.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Methods/PATCH",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "PUT drops missing fields (the lesson output)|||PUT bỏ trường vắng (output của bài)",
+            "goi": "applyUpdate(\"PUT\", { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { name: \"Desk lamp\", price: 299000 })",
+            "mongDoi": {
+              "id": 2,
+              "name": "Desk lamp",
+              "price": 299000,
+              "category": "other"
+            }
+          },
+          {
+            "moTa": "PATCH keeps the rest|||PATCH giữ phần còn lại",
+            "goi": "applyUpdate(\"PATCH\", { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { price: 299000 })",
+            "mongDoi": {
+              "id": 2,
+              "name": "Desk lamp",
+              "price": 299000,
+              "category": "home"
+            }
+          },
+          {
+            "moTa": "id cannot change; stored not mutated|||id không đổi được; stored không bị sửa",
+            "chuanBi": "const s = { id: 5, name: \"Pen\", price: 5000, category: \"office\" }; const r = applyUpdate(\"patch\", s, { id: 99, name: \"Pen 2\" });",
+            "goi": "[r.id, r.name, s.name]",
+            "mongDoi": [
+              5,
+              "Pen 2",
+              "Pen"
+            ]
+          },
+          {
+            "moTa": "Other methods throw TypeError|||Method khác ném TypeError",
+            "goi": "applyUpdate(\"POST\", { id: 1 }, {})",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đột biến stored."
+        },
+        {
+          "loi": "Để body.id đè id thật."
+        },
+        {
+          "loi": "Dùng PATCH cho PUT — form chỉ có tên làm mất trường khác ở chiều ngược lại."
+        }
+      ]
+    },
+    {
+      "title": "Dựng header Allow",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "405",
+        "header Allow"
+      ],
+      "prerequisites": [
+        "filter",
+        "Set"
+      ],
+      "tags": [
+        "javascript",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>allowHeader(routes, path)</code>: <code>routes</code> là mảng chuỗi dạng <code>\"GET /api/products\"</code>. Trả giá trị header <code>Allow</code> cho <code>path</code> (so khớp nguyên văn): các method của path đó, KHÔNG trùng, sắp theo thứ tự <code>GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS</code>, nối bằng <code>\", \"</code>. Có GET thì tự thêm HEAD. Không route nào ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lọc đúng path.</li>\n  <li>GET ⇒ thêm HEAD.</li>\n  <li>Sắp theo thứ tự cố định, không trùng.</li>\n  <li>Không có ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "routes: string[]; path: string.",
+      "outputSpec": "string hoặc null.",
+      "constraints": "Method trong routes luôn viết hoa.",
+      "examplesJson": [
+        {
+          "input": "allowHeader([\"POST /api/products\", \"GET /api/products\"], \"/api/products\")",
+          "output": "\"GET, HEAD, POST\"",
+          "explanation": "Đúng header máy chủ của bài gửi kèm 405."
+        }
+      ],
+      "hintsJson": [
+        "const methods = new Set(routes.filter((r) => r.split(\" \")[1] === path).map((r) => r.split(\" \")[0]));",
+        "ORDER.filter((m) => methods.has(m)).join(\", \")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — header Allow\nfunction allowHeader(routes, path) {\n  return routes.map((r) => r.split(' ')[0]).join(', ');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — Allow liệt kê method mà một địa chỉ nhận\nconst ORDER = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'];\nfunction allowHeader(routes, path) {\n  const methods = new Set();\n  for (const r of routes) {\n    const [m, p] = r.split(' ');\n    if (p === path) methods.add(m);\n  }\n  if (methods.size === 0) return null;\n  if (methods.has('GET')) methods.add('HEAD');          // máy chủ HTTP trả HEAD cho mọi GET\n  return ORDER.filter((m) => methods.has(m)).join(', ');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Response 405 nên kèm <code>Allow</code> để client biết đổi sang method nào. Express tự trả nó khi bạn gọi <code>app.route(…).all(…)</code> đúng cách; dựng tay một lần giúp bạn đọc được nó khi gỡ lỗi.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không lọc theo path — Allow liệt kê method của địa chỉ khác.</li>\n  <li>Trùng lặp khi một method khai hai lần.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Allow",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Collection: GET, HEAD, POST|||Tập hợp: GET, HEAD, POST",
+            "goi": "allowHeader([\"POST /api/products\", \"GET /api/products\", \"GET /api/products/:id\", \"DELETE /api/products/:id\"], \"/api/products\")",
+            "mongDoi": "GET, HEAD, POST"
+          },
+          {
+            "moTa": "Item: fixed order, no duplicates|||Phần tử: đúng thứ tự, không trùng",
+            "goi": "allowHeader([\"DELETE /p/:id\", \"PATCH /p/:id\", \"GET /p/:id\", \"PUT /p/:id\", \"PATCH /p/:id\"], \"/p/:id\")",
+            "mongDoi": "GET, HEAD, PUT, PATCH, DELETE"
+          },
+          {
+            "moTa": "No GET means no HEAD; unknown path is null|||Không GET thì không HEAD; path lạ trả null",
+            "goi": "[allowHeader([\"POST /login\"], \"/login\"), allowHeader([\"GET /a\"], \"/b\")]",
+            "mongDoi": [
+              "POST",
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không lọc theo path — Allow liệt kê method của địa chỉ khác."
+        },
+        {
+          "loi": "Trùng lặp khi một method khai hai lần."
+        }
+      ]
+    },
+    {
+      "title": "Một kho sản phẩm trong bộ nhớ",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "CRUD",
+        "201/204/404/405",
+        "trạng thái trong closure"
+      ],
+      "prerequisites": [
+        "closure",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "rest",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 6.2 — HTTP method.</em> Các bài dựng lại từng quyết định mà API sản phẩm của Chương 6 đưa ra cho mỗi method.</p><p>Viết <code>createStore()</code> trả hàm <code>handle(method, path, body)</code> mô phỏng API của bài (không có mạng — chỉ logic), trả <code>{ status, body }</code>. Kho bắt đầu RỖNG, id tăng từ 1. Luật: <code>GET /api/products</code> → 200, mảng sản phẩm; <code>POST /api/products</code> → 201, sản phẩm mới <code>{ id, name, price, category: body.category ?? \"other\" }</code>; <code>GET /api/products/:id</code> → 200; <code>PUT</code>/<code>PATCH</code> → 200 như bài trước; <code>DELETE</code> → 204, <code>body: null</code>; id không có → 404 <code>{ error: \"Product &lt;id&gt; not found\" }</code>; method không hợp → 405 <code>{ error: \"Method not allowed\" }</code>; đường dẫn khác → 404 <code>{ error: \"Not found\" }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi createStore() là một kho riêng.</li>\n  <li>POST hai lần ⇒ hai id khác nhau.</li>\n  <li>DELETE lần hai ⇒ 404.</li>\n  <li>Không trả tham chiếu tới dữ liệu bên trong (trả bản sao).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "method, path: string; body?: object.",
+      "outputSpec": "{ status: number, body }.",
+      "constraints": "Không cần kiểm dữ liệu (validation để Bài 6.3).",
+      "examplesJson": [
+        {
+          "input": "h(\"POST\", \"/api/products\", { name: \"Ruler\", price: 8000 }) hai lần",
+          "output": "201 id 1, rồi 201 id 2",
+          "explanation": "POST không idempotent."
+        }
+      ],
+      "hintsJson": [
+        "let items = []; let nextId = 1; return function handle(method, path, body) { … }",
+        "const m = path.match(/^\\/api\\/products(?:\\/(\\d+))?$/);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — kho sản phẩm trong bộ nhớ\nfunction createStore() {\n  const items = [];\n  return function handle(method, path, body) {\n    items.push(body);\n    return { status: 200, body: items };\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.2 — API sản phẩm không có mạng: method + đường dẫn → mã + phần thân\nfunction createStore() {\n  let items = [];\n  let nextId = 1;\n  const copy = (p) => ({ ...p });\n  return function handle(method, path, body = {}) {\n    const m = method.toUpperCase();\n    const match = path.match(/^\\/api\\/products(?:\\/(\\d+))?$/);\n    if (!match) return { status: 404, body: { error: 'Not found' } };\n    if (match[1] === undefined) {                                   // tập hợp\n      if (m === 'GET') return { status: 200, body: items.map(copy) };\n      if (m === 'POST') {\n        const p = { id: nextId++, name: body.name, price: body.price, category: body.category ?? 'other' };\n        items.push(p);\n        return { status: 201, body: copy(p) };\n      }\n      return { status: 405, body: { error: 'Method not allowed' } };\n    }\n    const id = Number(match[1]);                                    // một phần tử\n    const i = items.findIndex((p) => p.id === id);\n    if (!['GET', 'PUT', 'PATCH', 'DELETE'].includes(m)) return { status: 405, body: { error: 'Method not allowed' } };\n    if (i < 0) return { status: 404, body: { error: `Product ${id} not found` } };\n    if (m === 'GET') return { status: 200, body: copy(items[i]) };\n    if (m === 'DELETE') { items = items.filter((p) => p.id !== id); return { status: 204, body: null }; }\n    items[i] = m === 'PUT'\n      ? { id, name: body.name, price: body.price, category: body.category ?? 'other' }\n      : { ...items[i], ...body, id };\n    return { status: 200, body: copy(items[i]) };\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là toàn bộ \"bộ não\" của server.mjs khi bỏ phần mạng: tra địa chỉ, tra method, đổi trạng thái, chọn mã. Bài 5 của Node.js dựng lại đúng thứ này bằng Express và một cơ sở dữ liệu thật. Kiểm 405 TRƯỚC 404 (với phần tử) hay sau là lựa chọn thiết kế; ở đây method sai được báo trước.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng biến toàn cục — hai kho dùng chung dữ liệu.</li>\n  <li>Trả chính object bên trong — người gọi sửa được kho mà không qua API.</li>\n  <li>DELETE lần hai trả 204.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.2 HTTP methods.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Glossary/CRUD",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "POST twice creates ids 1 and 2|||POST hai lần tạo id 1 và 2",
+            "chuanBi": "const h = createStore(); const a = h(\"POST\", \"/api/products\", { name: \"Ruler\", price: 8000 }); const b = h(\"POST\", \"/api/products\", { name: \"Ruler\", price: 8000 });",
+            "goi": "[a, b]",
+            "mongDoi": [
+              {
+                "status": 201,
+                "body": {
+                  "id": 1,
+                  "name": "Ruler",
+                  "price": 8000,
+                  "category": "other"
+                }
+              },
+              {
+                "status": 201,
+                "body": {
+                  "id": 2,
+                  "name": "Ruler",
+                  "price": 8000,
+                  "category": "other"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": "PATCH keeps, PUT replaces|||PATCH giữ, PUT thay",
+            "chuanBi": "const h = createStore(); h(\"POST\", \"/api/products\", { name: \"Desk lamp\", price: 320000, category: \"home\" });",
+            "goi": "[h(\"PATCH\", \"/api/products/1\", { price: 299000 }).body.category, h(\"PUT\", \"/api/products/1\", { name: \"Desk lamp\", price: 299000 }).body.category]",
+            "mongDoi": [
+              "home",
+              "other"
+            ]
+          },
+          {
+            "moTa": "DELETE twice: 204 then 404|||DELETE hai lần: 204 rồi 404",
+            "chuanBi": "const h = createStore(); h(\"POST\", \"/api/products\", { name: \"A\", price: 1 });",
+            "goi": "[h(\"DELETE\", \"/api/products/1\"), h(\"DELETE\", \"/api/products/1\"), h(\"GET\", \"/api/products\")]",
+            "mongDoi": [
+              {
+                "status": 204,
+                "body": null
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Product 1 not found"
+                }
+              },
+              {
+                "status": 200,
+                "body": []
+              }
+            ]
+          },
+          {
+            "moTa": "405 and 404 for wrong method / path|||405 và 404 cho sai method / đường dẫn",
+            "chuanBi": "const h = createStore();",
+            "goi": "[h(\"POST\", \"/api/products/1\").status, h(\"DELETE\", \"/api/products\").status, h(\"GET\", \"/api/users\").status, h(\"GET\", \"/api/products/9\").status]",
+            "mongDoi": [
+              405,
+              405,
+              404,
+              404
+            ]
+          },
+          {
+            "moTa": "Stores are separate; data is copied|||Các kho tách biệt; dữ liệu được sao chép",
+            "chuanBi": "const h1 = createStore(); const h2 = createStore(); h1(\"POST\", \"/api/products\", { name: \"A\", price: 1 }); const list = h1(\"GET\", \"/api/products\").body; list[0].name = \"HACKED\";",
+            "goi": "[h2(\"GET\", \"/api/products\").body.length, h1(\"GET\", \"/api/products/1\").body.name]",
+            "mongDoi": [
+              0,
+              "A"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng biến toàn cục — hai kho dùng chung dữ liệu."
+        },
+        {
+          "loi": "Trả chính object bên trong — người gọi sửa được kho mà không qua API."
+        },
+        {
+          "loi": "DELETE lần hai trả 204."
+        }
+      ]
+    }
+  ]
+}

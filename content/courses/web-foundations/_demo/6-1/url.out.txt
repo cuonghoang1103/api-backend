@@ -1,0 +1,9 @@
+protocol : https:
+hostname : shop.example
+port     : 8443
+origin   : https://shop.example:8443
+pathname : /api/products/3
+search   : ?sort=price&page=2
+hash     : #reviews
+default  : port 443 is the default, so it is empty
+relative : https://shop.example/api/cart?step=1

@@ -132,6 +132,21 @@ n.<span class="tok-function">toUpperCase</span>();             <span class="tok-
   <span class="lc-body"><span class="lc-title">Luyện tập: hàm generic trên Code Lab</span><span class="lc-sub">Viết identity, first và một bộ bọc có kiểu sau chương này.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-4-functions-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 9.4 — Functions and generics</span><span class="lc-sub">Typed parameters and callbacks, first&lt;T&gt;, findById with a constraint, and generics that lie</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-4-functions-generics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 9.4 — Hàm và generic</span><span class="lc-sub">Tham số và callback có kiểu, first&lt;T&gt;, findById có ràng buộc, và generic nói dối</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

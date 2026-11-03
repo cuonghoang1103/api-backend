@@ -38,6 +38,8 @@
  *   - Bảng kiểu mặc định của jsdom bị tính như CSS tác giả (`:link` (0,1,0) thắng `nav a`);
  *     script vá bằng cách bọc nó trong :where() lúc nạp. Hai !important đánh nhau thì jsdom lấy
  *     cái sau cùng (trình duyệt so độ đặc hiệu) — chỉ ảnh hưởng code khởi đầu cố ý có !important.
+ *   - Không giải var(), không hiểu @layer, không có prefers-color-scheme ⇒ kiểm khai `chiTrinhDuyet: true`
+ *     được BỎ QUA ở đây (máy chấm trình duyệt thật vẫn chấm). Dùng cho Ch12 (token, layer, theme).
  *   - Trình duyệt có margin mặc định 8px cho body; jsdom không ⇒ script chèn
  *     `body{margin:8px}` làm bảng kiểu đầu tiên (tác giả đè được như thật).
  */
@@ -448,6 +450,10 @@ const LOAI_JS = new Set(['js', 'console', 'module']);
 
 async function chayKiem(k, files, tj) {
   if (k.kiem === 'ma-nguon') return chayKiemDom(k, files, tj.tepHtml, null);
+  // chiTrinhDuyet (01/11/2026, Ch12 CSS nâng cao): kiểm cần CSS mà jsdom không có — var(), @layer,
+  // prefers-color-scheme, transition-* đã tính… ⇒ jsdom BỎ QUA; máy chấm trình duyệt thật vẫn chấm đầy đủ
+  // (scripts/codelab-kiem-cham-trinh-duyet.mjs là thước đo chuẩn).
+  if (k.chiTrinhDuyet) return { boQua: 'chỉ chấm được trong trình duyệt thật (var/@layer/@media màu)' };
   if (tj.loai === 'module') return chamKiemModule(tj, k, files);
   if (LOAI_JS.has(tj.loai)) return chamKiemJs(tj, k, files);
   if (tj.chayScript) {
@@ -749,7 +755,7 @@ if (!CHI) {
     docsUrl: 'https://developer.mozilla.org/vi/docs/Learn',
     status: 'PUBLISHED', // chủ web duyệt công khai 14/10/2026 (đã nạp prod)
     level: 'BEGINNER',
-    description: `Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. ${[['wf-1-', 'Chương 1 công cụ'], ['wf-2-', 'Chương 2 HTML'], ['wf-3-', 'Chương 3 CSS'], ['wf-4-', 'Chương 4 JavaScript'], ['wf-5-', 'Chương 5 JS bất đồng bộ & modules'], ['wf-11-', 'Chương 11 JS nâng cao'], ['wf-12-', 'Chương 12 CSS nâng cao'], ['wf-13-', 'Chương 13 kiểm thử'], ['wf-14-', 'Chương 14 đưa lên mạng']].filter(([p]) => modules.some((m) => m.slug.startsWith(p))).map(([, t]) => t).join(' + ')}.`,
+    description: `Bộ luyện đi kèm khoá Nền tảng Web: mỗi bài học có video một bộ đề riêng, sắp từ dễ đến khó, có bộ kiểm máy chấm được. ${[['wf-1-', 'Chương 1 công cụ'], ['wf-2-', 'Chương 2 HTML'], ['wf-3-', 'Chương 3 CSS'], ['wf-4-', 'Chương 4 JavaScript'], ['wf-5-', 'Chương 5 JS bất đồng bộ & modules'], ['wf-6-', 'Chương 6 HTTP & API'], ['wf-7-', 'Chương 7 xác thực & bảo mật'], ['wf-8-', 'Chương 8 dữ liệu & SQL'], ['wf-9-', 'Chương 9 TypeScript'], ['wf-10-', 'Chương 10 tư duy & gỡ lỗi'], ['wf-11-', 'Chương 11 JS nâng cao'], ['wf-12-', 'Chương 12 CSS nâng cao'], ['wf-13-', 'Chương 13 kiểm thử'], ['wf-14-', 'Chương 14 đưa lên mạng']].filter(([p]) => modules.some((m) => m.slug.startsWith(p))).map(([, t]) => t).join(' + ')}.`,
     modules: modules.map((m) => ({ slug: m.slug, name: m.ten, level: m.level || 'BEGINNER', description: m.moTa })),
   };
   const tepTrack = path.join(THU_MUC, '_track.json');

@@ -23,8 +23,10 @@ const lay = (k, bang, ten) => { if (bang[k] == null) throw new Error(`${ten}['${
 const ma = (lang) => (k, tay, opts = {}) => {
   let s = k ? lay(k, CODE, 'CODE') : tay;
   if (opts.chi) s = s.split('\n').slice(opts.chi[0] - 1, opts.chi[1]).join('\n');
+  s = s.replace(/^[ \t]*<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>[ \t]*\n/gm, '').replace(/<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>/g, '');
   // gon: bỏ chú thích cuối dòng (// …) và dòng chỉ có chú thích — slide hẹp, bài đọc vẫn giữ đủ chú thích
-  if (opts.gon !== false) s = s.split('\n').filter((l) => !/^\s*\/\/(?!\s*-)/.test(l)).map((l) => l.replace(/\s+\/\/ .*$/, '')).join('\n');
+  if (opts.gon !== false) s = s.split('\n').filter((l) => !/^\s*\/\/(?!\s*-)/.test(l) && !/^\s*\/\*.*\*\/\s*$/.test(l))
+    .map((l) => l.replace(/\s+\/\/ .*$/, '').replace(/(\S)\s+\/\*.*\*\/\s*$/, '$1')).join('\n');
   return sql(s.replace(/\n+$/, ''), { lang, sm: opts.sm ?? true, hl: opts.hl || [] });
 };
 export const js = ma('javascript');
@@ -32,11 +34,13 @@ export const css = ma('css');
 export const html = ma('xml');
 export const ts = ma('typescript');
 export const bash = ma('bash');
+export const sqlm = ma('sql');   // mã SQL (Chương 8) — 'sql' đã là tên hàm khung trong _pg-chung
 /** Console Chromium: con('11-1/counter') lấy từ OUT; con(null, 'chữ'). */
 export const con = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'Chromium · console', sm: opts.sm ?? true, hl: opts.hl || [] })
   .replace('<pre>', '<pre style="white-space:pre-wrap;overflow-wrap:anywhere">');   // dòng console dài ⇒ xuống dòng, không tràn ngang
 /** Terminal: term(k | null, chữ). */
-export const term = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'terminal', sm: opts.sm ?? true, hl: opts.hl || [] });
+export const term = (k, tay, opts = {}) => psql(k ? lay(k, OUT, 'OUT') : tay, { title: opts.title || 'terminal', sm: opts.sm ?? true, hl: opts.hl || [] })
+  .replace('<pre>', '<pre style="white-space:pre-wrap;overflow-wrap:anywhere">');
 /** Ảnh chụp thật (png trong _demo/) nhúng base64. anh('11-1/buttons.png', { w: 520 }) */
 export function anh(rel, opts = {}) {
   const f = path.resolve(path.dirname(new URL(import.meta.url).pathname), '../../content/courses/web-foundations/_demo', rel);

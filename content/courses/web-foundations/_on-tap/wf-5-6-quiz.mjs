@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`5.1 The event loop`, `5.1 Event loop`,
+      [`One thread: a long synchronous task freezes the page.`, `Order: synchronous code, then microtasks (Promise callbacks), then tasks (timers) — even <code>setTimeout(fn, 0)</code> waits.`],
+      [`Một luồng: một việc đồng bộ chạy lâu làm trang đứng hình.`, `Thứ tự: mã đồng bộ, rồi microtask (callback của Promise), rồi task (hẹn giờ) — kể cả <code>setTimeout(fn, 0)</code> cũng phải chờ.`]],
+    [`5.2 Promises`, `5.2 Promise`,
+      [`Three states: pending, fulfilled, rejected.`, `<code>.then</code> on success, <code>.catch</code> on failure, <code>.finally</code> always — hide the spinner there.`],
+      [`Ba trạng thái: pending, fulfilled, rejected.`, `<code>.then</code> khi thành công, <code>.catch</code> khi thất bại, <code>.finally</code> luôn chạy — tắt spinner ở đó.`]],
+    [`5.3 async / await`, `5.3 async / await`,
+      [`<code>await</code> pauses the function, not the page; an async function always returns a Promise.`, `<code>try/catch</code> handles rejections; <code>Promise.all</code> runs independent calls in parallel.`, `<code>await</code> inside <code>forEach</code> waits for nothing — use <code>for…of</code>.`],
+      [`<code>await</code> tạm dừng hàm, không dừng trang; hàm async luôn trả về Promise.`, `<code>try/catch</code> xử lý lỗi; <code>Promise.all</code> chạy song song các lời gọi độc lập.`, `<code>await</code> trong <code>forEach</code> chẳng chờ gì — dùng <code>for…of</code>.`]],
+    [`5.4 fetch`, `5.4 fetch`,
+      [`<code>fetch</code> rejects only on network failure; check <code>res.ok</code> for 404/500 yourself.`, `<code>await res.json()</code> parses the body; a POST needs method, <code>Content-Type: application/json</code> and <code>JSON.stringify</code>.`],
+      [`<code>fetch</code> chỉ reject khi mất mạng; tự kiểm <code>res.ok</code> cho 404/500.`, `<code>await res.json()</code> đọc phần thân; POST cần method, <code>Content-Type: application/json</code> và <code>JSON.stringify</code>.`]],
+    [`5.5 ES modules`, `5.5 ES module`,
+      [`Named exports are imported with braces and the exact name; one default export per file, any name on import.`, `Relative imports start with <code>./</code> or <code>../</code>.`],
+      [`Named export được import trong ngoặc nhọn với đúng tên; mỗi file một default export, import với tên tuỳ ý.`, `Import tương đối bắt đầu bằng <code>./</code> hoặc <code>../</code>.`]],
+  ],
+  bay: [
+    [`Forgetting <code>await</code> and logging <code>Promise { &lt;pending&gt; }</code>.`, `Quên <code>await</code> nên in ra <code>Promise { &lt;pending&gt; }</code>.`],
+    [`Treating a 404 response as success because <code>res.ok</code> was not checked.`, `Coi response 404 là thành công vì không kiểm <code>res.ok</code>.`],
+    [`Awaiting independent requests one after another — three times slower than <code>Promise.all</code>.`, `Await lần lượt các request độc lập — chậm gấp ba so với <code>Promise.all</code>.`],
+    [`Leaving the loading spinner on after an error — turn it off in <code>finally</code>.`, `Để spinner quay mãi sau khi lỗi — tắt nó trong <code>finally</code>.`],
+  ],
+  hoi: [
+    [`In what order do these print: <code>log(1); setTimeout(()=&gt;log(2)); Promise.resolve().then(()=&gt;log(3)); log(4);</code>?`, `1, 4, 3, 2 — synchronous first, then the microtask, then the timer.`, `Các dòng này in theo thứ tự nào: <code>log(1); setTimeout(()=&gt;log(2)); Promise.resolve().then(()=&gt;log(3)); log(4);</code>?`, `1, 4, 3, 2 — đồng bộ trước, rồi microtask, rồi hẹn giờ.`],
+    [`The server answers 500. Does <code>await fetch(url)</code> throw?`, `No. It resolves with <code>res.ok === false</code> and <code>res.status === 500</code>; you must throw yourself.`, `Máy chủ trả 500. <code>await fetch(url)</code> có ném lỗi không?`, `Không. Nó resolve với <code>res.ok === false</code> và <code>res.status === 500</code>; bạn phải tự ném lỗi.`],
+    [`Three independent calls take 1 second each. How long with three awaits in a row, and with <code>Promise.all</code>?`, `About 3 seconds in a row; about 1 second with <code>Promise.all</code>.`, `Ba lời gọi độc lập mỗi cái 1 giây. Await nối tiếp mất bao lâu, và với <code>Promise.all</code>?`, `Khoảng 3 giây nếu nối tiếp; khoảng 1 giây với <code>Promise.all</code>.`],
+    [`What does an <code>async</code> function return when its body says <code>return 5</code>?`, `A Promise that fulfils with 5.`, `Một hàm <code>async</code> có thân <code>return 5</code> thì trả về gì?`, `Một Promise fulfill với giá trị 5.`],
+    [`How do you import a default export <code>Menu</code> and a named export <code>pizzas</code> from <code>./menu.js</code>?`, `<code>import Menu, { pizzas } from './menu.js';</code>`, `Import default export <code>Menu</code> và named export <code>pizzas</code> từ <code>./menu.js</code> thế nào?`, `<code>import Menu, { pizzas } from './menu.js';</code>`],
+  ],
+};

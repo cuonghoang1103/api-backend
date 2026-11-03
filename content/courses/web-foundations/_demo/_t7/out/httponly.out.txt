@@ -1,0 +1,8 @@
+login → 200
+fetch /api/me → {"id":1,"name":"An","role":"user"}   ← the browser attached the HttpOnly cookie
+document.cookie → "theme=dark"   ← sid is not visible
+localStorage.token → "eyJhbGciOi…(a JWT kept in localStorage)"
+
+The browser's cookie store for localhost:
+sid  httpOnly=true  sameSite=Lax  path=/
+theme  httpOnly=false  sameSite=Lax  path=/

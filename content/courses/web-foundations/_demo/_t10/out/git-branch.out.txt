@@ -1,0 +1,20 @@
+$ git switch -c feature/search
+Switched to a new branch 'feature/search'
+$ git commit -m "Add search(term) to notes"
+[feature/search 227333d] Add search(term) to notes
+ 1 file changed, 4 insertions(+)
+$ git commit -m "Print search results for 'git'"
+[feature/search 60c327d] Print search results for 'git'
+ 1 file changed, 1 insertion(+)
+$ git push -u origin feature/search
+To origin.git
+ * [new branch]      feature/search -> feature/search
+branch 'feature/search' set up to track 'origin/feature/search'.
+
+# the pull request: what would be merged, and how big it is
+$ git log --oneline main..feature/search
+60c327d Print search results for 'git'
+227333d Add search(term) to notes
+$ git diff --stat main...feature/search
+ notes.js | 5 +++++
+ 1 file changed, 5 insertions(+)

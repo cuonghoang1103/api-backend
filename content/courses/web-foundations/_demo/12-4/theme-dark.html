@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="520x220">
+<meta name="mo-phong" content="colorScheme=dark">
+<title>Theme: dark (from the operating system)</title>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <div class="card">
+    <h3>Order #1024</h3>
+    <p>Shipped yesterday · arrives Monday</p>
+    <button class="btn">Track parcel</button>
+  </div>
+  <script>
+    const root = getComputedStyle(document.documentElement);
+    const b = getComputedStyle(document.body);
+    console.log('prefers dark?', matchMedia('(prefers-color-scheme: dark)').matches,
+      '| --color-bg =', root.getPropertyValue('--color-bg').trim(), '| body background', b.backgroundColor);
+  </script>
+</body>
+</html>

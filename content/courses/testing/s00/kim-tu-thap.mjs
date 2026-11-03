@@ -360,5 +360,20 @@ ${NGUON}
 ${lienKet({ bai: 'swt301-ci-automation', title: 'Đã gặp ở SWT301 — bài 8.6: Test pyramid, CI và Selenium', sub: 'Giống: kim tự tháp của Mike Cohn, dạng sai "cây kem", ánh xạ các tầng sang cấp test ISTQB. Khác: SWT301 giải thích lý thuyết để thi và trên dự án Java; ở đây bạn đo khoảng cách tốc độ trên một API Node đang chạy và học thêm chiếc cúp.', cta: 'MỞ BÀI SWT301 →' })}
 ${lienKet({ bai: 'swt301-test-levels', title: 'Đã gặp ở SWT301 — bài 2.2: Component và integration testing, stub và driver', sub: 'Giống: các cấp test — component (unit) và tích hợp. Khác: SWT301 dùng từ vựng ISTQB (component, component-integration, system-integration, stub, driver); bài này đặt các test cụ thể của LabFlow Lite vào đúng những cấp đó.', cta: 'MỞ BÀI SWT301 →' })}
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-1-why-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.1 — Why tests exist</span><span class="lc-sub">The beginner version: the pyramid and a regression caught for real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-1-why-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.1 — Vì sao có test</span><span class="lc-sub">Bản cho người mới: tháp kiểm thử và một lỗi hồi quy bị bắt thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
 };

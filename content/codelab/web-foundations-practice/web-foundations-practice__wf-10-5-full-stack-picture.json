@@ -1,0 +1,700 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-10-5-full-stack-picture",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-10-5-full-stack-picture"
+  },
+  "exercises": [
+    {
+      "title": "Lỗi nằm ở tầng nào?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "mã trạng thái",
+        "tầng"
+      ],
+      "prerequisites": [
+        "if/else"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>whereToLook(sym)</code> với <code>sym = { request: boolean, status?: number, consoleError?: string }</code> theo bảng của bài: không có request ⇒ <code>\"page\"</code>; <code>consoleError</code> chứa <code>\"CORS\"</code> ⇒ <code>\"server headers\"</code>; 401/403 ⇒ <code>\"session\"</code>; 400/422 ⇒ <code>\"request body\"</code>; 404/405 ⇒ <code>\"route\"</code>; 500–599 ⇒ <code>\"server code or database\"</code>; 200–299 ⇒ <code>\"rendering\"</code>; còn lại ⇒ <code>\"read the response\"</code>. Kiểm theo đúng thứ tự trên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự kiểm.</li>\n  <li>Khoảng 5xx và 2xx.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "sym: object.",
+      "outputSpec": "string.",
+      "constraints": "CORS được kiểm trước mã trạng thái (trình duyệt có thể chặn đọc cả response 200).",
+      "examplesJson": [
+        {
+          "input": "whereToLook({ request: true, status: 422 })",
+          "output": "\"request body\"",
+          "explanation": "Tiêu đề trống trong bài."
+        }
+      ],
+      "hintsJson": [
+        "if (!sym.request) return \"page\";",
+        "sym.status >= 500 && sym.status <= 599"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — lỗi nằm ở tầng nào?\nfunction whereToLook(sym) {\n  return 'server code or database';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — đọc triệu chứng trước, mở đúng tầng sau\nfunction whereToLook(sym) {\n  const s = sym.status;\n  if (!sym.request) return 'page';                                   // không có request: sự kiện / JS trên trang\n  if (String(sym.consoleError ?? '').includes('CORS')) return 'server headers';\n  if (s === 401 || s === 403) return 'session';\n  if (s === 400 || s === 422) return 'request body';\n  if (s === 404 || s === 405) return 'route';\n  if (s >= 500 && s <= 599) return 'server code or database';\n  if (s >= 200 && s <= 299) return 'rendering';\n  return 'read the response';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một lần nhìn tab Network quyết định bạn mở tệp nào. Mã khởi đầu làm điều người mới hay làm: đoán \"chắc lỗi máy chủ\" bất kể triệu chứng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Kiểm status trước khi kiểm có request không.</li>\n  <li>Bỏ sót 405.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.chrome.com/docs/devtools/network",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "No request and validation|||Không có request và kiểm dữ liệu",
+            "goi": "[whereToLook({ request: false }), whereToLook({ request: true, status: 422 })]",
+            "mongDoi": [
+              "page",
+              "request body"
+            ]
+          },
+          {
+            "moTa": "Session, route, server|||Phiên, route, máy chủ",
+            "goi": "[401, 403, 404, 405, 500, 503].map((status) => whereToLook({ request: true, status }))",
+            "mongDoi": [
+              "session",
+              "session",
+              "route",
+              "route",
+              "server code or database",
+              "server code or database"
+            ]
+          },
+          {
+            "moTa": "CORS beats 200; rendering; other|||CORS trước 200; hiển thị; khác",
+            "goi": "[whereToLook({ request: true, status: 200, consoleError: \"blocked by CORS policy\" }), whereToLook({ request: true, status: 201 }), whereToLook({ request: true, status: 302 })]",
+            "mongDoi": [
+              "server headers",
+              "rendering",
+              "read the response"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Kiểm status trước khi kiểm có request không."
+        },
+        {
+          "loi": "Bỏ sót 405."
+        }
+      ]
+    },
+    {
+      "title": "Đọc cookie sid",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "header Cookie"
+      ],
+      "prerequisites": [
+        "split",
+        "decodeURIComponent"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>getCookie(header, name)</code> đọc header <code>Cookie</code> dạng <code>\"theme=dark; sid=abc123; lang=vi\"</code>. Tách theo <code>;</code>, bỏ khoảng trắng hai đầu mỗi cặp, tên so khớp CHÍNH XÁC (<code>\"sid\"</code> không khớp <code>\"xsid\"</code>), giá trị có thể chứa <code>=</code> (chỉ tách ở dấu <code>=</code> đầu), và được <code>decodeURIComponent</code> (giá trị mã hoá sai ⇒ trả nguyên). Không có header hoặc không có cookie ⇒ <code>null</code>. Trùng tên ⇒ lấy cái đầu.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khớp tên chính xác.</li>\n  <li>Tách ở = đầu tiên.</li>\n  <li>Giải mã an toàn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "header: string | undefined; name: string.",
+      "outputSpec": "string | null.",
+      "constraints": "Không dùng regex dễ khớp nhầm như /sid=([^;]+)/.",
+      "examplesJson": [
+        {
+          "input": "getCookie(\"xsid=bad; sid=abc123\", \"sid\")",
+          "output": "\"abc123\"",
+          "explanation": "Regex /sid=/ đơn giản sẽ khớp nhầm \"xsid\"."
+        }
+      ],
+      "hintsJson": [
+        "for (const part of header.split(\";\")) { const i = part.indexOf(\"=\"); … }",
+        "try { return decodeURIComponent(v); } catch { return v; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — đọc cookie\nfunction getCookie(header, name) {\n  const m = new RegExp(name + '=([^;]+)').exec(header);\n  return m ? m[1] : null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — \"tên=giá trị; tên=giá trị\": tách ở ';', rồi ở '=' ĐẦU TIÊN, so tên chính xác\nfunction getCookie(header, name) {\n  if (!header) return null;\n  for (const part of String(header).split(';')) {\n    const p = part.trim();\n    const i = p.indexOf('=');\n    if (i < 0 || p.slice(0, i).trim() !== name) continue;\n    const v = p.slice(i + 1).trim();\n    try { return decodeURIComponent(v); } catch { return v; }\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Máy chủ trong bài dùng một regex có neo <code>(?:^|;\\s*)sid=</code> để tránh khớp nhầm — mã khởi đầu thì không. Cookie đến từ trình duyệt, tức là từ người dùng: đọc nó cẩn thận như mọi dữ liệu đầu vào.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"xsid\" khớp \"sid\".</li>\n  <li>Cắt mất phần sau dấu = thứ hai.</li>\n  <li>decodeURIComponent ném lỗi làm sập request.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cookie",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Finds sid exactly|||Tìm đúng sid",
+            "goi": "[getCookie(\"theme=dark; sid=abc123; lang=vi\", \"sid\"), getCookie(\"xsid=bad; sid=abc123\", \"sid\")]",
+            "mongDoi": [
+              "abc123",
+              "abc123"
+            ]
+          },
+          {
+            "moTa": "Values with = and encoding|||Giá trị có = và mã hoá",
+            "goi": "[getCookie(\"data=a=b=c\", \"data\"), getCookie(\"name=L%C3%A2n\", \"name\"), getCookie(\"bad=%E0%A4%A\", \"bad\")]",
+            "mongDoi": [
+              "a=b=c",
+              "Lân",
+              "%E0%A4%A"
+            ]
+          },
+          {
+            "moTa": "Missing header or cookie; duplicates|||Thiếu header hoặc cookie; trùng tên",
+            "goi": "[getCookie(undefined, \"sid\"), getCookie(\"a=1\", \"sid\"), getCookie(\"sid=first; sid=second\", \"sid\")]",
+            "mongDoi": [
+              null,
+              null,
+              "first"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"xsid\" khớp \"sid\"."
+        },
+        {
+          "loi": "Cắt mất phần sau dấu = thứ hai."
+        },
+        {
+          "loi": "decodeURIComponent ném lỗi làm sập request."
+        }
+      ]
+    },
+    {
+      "title": "Khớp route, 404 và 405",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "định tuyến",
+        "tham số đường dẫn",
+        "405 + Allow"
+      ],
+      "prerequisites": [
+        "split",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>matchRoute(routes, method, path)</code> với <code>routes</code> là mảng <code>{ method, pattern, name }</code> (pattern như <code>\"/api/notes/:id\"</code>). Bỏ query (<code>?…</code>) và dấu <code>/</code> cuối (trừ <code>\"/\"</code>) trước khi so. So từng đoạn: đoạn <code>:x</code> khớp mọi đoạn không rỗng và được giải mã vào <code>params.x</code>. Trả: khớp cả đường dẫn lẫn phương thức ⇒ <code>{ status: 200, name, params }</code>; đường dẫn khớp nhưng sai phương thức ⇒ <code>{ status: 405, allow: \"GET, POST\" }</code> (các phương thức của mọi route khớp đường dẫn, theo thứ tự khai báo, không trùng); không đường dẫn nào khớp ⇒ <code>{ status: 404 }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tham số đường dẫn.</li>\n  <li>Phân biệt 404 và 405.</li>\n  <li>Header Allow đúng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "routes; method: string; path: string.",
+      "outputSpec": "{ status, name?, params?, allow? }.",
+      "constraints": "Route khai báo trước thắng khi nhiều route cùng khớp.",
+      "examplesJson": [
+        {
+          "input": "matchRoute(routes, \"PUT\", \"/api/notes\")",
+          "output": "{ status: 405, allow: \"GET, POST\" }",
+          "explanation": "Đúng nhánh 405 trong server.mjs của bài."
+        }
+      ],
+      "hintsJson": [
+        "const segs = (p) => p.split(\"/\").filter(Boolean);",
+        "Hai mảng đoạn phải cùng độ dài; đoạn bắt đầu \":\" thì gán params."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — khớp route\nfunction matchRoute(routes, method, path) {\n  const r = routes.find((x) => x.method === method && x.pattern === path);\n  return r ? { status: 200, name: r.name, params: {} } : { status: 404 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — so theo đoạn; đường dẫn khớp mà sai phương thức là 405 (kèm Allow), không phải 404\nfunction matchPath(pattern, path) {\n  const a = pattern.split('/').filter(Boolean);\n  const b = path.split('/').filter(Boolean);\n  if (a.length !== b.length) return null;\n  const params = {};\n  for (let i = 0; i < a.length; i++) {\n    if (a[i].startsWith(':')) params[a[i].slice(1)] = decodeURIComponent(b[i]);\n    else if (a[i] !== b[i]) return null;\n  }\n  return params;\n}\n\nfunction matchRoute(routes, method, path) {\n  let clean = path.split('?')[0];\n  if (clean.length > 1) clean = clean.replace(/\\/+$/, '');\n  const allow = [];\n  for (const r of routes) {\n    const params = matchPath(r.pattern, clean);\n    if (!params) continue;\n    if (r.method === method) return { status: 200, name: r.name, params };\n    if (!allow.includes(r.method)) allow.push(r.method);\n  }\n  return allow.length ? { status: 405, allow: allow.join(', ') } : { status: 404 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>404 nói \"không có thứ này\", 405 nói \"có, nhưng không làm được việc đó\" — và header <code>Allow</code> cho người gọi biết làm được gì. Đây đúng là việc Express làm bên trong <code>app.get</code>/<code>app.post</code>; ở khoá Node.js bạn sẽ dùng nó thay vì tự viết.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả 404 khi chỉ sai phương thức.</li>\n  <li>\"/api/notes/\" không khớp \"/api/notes\".</li>\n  <li>Đoạn rỗng khớp :id.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/405",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Params and trailing slash|||Tham số và dấu / cuối",
+            "goi": "(() => { const R = [{ method: \"GET\", pattern: \"/api/notes\", name: \"list\" }, { method: \"POST\", pattern: \"/api/notes\", name: \"create\" }, { method: \"DELETE\", pattern: \"/api/notes/:id\", name: \"remove\" }]; return [matchRoute(R, \"GET\", \"/api/notes/?page=2\"), matchRoute(R, \"DELETE\", \"/api/notes/42\")]; })()",
+            "mongDoi": [
+              {
+                "status": 200,
+                "name": "list",
+                "params": {}
+              },
+              {
+                "status": 200,
+                "name": "remove",
+                "params": {
+                  "id": "42"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": "405 with Allow, then 404|||405 kèm Allow, rồi 404",
+            "goi": "(() => { const R = [{ method: \"GET\", pattern: \"/api/notes\", name: \"list\" }, { method: \"POST\", pattern: \"/api/notes\", name: \"create\" }, { method: \"DELETE\", pattern: \"/api/notes/:id\", name: \"remove\" }]; return [matchRoute(R, \"PUT\", \"/api/notes\"), matchRoute(R, \"GET\", \"/api/notes/7\"), matchRoute(R, \"GET\", \"/api/users\")]; })()",
+            "mongDoi": [
+              {
+                "status": 405,
+                "allow": "GET, POST"
+              },
+              {
+                "status": 405,
+                "allow": "DELETE"
+              },
+              {
+                "status": 404
+              }
+            ]
+          },
+          {
+            "moTa": "Root, empty segment, decoding|||Gốc, đoạn rỗng, giải mã",
+            "goi": "(() => { const R = [{ method: \"GET\", pattern: \"/\", name: \"home\" }, { method: \"GET\", pattern: \"/tags/:tag\", name: \"tag\" }]; return [matchRoute(R, \"GET\", \"/\").name, matchRoute(R, \"GET\", \"/tags/\").status, matchRoute(R, \"GET\", \"/tags/c%2B%2B\").params]; })()",
+            "mongDoi": [
+              "home",
+              404,
+              {
+                "tag": "c++"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả 404 khi chỉ sai phương thức."
+        },
+        {
+          "loi": "\"/api/notes/\" không khớp \"/api/notes\"."
+        },
+        {
+          "loi": "Đoạn rỗng khớp :id."
+        }
+      ]
+    },
+    {
+      "title": "Kiểm phần thân ghi chú",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "kiểm ở ranh giới",
+        "422"
+      ],
+      "prerequisites": [
+        "typeof",
+        "trim"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>validateNote(raw)</code> — <code>raw</code> là CHUỖI phần thân request. JSON hỏng ⇒ <code>{ status: 400, errors: [\"body is not valid JSON\"] }</code>. Phải là object (không null/mảng) ⇒ ngược lại <code>{ status: 400, errors: [\"body must be an object\"] }</code>. Rồi gom MỌI lỗi (status 422): <code>title</code> là chuỗi, sau trim không rỗng (<code>\"title is required\"</code>), dài tối đa 80 ký tự THẬT (<code>\"title is longer than 80 characters\"</code>); <code>tags</code> nếu có phải là mảng tối đa 5 chuỗi (<code>\"tags must be at most 5 strings\"</code>); khoá khác <code>title, tags</code> ⇒ <code>\"unknown field: &lt;khoá&gt;\"</code>. Hợp lệ ⇒ <code>{ status: 200, data: { title, tags } }</code> với title đã trim, tags mặc định <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>400 cho JSON hỏng / không phải object.</li>\n  <li>422 gom mọi lỗi.</li>\n  <li>Trả dữ liệu sạch.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "raw: string.",
+      "outputSpec": "{ status, errors } | { status, data }.",
+      "constraints": "Đếm độ dài bằng [...title].length.",
+      "examplesJson": [
+        {
+          "input": "validateNote('{\"title\":\"   \"}')",
+          "output": "{ status: 422, errors: [\"title is required\"] }",
+          "explanation": "Đúng lần 422 trong bài."
+        }
+      ],
+      "hintsJson": [
+        "let body; try { body = JSON.parse(raw); } catch { return { status: 400, … }; }",
+        "Object.keys(body).filter((k) => ![\"title\", \"tags\"].includes(k))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — kiểm phần thân ghi chú\nfunction validateNote(raw) {\n  const body = JSON.parse(raw);\n  return { status: 200, data: body };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — 400: không đọc được; 422: đọc được nhưng nội dung sai; 200: dữ liệu sạch đi tiếp vào SQL\nfunction validateNote(raw) {\n  let body;\n  try { body = JSON.parse(raw); } catch { return { status: 400, errors: ['body is not valid JSON'] }; }\n  if (typeof body !== 'object' || body === null || Array.isArray(body)) return { status: 400, errors: ['body must be an object'] };\n  const errors = [];\n  const title = typeof body.title === 'string' ? body.title.trim() : '';\n  if (!title) errors.push('title is required');\n  else if ([...title].length > 80) errors.push('title is longer than 80 characters');\n  const tags = body.tags ?? [];\n  if (!Array.isArray(tags) || tags.length > 5 || !tags.every((t) => typeof t === 'string')) errors.push('tags must be at most 5 strings');\n  for (const k of Object.keys(body)) if (k !== 'title' && k !== 'tags') errors.push('unknown field: ' + k);\n  return errors.length ? { status: 422, errors } : { status: 200, data: { title, tags } };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là tầng \"valid\" trong log của bài: nằm sau auth, trước SQL. Dữ liệu trả về là bản SẠCH (đã trim, đúng kiểu, không trường lạ) — phần còn lại của máy chủ chỉ làm việc với nó, như <code>safeParse</code> của zod ở Bài 9.5.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>JSON.parse không try.</li>\n  <li>Dừng ở lỗi đầu.</li>\n  <li>Cho trường lạ lọt xuống CSDL.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/422",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Valid note, cleaned|||Ghi chú hợp lệ, đã làm sạch",
+            "goi": "validateNote('{\"title\":\"  Ship the capstone  \"}')",
+            "mongDoi": {
+              "status": 200,
+              "data": {
+                "title": "Ship the capstone",
+                "tags": []
+              }
+            }
+          },
+          {
+            "moTa": "Blank title and every other error|||Tiêu đề trống và mọi lỗi khác",
+            "goi": "[validateNote('{\"title\":\"   \"}'), validateNote(JSON.stringify({ title: \"x\".repeat(81), tags: [\"a\", 1], done: true }))]",
+            "mongDoi": [
+              {
+                "status": 422,
+                "errors": [
+                  "title is required"
+                ]
+              },
+              {
+                "status": 422,
+                "errors": [
+                  "title is longer than 80 characters",
+                  "tags must be at most 5 strings",
+                  "unknown field: done"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "400 for unreadable bodies|||400 cho phần thân không đọc được",
+            "goi": "[validateNote(\"title=hi\"), validateNote(\"[1]\"), validateNote(\"null\")]",
+            "mongDoi": [
+              {
+                "status": 400,
+                "errors": [
+                  "body is not valid JSON"
+                ]
+              },
+              {
+                "status": 400,
+                "errors": [
+                  "body must be an object"
+                ]
+              },
+              {
+                "status": 400,
+                "errors": [
+                  "body must be an object"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "JSON.parse không try."
+        },
+        {
+          "loi": "Dừng ở lỗi đầu."
+        },
+        {
+          "loi": "Cho trường lạ lọt xuống CSDL."
+        }
+      ]
+    },
+    {
+      "title": "Dòng log theo tầng, có che",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "log có cấu trúc",
+        "che dữ liệu nhạy cảm"
+      ],
+      "prerequisites": [
+        "đệ quy",
+        "JSON.stringify"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>logLine(id, layer, data)</code> trả chuỗi <code>\"[req &lt;id&gt;] &lt;layer đệm phải tới 6 ký tự&gt; &lt;data&gt;\"</code> giống log của bài (<code>\"[req 5] auth   session ok\"</code>). <code>data</code> là chuỗi thì in nguyên; là object/mảng thì in <code>JSON.stringify</code> SAU KHI che đệ quy: mọi khoá (không phân biệt hoa thường) là <code>password, token, sid, cookie, authorization</code> hoặc kết thúc bằng <code>secret</code> ⇒ giá trị <code>\"***\"</code>. Không sửa object gốc.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đệm tầng 6 ký tự.</li>\n  <li>Che đệ quy cả trong mảng.</li>\n  <li>Không sửa gốc.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "id: number; layer: string; data: string | object.",
+      "outputSpec": "string.",
+      "constraints": "Giá trị null/số của khoá nhạy cảm cũng che.",
+      "examplesJson": [
+        {
+          "input": "logLine(3, \"http\", { email: \"an@example.com\", password: \"correct horse battery\" })",
+          "output": "\"[req 3] http   {\\\"email\\\":\\\"an@example.com\\\",\\\"password\\\":\\\"***\\\"}\"",
+          "explanation": "Mật khẩu không bao giờ vào log."
+        }
+      ],
+      "hintsJson": [
+        "const mask = (v) => Array.isArray(v) ? v.map(mask) : v && typeof v === \"object\" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, SECRET(k) ? \"***\" : mask(x)])) : v;",
+        "layer.padEnd(6)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — dòng log theo tầng\nfunction logLine(id, layer, data) {\n  return '[req ' + id + '] ' + layer + ' ' + JSON.stringify(data);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — log có cấu trúc: mã request + tầng + dữ liệu đã che\nconst isSecret = (k) => /^(password|token|sid|cookie|authorization)$/i.test(k) || /secret$/i.test(k);\nconst mask = (v) =>\n  Array.isArray(v) ? v.map(mask)\n  : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, isSecret(k) ? '***' : mask(x)]))\n  : v;\n\nfunction logLine(id, layer, data) {\n  const text = typeof data === 'string' ? data : JSON.stringify(mask(data));\n  return '[req ' + id + '] ' + layer.padEnd(6) + ' ' + text;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bẫy của bài: bản đầu <code>app.js</code> in nguyên mật khẩu. Che ở MỘT hàm log dùng chung an toàn hơn nhớ che ở từng chỗ gọi. Mã request gắn các dòng của cùng một request lại với nhau khi nhiều request chạy xen kẽ.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa object gốc khi che.</li>\n  <li>Không che trong mảng lồng.</li>\n  <li>Che theo giá trị thay vì theo khoá.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The login line from the lesson|||Dòng đăng nhập trong bài",
+            "goi": "logLine(3, \"http\", { email: \"an@example.com\", password: \"correct horse battery\" })",
+            "mongDoi": "[req 3] http   {\"email\":\"an@example.com\",\"password\":\"***\"}"
+          },
+          {
+            "moTa": "Strings, padding, nested secrets|||Chuỗi, đệm, bí mật lồng nhau",
+            "goi": "[logLine(5, \"auth\", \"session ok → user 1\"), logLine(9, \"sql\", { headers: { Cookie: \"sid=abc\", Accept: \"*/*\" }, users: [{ id: 1, clientSecret: \"s\", Token: null }] })]",
+            "mongDoi": [
+              "[req 5] auth   session ok → user 1",
+              "[req 9] sql    {\"headers\":{\"Cookie\":\"***\",\"Accept\":\"*/*\"},\"users\":[{\"id\":1,\"clientSecret\":\"***\",\"Token\":\"***\"}]}"
+            ]
+          },
+          {
+            "moTa": "The original object is untouched|||Object gốc không đổi",
+            "goi": "(() => { const body = { password: \"p\", nested: { sid: \"x\" } }; logLine(1, \"http\", body); return body; })()",
+            "mongDoi": {
+              "password": "p",
+              "nested": {
+                "sid": "x"
+              }
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa object gốc khi che."
+        },
+        {
+          "loi": "Không che trong mảng lồng."
+        },
+        {
+          "loi": "Che theo giá trị thay vì theo khoá."
+        }
+      ]
+    },
+    {
+      "title": "Cả máy chủ ghi chú trong một hàm",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 35,
+      "points": 30,
+      "concepts": [
+        "request → response",
+        "phiên",
+        "phân quyền theo người dùng"
+      ],
+      "prerequisites": [
+        "Map",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "full-stack"
+      ],
+      "problemHtml": "<p><em>Bài 10.5 — Bức tranh full-stack.</em> Mỗi bài là một tầng của app ghi chú trong bài học, viết thành hàm thuần để kiểm được — bài cuối ghép tất cả lại.</p><p>Viết <code>createApp(users)</code> trả <code>{ handle }</code>. <code>users</code>: <code>[{ id, email, password }]</code> (mật khẩu thô — chỉ để luyện). <code>handle({ method, path, cookie, body })</code> trả <code>{ status, headers, body, log }</code> (log = mảng chuỗi <code>\"&lt;layer&gt; &lt;mô tả&gt;\"</code> cho request này). Route: <code>POST /login</code> <code>{ email, password }</code> ⇒ đúng: 200 <code>{ ok: true }</code> + <code>headers[\"Set-Cookie\"] = \"sid=s&lt;N&gt;; HttpOnly; SameSite=Lax; Path=/\"</code> (N = 1, 2, … theo lần đăng nhập), sai: 401 <code>{ error: \"wrong email or password\" }</code>. Dưới <code>/api/notes</code> cần cookie <code>sid</code> hợp lệ, không ⇒ 401 <code>{ error: \"log in first\" }</code>. <code>GET /api/notes</code> ⇒ 200 <code>{ items: [{ id, title }] }</code> CHỈ của người đó, theo id tăng dần. <code>POST /api/notes</code> <code>{ title }</code> ⇒ title trim rỗng: 422 <code>{ errors: [\"title is required\"] }</code>; được: 201 <code>{ id, title }</code> + <code>Location: /api/notes/&lt;id&gt;</code> (id tăng dần toàn hệ thống từ 1). <code>DELETE /api/notes/:id</code> ⇒ ghi chú của người đó: 204 body <code>null</code>; không có hoặc của người khác: 404 <code>{ error: \"not found\" }</code>. Route khác dưới /api/notes với phương thức sai ⇒ 405; còn lại 404 <code>{ error: \"not found\" }</code>. Log tối thiểu: <code>\"http &lt;METHOD&gt; &lt;path&gt;\"</code> đầu tiên và <code>\"reply &lt;status&gt;\"</code> cuối cùng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Phiên bằng cookie sid.</li>\n  <li>Mỗi người chỉ thấy/xoá ghi chú của mình.</li>\n  <li>401/404/405/422 đúng chỗ.</li>\n  <li>Log mở đầu và kết thúc.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "users; request { method, path, cookie?, body? }.",
+      "outputSpec": "{ status, headers, body, log }.",
+      "constraints": "Không có thư viện, không CSDL — dữ liệu trong Map/mảng của closure.\nXoá ghi chú của người khác trả 404 (không lộ sự tồn tại), không phải 403.",
+      "examplesJson": [
+        {
+          "input": "app.handle({ method: \"POST\", path: \"/api/notes\", body: { title: \"x\" } })",
+          "output": "{ status: 401, body: { error: \"log in first\" }, log: [\"http POST /api/notes\", \"auth no valid session\", \"reply 401\"], … }",
+          "explanation": "Như lần curl không cookie trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const sessions = new Map(); const notes = []; let nextNote = 1, nextSid = 1;",
+        "Mỗi request: const log = []; const reply = (status, body, headers = {}) => { log.push(\"reply \" + status); return { status, headers, body, log }; };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — cả máy chủ ghi chú trong một hàm\nfunction createApp(users) {\n  const notes = [];\n  return {\n    handle(req) {\n      return { status: 200, headers: {}, body: { items: notes }, log: [] };\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.5 — http → auth → valid → \"sql\" → reply, cho từng request; dữ liệu theo user_id\nfunction createApp(users) {\n  const sessions = new Map();              // sid → user id\n  const notes = [];                        // { id, userId, title }\n  let nextNote = 1;\n  let nextSid = 1;\n\n  function sidFrom(cookie) {\n    for (const part of String(cookie ?? '').split(';')) {\n      const [k, ...v] = part.trim().split('=');\n      if (k === 'sid') return v.join('=');\n    }\n    return null;\n  }\n\n  function handle({ method, path, cookie, body }) {\n    const log = ['http ' + method + ' ' + path];\n    const reply = (status, payload, headers = {}) => { log.push('reply ' + status); return { status, headers, body: payload, log }; };\n\n    if (path === '/login') {\n      if (method !== 'POST') return reply(405, { error: 'method not allowed' }, { Allow: 'POST' });\n      const u = users.find((x) => x.email === body?.email && x.password === body?.password);\n      log.push('auth ' + (u ? 'password ok → user ' + u.id : 'wrong email or password'));\n      if (!u) return reply(401, { error: 'wrong email or password' });\n      const sid = 's' + nextSid++;\n      sessions.set(sid, u.id);\n      return reply(200, { ok: true }, { 'Set-Cookie': 'sid=' + sid + '; HttpOnly; SameSite=Lax; Path=/' });\n    }\n\n    const one = /^\\/api\\/notes\\/(\\d+)$/.exec(path);\n    if (path !== '/api/notes' && !one) return reply(404, { error: 'not found' });\n\n    const userId = sessions.get(sidFrom(cookie));\n    log.push('auth ' + (userId ? 'session ok → user ' + userId : 'no valid session'));\n    if (!userId) return reply(401, { error: 'log in first' });\n\n    if (path === '/api/notes' && method === 'GET') {\n      const items = notes.filter((n) => n.userId === userId).map(({ id, title }) => ({ id, title }));\n      log.push('sql select ' + items.length + ' rows');\n      return reply(200, { items });\n    }\n    if (path === '/api/notes' && method === 'POST') {\n      const title = typeof body?.title === 'string' ? body.title.trim() : '';\n      log.push('valid ' + (title ? 'ok' : 'rejected: title is required'));\n      if (!title) return reply(422, { errors: ['title is required'] });\n      const note = { id: nextNote++, userId, title };\n      notes.push(note);\n      log.push('sql insert id ' + note.id);\n      return reply(201, { id: note.id, title }, { Location: '/api/notes/' + note.id });\n    }\n    if (one && method === 'DELETE') {\n      const i = notes.findIndex((n) => n.id === Number(one[1]) && n.userId === userId);   // WHERE id = ? AND user_id = ?\n      log.push('sql delete ' + (i < 0 ? 0 : 1) + ' rows');\n      if (i < 0) return reply(404, { error: 'not found' });\n      notes.splice(i, 1);\n      return reply(204, null);\n    }\n    return reply(405, { error: 'method not allowed' }, { Allow: one ? 'DELETE' : 'GET, POST' });\n  }\n\n  return { handle };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là <code>server.mjs</code> của bài học cộng bài luyện \"xoá\", không có mạng và CSDL để chấm được. Hai điều quan trọng nhất: mọi truy cập ghi chú đều kèm <code>userId</code> từ PHIÊN (không bao giờ từ body hay URL), và xoá ghi chú của người khác trả 404 giống hệt ghi chú không tồn tại — không cho kẻ dò biết id nào có thật (IDOR, Chương 6).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lấy userId từ body.</li>\n  <li>Trả 403 cho ghi chú người khác (lộ sự tồn tại).</li>\n  <li>GET trả ghi chú của mọi người.</li>\n  <li>Quên dòng \"reply\" trong log khi trả sớm.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.5 The full-stack picture.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "No cookie, then login and the Set-Cookie header|||Không cookie, rồi đăng nhập và Set-Cookie",
+            "goi": "(() => { const app = createApp([{ id: 1, email: \"an@example.com\", password: \"pw1\" }]); const a = app.handle({ method: \"POST\", path: \"/api/notes\", body: { title: \"x\" } }); const b = app.handle({ method: \"POST\", path: \"/login\", body: { email: \"an@example.com\", password: \"nope\" } }); const c = app.handle({ method: \"POST\", path: \"/login\", body: { email: \"an@example.com\", password: \"pw1\" } }); return [a.status, a.body, a.log, b.status, c.status, c.headers[\"Set-Cookie\"]]; })()",
+            "mongDoi": [
+              401,
+              {
+                "error": "log in first"
+              },
+              [
+                "http POST /api/notes",
+                "auth no valid session",
+                "reply 401"
+              ],
+              401,
+              200,
+              "sid=s1; HttpOnly; SameSite=Lax; Path=/"
+            ]
+          },
+          {
+            "moTa": "Create, validate and list|||Tạo, kiểm và liệt kê",
+            "goi": "(() => { const app = createApp([{ id: 1, email: \"an@example.com\", password: \"pw1\" }]); app.handle({ method: \"POST\", path: \"/login\", body: { email: \"an@example.com\", password: \"pw1\" } }); const ck = \"theme=dark; sid=s1\"; const a = app.handle({ method: \"POST\", path: \"/api/notes\", cookie: ck, body: { title: \"  Ship the capstone \" } }); const b = app.handle({ method: \"POST\", path: \"/api/notes\", cookie: ck, body: { title: \"   \" } }); const c = app.handle({ method: \"GET\", path: \"/api/notes\", cookie: ck }); return [a.status, a.body, a.headers.Location, b.status, b.body, c.body]; })()",
+            "mongDoi": [
+              201,
+              {
+                "id": 1,
+                "title": "Ship the capstone"
+              },
+              "/api/notes/1",
+              422,
+              {
+                "errors": [
+                  "title is required"
+                ]
+              },
+              {
+                "items": [
+                  {
+                    "id": 1,
+                    "title": "Ship the capstone"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "Users never see or delete each other's notes|||Không ai thấy hay xoá ghi chú của người khác",
+            "goi": "(() => { const app = createApp([{ id: 1, email: \"an@x.vn\", password: \"a\" }, { id: 2, email: \"binh@x.vn\", password: \"b\" }]); app.handle({ method: \"POST\", path: \"/login\", body: { email: \"an@x.vn\", password: \"a\" } }); app.handle({ method: \"POST\", path: \"/login\", body: { email: \"binh@x.vn\", password: \"b\" } }); app.handle({ method: \"POST\", path: \"/api/notes\", cookie: \"sid=s1\", body: { title: \"An note\" } }); app.handle({ method: \"POST\", path: \"/api/notes\", cookie: \"sid=s2\", body: { title: \"Binh note\" } }); const steal = app.handle({ method: \"DELETE\", path: \"/api/notes/1\", cookie: \"sid=s2\" }); const binhList = app.handle({ method: \"GET\", path: \"/api/notes\", cookie: \"sid=s2\" }).body; const own = app.handle({ method: \"DELETE\", path: \"/api/notes/1\", cookie: \"sid=s1\" }); const anList = app.handle({ method: \"GET\", path: \"/api/notes\", cookie: \"sid=s1\" }).body; return [steal.status, binhList, own.status, own.body, anList]; })()",
+            "mongDoi": [
+              404,
+              {
+                "items": [
+                  {
+                    "id": 2,
+                    "title": "Binh note"
+                  }
+                ]
+              },
+              204,
+              null,
+              {
+                "items": []
+              }
+            ]
+          },
+          {
+            "moTa": "404 and 405 routes|||Route 404 và 405",
+            "goi": "(() => { const app = createApp([{ id: 1, email: \"a\", password: \"b\" }]); app.handle({ method: \"POST\", path: \"/login\", body: { email: \"a\", password: \"b\" } }); return [app.handle({ method: \"GET\", path: \"/api/users\", cookie: \"sid=s1\" }).status, app.handle({ method: \"PUT\", path: \"/api/notes\", cookie: \"sid=s1\" }).status, app.handle({ method: \"GET\", path: \"/api/notes/1\", cookie: \"sid=s1\" }).headers.Allow]; })()",
+            "mongDoi": [
+              404,
+              405,
+              "DELETE"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy userId từ body."
+        },
+        {
+          "loi": "Trả 403 cho ghi chú người khác (lộ sự tồn tại)."
+        },
+        {
+          "loi": "GET trả ghi chú của mọi người."
+        },
+        {
+          "loi": "Quên dòng \"reply\" trong log khi trả sớm."
+        }
+      ]
+    }
+  ]
+}

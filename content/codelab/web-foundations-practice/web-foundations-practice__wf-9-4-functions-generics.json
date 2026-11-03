@@ -1,0 +1,661 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-9-4-functions-generics",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-9-4-functions-generics"
+  },
+  "exercises": [
+    {
+      "title": "Tham số mặc định và số đối số",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "tham số mặc định",
+        "kiểu trả về"
+      ],
+      "prerequisites": [
+        "arguments",
+        "Math.round"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Chữ ký: <code>function priceWithTax(price: number, rate: number = 0.1): number</code>. Viết thân hàm trả <code>Math.round(price * (1 + rate))</code>, đồng thời tự làm ba phép kiểm tsc làm ở functions.ts: gọi với 0 hoặc hơn 2 đối số ⇒ <code>TypeError(\"Expected 1-2 arguments, but got &lt;n&gt;.\")</code>; <code>price</code> không phải số ⇒ <code>TypeError(\"price must be a number\")</code>; <code>rate</code> được truyền nhưng không phải số ⇒ <code>TypeError(\"rate must be a number\")</code>. Truyền <code>undefined</code> cho rate ⇒ dùng mặc định.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mặc định 0.1.</li>\n  <li>Đếm đối số thật.</li>\n  <li>Ném đúng chữ của tsc.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "price, rate?.",
+      "outputSpec": "number.",
+      "constraints": "Dùng rest parameter để đếm đối số (arrow function không có arguments).",
+      "examplesJson": [
+        {
+          "input": "priceWithTax(25000)",
+          "output": "27500",
+          "explanation": "Thuế 10% mặc định."
+        }
+      ],
+      "hintsJson": [
+        "function priceWithTax(...args) { if (args.length < 1 || args.length > 2) throw … }",
+        "const [price, rate = 0.1] = args;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — function priceWithTax(price: number, rate: number = 0.1): number\nfunction priceWithTax(price, rate = 0.1) {\n  return price * (1 + rate);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — function priceWithTax(price: number, rate: number = 0.1): number\n// tsc kiểm số đối số và kiểu lúc biên dịch; ở đây làm lại lúc chạy để thấy nó kiểm những gì\nfunction priceWithTax(...args) {\n  if (args.length < 1 || args.length > 2) throw new TypeError('Expected 1-2 arguments, but got ' + args.length + '.');\n  const [price, rate = 0.1] = args;                 // mặc định áp cả khi truyền undefined\n  if (typeof price !== 'number') throw new TypeError('price must be a number');\n  if (typeof rate !== 'number') throw new TypeError('rate must be a number');\n  return Math.round(price * (1 + rate));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mặc định làm tham số thành tuỳ chọn, nhưng số đối số vẫn bị kiểm: <code>priceWithTax(25000, 0.1, 2)</code> là lỗi TS2554 trong bài. JavaScript thuần thì lặng lẽ bỏ đối số thứ ba. Kiểu trả về <code>: number</code> cộng <code>Math.round</code> bảo đảm không ai nhận <code>27500.000000000004</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên làm tròn: 25000 * 1.1 = 27500.000000000004.</li>\n  <li>Không nhận undefined làm mặc định.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/functions.html#optional-parameters",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Default and explicit rate|||Mặc định và rate truyền vào",
+            "goi": "[priceWithTax(25000), priceWithTax(25000, 0.08), priceWithTax(25000, undefined)]",
+            "mongDoi": [
+              27500,
+              27000,
+              27500
+            ]
+          },
+          {
+            "moTa": "A string price is refused|||Giá chuỗi bị từ chối",
+            "goi": "priceWithTax(\"25000\")",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^price must be a number$"
+            }
+          },
+          {
+            "moTa": "Three arguments|||Ba đối số",
+            "goi": "priceWithTax(25000, 0.1, 2)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^Expected 1-2 arguments, but got 3\\.$"
+            }
+          },
+          {
+            "moTa": "No arguments and a bad rate|||Không đối số và rate sai",
+            "goi": "[(() => { try { priceWithTax(); } catch (e) { return e.message; } })(), (() => { try { priceWithTax(1, \"0.1\"); } catch (e) { return e.message; } })()]",
+            "mongDoi": [
+              "Expected 1-2 arguments, but got 0.",
+              "rate must be a number"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên làm tròn: 25000 * 1.1 = 27500.000000000004."
+        },
+        {
+          "loi": "Không nhận undefined làm mặc định."
+        }
+      ]
+    },
+    {
+      "title": "first, last và findById",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "generic <T>",
+        "T extends"
+      ],
+      "prerequisites": [
+        "find",
+        "at"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Ba chữ ký: <code>first&lt;T&gt;(items: T[]): T | undefined</code>, <code>last&lt;T&gt;(items: T[]): T | undefined</code>, <code>findById&lt;T extends { id: number }&gt;(items: T[], id: number): T | undefined</code>. Viết cả ba. Mảng rỗng hoặc không tìm thấy ⇒ <code>undefined</code> (không ném lỗi). <code>findById</code> so <code>id</code> bằng <code>===</code> (chuỗi <code>\"2\"</code> không khớp số <code>2</code>). Hàm phải trả ĐÚNG object trong mảng (cùng tham chiếu), không phải bản sao.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>undefined khi rỗng/không thấy.</li>\n  <li>So ===.</li>\n  <li>Trả cùng tham chiếu.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: T[]; id: number.",
+      "outputSpec": "T | undefined.",
+      "constraints": "Không sửa mảng.",
+      "examplesJson": [
+        {
+          "input": "findById([{ id: 1, name: \"Notebook\" }, { id: 2, name: \"Pen\" }], 2)",
+          "output": "{ id: 2, name: \"Pen\" }",
+          "explanation": "T là { id: number; name: string } — kiểu thật được giữ."
+        }
+      ],
+      "hintsJson": [
+        "items[0] / items.at(-1)",
+        "items.find((x) => x.id === id)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — first<T>, last<T>, findById<T extends { id: number }>\nfunction first(items) {\n  return items[0] || null;\n}\nfunction last(items) {\n  return items.pop();\n}\nfunction findById(items, id) {\n  return items.find((x) => x.id == id);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — generic không đổi cách chạy; nó chỉ nói \"trả về cùng kiểu phần tử T\"\nfunction first(items) {             // first<T>(items: T[]): T | undefined\n  return items[0];\n}\n\nfunction last(items) {              // last<T>(items: T[]): T | undefined\n  return items.at(-1);              // không pop — không sửa mảng của người gọi\n}\n\nfunction findById(items, id) {      // findById<T extends { id: number }>(items: T[], id: number): T | undefined\n  return items.find((x) => x.id === id);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>items[0] || null</code> biến phần tử <code>0</code> hay <code>\"\"</code> thành <code>null</code> và đổi kiểu trả về; <code>pop</code> sửa mảng của người gọi. Kiểu <code>T | undefined</code> buộc người gọi xử lý trường hợp không có (lỗi TS18048 \"possibly undefined\" ở generics-errors.ts).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>|| null nuốt giá trị falsy.</li>\n  <li>pop sửa mảng.</li>\n  <li>== làm \"2\" khớp 2.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/generics.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "first and last, falsy values kept|||first và last, giữ giá trị falsy",
+            "goi": "[first([0, 1]), last([\"a\", \"\"]), first([]), last([])]",
+            "mongDoi": [
+              0,
+              "",
+              {
+                "$js": "undefined"
+              },
+              {
+                "$js": "undefined"
+              }
+            ]
+          },
+          {
+            "moTa": "last does not change the array|||last không sửa mảng",
+            "goi": "(() => { const a = [1, 2, 3]; last(a); return a; })()",
+            "mongDoi": [
+              1,
+              2,
+              3
+            ]
+          },
+          {
+            "moTa": "findById returns the same object|||findById trả đúng object",
+            "goi": "(() => { const pen = { id: 2, name: \"Pen\" }; const list = [{ id: 1, name: \"Notebook\" }, pen]; return [findById(list, 2) === pen, findById(list, \"2\"), findById(list, 9)]; })()",
+            "mongDoi": [
+              true,
+              {
+                "$js": "undefined"
+              },
+              {
+                "$js": "undefined"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "|| null nuốt giá trị falsy."
+        },
+        {
+          "loi": "pop sửa mảng."
+        },
+        {
+          "loi": "== làm \"2\" khớp 2."
+        }
+      ]
+    },
+    {
+      "title": "groupBy<T, K>",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "generic hai tham số",
+        "callback"
+      ],
+      "prerequisites": [
+        "reduce",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Chữ ký: <code>function groupBy&lt;T, K extends string&gt;(items: T[], key: (item: T) =&gt; K): Record&lt;K, T[]&gt;</code>. Viết thân hàm: gọi <code>key(item, index)</code> cho từng món, gom món vào mảng theo khoá trả về, khoá theo thứ tự xuất hiện lần đầu, món trong mỗi nhóm theo thứ tự gốc. Nếu <code>key</code> trả về thứ không phải chuỗi ⇒ ném <code>TypeError(\"key must return a string, got &lt;typeof&gt;\")</code>. Ví dụ dùng bài viết của Chương 8: <code>groupBy(posts, (p) =&gt; p.published ? \"live\" : \"draft\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gọi key với (item, index).</li>\n  <li>Giữ thứ tự.</li>\n  <li>Kiểm kết quả của key.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: T[]; key: (item, index) => string.",
+      "outputSpec": "object { khoá: T[] }.",
+      "constraints": "Không dùng Object.groupBy (để tự viết).",
+      "examplesJson": [
+        {
+          "input": "groupBy([{ t: \"Hello\", published: true }, { t: \"Draft\", published: false }], (p) => p.published ? \"live\" : \"draft\")",
+          "output": "{ live: [{ t: \"Hello\", published: true }], draft: [{ t: \"Draft\", published: false }] }",
+          "explanation": "Kiểu kết quả: Record<\"live\" | \"draft\", Post[]>."
+        }
+      ],
+      "hintsJson": [
+        "const out = {}; items.forEach((item, i) => { const k = key(item, i); (out[k] ??= []).push(item); });",
+        "if (typeof k !== \"string\") throw new TypeError(…)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — groupBy<T, K extends string>(items: T[], key: (item: T) => K): Record<K, T[]>\nfunction groupBy(items, key) {\n  return {};\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — groupBy<T, K extends string>(items: T[], key: (item: T, index: number) => K): Record<K, T[]>\nfunction groupBy(items, key) {\n  const out = {};\n  items.forEach((item, i) => {\n    const k = key(item, i);\n    if (typeof k !== 'string') throw new TypeError('key must return a string, got ' + typeof k);\n    (out[k] ??= []).push(item);                   // tạo nhóm lần đầu gặp khoá ⇒ đúng thứ tự xuất hiện\n  });\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai tham số kiểu: <code>T</code> giữ hình dạng món (bài viết vẫn là bài viết ở đầu ra), <code>K</code> giữ các khoá literal (<code>\"live\" | \"draft\"</code>) nên <code>groups.live</code> có kiểu còn <code>groups.lve</code> là lỗi. Ràng buộc <code>K extends string</code> là lý do ta kiểm kết quả <code>key</code> lúc chạy.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Mất thứ tự nhóm.</li>\n  <li>Không truyền index.</li>\n  <li>Để khoá số tự đổi thành chuỗi lặng lẽ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/generics.html#using-type-parameters-in-generic-constraints",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Posts by published|||Bài viết theo trạng thái",
+            "goi": "groupBy([{ id: 1, published: true }, { id: 2, published: false }, { id: 3, published: true }], (p) => p.published ? \"live\" : \"draft\")",
+            "mongDoi": {
+              "live": [
+                {
+                  "id": 1,
+                  "published": true
+                },
+                {
+                  "id": 3,
+                  "published": true
+                }
+              ],
+              "draft": [
+                {
+                  "id": 2,
+                  "published": false
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "key receives the index|||key nhận chỉ số",
+            "goi": "groupBy([\"a\", \"b\", \"c\", \"d\"], (_, i) => i % 2 === 0 ? \"even\" : \"odd\")",
+            "mongDoi": {
+              "even": [
+                "a",
+                "c"
+              ],
+              "odd": [
+                "b",
+                "d"
+              ]
+            }
+          },
+          {
+            "moTa": "Empty input|||Đầu vào rỗng",
+            "goi": "groupBy([], () => \"x\")",
+            "mongDoi": {}
+          },
+          {
+            "moTa": "A non-string key throws|||Khoá không phải chuỗi ném lỗi",
+            "goi": "groupBy([{ n: 1 }], (x) => x.n)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^key must return a string, got number$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mất thứ tự nhóm."
+        },
+        {
+          "loi": "Không truyền index."
+        },
+        {
+          "loi": "Để khoá số tự đổi thành chuỗi lặng lẽ."
+        }
+      ]
+    },
+    {
+      "title": "getJson<T> không nói dối",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "vị từ kiểu",
+        "generic chỉ ở kiểu trả về"
+      ],
+      "prerequisites": [
+        "async/await",
+        "fetch"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Chữ ký: <code>async function getJson&lt;T&gt;(url: string, check: (v: unknown) =&gt; v is T, fetchFn = fetch): Promise&lt;T&gt;</code>. Viết thân hàm: gọi <code>fetchFn(url)</code>; <code>!res.ok</code> ⇒ ném <code>Error(\"HTTP &lt;status&gt;\")</code>; đọc <code>await res.json()</code>; <code>check(data)</code> sai ⇒ ném <code>TypeError(\"unexpected response shape from &lt;url&gt;\")</code>; đúng ⇒ trả <code>data</code>. Viết thêm vị từ <code>isProduct(v)</code>: object (không null) có <code>id</code> số, <code>name</code> chuỗi, <code>price</code> số. Kiểm thử truyền <code>fetchFn</code> giả.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm res.ok trước.</li>\n  <li>check quyết định có trả về không.</li>\n  <li>isProduct kiểm ba trường.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "url; check; fetchFn.",
+      "outputSpec": "Promise<T>.",
+      "constraints": "Không dùng \"as\" hay ép kiểu — kiểu do check chứng minh.",
+      "examplesJson": [
+        {
+          "input": "await getJson(\"/api/products/7\", isProduct, fakeFetch)",
+          "output": "{ id: 7, name: \"Ruler\", price: 8000 }",
+          "explanation": "Trả về khi check đúng."
+        }
+      ],
+      "hintsJson": [
+        "const res = await fetchFn(url); if (!res.ok) throw new Error(\"HTTP \" + res.status);",
+        "if (!check(data)) throw new TypeError(\"unexpected response shape from \" + url);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — getJson<T>(url, check: (v: unknown) => v is T): Promise<T>\nasync function getJson(url, check, fetchFn = fetch) {\n  const res = await fetchFn(url);\n  return res.json();           // parse<T> kiểu cũ: chẳng kiểm gì cả\n}\nfunction isProduct(v) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — T xuất hiện ở THAM SỐ check (vị từ kiểu) ⇒ kiểu trả về được chứng minh, không phải \"as T\" đội lốt\nasync function getJson(url, check, fetchFn = fetch) {\n  const res = await fetchFn(url);\n  if (!res.ok) throw new Error('HTTP ' + res.status);\n  const data = await res.json();                       // unknown\n  if (!check(data)) throw new TypeError('unexpected response shape from ' + url);\n  return data;                                         // T — đã được check chứng minh\n}\n\nfunction isProduct(v) {                                // (v: unknown): v is { id: number; name: string; price: number }\n  return typeof v === 'object' && v !== null\n    && typeof v.id === 'number' && typeof v.name === 'string' && typeof v.price === 'number';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>parse&lt;T&gt;(json): T</code> là bẫy của Bài 9.4: T chỉ có ở kiểu trả về, nên không có gì kiểm. Ở đây T còn xuất hiện ở <code>check: (v: unknown) =&gt; v is T</code> — người gọi phải đưa một hàm thật sự kiểm, và TypeScript suy T từ chính hàm đó. Bài 9.5 dùng <code>Product.safeParse</code> của zod làm đúng vai này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đọc json trước khi kiểm res.ok.</li>\n  <li>isProduct quên null.</li>\n  <li>Trả data khi check sai.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/narrowing.html#using-type-predicates",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "isProduct|||isProduct",
+            "goi": "[isProduct({ id: 7, name: \"Ruler\", price: 8000 }), isProduct({ id: 7, title: \"Ruler\", price: \"8000\" }), isProduct(null), isProduct(\"x\")]",
+            "mongDoi": [
+              true,
+              false,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "A valid response is returned|||Response hợp lệ được trả về",
+            "goi": "await getJson(\"/api/products/7\", isProduct, async () => ({ ok: true, status: 200, json: async () => ({ id: 7, name: \"Ruler\", price: 8000 }) }))",
+            "mongDoi": {
+              "id": 7,
+              "name": "Ruler",
+              "price": 8000
+            }
+          },
+          {
+            "moTa": "The wrong shape is refused|||Hình dạng sai bị từ chối",
+            "goi": "await getJson(\"/api/products/7\", isProduct, async () => ({ ok: true, status: 200, json: async () => ({ id: 7, title: \"Ruler\", price: \"8000\" }) }))",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^unexpected response shape from /api/products/7$"
+            }
+          },
+          {
+            "moTa": "HTTP errors come first|||Lỗi HTTP báo trước",
+            "goi": "await getJson(\"/api/products/999\", isProduct, async () => ({ ok: false, status: 404, json: async () => ({ error: \"not found\" }) }))",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "^HTTP 404$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đọc json trước khi kiểm res.ok."
+        },
+        {
+          "loi": "isProduct quên null."
+        },
+        {
+          "loi": "Trả data khi check sai."
+        }
+      ]
+    },
+    {
+      "title": "memoize<A, R>",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "hàm bậc cao",
+        "generic giữ chữ ký"
+      ],
+      "prerequisites": [
+        "closure",
+        "Map"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Chữ ký: <code>function memoize&lt;A extends unknown[], R&gt;(fn: (...args: A) =&gt; R): ((...args: A) =&gt; R) &amp; { calls: () =&gt; number }</code>. Viết <code>memoize(fn)</code> trả hàm mới cùng tham số: lần đầu gặp một bộ đối số thì gọi <code>fn</code> và nhớ kết quả; lần sau trả kết quả đã nhớ. Khoá nhớ là <code>JSON.stringify(args)</code>. Hàm trả về có thêm phương thức <code>calls()</code> trả số lần <code>fn</code> THẬT SỰ được gọi. Nếu <code>fn</code> ném lỗi thì không nhớ gì (lần sau gọi lại).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhớ theo bộ đối số.</li>\n  <li>calls() đếm lần gọi thật.</li>\n  <li>Lỗi không được nhớ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fn.",
+      "outputSpec": "hàm có calls().",
+      "constraints": "Mỗi lần memoize có bộ nhớ riêng.",
+      "examplesJson": [
+        {
+          "input": "const slow = memoize((a, b) => a * b); slow(3, 4); slow(3, 4); slow.calls()",
+          "output": "1",
+          "explanation": "Lần thứ hai lấy từ bộ nhớ."
+        }
+      ],
+      "hintsJson": [
+        "const cache = new Map(); let count = 0;",
+        "const wrapped = (...args) => { const k = JSON.stringify(args); if (cache.has(k)) return cache.get(k); … }; wrapped.calls = () => count;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — memoize<A extends unknown[], R>(fn: (...args: A) => R)\nfunction memoize(fn) {\n  return fn;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — A giữ danh sách tham số, R giữ kiểu trả về: hàm bọc có ĐÚNG chữ ký của hàm gốc\nfunction memoize(fn) {\n  const cache = new Map();\n  let count = 0;\n  const wrapped = (...args) => {\n    const key = JSON.stringify(args);\n    if (cache.has(key)) return cache.get(key);\n    count++;\n    const result = fn(...args);                 // ném lỗi ⇒ dừng ở đây, không có gì được nhớ\n    cache.set(key, result);\n    return result;\n  };\n  wrapped.calls = () => count;\n  return wrapped;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không có generic, <code>memoize</code> sẽ trả <code>(...args: any[]) =&gt; any</code> và mọi kiểu biến mất sau khi bọc. Với <code>A</code> và <code>R</code>, <code>memoize(priceWithTax)</code> vẫn là <code>(price: number, rate?: number) =&gt; number</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Một cache chung cho mọi hàm.</li>\n  <li>Đếm cả lần lấy từ cache.</li>\n  <li>Nhớ lỗi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/generics.html#generic-types",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Results are remembered per arguments|||Nhớ kết quả theo đối số",
+            "goi": "(() => { const m = memoize((a, b) => a * b); return [m(3, 4), m(3, 4), m(4, 3), m.calls()]; })()",
+            "mongDoi": [
+              12,
+              12,
+              12,
+              2
+            ]
+          },
+          {
+            "moTa": "Separate caches|||Bộ nhớ riêng",
+            "goi": "(() => { const a = memoize((x) => x + 1); const b = memoize((x) => x + 2); return [a(1), b(1), a.calls(), b.calls()]; })()",
+            "mongDoi": [
+              2,
+              3,
+              1,
+              1
+            ]
+          },
+          {
+            "moTa": "Errors are not cached|||Lỗi không được nhớ",
+            "goi": "(() => { let n = 0; const m = memoize((x) => { n++; if (n === 1) throw new Error(\"flaky\"); return x * 2; }); try { m(5); } catch {} return [m(5), m(5), m.calls()]; })()",
+            "mongDoi": [
+              10,
+              10,
+              2
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Một cache chung cho mọi hàm."
+        },
+        {
+          "loi": "Đếm cả lần lấy từ cache."
+        },
+        {
+          "loi": "Nhớ lỗi."
+        }
+      ]
+    },
+    {
+      "title": "pipe: nối các hàm có kiểu",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "kết hợp hàm",
+        "kiểu nối tiếp"
+      ],
+      "prerequisites": [
+        "reduce",
+        "hàm bậc cao"
+      ],
+      "tags": [
+        "javascript",
+        "typescript"
+      ],
+      "problemHtml": "<p><em>Bài 9.4 — Hàm và generic.</em> Mỗi đề ghi chữ ký TypeScript mà hàm sẽ có; bạn viết thân hàm bằng JavaScript. Generic không làm hàm chạy khác đi — nó chỉ giữ cho kiểu của người gọi đi xuyên qua hàm.</p><p>Trong TypeScript, <code>pipe(f, g, h)</code> có chữ ký <code>pipe&lt;A, B, C, D&gt;(f: (a: A) =&gt; B, g: (b: B) =&gt; C, h: (c: C) =&gt; D): (a: A) =&gt; D</code> — kiểu ra của mỗi hàm phải khớp kiểu vào của hàm sau. Viết <code>pipe(...steps)</code> bằng JavaScript, trong đó mỗi bước là <code>{ name, fn, input, output }</code> với <code>input</code>/<code>output</code> là tên kiểu <code>\"string\" | \"number\" | \"boolean\" | \"object\"</code>. <code>pipe</code> phải: (1) kiểm lúc TẠO rằng <code>output</code> của mỗi bước bằng <code>input</code> của bước sau, sai ⇒ ném <code>TypeError(\"&lt;tên trước&gt; returns &lt;output&gt; but &lt;tên sau&gt; expects &lt;input&gt;\")</code>; (2) trả hàm <code>run(value)</code> chạy lần lượt các <code>fn</code>, và trước MỖI bước kiểm <code>typeof value</code> (null coi là <code>\"null\"</code>) bằng <code>input</code> của bước đó, sai ⇒ <code>TypeError(\"&lt;tên&gt; expected &lt;input&gt;, got &lt;thật&gt;\")</code>. Không có bước nào ⇒ <code>run</code> trả nguyên giá trị.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm khớp nối lúc tạo.</li>\n  <li>Kiểm kiểu trước mỗi bước lúc chạy.</li>\n  <li>Chạy theo thứ tự.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "steps: { name, fn, input, output }[].",
+      "outputSpec": "run: (value) => kết quả.",
+      "constraints": "Lỗi nối phải ném ngay khi gọi pipe, trước khi chạy gì.",
+      "examplesJson": [
+        {
+          "input": "pipe(trim, toNumber, withTax)(\" 25000 \")",
+          "output": "27500",
+          "explanation": "string → string → number → number."
+        }
+      ],
+      "hintsJson": [
+        "for (let i = 1; i < steps.length; i++) if (steps[i - 1].output !== steps[i].input) throw …",
+        "return (value) => steps.reduce((v, s) => { check(v, s); return s.fn(v); }, value);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — pipe: kiểu ra của bước trước phải khớp kiểu vào của bước sau\nfunction pipe(...steps) {\n  return (value) => steps.reduce((v, s) => s.fn(v), value);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 9.4 — tsc kiểm khớp nối B → B → C lúc biên dịch; ở đây: kiểm nối lúc TẠO, kiểm giá trị lúc CHẠY\nconst kindOf = (v) => (v === null ? 'null' : typeof v);\n\nfunction pipe(...steps) {\n  for (let i = 1; i < steps.length; i++) {\n    const prev = steps[i - 1];\n    const next = steps[i];\n    if (prev.output !== next.input) {\n      throw new TypeError(prev.name + ' returns ' + prev.output + ' but ' + next.name + ' expects ' + next.input);\n    }\n  }\n  return (value) => steps.reduce((v, step) => {\n    const got = kindOf(v);\n    if (got !== step.input) throw new TypeError(step.name + ' expected ' + step.input + ', got ' + got);\n    return step.fn(v);\n  }, value);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Phần (1) là thứ generic cho bạn miễn phí: <code>pipe(trim, withTax)</code> với <code>trim: string =&gt; string</code> và <code>withTax: number =&gt; number</code> là lỗi biên dịch. Phần (2) là thứ kiểu không làm được: giá trị đầu vào đến lúc chạy, và một <code>fn</code> viết sai vẫn có thể trả về <code>NaN</code> hay <code>null</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ kiểm lúc chạy — lỗi nối lộ ra muộn.</li>\n  <li>typeof null là \"object\".</li>\n  <li>Kiểm sau khi đã gọi fn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 9.4 Functions and generics.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.typescriptlang.org/docs/handbook/2/functions.html#function-type-expressions",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "string → number → number|||string → number → number",
+            "goi": "pipe({ name: \"trim\", fn: (s) => s.trim(), input: \"string\", output: \"string\" }, { name: \"toNumber\", fn: Number, input: \"string\", output: \"number\" }, { name: \"withTax\", fn: (n) => Math.round(n * 1.1), input: \"number\", output: \"number\" })(\" 25000 \")",
+            "mongDoi": 27500
+          },
+          {
+            "moTa": "A bad connection throws at creation|||Nối sai ném lỗi ngay lúc tạo",
+            "goi": "pipe({ name: \"trim\", fn: (s) => s.trim(), input: \"string\", output: \"string\" }, { name: \"withTax\", fn: (n) => n * 1.1, input: \"number\", output: \"number\" })",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^trim returns string but withTax expects number$"
+            }
+          },
+          {
+            "moTa": "A wrong runtime value is caught before the step|||Giá trị sai bị chặn trước bước",
+            "goi": "pipe({ name: \"trim\", fn: (s) => s.trim(), input: \"string\", output: \"string\" })(null)",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^trim expected string, got null$"
+            }
+          },
+          {
+            "moTa": "A step that lies about its output|||Bước khai sai kiểu ra",
+            "goi": "pipe({ name: \"parse\", fn: (s) => JSON.parse(s), input: \"string\", output: \"object\" }, { name: \"keys\", fn: (o) => Object.keys(o).length, input: \"object\", output: \"number\" })(\"42\")",
+            "mongDoi": {
+              "loi": "TypeError",
+              "thongDiep": "^keys expected object, got number$"
+            }
+          },
+          {
+            "moTa": "No steps|||Không có bước nào",
+            "goi": "pipe()(\"x\")",
+            "mongDoi": "x"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ kiểm lúc chạy — lỗi nối lộ ra muộn."
+        },
+        {
+          "loi": "typeof null là \"object\"."
+        },
+        {
+          "loi": "Kiểm sau khi đã gọi fn."
+        }
+      ]
+    }
+  ]
+}

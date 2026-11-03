@@ -1,0 +1,5 @@
+Page opened. Nobody clicked anything. Waited 1.5 s.
+Requests the server received:
+  GET /
+  GET /notes/1/delete
+Notes left on the server: ["Buy milk","Pay rent"]

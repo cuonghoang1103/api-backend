@@ -1,0 +1,743 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-8-4-relationships-joins",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-8-4-relationships-joins"
+  },
+  "exercises": [
+    {
+      "title": "INNER JOIN",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "INNER JOIN",
+        "chỉ mục bằng Map"
+      ],
+      "prerequisites": [
+        "Map",
+        "flatMap"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "join"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Viết <code>innerJoin(left, right, leftKey, rightKey, pick)</code>: với mỗi dòng <code>l</code> của <code>left</code> (theo thứ tự) và MỖI dòng <code>r</code> của <code>right</code> có <code>l[leftKey] === r[rightKey]</code> (theo thứ tự của right), trả <code>pick(l, r)</code>. Giá trị null/undefined không bao giờ khớp. Dựng một <code>Map</code> từ giá trị khoá sang danh sách dòng bên phải trước, đừng lồng hai vòng lặp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ cặp khớp.</li>\n  <li>null không khớp null.</li>\n  <li>Nhiều dòng phải khớp ⇒ nhiều kết quả.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "left, right: object[]; leftKey, rightKey: string; pick: (l, r) => any.",
+      "outputSpec": "any[].",
+      "constraints": "Độ phức tạp O(n + m), không O(n × m).",
+      "examplesJson": [
+        {
+          "input": "innerJoin(posts, users, \"user_id\", \"id\", (p, u) => p.title + \" — \" + u.name)",
+          "output": "5 dòng, \"Orphan Draft\" biến mất",
+          "explanation": "Như INNER JOIN trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const index = new Map(); for (const r of right) { if (r[rightKey] == null) continue; … push }",
+        "left.flatMap((l) => (index.get(l[leftKey]) ?? []).map((r) => pick(l, r)))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — INNER JOIN\nfunction innerJoin(left, right, leftKey, rightKey, pick) {\n  return left.map((l) => pick(l, right.find((r) => r[rightKey] == l[leftKey])));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — dựng chỉ mục cho bên phải một lần, rồi tra cho từng dòng bên trái (hash join)\nfunction innerJoin(left, right, leftKey, rightKey, pick) {\n  const index = new Map();\n  for (const r of right) {\n    const k = r[rightKey];\n    if (k === null || k === undefined) continue;             // NULL không bao giờ khớp\n    if (!index.has(k)) index.set(k, []);\n    index.get(k).push(r);\n  }\n  return left.flatMap((l) => (index.get(l[leftKey]) ?? []).map((r) => pick(l, r)));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây gần như đúng thuật toán \"hash join\" mà PostgreSQL dùng cho bảng lớn. Code khởi đầu sai ba chỗ: giữ cả dòng không khớp (thành pick với undefined), chỉ lấy dòng khớp đầu tiên, và dùng == nên null khớp undefined.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>find chỉ lấy một dòng khớp.</li>\n  <li>Cho null khớp null.</li>\n  <li>Hai vòng lặp lồng — chậm với bảng lớn.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.postgresql.org/docs/current/planner-optimizer.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Posts with authors; the orphan disappears|||Bài kèm tác giả; bài mồ côi biến mất",
+            "goi": "innerJoin([{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], [{ id: 1, name: \"Lan\" }, { id: 2, name: \"Minh\" }, { id: 3, name: \"An\" }], \"user_id\", \"id\", (p, u) => p.title + \" — \" + u.name)",
+            "mongDoi": [
+              "Hello World — Lan",
+              "Learning SQL — Lan",
+              "Draft Post — Minh",
+              "Node.js Basics — Minh",
+              "Old Announcement — Lan"
+            ]
+          },
+          {
+            "moTa": "One left row, several matches|||Một dòng trái, nhiều dòng khớp",
+            "goi": "innerJoin([{ id: 1, name: \"Lan\" }, { id: 2, name: \"Minh\" }, { id: 3, name: \"An\" }], [{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], \"id\", \"user_id\", (u, p) => u.name + \":\" + p.id)",
+            "mongDoi": [
+              "Lan:1",
+              "Lan:2",
+              "Lan:5",
+              "Minh:3",
+              "Minh:4"
+            ]
+          },
+          {
+            "moTa": "NULL never matches|||NULL không bao giờ khớp",
+            "goi": "innerJoin([{ k: null }, { k: 1 }], [{ k: null }, { k: 1 }], \"k\", \"k\", (a, b) => [a.k, b.k])",
+            "mongDoi": [
+              [
+                1,
+                1
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "find chỉ lấy một dòng khớp."
+        },
+        {
+          "loi": "Cho null khớp null."
+        },
+        {
+          "loi": "Hai vòng lặp lồng — chậm với bảng lớn."
+        }
+      ]
+    },
+    {
+      "title": "LEFT JOIN",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "LEFT JOIN",
+        "NULL bên thiếu"
+      ],
+      "prerequisites": [
+        "Map",
+        "flatMap"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "join"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Viết <code>leftJoin(left, right, leftKey, rightKey, pick)</code> như bài trước nhưng GIỮ mọi dòng bên trái: dòng không có cặp gọi <code>pick(l, null)</code> đúng một lần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mọi dòng trái xuất hiện ít nhất một lần.</li>\n  <li>Không cặp ⇒ pick(l, null).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "như innerJoin.",
+      "outputSpec": "any[].",
+      "constraints": "O(n + m).",
+      "examplesJson": [
+        {
+          "input": "leftJoin(posts, users, …, (p, u) => [p.title, u?.name ?? null])",
+          "output": "6 dòng, [\"Orphan Draft\", null] ở cuối",
+          "explanation": "Như LEFT JOIN trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const matches = index.get(l[leftKey]) ?? [];",
+        "return matches.length ? matches.map((r) => pick(l, r)) : [pick(l, null)];"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — LEFT JOIN\nfunction leftJoin(left, right, leftKey, rightKey, pick) {\n  return left.filter((l) => right.some((r) => r[rightKey] === l[leftKey])).map((l) => pick(l, null));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — như INNER JOIN, nhưng dòng trái không có cặp vẫn ở lại với NULL\nfunction leftJoin(left, right, leftKey, rightKey, pick) {\n  const index = new Map();\n  for (const r of right) {\n    const k = r[rightKey];\n    if (k === null || k === undefined) continue;\n    if (!index.has(k)) index.set(k, []);\n    index.get(k).push(r);\n  }\n  return left.flatMap((l) => {\n    const matches = index.get(l[leftKey]) ?? [];\n    return matches.length ? matches.map((r) => pick(l, r)) : [pick(l, null)];\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Chọn LEFT hay INNER bằng câu hỏi của bài: \"dòng bên trái có thể tồn tại không cặp, và tôi có muốn thấy nó không?\". Hàm <code>pick</code> nhận null là chỗ bạn quyết định hiển thị gì — \"(chưa có tác giả)\" chẳng hạn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bỏ dòng không cặp (thành INNER).</li>\n  <li>Gọi pick(l, null) cả khi đã có cặp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_select.html#special_handling_of_cross_join_",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Every post stays|||Mọi bài ở lại",
+            "goi": "leftJoin([{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], [{ id: 1, name: \"Lan\" }, { id: 2, name: \"Minh\" }, { id: 3, name: \"An\" }], \"user_id\", \"id\", (p, u) => [p.title, u ? u.name : null])",
+            "mongDoi": [
+              [
+                "Hello World",
+                "Lan"
+              ],
+              [
+                "Learning SQL",
+                "Lan"
+              ],
+              [
+                "Draft Post",
+                "Minh"
+              ],
+              [
+                "Node.js Basics",
+                "Minh"
+              ],
+              [
+                "Old Announcement",
+                "Lan"
+              ],
+              [
+                "Orphan Draft",
+                null
+              ]
+            ]
+          },
+          {
+            "moTa": "Users with their posts, An with none|||Người dùng kèm bài, An không có",
+            "goi": "leftJoin([{ id: 1, name: \"Lan\" }, { id: 2, name: \"Minh\" }, { id: 3, name: \"An\" }], [{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], \"id\", \"user_id\", (u, p) => u.name + \":\" + (p ? p.id : \"-\"))",
+            "mongDoi": [
+              "Lan:1",
+              "Lan:2",
+              "Lan:5",
+              "Minh:3",
+              "Minh:4",
+              "An:-"
+            ]
+          },
+          {
+            "moTa": "NULL keys and empty right side|||Khoá NULL và bên phải rỗng",
+            "goi": "[leftJoin([{ k: null }], [{ k: null }], \"k\", \"k\", (a, b) => b), leftJoin([{ k: 1 }, { k: 2 }], [], \"k\", \"k\", (a, b) => [a.k, b])]",
+            "mongDoi": [
+              [
+                null
+              ],
+              [
+                [
+                  1,
+                  null
+                ],
+                [
+                  2,
+                  null
+                ]
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ dòng không cặp (thành INNER)."
+        },
+        {
+          "loi": "Gọi pick(l, null) cả khi đã có cặp."
+        }
+      ]
+    },
+    {
+      "title": "Đếm con, kể cả số không",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "LEFT JOIN + GROUP BY",
+        "count(cột)"
+      ],
+      "prerequisites": [
+        "Map",
+        "map"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Viết <code>countChildren(parents, children, fk, as)</code> trả MỖI dòng cha (theo thứ tự) dưới dạng bản sao có thêm thuộc tính tên <code>as</code> = số dòng con có <code>child[fk] === parent.id</code> — kể cả 0. Kết quả sắp theo số đếm giảm dần, bằng nhau thì giữ thứ tự cũ. Đây là <code>SELECT users.*, count(posts.id) … LEFT JOIN … GROUP BY users.id ORDER BY … DESC</code> của bài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giữ cha có 0 con.</li>\n  <li>Không sửa dữ liệu vào.</li>\n  <li>Sắp giảm dần, ổn định.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "parents, children: object[]; fk: string; as: string.",
+      "outputSpec": "object[].",
+      "constraints": "Đếm một lượt qua children (Map), không filter cho từng cha.",
+      "examplesJson": [
+        {
+          "input": "countChildren(users, posts, \"user_id\", \"posts\")",
+          "output": "[{ id: 1, name: \"Lan\", posts: 3 }, { id: 2, …, posts: 2 }, { id: 3, name: \"An\", posts: 0 }]",
+          "explanation": "An ở lại với 0 — INNER JOIN sẽ làm cô biến mất."
+        }
+      ],
+      "hintsJson": [
+        "const counts = new Map(); for (const ch of children) counts.set(ch[fk], (counts.get(ch[fk]) ?? 0) + 1);",
+        "parents.map((p) => ({ ...p, [as]: counts.get(p.id) ?? 0 })).toSorted((a, b) => b[as] - a[as])"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — đếm con\nfunction countChildren(parents, children, fk, as) {\n  return parents.filter((p) => children.some((c) => c[fk] === p.id))\n    .map((p) => ({ ...p, [as]: children.filter((c) => c[fk] === p.id).length }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — đếm một lượt, rồi gắn số đếm cho MỌI cha (thiếu thì 0)\nfunction countChildren(parents, children, fk, as) {\n  const counts = new Map();\n  for (const ch of children) {\n    const k = ch[fk];\n    if (k === null || k === undefined) continue;\n    counts.set(k, (counts.get(k) ?? 0) + 1);\n  }\n  return parents\n    .map((p) => ({ ...p, [as]: counts.get(p.id) ?? 0 }))    // LEFT JOIN: không con ⇒ 0\n    .toSorted((a, b) => b[as] - a[as]);                     // ổn định khi bằng nhau\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là phiên bản INNER JOIN: An biến mất, và bảng điều khiển không bao giờ cho thấy ai chưa hoạt động. Nó còn chậm: lọc cả mảng con cho từng cha là O(n × m).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Bỏ cha có 0 con.</li>\n  <li>Lọc mảng con cho từng cha.</li>\n  <li>Sửa trực tiếp object cha.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.postgresql.org/docs/current/tutorial-agg.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Posts per user, An included|||Số bài mỗi người, có An",
+            "goi": "countChildren([{ id: 1, name: \"Lan\" }, { id: 2, name: \"Minh\" }, { id: 3, name: \"An\" }], [{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], \"user_id\", \"posts\")",
+            "mongDoi": [
+              {
+                "id": 1,
+                "name": "Lan",
+                "posts": 3
+              },
+              {
+                "id": 2,
+                "name": "Minh",
+                "posts": 2
+              },
+              {
+                "id": 3,
+                "name": "An",
+                "posts": 0
+              }
+            ]
+          },
+          {
+            "moTa": "Comments per post; ties keep order; input untouched|||Bình luận mỗi bài; bằng nhau giữ thứ tự; dữ liệu vào nguyên vẹn",
+            "chuanBi": "const P = [{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }]; const C = [{ post_id: 1 }, { post_id: 1 }, { post_id: 4 }, { post_id: 4 }, { post_id: 2 }]; const r = countChildren(P, C, \"post_id\", \"comments\");",
+            "goi": "[r.map((p) => p.id + \":\" + p.comments), \"comments\" in P[0]]",
+            "mongDoi": [
+              [
+                "1:2",
+                "4:2",
+                "2:1",
+                "3:0",
+                "5:0",
+                "6:0"
+              ],
+              false
+            ]
+          },
+          {
+            "moTa": "NULL foreign keys are not counted; no children|||Khoá ngoại NULL không được đếm; không có con",
+            "goi": "[countChildren([{ id: 1 }], [{ u: null }, { u: 1 }], \"u\", \"n\"), countChildren([{ id: 7 }, { id: 8 }], [], \"u\", \"n\")]",
+            "mongDoi": [
+              [
+                {
+                  "id": 1,
+                  "n": 1
+                }
+              ],
+              [
+                {
+                  "id": 7,
+                  "n": 0
+                },
+                {
+                  "id": 8,
+                  "n": 0
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Bỏ cha có 0 con."
+        },
+        {
+          "loi": "Lọc mảng con cho từng cha."
+        },
+        {
+          "loi": "Sửa trực tiếp object cha."
+        }
+      ]
+    },
+    {
+      "title": "Gom dòng JOIN thành object lồng",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "dòng phẳng",
+        "object lồng",
+        "việc ORM làm"
+      ],
+      "prerequisites": [
+        "Map",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "orm"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Một <code>users LEFT JOIN posts</code> trả các dòng PHẲNG: <code>{ user_id, name, post_id, title }</code> — mỗi người lặp lại một lần cho mỗi bài, người không có bài thì <code>post_id</code> và <code>title</code> là null. Viết <code>nest(rows)</code> trả <code>[{ id, name, posts: [{ id, title }] }]</code>: mỗi người một object theo thứ tự xuất hiện đầu tiên, <code>posts</code> theo thứ tự dòng, người không có bài thì <code>posts: []</code> (không có phần tử null).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Một object mỗi user_id.</li>\n  <li>Không có bài null.</li>\n  <li>Giữ thứ tự.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rows: { user_id, name, post_id, title }[].",
+      "outputSpec": "object[].",
+      "constraints": "Một lượt qua rows.",
+      "examplesJson": [
+        {
+          "input": "nest(kết quả LEFT JOIN của blog)",
+          "output": "[{ id: 1, name: \"Lan\", posts: [3 bài] }, …, { id: 3, name: \"An\", posts: [] }]",
+          "explanation": "Đây là việc include: { posts: true } của Prisma trả cho bạn."
+        }
+      ],
+      "hintsJson": [
+        "const byId = new Map(); for (const r of rows) { if (!byId.has(r.user_id)) byId.set(r.user_id, { id: r.user_id, name: r.name, posts: [] }); … }",
+        "if (r.post_id !== null) byId.get(r.user_id).posts.push({ id: r.post_id, title: r.title });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — gom dòng JOIN thành object lồng\nfunction nest(rows) {\n  return rows.map((r) => ({ id: r.user_id, name: r.name, posts: [{ id: r.post_id, title: r.title }] }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — dòng phẳng (user lặp lại) → mỗi user một object với mảng posts\nfunction nest(rows) {\n  const byId = new Map();                                    // Map giữ thứ tự xuất hiện\n  for (const r of rows) {\n    if (!byId.has(r.user_id)) byId.set(r.user_id, { id: r.user_id, name: r.name, posts: [] });\n    if (r.post_id !== null && r.post_id !== undefined) {     // LEFT JOIN không có bài ⇒ bỏ\n      byId.get(r.user_id).posts.push({ id: r.post_id, title: r.title });\n    }\n  }\n  return [...byId.values()];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>JSON lồng là thứ front-end muốn; dòng phẳng là thứ SQL trả. Ở giữa luôn có một bước gom như thế này — trong ORM, trong <code>json_agg</code> của PostgreSQL, hoặc trong mã của bạn. Quên bỏ dòng null là lỗi kinh điển: An hiện ra với một \"bài\" trống.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Mỗi dòng một user (user lặp lại).</li>\n  <li>posts: [{ id: null, title: null }] cho người không có bài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-client/queries/relation-queries",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The blog, nested|||Blog, đã lồng",
+            "goi": "nest([{ user_id: 1, name: \"Lan\", post_id: 1, title: \"Hello World\" }, { user_id: 1, name: \"Lan\", post_id: 2, title: \"Learning SQL\" }, { user_id: 2, name: \"Minh\", post_id: 3, title: \"Draft Post\" }, { user_id: 1, name: \"Lan\", post_id: 5, title: \"Old Announcement\" }, { user_id: 3, name: \"An\", post_id: null, title: null }])",
+            "mongDoi": [
+              {
+                "id": 1,
+                "name": "Lan",
+                "posts": [
+                  {
+                    "id": 1,
+                    "title": "Hello World"
+                  },
+                  {
+                    "id": 2,
+                    "title": "Learning SQL"
+                  },
+                  {
+                    "id": 5,
+                    "title": "Old Announcement"
+                  }
+                ]
+              },
+              {
+                "id": 2,
+                "name": "Minh",
+                "posts": [
+                  {
+                    "id": 3,
+                    "title": "Draft Post"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "An",
+                "posts": []
+              }
+            ]
+          },
+          {
+            "moTa": "No rows|||Không có dòng",
+            "goi": "nest([])",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Users who appear later keep their first position|||Người xuất hiện lại giữ vị trí đầu tiên",
+            "goi": "nest([{ user_id: 2, name: \"Minh\", post_id: 3, title: \"A\" }, { user_id: 1, name: \"Lan\", post_id: 1, title: \"B\" }, { user_id: 2, name: \"Minh\", post_id: 4, title: \"C\" }]).map((u) => u.name + \":\" + u.posts.map((p) => p.id).join(\",\"))",
+            "mongDoi": [
+              "Minh:3,4",
+              "Lan:1"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mỗi dòng một user (user lặp lại)."
+        },
+        {
+          "loi": "posts: [{ id: null, title: null }] cho người không có bài."
+        }
+      ]
+    },
+    {
+      "title": "Nhiều-nhiều và luật xoá",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "bảng nối",
+        "ON DELETE"
+      ],
+      "prerequisites": [
+        "filter",
+        "Set"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Hai hàm. (1) <code>tagsOf(posts, tags, postTags)</code>: trả mỗi bài (theo thứ tự) dạng <code>{ title, tags }</code> với <code>tags</code> là TÊN thẻ sắp chữ cái, chỉ những bài có ít nhất một thẻ. (2) <code>deleteParent(parentId, children, fk, rule)</code> mô phỏng xoá dòng cha: <code>rule</code> là <code>\"cascade\"</code> ⇒ trả <code>{ ok: true, children: &lt;không còn con của cha đó&gt; }</code>; <code>\"restrict\"</code> ⇒ nếu còn con thì <code>{ ok: false, error: \"FOREIGN KEY constraint failed\" }</code>, không thì như cascade; <code>\"set null\"</code> ⇒ các con của cha đó có <code>fk</code> = null. Không sửa mảng vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tên thẻ sắp chữ cái.</li>\n  <li>Ba luật xoá.</li>\n  <li>Không đột biến.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "xem mô tả.",
+      "outputSpec": "xem mô tả.",
+      "constraints": "Hai hàm trong cùng tệp.",
+      "examplesJson": [
+        {
+          "input": "deleteParent(2, comments, \"user_id\", \"restrict\")",
+          "output": "{ ok: false, error: \"FOREIGN KEY constraint failed\" }",
+          "explanation": "Xoá Minh bị từ chối trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const names = new Map(tags.map((t) => [t.id, t.name]));",
+        "children.map((ch) => ch[fk] === parentId ? { ...ch, [fk]: null } : { ...ch })"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — nhiều-nhiều và luật xoá\nfunction tagsOf(posts, tags, postTags) {\n  return posts.map((p) => ({ title: p.title, tags: [] }));\n}\nfunction deleteParent(parentId, children, fk, rule) {\n  return { ok: true, children };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — bảng nối giữ các cặp; khoá ngoại quyết định chuyện gì xảy ra khi xoá cha\nfunction tagsOf(posts, tags, postTags) {\n  const names = new Map(tags.map((t) => [t.id, t.name]));\n  return posts\n    .map((p) => ({\n      title: p.title,\n      tags: postTags.filter((pt) => pt.post_id === p.id).map((pt) => names.get(pt.tag_id)).sort(),\n    }))\n    .filter((p) => p.tags.length > 0);                       // như JOIN: bài không thẻ không có dòng\n}\n\nfunction deleteParent(parentId, children, fk, rule) {\n  const mine = children.filter((ch) => ch[fk] === parentId);\n  if (rule === 'restrict' && mine.length > 0) return { ok: false, error: 'FOREIGN KEY constraint failed' };\n  if (rule === 'set null') {\n    return { ok: true, children: children.map((ch) => (ch[fk] === parentId ? { ...ch, [fk]: null } : { ...ch })) };\n  }\n  return { ok: true, children: children.filter((ch) => ch[fk] !== parentId).map((ch) => ({ ...ch })) };   // cascade\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hai bảng nối của bài (post_tags) và ba luật ON DELETE tóm lại thành hai hàm. Câu hỏi thiết kế cho mỗi khoá ngoại: dòng con có ý nghĩa khi không còn cha không? Không (bình luận của bài) ⇒ cascade; có, và cần giữ lịch sử (bình luận của người dùng) ⇒ restrict; có, quan hệ tuỳ chọn (tác giả của bài) ⇒ set null.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên sắp tên thẻ.</li>\n  <li>restrict vẫn xoá.</li>\n  <li>Sửa trực tiếp mảng con.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/foreignkeys.html#fk_actions",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Posts with their tags|||Bài kèm thẻ",
+            "goi": "tagsOf([{ id: 1, user_id: 1, title: \"Hello World\" }, { id: 2, user_id: 1, title: \"Learning SQL\" }, { id: 3, user_id: 2, title: \"Draft Post\" }, { id: 4, user_id: 2, title: \"Node.js Basics\" }, { id: 5, user_id: 1, title: \"Old Announcement\" }, { id: 6, user_id: null, title: \"Orphan Draft\" }], [{ id: 1, name: \"sql\" }, { id: 2, name: \"beginner\" }, { id: 3, name: \"node\" }], [{ post_id: 1, tag_id: 2 }, { post_id: 2, tag_id: 1 }, { post_id: 2, tag_id: 2 }, { post_id: 4, tag_id: 3 }, { post_id: 4, tag_id: 2 }])",
+            "mongDoi": [
+              {
+                "title": "Hello World",
+                "tags": [
+                  "beginner"
+                ]
+              },
+              {
+                "title": "Learning SQL",
+                "tags": [
+                  "beginner",
+                  "sql"
+                ]
+              },
+              {
+                "title": "Node.js Basics",
+                "tags": [
+                  "beginner",
+                  "node"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "Cascade and restrict like the lesson|||Cascade và restrict như bài",
+            "chuanBi": "const C = [{ id: 1, post_id: 1, user_id: 2 }, { id: 2, post_id: 1, user_id: 3 }, { id: 3, post_id: 4, user_id: 1 }];",
+            "goi": "[deleteParent(1, C, \"post_id\", \"cascade\").children.map((c) => c.id), deleteParent(2, C, \"user_id\", \"restrict\"), deleteParent(9, C, \"user_id\", \"restrict\").ok]",
+            "mongDoi": [
+              [
+                3
+              ],
+              {
+                "ok": false,
+                "error": "FOREIGN KEY constraint failed"
+              },
+              true
+            ]
+          },
+          {
+            "moTa": "SET NULL keeps children; input untouched|||SET NULL giữ con; dữ liệu vào nguyên vẹn",
+            "chuanBi": "const P = [{ id: 1, user_id: 2 }, { id: 2, user_id: 1 }]; const r = deleteParent(2, P, \"user_id\", \"set null\");",
+            "goi": "[r.children, P[0].user_id]",
+            "mongDoi": [
+              [
+                {
+                  "id": 1,
+                  "user_id": null
+                },
+                {
+                  "id": 2,
+                  "user_id": 1
+                }
+              ],
+              2
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên sắp tên thẻ."
+        },
+        {
+          "loi": "restrict vẫn xoá."
+        },
+        {
+          "loi": "Sửa trực tiếp mảng con."
+        }
+      ]
+    },
+    {
+      "title": "Tìm N+1 trong nhật ký truy vấn",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "N+1",
+        "chuẩn hoá truy vấn",
+        "nhật ký truy vấn"
+      ],
+      "prerequisites": [
+        "regex",
+        "Map",
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 8.4 — Quan hệ và JOIN.</em> Các bài làm lại bằng JavaScript việc CSDL và ORM làm với các bảng trỏ vào nhau — dùng đúng dữ liệu blog của chương.</p><p>Viết <code>findNPlusOne(log, threshold = 5)</code>: <code>log</code> là mảng câu SQL đã chạy trong MỘT request (có thể có giá trị đã điền vào). Chuẩn hoá mỗi câu thành \"khuôn\": thay chuỗi trong nháy đơn bằng <code>?</code>, thay số (nguyên hoặc thập phân, không nằm trong tên như <code>t1</code>) bằng <code>?</code>, gộp danh sách <code>IN (?, ?, ?)</code> thành <code>IN (?)</code>, gộp khoảng trắng thành một dấu cách, trim. Trả mảng <code>{ template, count }</code> cho các khuôn xuất hiện ≥ <code>threshold</code> lần, sắp theo <code>count</code> giảm dần rồi <code>template</code> tăng dần.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chuỗi và số → ?.</li>\n  <li>IN (…) gộp lại.</li>\n  <li>Khoảng trắng chuẩn hoá.</li>\n  <li>Đúng ngưỡng và thứ tự.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "log: string[]; threshold?: number.",
+      "outputSpec": "{ template, count }[].",
+      "constraints": "Chuỗi có thể chứa '' (nháy kép trong SQL).",
+      "examplesJson": [
+        {
+          "input": "1 SELECT bài + 1000 SELECT name FROM users WHERE id = 1, 2, …",
+          "output": "[{ template: \"SELECT name FROM users WHERE id = ?\", count: 1000 }]",
+          "explanation": "Đúng 1001 truy vấn của bài."
+        }
+      ],
+      "hintsJson": [
+        "sql.replace(/'(?:[^']|'')*'/g, '?').replace(/\\b\\d+(?:\\.\\d+)?\\b/g, '?')",
+        "replace(/IN\\s*\\(\\s*\\?(?:\\s*,\\s*\\?)*\\s*\\)/gi, 'IN (?)').replace(/\\s+/g, ' ').trim()"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — tìm N+1\nfunction findNPlusOne(log, threshold = 5) {\n  const counts = {};\n  for (const q of log) counts[q] = (counts[q] ?? 0) + 1;\n  return Object.entries(counts).filter(([, n]) => n >= threshold).map(([template, count]) => ({ template, count }));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.4 — cùng một khuôn truy vấn lặp lại N lần trong một request = dấu hiệu N+1\nfunction normalize(sql) {\n  return sql\n    .replace(/'(?:[^']|'')*'/g, '?')                                     // 'chuỗi' → ?\n    .replace(/\\b\\d+(?:\\.\\d+)?\\b/g, '?')                               // số → ? (không đụng t1, user_2)\n    .replace(/IN\\s*\\(\\s*\\?(?:\\s*,\\s*\\?)*\\s*\\)/gi, 'IN (?)')         // IN (?, ?, ?) → IN (?)\n    .replace(/\\s+/g, ' ')\n    .trim();\n}\nfunction findNPlusOne(log, threshold = 5) {\n  const counts = new Map();\n  for (const q of log) {\n    const t = normalize(q);\n    counts.set(t, (counts.get(t) ?? 0) + 1);\n  }\n  return [...counts]\n    .filter(([, n]) => n >= threshold)\n    .map(([template, count]) => ({ template, count }))\n    .sort((a, b) => b.count - a.count || (a.template < b.template ? -1 : a.template > b.template ? 1 : 0));\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là cách các công cụ như Sentry, Bullet (Rails) hay nhật ký truy vấn của Prisma (Bài 8.5) nhận ra N+1: không phải nhìn một truy vấn chậm, mà đếm một khuôn lặp lại theo số dòng. Chuẩn hoá giá trị là bước then chốt — <code>WHERE id = 1</code> và <code>WHERE id = 2</code> là cùng một truy vấn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So nguyên văn — mỗi id là một câu khác.</li>\n  <li>Thay cả số trong tên bảng (t1 → t?).</li>\n  <li>Quên gộp IN.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.4 Relationships and JOINs.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.sentry.io/product/issues/issue-details/performance-issues/n-one-queries/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson feed: 1 + N queries|||Bảng tin của bài: 1 + N truy vấn",
+            "chuanBi": "const L = [\"SELECT id, title, user_id FROM posts ORDER BY id\"]; for (let i = 1; i <= 1000; i++) L.push(\"SELECT name FROM users WHERE id = \" + ((i % 100) + 1));",
+            "goi": "findNPlusOne(L)",
+            "mongDoi": [
+              {
+                "template": "SELECT name FROM users WHERE id = ?",
+                "count": 1000
+              }
+            ]
+          },
+          {
+            "moTa": "Strings, decimals, whitespace, IN lists|||Chuỗi, số thập phân, khoảng trắng, danh sách IN",
+            "chuanBi": "const L = []; for (let i = 0; i < 3; i++) L.push(\"SELECT * FROM t1 WHERE name = 'O''Brien' AND price > 9.5\"); for (let i = 0; i < 3; i++) L.push(\"SELECT  *   FROM posts WHERE user_id IN (\" + [1, 2, 3].slice(0, i + 1).join(\", \") + \")\");",
+            "goi": "findNPlusOne(L, 3)",
+            "mongDoi": [
+              {
+                "template": "SELECT * FROM posts WHERE user_id IN (?)",
+                "count": 3
+              },
+              {
+                "template": "SELECT * FROM t1 WHERE name = ? AND price > ?",
+                "count": 3
+              }
+            ]
+          },
+          {
+            "moTa": "Below the threshold: nothing|||Dưới ngưỡng: không có gì",
+            "goi": "findNPlusOne([\"SELECT 1\", \"SELECT 2\", \"SELECT 3\"])",
+            "mongDoi": []
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So nguyên văn — mỗi id là một câu khác."
+        },
+        {
+          "loi": "Thay cả số trong tên bảng (t1 → t?)."
+        },
+        {
+          "loi": "Quên gộp IN."
+        }
+      ]
+    }
+  ]
+}

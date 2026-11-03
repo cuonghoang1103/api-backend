@@ -1,0 +1,6 @@
+a: INVALID valueMissing — Please fill out this field.
+b: INVALID typeMismatch — Please include an '@' in the email address. 'not-an-email' is missing an '@'.
+c: INVALID rangeUnderflow — Value must be greater than or equal to 18.
+d: INVALID patternMismatch — Please match the requested format.
+e: valid  — 
+whole form valid? false

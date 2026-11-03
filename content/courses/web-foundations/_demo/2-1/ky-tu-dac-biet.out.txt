@@ -1,0 +1,3 @@
+paragraphs on the page: 4
+p2 text: Use the <p> tag for paragraphs
+p3 text: Tom & Jerry, 5 < 7, price: 100 000 ₫

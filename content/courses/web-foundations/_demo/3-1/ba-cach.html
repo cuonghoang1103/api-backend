@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><title>Three ways to add CSS</title><meta name="chup" content="640x180">
+<link rel="stylesheet" href="ngoai.css">          <!-- 3. external file: the normal way -->
+<style>
+  h2 { color: #1f4e8c; }                          /* 2. a style element in the page */
+</style>
+</head>
+<body style="font-family: system-ui, sans-serif">
+  <h1>External file</h1>
+  <h2>Style element</h2>
+  <p style="color: #b03a2e">Inline style attribute</p>   <!-- 1. on one element -->
+<script>
+  for (const tag of ['h1', 'h2', 'p']) console.log(tag, getComputedStyle(document.querySelector(tag)).color);
+  console.log('stylesheets in this page:', document.styleSheets.length);
+</script>
+</body>
+</html>

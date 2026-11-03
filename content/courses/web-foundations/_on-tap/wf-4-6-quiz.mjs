@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`4.1 Variables and types`, `4.1 Biến và kiểu dữ liệu`,
+      [`<code>const</code> by default, <code>let</code> when you reassign, never <code>var</code>.`, `<code>const</code> locks the name, not the value: you can still change an object's properties.`, `Types: string, number, boolean, null, undefined (plus object); <code>typeof</code> tells them apart.`],
+      [`Mặc định <code>const</code>, <code>let</code> khi gán lại, không dùng <code>var</code>.`, `<code>const</code> khoá cái tên, không khoá giá trị: vẫn sửa được thuộc tính của object.`, `Các kiểu: string, number, boolean, null, undefined (cộng object); <code>typeof</code> phân biệt chúng.`]],
+    [`4.2 Operators, conditions, loops`, `4.2 Toán tử, điều kiện, vòng lặp`,
+      [`<code>+</code> joins when a string is involved; convert with <code>Number()</code>.`, `Always <code>===</code>; <code>??</code> gives a fallback for null/undefined; the ternary chooses between two values.`, `<code>for…of</code> walks values; in React you render lists with <code>map</code>.`],
+      [`<code>+</code> thành phép nối khi có chuỗi; đổi bằng <code>Number()</code>.`, `Luôn dùng <code>===</code>; <code>??</code> cho giá trị dự phòng khi null/undefined; toán tử ba ngôi chọn giữa hai giá trị.`, `<code>for…of</code> duyệt giá trị; trong React dựng danh sách bằng <code>map</code>.`]],
+    [`4.3 Functions`, `4.3 Hàm`,
+      [`<code>return</code> sends a value out; no return ⇒ <code>undefined</code>.`, `One-line arrow functions return implicitly; with braces you must write <code>return</code>.`],
+      [`<code>return</code> đưa giá trị ra ngoài; không return ⇒ <code>undefined</code>.`, `Arrow function một dòng tự return; có ngoặc nhọn thì phải tự viết <code>return</code>.`]],
+    [`4.4 Arrays and objects`, `4.4 Mảng và object`,
+      [`<code>map</code>, <code>filter</code>, <code>find</code>, <code>reduce</code> do not change the original; <code>sort</code> does.`, `<code>sort()</code> without a compare function sorts as text: use <code>(a, b) =&gt; a - b</code>.`, `Destructuring pulls out properties; spread <code>{ ...obj, x: 1 }</code> makes a new object.`],
+      [`<code>map</code>, <code>filter</code>, <code>find</code>, <code>reduce</code> không sửa mảng gốc; <code>sort</code> thì có.`, `<code>sort()</code> không có hàm so sánh sẽ sắp theo chữ: dùng <code>(a, b) =&gt; a - b</code>.`, `Destructuring tách thuộc tính ra; spread <code>{ ...obj, x: 1 }</code> tạo object mới.`]],
+    [`4.5 The DOM and events`, `4.5 DOM và sự kiện`,
+      [`<code>document.querySelector</code> finds an element; <code>textContent</code> and <code>style</code> change it.`, `<code>addEventListener('click', fn)</code> passes a function — not the result of calling it.`],
+      [`<code>document.querySelector</code> tìm phần tử; <code>textContent</code> và <code>style</code> đổi nó.`, `<code>addEventListener('click', fn)</code> truyền một hàm — không phải kết quả của việc gọi hàm.`]],
+  ],
+  bay: [
+    [`"Cannot read properties of undefined": reading from something not loaded yet — use <code>?.</code> or check first.`, `"Cannot read properties of undefined": đọc từ thứ chưa có — dùng <code>?.</code> hoặc kiểm trước.`],
+    [`<code>==</code> letting an empty string pass as 0.`, `<code>==</code> để chuỗi rỗng lọt qua như số 0.`],
+    [`Forgetting <code>return</code> inside a multi-line arrow function.`, `Quên <code>return</code> trong arrow function nhiều dòng.`],
+    [`<code>onclick={doIt()}</code> calls the function immediately instead of on click.`, `<code>onclick={doIt()}</code> gọi hàm ngay lập tức thay vì khi bấm.`],
+  ],
+  hoi: [
+    [`What does <code>2 + 2 + "1"</code> evaluate to?`, `"41" — left to right: 2 + 2 = 4, then 4 + "1" joins.`, `<code>2 + 2 + "1"</code> cho ra gì?`, `"41" — từ trái sang phải: 2 + 2 = 4, rồi 4 + "1" thành phép nối.`],
+    [`<code>const user = { ten: 'An' }; user.ten = 'Binh';</code> — error or not?`, `No error: the name still points to the same object; only a property changed.`, `<code>const user = { ten: 'An' }; user.ten = 'Binh';</code> — có lỗi không?`, `Không lỗi: cái tên vẫn trỏ cùng object; chỉ một thuộc tính đổi.`],
+    [`<code>[10, 2, 9].sort()</code> returns what, and how do you fix it?`, `<code>[10, 2, 9]</code> sorted as text ⇒ <code>[10, 2, 9]</code>; use <code>.sort((a, b) =&gt; a - b)</code> ⇒ <code>[2, 9, 10]</code>.`, `<code>[10, 2, 9].sort()</code> trả về gì, sửa thế nào?`, `Sắp theo chữ ⇒ <code>[10, 2, 9]</code>; dùng <code>.sort((a, b) =&gt; a - b)</code> ⇒ <code>[2, 9, 10]</code>.`],
+    [`Which method gives the first student with a score ≥ 5, and which gives all of them?`, `<code>find</code> for the first one; <code>filter</code> for all of them.`, `Method nào lấy sinh viên đầu tiên có điểm ≥ 5, method nào lấy tất cả?`, `<code>find</code> cho người đầu tiên; <code>filter</code> cho tất cả.`],
+    [`What does <code>x ?? 'Khách'</code> return when x is 0?`, `0 — <code>??</code> only falls back for null and undefined (unlike <code>||</code>).`, `<code>x ?? 'Khách'</code> trả về gì khi x là 0?`, `0 — <code>??</code> chỉ lấy giá trị dự phòng khi null và undefined (khác <code>||</code>).`],
+  ],
+};

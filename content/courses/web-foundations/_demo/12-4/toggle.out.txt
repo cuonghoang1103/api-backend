@@ -1,0 +1,3 @@
+start   : dark rgb(15, 23, 42) (no saved choice, OS says dark)
+click 1 : light rgb(248, 250, 252) | saved = light
+click 2 : dark rgb(15, 23, 42) | saved = dark

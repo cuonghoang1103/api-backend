@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Todo</title><meta name="chup" content="640x290">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 16px; }
+  form { display: flex; gap: 8px; margin-bottom: 10px; }
+  input { flex: 1; padding: 8px; font: inherit; }
+  button { font: inherit; padding: 8px 12px; }
+  ul { list-style: none; padding: 0; }
+  li { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid #eee; }
+  li span { flex: 1; }
+  li.done span { text-decoration: line-through; color: #888; }
+</style></head>
+<body>
+  <h2>Todo <small id="left"></small></h2>
+  <form id="f"><input id="text" aria-label="New task" required><button>Add</button></form>
+  <ul id="list"></ul>
+<script>
+  const form = document.getElementById('f'), input = document.getElementById('text');
+  const list = document.getElementById('list'), left = document.getElementById('left');
+  let tasks = [];                                // the data is the source of truth
+
+  function render() {                            // draw the page from the data
+    list.textContent = '';
+    for (const t of tasks) {
+      const li = document.createElement('li');
+      li.classList.toggle('done', t.done);
+      li.dataset.id = t.id;
+      const span = document.createElement('span');
+      span.textContent = t.text;                 // textContent: user text is never run as HTML
+      const toggle = document.createElement('button');
+      toggle.textContent = t.done ? 'Undo' : 'Done';
+      li.append(span, toggle);
+      list.append(li);
+    }
+    left.textContent = `(${tasks.filter((t) => !t.done).length} left)`;
+  }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();                      // no page reload
+    tasks.push({ id: Date.now() + tasks.length, text: input.value.trim(), done: false });
+    input.value = '';
+    render();
+  });
+
+  list.addEventListener('click', (event) => {    // one listener for all rows
+    if (event.target.tagName !== 'BUTTON') return;
+    const id = Number(event.target.closest('li').dataset.id);
+    tasks = tasks.map((t) => (t.id === id ? { ...t, done: !t.done } : t));
+    render();
+  });
+
+  // the demo uses the form the way a person would
+  for (const text of ['Read Lesson 4.5', 'Build a todo app', 'Go to sleep']) {
+    input.value = text;
+    form.requestSubmit();
+  }
+  list.querySelector('button').click();
+  console.log(JSON.stringify(tasks.map(({ text, done }) => ({ text, done }))));
+</script>
+</body>
+</html>

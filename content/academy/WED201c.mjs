@@ -238,6 +238,21 @@ export default {
   <span class="lc-cta">COURSERA →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.1 — what the browser really builds</span><span class="lc-sub">The DOM tree, silent repairs, boolean attributes, all measured in Chromium</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.1 — trình duyệt thật sự dựng gì</span><span class="lc-sub">Cây DOM, sửa lỗi âm thầm, thuộc tính boolean, đo trong Chromium</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -351,6 +366,21 @@ export default {
 <div class="pitfall"><b>Ảnh không có <span class="badge">alt</span> là trượt bộ kiểm W3C và bộ kiểm khả năng tiếp cận — mà đồ án cuối MOOC 1 chấm cả hai.</b> Điều tương tự với việc thiếu <span class="badge">&lt;title&gt;</span> và nhảy cóc cấp tiêu đề (h1 → h3). Hãy chạy <span class="badge">validator.w3.org</span> trước khi nộp; mất mười giây và bắt được cả ba lỗi.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b><span class="badge">loading="lazy"</span> — một thuộc tính, một khoản lợi đo được.</b> Thêm nó vào các ảnh nằm dưới màn hình đầu là bảo trình duyệt đừng tải chúng cho tới khi người dùng cuộn tới gần. Với một trang thư viện ảnh, đó thường là một nửa tổng dung lượng và một giây thời gian tải, mà không cần JavaScript hay thư viện nào. Kết hợp với <span class="badge">decoding="async"</span> và width/height đúng là bạn đã làm gần hết những gì một chuyên gia "tối ưu ảnh" tính tiền. <em>Ngoài giáo trình vì MOOC dạy thẻ <span class="badge">&lt;img&gt;</span> như cú pháp, còn hiệu năng mới là thứ trang của bạn thật sự bị đánh giá.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-2-text-links-images" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.2 — text, links and images, measured</span><span class="lc-sub">How relative links resolve, alt text, 186 px of layout shift, srcset</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-2-text-links-images" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.2 — chữ, liên kết, ảnh, có đo đạc</span><span class="lc-sub">Liên kết tương đối được phân giải thế nào, alt, nhảy bố cục 186 px, srcset</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },
@@ -470,6 +500,21 @@ export default {
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Autocomplete là tính năng trợ năng, không phải chỉ là tiện lợi.</b> Thêm <span class="badge">autocomplete="email"</span>, <span class="badge">"given-name"</span>, <span class="badge">"street-address"</span>, <span class="badge">"cc-number"</span> giúp trình duyệt và trình quản lý mật khẩu điền đúng trường — với người dùng bị hạn chế vận động, đó có thể là ranh giới giữa một biểu mẫu dùng được và một biểu mẫu bất khả, và trên các trang thương mại nó nâng tỉ lệ hoàn tất thanh toán một cách đo được. Danh sách đầy đủ các giá trị nằm trong đặc tả HTML. <em>Ngoài giáo trình vì MOOC không hề nhắc tới, nhưng đó là khoản lợi về trải nghiệm rẻ nhất mà một biểu mẫu có thể nhận.</em></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.4 — what a form really sends</span><span class="lc-sub">A real browser posting to a real server: name, encoding, GET and POST</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-4-forms" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.4 — form thật sự gửi gì</span><span class="lc-sub">Trình duyệt thật gửi tới máy chủ thật: name, mã hoá, GET và POST</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -564,6 +609,21 @@ export default {
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Trợ năng là yêu cầu pháp lý, không phải điểm cộng.</b> WCAG 2.1 mức AA được luật hoá ở châu Âu (EN 301 549), ở Mỹ (Section 508 / ADA), và được viện dẫn trong các chuẩn chính phủ điện tử của Việt Nam; các trang khu vực công và trang thương mại lớn bị kiểm toán theo nó, và những trang không tiếp cận được đã thua kiện thật. Cũng chính đoạn mã làm hài lòng trình đọc màn hình sẽ cho bạn SEO tốt hơn — công cụ tìm kiếm phân tích tiêu đề, chữ alt và vùng mốc đúng như công nghệ trợ giúp. <em>Ngoài giáo trình vì MOOC đóng khung trợ năng như phép lịch sự, còn trong nghề đó là một đặc tả mà bạn bị soi theo.</em></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.5 — accessibility you can measure</span><span class="lc-sub">Accessibility tree of a table, contrast ratios, real Tab order, a five-minute check</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-5-tables-media-a11y" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.5 — khả năng tiếp cận đo được</span><span class="lc-sub">Cây trợ năng của bảng, tỉ số tương phản, thứ tự Tab thật, phép kiểm năm phút</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
       ],
@@ -626,6 +686,21 @@ export default {
   <span class="lc-cta">COURSERA →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.2 — the box model, measured</span><span class="lc-sub">box-sizing 350 vs 300 px, margin collapse, three ways to hide</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-2-box-model" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.2 — mô hình hộp, có đo đạc</span><span class="lc-sub">box-sizing 350 so với 300 px, gộp margin, ba cách ẩn</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -674,6 +749,36 @@ export default {
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: CSS3 — bố cục & định vị</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
   <span class="lc-cta">COURSERA →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.3 — Flexbox from zero</span><span class="lc-sub">Two axes, grow/shrink/basis and the min-width bug</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-3-flexbox" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.3 — Flexbox từ số 0</span><span class="lc-sub">Hai trục, grow/shrink/basis và lỗi min-width</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.4 — CSS Grid from zero</span><span class="lc-sub">fr, named areas and a gallery with no media query</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-4-css-grid" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.4 — CSS Grid từ số 0</span><span class="lc-sub">fr, vùng có tên và thư viện không cần media query</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,
@@ -769,6 +874,21 @@ export default {
 <div class="pitfall"><b><span class="badge">!important</span> là một khoản nợ, không phải cách chữa.</b> Hôm nay nó thắng, thế là lần ghi đè sau lại cần thêm một <span class="badge">!important</span> nữa, và chẳng mấy chốc không sửa được gì nếu không có nó. Phản ứng chuyên nghiệp khi "luật của tôi bị thua" là <em>hạ</em> độ ưu tiên của luật đối thủ — thay <span class="badge">#nav ul li a</span> bằng một class đơn — chứ không phải nâng luật của mình lên.</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Các quy ước đặt tên sinh ra để giữ độ ưu tiên luôn phẳng.</b> BEM viết mỗi phần tử một class — <span class="badge">.card</span>, <span class="badge">.card__title</span>, <span class="badge">.card--featured</span> — nên mọi luật đều là (0,1,0) và chỉ thứ tự xuất hiện quyết định. Các framework tiện ích như Tailwind còn đi xa hơn: mọi luật là một class đơn, và bạn ghép chúng ngay trong HTML. Cả hai hướng cùng chữa một căn bệnh: một tệp CSS mà không ai đoán nổi cái gì sẽ thắng. <em>Ngoài giáo trình vì MOOC dạy bộ chọn nhưng không dạy kỷ luật giữ cho một tệp CSS 2.000 dòng còn bảo trì được.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.1 — which rule wins?</span><span class="lc-sub">Six cascade fights measured in Chromium, specificity as three counters</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.1 — luật nào thắng?</span><span class="lc-sub">Sáu cuộc đấu cascade đo trong Chromium, độ cụ thể như ba bộ đếm</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },
@@ -1170,6 +1290,21 @@ Cũng việc đó viết bằng vòng for kinh điển thì mất sáu dòng và
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Toán tử chuỗi tuỳ chọn và hợp nhất null xoá gần hết mã phòng thủ.</b> <span class="badge">user?.address?.city</span> trả về undefined thay vì ném lỗi khi thiếu <span class="badge">address</span>, còn <span class="badge">const page = input ?? 1</span> chỉ lấy 1 khi giá trị là null hoặc undefined — khác với <span class="badge">||</span> vốn thay thế cả số 0 lẫn chuỗi rỗng. Hai toán tử xoá đi cả khối kiểm <span class="badge">if (x &amp;&amp; x.y &amp;&amp; x.y.z)</span>. <em>Ngoài giáo trình vì MOOC ra đời trước chúng, còn mọi mã nguồn hiện đại thì mặc định là có.</em></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-1-variables-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.1 — types and coercion, measured</span><span class="lc-sub">Why "5" + 1 is 51, == vs ===, truthiness, references</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-1-variables-types" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.1 — kiểu và ép kiểu, đo thật</span><span class="lc-sub">Vì sao "5" + 1 là 51, == và ===, truthy, tham chiếu</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
         },
         {
@@ -1287,6 +1422,21 @@ li.remove();                             <span class="tok-comment">// xoá nó �
 <div class="pitfall"><b>Đặt thẻ <span class="badge">&lt;script&gt;</span> ngay trước <span class="badge">&lt;/body&gt;</span>, hoặc dùng <span class="badge">defer</span>.</b> Script nằm trong <span class="badge">&lt;head&gt;</span> chạy trước khi HTML tồn tại, nên <span class="badge">querySelector</span> trả về <span class="badge">null</span> và bạn nhận lỗi "Cannot read properties of null". Chỉ riêng lỗi đó chiếm phần lớn các ca "JavaScript của em không chạy gì cả".</div>
 
 <div class="callout"><span class="badge">★ Ngoài giáo trình</span> <b>Thuộc tính data mang trạng thái mà không cần biến toàn cục.</b> Viết <span class="badge">&lt;button data-id="42" data-action="delete"&gt;</span> rồi đọc bằng <span class="badge">btn.dataset.id</span> và <span class="badge">btn.dataset.action</span>. Phần tử tự mang ngữ cảnh của nó, nên một hàm xử lý phục vụ được cả danh sách — và đó đúng là lý do uỷ quyền sự kiện (bài 3.4) vẫn đơn giản. Quy ước này là HTML5 chuẩn và cũng là thứ mà props của React hay directive của Vue rốt cuộc biên dịch xuống. <em>Ngoài giáo trình vì MOOC giữ trạng thái trong biến toàn cục, cách làm hỏng ngay khi danh sách trở nên động.</em></div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.5 — the DOM, safely</span><span class="lc-sub">XSS measured, defer, bubbling, delegation and a todo app</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-5-dom-events" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.5 — DOM, một cách an toàn</span><span class="lc-sub">XSS đo thật, defer, nổi bọt, ủy quyền và app todo</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
         },
@@ -1517,6 +1667,21 @@ list.addEventListener(<span class="tok-string">"click"</span>, (e) =&gt; {
   <span class="lc-ico">🎓</span>
   <span class="lc-body"><span class="lc-title">MOOC: Responsive Design</span><span class="lc-sub">Đại học Michigan trên Coursera.</span></span>
   <span class="lc-cta">COURSERA →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.5 — responsive, measured</span><span class="lc-sub">Viewport on an emulated phone, mobile first at three widths, clamp</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-5-responsive" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.5 — responsive, có đo đạc</span><span class="lc-sub">Viewport trên điện thoại giả lập, mobile first ở ba bề rộng, clamp</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

@@ -1,0 +1,31 @@
+$ git switch -c feature/sort
+Switched to a new branch 'feature/sort'
+$ git commit -m "Sort notes alphabetically"
+[feature/sort 75d4ef8] Sort notes alphabetically
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+$ git push -u origin feature/sort
+To origin.git
+ * [new branch]      feature/sort -> feature/sort
+branch 'feature/sort' set up to track 'origin/feature/sort'.
+# the search PR is reviewed and merged into main (as the Merge button would do)
+$ git switch main
+Switched to branch 'main'
+Your branch is up to date with 'origin/main'.
+$ git merge --no-ff feature/search -m "Merge pull request #1 from feature/search"
+Merge made by the 'ort' strategy.
+ notes.js | 5 +++++
+ 1 file changed, 5 insertions(+)
+$ git push origin main
+To origin.git
+   365679b..057bbcf  main -> main
+
+# Binh tries to push straight to main, which moved
+$ git push origin main
+To origin.git
+ ! [rejected]        main -> main (fetch first)
+error: failed to push some refs to 'origin.git'
+hint: Updates were rejected because the remote contains work that you do not
+hint: have locally. This is usually caused by another repository pushing to
+hint: the same ref. If you want to integrate the remote changes, use
+hint: 'git pull' before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.

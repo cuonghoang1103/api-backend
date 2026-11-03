@@ -1,0 +1,657 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-10-4-keep-learning",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-10-4-keep-learning"
+  },
+  "exercises": [
+    {
+      "title": "Sắp số cho đúng",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "sort mặc định",
+        "hợp đồng hàm so sánh"
+      ],
+      "prerequisites": [
+        "sort",
+        "spread"
+      ],
+      "tags": [
+        "javascript",
+        "tài liệu"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>MDN: không có hàm so sánh, <code>sort</code> đổi phần tử thành chuỗi — <code>[10, 9, 1].sort()</code> ra <code>[1, 10, 9]</code>. Viết <code>sortNumbers(nums, dir = \"asc\")</code> trả MẢNG MỚI sắp theo giá trị số (<code>\"asc\"</code> hoặc <code>\"desc\"</code>), KHÔNG sửa mảng gốc. <code>NaN</code> luôn ở cuối (cả hai chiều). Hàm so sánh phải trả số âm/0/dương — không trả boolean.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng gốc.</li>\n  <li>Hai chiều.</li>\n  <li>NaN ở cuối.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "nums: number[]; dir?: \"asc\" | \"desc\".",
+      "outputSpec": "number[].",
+      "constraints": "Không dùng (a, b) => a > b.",
+      "examplesJson": [
+        {
+          "input": "sortNumbers([10, 9, 1])",
+          "output": "[1, 9, 10]",
+          "explanation": "Đúng thứ docs.mjs in ra với a - b."
+        }
+      ],
+      "hintsJson": [
+        "[...nums].sort(...) hoặc nums.toSorted(...)",
+        "Đưa NaN ra cuối trước: if (Number.isNaN(a)) return 1;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — sắp số\nfunction sortNumbers(nums, dir = 'asc') {\n  return nums.sort((a, b) => a > b);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — hàm so sánh trả âm / 0 / dương; sao chép trước vì sort sửa tại chỗ\nfunction sortNumbers(nums, dir = 'asc') {\n  const sign = dir === 'desc' ? -1 : 1;\n  return [...nums].sort((a, b) => {\n    const na = Number.isNaN(a), nb = Number.isNaN(b);\n    if (na || nb) return na === nb ? 0 : na ? 1 : -1;   // NaN luôn xuống cuối\n    return sign * (a - b);\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mã khởi đầu có hai lỗi đã gặp ở bài học: hàm so sánh trả boolean (nên <code>false</code> = 0 = \"bằng nhau\") và <code>sort</code> sửa luôn mảng của người gọi. Cả hai đều viết rõ trong trang MDN.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Trả a > b.</li>\n  <li>Sửa mảng gốc.</li>\n  <li>NaN - x = NaN làm thứ tự hỏng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Numbers, not strings|||So số, không so chuỗi",
+            "goi": "[sortNumbers([10, 9, 1]), sortNumbers([3, 1, 2], \"desc\"), sortNumbers([5, 1, 4, 2, 3])]",
+            "mongDoi": [
+              [
+                1,
+                9,
+                10
+              ],
+              [
+                3,
+                2,
+                1
+              ],
+              [
+                1,
+                2,
+                3,
+                4,
+                5
+              ]
+            ]
+          },
+          {
+            "moTa": "The original array is untouched|||Mảng gốc không đổi",
+            "goi": "(() => { const a = [3, 1, 2]; sortNumbers(a); return a; })()",
+            "mongDoi": [
+              3,
+              1,
+              2
+            ]
+          },
+          {
+            "moTa": "NaN goes last both ways|||NaN xuống cuối cả hai chiều",
+            "goi": "[sortNumbers([2, NaN, 1]), sortNumbers([2, NaN, 1], \"desc\")]",
+            "mongDoi": [
+              [
+                1,
+                2,
+                {
+                  "$js": "NaN"
+                }
+              ],
+              [
+                2,
+                1,
+                {
+                  "$js": "NaN"
+                }
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Trả a > b."
+        },
+        {
+          "loi": "Sửa mảng gốc."
+        },
+        {
+          "loi": "NaN - x = NaN làm thứ tự hỏng."
+        }
+      ]
+    },
+    {
+      "title": "sortBy theo khoá",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "hàm so sánh",
+        "localeCompare"
+      ],
+      "prerequisites": [
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "tài liệu"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>Viết <code>sortBy(list, key, dir = \"asc\")</code> trả mảng mới sắp theo <code>item[key]</code>: số so bằng hiệu; chuỗi bằng <code>localeCompare</code> (không phân biệt hoa thường: <code>{ sensitivity: \"base\" }</code>); phần tử có <code>item[key]</code> là <code>undefined</code>/<code>null</code> luôn ở cuối. Sắp ỔN ĐỊNH: hai phần tử bằng nhau giữ thứ tự cũ (sort của JavaScript đã ổn định từ ES2019). Dùng nó sửa app ghi chú: <code>sortBy(notes, \"date\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Số và chuỗi.</li>\n  <li>Thiếu khoá ở cuối.</li>\n  <li>Ổn định.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "list: object[]; key: string; dir?.",
+      "outputSpec": "object[].",
+      "constraints": "Không sửa list.",
+      "examplesJson": [
+        {
+          "input": "sortBy([{ date: \"2026-03-01\" }, { date: \"2026-01-15\" }], \"date\")",
+          "output": "[{ date: \"2026-01-15\" }, { date: \"2026-03-01\" }]",
+          "explanation": "Ngày dạng YYYY-MM-DD sắp được như chuỗi."
+        }
+      ],
+      "hintsJson": [
+        "typeof a === \"number\" && typeof b === \"number\" ? a - b : String(a).localeCompare(String(b), undefined, { sensitivity: \"base\" })",
+        "Thiếu khoá: return 1 / -1 không nhân với chiều."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — sortBy\nfunction sortBy(list, key, dir = 'asc') {\n  return list.sort((a, b) => a[key] > b[key]);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — một hàm so sánh đúng hợp đồng cho số, chuỗi và giá trị thiếu\nfunction sortBy(list, key, dir = 'asc') {\n  const sign = dir === 'desc' ? -1 : 1;\n  return [...list].sort((x, y) => {\n    const a = x[key], b = y[key];\n    const ma = a === undefined || a === null, mb = b === undefined || b === null;\n    if (ma || mb) return ma === mb ? 0 : ma ? 1 : -1;            // thiếu khoá: luôn cuối, bất kể chiều\n    const cmp = typeof a === 'number' && typeof b === 'number'\n      ? a - b\n      : String(a).localeCompare(String(b), undefined, { sensitivity: 'base' });\n    return sign * cmp;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>localeCompare</code> trả đúng số âm/0/dương mà <code>sort</code> cần, và xếp \"Đà Nẵng\" theo cách người Việt đọc thay vì theo mã Unicode. Tính ổn định cho phép sắp nhiều tầng: sắp theo tầng phụ trước, rồi tầng chính.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>a[key] > b[key].</li>\n  <li>Đặt phần tử thiếu khoá lên đầu khi desc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The notes app, fixed|||App ghi chú, đã sửa",
+            "goi": "sortBy([{ id: 1, date: \"2026-03-01\" }, { id: 2, date: \"2026-01-15\" }, { id: 3, date: \"2026-02-10\" }, { id: 4, date: \"2026-02-28\" }, { id: 5, date: \"2026-01-02\" }], \"date\").map((n) => n.id)",
+            "mongDoi": [
+              5,
+              2,
+              3,
+              4,
+              1
+            ]
+          },
+          {
+            "moTa": "Numbers, case-insensitive strings, desc|||Số, chuỗi không phân biệt hoa, giảm dần",
+            "goi": "[sortBy([{ p: 10 }, { p: 9 }, { p: 100 }], \"p\").map((x) => x.p), sortBy([{ n: \"b\" }, { n: \"A\" }, { n: \"c\" }], \"n\", \"desc\").map((x) => x.n)]",
+            "mongDoi": [
+              [
+                9,
+                10,
+                100
+              ],
+              [
+                "c",
+                "b",
+                "A"
+              ]
+            ]
+          },
+          {
+            "moTa": "Missing keys last; stable ties|||Thiếu khoá ở cuối; hoà giữ thứ tự",
+            "goi": "sortBy([{ id: 1 }, { id: 2, p: 5 }, { id: 3, p: 1 }, { id: 4, p: 5 }, { id: 5, p: null }], \"p\", \"desc\").map((x) => x.id)",
+            "mongDoi": [
+              2,
+              4,
+              3,
+              1,
+              5
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "a[key] > b[key]."
+        },
+        {
+          "loi": "Đặt phần tử thiếu khoá lên đầu khi desc."
+        }
+      ]
+    },
+    {
+      "title": "Tự viết ms() sau khi đọc mã nguồn",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "đọc mã nguồn thư viện",
+        "regex"
+      ],
+      "prerequisites": [
+        "regex",
+        "switch"
+      ],
+      "tags": [
+        "javascript",
+        "mã nguồn"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>Bài học đọc <code>parse</code> của gói <code>ms</code> (dòng 52). Viết <code>ms(str)</code> theo đúng hợp đồng đó: chuỗi ≤ 100 ký tự khớp <code>/^((?:\\d+)?\\.?\\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i</code>; không có đơn vị ⇒ mili giây. Hệ số: s 1 000, m 60 000, h 3 600 000, d 86 400 000, w 7 ngày, y 365,25 ngày. Không khớp hoặc quá dài ⇒ <code>undefined</code>. (Phần đổi số ⇒ chuỗi của gói không cần làm.)</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng regex của thư viện.</li>\n  <li>Đúng hệ số.</li>\n  <li>Không khớp ⇒ undefined.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "str: string.",
+      "outputSpec": "number | undefined.",
+      "constraints": "Không phân biệt hoa thường đơn vị.",
+      "examplesJson": [
+        {
+          "input": "[ms(\"2 days\"), ms(\"1.5h\"), ms(\"two days\")]",
+          "output": "[172800000, 5400000, undefined]",
+          "explanation": "Đúng output thật trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const n = parseFloat(m[1]); const unit = (m[2] || \"ms\").toLowerCase();",
+        "Nhóm đơn vị theo chữ cái đầu: unit.startsWith(\"ms\") || unit.startsWith(\"mil\") ⇒ 1; \"m\" (phút)…"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — ms(\"2 days\") → 172800000\nfunction ms(str) {\n  return parseInt(str) * 1000;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — viết lại hợp đồng đã đọc trong node_modules/ms/index.js: một regex + một bảng hệ số\nconst S = 1000, M = S * 60, H = M * 60, D = H * 24, W = D * 7, Y = D * 365.25;\nconst RE = /^((?:\\d+)?\\.?\\d+) *(milliseconds?|msecs?|ms|seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)?$/i;\n\nfunction unitFactor(unit) {\n  if (/^(milliseconds?|msecs?|ms)$/.test(unit)) return 1;\n  if (/^(seconds?|secs?|s)$/.test(unit)) return S;\n  if (/^(minutes?|mins?|m)$/.test(unit)) return M;\n  if (/^(hours?|hrs?|h)$/.test(unit)) return H;\n  if (/^(days?|d)$/.test(unit)) return D;\n  if (/^(weeks?|w)$/.test(unit)) return W;\n  return Y;\n}\n\nfunction ms(str) {\n  str = String(str);\n  if (str.length > 100) return undefined;\n  const m = RE.exec(str);\n  if (!m) return undefined;\n  return parseFloat(m[1]) * unitFactor((m[2] || 'ms').toLowerCase());\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không cần đoán \"nó có nhận '1.5h' không\" — regex trả lời. Đọc mã nguồn cho bạn hợp đồng THẬT (kể cả giới hạn 100 ký tự chống chuỗi khổng lồ), thứ README đôi khi không ghi. Kiểm thử của bạn nên so với chính thư viện khi có thể.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"m\" là phút, \"ms\" là mili giây — thứ tự so khớp quan trọng.</li>\n  <li>parseInt bỏ phần thập phân.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://github.com/vercel/ms",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The values from the lesson|||Các giá trị trong bài",
+            "goi": "[ms(\"2 days\"), ms(\"1.5h\"), ms(\"two days\")]",
+            "mongDoi": [
+              172800000,
+              5400000,
+              {
+                "$js": "undefined"
+              }
+            ]
+          },
+          {
+            "moTa": "Units, case and no unit|||Đơn vị, hoa thường, không đơn vị",
+            "goi": "[ms(\"100\"), ms(\"10s\"), ms(\"5 MIN\"), ms(\"1w\"), ms(\".5ms\"), ms(\"1y\")]",
+            "mongDoi": [
+              100,
+              10000,
+              300000,
+              604800000,
+              0.5,
+              31557600000
+            ]
+          },
+          {
+            "moTa": "Rejected inputs|||Đầu vào bị từ chối",
+            "goi": "[ms(\"-1s\"), ms(\"1 fortnight\"), ms(\"1\".repeat(101)), ms(\"\")]",
+            "mongDoi": [
+              {
+                "$js": "undefined"
+              },
+              {
+                "$js": "undefined"
+              },
+              {
+                "$js": "undefined"
+              },
+              {
+                "$js": "undefined"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"m\" là phút, \"ms\" là mili giây — thứ tự so khớp quan trọng."
+        },
+        {
+          "loi": "parseInt bỏ phần thập phân."
+        }
+      ]
+    },
+    {
+      "title": "Soát câu hỏi trước khi gửi",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "ví dụ tái hiện tối thiểu",
+        "câu hỏi tốt"
+      ],
+      "prerequisites": [
+        "object",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "học tập"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>Viết <code>questionProblems(q)</code> với <code>q = { title, code, expected, actual, tried, versions }</code> (chuỗi; có thể thiếu). Trả mảng vấn đề theo thứ tự: tiêu đề rỗng hoặc dưới 15 ký tự ⇒ <code>\"title too short\"</code>; tiêu đề chứa <code>help, urgent, pls, please, not working, doesn't work</code> (không phân biệt hoa thường) ⇒ <code>\"title should name the problem\"</code>; thiếu <code>code</code> ⇒ <code>\"add the code\"</code>; <code>code</code> hơn 30 dòng ⇒ <code>\"shrink the code (N lines)\"</code>; thiếu <code>expected</code> ⇒ <code>\"say what you expected\"</code>; thiếu <code>actual</code> ⇒ <code>\"say what happened\"</code>; <code>expected === actual</code> ⇒ <code>\"expected and actual are the same\"</code>; thiếu <code>tried</code> ⇒ <code>\"say what you tried\"</code>; thiếu <code>versions</code> ⇒ <code>\"add versions\"</code>. \"Thiếu\" = không có hoặc chỉ khoảng trắng.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự.</li>\n  <li>Đếm dòng code.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "q: object.",
+      "outputSpec": "string[].",
+      "constraints": "Không có vấn đề ⇒ [].",
+      "examplesJson": [
+        {
+          "input": "questionProblems({ title: \"sort not working pls help\" })",
+          "output": "[\"title should name the problem\", \"add the code\", …]",
+          "explanation": "Câu hỏi khó trả lời nhất."
+        }
+      ],
+      "hintsJson": [
+        "const blank = (s) => !s || !String(s).trim();",
+        "code.split(\"\\n\").length"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — soát câu hỏi\nfunction questionProblems(q) {\n  return q.title ? [] : ['title too short'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — năm phần của một câu hỏi tốt, mỗi phần một phép kiểm\nconst VAGUE = /\\b(help|urgent|pls|please|not working|doesn't work)\\b/i;\nconst blank = (s) => !s || !String(s).trim();\n\nfunction questionProblems(q) {\n  const p = [];\n  const title = String(q.title ?? '').trim();\n  if (title.length < 15) p.push('title too short');\n  if (VAGUE.test(title)) p.push('title should name the problem');\n  if (blank(q.code)) p.push('add the code');\n  else {\n    const n = String(q.code).split('\\n').length;\n    if (n > 30) p.push('shrink the code (' + n + ' lines)');\n  }\n  if (blank(q.expected)) p.push('say what you expected');\n  if (blank(q.actual)) p.push('say what happened');\n  if (!blank(q.expected) && !blank(q.actual) && q.expected.trim() === q.actual.trim()) p.push('expected and actual are the same');\n  if (blank(q.tried)) p.push('say what you tried');\n  if (blank(q.versions)) p.push('add versions');\n  return p;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Danh sách này là khuôn câu hỏi trong bài, viết thành bộ kiểm. Thường thì điền đủ năm phần là tự thấy lời giải — đặc biệt phần \"đã thử gì\" và mã dưới 30 dòng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>\"Thiếu\" không tính chuỗi toàn khoảng trắng.</li>\n  <li>Đếm ký tự thay vì dòng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://stackoverflow.com/help/how-to-ask",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A complete question|||Câu hỏi đầy đủ",
+            "goi": "questionProblems({ title: \"Array.sort with (a, b) => a > b leaves [3, 1, 2] unsorted\", code: \"console.log([3, 1, 2].sort((a, b) => a > b));\", expected: \"[1, 2, 3]\", actual: \"[3, 1, 2]\", tried: \"Same with dates; works with 2 elements\", versions: \"Node v22.23.3\" })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "The worst question|||Câu hỏi tệ nhất",
+            "goi": "questionProblems({ title: \"sort not working pls help\" })",
+            "mongDoi": [
+              "title should name the problem",
+              "add the code",
+              "say what you expected",
+              "say what happened",
+              "say what you tried",
+              "add versions"
+            ]
+          },
+          {
+            "moTa": "Long code, short title, same output|||Mã dài, tiêu đề ngắn, kết quả giống nhau",
+            "goi": "questionProblems({ title: \"Bug\", code: \"x\\n\".repeat(40), expected: \" 1 \", actual: \"1\", tried: \"x\", versions: \"   \" })",
+            "mongDoi": [
+              "title too short",
+              "shrink the code (41 lines)",
+              "expected and actual are the same",
+              "add versions"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "\"Thiếu\" không tính chuỗi toàn khoảng trắng."
+        },
+        {
+          "loi": "Đếm ký tự thay vì dòng."
+        }
+      ]
+    },
+    {
+      "title": "Che bí mật trước khi chia sẻ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "dữ liệu nhạy cảm",
+        "regex thay thế"
+      ],
+      "prerequisites": [
+        "replace",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>Viết <code>redact(text)</code> che bí mật trong log/cấu hình trước khi dán vào câu hỏi: (1) cặp <code>&lt;tên&gt;=&lt;giá trị&gt;</code> hoặc <code>&lt;tên&gt;: &lt;giá trị&gt;</code> với tên (không phân biệt hoa thường) chứa <code>password, passwd, secret, token, apikey, api_key</code> ⇒ giá trị thành <code>***</code> (giá trị = mọi ký tự tới khoảng trắng, dấu phẩy, <code>&amp;</code> hoặc hết dòng; giữ dấu nháy nếu có); (2) mật khẩu trong URL <code>scheme://user:pass@host</code> ⇒ <code>scheme://user:***@host</code>; (3) <code>Bearer &lt;token&gt;</code> ⇒ <code>Bearer ***</code>. Trả <code>{ text, count }</code> — count là số chỗ đã che.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba loại bí mật.</li>\n  <li>Giữ phần còn lại nguyên vẹn.</li>\n  <li>Đếm số chỗ che.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "{ text, count }.",
+      "constraints": "Không che cả dòng — người đọc vẫn cần thấy cấu trúc.",
+      "examplesJson": [
+        {
+          "input": "redact(\"DATABASE_URL=postgres://lan:hunter2@db.local/app\")",
+          "output": "{ text: \"DATABASE_URL=postgres://lan:***@db.local/app\", count: 1 }",
+          "explanation": "Tên DATABASE_URL không phải bí mật — mật khẩu bên trong URL mới là."
+        }
+      ],
+      "hintsJson": [
+        "/\\b([\\w.-]*(?:password|passwd|secret|token|api_?key)[\\w.-]*)(\"?\\s*[:=]\\s*)(\"?)([^\\s,&\"]+)\\3/gi",
+        "/(\\w+:\\/\\/[^:\\/\\s@]+:)[^@\\s]+@/g và /\\bBearer\\s+[\\w.~+\\/-]+=*/g"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — che bí mật\nfunction redact(text) {\n  return { text, count: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — ba mẫu bí mật hay lọt vào câu hỏi; đếm mỗi lần thay\nfunction redact(text) {\n  let count = 0;\n  const hit = (s) => { count++; return s; };\n  let out = String(text);\n  out = out.replace(/(\\w+:\\/\\/[^:\\/\\s@]+:)[^@\\s]+@/g, (_, head) => hit(head + '***@'));\n  out = out.replace(/\\bBearer\\s+[\\w.~+\\/-]+=*/g, () => hit('Bearer ***'));\n  out = out.replace(/\\b([\\w.-]*(?:password|passwd|secret|token|api_?key)[\\w.-]*)(\"?\\s*[:=]\\s*)(\"?)([^\\s,&\"]+)\\3/gi,\n    (all, name, sep, q, value) => (value === '***' ? all : hit(name + sep + q + '***' + q)));\n  return { text: out, count };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Bài học nói: log và tệp cấu hình mang theo khoá, token, mật khẩu trong URL; diễn đàn và trợ lý chat giữ mọi thứ bạn dán. Che có cấu trúc (giữ tên, chỉ che giá trị) để câu hỏi vẫn có ích. Đây là phiên bản thu nhỏ của bộ quét bí mật mà kho mã này chạy trước mỗi commit.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Che cả DATABASE_URL — mất thông tin host/db.</li>\n  <li>Che hai lần cùng một chỗ.</li>\n  <li>Bỏ sót dạng \"token\": \"…\" có nháy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html#data-to-exclude",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Password inside a database URL|||Mật khẩu trong URL CSDL",
+            "goi": "redact(\"DATABASE_URL=postgres://lan:hunter2@db.local/app\")",
+            "mongDoi": {
+              "text": "DATABASE_URL=postgres://lan:***@db.local/app",
+              "count": 1
+            }
+          },
+          {
+            "moTa": "key=value, quoted JSON and Bearer|||khoá=giá trị, JSON có nháy và Bearer",
+            "goi": "redact(\"login password=hunter2 user=lan\\n{\\\"apiKey\\\": \\\"abc123\\\", \\\"page\\\": 2}\\nAuthorization: Bearer xyz.789\")",
+            "mongDoi": {
+              "text": "login password=*** user=lan\n{\"apiKey\": \"***\", \"page\": 2}\nAuthorization: Bearer ***",
+              "count": 3
+            }
+          },
+          {
+            "moTa": "Nothing to hide; query strings|||Không có gì để che; chuỗi truy vấn",
+            "goi": "[redact(\"GET /api/notes 200\"), redact(\"/reset?token=t0k3n&lang=vi\")]",
+            "mongDoi": [
+              {
+                "text": "GET /api/notes 200",
+                "count": 0
+              },
+              {
+                "text": "/reset?token=***&lang=vi",
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Che cả DATABASE_URL — mất thông tin host/db."
+        },
+        {
+          "loi": "Che hai lần cùng một chỗ."
+        },
+        {
+          "loi": "Bỏ sót dạng \"token\": \"…\" có nháy."
+        }
+      ]
+    },
+    {
+      "title": "Tự động thu nhỏ một ca lỗi",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "delta debugging",
+        "ví dụ tái hiện tối thiểu"
+      ],
+      "prerequisites": [
+        "vòng lặp",
+        "slice"
+      ],
+      "tags": [
+        "javascript",
+        "gỡ lỗi"
+      ],
+      "problemHtml": "<p><em>Bài 10.4 — Cách tiếp tục học.</em> Mỗi bài bắt đầu từ một điều bạn chỉ biết được bằng cách đọc tài liệu, đọc mã nguồn, hay rút gọn một lỗi.</p><p>Bước 3 của bài làm bằng tay; giờ tự động hoá. Viết <code>shrink(items, stillFails)</code>: <code>items</code> là mảng (dòng mã, phần tử dữ liệu…), <code>stillFails(subset)</code> trả <code>true</code> nếu lỗi còn. Lặp: thử bỏ từng KHỐI liên tiếp, bắt đầu với khối bằng nửa mảng rồi giảm một nửa mỗi vòng tới khối 1 phần tử; mỗi lần bỏ mà lỗi vẫn còn thì giữ việc bỏ đó và thử tiếp ở cùng cỡ khối. Kết thúc khi bỏ bất kỳ MỘT phần tử nào cũng làm lỗi biến mất. Trả <code>{ result, tests }</code> — mảng nhỏ nhất (giữ thứ tự gốc) và số lần gọi <code>stillFails</code>. Nếu <code>stillFails(items)</code> ngay từ đầu là false ⇒ ném <code>Error(\"the full input does not fail\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ theo khối giảm dần.</li>\n  <li>Kết quả 1-tối thiểu.</li>\n  <li>Giữ thứ tự.</li>\n  <li>Đếm số lần kiểm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: any[]; stillFails: (subset) => boolean.",
+      "outputSpec": "{ result, tests }.",
+      "constraints": "Lần gọi đầu kiểm cả mảng cũng tính vào tests.",
+      "examplesJson": [
+        {
+          "input": "shrink([5, 1, 4, 2, 3], (a) => a.length > 1 && a.join() === [...a].sort((x, y) => x > y).join() && a.join() !== [...a].sort((x, y) => x - y).join())",
+          "output": "{ result: [2, 1] hoặc tương tự, tests: … }",
+          "explanation": "Thu năm số về ca nhỏ nhất vẫn làm lộ hàm so sánh boolean."
+        }
+      ],
+      "hintsJson": [
+        "let size = Math.floor(items.length / 2); while (size >= 1) { let i = 0; while (i < cur.length) { const cand = [...cur.slice(0, i), ...cur.slice(i + size)]; … } size = Math.floor(size / 2); }",
+        "Bỏ thành công thì KHÔNG tăng i (phần tử mới đã trượt vào vị trí i)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — tự động thu nhỏ\nfunction shrink(items, stillFails) {\n  return { result: items, tests: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.4 — bỏ khối lớn trước (nhanh), khối nhỏ sau (chính xác); giữ mọi lần bỏ mà lỗi vẫn còn\nfunction shrink(items, stillFails) {\n  let tests = 0;\n  const fails = (a) => { tests++; return stillFails(a); };\n  if (!fails(items)) throw new Error('the full input does not fail');\n  let cur = [...items];\n  for (let size = Math.max(1, Math.floor(cur.length / 2)); size >= 1; size = Math.floor(size / 2)) {\n    let i = 0;\n    while (i < cur.length) {\n      const cand = [...cur.slice(0, i), ...cur.slice(i + size)];\n      if (cand.length < cur.length && fails(cand)) cur = cand;     // vẫn lỗi ⇒ giữ bản nhỏ hơn, thử lại tại i\n      else i += size;\n    }\n  }\n  return { result: cur, tests };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là ý tưởng của \"delta debugging\" và của bộ thu nhỏ trong các thư viện kiểm thử dựa trên thuộc tính: máy làm đúng việc bạn làm ở Bước 3 — bỏ một phần, xem lỗi còn không — chỉ nhanh và kiên nhẫn hơn. Vòng cuối với khối 1 phần tử bảo đảm không bỏ thêm được phần tử nào.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tăng i sau khi bỏ thành công — bỏ sót phần tử.</li>\n  <li>Không đếm lần kiểm đầu.</li>\n  <li>Dừng sau một vòng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.4 How to keep learning.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.debuggingbook.org/html/DeltaDebugger.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Shrinks to the two culprits|||Thu về đúng hai thủ phạm",
+            "goi": "shrink([\"a\", \"b\", \"c\", \"d\", \"e\", \"f\", \"g\", \"h\"], (s) => s.includes(\"c\") && s.includes(\"f\")).result",
+            "mongDoi": [
+              "c",
+              "f"
+            ]
+          },
+          {
+            "moTa": "One culprit; few tests|||Một thủ phạm; ít lần kiểm",
+            "goi": "(() => { const items = Array.from({ length: 64 }, (_, i) => i); const r = shrink(items, (s) => s.includes(37)); return [r.result, r.tests <= 20]; })()",
+            "mongDoi": [
+              [
+                37
+              ],
+              true
+            ]
+          },
+          {
+            "moTa": "The boolean comparator bug|||Lỗi hàm so sánh boolean",
+            "goi": "shrink([5, 1, 4, 2, 3], (a) => a.join() !== [...a].sort((x, y) => x - y).join() && a.join() === [...a].sort((x, y) => x > y).join()).result.length",
+            "mongDoi": 2
+          },
+          {
+            "moTa": "Input that does not fail|||Đầu vào không lỗi",
+            "goi": "shrink([1, 2], () => false)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "does not fail"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tăng i sau khi bỏ thành công — bỏ sót phần tử."
+        },
+        {
+          "loi": "Không đếm lần kiểm đầu."
+        },
+        {
+          "loi": "Dừng sau một vòng."
+        }
+      ]
+    }
+  ]
+}

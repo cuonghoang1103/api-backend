@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Checking token pairs against WCAG contrast</title>
+</head>
+<body>
+  <script>
+    // WCAG 2.x contrast ratio between two hex colours
+    const lum = (hex) => {
+      const [r, g, b] = hex.match(/\w\w/g).map((h) => parseInt(h, 16) / 255)
+        .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+    const pairs = [
+      ['light: text on bg', '#0f172a', '#f8fafc'],
+      ['light: muted on bg', '#334155', '#f8fafc'],
+      ['light: button text on primary', '#f8fafc', '#2563eb'],
+      ['dark: text on bg', '#f8fafc', '#0f172a'],
+      ['dark: button text on primary', '#0f172a', '#93c5fd'],
+      ['a bad pair: gray-400 on white', '#9ca3af', '#ffffff'],
+    ];
+    for (const [label, fg, bg] of pairs) {
+      const r = ratio(fg, bg);
+      console.log(label.padEnd(31), r.toFixed(2) + ':1', r >= 4.5 ? 'AA ✓' : 'fails AA (needs 4.5:1)');
+    }
+  </script>
+</body>
+</html>

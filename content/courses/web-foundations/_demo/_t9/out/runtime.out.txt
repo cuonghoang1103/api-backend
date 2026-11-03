@@ -1,0 +1,14 @@
+$ npx tsc runtime.ts --outDir dist && cat dist/runtime.js   (what actually runs)
+"use strict";
+const body = '{"id": 7, "title": "Ruler", "price": "8000"}'; // what a server really sent
+const product = JSON.parse(body); // "trust me" — TypeScript cannot check this
+console.log(typeof product.price, product.price * 2);
+console.log(product.name.toUpperCase());
+
+$ node --experimental-strip-types runtime.ts
+string 16000
+runtime.ts:10
+console.log(product.name.toUpperCase());
+                         ^
+
+TypeError: Cannot read properties of undefined (reading 'toUpperCase')

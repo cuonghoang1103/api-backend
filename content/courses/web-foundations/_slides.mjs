@@ -13,6 +13,8 @@
  * Dùng lại đúng các class đang sống trong globals.css (.anh-slide /
  * .chu-thich) và cặp .ml-en / .ml-vi của khoá — không phải sửa frontend.
  */
+import { GIANG } from './_giang/index.mjs';
+
 export const CDN = 'https://media.cuongthai.com/images/academy/WF/v1';
 
 const W = 1280, H = 720;
@@ -59,6 +61,14 @@ export function slide(deck, n, caption) {
 /** Cả bộ: rows = [[n, caption], …] */
 export const gallery = (deck, rows) => rows.map((r) => slide(deck, ...r)).join('\n');
 
+/** Cả bộ KÈM lời giảng EN/VI dưới từng slide (02/11/2026) — lời giảng ở _giang/<deck>.mjs, đủ 1..total. */
+export const galleryGiang = (deck, rows) => {
+  const g = GIANG[deck];
+  if (!g || g.length !== DECKS[deck].total) throw new Error(`_giang/${deck}.mjs thiếu lời giảng (cần ${DECKS[deck].total})`);
+  return rows.map(([n, caption]) => slide(deck, n, caption) +
+    `\n<div class="ml-en giang">${g[n - 1][0]}</div>\n<div class="ml-vi giang">${g[n - 1][1]}</div>`).join('\n');
+};
+
 /* ═══════════════ Deck BÀI (01/11/2026) — khuôn _pg-chung, slide tiếng Anh, lời giảng EN/VI ═══════════════
  * Deck mỗi bài `wf-N-M` (vd wf-11-1), dựng từ scripts/slides-src/wf-N-M.mjs, đẩy lên WF/v1/<deck>/.
  * Dựng lại một deck đã đẩy ⇒ đẩy sang WF/v2 và ghi vào VER — Cloudflare giữ bytes cũ của key bị ghi đè.
@@ -86,11 +96,14 @@ export function walkWf(deck, tenEn, tenVi, rows) {
 }
 
 const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+/** Bỏ thẻ <meta> điều khiển chay-demo (chup/cho/cho-xong/mo-phong) khỏi mã hiển thị cho người học. */
+export const boMetaDemo = (s) => String(s).replace(/^[ \t]*<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>[ \t]*\n/gm, '').replace(/<meta name="(?:chup|cho|cho-xong|mo-phong)"[^>]*>/g, '');
 /** Khối mã (nguồn lấy từ _ma.mjs — tự thoát HTML). dong = [từ, tới] (1-based, gồm cả hai đầu) ⇒ chỉ lấy đoạn đó. */
 export const ma = (lang, src, dong) => {
   if (src == null) throw new Error('ma(): thiếu mã — chạy lại scripts/wf/sinh-ma.mjs?');
   let s = String(src);
   if (dong) s = s.split('\n').slice(dong[0] - 1, dong[1]).join('\n');
+  s = boMetaDemo(s);
   return `<pre><code class="language-${lang}">${escHtml(s.replace(/^\n/, '').replace(/\n+$/, ''))}</code></pre>`;
 };
 /** Output chạy thật (từ _ma.mjs). */

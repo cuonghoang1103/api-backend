@@ -1,0 +1,2 @@
+frames painted in 1 s, calm: 121
+frames painted in 1 s, with an 800 ms busy loop: 27

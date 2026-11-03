@@ -640,6 +640,21 @@ run 36075106581:
 <div class="link-card"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Sân tập — nhánh ch15-capstone và PR #10</span><span class="lc-sub">github.com/cuonghoang1103/ga-san-tap/tree/ch15-capstone · /pull/10 — app, <code>ch15-ci.yml</code>, bốn run của PR (hủy, xanh, đỏ, xanh).</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🐳</span><span class="lc-body"><span class="lc-title">Docker — container, cổng và health check</span><span class="lc-sub">/courses/docker/learn${REF} — cùng cơ chế mà <code>services:</code> dùng phía sau.</span></span></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.4 — Mocking and tests in CI</span><span class="lc-sub">vi.fn for fetch, fake timers, and a GitHub Actions workflow checked with actionlint</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-4-mocking-ci" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.4 — Giả lập và test trong CI</span><span class="lc-sub">vi.fn cho fetch, đồng hồ giả, và workflow GitHub Actions kiểm bằng actionlint</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     {

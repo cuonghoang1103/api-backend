@@ -1,0 +1,9 @@
+['a', 'b', 'c', 'd'] 4
+d ['a', 'b', 'c']
+z ['a', 'b', 'c']
+a c c undefined
+1 -1 true
+['b', 'c'] ['a', 'b', 'c']
+['b'] ['a', 'c']
+['x', 'y', 'z'] ['a', 'c', 'new']
+c b a

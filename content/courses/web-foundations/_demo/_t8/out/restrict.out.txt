@@ -1,0 +1,10 @@
+sqlite> DELETE FROM users WHERE id = 2;
+Error near line 1: FOREIGN KEY constraint failed
+
+sqlite> SELECT count(*) AS comments_by_minh FROM comments WHERE user_id = 2;
++------------------+
+| comments_by_minh |
++------------------+
+|                2 |
++------------------+
+

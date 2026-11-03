@@ -131,6 +131,21 @@ export default {
   <span class="lc-body"><span class="lc-title">tailwindcss.com — Cài với Next.js</span><span class="lc-sub">Quét content, các directive, và config.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 3.1 — the cascade under Tailwind</span><span class="lc-sub">Specificity and inheritance: what utility classes are avoiding</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-3-1-css-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 3.1 — cascade bên dưới Tailwind</span><span class="lc-sub">Độ cụ thể và kế thừa: thứ mà class tiện ích đang tránh</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -441,6 +456,51 @@ html.theme-brown { --text-primary: #f3e9d8; --surface: #2b211a; }
 <a class="link-card dl" href="https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties" target="_blank" rel="noopener">
   <span class="lc-ico">🎚️</span>
   <span class="lc-body"><span class="lc-title">MDN — CSS custom properties</span><span class="lc-sub">Định nghĩa và dùng CSS variables cho theme.</span></span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-1-position-stacking" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.1 — Position and the stacking context</span><span class="lc-sub">Why z-index: 9999 still loses, with screenshots from Chromium</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-1-position-stacking" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.1 — Position và ngữ cảnh xếp chồng</span><span class="lc-sub">Vì sao z-index: 9999 vẫn thua, kèm ảnh chụp từ Chromium</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.3 — Naming and organising CSS</span><span class="lc-sub">BEM, CSS Modules, @layer and why class names collide</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-3-css-architecture" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.3 — Đặt tên và tổ chức CSS</span><span class="lc-sub">BEM, CSS Modules, @layer và vì sao tên class đụng nhau</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-4-tokens-theming" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 12.4 — Design tokens and theming</span><span class="lc-sub">Primitive and semantic tokens, dark mode with prefers-color-scheme and data-theme</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-12-4-tokens-theming" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 12.4 — Token thiết kế và giao diện</span><span class="lc-sub">Token nguyên thuỷ và ngữ nghĩa, chế độ tối với prefers-color-scheme và data-theme</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

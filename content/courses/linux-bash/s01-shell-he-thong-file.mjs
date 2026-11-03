@@ -977,6 +977,21 @@ hi</div>
 <div class="pitfall"><strong>Bẫy:</strong> một dấu gạch chéo ở cuối làm đổi hành vi của lệnh. Với <code>cd</code> và <code>ls</code> thì vô hại. Với <code>cp</code>, <code>mv</code> và nhất là <code>rsync</code> thì rất quan trọng: <code>rsync src/ dest/</code> chép <em>NỘI DUNG</em> của <code>src</code>, còn <code>rsync src dest/</code> chép <em>CẢ THƯ MỤC</em> vào trong <code>dest</code>. Một ký tự, hai kết cục rất khác nhau — Chương 9 nói kỹ, và đáng biết là cái bẫy đó tồn tại ngay từ bây giờ.</div>
 <p class="note-ct"><strong>Mô hình cần giữ:</strong> chỉ có MỘT cái cây. Mọi đường dẫn hoặc là "bắt đầu ở gốc" (có <code>/</code> đứng đầu) hoặc là "bắt đầu ở chỗ tôi đang đứng" (không có). Mọi lỗi "file not found" khó hiểu trong khoá này đều quy về phân biệt đó cộng với <code>pwd</code>.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-1-terminal" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.1 — The terminal</span><span class="lc-sub">pwd, cd, relative vs absolute paths, rm without a recycle bin, pipes and exit codes — all with real output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-1-terminal" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.1 — Terminal</span><span class="lc-sub">pwd, cd, đường dẫn tương đối và tuyệt đối, rm không có thùng rác, ống và mã thoát — kèm output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

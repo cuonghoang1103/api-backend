@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x380">
+<title>The five position values</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; }
+  .stage { position: relative; height: 300px; border: 2px dashed #999; padding: 12px; }
+  .box { width: 130px; padding: 8px; color: #fff; font-weight: 700; border-radius: 6px; margin-bottom: 8px; }
+  .static   { background: #6b7280; }
+  .relative { background: #2563eb; position: relative; top: 10px; left: 40px; }
+  .absolute { background: #dc2626; position: absolute; top: 12px; right: 12px; }
+  .fixed    { background: #16a34a; position: fixed; bottom: 12px; right: 12px; }
+  .sticky   { background: #9333ea; position: sticky; top: 0; }
+</style>
+</head>
+<body>
+  <div class="stage">
+    <div class="box static">static</div>
+    <div class="box relative">relative</div>
+    <div class="box absolute">absolute</div>
+    <div class="box sticky">sticky</div>
+  </div>
+  <div class="box fixed">fixed</div>
+  <script>
+    const stage = document.querySelector('.stage').getBoundingClientRect();
+    for (const el of document.querySelectorAll('.box')) {
+      const r = el.getBoundingClientRect();
+      console.log(el.textContent.padEnd(8), 'x =', Math.round(r.left), 'y =', Math.round(r.top),
+        '| inside stage at', Math.round(r.left - stage.left) + ',' + Math.round(r.top - stage.top));
+    }
+  </script>
+</body>
+</html>

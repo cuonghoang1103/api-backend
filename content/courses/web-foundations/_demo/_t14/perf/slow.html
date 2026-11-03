@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slow page</title>
+<script>
+  // a "tracking" script in <head>: blocks parsing until it finishes (simulated 300 ms of work)
+  const t = performance.now(); while (performance.now() - t < 300) {}
+</script>
+<style>body { margin: 0; font-family: system-ui, sans-serif; } img { width: 100%; display: block; } main { padding: 16px; }</style>
+</head>
+<body>
+  <div id="banner-slot"></div>
+  <img src="hero-big.jpg" alt="New collection">
+  <main><h1>New collection</h1><p>Free shipping from 500.000đ.</p></main>
+  <script>
+    // a promo banner injected later pushes everything down: layout shift
+    setTimeout(() => {
+      document.getElementById('banner-slot').innerHTML = '<p style="margin:0;padding:24px;height:220px;box-sizing:border-box;background:#fde68a">Sale: -20% today only!<br>Use code CT20 at checkout.<br>Ends at midnight.</p>';
+    }, 800);
+  </script>
+</body>
+</html>

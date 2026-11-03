@@ -1,0 +1,666 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-7-1-auth-basics",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-7-1-auth-basics"
+  },
+  "exercises": [
+    {
+      "title": "Tách header Authorization",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Authorization",
+        "Bearer",
+        "Basic"
+      ],
+      "prerequisites": [
+        "chuỗi",
+        "indexOf"
+      ],
+      "tags": [
+        "javascript",
+        "http",
+        "auth"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>parseAuthorization(value)</code>: header có dạng <code>&lt;scheme&gt; &lt;credentials&gt;</code>, ví dụ <code>Bearer eyJhbGciOi…</code> hay <code>Basic YW46c2VjcmV0</code>. Trả <code>{ scheme, credentials }</code> với <code>scheme</code> viết THƯỜNG và <code>credentials</code> đã trim. Vắng, rỗng, không có dấu cách, hoặc credentials rỗng ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>scheme viết thường (Bearer = bearer).</li>\n  <li>Tách ở dấu cách đầu tiên; credentials trim.</li>\n  <li>Thiếu phần nào ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "value: string | undefined.",
+      "outputSpec": "{ scheme, credentials } hoặc null.",
+      "constraints": "Không giải mã credentials.",
+      "examplesJson": [
+        {
+          "input": "parseAuthorization(\"Bearer abc.def.ghi\")",
+          "output": "{ scheme: \"bearer\", credentials: \"abc.def.ghi\" }",
+          "explanation": "Tên scheme không phân biệt hoa thường."
+        }
+      ],
+      "hintsJson": [
+        "const v = (value ?? \"\").trim(); const i = v.indexOf(\" \");",
+        "if (i < 0) return null; const credentials = v.slice(i + 1).trim();"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — tách header Authorization\nfunction parseAuthorization(value) {\n  const [scheme, credentials] = value.split(' ');\n  return { scheme, credentials };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — \"<scheme> <credentials>\"; scheme không phân biệt hoa thường\nfunction parseAuthorization(value) {\n  const v = (value ?? '').trim();\n  const i = v.indexOf(' ');\n  if (i <= 0) return null;                                  // không có scheme hoặc không có phần sau\n  const credentials = v.slice(i + 1).trim();\n  if (!credentials) return null;\n  return { scheme: v.slice(0, i).toLowerCase(), credentials };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Middleware xác thực nào cũng bắt đầu bằng bước này. Trả <code>null</code> cho mọi hình dạng lạ giúp nhánh sau chỉ cần một câu <code>if (!auth) return 401</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>value.split(\" \") ném lỗi khi header vắng (undefined).</li>\n  <li>So scheme === \"Bearer\" — \"bearer\" bị từ chối dù hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Authorization",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Bearer and Basic|||Bearer và Basic",
+            "goi": "[parseAuthorization(\"Bearer abc.def.ghi\"), parseAuthorization(\"basic YW46c2VjcmV0\")]",
+            "mongDoi": [
+              {
+                "scheme": "bearer",
+                "credentials": "abc.def.ghi"
+              },
+              {
+                "scheme": "basic",
+                "credentials": "YW46c2VjcmV0"
+              }
+            ]
+          },
+          {
+            "moTa": "Extra spaces are trimmed|||Khoảng trắng thừa được bỏ",
+            "goi": "parseAuthorization(\"  BEARER    tok123  \")",
+            "mongDoi": {
+              "scheme": "bearer",
+              "credentials": "tok123"
+            }
+          },
+          {
+            "moTa": "Missing parts give null|||Thiếu phần trả null",
+            "goi": "[parseAuthorization(undefined), parseAuthorization(\"\"), parseAuthorization(\"Bearer\"), parseAuthorization(\"Bearer   \")]",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "value.split(\" \") ném lỗi khi header vắng (undefined)."
+        },
+        {
+          "loi": "So scheme === \"Bearer\" — \"bearer\" bị từ chối dù hợp lệ."
+        }
+      ]
+    },
+    {
+      "title": "Không tin trường do client gửi",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "mass assignment",
+        "danh sách cho phép"
+      ],
+      "prerequisites": [
+        "Object.entries",
+        "filter"
+      ],
+      "tags": [
+        "javascript",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>pickAllowed(body, allowed)</code> trả object MỚI chỉ gồm các khoá có trong mảng <code>allowed</code> (khoá RIÊNG của body, không lấy từ prototype). Dùng khi cập nhật hồ sơ: <code>pickAllowed(req.body, [\"name\", \"avatar\"])</code> — ai gửi thêm <code>role: \"admin\"</code> hay <code>id</code> cũng bị bỏ. <code>body</code> không phải object thường ⇒ <code>{}</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ khoá trong allowed.</li>\n  <li>Không sửa body.</li>\n  <li>body null/mảng/chuỗi ⇒ {}.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "body: any; allowed: string[].",
+      "outputSpec": "object.",
+      "constraints": "Danh sách CHO PHÉP, không phải danh sách cấm.",
+      "examplesJson": [
+        {
+          "input": "pickAllowed({ name: \"An\", role: \"admin\" }, [\"name\"])",
+          "output": "{ name: \"An\" }",
+          "explanation": "role do người dùng gõ, máy chủ không nhận."
+        }
+      ],
+      "hintsJson": [
+        "Object.entries(body).filter(([k]) => allowed.includes(k))",
+        "Kiểm body: body !== null && typeof body === \"object\" && !Array.isArray(body)."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — chỉ nhận trường được phép\nfunction pickAllowed(body, allowed) {\n  delete body.role;\n  return body;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — danh sách cho phép: thứ gì không được nêu tên thì không vào\nfunction pickAllowed(body, allowed) {\n  if (body === null || typeof body !== 'object' || Array.isArray(body)) return {};\n  const out = {};\n  for (const [key, value] of Object.entries(body)) {      // chỉ khoá riêng, không đi vào prototype\n    if (allowed.includes(key)) out[key] = value;\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Danh sách cấm (<code>delete body.role</code>) luôn sót: hôm sau ai đó thêm cột <code>isAdmin</code> hay <code>balance</code> và nó lọt qua. Danh sách cho phép thì mặc định là \"không\". Lỗi này có tên: mass assignment — từng cho người dùng GitHub tự thêm mình vào dự án người khác (2012).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Xoá từng trường nguy hiểm — sót trường mới.</li>\n  <li>Sửa trực tiếp req.body.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Mass_Assignment_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Role and id are dropped|||role và id bị bỏ",
+            "goi": "pickAllowed({ name: \"An\", avatar: \"a.png\", role: \"admin\", id: 99 }, [\"name\", \"avatar\"])",
+            "mongDoi": {
+              "name": "An",
+              "avatar": "a.png"
+            }
+          },
+          {
+            "moTa": "Body is not changed|||body không bị sửa",
+            "chuanBi": "const b = { name: \"An\", isAdmin: true }; pickAllowed(b, [\"name\"]);",
+            "goi": "b",
+            "mongDoi": {
+              "name": "An",
+              "isAdmin": true
+            }
+          },
+          {
+            "moTa": "Non-objects give {}|||Không phải object trả {}",
+            "goi": "[pickAllowed(null, [\"a\"]), pickAllowed([\"a\"], [\"0\"]), pickAllowed(\"x\", [\"length\"])]",
+            "mongDoi": [
+              {},
+              {},
+              {}
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Xoá từng trường nguy hiểm — sót trường mới."
+        },
+        {
+          "loi": "Sửa trực tiếp req.body."
+        }
+      ]
+    },
+    {
+      "title": "Bảng quyền: vai trò và chủ sở hữu",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "RBAC",
+        "quyền sở hữu"
+      ],
+      "prerequisites": [
+        "object",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "auth"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>can(user, action, post)</code> cho một blog: <code>user</code> là <code>{ id, role }</code> hoặc <code>null</code>; <code>action</code> là <code>\"read\" | \"create\" | \"update\" | \"delete\" | \"publish\"</code>; <code>post</code> là <code>{ authorId, published }</code> (không cần cho create). Luật: ai cũng <code>read</code> được bài ĐÃ đăng; bài chưa đăng chỉ tác giả, editor, admin đọc được. Người đã đăng nhập (mọi vai trò) <code>create</code> được. <code>update</code>: tác giả, editor, admin. <code>delete</code>: tác giả hoặc admin. <code>publish</code>: editor, admin. <code>null</code> user chỉ đọc bài đã đăng. Trả boolean.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách vai trò và chủ sở hữu.</li>\n  <li>user null không làm gì ngoài đọc bài đã đăng.</li>\n  <li>action lạ ⇒ false.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "user: { id, role } | null; action: string; post?: { authorId, published }.",
+      "outputSpec": "boolean.",
+      "constraints": "Vai trò: \"user\", \"editor\", \"admin\".",
+      "examplesJson": [
+        {
+          "input": "can({ id: 1, role: \"user\" }, \"delete\", { authorId: 2, published: true })",
+          "output": "false",
+          "explanation": "Không phải tác giả, không phải admin."
+        }
+      ],
+      "hintsJson": [
+        "const isAuthor = !!user && !!post && post.authorId === user.id;",
+        "switch (action) { case \"read\": … }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — bảng quyền\nfunction can(user, action, post) {\n  return user !== null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — quyền = vai trò HOẶC quan hệ với tài nguyên (chủ sở hữu)\nfunction can(user, action, post) {\n  const role = user ? user.role : null;\n  const isAuthor = !!user && !!post && post.authorId === user.id;\n  const staff = role === 'editor' || role === 'admin';\n  switch (action) {\n    case 'read': return !!post && (post.published || isAuthor || staff);\n    case 'create': return !!user;\n    case 'update': return isAuthor || staff;\n    case 'delete': return isAuthor || role === 'admin';\n    case 'publish': return staff;\n    default: return false;                                  // hành động lạ: mặc định từ chối\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hầu hết hệ thống thật trộn hai kiểu: theo vai trò (RBAC — editor sửa được mọi bài) và theo quan hệ (tác giả sửa được bài CỦA MÌNH). Đặt mọi luật vào một hàm <code>can()</code> giúp route chỉ hỏi một câu và trả 403 khi false.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên kiểm user null ⇒ TypeError.</li>\n  <li>Cho mặc định true với action lạ.</li>\n  <li>So post.authorId == user.id với kiểu khác nhau.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authorization_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Anonymous: only published posts|||Khách: chỉ bài đã đăng",
+            "goi": "[can(null, \"read\", { authorId: 1, published: true }), can(null, \"read\", { authorId: 1, published: false }), can(null, \"create\")]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Author vs other user|||Tác giả và người khác",
+            "goi": "[can({ id: 1, role: \"user\" }, \"update\", { authorId: 1, published: false }), can({ id: 2, role: \"user\" }, \"update\", { authorId: 1, published: true }), can({ id: 1, role: \"user\" }, \"delete\", { authorId: 1 }), can({ id: 1, role: \"user\" }, \"publish\", { authorId: 1 })]",
+            "mongDoi": [
+              true,
+              false,
+              true,
+              false
+            ]
+          },
+          {
+            "moTa": "Editor and admin|||Editor và admin",
+            "goi": "[can({ id: 5, role: \"editor\" }, \"update\", { authorId: 1 }), can({ id: 5, role: \"editor\" }, \"delete\", { authorId: 1 }), can({ id: 9, role: \"admin\" }, \"delete\", { authorId: 1 }), can({ id: 5, role: \"editor\" }, \"read\", { authorId: 1, published: false })]",
+            "mongDoi": [
+              true,
+              false,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Unknown action is denied|||Hành động lạ bị từ chối",
+            "goi": "can({ id: 9, role: \"admin\" }, \"drop-database\", {})",
+            "mongDoi": false
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên kiểm user null ⇒ TypeError."
+        },
+        {
+          "loi": "Cho mặc định true với action lạ."
+        },
+        {
+          "loi": "So post.authorId == user.id với kiểu khác nhau."
+        }
+      ]
+    },
+    {
+      "title": "Luật theo route: 401, 403 hay 200",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "401 vs 403",
+        "mặc định từ chối"
+      ],
+      "prerequisites": [
+        "find",
+        "startsWith"
+      ],
+      "tags": [
+        "javascript",
+        "auth",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>checkAccess(rules, user, method, path)</code>: <code>rules</code> là mảng <code>{ method, path, roles }</code> theo thứ tự ưu tiên; <code>path</code> của luật có thể kết thúc bằng <code>/*</code> (khớp chính tiền tố đó và mọi thứ bên dưới); <code>method</code> <code>\"*\"</code> khớp mọi method; <code>roles</code> là <code>\"public\"</code> (ai cũng được), <code>\"any\"</code> (phải đăng nhập) hoặc mảng vai trò. Dùng luật ĐẦU TIÊN khớp. Không luật nào khớp ⇒ <code>403</code> (mặc định từ chối). Luật đòi đăng nhập mà <code>user</code> null ⇒ <code>401</code>; sai vai trò ⇒ <code>403</code>; còn lại <code>200</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luật đầu tiên khớp thắng.</li>\n  <li>\"/*\" khớp tiền tố.</li>\n  <li>Không khớp ⇒ 403.</li>\n  <li>401 trước 403.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rules: object[]; user: { role } | null; method, path: string.",
+      "outputSpec": "200 | 401 | 403.",
+      "constraints": "Bỏ query string của path trước khi so.",
+      "examplesJson": [
+        {
+          "input": "checkAccess([{ method: \"GET\", path: \"/api/admin/*\", roles: [\"admin\"] }], { role: \"user\" }, \"GET\", \"/api/admin/users\")",
+          "output": "403",
+          "explanation": "Đúng như /api/admin/users của An trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const matchPath = (p, path) => p.endsWith(\"/*\") ? path === p.slice(0, -2) || path.startsWith(p.slice(0, -1)) : p === path;",
+        "const rule = rules.find((r) => (r.method === \"*\" || r.method === method) && matchPath(r.path, clean));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — luật theo route\nfunction checkAccess(rules, user, method, path) {\n  const rule = rules.find((r) => r.path === path);\n  if (!rule) return 200;\n  return rule.roles.includes(user.role) ? 200 : 401;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — luật đầu tiên khớp; không có luật ⇒ từ chối; 401 (ai?) trước 403 (được không?)\nfunction checkAccess(rules, user, method, path) {\n  const clean = path.split('?')[0];\n  const matchPath = (p) => (p.endsWith('/*')\n    ? clean === p.slice(0, -2) || clean.startsWith(p.slice(0, -1))\n    : p === clean);\n  const rule = rules.find((r) => (r.method === '*' || r.method === method.toUpperCase()) && matchPath(r.path));\n  if (!rule) return 403;                                     // mặc định từ chối\n  if (rule.roles === 'public') return 200;\n  if (!user) return 401;\n  if (rule.roles === 'any') return 200;\n  return rule.roles.includes(user.role) ? 200 : 403;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Mặc định từ chối\" là nguyên tắc quan trọng nhất ở đây: route mới quên khai luật sẽ bị chặn (và bạn phát hiện ngay khi thử) thay vì mở toang. Thứ tự luật cho phép viết ngoại lệ trước luật chung, như <code>/api/admin/health</code> công khai trước <code>/api/admin/*</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không khớp luật ⇒ 200 (mặc định cho phép).</li>\n  <li>Trả 401 cho người đã đăng nhập nhưng sai vai trò.</li>\n  <li>\"/api/admin/*\" khớp nhầm \"/api/administrator\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://owasp.org/Top10/A01_2021-Broken_Access_Control/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson app|||App của bài",
+            "chuanBi": "const R = [{ method: \"POST\", path: \"/login\", roles: \"public\" }, { method: \"GET\", path: \"/api/me\", roles: \"any\" }, { method: \"*\", path: \"/api/admin/*\", roles: [\"admin\"] }];",
+            "goi": "[checkAccess(R, null, \"POST\", \"/login\"), checkAccess(R, null, \"GET\", \"/api/me\"), checkAccess(R, { role: \"user\" }, \"GET\", \"/api/me\"), checkAccess(R, { role: \"user\" }, \"GET\", \"/api/admin/users\"), checkAccess(R, { role: \"admin\" }, \"DELETE\", \"/api/admin/users/3\")]",
+            "mongDoi": [
+              200,
+              401,
+              200,
+              403,
+              200
+            ]
+          },
+          {
+            "moTa": "No matching rule: denied|||Không có luật khớp: từ chối",
+            "goi": "[checkAccess([{ method: \"GET\", path: \"/a\", roles: \"public\" }], { role: \"admin\" }, \"GET\", \"/b\"), checkAccess([{ method: \"GET\", path: \"/a\", roles: \"public\" }], null, \"POST\", \"/a\")]",
+            "mongDoi": [
+              403,
+              403
+            ]
+          },
+          {
+            "moTa": "First rule wins; prefix is exact; query ignored|||Luật đầu thắng; tiền tố chính xác; bỏ query",
+            "chuanBi": "const R = [{ method: \"GET\", path: \"/api/admin/health\", roles: \"public\" }, { method: \"*\", path: \"/api/admin/*\", roles: [\"admin\"] }];",
+            "goi": "[checkAccess(R, null, \"GET\", \"/api/admin/health?full=1\"), checkAccess(R, null, \"GET\", \"/api/admin\"), checkAccess(R, { role: \"admin\" }, \"GET\", \"/api/administrator\")]",
+            "mongDoi": [
+              200,
+              401,
+              403
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không khớp luật ⇒ 200 (mặc định cho phép)."
+        },
+        {
+          "loi": "Trả 401 cho người đã đăng nhập nhưng sai vai trò."
+        },
+        {
+          "loi": "\"/api/admin/*\" khớp nhầm \"/api/administrator\"."
+        }
+      ]
+    },
+    {
+      "title": "Giới hạn đăng nhập sai",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "rate limiting",
+        "cửa sổ thời gian",
+        "Retry-After"
+      ],
+      "prerequisites": [
+        "closure",
+        "Map",
+        "filter"
+      ],
+      "tags": [
+        "javascript",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>createLimiter(max, windowMs)</code> trả object có hai hàm. <code>fail(key, now)</code> ghi một lần sai cho <code>key</code> (vd email) tại thời điểm <code>now</code> (ms). <code>check(key, now)</code> trả <code>{ allowed: true }</code> nếu trong <code>windowMs</code> ms gần nhất (lần sai có <code>now - t &lt; windowMs</code>) có ÍT HƠN <code>max</code> lần sai; ngược lại <code>{ allowed: false, retryAfter }</code> với <code>retryAfter</code> là số GIÂY (làm tròn lên) tới khi lần sai cũ nhất trong cửa sổ hết hạn. Mỗi key độc lập.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cửa sổ trượt theo thời gian.</li>\n  <li>retryAfter làm tròn lên (Math.ceil).</li>\n  <li>Key độc lập, limiter độc lập.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "max: number; windowMs: number.",
+      "outputSpec": "{ fail(key, now), check(key, now) }.",
+      "constraints": "Không dùng Date.now() — dùng tham số now.",
+      "examplesJson": [
+        {
+          "input": "5 lần fail(\"an\", 0..4000) rồi check(\"an\", 5000) với max 5, window 15 phút",
+          "output": "{ allowed: false, retryAfter: 895 }",
+          "explanation": "Lần sai đầu (t=0) hết hạn ở 900 000 ms."
+        }
+      ],
+      "hintsJson": [
+        "const log = new Map(); // key → mảng thời điểm",
+        "const recent = (log.get(key) ?? []).filter((t) => now - t < windowMs);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — giới hạn đăng nhập sai\nfunction createLimiter(max, windowMs) {\n  let count = 0;\n  return {\n    fail(key, now) { count++; },\n    check(key, now) { return { allowed: count < max }; },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — đếm lần sai trong cửa sổ trượt; quá giới hạn thì báo còn chờ bao lâu\nfunction createLimiter(max, windowMs) {\n  const log = new Map();                                     // key → thời điểm các lần sai\n  const recent = (key, now) => (log.get(key) ?? []).filter((t) => now - t < windowMs);\n  return {\n    fail(key, now) {\n      log.set(key, [...recent(key, now), now]);              // dọn lần cũ khi ghi lần mới\n    },\n    check(key, now) {\n      const r = recent(key, now);\n      if (r.length < max) return { allowed: true };\n      const oldest = Math.min(...r);\n      return { allowed: false, retryAfter: Math.ceil((oldest + windowMs - now) / 1000) };\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Không giới hạn thì một script thử hàng nghìn mật khẩu mỗi phút. Giới hạn theo email chặn dò một tài khoản; hệ thống thật giới hạn thêm theo IP để chặn dò nhiều tài khoản. <code>retryAfter</code> đi vào header <code>Retry-After</code> của response 429 (Bài 6.3).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Một bộ đếm chung cho mọi key.</li>\n  <li>Không bao giờ xoá lần sai cũ — người dùng bị khoá vĩnh viễn.</li>\n  <li>Trả mili giây cho Retry-After.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#login-throttling",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Five failures lock, with seconds to wait|||Năm lần sai thì khoá, kèm số giây chờ",
+            "chuanBi": "const L = createLimiter(5, 15 * 60 * 1000); for (let i = 0; i < 4; i++) L.fail(\"an\", i * 1000);",
+            "goi": "[L.check(\"an\", 4500), (L.fail(\"an\", 4000), L.check(\"an\", 5000))]",
+            "mongDoi": [
+              {
+                "allowed": true
+              },
+              {
+                "allowed": false,
+                "retryAfter": 895
+              }
+            ]
+          },
+          {
+            "moTa": "The window slides|||Cửa sổ trượt",
+            "chuanBi": "const L = createLimiter(2, 10000); L.fail(\"x\", 0); L.fail(\"x\", 6000);",
+            "goi": "[L.check(\"x\", 9999).allowed, L.check(\"x\", 10000).allowed, L.check(\"x\", 9000).retryAfter]",
+            "mongDoi": [
+              false,
+              true,
+              1
+            ]
+          },
+          {
+            "moTa": "Keys and limiters are independent|||Key và limiter độc lập",
+            "chuanBi": "const A = createLimiter(1, 1000); const B = createLimiter(1, 1000); A.fail(\"an\", 0);",
+            "goi": "[A.check(\"an\", 10).allowed, A.check(\"binh\", 10).allowed, B.check(\"an\", 10).allowed]",
+            "mongDoi": [
+              false,
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Một bộ đếm chung cho mọi key."
+        },
+        {
+          "loi": "Không bao giờ xoá lần sai cũ — người dùng bị khoá vĩnh viễn."
+        },
+        {
+          "loi": "Trả mili giây cho Retry-After."
+        }
+      ]
+    },
+    {
+      "title": "Luồng đăng nhập hoàn chỉnh",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "dò tài khoản",
+        "khoá tạm",
+        "một câu báo lỗi"
+      ],
+      "prerequisites": [
+        "closure",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "auth",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.1 — Xác thực và phân quyền.</em> Mỗi bài là một quyết định mà máy chủ đưa ra ở MỌI request: bạn là ai, và bạn có được làm việc này không.</p><p>Viết <code>createLogin(users, verify, newSessionId)</code> trả hàm <code>login(email, password, now)</code> → <code>{ status, body, headers }</code>. <code>verify(user, password)</code> (cho sẵn) trả boolean; <code>newSessionId()</code> (cho sẵn) trả id mới. Luật: email so KHÔNG phân biệt hoa thường và đã trim. Quá 5 lần sai cho một email trong 15 phút (cửa sổ trượt như bài trước, viết lại bên trong) ⇒ 429 <code>{ error: \"Too many attempts\" }</code>, header <code>Retry-After</code> (giây, chuỗi), KỂ CẢ khi mật khẩu lần này đúng. Sai email hoặc sai mật khẩu ⇒ 401 <code>{ error: \"Wrong email or password\" }</code> và ghi một lần sai. Đúng ⇒ 200 <code>{ name }</code>, header <code>Set-Cookie: sid=&lt;id&gt;; HttpOnly; Secure; SameSite=Lax; Path=/</code>, và XOÁ các lần sai của email đó. <code>headers</code> là <code>{}</code> nếu không có gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cùng một câu cho sai email và sai mật khẩu.</li>\n  <li>Đếm cả lần sai với email không tồn tại.</li>\n  <li>Bị khoá thì không gọi verify.</li>\n  <li>Đăng nhập đúng xoá bộ đếm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "users: { email, name }[]; verify: fn; newSessionId: fn.",
+      "outputSpec": "login(email, password, now) → { status, body, headers }.",
+      "constraints": "Không dùng Date.now().\nMột hàm tự đủ.",
+      "examplesJson": [
+        {
+          "input": "5 lần sai rồi đăng nhập đúng trong 15 phút",
+          "output": "{ status: 429, …, headers: { \"Retry-After\": \"…\" } }",
+          "explanation": "Nếu cho qua, kẻ dò chỉ cần thử tiếp tới khi đúng."
+        }
+      ],
+      "hintsJson": [
+        "const key = email.trim().toLowerCase();",
+        "Kiểm giới hạn TRƯỚC khi tìm user và gọi verify."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — luồng đăng nhập\nfunction createLogin(users, verify, newSessionId) {\n  return function login(email, password, now) {\n    const user = users.find((u) => u.email === email);\n    if (!user) return { status: 404, body: { error: 'No such user' }, headers: {} };\n    if (!verify(user, password)) return { status: 401, body: { error: 'Wrong password' }, headers: {} };\n    return { status: 200, body: { name: user.name }, headers: {} };\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.1 — kiểm giới hạn → tìm người → kiểm mật khẩu → cấp phiên; một câu cho mọi thất bại\nfunction createLogin(users, verify, newSessionId) {\n  const WINDOW = 15 * 60 * 1000;\n  const MAX = 5;\n  const fails = new Map();                                   // email → thời điểm các lần sai\n  const recent = (key, now) => (fails.get(key) ?? []).filter((t) => now - t < WINDOW);\n  const wrong = { status: 401, body: { error: 'Wrong email or password' }, headers: {} };\n\n  return function login(email, password, now) {\n    const key = String(email ?? '').trim().toLowerCase();\n    const r = recent(key, now);\n    if (r.length >= MAX) {\n      const wait = Math.ceil((Math.min(...r) + WINDOW - now) / 1000);\n      return { status: 429, body: { error: 'Too many attempts' }, headers: { 'Retry-After': String(wait) } };\n    }\n    const user = users.find((u) => u.email.trim().toLowerCase() === key);\n    if (!user || !verify(user, password)) {\n      fails.set(key, [...r, now]);                           // đếm cả email không tồn tại\n      return wrong;\n    }\n    fails.delete(key);\n    return {\n      status: 200,\n      body: { name: user.name },\n      headers: { 'Set-Cookie': `sid=${newSessionId()}; HttpOnly; Secure; SameSite=Lax; Path=/` },\n    };\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ba lỗi của code khởi đầu đều có thật ngoài đời: 404 \"No such user\" cho phép dò email nào đã đăng ký; không giới hạn cho phép đoán mật khẩu vô tận; không có cookie thì đăng nhập vô nghĩa. Thứ tự kiểm quan trọng: kiểm khoá trước để kẻ dò không biết mật khẩu nào đúng ngay cả khi đoán trúng lúc đang bị khoá.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thông báo khác nhau cho sai email / sai mật khẩu.</li>\n  <li>Chỉ đếm lần sai khi email tồn tại — lộ email qua hành vi khoá.</li>\n  <li>Cho qua mật khẩu đúng khi đang bị khoá.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.1 Authentication vs authorization.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#authentication-and-error-messages",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Same 401 for unknown email and wrong password|||Cùng 401 cho email lạ và sai mật khẩu",
+            "chuanBi": "const login = createLogin([{ email: \"an@example.com\", name: \"An\" }], (u, p) => p === \"right\", () => \"S1\");",
+            "goi": "[login(\"nobody@example.com\", \"x\", 0), login(\"an@example.com\", \"wrong\", 1)]",
+            "mongDoi": [
+              {
+                "status": 401,
+                "body": {
+                  "error": "Wrong email or password"
+                },
+                "headers": {}
+              },
+              {
+                "status": 401,
+                "body": {
+                  "error": "Wrong email or password"
+                },
+                "headers": {}
+              }
+            ]
+          },
+          {
+            "moTa": "Success sets a safe cookie; email case-insensitive|||Thành công đặt cookie an toàn; email không phân biệt hoa thường",
+            "chuanBi": "const login = createLogin([{ email: \"an@example.com\", name: \"An\" }], (u, p) => p === \"right\", () => \"S1\");",
+            "goi": "login(\"  An@Example.com \", \"right\", 0)",
+            "mongDoi": {
+              "status": 200,
+              "body": {
+                "name": "An"
+              },
+              "headers": {
+                "Set-Cookie": "sid=S1; HttpOnly; Secure; SameSite=Lax; Path=/"
+              }
+            }
+          },
+          {
+            "moTa": "Locked after 5 failures, even with the right password|||Khoá sau 5 lần sai, kể cả mật khẩu đúng",
+            "chuanBi": "let calls = 0; const login = createLogin([{ email: \"an@example.com\", name: \"An\" }], (u, p) => { calls++; return p === \"right\"; }, () => \"S1\"); for (let i = 0; i < 5; i++) login(\"an@example.com\", \"bad\", i * 1000); const before = calls; const r = login(\"an@example.com\", \"right\", 10000);",
+            "goi": "[r, calls - before]",
+            "mongDoi": [
+              {
+                "status": 429,
+                "body": {
+                  "error": "Too many attempts"
+                },
+                "headers": {
+                  "Retry-After": "890"
+                }
+              },
+              0
+            ]
+          },
+          {
+            "moTa": "Unknown emails are counted too; success resets|||Email lạ cũng bị đếm; thành công thì đặt lại",
+            "chuanBi": "const login = createLogin([{ email: \"an@example.com\", name: \"An\" }], (u, p) => p === \"right\", () => \"S1\"); for (let i = 0; i < 5; i++) login(\"ghost@example.com\", \"x\", i); for (let i = 0; i < 4; i++) login(\"an@example.com\", \"bad\", i); login(\"an@example.com\", \"right\", 10); for (let i = 0; i < 4; i++) login(\"an@example.com\", \"bad\", 20 + i);",
+            "goi": "[login(\"ghost@example.com\", \"x\", 100).status, login(\"an@example.com\", \"right\", 100).status]",
+            "mongDoi": [
+              429,
+              200
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thông báo khác nhau cho sai email / sai mật khẩu."
+        },
+        {
+          "loi": "Chỉ đếm lần sai khi email tồn tại — lộ email qua hành vi khoá."
+        },
+        {
+          "loi": "Cho qua mật khẩu đúng khi đang bị khoá."
+        }
+      ]
+    }
+  ]
+}

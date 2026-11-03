@@ -1,0 +1,23 @@
+$ pwd
+/Users/lan
+$ ls
+projects
+$ ls projects
+blog
+notes.txt
+shop
+$ cd projects/shop
+$ pwd
+/Users/lan/projects/shop
+$ ls -F
+index.html
+src/
+$ cd src
+$ pwd
+/Users/lan/projects/shop/src
+$ cd ..
+$ pwd
+/Users/lan/projects/shop
+$ cd ../..
+$ pwd
+/Users/lan

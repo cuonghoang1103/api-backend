@@ -1,0 +1,50 @@
+$ grep -A 4 '"scripts"' package.json
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node --test"
+  },
+$ npm run
+Lifecycle scripts included in shop@1.0.0:
+  start
+    node index.js
+  test
+    node --test
+available via `npm run-script`:
+  dev
+    nodemon index.js
+$ npm start -- Minh
+
+> shop@1.0.0 start
+> node index.js Minh
+
+Hello, Minh!
+Launch day: Tuesday 1 December 2026
+Days from 2026-11-02: 29
+$ npm test
+
+> shop@1.0.0 test
+> node --test
+
+TAP version 13
+# Subtest: dayjs counts days between two dates
+ok 1 - dayjs counts days between two dates
+  ---
+  duration_ms …
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms …
+$ npm run strat
+npm error Missing script: "strat"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: ~/.npm/_logs/<time>-debug-0.log

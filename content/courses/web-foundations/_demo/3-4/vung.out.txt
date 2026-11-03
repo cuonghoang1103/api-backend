@@ -1,0 +1,4 @@
+header  x 0 y 0 640×60
+aside   x 0 y 60 180×200
+main    x 180 y 60 460×200
+footer  x 0 y 260 640×40

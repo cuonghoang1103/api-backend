@@ -1,0 +1,18 @@
+$ mkdir my project
+$ ls
+my
+project
+projects
+$ mkdir "my project"
+$ ls
+my
+my project
+project
+projects
+$ cd my project
+$ pwd
+/Users/lan/my
+$ cd ..
+$ cd "my project"
+$ pwd
+/Users/lan/my project

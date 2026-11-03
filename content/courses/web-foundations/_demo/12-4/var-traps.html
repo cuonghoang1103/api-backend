@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Custom property traps</title>
+<style>
+  :root { --size: 20; --gap: 16px; --brand: #2563eb; }
+  .a { width: var(--size); }                  /* "20" has no unit ⇒ invalid at computed-value time */
+  .b { width: calc(var(--size) * 1px); }       /* the fix: multiply by a unit */
+  .c { color: var(--brnad, rgb(220, 38, 38)); } /* typo ⇒ the fallback is used, silently */
+  .d { margin-top: var(--gap); }
+  .scope { --gap: 40px; }                      /* tokens are inherited and can be overridden locally */
+</style>
+</head>
+<body>
+  <div class="a">a</div><div class="b">b</div><div class="c">c</div>
+  <div class="d" id="d1">d outside</div>
+  <div class="scope"><div class="d" id="d2">d inside .scope</div></div>
+  <script>
+    const cs = (sel) => getComputedStyle(document.querySelector(sel));
+    console.log('.a width: var(--size)              →', cs('.a').width, '(the whole declaration was dropped)');
+    console.log('.b width: calc(var(--size) * 1px)  →', cs('.b').width);
+    console.log('.c color: var(--brnad, red)        →', cs('.c').color, '(typo: fallback used, no error anywhere)');
+    console.log('#d1 margin-top                     →', cs('#d1').marginTop);
+    console.log('#d2 margin-top (inside .scope)     →', cs('#d2').marginTop);
+  </script>
+</body>
+</html>

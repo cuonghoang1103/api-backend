@@ -1,0 +1,4 @@
+Tab 1: a "Home"
+Tab 2: a "About"
+Tab 3: button "Like"
+Enter on the Like control: alert "liked"

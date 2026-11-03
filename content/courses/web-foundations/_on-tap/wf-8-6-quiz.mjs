@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`8.1 Databases`, `8.1 Cơ sở dữ liệu`,
+      [`Safe concurrent writes, indexes, constraints and transactions — what a file cannot give you.`, `Primary key: unique per row. Foreign key: points to another table's row and is enforced.`],
+      [`Ghi đồng thời an toàn, chỉ mục, ràng buộc và giao dịch — thứ file không cho được.`, `Khoá chính: duy nhất mỗi hàng. Khoá ngoại: trỏ tới hàng của bảng khác và được kiểm.`]],
+    [`8.2 SELECT`, `8.2 SELECT`,
+      [`<code>SELECT cols FROM t WHERE … ORDER BY … LIMIT …</code>.`, `Aggregates with <code>GROUP BY</code>; <code>WHERE</code> filters rows before grouping, <code>HAVING</code> after.`],
+      [`<code>SELECT cột FROM bảng WHERE … ORDER BY … LIMIT …</code>.`, `Hàm gộp với <code>GROUP BY</code>; <code>WHERE</code> lọc hàng trước khi gộp, <code>HAVING</code> sau khi gộp.`]],
+    [`8.3 INSERT, UPDATE, DELETE`, `8.3 INSERT, UPDATE, DELETE`,
+      [`UPDATE and DELETE without <code>WHERE</code> affect every row.`, `Write the SELECT with the same WHERE first, then convert it.`],
+      [`UPDATE và DELETE thiếu <code>WHERE</code> là đụng mọi hàng.`, `Viết SELECT với cùng WHERE trước, rồi mới đổi thành câu sửa/xoá.`]],
+    [`8.4 Relationships and JOIN`, `8.4 Quan hệ và JOIN`,
+      [`1–1, 1–n (most common), n–n (needs a junction table with two foreign keys).`, `INNER JOIN keeps matches only; LEFT JOIN keeps every left row, NULL where nothing matches.`],
+      [`1–1, 1–n (hay gặp nhất), n–n (cần bảng trung gian có hai khoá ngoại).`, `INNER JOIN chỉ giữ hàng khớp; LEFT JOIN giữ mọi hàng bên trái, NULL khi không khớp.`]],
+    [`8.5 ORMs and Prisma`, `8.5 ORM và Prisma`,
+      [`<code>findMany</code> with <code>where</code>, <code>orderBy</code>, <code>take</code>, <code>include</code> (JOIN); <code>create</code>, <code>update</code>, <code>delete</code>.`, `Parameterised queries (and ORMs) stop SQL injection; string concatenation does not.`],
+      [`<code>findMany</code> với <code>where</code>, <code>orderBy</code>, <code>take</code>, <code>include</code> (JOIN); <code>create</code>, <code>update</code>, <code>delete</code>.`, `Truy vấn tham số hoá (và ORM) chặn SQL injection; ghép chuỗi thì không.`]],
+  ],
+  bay: [
+    [`<code>UPDATE pizzas SET gia = 0;</code> — no WHERE, every price is now zero.`, `<code>UPDATE pizzas SET gia = 0;</code> — thiếu WHERE, giá mọi món thành 0.`],
+    [`Filtering an aggregate with WHERE instead of HAVING.`, `Lọc kết quả gộp bằng WHERE thay vì HAVING.`],
+    [`Building SQL by joining user input into a string.`, `Dựng câu SQL bằng cách ghép đầu vào của người dùng vào chuỗi.`],
+    [`Using INNER JOIN when rows without a match must still appear.`, `Dùng INNER JOIN khi các hàng không có hàng khớp vẫn phải hiện ra.`],
+  ],
+  hoi: [
+    [`How do you count pizzas per category and keep only categories with more than two?`, `<code>SELECT loai, COUNT(*) FROM pizzas GROUP BY loai HAVING COUNT(*) &gt; 2;</code>`, `Đếm pizza theo từng loại và chỉ giữ loại có hơn hai món thế nào?`, `<code>SELECT loai, COUNT(*) FROM pizzas GROUP BY loai HAVING COUNT(*) &gt; 2;</code>`],
+    [`Orders and dishes: one order has many dishes and one dish appears in many orders. How many tables?`, `Three: orders, dishes, and a junction table (order_id, dish_id) with two foreign keys.`, `Đơn hàng và món: một đơn có nhiều món và một món nằm trong nhiều đơn. Cần mấy bảng?`, `Ba: đơn hàng, món, và một bảng trung gian (don_id, mon_id) chứa hai khoá ngoại.`],
+    [`What does the input <code>' OR '1'='1</code> do to a concatenated login query?`, `It makes the condition always true and can return every user; parameterised queries treat it as plain data.`, `Đầu vào <code>' OR '1'='1</code> làm gì với một câu truy vấn đăng nhập ghép chuỗi?`, `Nó làm điều kiện luôn đúng và có thể trả về mọi người dùng; truy vấn tham số hoá coi nó chỉ là dữ liệu.`],
+    [`Which query shows every pizza, including those without a category?`, `A LEFT JOIN from pizzas to categories — missing categories come back as NULL.`, `Truy vấn nào hiện mọi pizza, kể cả món chưa có loại?`, `LEFT JOIN từ pizzas sang bảng loại — loại bị thiếu trả về NULL.`],
+    [`Finding a user by email is slow on a big table. What do you add?`, `An index on the email column (<code>CREATE INDEX … ON users(email)</code>); check with EXPLAIN.`, `Tìm người dùng theo email chậm trên bảng lớn. Thêm gì?`, `Một chỉ mục trên cột email (<code>CREATE INDEX … ON users(email)</code>); kiểm bằng EXPLAIN.`],
+  ],
+};

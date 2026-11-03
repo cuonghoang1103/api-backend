@@ -286,6 +286,21 @@ immediate timeout</div>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-1-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 5.1 — the event loop in the browser</span><span class="lc-sub">Predicting sync, microtask and timer order, and a frozen page measured in frames</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-5-1-event-loop" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 5.1 — event loop trong trình duyệt</span><span class="lc-sub">Đoán thứ tự đồng bộ, microtask, hẹn giờ, và trang đơ đo bằng khung hình</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

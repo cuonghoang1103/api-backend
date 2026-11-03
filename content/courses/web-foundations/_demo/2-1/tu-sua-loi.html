@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Broken on purpose</title></head>
+<body>
+<section id="a"><p>Unclosed paragraph<p>Second paragraph</section>
+<section id="b"><p>A paragraph with <div>a div inside</div> it</p></section>
+<section id="c"><b>bold <i>both</b> italic</i></section>
+<script>
+  // We wrote three mistakes. No error appears. What did the browser actually build?
+  for (const id of ['a', 'b', 'c']) console.log(id + ': ' + document.getElementById(id).innerHTML);
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+$ echo "<h1>Shop</h1>" > projects/shop/index.html
+$ echo "console.log('shop ready');" > projects/shop/src/app.js
+$ echo "TODO: write the about page" > projects/notes.txt
+$ find projects -name "*.js"
+projects/shop/src/app.js
+$ find projects -type f
+projects/notes.txt
+projects/shop/index.html
+projects/shop/src/app.js
+$ grep -rn "shop" projects
+projects/shop/src/app.js:1:console.log('shop ready');
+$ grep -rl TODO .
+./projects/notes.txt

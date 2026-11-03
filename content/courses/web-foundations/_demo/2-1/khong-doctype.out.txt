@@ -1,0 +1,1 @@
+compatMode without doctype: BackCompat

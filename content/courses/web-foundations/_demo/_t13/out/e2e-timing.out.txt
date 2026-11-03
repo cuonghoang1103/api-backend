@@ -1,0 +1,3 @@
+end-to-end sign-up check in a real browser: 438 ms (including browser start)
+end-to-end sign-up check in a real browser: 254 ms (including browser start)
+end-to-end sign-up check in a real browser: 252 ms (including browser start)

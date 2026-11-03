@@ -1,0 +1,3 @@
+b1 display: block         130×50
+i1 display: inline        48×28
+k1 display: inline-block  130×50

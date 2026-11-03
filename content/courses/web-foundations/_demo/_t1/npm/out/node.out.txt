@@ -1,0 +1,6 @@
+$ node -v
+v22.23.3
+$ npm -v
+10.9.9
+$ node -e "console.log(2 + 3, typeof window, typeof process)"
+5 undefined object

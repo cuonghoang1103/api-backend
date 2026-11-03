@@ -1,0 +1,4 @@
+JSON file : 2 × 200 likes → 202 saved (198 likes lost)
+            reads that found a half-written file: 32 — SyntaxError: Unexpected end of JSON input
+database  : 2 × 200 likes → 400 saved
+after reopening the database file: [{"id":1,"likes":400}]

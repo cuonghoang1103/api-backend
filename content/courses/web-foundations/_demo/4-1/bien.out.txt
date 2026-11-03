@@ -1,0 +1,5 @@
+Linh 15
+TypeError: Assignment to constant variable.
+{age: 21}
+I escaped
+undefined

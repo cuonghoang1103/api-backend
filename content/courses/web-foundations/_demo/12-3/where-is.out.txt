@@ -1,0 +1,2 @@
+inside :where(.lib-card) → rgb(37, 99, 235)
+inside :is(.lib-panel)   → rgb(220, 38, 38)

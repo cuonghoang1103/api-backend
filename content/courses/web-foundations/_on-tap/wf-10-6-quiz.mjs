@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`10.1 Thinking like a programmer`, `10.1 Tư duy như lập trình viên`,
+      [`Split a big task into steps that each run on their own.`, `Before coding: input, output (one concrete example), steps in plain words, edge cases.`],
+      [`Chia việc lớn thành các bước mà bước nào cũng tự chạy được.`, `Trước khi viết mã: đầu vào, đầu ra (một ví dụ cụ thể), các bước bằng lời, trường hợp biên.`]],
+    [`10.2 Errors and debugging`, `10.2 Lỗi và gỡ lỗi`,
+      [`Read the error type, the message, and the first stack line in your own code.`, `Loop: reproduce → hypothesis → measure → change one thing.`, `Label your logs; <code>console.table</code> for arrays; explain the problem out loud.`],
+      [`Đọc loại lỗi, nội dung, và dòng stack đầu tiên thuộc mã của bạn.`, `Vòng lặp: tái hiện → giả thuyết → đo → đổi một thứ.`, `Gắn nhãn cho log; <code>console.table</code> cho mảng; giải thích bài toán thành tiếng.`]],
+    [`10.3 Git workflow`, `10.3 Quy trình Git`,
+      [`One branch per task; <code>main</code> always runs; changes reach main through pull requests.`, `Commit messages say what and why; resolve conflicts by editing the marked region, then add and commit.`],
+      [`Mỗi việc một nhánh; <code>main</code> luôn chạy được; thay đổi vào main qua pull request.`, `Lời nhắn commit nói cái gì và vì sao; giải quyết xung đột bằng cách sửa vùng được đánh dấu, rồi add và commit.`]],
+    [`10.4 Keep learning`, `10.4 Tiếp tục học`,
+      [`Official docs (MDN, react.dev) first; build something you actually want to use.`, `A little every day beats long irregular sessions.`],
+      [`Tài liệu chính thức (MDN, react.dev) trước tiên; dựng thứ bạn thật sự muốn dùng.`, `Mỗi ngày một ít hơn những buổi dài thất thường.`]],
+    [`10.5 The full-stack picture`, `10.5 Bức tranh full-stack`,
+      [`React in the browser ↔ HTTP/JSON ↔ Node API ↔ SQL ↔ database.`, `Each layer maps to a chapter: 2–5 interface, 6–7 the wire, 8 data, 9–10 code quality.`],
+      [`React trong trình duyệt ↔ HTTP/JSON ↔ API Node ↔ SQL ↔ cơ sở dữ liệu.`, `Mỗi tầng ứng với một nhóm chương: 2–5 giao diện, 6–7 đường truyền, 8 dữ liệu, 9–10 chất lượng mã.`]],
+  ],
+  bay: [
+    [`Changing three things at once and not knowing which one fixed the bug.`, `Đổi ba thứ một lúc rồi không biết cái nào sửa được lỗi.`],
+    [`Starting from the last stack line (inside a library) instead of the first line in your code.`, `Bắt đầu từ dòng stack cuối (trong thư viện) thay vì dòng đầu tiên thuộc mã của bạn.`],
+    [`Pushing straight to <code>main</code>, or committing with the message "fix".`, `Push thẳng lên <code>main</code>, hay commit với lời nhắn "fix".`],
+    [`Asking for help with "it doesn't work" and no error message.`, `Hỏi giúp đỡ bằng câu "nó không chạy" mà không kèm thông báo lỗi.`],
+  ],
+  hoi: [
+    [`A bug appears only sometimes. What is the first step?`, `Find a way to reproduce it every time; you cannot debug what you cannot trigger.`, `Một lỗi lúc có lúc không. Bước đầu tiên là gì?`, `Tìm cách làm nó xảy ra mỗi lần; không gỡ được thứ mình không kích hoạt được.`],
+    [`"TypeError: Cannot read properties of undefined (reading 'ten')" — what does it literally say?`, `Somewhere you wrote <code>x.ten</code> and <code>x</code> was undefined at that moment.`, `"TypeError: Cannot read properties of undefined (reading 'ten')" — nó nói đúng nghĩa đen là gì?`, `Ở đâu đó bạn viết <code>x.ten</code> và lúc đó <code>x</code> đang là undefined.`],
+    [`What four questions come before writing a function?`, `Input, desired output with an example, intermediate steps, edge cases.`, `Bốn câu hỏi nào cần trả lời trước khi viết một hàm?`, `Đầu vào, đầu ra mong muốn kèm ví dụ, các bước ở giữa, trường hợp biên.`],
+    [`Why one branch per task?`, `Each pull request stays small and reviewable, and a wrong direction can be dropped without touching other work.`, `Vì sao mỗi việc một nhánh?`, `Mỗi pull request nhỏ và review được, và một hướng đi sai có thể bỏ đi mà không đụng việc khác.`],
+    [`Which layer does a CORS error belong to?`, `The wire between browser and API (chapters 6–7); it is fixed on the server.`, `Lỗi CORS thuộc tầng nào?`, `Đường truyền giữa trình duyệt và API (chương 6–7); sửa ở máy chủ.`],
+  ],
+};

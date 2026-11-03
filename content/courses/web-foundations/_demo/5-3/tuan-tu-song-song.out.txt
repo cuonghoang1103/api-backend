@@ -1,0 +1,2 @@
+sequential: ['user', 'posts', 'likes'] about 600 ms
+parallel  : ['user', 'posts', 'likes'] about 200 ms

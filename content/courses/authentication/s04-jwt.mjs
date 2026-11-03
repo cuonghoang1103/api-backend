@@ -179,6 +179,21 @@ JWT that, co role va permission                ~ 600–900 ky tu</code></pre>
 <a class="link-card" href="https://datatracker.ietf.org/doc/html/rfc8725" target="_blank" rel="noopener"><span class="lc-ico">⚠️</span><span class="lc-body"><span class="lc-title">RFC 8725 — Thực hành tốt nhất hiện hành cho JWT</span><span class="lc-sub">datatracker.ietf.org · Tài liệu mà hai bài kế tiếp dựng lên trên</span></span></a>
 <a class="link-card codelab" href="/code-lab/tracks/authentication${REF}"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Code Lab — track "Authentication"</span><span class="lc-sub">Giải mã, sửa và ký lại một token bằng tay — không thư viện, ba câu lệnh</span></span></a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-3-jwt" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 7.3 — a JWT built by hand</span><span class="lc-sub">HS256 with node:crypto, forged role and alg none rejected, the logout problem</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-3-jwt" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 7.3 — tự dựng một JWT</span><span class="lc-sub">HS256 bằng node:crypto, sửa role và alg none bị từ chối, vấn đề đăng xuất</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 4.2 ─────────────────────────── */

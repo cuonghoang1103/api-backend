@@ -1,0 +1,26 @@
+$ npx tsc --noEmit --strict api-types.ts
+(exit code 0)
+
+$ npx tsc --declaration --emitDeclarationOnly api-types.ts   (the types TypeScript inferred)
+export interface Product {
+    id: number;
+    name: string;
+    price: number;
+    category: string;
+}
+export interface ProductList {
+    items: Product[];
+    page: number;
+    limit: number;
+    total: number;
+}
+export interface ApiError {
+    error: string;
+}
+export interface ValidationError {
+    errors: string[];
+}
+export type CreateProductInput = Omit<Product, 'id'>;
+export type UpdateProductInput = Partial<CreateProductInput>;
+export type ViewsByCategory = Record<string, number>;
+export declare function getProducts(page?: number): Promise<ProductList>;

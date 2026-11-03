@@ -1,0 +1,34 @@
+$ git log --oneline
+39b186f add isFree
+fcde41d note currency setting
+7b2e2d1 add free shipping threshold
+ff92967 use VAT constant
+439929c export VAT constant
+5c1b9b7 comment rounding
+4104f52 add price helpers
+
+$ node test.js
+FAIL 25.000 ₫
+(exit code 1)
+
+$ git bisect start HEAD <first commit>    # bad = now, good = the first commit
+  Bisecting: 2 revisions left to test after this (roughly 2 steps)
+  [ff9296741cf41809106f3e7d49e8947182ae698c] use VAT constant
+$ git bisect run node test.js
+FAIL 25.000 ₫
+Bisecting: 0 revisions left to test after this (roughly 1 step)
+[439929c9448f4ec384f896cfd80249b1b5eab7fc] export VAT constant
+ok 27.500 ₫
+ff9296741cf41809106f3e7d49e8947182ae698c is the first bad commit
+commit ff9296741cf41809106f3e7d49e8947182ae698c
+Author: Lan <lan@example.com>
+Date:   Wed Nov 4 09:00:00 2026 +0700
+    use VAT constant
+ price.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+bisect found first bad commit
+
+$ git show refs/bisect/bad -- price.js     (only the changed lines)
+ff92967 use VAT constant
+-export function withTax(price) { return Math.round(price * 1.1); }
++export function withTax(price) { return Math.round(price * 1 + 0.1); }

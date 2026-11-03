@@ -6,7 +6,7 @@
 import { Prisma } from '@prisma/client';
 
 import { prisma } from '../../../config/database.js';
-import { chuKyKe, dauChuKy, napTuMoiTruong } from './khoKey.js';
+import { chuKyKe, dauChuKy, napTuMoiTruong, ngayLamMoiHieuLuc } from './khoKey.js';
 import { dauThangVn, dauNgayVn, docTranGoi, goiCuaNguoi, xemHanMucChinhHang } from './hanMuc.js';
 
 /** đọc đệm / (vào không đệm + đọc đệm + ghi đệm). */
@@ -19,7 +19,8 @@ export async function dsKeyAdmin(luc = new Date()) {
   await napTuMoiTruong();
   const rows = await prisma.anthropicKey.findMany({ orderBy: [{ thuTu: 'asc' }, { id: 'asc' }] });
   return Promise.all(rows.map(async (r) => {
-    const dau = dauChuKy(r.ngayLamMoi, luc);
+    const lamMoi = ngayLamMoiHieuLuc(r);
+    const dau = dauChuKy(lamMoi, luc);
     const [tong, loi] = await Promise.all([
       prisma.anthropicUsage.aggregate({
         where: { keyId: r.id, createdAt: { gte: dau } },
@@ -37,12 +38,12 @@ export async function dsKeyAdmin(luc = new Date()) {
       thuTu: r.thuTu,
       trangThai: r.trangThai,
       nganSachThangUsd: r.nganSachThangUsd,
-      ngayLamMoi: r.ngayLamMoi,
+      ngayLamMoi: lamMoi,
       hetHanLuc: r.hetHanLuc?.toISOString() ?? null,
       loiCuoi: r.loiCuoi,
       loiCuoiLuc: r.loiCuoiLuc?.toISOString() ?? null,
       hetCreditLuc: r.hetCreditLuc?.toISOString() ?? null,
-      chuKy: { tu: dau.toISOString(), lamMoiLuc: chuKyKe(r.ngayLamMoi, luc).toISOString() },
+      chuKy: { tu: dau.toISOString(), lamMoiLuc: chuKyKe(lamMoi, luc)?.toISOString() ?? null },
       daDungUsd: Math.round(daDung * 10_000) / 10_000,
       conLaiUocUsd: r.nganSachThangUsd > 0 ? Math.max(0, Math.round((r.nganSachThangUsd - daDung) * 100) / 100) : null,
       soLuot: tong._count,

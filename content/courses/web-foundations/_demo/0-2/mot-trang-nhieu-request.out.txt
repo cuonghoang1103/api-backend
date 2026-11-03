@@ -1,0 +1,6 @@
+1. /0-2/mot-trang-nhieu-request.html  (the HTML document)
+2. /0-2/trang/style.css  (link)
+3. /0-2/trang/logo.svg  (img)
+4. /0-2/trang/photo.svg  (img)
+5. /0-2/trang/app.js  (script)
+requests for this one page: 5

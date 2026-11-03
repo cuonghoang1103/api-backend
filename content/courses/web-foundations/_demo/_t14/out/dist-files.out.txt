@@ -1,0 +1,4 @@
+979 ./assets/index-27wt_Xcd.js
+68 ./assets/index-BKlmIFzn.css
+425 ./index.html
+14 ./robots.txt

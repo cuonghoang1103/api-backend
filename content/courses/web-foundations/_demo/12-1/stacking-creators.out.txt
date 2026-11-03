@@ -1,0 +1,7 @@
+nothing special            → child z-index 999 on top of cover z-index 5? yes
+opacity: 0.99              → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context
+transform: translateX(0)   → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context
+filter: blur(0)            → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context
+z-index: 1 (positioned)    → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context
+isolation: isolate         → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context
+will-change: transform     → child z-index 999 on top of cover z-index 5? NO — trapped in a stacking context

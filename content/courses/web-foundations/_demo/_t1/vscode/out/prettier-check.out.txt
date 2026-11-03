@@ -1,0 +1,5 @@
+$ npx prettier --check src/messy.js
+Checking formatting...
+[warn] src/messy.js
+[warn] Code style issues found in the above file. Run Prettier with --write to fix.
+exit code: 1

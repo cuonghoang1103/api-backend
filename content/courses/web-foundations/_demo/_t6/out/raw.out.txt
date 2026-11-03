@@ -1,0 +1,21 @@
+--- what we sent, character for character ---
+GET /api/products/3 HTTP/1.1
+Host: localhost:3456
+Accept: application/json
+Connection: close
+
+
+--- what came back ---
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+ETag: "f9dd31ae907b"
+Cache-Control: no-cache
+Date: (removed)
+Connection: close
+Transfer-Encoding: chunked
+
+36
+{"id":3,"name":"Pen","price":5000,"category":"office"}
+0
+
+

@@ -1,0 +1,8 @@
+Hello friend!
+Hello Linh!
+Hello Linh?
+Hello friend?
+Hello null!
+6 0
+Book: 0
+110.00000000000001

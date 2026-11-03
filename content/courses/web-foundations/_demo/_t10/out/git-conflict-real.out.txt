@@ -1,0 +1,32 @@
+$ git switch -c fix/notes-format
+Switched to a new branch 'fix/notes-format'
+$ git commit -m "Number the notes"
+[fix/notes-format ca025c2] Number the notes
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+# meanwhile main changed the same line Binh changed
+$ git fetch origin
+From origin
+   057bbcf..8fd81e6  main       -> origin/main
+$ git merge origin/main
+Auto-merging notes.js
+CONFLICT (content): Merge conflict in notes.js
+Automatic merge failed; fix conflicts and then commit the result.
+$ git status --short
+UU notes.js
+$ cat notes.js
+const notes = ['Buy milk', 'Learn Git', 'Call Lan'];
+
+function list() {
+<<<<<<< HEAD
+  return [...notes].sort().join('\n');
+=======
+  return notes.map((n, i) => (i + 1) + '. ' + n).join('\n');
+>>>>>>> origin/main
+}
+
+console.log(list());
+
+function search(term) {
+  return notes.filter((n) => n.toLowerCase().includes(term.toLowerCase()));
+}
+console.log(search('git'));

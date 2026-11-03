@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>What CSS Modules do: rename classes per file</title>
+<style id="out"></style>
+</head>
+<body>
+  <div id="host"></div>
+  <script>
+    // A tiny imitation of a CSS Modules build step: every class in a file gets a unique suffix.
+    function cssModule(fileName, css) {
+      const map = {};
+      const hash = [...fileName].reduce((h, ch) => (h * 31 + ch.charCodeAt(0)) >>> 0, 7).toString(36).slice(0, 5);
+      const out = css.replace(/\.([a-zA-Z][\w-]*)/g, (_, name) => {
+        map[name] = map[name] || name + '_' + hash;
+        return '.' + map[name];
+      });
+      document.getElementById('out').textContent += out + '\n';
+      return map;                                   // what "import styles from './Card.module.css'" gives you
+    }
+    const card = cssModule('Card.module.css', '.title { color: rgb(37, 99, 235); font-size: 20px; }');
+    const footer = cssModule('Footer.module.css', '.title { color: rgb(156, 163, 175); font-size: 12px; }');
+    console.log('Card styles.title   =', card.title);
+    console.log('Footer styles.title =', footer.title);
+    document.getElementById('host').innerHTML =
+      '<h3 class="' + card.title + '">Card</h3><span class="' + footer.title + '">Footer</span>';
+    const [h, s] = document.querySelectorAll('#host > *');
+    console.log('card title', getComputedStyle(h).fontSize, getComputedStyle(h).color, '| footer title', getComputedStyle(s).fontSize);
+  </script>
+</body>
+</html>

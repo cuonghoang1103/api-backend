@@ -1,0 +1,21 @@
+── browser (DevTools console) ──
+event   submit #login
+fetch   POST /login {"email":"an@example.com","password":"***"}
+reply   200 {"ok":true} (34 ms)
+fetch   GET /api/notes
+reply   200 {"items":[{"id":1,"title":"Learn HTTP"},{"id":2,"title":"Learn SQL"}]} (2 ms)
+dom     2 <li> in #notes
+
+── server (terminal) ──
+[req 1] http   GET / (no cookie)
+[req 1] reply  200 OK
+[req 2] http   GET /app.js (no cookie)
+[req 2] reply  200 OK
+[req 3] http   POST /login (no cookie)
+[req 3] sql    SELECT id, password_hash, salt FROM users WHERE email = ? ["an@example.com"] → 1 rows
+[req 3] auth   password ok → new session for user 1
+[req 3] reply  200 OK
+[req 4] http   GET /api/notes (cookie: sid=…)
+[req 4] auth   session ok → user 1
+[req 4] sql    SELECT id, title FROM notes WHERE user_id = ? ORDER BY id [1] → 2 rows
+[req 4] reply  200 OK

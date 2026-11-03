@@ -1,0 +1,1 @@
+space left/right: 150 150 · top/bottom: 120 120

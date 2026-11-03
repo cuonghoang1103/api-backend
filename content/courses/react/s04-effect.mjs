@@ -1856,6 +1856,21 @@ ${SD.congCuVi}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — useEffectEvent reference</span><span class="lc-sub">react.dev/reference/react/useEffectEvent — API, các luật của nó, và khi nào không dùng.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">React — useCallback</span><span class="lc-sub">react.dev/reference/react/useCallback — khi nào nhớ một hàm có ích, kể cả khi làm dependency của effect.</span></span></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 11.1 — Closure: a function that remembers</span><span class="lc-sub">Closures from zero, run in Chromium: counters, the var-in-a-loop puzzle, private state</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-11-1-closure" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 11.1 — Closure: hàm nhớ được nơi nó sinh ra</span><span class="lc-sub">Closure từ số 0, chạy trong Chromium: bộ đếm, câu đố var trong vòng lặp, state riêng tư</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

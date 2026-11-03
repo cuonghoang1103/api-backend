@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Links</title></head>
+<body>
+  <a href="about.html">relative</a>
+  <a href="./about.html">same folder</a>
+  <a href="../index.html">parent folder</a>
+  <a href="/contact">root-relative</a>
+  <a href="#pricing">same page</a>
+  <a href="https://example.com/docs">absolute</a>
+  <a href="mailto:hello@example.com">email</a>
+  <a href="tel:+84900000000">phone</a>
+<script>
+  // this page lives at /2-2/lien-ket.html — a.href is the URL the browser will really open
+  console.log('page:', location.pathname);
+  for (const a of document.links) {
+    const full = a.href.replace(location.origin, '');
+    console.log(a.getAttribute('href').padEnd(26) + ' → ' + full);
+  }
+</script>
+</body>
+</html>

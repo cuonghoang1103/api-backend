@@ -1107,6 +1107,21 @@ ban git archive: 0</div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Git &amp; GitHub — một commit thật ra chứa cái gì</span><span class="lc-sub">/courses/git/learn${REF} — chính là cái tạo tác ở bước 1, khi tạo tác là một commit.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — tiến trình, tín hiệu và kill thật ra làm gì</span><span class="lc-sub">/courses/linux-bash/learn${REF} — cơ chế nằm dưới bước 3, và vì sao một tiến trình không chết ngay khoảnh khắc bạn bảo nó chết.</span></span></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.3 — Deploying</span><span class="lc-sub">SPA fallback, cache headers and a smoke test, run against a real static server</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.3 — Deploy</span><span class="lc-sub">SPA fallback, header lưu đệm và smoke-test, chạy với một máy chủ tĩnh thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

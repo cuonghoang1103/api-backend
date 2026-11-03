@@ -1,0 +1,17 @@
+$ curl -s -b cookies.txt http://localhost:3457/api/me
+{"id":1,"name":"An","role":"user"}
+
+$ curl -s -b cookies.txt -c cookies.txt -X POST http://localhost:3457/logout -i
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Set-Cookie: sid=; HttpOnly; Path=/; Max-Age=0
+
+{"ok":true}
+
+# the old cookie value, sent again by hand after logout:
+$ curl -s -i http://localhost:3457/api/me -H 'Cookie: sid=(the old value)'
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json; charset=utf-8
+
+{"error":"Log in first"}
+

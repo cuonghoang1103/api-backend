@@ -1,0 +1,6 @@
+$ node reverse.mjs
+"the sky is blue"  → v1 "blue is sky the"  → final "blue is sky the"
+"  the   sky  "    → v1 "  sky   the  "    → final "sky the"
+""                 → v1 ""                 → final ""
+"hello"            → v1 "hello"            → final "hello"
+"one\ttwo"         → v1 "one\ttwo"         → final "two one"

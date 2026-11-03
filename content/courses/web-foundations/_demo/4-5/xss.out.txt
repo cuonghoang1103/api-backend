@@ -1,0 +1,3 @@
+safe paragraph has 0 img elements
+unsafe paragraph has 1 img elements
+injected code ran: true

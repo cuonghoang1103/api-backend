@@ -1,0 +1,636 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-10-3-git-workflow",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-10-3-git-workflow"
+  },
+  "exercises": [
+    {
+      "title": "Soát thông điệp commit",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "thông điệp commit"
+      ],
+      "prerequisites": [
+        "split",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>commitProblems(message)</code> trả mảng vấn đề theo thứ tự: dòng tiêu đề (dòng đầu) rỗng ⇒ <code>[\"empty subject\"]</code> (dừng luôn); dài hơn 72 ký tự ⇒ <code>\"subject longer than 72\"</code>; kết thúc bằng dấu chấm ⇒ <code>\"subject ends with a period\"</code>; chữ đầu là chữ thường ⇒ <code>\"start with a capital letter\"</code>; cả tiêu đề (không phân biệt hoa thường, bỏ dấu câu cuối) là một trong <code>update, fix, wip, changes, stuff, asdf, final</code> ⇒ <code>\"say what changed\"</code>; có thân bài mà dòng thứ hai không trống ⇒ <code>\"blank line after the subject\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự vấn đề.</li>\n  <li>Tiêu đề rỗng dừng sớm.</li>\n  <li>Kiểm dòng trống sau tiêu đề.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "message: string.",
+      "outputSpec": "string[].",
+      "constraints": "Tiêu đề được trim trước khi kiểm.",
+      "examplesJson": [
+        {
+          "input": "commitProblems(\"Add search(term) to notes\")",
+          "output": "[]",
+          "explanation": "Commit của An trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const [first = \"\", second, ...rest] = message.split(\"\\n\"); const subject = first.trim();",
+        "/^[a-z]/.test(subject) — chữ thường ở đầu"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — soát thông điệp commit\nfunction commitProblems(message) {\n  return message ? [] : ['empty subject'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — luật quen thuộc: tiêu đề ngắn, viết hoa, không dấu chấm, nói rõ thay đổi; dòng trống trước thân bài\nconst VAGUE = new Set(['update', 'fix', 'wip', 'changes', 'stuff', 'asdf', 'final']);\n\nfunction commitProblems(message) {\n  const lines = String(message).split('\\n');\n  const subject = lines[0].trim();\n  if (subject === '') return ['empty subject'];\n  const problems = [];\n  if (subject.length > 72) problems.push('subject longer than 72');\n  if (subject.endsWith('.')) problems.push('subject ends with a period');\n  if (/^[a-z]/.test(subject)) problems.push('start with a capital letter');\n  if (VAGUE.has(subject.toLowerCase().replace(/[.!]+$/, ''))) problems.push('say what changed');\n  if (lines.length > 1 && lines[1].trim() !== '') problems.push('blank line after the subject');\n  return problems;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>git log --oneline</code> chỉ hiện tiêu đề — sáu tháng sau đó là thứ duy nhất người khác (và bạn) đọc. Nhiều nhóm gắn đúng những luật này vào hook <code>commit-msg</code> hoặc CI.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không trim tiêu đề.</li>\n  <li>Coi \"Fix.\" khác \"fix\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cbea.ms/git-commit/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Good messages pass|||Thông điệp tốt được nhận",
+            "goi": "[commitProblems(\"Add search(term) to notes\"), commitProblems(\"Fix crash for pick-up orders\\n\\nOrders without an address made shippingLabel throw.\")]",
+            "mongDoi": [
+              [],
+              []
+            ]
+          },
+          {
+            "moTa": "Vague, lowercase, period|||Mơ hồ, chữ thường, dấu chấm",
+            "goi": "[commitProblems(\"update\"), commitProblems(\"Fix.\"), commitProblems(\"added the thing.\")]",
+            "mongDoi": [
+              [
+                "start with a capital letter",
+                "say what changed"
+              ],
+              [
+                "subject ends with a period",
+                "say what changed"
+              ],
+              [
+                "subject ends with a period",
+                "start with a capital letter"
+              ]
+            ]
+          },
+          {
+            "moTa": "Long subject, missing blank line, empty|||Tiêu đề dài, thiếu dòng trống, rỗng",
+            "goi": "[commitProblems(\"A\".repeat(73) + \"\\nbody\"), commitProblems(\"   \\nbody\")]",
+            "mongDoi": [
+              [
+                "subject longer than 72",
+                "blank line after the subject"
+              ],
+              [
+                "empty subject"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không trim tiêu đề."
+        },
+        {
+          "loi": "Coi \"Fix.\" khác \"fix\"."
+        }
+      ]
+    },
+    {
+      "title": "Tên nhánh từ tiêu đề việc",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "quy ước đặt tên nhánh",
+        "slug"
+      ],
+      "prerequisites": [
+        "normalize",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>branchName(type, title)</code>: <code>type</code> phải là <code>feature | fix | docs | chore</code> (khác ⇒ ném <code>RangeError(\"unknown type: &lt;type&gt;\")</code>). Tiêu đề thành slug: bỏ dấu tiếng Việt (<code>normalize(\"NFD\")</code> rồi bỏ dấu kết hợp; <code>đ/Đ</code> → <code>d</code>), chữ thường, mọi chuỗi ký tự không phải a–z/0–9 thành một <code>-</code>, bỏ <code>-</code> hai đầu, cắt tối đa 40 ký tự (không để <code>-</code> ở cuối sau khi cắt). Slug rỗng ⇒ ném <code>RangeError(\"empty title\")</code>. Kết quả <code>\"&lt;type&gt;/&lt;slug&gt;\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Kiểm type.</li>\n  <li>Bỏ dấu tiếng Việt.</li>\n  <li>Tối đa 40 ký tự slug.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "type: string; title: string.",
+      "outputSpec": "string.",
+      "constraints": "Không có dấu cách hay ký tự đặc biệt trong tên nhánh.",
+      "examplesJson": [
+        {
+          "input": "branchName(\"feature\", \"Thêm tìm kiếm ghi chú\")",
+          "output": "\"feature/them-tim-kiem-ghi-chu\"",
+          "explanation": "Tên nhánh gõ được trên mọi terminal."
+        }
+      ],
+      "hintsJson": [
+        "title.normalize(\"NFD\").replace(/[\\u0300-\\u036f]/g, \"\").replace(/[đĐ]/g, \"d\")",
+        ".toLowerCase().replace(/[^a-z0-9]+/g, \"-\").replace(/^-+|-+$/g, \"\")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — tên nhánh\nfunction branchName(type, title) {\n  return type + '/' + title;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — loại/việc-ngắn-gọn: đọc được, gõ được, không dấu cách\nconst TYPES = ['feature', 'fix', 'docs', 'chore'];\n\nfunction branchName(type, title) {\n  if (!TYPES.includes(type)) throw new RangeError('unknown type: ' + type);\n  const slug = String(title)\n    .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')    // bỏ dấu\n    .replace(/[đĐ]/g, 'd')\n    .toLowerCase()\n    .replace(/[^a-z0-9]+/g, '-')\n    .replace(/^-+|-+$/g, '')\n    .slice(0, 40)\n    .replace(/-+$/, '');\n  if (!slug) throw new RangeError('empty title');\n  return type + '/' + slug;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Tên nhánh xuất hiện trong lệnh, URL của pull request và log CI. Dấu cách và dấu tiếng Việt làm lệnh phải đặt trong nháy và dễ gõ sai; tiền tố loại giúp lọc nhánh (<code>git branch --list \"fix/*\"</code>).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên đ.</li>\n  <li>Cắt 40 rồi để lại \"-\" ở cuối.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-check-ref-format",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Vietnamese title|||Tiêu đề tiếng Việt",
+            "goi": "[branchName(\"feature\", \"Thêm tìm kiếm ghi chú\"), branchName(\"fix\", \"Đơn tự lấy không có địa chỉ!\")]",
+            "mongDoi": [
+              "feature/them-tim-kiem-ghi-chu",
+              "fix/don-tu-lay-khong-co-dia-chi"
+            ]
+          },
+          {
+            "moTa": "Length limit and trimming dashes|||Giới hạn độ dài và bỏ gạch thừa",
+            "goi": "[branchName(\"docs\", \"  --Update README: setup & deploy (v2)--  \"), branchName(\"chore\", \"a\".repeat(39) + \" bcd\")]",
+            "mongDoi": [
+              "docs/update-readme-setup-deploy-v2",
+              "chore/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            ]
+          },
+          {
+            "moTa": "Bad type or empty title|||Loại sai hoặc tiêu đề rỗng",
+            "goi": "[(() => { try { branchName(\"hotfix\", \"x\"); } catch (e) { return e.message; } })(), (() => { try { branchName(\"fix\", \"!!!\"); } catch (e) { return e.message; } })()]",
+            "mongDoi": [
+              "unknown type: hotfix",
+              "empty title"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên đ."
+        },
+        {
+          "loi": "Cắt 40 rồi để lại \"-\" ở cuối."
+        }
+      ]
+    },
+    {
+      "title": "Đọc các khối xung đột",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "dấu xung đột",
+        "ours/theirs"
+      ],
+      "prerequisites": [
+        "split",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>findConflicts(text)</code> trả mảng các khối xung đột <code>{ startLine, ours, theirs, theirsName }</code>: <code>startLine</code> là số dòng (từ 1) của dòng <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>; <code>ours</code>/<code>theirs</code> là mảng dòng giữa các dấu; <code>theirsName</code> là chữ sau <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; </code>. Dòng đánh dấu bắt đầu bằng đúng 7 ký tự <code>&lt;</code>/<code>=</code>/<code>&gt;</code>. Khối không đóng (hết tệp mà chưa có <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code>) ⇒ ném <code>SyntaxError(\"unterminated conflict at line N\")</code>. Không có xung đột ⇒ <code>[]</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Nhiều khối.</li>\n  <li>Số dòng chính xác.</li>\n  <li>Khối dở dang ⇒ lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "{ startLine, ours, theirs, theirsName }[].",
+      "constraints": "Một dòng \"=======\" ngoài khối xung đột là văn bản thường.",
+      "examplesJson": [
+        {
+          "input": "findConflicts(notes.js trong bài)",
+          "output": "[{ startLine: 4, ours: [\"  return [...notes].sort().join('\\\\n');\"], theirs: [...], theirsName: \"origin/main\" }]",
+          "explanation": "Đúng xung đột của Bình."
+        }
+      ],
+      "hintsJson": [
+        "Trạng thái: \"out\" | \"ours\" | \"theirs\"; đổi trạng thái ở mỗi dòng dấu.",
+        "line.startsWith('<<<<<<<') / === '=======' / startsWith('>>>>>>>')"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — đọc khối xung đột\nfunction findConflicts(text) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — máy trạng thái ba trạng thái: ngoài khối → phần của ta → phần của họ\nfunction findConflicts(text) {\n  const lines = String(text).split('\\n');\n  const blocks = [];\n  let cur = null;\n  let part = 'out';\n  lines.forEach((line, i) => {\n    if (part === 'out' && line.startsWith('<<<<<<<')) {\n      cur = { startLine: i + 1, ours: [], theirs: [], theirsName: '' };\n      part = 'ours';\n    } else if (part === 'ours' && line === '=======') {\n      part = 'theirs';\n    } else if (part === 'theirs' && line.startsWith('>>>>>>>')) {\n      cur.theirsName = line.slice(7).trim();\n      blocks.push(cur);\n      cur = null;\n      part = 'out';\n    } else if (part !== 'out') {\n      cur[part].push(line);\n    }\n  });\n  if (cur) throw new SyntaxError('unterminated conflict at line ' + cur.startLine);\n  return blocks;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Git chỉ ghi văn bản có quy ước; trình soạn thảo (VS Code: \"Accept Current / Incoming / Both\") đọc đúng các dấu này. Một khối dở dang nghĩa là ai đó đã xoá mất một dấu bằng tay — tệp đó không nên được commit.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Coi \"=======\" ngoài khối là dấu.</li>\n  <li>Đánh số dòng từ 0.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-merge#_how_conflicts_are_presented",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Binh's conflict from the lesson|||Xung đột của Bình trong bài",
+            "goi": "findConflicts([\"const notes = [];\", \"\", \"function list() {\", \"<<<<<<< HEAD\", \"  return [...notes].sort().join('\\\\n');\", \"=======\", \"  return notes.map((n, i) => (i + 1) + '. ' + n).join('\\\\n');\", \">>>>>>> origin/main\", \"}\"].join(\"\\n\"))",
+            "mongDoi": [
+              {
+                "startLine": 4,
+                "ours": [
+                  "  return [...notes].sort().join('\\n');"
+                ],
+                "theirs": [
+                  "  return notes.map((n, i) => (i + 1) + '. ' + n).join('\\n');"
+                ],
+                "theirsName": "origin/main"
+              }
+            ]
+          },
+          {
+            "moTa": "Two blocks, a plain ======= line, no conflicts|||Hai khối, dòng ======= thường, không xung đột",
+            "goi": "[findConflicts(\"=======\\n<<<<<<< HEAD\\na\\n=======\\nb\\nc\\n>>>>>>> feature/x\\nmid\\n<<<<<<< HEAD\\n=======\\nz\\n>>>>>>> main\").map((b) => [b.startLine, b.ours.length, b.theirs.length, b.theirsName]), findConflicts(\"plain\\ntext\")]",
+            "mongDoi": [
+              [
+                [
+                  2,
+                  1,
+                  2,
+                  "feature/x"
+                ],
+                [
+                  9,
+                  0,
+                  1,
+                  "main"
+                ]
+              ],
+              []
+            ]
+          },
+          {
+            "moTa": "An unterminated block throws|||Khối dở dang ném lỗi",
+            "goi": "findConflicts(\"x\\n<<<<<<< HEAD\\na\\n=======\\nb\")",
+            "mongDoi": {
+              "loi": "SyntaxError",
+              "thongDiep": "^unterminated conflict at line 2$"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Coi \"=======\" ngoài khối là dấu."
+        },
+        {
+          "loi": "Đánh số dòng từ 0."
+        }
+      ]
+    },
+    {
+      "title": "Gỡ xung đột theo lựa chọn",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ours/theirs/both",
+        "không để sót dấu"
+      ],
+      "prerequisites": [
+        "vòng lặp",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>resolve(text, choices)</code>: <code>choices</code> là mảng, mỗi phần tử cho một khối xung đột theo thứ tự: <code>\"ours\"</code>, <code>\"theirs\"</code>, <code>\"both\"</code> (ours rồi theirs) hoặc một CHUỖI khác bất kỳ được coi là nội dung viết tay thay cho cả khối (có thể nhiều dòng). Trả văn bản đã gỡ, giữ nguyên các dòng ngoài khối. Số lựa chọn khác số khối ⇒ ném <code>RangeError(\"expected N choices, got M\")</code>. Kết quả còn dòng bắt đầu bằng <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> hoặc <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> ⇒ ném <code>Error(\"conflict markers left\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bốn kiểu lựa chọn.</li>\n  <li>Đếm khớp số khối.</li>\n  <li>Chặn dấu sót.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string; choices: string[].",
+      "outputSpec": "string.",
+      "constraints": "Dùng lại cách đọc khối của bài trước (tự viết lại trong tệp).",
+      "examplesJson": [
+        {
+          "input": "resolve(notes.js xung đột, [\"  return [...notes].sort().map((n, i) => (i + 1) + '. ' + n).join('\\\\n');\"])",
+          "output": "tệp với dòng return mới, không còn dấu",
+          "explanation": "Cách Bình gỡ trong bài: giữ cả hai ý."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt dòng; trong khối thì gom ours/theirs; khi gặp >>>>>>> thì đẩy phần được chọn.",
+        "const pick = { ours: b.ours, theirs: b.theirs, both: [...b.ours, ...b.theirs] }[choice] ?? choice.split(\"\\n\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — gỡ xung đột\nfunction resolve(text, choices) {\n  return text.replace(/^(<<<<<<<|=======|>>>>>>>).*\\n?/gm, '');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — thay mỗi khối bằng phần được chọn; kiểm số lựa chọn và kiểm không còn dấu\nfunction resolve(text, choices) {\n  const out = [];\n  let block = null, part = null, k = 0;\n  const lines = String(text).split('\\n');\n  const total = lines.filter((l) => l.startsWith('<<<<<<<')).length;\n  if (total !== choices.length) throw new RangeError('expected ' + total + ' choices, got ' + choices.length);\n  for (const line of lines) {\n    if (!block && line.startsWith('<<<<<<<')) { block = { ours: [], theirs: [] }; part = 'ours'; continue; }\n    if (block && part === 'ours' && line === '=======') { part = 'theirs'; continue; }\n    if (block && part === 'theirs' && line.startsWith('>>>>>>>')) {\n      const choice = choices[k++];\n      const pick = { ours: block.ours, theirs: block.theirs, both: [...block.ours, ...block.theirs] }[choice] ?? String(choice).split('\\n');\n      out.push(...pick);\n      block = null;\n      continue;\n    }\n    if (block) block[part].push(line); else out.push(line);\n  }\n  const result = out.join('\\n');\n  if (/^(<<<<<<<|>>>>>>>)/m.test(result)) throw new Error('conflict markers left');\n  return result;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Mã khởi đầu chỉ xoá các dòng dấu — giữ LẪN LỘN cả hai phiên bản, thường là mã sai (hai lệnh return). Gỡ xung đột là chọn có chủ đích cho từng khối. Phép kiểm cuối là lưới an toàn mà <code>git add</code> không có.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ xoá dấu, giữ cả hai.</li>\n  <li>Không đếm khối.</li>\n  <li>Viết tay một dòng mà vẫn dính dấu.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging#_basic_merge_conflicts",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "ours, theirs, both|||ours, theirs, both",
+            "goi": "(() => { const t = \"a\\n<<<<<<< HEAD\\nmine\\n=======\\nyours\\n>>>>>>> main\\nz\"; return [resolve(t, [\"ours\"]), resolve(t, [\"theirs\"]), resolve(t, [\"both\"])]; })()",
+            "mongDoi": [
+              "a\nmine\nz",
+              "a\nyours\nz",
+              "a\nmine\nyours\nz"
+            ]
+          },
+          {
+            "moTa": "A hand-written resolution, as Binh did|||Gỡ bằng tay như Bình",
+            "goi": "resolve([\"function list() {\", \"<<<<<<< HEAD\", \"  return [...notes].sort().join('\\\\n');\", \"=======\", \"  return notes.map((n, i) => (i + 1) + '. ' + n).join('\\\\n');\", \">>>>>>> origin/main\", \"}\"].join(\"\\n\"), [\"  return [...notes].sort().map((n, i) => (i + 1) + '. ' + n).join('\\\\n');\"])",
+            "mongDoi": "function list() {\n  return [...notes].sort().map((n, i) => (i + 1) + '. ' + n).join('\\n');\n}"
+          },
+          {
+            "moTa": "Wrong number of choices|||Sai số lựa chọn",
+            "goi": "resolve(\"<<<<<<< HEAD\\na\\n=======\\nb\\n>>>>>>> x\\n<<<<<<< HEAD\\nc\\n=======\\nd\\n>>>>>>> x\", [\"ours\"])",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "^expected 2 choices, got 1$"
+            }
+          },
+          {
+            "moTa": "Markers left in a manual resolution|||Còn dấu trong phần viết tay",
+            "goi": "resolve(\"<<<<<<< HEAD\\na\\n=======\\nb\\n>>>>>>> x\", [\"a\\n>>>>>>> x\"])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "conflict markers left"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ xoá dấu, giữ cả hai."
+        },
+        {
+          "loi": "Không đếm khối."
+        },
+        {
+          "loi": "Viết tay một dòng mà vẫn dính dấu."
+        }
+      ]
+    },
+    {
+      "title": "Push, pull hay merge?",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "ahead/behind",
+        "fast-forward",
+        "push bị từ chối"
+      ],
+      "prerequisites": [
+        "Set",
+        "indexOf"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>syncStatus(local, remote)</code>: hai mảng mã commit của CÙNG một nhánh, từ cũ tới mới (lịch sử tuyến tính). Gọi <code>base</code> là commit chung MỚI NHẤT (phần đầu chung dài nhất). <code>ahead</code> = số commit chỉ có ở local sau base, <code>behind</code> = số commit chỉ có ở remote sau base. Trả <code>{ ahead, behind, action }</code> với <code>action</code>: <code>\"up to date\"</code> (0/0), <code>\"push\"</code> (ahead > 0, behind = 0), <code>\"pull (fast-forward)\"</code> (ahead = 0, behind > 0), <code>\"pull then push (merge)\"</code> (cả hai > 0 — đây là lúc push bị từ chối). Không có commit chung nào ⇒ ném <code>Error(\"unrelated histories\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tìm phần đầu chung.</li>\n  <li>Đếm ahead/behind.</li>\n  <li>Bốn hành động.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "local: string[]; remote: string[].",
+      "outputSpec": "{ ahead, behind, action }.",
+      "constraints": "Lịch sử tuyến tính (không cần xử lý merge commit).",
+      "examplesJson": [
+        {
+          "input": "syncStatus([\"365679b\", \"b1\"], [\"365679b\", \"057bbcf\"])",
+          "output": "{ ahead: 1, behind: 1, action: \"pull then push (merge)\" }",
+          "explanation": "Đúng lúc push của Bình bị từ chối \"fetch first\"."
+        }
+      ],
+      "hintsJson": [
+        "let i = 0; while (i < local.length && i < remote.length && local[i] === remote[i]) i++;",
+        "ahead = local.length - i; behind = remote.length - i;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — push, pull hay merge?\nfunction syncStatus(local, remote) {\n  return { ahead: local.length - remote.length, behind: 0, action: 'push' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — phần đầu chung = lịch sử đã đồng bộ; phần đuôi mỗi bên quyết định việc cần làm\nfunction syncStatus(local, remote) {\n  let i = 0;\n  while (i < local.length && i < remote.length && local[i] === remote[i]) i++;\n  if (i === 0) throw new Error('unrelated histories');\n  const ahead = local.length - i;\n  const behind = remote.length - i;\n  const action = ahead === 0 && behind === 0 ? 'up to date'\n    : behind === 0 ? 'push'\n    : ahead === 0 ? 'pull (fast-forward)'\n    : 'pull then push (merge)';\n  return { ahead, behind, action };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là thứ <code>git status</code> in ra: \"Your branch is ahead of 'origin/main' by 1 commit, and behind by 1\" (diverged). Push chỉ được nhận khi behind = 0; vì vậy push của Bình bị từ chối, và <code>--force</code> là \"giả vờ behind = 0\" bằng cách xoá commit của người khác.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So độ dài thay vì so phần chung.</li>\n  <li>Coi diverged là push được.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://git-scm.com/docs/git-status",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Diverged: the rejected push|||Phân kỳ: lần push bị từ chối",
+            "goi": "syncStatus([\"365679b\", \"b1\"], [\"365679b\", \"057bbcf\"])",
+            "mongDoi": {
+              "ahead": 1,
+              "behind": 1,
+              "action": "pull then push (merge)"
+            }
+          },
+          {
+            "moTa": "Push, fast-forward, up to date|||Push, tiến thẳng, đã đồng bộ",
+            "goi": "[syncStatus([\"a\", \"b\", \"c\"], [\"a\"]).action, syncStatus([\"a\"], [\"a\", \"b\", \"c\"]), syncStatus([\"a\", \"b\"], [\"a\", \"b\"]).action]",
+            "mongDoi": [
+              "push",
+              {
+                "ahead": 0,
+                "behind": 2,
+                "action": "pull (fast-forward)"
+              },
+              "up to date"
+            ]
+          },
+          {
+            "moTa": "Unrelated histories|||Lịch sử không liên quan",
+            "goi": "syncStatus([\"x\"], [\"y\"])",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "unrelated histories"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So độ dài thay vì so phần chung."
+        },
+        {
+          "loi": "Coi diverged là push được."
+        }
+      ]
+    },
+    {
+      "title": "Gộp ba bên theo dòng",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "three-way merge",
+        "base/ours/theirs"
+      ],
+      "prerequisites": [
+        "mảng",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "git"
+      ],
+      "problemHtml": "<p><em>Bài 10.3 — Quy trình Git.</em> Mỗi bài mô phỏng một quyết định trong quy trình làm việc nhóm — thứ Git làm hoặc thứ người review nhìn vào.</p><p>Viết <code>merge3(base, ours, theirs, theirsName = \"theirs\")</code> — ba văn bản có CÙNG số dòng (mô hình đơn giản: chỉ sửa dòng, không thêm/xoá). Với từng dòng: hai bên giống nhau ⇒ lấy dòng đó; chỉ ours đổi so với base ⇒ lấy ours; chỉ theirs đổi ⇒ lấy theirs; cả hai đổi và khác nhau ⇒ xung đột. Các dòng xung đột LIỀN NHAU gộp thành MỘT khối <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; ours</code> … <code>=======</code> … <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; &lt;theirsName&gt;</code>. Trả <code>{ text, conflicts }</code> (conflicts = số khối). Số dòng khác nhau ⇒ ném <code>RangeError(\"line counts differ\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luật theo base.</li>\n  <li>Gộp dòng xung đột liền nhau.</li>\n  <li>Đếm khối.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "base, ours, theirs: string; theirsName?: string.",
+      "outputSpec": "{ text, conflicts }.",
+      "constraints": "Đây là lý do git cần base: không có nó thì không biết bên nào đã đổi.",
+      "examplesJson": [
+        {
+          "input": "merge3(\"a\\nb\\nc\", \"a\\nB\\nc\", \"a\\nb\\nC\")",
+          "output": "{ text: \"a\\nB\\nC\", conflicts: 0 }",
+          "explanation": "Hai bên sửa hai dòng khác nhau — tự gộp như ở Bước 3 của bài."
+        }
+      ],
+      "hintsJson": [
+        "for i: const o = O[i], t = T[i], b = B[i]; if (o === t) take o; else if (o === b) take t; else if (t === b) take o; else conflict",
+        "Giữ một khối đang mở { ours: [], theirs: [] }; đóng nó khi gặp dòng không xung đột hoặc hết tệp."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — gộp ba bên theo dòng\nfunction merge3(base, ours, theirs, theirsName = 'theirs') {\n  return { text: ours, conflicts: 0 };   // \"giữ của mình\" — mất thay đổi của người khác\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 10.3 — base cho biết AI đã đổi dòng nào; chỉ khi CẢ HAI đổi khác nhau mới là xung đột\nfunction merge3(base, ours, theirs, theirsName = 'theirs') {\n  const B = base.split('\\n'), O = ours.split('\\n'), T = theirs.split('\\n');\n  if (B.length !== O.length || B.length !== T.length) throw new RangeError('line counts differ');\n  const out = [];\n  let open = null;\n  let conflicts = 0;\n  const close = () => {\n    if (!open) return;\n    out.push('<<<<<<< ours', ...open.ours, '=======', ...open.theirs, '>>>>>>> ' + theirsName);\n    conflicts++;\n    open = null;\n  };\n  for (let i = 0; i < B.length; i++) {\n    const b = B[i], o = O[i], t = T[i];\n    if (o === t || t === b) { close(); out.push(o); }        // giống nhau, hoặc chỉ ours đổi\n    else if (o === b) { close(); out.push(t); }              // chỉ theirs đổi\n    else {                                                   // cả hai đổi, khác nhau\n      open ??= { ours: [], theirs: [] };\n      open.ours.push(o);\n      open.theirs.push(t);\n    }\n  }\n  close();\n  return { text: out.join('\\n'), conflicts };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>So hai tệp thôi thì không biết dòng khác nhau là do ai sửa. Base (commit chung, Bài 10.3 Bước 3) trả lời câu đó — vì vậy sửa khác dòng thì tự gộp, sửa cùng dòng mới xung đột. Git thật còn xử lý dòng thêm/xoá bằng thuật toán diff, nhưng luật quyết định giống hệt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không dùng base — báo xung đột mọi dòng khác nhau.</li>\n  <li>Mỗi dòng một khối.</li>\n  <li>Quên đóng khối cuối.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 10.3 Git workflow for real work.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Merge_(version_control)#Three-way_merge",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Different lines merge cleanly|||Khác dòng thì tự gộp",
+            "goi": "merge3(\"a\\nb\\nc\", \"a\\nB\\nc\", \"a\\nb\\nC\")",
+            "mongDoi": {
+              "text": "a\nB\nC",
+              "conflicts": 0
+            }
+          },
+          {
+            "moTa": "Same change on both sides is not a conflict|||Cùng một thay đổi ở hai bên không xung đột",
+            "goi": "merge3(\"x\\ny\", \"x\\nY\", \"x\\nY\")",
+            "mongDoi": {
+              "text": "x\nY",
+              "conflicts": 0
+            }
+          },
+          {
+            "moTa": "Adjacent conflicting lines form one block|||Các dòng xung đột liền nhau thành một khối",
+            "goi": "merge3(\"1\\n2\\n3\\n4\", \"1\\ntwo\\nthree\\n4\", \"1\\nhai\\nba\\nfour\", \"origin/main\")",
+            "mongDoi": {
+              "text": "1\n<<<<<<< ours\ntwo\nthree\n=======\nhai\nba\n>>>>>>> origin/main\nfour",
+              "conflicts": 1
+            }
+          },
+          {
+            "moTa": "Two separate blocks; line count check|||Hai khối riêng; kiểm số dòng",
+            "goi": "[merge3(\"a\\nb\\nc\", \"A\\nb\\nC\", \"α\\nb\\nγ\").conflicts, (() => { try { merge3(\"a\", \"a\\nb\", \"a\"); } catch (e) { return e.name; } })()]",
+            "mongDoi": [
+              2,
+              "RangeError"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không dùng base — báo xung đột mọi dòng khác nhau."
+        },
+        {
+          "loi": "Mỗi dòng một khối."
+        },
+        {
+          "loi": "Quên đóng khối cuối."
+        }
+      ]
+    }
+  ]
+}

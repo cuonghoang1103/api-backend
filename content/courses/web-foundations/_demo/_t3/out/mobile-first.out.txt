@@ -1,0 +1,3 @@
+ 390px: 1 column(s) · sidebar none  · (min-width: 640px) false · (min-width: 960px) false
+ 768px: 2 column(s) · sidebar none  · (min-width: 640px) true  · (min-width: 960px) false
+1100px: 3 column(s) · sidebar block · (min-width: 640px) true  · (min-width: 960px) true

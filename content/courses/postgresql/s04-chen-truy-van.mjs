@@ -393,6 +393,21 @@ SELECT title, tag FROM note WHERE tag &lt;&gt; 'sql' ORDER BY id;   <span class=
   <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-2-select" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 8.2 — SELECT from zero</span><span class="lc-sub">WHERE, ORDER BY, the NULL trap, GROUP BY and an index measured on 300 000 rows</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-2-select" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 8.2 — SELECT từ số 0</span><span class="lc-sub">WHERE, ORDER BY, bẫy NULL, GROUP BY và chỉ mục đo trên 300 000 dòng</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -731,6 +746,21 @@ SELECT count(*) AS remaining FROM note;</code></pre>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở DBI202 — bài 6.5: INSERT, UPDATE, DELETE làm cho an toàn</span><span class="lc-sub">Nếu bạn đã học môn DBI202 ở Academy thì phần này không còn lạ. Giống: tai hoạ thiếu mệnh đề WHERE và cách tự bảo vệ. Khác: DBI202 làm trên SQL Server, khoá này làm trên PostgreSQL (SQL Server dùng TOP, PostgreSQL dùng LIMIT). Ở bài này mình học thêm: UPDATE/DELETE ... RETURNING cho thấy ngay dòng nào bị đổi, hình dạng của một lệnh ghi an toàn; bài 4.1 thêm INSERT nhiều dòng, RETURNING và UPSERT. Chưa học DBI202 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI DBI202 →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-3-crud" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 8.3 — writing data safely</span><span class="lc-sub">UPDATE without WHERE, a transfer that creates money, transactions that really roll back, SQL injection</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-8-3-crud" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 8.3 — ghi dữ liệu an toàn</span><span class="lc-sub">UPDATE thiếu WHERE, chuyển tiền tự sinh tiền, giao dịch hoàn tác thật, SQL injection</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

@@ -1,0 +1,26 @@
+$ npm install --save-dev nodemon@3.1.4
+
+added 29 packages, and audited 31 packages in …s
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+$ grep -A 5 '"dependencies"' package.json
+  "dependencies": {
+    "dayjs": "^1.11.13"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+$ ls node_modules | wc -l
+      30
+$ du -sh node_modules
+3.5M	node_modules
+$ npm ls
+shop@1.0.0 /Users/lan/shop
+├── dayjs@1.11.13
+└── nodemon@3.1.4
+

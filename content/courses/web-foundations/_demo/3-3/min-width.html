@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>min-width: 0</title><meta name="chup" content="640x190">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; }
+  .row { display: flex; gap: 8px; width: 420px; border: 2px dashed #1f4e8c; padding: 6px; margin-bottom: 12px; }
+  .side { flex: 0 0 90px; background: #e8eef7; }
+  .main { flex: 1; background: #ffe6cc; }
+  .main pre { margin: 0; overflow: auto; }
+  .fix .main { min-width: 0; }
+</style></head>
+<body>
+  <div class="row bad"><div class="side">side</div><div class="main"><pre>const veryLongLineOfCodeThatDoesNotWrapAtAll = computeSomething(a, b, c, d);</pre></div></div>
+  <div class="row fix"><div class="side">side</div><div class="main"><pre>const veryLongLineOfCodeThatDoesNotWrapAtAll = computeSomething(a, b, c, d);</pre></div></div>
+<script>
+  for (const s of ['.bad', '.fix']) {
+    const r = document.querySelector(s), m = r.querySelector('.main');
+    console.log(s, 'row inner width', r.clientWidth - 12, '· main width', Math.round(m.getBoundingClientRect().width), '· row overflows:', r.scrollWidth > r.clientWidth);
+  }
+</script>
+</body>
+</html>

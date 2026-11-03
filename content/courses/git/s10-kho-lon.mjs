@@ -463,7 +463,7 @@ git ls-files --stage vendor/ui-kit                <span class="tok-comment"># tr
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.11 (tiếng Việt) — Submodule</span><span class="lc-sub">Gồm cả mục "Vấn đề với Submodule", viết rất thẳng thắn.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.11 (tiếng Anh) — Submodule</span><span class="lc-sub">Gồm cả mục "Vấn đề với Submodule", viết rất thẳng thắn.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-subtree" target="_blank" rel="noopener">
   <span class="lc-ico">🌱</span>

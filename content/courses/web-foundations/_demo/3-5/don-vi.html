@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Fluid units</title>
+<style>
+  .t { font-size: clamp(1.25rem, 4vw, 2.5rem); }
+  .w { width: min(90%, 600px); }
+  .h { height: 50vh; }
+</style></head>
+<body>
+<script>
+  const css = `<style>body{margin:0}.t{font-size:clamp(1.25rem,4vw,2.5rem)}.w{width:min(90%,600px)}</style><h1 class="t">Title</h1><div class="w">box</div>`;
+  Promise.all([320, 800, 1400].map((w) => new Promise((done) => {
+    const f = document.createElement('iframe');
+    f.width = w; f.height = 80; f.style.border = 0; f.srcdoc = css;
+    f.onload = () => {
+      const d = f.contentDocument, g = (s, p) => f.contentWindow.getComputedStyle(d.querySelector(s))[p];
+      done(`window ${String(w).padStart(4)}px: clamp(1.25rem, 4vw, 2.5rem) = ${g('.t', 'fontSize')} · min(90%, 600px) = ${g('.w', 'width')}`);
+    };
+    document.body.append(f);
+  }))).then((l) => l.forEach((x) => console.log(x)));
+</script>
+</body>
+</html>

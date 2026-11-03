@@ -86,7 +86,7 @@ From github.com:cuonghoang1103/api-backend
 <p>New commits are downloaded and the remote-tracking branches move. Your local branches, your working directory and your index are <strong>untouched</strong>. Nothing can break, nothing can conflict, and nothing you were doing is interrupted.</p>
 <pre><code class="language-bash"><span class="tok-comment"># The safe review ritual, after fetching:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># what did they add?</span>
-git diff main origin/main --stat        <span class="tok-comment"># how big is it?</span>
+git diff main...origin/main --stat      <span class="tok-comment"># how big is it? (three dots: only their side, lesson 2.2)</span>
 git log --oneline origin/main..main     <span class="tok-comment"># what do I have that they do not?</span></code></pre>
 <div class="callout ok"><code>git fetch</code> is the only network command in Git that cannot possibly cause a problem. Run it whenever you want to know what is going on — before starting work, before pushing, before deciding whether to rebase. Some people run it on a timer.</div>
 
@@ -124,7 +124,8 @@ and have 2 and 3 different commits each, respectively.</div>
 <pre><code class="language-bash">git branch -vv               <span class="tok-comment"># every local branch, its upstream, and ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
-  experiment    9e2d4b7 no upstream — never pushed</div>
+  experiment    9e2d4b7 wip: try a new layout</div>
+<p>A line with no <code>[brackets]</code> — <code>experiment</code> here — has no upstream: that branch has never been pushed.</p>
 
 <h3>Cleaning up branches that were deleted on the server</h3>
 <pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># delete origin/* refs whose branch is gone from the server</span>
@@ -206,7 +207,7 @@ From github.com:cuonghoang1103/api-backend
 <p>Các commit mới được tải về và các nhánh theo dõi remote dịch chuyển. Nhánh cục bộ, thư mục làm việc và index của bạn <strong>không bị đụng tới</strong>. Không gì hỏng được, không gì xung đột được, và không có việc gì bạn đang làm bị cắt ngang.</p>
 <pre><code class="language-bash"><span class="tok-comment"># Nghi thức soi xét an toàn, sau khi fetch:</span>
 git log --oneline main..origin/main     <span class="tok-comment"># họ đã thêm gì?</span>
-git diff main origin/main --stat        <span class="tok-comment"># nó to cỡ nào?</span>
+git diff main...origin/main --stat      <span class="tok-comment"># nó to cỡ nào? (ba chấm: chỉ phần của họ, bài 2.2)</span>
 git log --oneline origin/main..main     <span class="tok-comment"># tôi có gì mà họ chưa có?</span></code></pre>
 <div class="callout ok"><code>git fetch</code> là lệnh mạng DUY NHẤT trong Git không thể gây ra vấn đề gì. Hãy chạy nó bất cứ khi nào bạn muốn biết chuyện gì đang diễn ra — trước khi bắt đầu làm việc, trước khi push, trước khi quyết định có rebase hay không. Có người còn đặt hẹn giờ chạy nó.</div>
 
@@ -244,7 +245,8 @@ and have 2 and 3 different commits each, respectively.</div>
 <pre><code class="language-bash">git branch -vv               <span class="tok-comment"># mọi nhánh cục bộ, upstream của nó, và ahead/behind</span></code></pre>
 <div class="out">* main          5f7a9c2 [origin/main: ahead 2, behind 3] fix(auth): reject expired
   feature/login 3f8a1c9 [origin/feature/login] feat(auth): rotation
-  experiment    9e2d4b7 no upstream — never pushed</div>
+  experiment    9e2d4b7 wip: thử bố cục mới</div>
+<p>Dòng không có <code>[ngoặc vuông]</code> — ở đây là <code>experiment</code> — là nhánh chưa có upstream: nó chưa từng được push.</p>
 
 <h3>Dọn những nhánh đã bị xoá trên máy chủ</h3>
 <pre><code class="language-bash">git fetch --prune            <span class="tok-comment"># xoá các ref origin/* mà nhánh đã biến mất khỏi máy chủ</span>
@@ -281,7 +283,7 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># không có th
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Working-with-Remotes" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 2.5 (tiếng Việt) — Làm việc với Remote</span><span class="lc-sub">remote add/rename/remove, và "nhánh theo dõi remote" nghĩa là gì.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 2.5 (tiếng Anh) — Làm việc với Remote</span><span class="lc-sub">remote add/rename/remove, và "nhánh theo dõi remote" nghĩa là gì.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-fetch" target="_blank" rel="noopener">
   <span class="lc-ico">⬇️</span>
@@ -290,6 +292,21 @@ git clone --bare &lt;url&gt;           <span class="tok-comment"># không có th
 
 <div class="pitfall"><strong>Bẫy:</strong> tin vào <code>git log origin/main</code> mà chưa fetch. Nó đọc bộ nhớ đệm cục bộ, nên sau một tuần vắng mặt nó vui vẻ cho bạn xem bức tranh của một tuần trước mà không hề cảnh báo — và những quyết định dựa trên đó (có nên rebase không, bản vá của mình đã lên thượng nguồn chưa) sẽ sai. Hãy để <code>git fetch</code> làm lệnh đầu tiên của mọi phiên làm việc.</div>
 <p class="note-ct"><strong>Phân biệt cần giữ lấy:</strong> <code>fetch</code> cập nhật <em>hiểu biết</em> của bạn; <code>merge</code>/<code>rebase</code> cập nhật <em>công việc</em> của bạn; <code>pull</code> làm cả hai trong một bước và giấu đi cái nào là cái nào. Khi có chuyện bất ngờ xảy ra sau một lần pull, hãy làm lại theo lối fetch-rồi-nhìn-rồi-tích-hợp, và cái bất ngờ thường tự nó giải thích.</p>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -384,7 +401,7 @@ git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Pair it with the per-repository identity from 0.3 so your commits carry the right email too:</p>
 <pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
-<div class="callout ok"><code>IdentitiesOnly yes</code> matters more than it looks. Without it, SSH offers every key in your agent in turn, and GitHub authenticates you as whichever account matches <em>first</em> — so you silently push to the work repository as your personal account. The flag forces exactly the key you named.</div>
+<div class="callout ok"><code>IdentitiesOnly yes</code> matters more than it looks. Without it, SSH also offers the other keys loaded in your agent — and when the work key is not loaded (after a reboot, say), your personal key from the agent is offered <em>before</em> the work key file, GitHub accepts it, and you silently push to the work repository as your personal account. The flag forces exactly the key you named.</div>
 
 <h3>Deploy keys and CI tokens</h3>
 <div class="kv-grid">
@@ -507,7 +524,7 @@ git clone git@github-work:company/api.git
 git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</code></pre>
 <p>Hãy ghép nó với danh tính theo từng kho ở bài 0.3 để commit của bạn cũng mang đúng email:</p>
 <pre><code class="language-bash">cd ~/work/api &amp;&amp; git config user.email an@company.com</code></pre>
-<div class="callout ok"><code>IdentitiesOnly yes</code> quan trọng hơn vẻ ngoài của nó. Thiếu nó, SSH lần lượt đưa ra mọi khoá trong agent, và GitHub xác thực bạn dưới danh nghĩa tài khoản nào khớp <em>ĐẦU TIÊN</em> — nên bạn âm thầm push vào kho công ty dưới tài khoản cá nhân. Cái cờ ép dùng đúng khoá bạn đã chỉ định.</div>
+<div class="callout ok"><code>IdentitiesOnly yes</code> quan trọng hơn vẻ ngoài của nó. Thiếu nó, SSH đưa ra cả những khoá khác đang nạp trong agent — và khi khoá công ty chưa được nạp (chẳng hạn vừa khởi động lại máy), khoá cá nhân trong agent được đưa ra <em>TRƯỚC</em> file khoá công ty, GitHub nhận nó, nên bạn âm thầm push vào kho công ty dưới tài khoản cá nhân. Cái cờ ép dùng đúng khoá bạn đã chỉ định.</div>
 
 <h3>Deploy key và token cho CI</h3>
 <div class="kv-grid">
@@ -545,6 +562,21 @@ git remote set-url origin git@github-personal:cuonghoang1103/api-backend.git</co
 
 <div class="pitfall"><strong>Bẫy:</strong> nhét token vào URL remote cho "chạy được" — <code>git remote set-url origin https://ghp_xxx@github.com/user/repo.git</code>. Nó chạy thật, và nó ghi token dưới dạng chữ thô vào <code>.git/config</code>, vào lịch sử shell của bạn, và vào mọi bản log có in ra cái remote. Tệ hơn, <code>git remote -v</code> in nó ra, nên nó rốt cuộc bị dán vào các báo cáo lỗi. Hãy dùng credential helper; nó sinh ra chính là để tránh chuyện này.</div>
 <p class="note-ct"><strong>Một thói quen hữu ích:</strong> cho mọi token một hạn dùng (90 ngày là mặc định hợp lý) và một cái tên nói rõ nó sống ở đâu — "laptop-an", "vps-deploy", "ci-staging". Khi một cái bị lộ hay một cái máy bị thanh lý, bạn biết chính xác phải thu hồi cái nào, và thu hồi nó chỉ làm hỏng đúng một thứ.</p>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -590,8 +622,8 @@ git config --global push.autoSetupRemote true    <span class="tok-comment"># do 
 ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">The remote has commits you do not. Someone pushed while you were working. <strong>Pull (or fetch + rebase), then push.</strong> Never force.</span></div>
-  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.3).</span></div>
-  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.5).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Your history diverged — usually you rewrote commits the remote still has. Fix with <code>--force-with-lease</code>, <em>only</em> if that branch is yours (8.2).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">A branch protection rule refused it. Push to a branch and open a pull request instead — the rule is doing its job (6.4).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
@@ -600,7 +632,7 @@ hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
 <pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># the correct response, nine times in ten</span></code></pre>
-<div class="callout danger">The wrong response is <code>git push --force</code>. It tells the server "discard whatever you have and take mine" — and whatever it had was your colleague's commits, which are now gone from the server. If they have them locally they can restore them; if the only copy was on the server, that work is destroyed. Chapter 8.3 covers <code>--force-with-lease</code>, which refuses in exactly this situation.</div>
+<div class="callout danger">The wrong response is <code>git push --force</code>. It tells the server "discard whatever you have and take mine" — and whatever it had was your colleague's commits, which are now gone from the server. If they have them locally they can restore them; if the only copy was on the server, that work is destroyed. Chapter 8.2 covers <code>--force-with-lease</code>, which refuses in exactly this situation.</div>
 <div class="callout warn"><strong>"non-fast-forward" does not always mean you rewrote history.</strong> Git picks the wording by what your machine already has. Real output from our test repository, same situation twice — An pushed, Cường has one commit of his own:
 <div class="out"><span class="tok-comment"># before fetching:</span>
  ! [rejected]        main -&gt; main (fetch first)
@@ -630,7 +662,7 @@ git push origin main</code></pre>
 git push origin --tags            <span class="tok-comment"># every local tag</span>
 git push --follow-tags            <span class="tok-comment"># push commits + the ANNOTATED tags that point into them</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># delete a tag from the remote</span></code></pre>
-<div class="callout ok"><code>--follow-tags</code> is the sane default for a release workflow: it pushes annotated tags reachable from what you are pushing, and ignores stray local tags. Chapter 7.3 covers tags and semantic versioning properly.</div>
+<div class="callout ok"><code>--follow-tags</code> is the sane default for a release workflow: it pushes annotated tags reachable from what you are pushing, and ignores stray local tags. Lesson 7.2 covers tags and semantic versioning properly.</div>
 
 <h3>Pushing everything, and what not to do</h3>
 <pre><code class="language-bash">git push origin --all             <span class="tok-comment"># every local branch — rarely what you want</span>
@@ -711,8 +743,8 @@ git config --global push.autoSetupRemote true    <span class="tok-comment"># t�
 ${slide('git-05', 12, 'Push bị từ chối: fetch first và non-fast-forward')}
 <div class="lz-stack">
   <div class="lz-layer"><span class="lz-k">! [rejected] … (fetch first)</span><span class="lz-v">Remote có commit bạn chưa có. Ai đó đã push trong lúc bạn làm việc. <strong>Hãy pull (hoặc fetch + rebase), rồi push.</strong> Đừng bao giờ ép.</span></div>
-  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.3).</span></div>
-  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.5).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [rejected] … (non-fast-forward)</span><span class="lz-v">Lịch sử của bạn đã phân ly — thường là bạn đã viết lại những commit mà remote vẫn còn giữ. Sửa bằng <code>--force-with-lease</code>, <em>chỉ khi</em> nhánh đó là của bạn (bài 8.2).</span></div>
+  <div class="lz-layer"><span class="lz-k">! [remote rejected] … (protected branch)</span><span class="lz-v">Một luật bảo vệ nhánh đã từ chối. Hãy push lên một nhánh rồi mở pull request — cái luật đang làm đúng việc của nó (bài 6.4).</span></div>
 </div>
 <pre><code class="language-bash">git push</code></pre>
 <div class="out">! [rejected]        main -&gt; main (fetch first)
@@ -721,7 +753,7 @@ hint: Updates were rejected because the remote contains work that you do not
 hint: have locally. This is usually caused by another repository pushing to
 hint: the same ref.</div>
 <pre><code class="language-bash">git pull --rebase &amp;&amp; git push          <span class="tok-comment"># cách đáp đúng, chín trên mười lần</span></code></pre>
-<div class="callout danger">Cách đáp SAI là <code>git push --force</code>. Nó nói với máy chủ "vứt đi cái ngươi đang có và nhận cái của ta" — và cái nó đang có là commit của đồng nghiệp bạn, giờ đã biến mất khỏi máy chủ. Nếu họ còn bản cục bộ thì khôi phục được; nếu bản duy nhất nằm trên máy chủ thì phần việc đó bị huỷ. Bài 8.3 nói về <code>--force-with-lease</code>, thứ sẽ từ chối đúng trong tình huống này.</div>
+<div class="callout danger">Cách đáp SAI là <code>git push --force</code>. Nó nói với máy chủ "vứt đi cái ngươi đang có và nhận cái của ta" — và cái nó đang có là commit của đồng nghiệp bạn, giờ đã biến mất khỏi máy chủ. Nếu họ còn bản cục bộ thì khôi phục được; nếu bản duy nhất nằm trên máy chủ thì phần việc đó bị huỷ. Bài 8.2 nói về <code>--force-with-lease</code>, thứ sẽ từ chối đúng trong tình huống này.</div>
 <div class="callout warn"><strong>"non-fast-forward" không phải lúc nào cũng có nghĩa là bạn đã viết lại lịch sử.</strong> Git chọn câu chữ theo thứ máy bạn đã có. Output thật từ kho thử, cùng một tình huống hai lần — An đã push, Cường có một commit của riêng mình:
 <div class="out"><span class="tok-comment"># trước khi fetch:</span>
  ! [rejected]        main -&gt; main (fetch first)
@@ -751,7 +783,7 @@ git push origin main</code></pre>
 git push origin --tags            <span class="tok-comment"># mọi tag cục bộ</span>
 git push --follow-tags            <span class="tok-comment"># push commit + những tag CÓ CHÚ THÍCH trỏ vào chúng</span>
 git push origin --delete v1.5.0   <span class="tok-comment"># xoá một tag khỏi remote</span></code></pre>
-<div class="callout ok"><code>--follow-tags</code> là mặc định hợp lý cho quy trình phát hành: nó push những tag có chú thích với tới được từ thứ bạn đang push, và bỏ qua các tag cục bộ lạc lõng. Bài 7.3 nói tử tế về tag và đánh phiên bản ngữ nghĩa.</div>
+<div class="callout ok"><code>--follow-tags</code> là mặc định hợp lý cho quy trình phát hành: nó push những tag có chú thích với tới được từ thứ bạn đang push, và bỏ qua các tag cục bộ lạc lõng. Bài 7.2 nói tử tế về tag và đánh phiên bản ngữ nghĩa.</div>
 
 <h3>Push mọi thứ, và những thứ không nên làm</h3>
 <pre><code class="language-bash">git push origin --all             <span class="tok-comment"># mọi nhánh cục bộ — hiếm khi là thứ bạn muốn</span>

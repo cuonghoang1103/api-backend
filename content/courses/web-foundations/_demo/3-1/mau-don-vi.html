@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Colours and sizes</title>
+<style>
+  html { font-size: 16px; }
+  .wrap { font-size: 20px; width: 400px; }
+  .c1 { color: #1f4e8c; }
+  .c2 { color: rgb(31 78 140); }
+  .c3 { color: hsl(214 64% 34%); }
+  .c4 { color: rgb(31 78 140 / 50%); }
+  .s1 { width: 50%; }
+  .s2 { font-size: 1.5em; }
+  .s3 { font-size: 1.5rem; }
+  .s4 { width: 10vw; }
+</style></head>
+<body>
+  <div class="wrap">
+    <p class="c1">hex</p><p class="c2">rgb</p><p class="c3">hsl</p><p class="c4">alpha</p>
+    <p class="s1">50% of parent</p><p class="s2">1.5em</p><p class="s3">1.5rem</p><p class="s4">10vw</p>
+  </div>
+<script>
+  const g = (c, p) => getComputedStyle(document.querySelector(c))[p];
+  for (const c of ['.c1', '.c2', '.c3', '.c4']) console.log(c, 'computed color =', g(c, 'color'));
+  console.log('.s1 50% of a 400px parent =', g('.s1', 'width'));
+  console.log('.s2 1.5em of parent 20px  =', g('.s2', 'fontSize'));
+  console.log('.s3 1.5rem of root 16px   =', g('.s3', 'fontSize'));
+  console.log('.s4 10vw of a', innerWidth + 'px window =', g('.s4', 'width'));
+</script>
+</body>
+</html>

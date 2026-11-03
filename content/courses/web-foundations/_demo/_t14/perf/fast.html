@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fast page</title>
+<!-- the same tracking work, but deferred until after the page is parsed -->
+<script defer src="tracking.js"></script>
+<link rel="preload" as="image" href="hero.webp" fetchpriority="high">
+<style>body { margin: 0; font-family: system-ui, sans-serif; } img { width: 100%; height: auto; display: block; } main { padding: 16px; }
+  #banner-slot { min-height: 220px; }   /* space reserved for the banner: nothing moves when it arrives */</style>
+</head>
+<body>
+  <div id="banner-slot"></div>
+  <img src="hero.webp" alt="New collection" width="1200" height="800" fetchpriority="high">
+  <main><h1>New collection</h1><p>Free shipping from 500.000đ.</p></main>
+  <script>
+    setTimeout(() => {
+      document.getElementById('banner-slot').innerHTML = '<p style="margin:0;padding:24px;height:220px;box-sizing:border-box;background:#fde68a">Sale: -20% today only!<br>Use code CT20 at checkout.<br>Ends at midnight.</p>';
+    }, 800);
+  </script>
+</body>
+</html>

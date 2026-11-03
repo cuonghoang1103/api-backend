@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`2.1 Elements, tags, attributes`, `2.1 Phần tử, thẻ, thuộc tính`,
+      [`An element = opening tag (+ attributes) + content + closing tag; empty elements such as <code>img</code>, <code>br</code>, <code>input</code> have no closing tag.`, `Every page: doctype, <code>html lang</code>, a <code>head</code> with charset, viewport and title, and a <code>body</code>.`, `Forgetting the viewport meta tag makes a page non-responsive on phones.`],
+      [`Một phần tử = thẻ mở (+ thuộc tính) + nội dung + thẻ đóng; phần tử rỗng như <code>img</code>, <code>br</code>, <code>input</code> không có thẻ đóng.`, `Mọi trang: doctype, <code>html lang</code>, <code>head</code> có charset, viewport và title, và <code>body</code>.`, `Quên thẻ meta viewport làm trang không responsive trên điện thoại.`]],
+    [`2.2 Text, links, images`, `2.2 Chữ, liên kết, ảnh`,
+      [`One <code>h1</code> per page; headings in order <code>h1 → h2 → h3</code>.`, `<code>a href</code> links; <code>target="_blank"</code> with <code>rel="noopener"</code> opens a new tab safely.`, `<code>img</code> needs <code>alt</code> — read by screen readers and shown when the image fails.`],
+      [`Mỗi trang một <code>h1</code>; tiêu đề đúng thứ tự <code>h1 → h2 → h3</code>.`, `<code>a href</code> tạo liên kết; <code>target="_blank"</code> kèm <code>rel="noopener"</code> mở tab mới an toàn.`, `<code>img</code> cần <code>alt</code> — trình đọc màn hình đọc lên và hiện khi ảnh hỏng.`]],
+    [`2.3 Semantic structure`, `2.3 Cấu trúc ngữ nghĩa`,
+      [`header, nav, main (one per page), section, article, aside, footer name the regions.`, `Search engines and screen readers use them; <code>div</code> is only for styling boxes without meaning.`],
+      [`header, nav, main (mỗi trang một), section, article, aside, footer đặt tên cho các vùng.`, `Công cụ tìm kiếm và trình đọc màn hình dùng chúng; <code>div</code> chỉ dành cho hộp trang trí không mang nghĩa.`]],
+    [`2.4 Forms`, `2.4 Biểu mẫu`,
+      [`Each input has a <code>label for</code> matching its <code>id</code>; <code>name</code> is the key sent to the server.`, `Input types (email, password, number, date, checkbox, radio) change keyboard and validation for free.`, `Radios in one group share the same <code>name</code>; an input's value is always a string.`],
+      [`Mỗi ô nhập có <code>label for</code> trùng <code>id</code>; <code>name</code> là khoá gửi lên server.`, `Kiểu input (email, password, number, date, checkbox, radio) đổi bàn phím và kiểm tra mà không tốn công.`, `Các radio trong một nhóm dùng chung <code>name</code>; giá trị của input luôn là chuỗi.`]],
+    [`2.5 Tables, media, accessibility`, `2.5 Bảng, media, khả năng tiếp cận`,
+      [`Tables for tabular data only (<code>thead</code>, <code>tbody</code>, <code>th</code>, <code>td</code>), never for layout.`, `<code>video</code>/<code>audio</code> with <code>controls</code>; real <code>button</code> elements work with Tab and Enter.`],
+      [`Bảng chỉ dành cho dữ liệu dạng bảng (<code>thead</code>, <code>tbody</code>, <code>th</code>, <code>td</code>), không dùng để dàn trang.`, `<code>video</code>/<code>audio</code> kèm <code>controls</code>; phần tử <code>button</code> thật dùng được với Tab và Enter.`]],
+  ],
+  bay: [
+    [`A <code>div</code> with a click handler instead of a <code>button</code> — unreachable by keyboard.`, `Một <code>div</code> gắn sự kiện click thay vì <code>button</code> — không tới được bằng bàn phím.`],
+    [`Choosing a heading level for its size; use CSS for size, the level for structure.`, `Chọn bậc tiêu đề theo cỡ chữ; cỡ chữ là việc của CSS, bậc là để thể hiện cấu trúc.`],
+    [`A label whose <code>for</code> does not match any <code>id</code> — clicking it does nothing and screen readers lose the link.`, `Label có <code>for</code> không trùng <code>id</code> nào — bấm vào không có tác dụng và trình đọc màn hình mất liên kết.`],
+    [`In JSX: <code>class</code> instead of <code>className</code>, and empty tags left unclosed.`, `Trong JSX: viết <code>class</code> thay vì <code>className</code>, và thẻ rỗng không tự đóng.`],
+  ],
+  hoi: [
+    [`What should the <code>alt</code> of a purely decorative image be?`, `An empty string, <code>alt=""</code>, so screen readers skip it.`, `<code>alt</code> của ảnh chỉ để trang trí nên là gì?`, `Chuỗi rỗng, <code>alt=""</code>, để trình đọc màn hình bỏ qua.`],
+    [`Three radio buttons let the user pick all three at once. Why?`, `They have different <code>name</code> values; radios form one group only when they share a name.`, `Ba nút radio cho phép chọn cả ba cùng lúc. Vì sao?`, `Chúng có <code>name</code> khác nhau; radio chỉ thành một nhóm khi dùng chung tên.`],
+    [`Which element should wrap the main content of a page, and how many may there be?`, `<code>main</code> — one per page.`, `Phần tử nào nên bọc nội dung chính của trang, và được có bao nhiêu cái?`, `<code>main</code> — mỗi trang một cái.`],
+    [`An <code>input type="number"</code> holds 5 and you add 1 to its value. What do you get, and how do you fix it?`, `"51" — the value is a string. Convert first: <code>Number(input.value) + 1</code>.`, `Một <code>input type="number"</code> đang là 5 và bạn cộng 1 vào giá trị của nó. Kết quả là gì, sửa thế nào?`, `"51" — giá trị là chuỗi. Đổi trước: <code>Number(input.value) + 1</code>.`],
+    [`When is a table the right element?`, `When the data really has rows and columns — a timetable or a price list — not to position parts of a page.`, `Khi nào bảng là phần tử đúng?`, `Khi dữ liệu thật sự có hàng và cột — thời khoá biểu hay bảng giá — không phải để xếp vị trí các phần của trang.`],
+  ],
+};

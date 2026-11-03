@@ -454,6 +454,21 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-4-passwords" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 7.4 — why passwords are hashed slowly</span><span class="lc-sub">Unsalted SHA-256 cracked by a table, salts, ~1.9 million SHA-256/s vs ~13 bcrypt/s</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-4-passwords" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 7.4 — vì sao mật khẩu phải hash chậm</span><span class="lc-sub">SHA-256 không muối bị bảng tra phá, muối, ~1,9 triệu SHA-256/giây so với ~13 bcrypt/giây</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 8.2 ─────────────────────────── */
@@ -1733,6 +1748,21 @@ email KHÁC từ cùng IP        : HTTP 200</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.1: một bảng phiên, và mỗi cột để làm gì</span><span class="lc-sub">Giống: cookie trình duyệt tự gửi, và nhu cầu thu hồi. Sâu hơn: phiên là một dòng, nên thu hồi là một DELETE (đăng xuất mọi nơi kết thúc 3 thiết bị); nhàn rỗi 30 phút và tuyệt đối 12 giờ đo bằng đồng hồ giả; chạm last_seen ở mọi request tốn 1.000 UPDATE cho 1.000 lần đọc, mỗi phút một lần thì 0. Chưa học khoá đó thì bài này vẫn tự đứng được.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 7.2 — cookies and sessions, measured</span><span class="lc-sub">HttpOnly vs localStorage in Chromium, logout that really ends a session, a CSRF attack with SameSite Lax vs None</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-2-cookies-sessions" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 7.2 — cookie và phiên, đo thật</span><span class="lc-sub">HttpOnly và localStorage trong Chromium, đăng xuất thật sự, tấn công CSRF với SameSite Lax và None</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

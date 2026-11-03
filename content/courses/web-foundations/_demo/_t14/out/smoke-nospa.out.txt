@@ -1,0 +1,5 @@
+ok   200  /
+ok   200  /robots.txt
+FAIL 404  /products/42
+1 check(s) failed
+exit code: 1

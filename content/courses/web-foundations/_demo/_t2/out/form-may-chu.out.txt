@@ -1,0 +1,5 @@
+GET /search?q=css+grid&sort=new
+
+POST /signup
+content-type: application/x-www-form-urlencoded
+body: email=linh%40example.com&password=s3cret+%26+safe

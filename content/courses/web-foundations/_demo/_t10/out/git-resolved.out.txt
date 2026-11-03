@@ -1,0 +1,35 @@
+# resolve: keep BOTH ideas — sorted AND numbered — then remove the markers
+$ node notes.js
+1. Buy milk
+2. Call Lan
+3. Learn Git
+[ 'Learn Git' ]
+$ git add notes.js
+$ git commit --no-edit
+[feature/sort 15faac8] Merge remote-tracking branch 'origin/main' into feature/sort
+$ git push origin feature/sort
+To origin.git
+   2c0fec3..15faac8  feature/sort -> feature/sort
+$ git log --oneline --graph
+*   5833ebe Merge pull request #3 from feature/sort
+|\  
+| *   15faac8 Merge remote-tracking branch 'origin/main' into feature/sort
+| |\  
+| |/  
+|/|   
+* |   8fd81e6 Merge pull request #2 from fix/notes-format
+|\ \  
+| * | ca025c2 Number the notes
+|/ /  
+| *   2c0fec3 Merge remote-tracking branch 'origin/main' into feature/sort
+| |\  
+| |/  
+|/|   
+* |   057bbcf Merge pull request #1 from feature/search
+|\ \  
+| * | 60c327d Print search results for 'git'
+| * | 227333d Add search(term) to notes
+|/ /  
+| * 75d4ef8 Sort notes alphabetically
+|/  
+* 365679b Initial notes app

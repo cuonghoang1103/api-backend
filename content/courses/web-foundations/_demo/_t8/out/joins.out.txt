@@ -1,0 +1,23 @@
+sqlite> SELECT posts.title, users.name FROM posts INNER JOIN users ON posts.user_id = users.id ORDER BY posts.id;
++------------------+------+
+|      title       | name |
++------------------+------+
+| Hello World      | Lan  |
+| Learning SQL     | Lan  |
+| Draft Post       | Minh |
+| Node.js Basics   | Minh |
+| Old Announcement | Lan  |
++------------------+------+
+
+sqlite> SELECT posts.title, users.name FROM posts LEFT JOIN users ON posts.user_id = users.id ORDER BY posts.id;
++------------------+------+
+|      title       | name |
++------------------+------+
+| Hello World      | Lan  |
+| Learning SQL     | Lan  |
+| Draft Post       | Minh |
+| Node.js Basics   | Minh |
+| Old Announcement | Lan  |
+| Orphan Draft     |      |
++------------------+------+
+

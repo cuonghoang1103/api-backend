@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="mo-phong" content="colorScheme=dark">
+<title>A theme switch that remembers</title>
+<script>
+  // Runs in <head>, BEFORE the body is painted: apply the saved choice first ⇒ no flash of the wrong theme
+  try {
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.dataset.theme = saved;
+  } catch {}
+</script>
+<link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <button class="btn" id="toggle">Toggle theme</button>
+  <script>
+    const root = document.documentElement;
+    const current = () => root.dataset.theme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.getElementById('toggle').addEventListener('click', () => {
+      const next = current() === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try { localStorage.setItem('theme', next); } catch {}
+    });
+    const bg = () => getComputedStyle(document.body).backgroundColor;
+    console.log('start   :', current(), bg(), '(no saved choice, OS says dark)');
+    document.getElementById('toggle').click();
+    console.log('click 1 :', current(), bg(), '| saved =', localStorage.getItem('theme'));
+    document.getElementById('toggle').click();
+    console.log('click 2 :', current(), bg(), '| saved =', localStorage.getItem('theme'));
+    localStorage.removeItem('theme');
+  </script>
+</body>
+</html>

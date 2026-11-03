@@ -1,0 +1,21 @@
+
+
+ ✓ test/cart.test.js > subtotal > adds price × qty for every item 1ms
+ ✓ test/cart.test.js > subtotal > is 0 for an empty cart 0ms
+ ✓ test/cart.test.js > shipping > order of 0 đ ships for 30000 đ 0ms
+ ✓ test/cart.test.js > shipping > order of 499999 đ ships for 30000 đ 0ms
+ ✓ test/cart.test.js > shipping > order of 500000 đ ships for 0 đ 0ms
+ ✓ test/cart.test.js > shipping > order of 1200000 đ ships for 0 đ 0ms
+ ✓ test/cart.test.js > applyCoupon > takes the percentage off and rounds to a whole đồng 0ms
+ ✓ test/cart.test.js > applyCoupon > rejects 0 0ms
+ ✓ test/cart.test.js > applyCoupon > rejects 51 0ms
+ ✓ test/cart.test.js > applyCoupon > rejects 12.5 0ms
+ ✓ test/cart.test.js > applyCoupon > rejects -5 0ms
+ ✓ test/cart.test.js > total > free shipping applies AFTER the coupon 0ms
+ ✓ test/cart.test.js > total > returns a plain object comparison example 0ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  22:44:24
+   Duration  88ms (import 41%, tests 23%, transform 22%, worker 13%)
+

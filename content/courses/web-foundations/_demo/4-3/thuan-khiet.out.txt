@@ -1,0 +1,2 @@
+['pen'] ['pen', 'book']
+['pen', 'book'] ['pen', 'book'] true log = 1

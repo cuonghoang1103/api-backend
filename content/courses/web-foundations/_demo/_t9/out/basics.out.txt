@@ -1,0 +1,8 @@
+$ npx tsc --noEmit --strict basics.ts
+basics.ts(3,1): error TS2322: Type 'string' is not assignable to type 'number'.
+basics.ts(6,12): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+basics.ts(13,16): error TS2339: Property 'toFixed' does not exist on type 'string | number'.
+  Property 'toFixed' does not exist on type 'string'.
+basics.ts(22,1): error TS2322: Type '"descending"' is not assignable to type 'SortDir'.
+basics.ts(24,20): error TS18050: The value 'undefined' cannot be used here.
+(exit code 2)

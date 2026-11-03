@@ -1,0 +1,2 @@
+time → machine-readable value: 2026-11-02
+abbr → expansion: HyperText Markup Language

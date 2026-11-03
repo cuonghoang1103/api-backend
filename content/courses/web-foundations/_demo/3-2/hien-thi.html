@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>display</title><meta name="chup" content="640x220">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; }
+  .x { width: 120px; height: 40px; margin: 4px; padding: 4px; background: #e8eef7; border: 1px solid #1f4e8c; }
+  .i { display: inline; }
+  .ib { display: inline-block; }
+</style></head>
+<body>
+  <div class="x" id="b1">block</div><div class="x" id="b2">block</div>
+  <span class="x i" id="i1">inline</span><span class="x i" id="i2">inline</span>
+  <br>
+  <span class="x ib" id="k1">inline-block</span><span class="x ib" id="k2">inline-block</span>
+<script>
+  for (const id of ['b1', 'i1', 'k1']) {
+    const r = document.getElementById(id).getBoundingClientRect();
+    console.log(id, 'display:', getComputedStyle(document.getElementById(id)).display.padEnd(13), Math.round(r.width) + '×' + Math.round(r.height));
+  }
+</script>
+</body>
+</html>

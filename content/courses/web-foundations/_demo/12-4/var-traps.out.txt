@@ -1,0 +1,5 @@
+.a width: var(--size)              → 984px (the whole declaration was dropped)
+.b width: calc(var(--size) * 1px)  → 20px
+.c color: var(--brnad, red)        → rgb(220, 38, 38) (typo: fallback used, no error anywhere)
+#d1 margin-top                     → 16px
+#d2 margin-top (inside .scope)     → 40px

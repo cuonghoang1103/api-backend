@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Hiding</title>
+<style>
+  button { display: block; height: 30px; width: 200px; }
+  .none { display: none; }
+  .hidden { visibility: hidden; }
+  .zero { opacity: 0; }
+</style></head>
+<body>
+  <button class="none" id="a">display: none</button>
+  <button class="hidden" id="b">visibility: hidden</button>
+  <button class="zero" id="c">opacity: 0</button>
+  <button id="end">end</button>
+<script>
+  for (const id of ['a', 'b', 'c']) {
+    const el = document.getElementById(id);
+    const r = el.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.x + 5, r.y + 5);
+    console.log(id, '· height', r.height, '· takes space:', r.height > 0, '· real mouse click lands on it:', hit === el, '· can be focused:', (el.focus(), document.activeElement === el));
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+total: 01208050
+typeof prices[0]: string
+fixed total: 250

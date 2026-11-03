@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`9.1 Why TypeScript`, `9.1 Vì sao TypeScript`,
+      [`Mistakes appear in the editor while you type, instead of at run time in front of users.`, `TypeScript compiles to plain JavaScript; types disappear at run time.`],
+      [`Lỗi hiện ra trong trình soạn thảo khi đang gõ, thay vì lúc chạy trước mặt người dùng.`, `TypeScript biên dịch ra JavaScript thường; kiểu biến mất lúc chạy.`]],
+    [`9.2 Basic types`, `9.2 Kiểu cơ bản`,
+      [`string, number, boolean, <code>number[]</code>, tuples; avoid <code>any</code>.`, `Inference: you rarely need to write a variable's type; annotate parameters.`],
+      [`string, number, boolean, <code>number[]</code>, tuple; tránh <code>any</code>.`, `Suy luận kiểu: hiếm khi phải ghi kiểu cho biến; hãy ghi kiểu cho tham số.`]],
+    [`9.3 Interfaces`, `9.3 Interface`,
+      [`<code>interface</code> describes object shapes: optional <code>?</code>, <code>readonly</code>, <code>extends</code>.`, `<code>type</code> handles unions such as <code>'chay' | 'thit'</code>.`],
+      [`<code>interface</code> mô tả hình dạng object: tuỳ chọn <code>?</code>, <code>readonly</code>, <code>extends</code>.`, `<code>type</code> xử lý kiểu hợp như <code>'chay' | 'thit'</code>.`]],
+    [`9.4 Functions and generics`, `9.4 Hàm và generic`,
+      [`Type parameters and the return value; <code>void</code> for no return.`, `A generic <code>&lt;T&gt;</code> keeps the caller's type instead of losing it to <code>any</code>.`],
+      [`Gắn kiểu cho tham số và giá trị trả về; <code>void</code> khi không trả gì.`, `Generic <code>&lt;T&gt;</code> giữ kiểu của nơi gọi thay vì đánh mất nó vào <code>any</code>.`]],
+    [`9.5 TypeScript in practice`, `9.5 TypeScript trong thực tế`,
+      [`<code>tsc --noEmit</code> checks types only — the command CI runs.`, `<code>"strict": true</code> in tsconfig; read the error message, it usually names the fix.`],
+      [`<code>tsc --noEmit</code> chỉ kiểm kiểu — đúng lệnh CI chạy.`, `<code>"strict": true</code> trong tsconfig; đọc thông báo lỗi, nó thường gọi tên cách sửa.`]],
+  ],
+  bay: [
+    [`Silencing an error with <code>any</code> — the protection disappears for everything that value touches.`, `Bịt lỗi bằng <code>any</code> — sự bảo vệ biến mất ở mọi chỗ giá trị đó chạm tới.`],
+    [`Assigning <code>input.value</code> (a string) to a number field.`, `Gán <code>input.value</code> (một chuỗi) cho trường kiểu number.`],
+    [`Turning off <code>strict</code> to make errors go away.`, `Tắt <code>strict</code> cho hết báo lỗi.`],
+    [`Ignoring "possibly null" instead of checking or using <code>?.</code>.`, `Lờ cảnh báo "possibly null" thay vì kiểm hoặc dùng <code>?.</code>.`],
+  ],
+  hoi: [
+    [`<code>let ten = 'Lan'; ten = 5;</code> — is there an error even without an annotation?`, `Yes: TypeScript inferred <code>string</code> from the first value.`, `<code>let ten = 'Lan'; ten = 5;</code> — có lỗi không, dù không ghi kiểu?`, `Có: TypeScript đã suy ra <code>string</code> từ giá trị đầu tiên.`],
+    [`How do you mark a field as optional in an interface?`, `With a question mark: <code>moTa?: string</code>.`, `Đánh dấu một trường là tuỳ chọn trong interface thế nào?`, `Bằng dấu hỏi: <code>moTa?: string</code>.`],
+    [`Interface or type for <code>'chay' | 'thit' | 'hai-san'</code>?`, `<code>type</code> — an interface cannot describe a union of values.`, `Interface hay type cho <code>'chay' | 'thit' | 'hai-san'</code>?`, `<code>type</code> — interface không mô tả được hợp các giá trị.`],
+    [`What does <code>function dauTien&lt;T&gt;(arr: T[]): T | undefined</code> return when called with <code>['a','b']</code>?`, `A value typed <code>string | undefined</code> — the generic carried the element type through.`, `<code>function dauTien&lt;T&gt;(arr: T[]): T | undefined</code> trả về gì khi gọi với <code>['a','b']</code>?`, `Một giá trị kiểu <code>string | undefined</code> — generic mang kiểu phần tử đi qua.`],
+    [`Which command should CI run to check types without producing files?`, `<code>npx tsc --noEmit</code>.`, `CI nên chạy lệnh nào để kiểm kiểu mà không sinh file?`, `<code>npx tsc --noEmit</code>.`],
+  ],
+};

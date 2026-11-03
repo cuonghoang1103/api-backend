@@ -1,0 +1,45 @@
+$ echo '<p>Opening soon</p>' >> index.html
+$ git status --short
+ M index.html
+$ git diff
+diff --git a/index.html b/index.html
+index da82aa6..269364e 100644
+--- a/index.html
++++ b/index.html
+@@ -1 +1,2 @@
+ <h1>My shop</h1>
++<p>Opening soon</p>
+$ git add index.html
+$ git diff
+$ git diff --staged
+diff --git a/index.html b/index.html
+index da82aa6..269364e 100644
+--- a/index.html
++++ b/index.html
+@@ -1 +1,2 @@
+ <h1>My shop</h1>
++<p>Opening soon</p>
+$ git commit -m "Add opening message"
+[main e0de3f3] Add opening message
+ 1 file changed, 1 insertion(+)
+$ echo 'body { font-family: sans-serif; }' > style.css
+$ echo '<link rel="stylesheet" href="style.css">' >> index.html
+$ git add .
+$ git commit -m "Add basic styles"
+[main b151d3e] Add basic styles
+ 2 files changed, 2 insertions(+)
+ create mode 100644 style.css
+$ git log --oneline
+b151d3e Add basic styles
+e0de3f3 Add opening message
+a5600e9 Add home page
+$ git show --stat HEAD
+commit b151d3e95f28aadee911e5dd68da6d316b702c66
+Author: Lan <lan@example.com>
+Date:   Sun Nov 1 11:00:00 2026 +0700
+
+    Add basic styles
+
+ index.html | 1 +
+ style.css  | 1 +
+ 2 files changed, 2 insertions(+)

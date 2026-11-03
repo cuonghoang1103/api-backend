@@ -2012,6 +2012,21 @@ ${slide('rx-00', 22, 'Lớp phủ lỗi của Vite — ảnh chụp thật')}
   <span class="lc-cta">MỞ BÀI FER202 →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 2.1 — the HTML under JSX</span><span class="lc-sub">Elements, attributes and the DOM tree that JSX finally produces</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-2-1-html-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 2.1 — HTML bên dưới JSX</span><span class="lc-sub">Phần tử, thuộc tính và cây DOM mà JSX rốt cuộc tạo ra</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -3270,6 +3285,21 @@ dist/assets/index-CcUL7llf.js   222.07 kB │ gzip: 69.86 kB
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở FER202 — bài 2.2: Destructuring, spread &amp; module</span><span class="lc-sub">Nếu bạn đã học môn FER202 ở Academy thì phần này không còn lạ. Giống: destructuring, spread và import/export. Khác: Courses giải thích "chép" bằng spread thật ra là chép nông và nối thẳng vào chuyện cập nhật state. Ở bài này mình học thêm: spread chép rồi sửa nghĩa là gì, cùng giá trị hay cùng object, closure, async/await. Chưa học FER202 cũng không sao — bài này vẫn tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI FER202 →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 4.4 — arrays and objects from zero</span><span class="lc-sub">map/filter/reduce, shallow copies and JSON, all with real output</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-4-4-arrays-objects" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 4.4 — mảng và object từ số 0</span><span class="lc-sub">map/filter/reduce, sao chép nông và JSON, kèm output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

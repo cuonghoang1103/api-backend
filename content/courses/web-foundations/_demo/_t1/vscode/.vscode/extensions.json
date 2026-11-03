@@ -1,0 +1,4 @@
+{
+  // VS Code shows "This workspace has extension recommendations" to anyone who opens the folder.
+  "recommendations": ["esbenp.prettier-vscode", "dbaeumer.vscode-eslint"]
+}

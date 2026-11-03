@@ -534,7 +534,7 @@ git describe --tags         <span class="tok-comment"># nhap</span></code></pre>
 </a>
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Basics-Tagging" target="_blank" rel="noopener">
   <span class="lc-ico">🏷️</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 2.6 (tiếng Việt) — Gắn thẻ</span><span class="lc-sub">Tag nhẹ vs có chú thích, ký tag, và gắn tag cho commit quá khứ.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 2.6 (tiếng Anh) — Gắn thẻ</span><span class="lc-sub">Tag nhẹ vs có chú thích, ký tag, và gắn tag cho commit quá khứ.</span></span>
 </a>
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng một tag nhẹ cho bản phát hành rồi thắc mắc vì sao <code>git describe</code> lờ nó đi và vì sao không ai biết được ai đã cắt bản phát hành. Tag nhẹ hoàn toàn không mang siêu dữ liệu nào — không có tác giả, không có ngày, không có gì để ký. Cách sửa là một cái cờ, <code>-a</code>, quyết định ngay lúc bạn tạo nó và không thể thêm vào sau nếu không tạo lại tag.</div>

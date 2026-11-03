@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>:where() has zero specificity, :is() does not</title>
+<style>
+  /* a library's defaults written with :where() are easy to override */
+  :where(.lib-card) h3 { color: rgb(220, 38, 38); }
+  :is(.lib-panel) h3 { color: rgb(220, 38, 38); }
+  /* your own rule: a single element selector */
+  h3 { color: rgb(37, 99, 235); }
+</style>
+</head>
+<body>
+  <div class="lib-card"><h3 id="w">inside :where(.lib-card)</h3></div>
+  <div class="lib-panel"><h3 id="i">inside :is(.lib-panel)</h3></div>
+  <script>
+    for (const id of ['w', 'i']) {
+      const h = document.getElementById(id);
+      console.log(h.textContent.padEnd(24), '→', getComputedStyle(h).color);
+    }
+  </script>
+</body>
+</html>

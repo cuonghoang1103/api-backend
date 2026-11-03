@@ -1,0 +1,24 @@
+$ curl -s -i http://localhost:3456/api/products/999
+HTTP/1.1 404 Not Found
+Content-Type: application/json; charset=utf-8
+
+{"error":"Product 999 not found"}
+
+$ curl -s -i -X POST http://localhost:3456/api/products -H 'Content-Type: application/json' -d '{"name":"","price":-5}'
+HTTP/1.1 422 Unprocessable Entity
+Content-Type: application/json; charset=utf-8
+
+{"errors":["name is required","price must be a whole number ≥ 0"]}
+
+$ curl -s -i http://localhost:3456/old-products
+HTTP/1.1 301 Moved Permanently
+Location: /api/products
+
+
+$ curl -s -i http://localhost:3456/api/admin/stats
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json; charset=utf-8
+WWW-Authenticate: Bearer
+
+{"error":"Log in first"}
+

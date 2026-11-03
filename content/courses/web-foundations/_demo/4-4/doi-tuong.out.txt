@@ -1,0 +1,9 @@
+Linh 20 blue
+20 undefined
+{name: 'Linh', age: 21, address: {city: 'Hà Nội'}, email: 'linh@example.com'}
+['name', 'age', 'address', 'email']
+4 [['a', 1], ['b', 2]]
+true undefined undefined
+Linh 21 none
+22 21
+Huế

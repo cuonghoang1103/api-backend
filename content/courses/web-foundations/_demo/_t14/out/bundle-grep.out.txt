@@ -1,0 +1,8 @@
+last 330 characters of index-27wt_Xcd.js — our own code, minified:
+fetch(e.href,n)}})();function e(e){return new Intl.NumberFormat(`vi-VN`,{style:`currency`,currency:`VND`}).format(e)}document.querySelector(`#price`).textContent=`Keyboard: `+e(45e4),document.querySelector(`#api`).textContent=`API: https://api.ctshop.example`,window.__paymentKey=`demo-secret-not-real-0001`,window.__dbUrl=void 0;
+
+"GENERATED_REPORT_MARKER"    found 0 time(s) in the bundle
+"[dev] app started"          found 0 time(s) in the bundle
+"api.ctshop.example"         found 1 time(s) in the bundle
+"demo-secret-not-real-0001"  found 1 time(s) in the bundle
+"demo-password"              found 0 time(s) in the bundle

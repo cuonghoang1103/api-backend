@@ -1,0 +1,822 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-6-5-rest-params-query",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-6-5-rest-params-query"
+  },
+  "exercises": [
+    {
+      "title": "Dựng query string",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "query string",
+        "mã hoá",
+        "URLSearchParams"
+      ],
+      "prerequisites": [
+        "object",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "url"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>buildQuery(params)</code> trả query string bắt đầu bằng <code>?</code> — hoặc chuỗi rỗng nếu không còn tham số nào. Bỏ giá trị <code>undefined</code>, <code>null</code> và <code>\"\"</code>; mảng ⇒ lặp tên cho từng phần tử; số ⇒ chuỗi. Mã hoá bằng <code>URLSearchParams</code> (dấu cách thành <code>+</code>, <code>&amp;</code> thành <code>%26</code>).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ undefined/null/\"\".</li>\n  <li>Mảng lặp tên.</li>\n  <li>Rỗng ⇒ \"\".</li>\n  <li>Mã hoá đúng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "params: object.",
+      "outputSpec": "string.",
+      "constraints": "Không tự ghép bằng + hay template string.",
+      "examplesJson": [
+        {
+          "input": "buildQuery({ q: \"bút & sổ\", page: 2, sort: undefined })",
+          "output": "\"?q=b%C3%BAt+%26+s%E1%BB%95&page=2\"",
+          "explanation": "& trong giá trị phải được mã hoá, nếu không nó mở một cặp mới."
+        }
+      ],
+      "hintsJson": [
+        "const sp = new URLSearchParams(); for (const [k, v] of Object.entries(params)) …",
+        "Array.isArray(v) ? v.forEach((x) => sp.append(k, x)) : sp.append(k, v)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — dựng query string\nfunction buildQuery(params) {\n  return '?' + Object.entries(params).map(([k, v]) => k + '=' + v).join('&');\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — URLSearchParams mã hoá giúp: dấu cách, &, #, chữ có dấu\nfunction buildQuery(params) {\n  const sp = new URLSearchParams();\n  for (const [key, value] of Object.entries(params)) {\n    const values = Array.isArray(value) ? value : [value];\n    for (const v of values) {\n      if (v === undefined || v === null || v === '') continue;   // tham số tuỳ chọn bị bỏ\n      sp.append(key, String(v));\n    }\n  }\n  const s = sp.toString();\n  return s ? '?' + s : '';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là đúng bản \"by hand\" trong output của bài: <code>&amp;</code> trong \"bút & sổ\" cắt giá trị làm đôi, và <code>undefined</code> bị gửi thành chữ \"undefined\". Bỏ tham số rỗng giúp URL gọn và để máy chủ dùng giá trị mặc định.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Ghép chuỗi tay — & và # phá query.</li>\n  <li>Gửi \"sort=undefined\".</li>\n  <li>Trả \"?\" khi không có gì.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Encodes and skips empty values|||Mã hoá và bỏ giá trị rỗng",
+            "goi": "buildQuery({ q: \"bút & sổ\", page: 2, sort: undefined, tag: null, x: \"\" })",
+            "mongDoi": "?q=b%C3%BAt+%26+s%E1%BB%95&page=2"
+          },
+          {
+            "moTa": "Arrays repeat the name|||Mảng lặp tên",
+            "goi": "buildQuery({ tag: [\"a\", \"b\"], limit: 10 })",
+            "mongDoi": "?tag=a&tag=b&limit=10"
+          },
+          {
+            "moTa": "Nothing left gives an empty string|||Không còn gì trả chuỗi rỗng",
+            "goi": "[buildQuery({}), buildQuery({ a: undefined, b: \"\" })]",
+            "mongDoi": [
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép chuỗi tay — & và # phá query."
+        },
+        {
+          "loi": "Gửi \"sort=undefined\"."
+        },
+        {
+          "loi": "Trả \"?\" khi không có gì."
+        }
+      ]
+    },
+    {
+      "title": "Đọc query string",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "query string",
+        "khoá lặp"
+      ],
+      "prerequisites": [
+        "URLSearchParams",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "url"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>parseQuery(search)</code> nhận phần query (có hoặc không có <code>?</code> ở đầu) và trả object: giá trị đã giải mã, LUÔN là chuỗi; tên xuất hiện nhiều lần ⇒ mảng theo thứ tự xuất hiện (như <code>req.query</code> của Express).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chấp nhận có hoặc không có \"?\".</li>\n  <li>Giải mã (+ ⇒ dấu cách, %C3%BA ⇒ ú).</li>\n  <li>Khoá lặp ⇒ mảng.</li>\n  <li>Giá trị luôn là chuỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "search: string.",
+      "outputSpec": "object.",
+      "constraints": "Không đổi \"2\" thành số — đó là việc của bước kiểm tra.",
+      "examplesJson": [
+        {
+          "input": "parseQuery(\"?tag=a&tag=b&page=2\")",
+          "output": "{ tag: [\"a\", \"b\"], page: \"2\" }",
+          "explanation": "page vẫn là chuỗi \"2\"."
+        }
+      ],
+      "hintsJson": [
+        "for (const [k, v] of new URLSearchParams(search)) …",
+        "k in out ? (Array.isArray(out[k]) ? out[k].push(v) : out[k] = [out[k], v]) : out[k] = v"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — đọc query string\nfunction parseQuery(search) {\n  return Object.fromEntries(new URLSearchParams(search));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — giống req.query: chuỗi đã giải mã; khoá lặp thành mảng\nfunction parseQuery(search) {\n  const out = {};\n  for (const [key, value] of new URLSearchParams(search)) {   // tự bỏ \"?\" đầu và giải mã\n    if (!(key in out)) out[key] = value;\n    else if (Array.isArray(out[key])) out[key].push(value);\n    else out[key] = [out[key], value];\n  }\n  return out;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>Object.fromEntries</code> của code khởi đầu âm thầm giữ giá trị CUỐI của khoá lặp. Mảng là điều Express trả cho <code>?tag=a&amp;tag=b</code> — và cũng là lý do <code>req.query.page</code> có thể là mảng khi kẻ xấu gửi <code>?page=1&amp;page=2</code>: luôn kiểm kiểu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Mất giá trị của khoá lặp.</li>\n  <li>Đổi sang số ở đây.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://expressjs.com/en/api.html#req.query",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Decoded strings, with or without ?|||Chuỗi đã giải mã, có hoặc không có ?",
+            "goi": "[parseQuery(\"?q=desk+lamp&page=2\"), parseQuery(\"q=b%C3%BAt\")]",
+            "mongDoi": [
+              {
+                "q": "desk lamp",
+                "page": "2"
+              },
+              {
+                "q": "bút"
+              }
+            ]
+          },
+          {
+            "moTa": "Repeated keys become arrays|||Khoá lặp thành mảng",
+            "goi": "parseQuery(\"tag=a&tag=b&tag=c&x=1\")",
+            "mongDoi": {
+              "tag": [
+                "a",
+                "b",
+                "c"
+              ],
+              "x": "1"
+            }
+          },
+          {
+            "moTa": "Empty query|||Query rỗng",
+            "goi": "[parseQuery(\"\"), parseQuery(\"?\")]",
+            "mongDoi": [
+              {},
+              {}
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Mất giá trị của khoá lặp."
+        },
+        {
+          "loi": "Đổi sang số ở đây."
+        }
+      ]
+    },
+    {
+      "title": "Khớp route có tham số",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tham số đường dẫn",
+        ":id",
+        "decodeURIComponent"
+      ],
+      "prerequisites": [
+        "split",
+        "vòng lặp"
+      ],
+      "tags": [
+        "javascript",
+        "rest",
+        "routing"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>matchRoute(pattern, path)</code> như Express: <code>pattern</code> như <code>\"/api/users/:userId/posts/:postId\"</code>. Trả object tham số (đã <code>decodeURIComponent</code>) nếu khớp, <code>null</code> nếu không. Khớp khi số đoạn bằng nhau, đoạn thường giống hệt, đoạn <code>:tên</code> khớp mọi đoạn KHÔNG rỗng. Bỏ query string của <code>path</code>; một dấu <code>/</code> thừa ở cuối path được chấp nhận.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách theo \"/\".</li>\n  <li>Đoạn :tên bắt giá trị đã giải mã.</li>\n  <li>Bỏ query, chấp nhận \"/\" cuối.</li>\n  <li>Không khớp ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "pattern: string; path: string.",
+      "outputSpec": "object hoặc null.",
+      "constraints": "Không dùng thư viện (path-to-regexp…).",
+      "examplesJson": [
+        {
+          "input": "matchRoute(\"/api/products/:id\", \"/api/products/3?x=1\")",
+          "output": "{ id: \"3\" }",
+          "explanation": "id vẫn là chuỗi."
+        }
+      ],
+      "hintsJson": [
+        "const clean = path.split(\"?\")[0].replace(/\\/$/, \"\") || \"/\";",
+        "p.startsWith(\":\") ? params[p.slice(1)] = decodeURIComponent(seg) : p === seg"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — khớp route\nfunction matchRoute(pattern, path) {\n  return pattern === path ? {} : null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — đoạn thường phải giống hệt; đoạn \":tên\" bắt giá trị\nfunction matchRoute(pattern, path) {\n  const clean = path.split('?')[0].replace(/(.)\\/$/, '$1');   // bỏ query và một \"/\" cuối\n  const want = pattern.split('/');\n  const got = clean.split('/');\n  if (want.length !== got.length) return null;\n  const params = {};\n  for (let i = 0; i < want.length; i++) {\n    if (want[i].startsWith(':')) {\n      if (got[i] === '') return null;                         // tham số không được rỗng\n      params[want[i].slice(1)] = decodeURIComponent(got[i]);\n    } else if (want[i] !== got[i]) {\n      return null;\n    }\n  }\n  return params;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là cốt lõi của <code>app.get('/api/products/:id', …)</code>: Express khớp đường dẫn rồi đặt kết quả vào <code>req.params</code>. Giải mã là cần thiết vì tên như \"Đức Anh\" đến dưới dạng <code>%C4%90%E1%BB%A9c%20Anh</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Không so số đoạn — \"/api/products/3/extra\" khớp nhầm.</li>\n  <li>Quên giải mã.</li>\n  <li>Cho :id khớp đoạn rỗng (\"/api/products/\").</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://expressjs.com/en/guide/routing.html#route-parameters",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "One and two parameters|||Một và hai tham số",
+            "goi": "[matchRoute(\"/api/products/:id\", \"/api/products/3\"), matchRoute(\"/api/users/:userId/posts/:postId\", \"/api/users/7/posts/42\")]",
+            "mongDoi": [
+              {
+                "id": "3"
+              },
+              {
+                "userId": "7",
+                "postId": "42"
+              }
+            ]
+          },
+          {
+            "moTa": "Query and trailing slash ignored; values decoded|||Bỏ query và \"/\" cuối; giá trị được giải mã",
+            "goi": "[matchRoute(\"/api/products/:id\", \"/api/products/3/?x=1\"), matchRoute(\"/api/users/:name\", \"/api/users/%C4%90%E1%BB%A9c%20Anh\")]",
+            "mongDoi": [
+              {
+                "id": "3"
+              },
+              {
+                "name": "Đức Anh"
+              }
+            ]
+          },
+          {
+            "moTa": "No match gives null|||Không khớp trả null",
+            "goi": "[matchRoute(\"/api/products/:id\", \"/api/products\"), matchRoute(\"/api/products/:id\", \"/api/products/3/reviews\"), matchRoute(\"/api/products/:id\", \"/api/users/3\"), matchRoute(\"/api/products/:id\", \"/api/products//\")]",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": "Static routes return an empty object|||Route tĩnh trả object rỗng",
+            "goi": "matchRoute(\"/api/products\", \"/api/products?page=2\")",
+            "mongDoi": {}
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Không so số đoạn — \"/api/products/3/extra\" khớp nhầm."
+        },
+        {
+          "loi": "Quên giải mã."
+        },
+        {
+          "loi": "Cho :id khớp đoạn rỗng (\"/api/products/\")."
+        }
+      ]
+    },
+    {
+      "title": "Kiểm tham số danh sách",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "kiểm tra dữ liệu vào",
+        "mặc định",
+        "danh sách cho phép"
+      ],
+      "prerequisites": [
+        "Number.isInteger",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "validation"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>readListQuery(query)</code>: <code>query</code> là object như <code>req.query</code> (giá trị chuỗi, có thể vắng, có thể là mảng). Quy tắc: <code>page</code> mặc định 1, phải là số nguyên ≥ 1; <code>limit</code> mặc định 10, số nguyên 1–50; <code>sort</code> mặc định <code>null</code>, nếu có phải thuộc <code>[\"price\", \"-price\", \"name\"]</code>. Mảng (tham số lặp) luôn là lỗi. Hợp lệ ⇒ <code>{ ok: true, page, limit, sort }</code> (page/limit là number); không ⇒ <code>{ ok: false, errors }</code> với thông điệp theo thứ tự page, limit, sort: <code>\"page must be a whole number ≥ 1\"</code>, <code>\"limit must be a whole number from 1 to 50\"</code>, <code>\"sort must be one of: price, -price, name\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mặc định khi vắng.</li>\n  <li>Chuỗi rỗng là lỗi (không phải vắng).</li>\n  <li>Số thập phân, chữ, mảng ⇒ lỗi.</li>\n  <li>Gom mọi lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "query: object.",
+      "outputSpec": "{ ok: true, page, limit, sort } | { ok: false, errors }.",
+      "constraints": "Không dùng parseInt (\"12abc\" phải là lỗi).",
+      "examplesJson": [
+        {
+          "input": "readListQuery({ limit: \"abc\" })",
+          "output": "{ ok: false, errors: [\"limit must be a whole number from 1 to 50\"] }",
+          "explanation": "Trong bài máy chủ trả danh sách rỗng âm thầm — giờ nó báo 400 rõ ràng."
+        }
+      ],
+      "hintsJson": [
+        "const int = (v) => typeof v === \"string\" && /^\\d+$/.test(v) ? Number(v) : NaN;",
+        "Kiểm \"in query\" để phân biệt vắng với rỗng."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — kiểm tham số danh sách\nfunction readListQuery(query) {\n  return { ok: true, page: query.page, limit: query.limit, sort: query.sort };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — đổi kiểu có chủ ý, kiểm, áp mặc định, áp trần; sai thì nói rõ\nconst SORTS = ['price', '-price', 'name'];\nfunction readListQuery(query) {\n  const int = (v) => (typeof v === 'string' && /^\\d+$/.test(v) ? Number(v) : NaN);   // \"12abc\", \"2.5\", mảng ⇒ NaN\n  const errors = [];\n  const page = 'page' in query ? int(query.page) : 1;\n  if (!(page >= 1)) errors.push('page must be a whole number ≥ 1');\n  const limit = 'limit' in query ? int(query.limit) : 10;\n  if (!(limit >= 1 && limit <= 50)) errors.push('limit must be a whole number from 1 to 50');\n  const sort = 'sort' in query ? query.sort : null;\n  if (sort !== null && !SORTS.includes(sort)) errors.push('sort must be one of: ' + SORTS.join(', '));\n  return errors.length ? { ok: false, errors } : { ok: true, page, limit, sort };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Output <code>limit=abc</code> trong bài cho thấy hậu quả khi bỏ bước này: <code>NaN</code> lọt qua <code>Math.min</code> và máy chủ trả danh sách rỗng mà không ai biết vì sao. <code>!(page &gt;= 1)</code> bắt được cả <code>NaN</code> (mọi phép so với NaN đều false). Thư viện như Zod làm đúng việc này ở quy mô lớn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>parseInt(\"12abc\") = 12 — chấp nhận rác.</li>\n  <li>Coi \"\" như vắng.</li>\n  <li>Dừng ở lỗi đầu tiên.</li>\n  <li>Không đặt trần cho limit.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://owasp.org/API-Security/editions/2023/en/0xa4-unrestricted-resource-consumption/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Defaults when absent; numbers converted|||Mặc định khi vắng; đổi sang số",
+            "goi": "[readListQuery({}), readListQuery({ page: \"3\", limit: \"50\", sort: \"-price\" })]",
+            "mongDoi": [
+              {
+                "ok": true,
+                "page": 1,
+                "limit": 10,
+                "sort": null
+              },
+              {
+                "ok": true,
+                "page": 3,
+                "limit": 50,
+                "sort": "-price"
+              }
+            ]
+          },
+          {
+            "moTa": "The limit=abc case from the lesson|||Trường hợp limit=abc của bài",
+            "goi": "readListQuery({ limit: \"abc\" })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "limit must be a whole number from 1 to 50"
+              ]
+            }
+          },
+          {
+            "moTa": "All errors, in order|||Mọi lỗi, đúng thứ tự",
+            "goi": "readListQuery({ page: \"0\", limit: \"1000\", sort: \"date\" })",
+            "mongDoi": {
+              "ok": false,
+              "errors": [
+                "page must be a whole number ≥ 1",
+                "limit must be a whole number from 1 to 50",
+                "sort must be one of: price, -price, name"
+              ]
+            }
+          },
+          {
+            "moTa": "Decimals, junk, empty and arrays are errors|||Số thập phân, rác, rỗng và mảng là lỗi",
+            "goi": "[readListQuery({ page: \"2.5\" }).ok, readListQuery({ page: \"12abc\" }).ok, readListQuery({ limit: \"\" }).ok, readListQuery({ page: [\"1\", \"2\"] }).ok]",
+            "mongDoi": [
+              false,
+              false,
+              false,
+              false
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "parseInt(\"12abc\") = 12 — chấp nhận rác."
+        },
+        {
+          "loi": "Coi \"\" như vắng."
+        },
+        {
+          "loi": "Dừng ở lỗi đầu tiên."
+        },
+        {
+          "loi": "Không đặt trần cho limit."
+        }
+      ]
+    },
+    {
+      "title": "Lọc, sắp xếp, chia trang",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "lọc",
+        "sắp xếp",
+        "phân trang",
+        "total"
+      ],
+      "prerequisites": [
+        "filter",
+        "toSorted",
+        "slice"
+      ],
+      "tags": [
+        "javascript",
+        "rest"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>listProducts(products, { category, q, sort, page = 1, limit = 10 })</code> như <code>GET /api/products</code> của bài: lọc theo <code>category</code> (bằng nhau) nếu có; lọc <code>q</code> — tên CHỨA q, không phân biệt hoa thường — nếu có; sắp <code>\"price\"</code> tăng, <code>\"-price\"</code> giảm, <code>\"name\"</code> theo tên (so <code>&lt;</code>); rồi cắt trang. Trả <code>{ items, page, limit, total }</code> với <code>total</code> là số món SAU khi lọc, TRƯỚC khi cắt trang. Không sửa mảng vào.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Lọc → sắp → cắt trang, đúng thứ tự đó.</li>\n  <li>total đếm sau lọc.</li>\n  <li>Không đột biến products.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "products: object[]; options: object (đã kiểm hợp lệ).",
+      "outputSpec": "{ items, page, limit, total }.",
+      "constraints": "Dùng toSorted hoặc sao chép trước khi sort.",
+      "examplesJson": [
+        {
+          "input": "listProducts(SP, { category: \"office\", sort: \"-price\" })",
+          "output": "items Stapler, Notebook, Pen; total 3",
+          "explanation": "Đúng output curl của bài."
+        }
+      ],
+      "hintsJson": [
+        "let list = products; if (category) list = list.filter((p) => p.category === category);",
+        "list.slice((page - 1) * limit, page * limit)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — lọc, sắp xếp, chia trang\nfunction listProducts(products, { category, q, sort, page = 1, limit = 10 } = {}) {\n  const items = products.slice((page - 1) * limit, page * limit).filter((p) => !category || p.category === category);\n  return { items, page, limit, total: items.length };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — lọc trước, sắp sau, cắt trang cuối cùng; total đếm trước khi cắt\nfunction listProducts(products, { category, q, sort, page = 1, limit = 10 } = {}) {\n  let list = products;\n  if (category) list = list.filter((p) => p.category === category);\n  if (q) list = list.filter((p) => p.name.toLowerCase().includes(q.toLowerCase()));\n  if (sort === 'price') list = list.toSorted((a, b) => a.price - b.price);\n  if (sort === '-price') list = list.toSorted((a, b) => b.price - a.price);\n  if (sort === 'name') list = list.toSorted((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0));\n  const items = list.slice((page - 1) * limit, page * limit);\n  return { items, page, limit, total: list.length };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu cắt trang TRƯỚC khi lọc: trang 1 chỉ chứa những món office tình cờ nằm trong 10 món đầu, và total sai. Trên cơ sở dữ liệu thật, đúng thứ tự này là <code>WHERE … ORDER BY … LIMIT … OFFSET …</code> (Chương 8).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cắt trang trước khi lọc.</li>\n  <li>total = items.length — thanh phân trang luôn nói \"1 trang\".</li>\n  <li>list.sort() — sắp luôn mảng gốc.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/toSorted",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "category + sort, like the lesson|||category + sort, như bài",
+            "goi": "listProducts([{ id: 1, name: \"Notebook\", price: 25000, category: \"office\" }, { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { id: 3, name: \"Pen\", price: 5000, category: \"office\" }, { id: 4, name: \"Mug\", price: 60000, category: \"home\" }, { id: 5, name: \"Stapler\", price: 45000, category: \"office\" }], { category: \"office\", sort: \"-price\" }).items.map((p) => p.name)",
+            "mongDoi": [
+              "Stapler",
+              "Notebook",
+              "Pen"
+            ]
+          },
+          {
+            "moTa": "Page 2 of 2 items, total before paging|||Trang 2 cỡ 2, total trước khi cắt",
+            "goi": "listProducts([{ id: 1, name: \"Notebook\", price: 25000, category: \"office\" }, { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { id: 3, name: \"Pen\", price: 5000, category: \"office\" }, { id: 4, name: \"Mug\", price: 60000, category: \"home\" }, { id: 5, name: \"Stapler\", price: 45000, category: \"office\" }], { page: 2, limit: 2 })",
+            "mongDoi": {
+              "items": [
+                {
+                  "id": 3,
+                  "name": "Pen",
+                  "price": 5000,
+                  "category": "office"
+                },
+                {
+                  "id": 4,
+                  "name": "Mug",
+                  "price": 60000,
+                  "category": "home"
+                }
+              ],
+              "page": 2,
+              "limit": 2,
+              "total": 5
+            }
+          },
+          {
+            "moTa": "q is case-insensitive; sort by name|||q không phân biệt hoa thường; sắp theo tên",
+            "goi": "[listProducts([{ id: 1, name: \"Notebook\", price: 25000, category: \"office\" }, { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { id: 3, name: \"Pen\", price: 5000, category: \"office\" }, { id: 4, name: \"Mug\", price: 60000, category: \"home\" }, { id: 5, name: \"Stapler\", price: 45000, category: \"office\" }], { q: \"LAMP\" }).items.map((p) => p.id), listProducts([{ id: 1, name: \"Notebook\", price: 25000, category: \"office\" }, { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { id: 3, name: \"Pen\", price: 5000, category: \"office\" }, { id: 4, name: \"Mug\", price: 60000, category: \"home\" }, { id: 5, name: \"Stapler\", price: 45000, category: \"office\" }], { sort: \"name\", limit: 3 }).items.map((p) => p.name)]",
+            "mongDoi": [
+              [
+                2
+              ],
+              [
+                "Desk lamp",
+                "Mug",
+                "Notebook"
+              ]
+            ]
+          },
+          {
+            "moTa": "Filter then page; input untouched|||Lọc rồi mới chia trang; mảng vào không đổi",
+            "chuanBi": "const all = [{ id: 1, name: \"Notebook\", price: 25000, category: \"office\" }, { id: 2, name: \"Desk lamp\", price: 320000, category: \"home\" }, { id: 3, name: \"Pen\", price: 5000, category: \"office\" }, { id: 4, name: \"Mug\", price: 60000, category: \"home\" }, { id: 5, name: \"Stapler\", price: 45000, category: \"office\" }]; const r = listProducts(all, { category: \"home\", sort: \"price\", limit: 1, page: 2 });",
+            "goi": "[r.items.map((p) => p.name), r.total, all[0].name]",
+            "mongDoi": [
+              [
+                "Desk lamp"
+              ],
+              2,
+              "Notebook"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cắt trang trước khi lọc."
+        },
+        {
+          "loi": "total = items.length — thanh phân trang luôn nói \"1 trang\"."
+        },
+        {
+          "loi": "list.sort() — sắp luôn mảng gốc."
+        }
+      ]
+    },
+    {
+      "title": "Chặn IDOR",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "IDOR / BOLA",
+        "phân quyền theo đối tượng"
+      ],
+      "prerequisites": [
+        "find",
+        "Number"
+      ],
+      "tags": [
+        "javascript",
+        "bảo mật",
+        "rest"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>getNote(notes, userId, rawId)</code> cho <code>GET /api/notes/:id</code>: <code>rawId</code> là chuỗi từ đường dẫn. Trả <code>{ status, body }</code>: <code>userId</code> rỗng/vắng ⇒ 401 <code>{ error: \"Log in first\" }</code>; <code>rawId</code> không phải số nguyên dương (chỉ chữ số) ⇒ 400 <code>{ error: \"id must be a number\" }</code>; ghi chú không tồn tại HOẶC không thuộc <code>userId</code> ⇒ 404 <code>{ error: \"Not found\" }</code> — cùng một câu trả lời cho cả hai; còn lại ⇒ 200 với ghi chú.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>401 → 400 → 404 → 200.</li>\n  <li>Không tồn tại và không phải của mình: cùng 404.</li>\n  <li>So id kiểu số.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "notes: { id, owner, text }[]; userId: string | null; rawId: string.",
+      "outputSpec": "{ status, body }.",
+      "constraints": "Không bao giờ trả 403 cho ghi chú của người khác (đừng xác nhận nó tồn tại).",
+      "examplesJson": [
+        {
+          "input": "getNote(NOTES, \"an\", \"13\")",
+          "output": "{ status: 404, body: { error: \"Not found\" } }",
+          "explanation": "Ghi chú 13 của Bình — y như bản \"with owner check\" trong bài."
+        }
+      ],
+      "hintsJson": [
+        "if (!/^\\d+$/.test(rawId)) return { status: 400, … };",
+        "notes.find((n) => n.id === Number(rawId) && n.owner === userId)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — chặn IDOR\nfunction getNote(notes, userId, rawId) {\n  const note = notes.find((n) => n.id == rawId);\n  if (!note) return { status: 404, body: { error: 'Not found' } };\n  return { status: 200, body: note };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — đăng nhập trả lời \"bạn là ai\"; câu \"được xem CÁI NÀY không\" phải hỏi riêng\nfunction getNote(notes, userId, rawId) {\n  if (!userId) return { status: 401, body: { error: 'Log in first' } };\n  if (!/^\\d+$/.test(rawId) || Number(rawId) < 1) return { status: 400, body: { error: 'id must be a number' } };\n  const id = Number(rawId);\n  const note = notes.find((n) => n.id === id && n.owner === userId);   // tồn tại VÀ thuộc người gọi\n  if (!note) return { status: 404, body: { error: 'Not found' } };      // không phân biệt \"không có\" với \"của người khác\"\n  return { status: 200, body: note };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là bản \"without owner check\" của bài: đổi 12 thành 13 là đọc được ghi chú của người khác. Trong SQL, điều kiện chủ sở hữu nằm ngay trong truy vấn: <code>WHERE id = $1 AND owner_id = $2</code> — không tải về rồi mới kiểm.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ kiểm \"có tồn tại không\".</li>\n  <li>Trả 403 — xác nhận cho kẻ dò rằng id đó có thật.</li>\n  <li>So == với chuỗi — \"013\" khớp 13.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://owasp.org/API-Security/editions/2023/en/0xa1-broken-object-level-authorization/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Own note 200, someone else's 404|||Ghi chú của mình 200, của người khác 404",
+            "chuanBi": "const N = [{ id: 12, owner: \"an\", text: \"Buy milk\" }, { id: 13, owner: \"binh\", text: \"PIN hint\" }];",
+            "goi": "[getNote(N, \"an\", \"12\"), getNote(N, \"an\", \"13\")]",
+            "mongDoi": [
+              {
+                "status": 200,
+                "body": {
+                  "id": 12,
+                  "owner": "an",
+                  "text": "Buy milk"
+                }
+              },
+              {
+                "status": 404,
+                "body": {
+                  "error": "Not found"
+                }
+              }
+            ]
+          },
+          {
+            "moTa": "Missing and foreign look identical|||Không có và của người khác trông y hệt",
+            "chuanBi": "const N = [{ id: 13, owner: \"binh\", text: \"x\" }];",
+            "goi": "JSON.stringify(getNote(N, \"an\", \"13\")) === JSON.stringify(getNote(N, \"an\", \"99\"))",
+            "mongDoi": true
+          },
+          {
+            "moTa": "401 before 400 before 404|||401 trước 400 trước 404",
+            "chuanBi": "const N = [{ id: 12, owner: \"an\", text: \"x\" }];",
+            "goi": "[getNote(N, null, \"abc\").status, getNote(N, \"an\", \"abc\").status, getNote(N, \"an\", \"-1\").status, getNote(N, \"an\", \"1.5\").status, getNote(N, \"\", \"12\").status]",
+            "mongDoi": [
+              401,
+              400,
+              400,
+              400,
+              401
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ kiểm \"có tồn tại không\"."
+        },
+        {
+          "loi": "Trả 403 — xác nhận cho kẻ dò rằng id đó có thật."
+        },
+        {
+          "loi": "So == với chuỗi — \"013\" khớp 13."
+        }
+      ]
+    },
+    {
+      "title": "Bộ định tuyến 404/405",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "bộ định tuyến",
+        "405 + Allow",
+        "tham số đường dẫn"
+      ],
+      "prerequisites": [
+        "split",
+        "mảng",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "rest",
+        "routing"
+      ],
+      "problemHtml": "<p><em>Bài 6.5 — REST, tham số đường dẫn và query string.</em> Các bài là những mảnh mà Express làm giúp bạn sau này — tự viết một lần để biết chúng làm gì.</p><p>Viết <code>route(routes, method, url)</code>: <code>routes</code> là mảng <code>{ method, pattern, name }</code> (pattern có thể có <code>:tên</code>). Bỏ query của <code>url</code> nhưng trả nó dạng object. Trả: route đầu tiên khớp cả đường dẫn lẫn method (HEAD dùng được route GET) ⇒ <code>{ status: 200, name, params, query }</code>; đường dẫn khớp ít nhất một route nhưng không method nào hợp ⇒ <code>{ status: 405, allow }</code> với <code>allow</code> là chuỗi method KHÔNG trùng theo thứ tự <code>GET, HEAD, POST, PUT, PATCH, DELETE</code> (có GET ⇒ thêm HEAD), nối <code>\", \"</code>; không khớp gì ⇒ <code>{ status: 404 }</code>. Tham số và query được giải mã; query lặp ⇒ giữ giá trị cuối.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khớp :tham số như bài \"Khớp route\" (viết lại trong hàm).</li>\n  <li>Route đầu tiên thắng.</li>\n  <li>405 kèm allow đúng thứ tự.</li>\n  <li>HEAD ⇒ route GET.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "routes: object[]; method: string; url: string.",
+      "outputSpec": "object.",
+      "constraints": "Một hàm tự đủ (có thể có hàm phụ bên trong tệp).\nMethod không phân biệt hoa thường.",
+      "examplesJson": [
+        {
+          "input": "route(R, \"GET\", \"/api/products/3?fields=name\")",
+          "output": "{ status: 200, name: \"readProduct\", params: { id: \"3\" }, query: { fields: \"name\" } }",
+          "explanation": "Express gọi đúng handler với req.params và req.query."
+        }
+      ],
+      "hintsJson": [
+        "const [path, qs = \"\"] = url.split(\"?\");",
+        "Gom method của mọi route khớp đường dẫn để dựng Allow."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — bộ định tuyến\nfunction route(routes, method, url) {\n  const r = routes.find((x) => x.method === method && x.pattern === url);\n  return r ? { status: 200, name: r.name, params: {}, query: {} } : { status: 404 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 6.5 — khớp đường dẫn trước, rồi method: 200, 405 (+ Allow) hay 404\nconst ORDER = ['GET', 'HEAD', 'POST', 'PUT', 'PATCH', 'DELETE'];\n\nfunction matchPath(pattern, path) {\n  const want = pattern.split('/');\n  const got = path.replace(/(.)\\/$/, '$1').split('/');\n  if (want.length !== got.length) return null;\n  const params = {};\n  for (let i = 0; i < want.length; i++) {\n    if (want[i].startsWith(':')) {\n      if (!got[i]) return null;\n      params[want[i].slice(1)] = decodeURIComponent(got[i]);\n    } else if (want[i] !== got[i]) return null;\n  }\n  return params;\n}\n\nfunction route(routes, method, url) {\n  const [path, qs = ''] = url.split('?');\n  const m = method.toUpperCase();\n  const query = Object.fromEntries(new URLSearchParams(qs));\n  const allowed = new Set();\n  for (const r of routes) {\n    const params = matchPath(r.pattern, path);\n    if (!params) continue;\n    const rm = r.method.toUpperCase();\n    if (rm === m || (m === 'HEAD' && rm === 'GET')) return { status: 200, name: r.name, params, query };\n    allowed.add(rm);\n    if (rm === 'GET') allowed.add('HEAD');\n  }\n  if (allowed.size === 0) return { status: 404 };\n  return { status: 405, allow: ORDER.filter((x) => allowed.has(x)).join(', ') };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là bộ não của Express Router gói trong 40 dòng: thử từng route theo thứ tự khai báo, đoạn <code>:tên</code> thành <code>req.params</code>, query thành <code>req.query</code>. Thứ tự quan trọng: khai <code>/api/products/new</code> SAU <code>/api/products/:id</code> thì \"new\" bị coi là một id — lỗi kinh điển khi dựng API Express.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So pattern === url — không bao giờ khớp :id.</li>\n  <li>Trả 404 khi đường dẫn có mà method sai.</li>\n  <li>Allow lặp method hoặc sai thứ tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 6.5 REST APIs, path parameters and query strings.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://expressjs.com/en/guide/routing.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Collection and item with params and query|||Tập hợp và phần tử, có tham số và query",
+            "chuanBi": "const R = [{ method: \"GET\", pattern: \"/api/products\", name: \"list\" }, { method: \"POST\", pattern: \"/api/products\", name: \"create\" }, { method: \"GET\", pattern: \"/api/products/:id\", name: \"read\" }, { method: \"DELETE\", pattern: \"/api/products/:id\", name: \"remove\" }];",
+            "goi": "[route(R, \"GET\", \"/api/products?page=2&q=desk+lamp\"), route(R, \"delete\", \"/api/products/7\")]",
+            "mongDoi": [
+              {
+                "status": 200,
+                "name": "list",
+                "params": {},
+                "query": {
+                  "page": "2",
+                  "q": "desk lamp"
+                }
+              },
+              {
+                "status": 200,
+                "name": "remove",
+                "params": {
+                  "id": "7"
+                },
+                "query": {}
+              }
+            ]
+          },
+          {
+            "moTa": "405 with Allow, 404 for unknown paths|||405 kèm Allow, 404 cho đường dẫn lạ",
+            "chuanBi": "const R = [{ method: \"DELETE\", pattern: \"/api/products/:id\", name: \"remove\" }, { method: \"GET\", pattern: \"/api/products/:id\", name: \"read\" }, { method: \"PATCH\", pattern: \"/api/products/:id\", name: \"update\" }, { method: \"GET\", pattern: \"/api/products\", name: \"list\" }];",
+            "goi": "[route(R, \"POST\", \"/api/products/1\"), route(R, \"GET\", \"/api/users\"), route(R, \"GET\", \"/api/products/1/reviews\")]",
+            "mongDoi": [
+              {
+                "status": 405,
+                "allow": "GET, HEAD, PATCH, DELETE"
+              },
+              {
+                "status": 404
+              },
+              {
+                "status": 404
+              }
+            ]
+          },
+          {
+            "moTa": "HEAD uses GET; first match wins|||HEAD dùng GET; route đầu tiên thắng",
+            "chuanBi": "const R = [{ method: \"GET\", pattern: \"/api/products/:id\", name: \"read\" }, { method: \"GET\", pattern: \"/api/products/new\", name: \"newForm\" }];",
+            "goi": "[route(R, \"HEAD\", \"/api/products/5\").name, route(R, \"GET\", \"/api/products/new\").params]",
+            "mongDoi": [
+              "read",
+              {
+                "id": "new"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So pattern === url — không bao giờ khớp :id."
+        },
+        {
+          "loi": "Trả 404 khi đường dẫn có mà method sai."
+        },
+        {
+          "loi": "Allow lặp method hoặc sai thứ tự."
+        }
+      ]
+    }
+  ]
+}

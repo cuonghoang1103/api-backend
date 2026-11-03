@@ -1,0 +1,32 @@
+export default {
+  bai: [
+    [`3.1 Selectors and the cascade`, `3.1 Bộ chọn và sự xếp tầng`,
+      [`Link a separate stylesheet; avoid inline styles.`, `Specificity: tag 1, class 10, id 100, inline 1000; equal scores ⇒ the later rule wins.`, `Load your CSS after Bootstrap to override it.`],
+      [`Nối một stylesheet riêng; tránh style inline.`, `Độ ưu tiên: thẻ 1, class 10, id 100, inline 1000; điểm bằng nhau ⇒ quy tắc viết sau thắng.`, `Nạp CSS của bạn sau Bootstrap để ghi đè được.`]],
+    [`3.2 The box model`, `3.2 Box model`,
+      [`Content, padding, border, margin.`, `By default width covers content only; <code>box-sizing: border-box</code> makes width include padding and border.`],
+      [`Nội dung, padding, viền, margin.`, `Mặc định width chỉ tính nội dung; <code>box-sizing: border-box</code> làm width gồm cả padding và viền.`]],
+    [`3.3 Flexbox`, `3.3 Flexbox`,
+      [`One direction; <code>justify-content</code> = main axis, <code>align-items</code> = cross axis.`, `<code>gap</code> spaces children; <code>flex-wrap: wrap</code> lets them wrap; three lines centre anything.`],
+      [`Một chiều; <code>justify-content</code> = trục chính, <code>align-items</code> = trục phụ.`, `<code>gap</code> tạo khoảng cách giữa các con; <code>flex-wrap: wrap</code> cho xuống dòng; ba dòng là canh giữa được mọi thứ.`]],
+    [`3.4 Grid`, `3.4 Grid`,
+      [`Two dimensions; <code>repeat(3, 1fr)</code> = three equal columns.`, `<code>repeat(auto-fit, minmax(250px, 1fr))</code> = responsive without media queries.`],
+      [`Hai chiều; <code>repeat(3, 1fr)</code> = ba cột đều nhau.`, `<code>repeat(auto-fit, minmax(250px, 1fr))</code> = responsive không cần media query.`]],
+    [`3.5 Responsive design &amp; wireframes`, `3.5 Responsive &amp; wireframe`,
+      [`Mobile first, then <code>@media (min-width: …)</code> for bigger screens.`, `rem for text and spacing, % and fr for widths, vh for full-height blocks.`, `Sketch the layout at phone and desktop width before writing CSS.`],
+      [`Điện thoại trước, rồi <code>@media (min-width: …)</code> cho màn to hơn.`, `rem cho chữ và khoảng cách, % và fr cho chiều rộng, vh cho khối cao bằng màn hình.`, `Phác bố cục ở cỡ điện thoại và máy tính trước khi viết CSS.`]],
+  ],
+  bay: [
+    [`A rule "does nothing": another rule wins — find the struck-through line in DevTools → Elements.`, `Quy tắc "không ăn": quy tắc khác thắng — tìm dòng bị gạch ngang trong DevTools → Elements.`],
+    [`Boxes wider than their width: <code>border-box</code> is missing.`, `Hộp rộng hơn width: thiếu <code>border-box</code>.`],
+    [`Reaching for <code>!important</code> instead of fixing specificity.`, `Dùng <code>!important</code> thay vì sửa độ ưu tiên.`],
+    [`A gap under images: images are inline — use <code>display: block</code>.`, `Khoảng trắng dưới ảnh: ảnh là inline — dùng <code>display: block</code>.`],
+  ],
+  hoi: [
+    [`<code>.card p</code> versus <code>#main p</code> — which wins, and why?`, `<code>#main p</code> (100 + 1) beats <code>.card p</code> (10 + 1).`, `<code>.card p</code> so với <code>#main p</code> — cái nào thắng, vì sao?`, `<code>#main p</code> (100 + 1) thắng <code>.card p</code> (10 + 1).`],
+    [`A box has width 200px, padding 20px and a 2px border, without border-box. How wide is it on screen?`, `244px: 200 + 2×20 + 2×2.`, `Một hộp có width 200px, padding 20px và viền 2px, không có border-box. Trên màn hình nó rộng bao nhiêu?`, `244px: 200 + 2×20 + 2×2.`],
+    [`Which three Flexbox lines centre a child horizontally and vertically?`, `<code>display: flex; justify-content: center; align-items: center;</code> (plus a height on the parent).`, `Ba dòng Flexbox nào canh giữa một phần tử con cả ngang lẫn dọc?`, `<code>display: flex; justify-content: center; align-items: center;</code> (cộng một chiều cao cho cha).`],
+    [`In Bootstrap, what does <code>col-md-6</code> mean?`, `Half the row's width from the md breakpoint (768px) upwards; full width below.`, `Trong Bootstrap, <code>col-md-6</code> nghĩa là gì?`, `Rộng một nửa hàng từ breakpoint md (768px) trở lên; nhỏ hơn thì rộng hết.`],
+    [`Flexbox or Grid for a gallery of product cards?`, `Grid — it is two-dimensional (rows and columns); Flexbox suits a single row such as a nav bar.`, `Flexbox hay Grid cho một lưới thẻ sản phẩm?`, `Grid — nó hai chiều (hàng và cột); Flexbox hợp với một hàng đơn như thanh nav.`],
+  ],
+};

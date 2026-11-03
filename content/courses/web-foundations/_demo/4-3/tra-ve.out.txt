@@ -1,0 +1,6 @@
+undefined 10
+hello
+undefined
+{name: 'Linh'} undefined
+undefined
+4 null

@@ -275,7 +275,7 @@ hint: If you are sure you want to delete it, run 'git branch -D thu/nhanh'</code
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Branches-in-a-Nutshell" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.1 (tiếng Việt) — Nhánh trong Git là gì</span><span class="lc-sub">Cùng ý "một nhánh là một con trỏ", kèm sơ đồ của sách.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.1 (tiếng Anh) — Nhánh trong Git là gì</span><span class="lc-sub">Cùng ý "một nhánh là một con trỏ", kèm sơ đồ của sách.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-switch" target="_blank" rel="noopener">
   <span class="lc-ico">🔀</span>
@@ -524,7 +524,7 @@ git show --no-patch --format="%h cha: %p" HEAD
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.2 (tiếng Việt) — Căn bản về nhánh và hoà trộn</span><span class="lc-sub">Sơ đồ fast-forward và ba chiều, trong sách chính thức.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.2 (tiếng Anh) — Căn bản về nhánh và hoà trộn</span><span class="lc-sub">Sơ đồ fast-forward và ba chiều, trong sách chính thức.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-merge" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
@@ -795,7 +795,7 @@ config.txt:7: leftover conflict marker</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Advanced-Merging" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.8 (tiếng Việt) — Hoà trộn nâng cao</span><span class="lc-sub">Kiểu hiển thị xung đột, ours/theirs, rerere, và hợp nhất file nhị phân.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.8 (tiếng Anh) — Hoà trộn nâng cao</span><span class="lc-sub">Kiểu hiển thị xung đột, ours/theirs, rerere, và hợp nhất file nhị phân.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>
@@ -804,6 +804,21 @@ config.txt:7: leftover conflict marker</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> commit luôn cả ký hiệu xung đột. Bỏ sót một dòng <code>=======</code> hay <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code> là nó đi thẳng vào lịch sử — file trở nên sai cú pháp và CI hỏng với một thông báo chỉ vào chỗ chẳng ích gì. Trước khi kết thúc một lần merge, hãy chạy <code>git diff --check</code> (nó báo ký hiệu còn sót) hoặc đơn giản là <code>git grep -n "^&lt;&lt;&lt;&lt;&lt;&lt;&lt;"</code>. Chương 12 chỉ cách làm một hook pre-commit tự động từ chối việc đó.</div>
 <p class="note-ct"><strong>Bước mà người ta hay bỏ qua:</strong> chạy test sau khi giải xung đột. Một bản giải xung đột là mã MỚI chưa từng được chạy ở đâu — bạn viết nó bằng tay, dưới áp lực nhẹ, ghép ý định của hai người lại. Đó đúng là loại mã biên dịch trót lọt và hành xử sai. Hãy giải, rồi <em>chạy nó</em>, rồi mới commit.</p>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.3 — Git workflow for real work</span><span class="lc-sub">Two people, one origin: a rejected push, an automatic merge and a real conflict resolved step by step</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-3-git-workflow" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.3 — Quy trình Git cho công việc thật</span><span class="lc-sub">Hai người, một origin: push bị từ chối, gộp tự động và một xung đột thật được gỡ từng bước</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -854,7 +869,7 @@ git log --oneline --graph -5</code></pre>
 
 <h3>The golden rule</h3>
 <div class="callout danger"><strong>Never rebase commits that other people already have.</strong> Rebasing replaces commits with new ones. If a colleague pulled the originals, their history and yours have silently diverged — and when they next pull, Git tries to merge the old copies with the new copies and produces duplicate commits and conflicts nobody can explain. Rebase freely on a branch only you have; use merge once it is shared.</div>
-<p>The practical boundary: <em>have I pushed this branch, and could anyone have pulled it?</em> A personal feature branch nobody else touches is fine to rebase even after pushing (you force-push with <code>--force-with-lease</code>, Chapter 8.3). A shared branch — <code>main</code>, <code>develop</code>, a branch two people are working on — is not.</p>
+<p>The practical boundary: <em>have I pushed this branch, and could anyone have pulled it?</em> A personal feature branch nobody else touches is fine to rebase even after pushing (you force-push with <code>--force-with-lease</code>, Chapter 8.2). A shared branch — <code>main</code>, <code>develop</code>, a branch two people are working on — is not.</p>
 <div class="pitfall co-tieu-de"><strong>How this goes wrong in a student team project.</strong> <b>Rebasing <code>develop</code> "to make it tidy".</b> Four teammates already pulled it; after your force-push each of them gets duplicated commits on the next pull. Tidy your own <code>feature/*</code> branch instead, before opening the PR. <b>Rebasing a branch you share with one teammate.</b> Agree first, or merge. <b>Using <code>--force</code> instead of <code>--force-with-lease</code>.</b> Plain force silently deletes whatever your teammate pushed in the last five minutes.</div>
 
 <h3>Choosing</h3>
@@ -883,11 +898,11 @@ git rebase --abort             <span class="tok-comment"># give up entirely, bac
 <p>And this is where <code>rerere</code> (3.3) earns its keep: on a rebase of ten commits through the same conflicting region, it resolves nine of them for you after you solve the first.</p>
 
 <h3>git pull is merge or rebase — pick deliberately</h3>
-<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (default)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># with pull.rebase false (lesson 0.3) = git fetch + git merge origin/main</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># make --rebase the default</span>
 git config --global pull.ff only          <span class="tok-comment"># or: refuse to pull unless fast-forward</span></code></pre>
-<p>The default creates a merge commit every time your local branch and the remote have both moved. On a busy <code>main</code> this produces a stream of noise commits saying "Merge branch 'main' of github.com:…" — pure bookkeeping that tells a reader nothing.</p>
+<p>Git 2.33 and later have no silent default here: if your local branch and the remote have both moved and neither setting is configured, <code>git pull</code> stops with <code>fatal: Need to specify how to reconcile divergent branches.</code> That is why lesson 0.3 sets <code>pull.rebase false</code>. With that setting, every pull where both sides moved creates a merge commit. On a busy <code>main</code> this produces a stream of noise commits saying "Merge branch 'main' of github.com:…" — pure bookkeeping that tells a reader nothing.</p>
 <div class="callout ok"><code>pull.rebase true</code> is safe for the everyday case even under the golden rule: you are rebasing <em>your own unpushed commits</em> onto what the server already has. Nobody else has your local commits, so nothing is being rewritten out from under anyone. This is the setting most teams end up standardising on.</div>
 
 <h3>Rebasing onto a different base</h3>
@@ -977,7 +992,7 @@ git log --oneline --graph -5</code></pre>
 
 <h3>Luật vàng</h3>
 <div class="callout danger"><strong>Đừng bao giờ rebase những commit mà người khác đã có.</strong> Rebase thay commit bằng những commit mới. Nếu một đồng nghiệp đã kéo bản gốc về, lịch sử của họ và của bạn đã âm thầm phân ly — và lần pull tiếp theo, Git sẽ cố hợp nhất bản sao cũ với bản sao mới rồi sinh ra commit trùng lặp cùng những xung đột không ai giải thích nổi. Hãy rebase thoải mái trên nhánh chỉ mình bạn có; dùng merge khi nó đã được chia sẻ.</div>
-<p>Ranh giới thực dụng: <em>tôi đã push nhánh này chưa, và có ai có thể đã kéo nó về không?</em> Một nhánh tính năng cá nhân không ai khác đụng vào thì rebase được kể cả sau khi push (bạn force-push bằng <code>--force-with-lease</code>, bài 8.3). Một nhánh chung — <code>main</code>, <code>develop</code>, một nhánh hai người cùng làm — thì không.</p>
+<p>Ranh giới thực dụng: <em>tôi đã push nhánh này chưa, và có ai có thể đã kéo nó về không?</em> Một nhánh tính năng cá nhân không ai khác đụng vào thì rebase được kể cả sau khi push (bạn force-push bằng <code>--force-with-lease</code>, bài 8.2). Một nhánh chung — <code>main</code>, <code>develop</code>, một nhánh hai người cùng làm — thì không.</p>
 <div class="pitfall co-tieu-de"><strong>Chuyện này hỏng thế nào trong đồ án nhóm.</strong> <b>Rebase <code>develop</code> "cho gọn".</b> Bốn bạn cùng nhóm đã kéo nó về; sau khi bạn force-push, ai pull lần tới cũng bị nhân đôi commit. Hãy dọn nhánh <code>feature/*</code> của riêng bạn, trước khi mở PR. <b>Rebase một nhánh đang làm chung với một bạn.</b> Thống nhất trước, hoặc dùng merge. <b>Dùng <code>--force</code> thay vì <code>--force-with-lease</code>.</b> Force trần âm thầm xoá mất thứ bạn cùng nhóm vừa push năm phút trước.</div>
 
 <h3>Chọn cái nào</h3>
@@ -1006,11 +1021,11 @@ git rebase --abort             <span class="tok-comment"># bỏ hẳn, về trư
 <p>Và đây là chỗ <code>rerere</code> (bài 3.3) trả công: khi rebase mười commit đi qua cùng một vùng xung đột, nó giải hộ bạn chín cái sau khi bạn giải cái đầu tiên.</p>
 
 <h3>git pull là merge hay rebase — hãy chọn có chủ ý</h3>
-<pre><code class="language-bash">git pull                       <span class="tok-comment"># = git fetch + git merge origin/main (mặc định)</span>
+<pre><code class="language-bash">git pull                       <span class="tok-comment"># với pull.rebase false (bài 0.3) = git fetch + git merge origin/main</span>
 git pull --rebase              <span class="tok-comment"># = git fetch + git rebase origin/main</span>
 git config --global pull.rebase true      <span class="tok-comment"># lấy --rebase làm mặc định</span>
 git config --global pull.ff only          <span class="tok-comment"># hoặc: từ chối pull trừ khi fast-forward</span></code></pre>
-<p>Mặc định tạo một commit hợp nhất mỗi lần nhánh cục bộ và remote cùng tiến lên. Trên một <code>main</code> sôi động, nó sinh ra một dòng commit nhiễu ghi "Merge branch 'main' of github.com:…" — thuần sổ sách, chẳng nói gì với người đọc.</p>
+<p>Từ Git 2.33 không còn mặc định ngầm ở đây: nếu nhánh cục bộ và remote cùng tiến lên mà chưa cấu hình gì, <code>git pull</code> dừng lại với <code>fatal: Need to specify how to reconcile divergent branches.</code> Vì thế bài 0.3 đặt <code>pull.rebase false</code>. Với thiết lập đó, mỗi lần pull mà hai bên cùng tiến sẽ tạo một commit hợp nhất. Trên một <code>main</code> sôi động, nó sinh ra một dòng commit nhiễu ghi "Merge branch 'main' of github.com:…" — thuần sổ sách, chẳng nói gì với người đọc.</p>
 <div class="callout ok"><code>pull.rebase true</code> an toàn cho trường hợp hằng ngày kể cả dưới luật vàng: bạn đang rebase <em>những commit chưa push của chính mình</em> lên trên thứ máy chủ đã có. Không ai khác có commit cục bộ của bạn, nên không có gì bị viết lại dưới chân người khác. Đây là thiết lập mà đa số nhóm rốt cuộc chuẩn hoá theo.</div>
 
 <h3>Rebase lên một gốc khác</h3>
@@ -1050,7 +1065,7 @@ c17550f HEAD@{4}: checkout: moving from main to feature/rebase</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 3.6 (tiếng Việt) — Rebase</span><span class="lc-sub">Gồm cả mục "Hiểm hoạ của Rebase", chính là luật vàng kèm sơ đồ.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 3.6 (tiếng Anh) — Rebase</span><span class="lc-sub">Gồm cả mục "Hiểm hoạ của Rebase", chính là luật vàng kèm sơ đồ.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-rebase" target="_blank" rel="noopener">
   <span class="lc-ico">♻️</span>
@@ -1339,7 +1354,7 @@ git reflog -6
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.6 (tiếng Việt) — Viết lại lịch sử</span><span class="lc-sub">Rebase tương tác, chẻ commit, và quy trình amend.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.6 (tiếng Anh) — Viết lại lịch sử</span><span class="lc-sub">Rebase tương tác, chẻ commit, và quy trình amend.</span></span>
 </a>
 <a class="link-card codelab" href="/code-lab/git${REF}" target="_blank" rel="noopener">
   <span class="lc-ico">🧪</span>

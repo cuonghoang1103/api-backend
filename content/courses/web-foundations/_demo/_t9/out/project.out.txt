@@ -1,0 +1,25 @@
+$ cat tsconfig.json
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "include": ["src"]
+}
+
+$ npx tsc -p .        (type-check and compile src/ → dist/)
+(exit code 0)
+$ ls dist
+config.js
+index.js
+
+$ node dist/index.js
+Error: DATABASE_URL is required
+$ DATABASE_URL=postgres://localhost/shop PORT=8080 node dist/index.js
+Server would listen on port 8080

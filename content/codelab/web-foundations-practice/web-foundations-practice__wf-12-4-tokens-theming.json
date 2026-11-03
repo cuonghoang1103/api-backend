@@ -1,0 +1,684 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-12-4-tokens-theming",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-12-4-tokens-theming"
+  },
+  "exercises": [
+    {
+      "title": "Khai báo token trên :root",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "custom property",
+        ":root"
+      ],
+      "prerequisites": [
+        "selector"
+      ],
+      "tags": [
+        "css",
+        "token"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p>Khai báo năm token ngữ nghĩa trên <code>:root</code>: <code>--color-bg: #f8fafc</code>, <code>--color-text: #0f172a</code>, <code>--color-muted: #334155</code>, <code>--color-primary: #2563eb</code>, <code>--radius-md: 10px</code>. Code khởi đầu đặt chúng trong <code>.card</code> — nên <code>body</code> và các phần tử ngoài thẻ không thấy.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Năm token nằm trên :root (phần tử html).</li>\n  <li>Đúng giá trị như đề.</li>\n  <li>body dùng --color-bg và --color-text.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Token toàn trang.",
+      "constraints": "Tên token đúng như đề.",
+      "examplesJson": [
+        {
+          "input": ":root { --color-primary: #2563eb; }",
+          "output": "mọi phần tử đọc được var(--color-primary)",
+          "explanation": "Custom property được kế thừa xuống cả trang."
+        }
+      ],
+      "hintsJson": [
+        ":root là phần tử <html> — khai ở đó thì mọi con cháu kế thừa.",
+        ":root { --color-bg: #f8fafc; … } body { background: var(--color-bg); color: var(--color-text); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — token đặt sai chỗ */\n.card { --color-bg: #f8fafc; --color-text: #0f172a; --color-muted: #334155; --color-primary: #2563eb; --radius-md: 10px; }\nbody { background: var(--color-bg); color: var(--color-text); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — token ngữ nghĩa trên :root ⇒ cả trang kế thừa */\n:root {\n  --color-bg: #f8fafc;\n  --color-text: #0f172a;\n  --color-muted: #334155;\n  --color-primary: #2563eb;\n  --radius-md: 10px;\n}\nbody { background: var(--color-bg); color: var(--color-text); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Custom property kế thừa từ cha xuống con như <code>color</code>. Khai trên <code>.card</code> thì chỉ thẻ và con của nó thấy; <code>body</code> là cha của thẻ nên không thấy gì. <code>:root</code> là gốc của cây, khai ở đó là toàn trang.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết -color-bg (một gạch) — không phải custom property.</li>\n  <li>Viết hoa tên khi đọc — custom property phân biệt hoa thường.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/:root",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "--color-primary on :root|||--color-primary trên :root",
+            "kiem": "css",
+            "selector": "html",
+            "thuocTinh": "--color-primary",
+            "giaTri": "#2563eb"
+          },
+          {
+            "moTa": "--color-bg and --radius-md on :root|||--color-bg và --radius-md trên :root",
+            "kiem": "css",
+            "selector": "html",
+            "thuocTinh": "--radius-md",
+            "giaTri": "10px"
+          },
+          {
+            "moTa": "body background resolves to #f8fafc|||Nền body tính ra #f8fafc",
+            "kiem": "css",
+            "selector": "body",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(248, 250, 252)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Hidden: --color-muted|||Ẩn: --color-muted",
+            "an": true,
+            "kiem": "css",
+            "selector": "html",
+            "thuocTinh": "--color-muted",
+            "giaTri": "#334155"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết -color-bg (một gạch) — không phải custom property."
+        },
+        {
+          "loi": "Viết hoa tên khi đọc — custom property phân biệt hoa thường."
+        }
+      ]
+    },
+    {
+      "title": "Component chỉ dùng token",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "var()",
+        "token ngữ nghĩa"
+      ],
+      "prerequisites": [
+        "custom property"
+      ],
+      "tags": [
+        "css",
+        "token"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p>Token đã có trên <code>:root</code>. CSS component (<code>.card</code>, <code>.card__meta</code>, <code>.btn</code>) đang viết mã màu trực tiếp. Thay MỌI mã màu và bán kính trong component bằng <code>var(--…)</code>: viền thẻ <code>--color-border</code>, chữ phụ <code>--color-muted</code>, nút nền <code>--color-primary</code> chữ <code>--color-bg</code>, bo góc <code>--radius-md</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ngoài :root, styles.css không còn mã màu # nào.</li>\n  <li>Màu tính ra đúng như trước (nút xanh #2563eb).</li>\n  <li>Bo góc thẻ dùng --radius-md.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Component dùng token.",
+      "constraints": "Không đổi giá trị token.",
+      "examplesJson": [
+        {
+          "input": ".btn { background: var(--color-primary); }",
+          "output": "rgb(37, 99, 235)",
+          "explanation": "Đổi theme ⇒ nút tự đổi theo."
+        }
+      ],
+      "hintsJson": [
+        "Tìm mọi # ngoài :root và thay bằng token tương ứng.",
+        ".btn { background: var(--color-primary); color: var(--color-bg); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — token có sẵn nhưng component chưa dùng */\n:root { --color-bg: #f8fafc; --color-text: #0f172a; --color-muted: #334155; --color-border: #cbd5e1; --color-primary: #2563eb; --radius-md: 10px; }\nbody { background: var(--color-bg); color: var(--color-text); }\n.card { border: 1px solid #cbd5e1; border-radius: 10px; padding: 12px; }\n.card__meta { color: #334155; }\n.btn { background: #2563eb; color: #f8fafc; border: 0; padding: 8px 14px; border-radius: 8px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — component chỉ nói \"vai trò\", token nói \"giá trị\" */\n:root { --color-bg: #f8fafc; --color-text: #0f172a; --color-muted: #334155; --color-border: #cbd5e1; --color-primary: #2563eb; --radius-md: 10px; }\nbody { background: var(--color-bg); color: var(--color-text); }\n.card { border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 12px; }\n.card__meta { color: var(--color-muted); }\n.btn { background: var(--color-primary); color: var(--color-bg); border: 0; padding: 8px 14px; border-radius: 8px; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khi component chỉ đọc token ngữ nghĩa, đổi giao diện (hay thêm theme tối) là sửa giá trị token — không đụng tới component nào. Máy chấm kiểm cả màu tính ra (sau khi trình duyệt thay <code>var()</code>) lẫn mã nguồn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sót một mã màu trong :hover hay border.</li>\n  <li>Dùng token nguyên thuỷ (--blue-600) trong component — theme tối không đổi được.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/var",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "No hex colours outside :root|||Không mã màu # ngoài :root",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\}[^}]*#[0-9a-fA-F]{3,8}\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Button resolves to the primary blue|||Nút tính ra màu xanh chính",
+            "kiem": "css",
+            "selector": ".btn",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(37, 99, 235)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Muted text resolves to slate|||Chữ phụ tính ra màu xám",
+            "kiem": "css",
+            "selector": ".card__meta",
+            "thuocTinh": "color",
+            "giaTri": "rgb(51, 65, 85)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Card radius uses --radius-md|||Bo góc thẻ dùng --radius-md",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "border-radius\\s*:\\s*var\\(--radius-md\\)"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sót một mã màu trong :hover hay border."
+        },
+        {
+          "loi": "Dùng token nguyên thuỷ (--blue-600) trong component — theme tối không đổi được."
+        }
+      ]
+    },
+    {
+      "title": "Sửa bẫy token thiếu đơn vị",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 10,
+      "points": 20,
+      "concepts": [
+        "invalid at computed-value time",
+        "calc()"
+      ],
+      "prerequisites": [
+        "var()"
+      ],
+      "tags": [
+        "css",
+        "token"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p><code>--sidebar-width: 240</code> không có đơn vị nên <code>width: var(--sidebar-width)</code> không hợp lệ và sidebar bung hết bề ngang — không có lỗi nào hiện ra. Sửa để <code>.sidebar</code> rộng đúng 240px VÀ <code>.content</code> có <code>margin-left</code> bằng chính token đó cộng 16px (dùng <code>calc()</code>). Giữ một chỗ khai báo duy nhất.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>.sidebar rộng 240px (đo thật).</li>\n  <li>.content margin-left 256px, tính từ token bằng calc().</li>\n  <li>Token khai một lần trên :root.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Bố cục đúng.",
+      "constraints": "Không viết số 240 ở chỗ thứ hai.",
+      "examplesJson": [
+        {
+          "input": "--sidebar-width: 240px",
+          "output": "width: 240px",
+          "explanation": "Đơn vị nằm trong token."
+        }
+      ],
+      "hintsJson": [
+        "Cách 1: --sidebar-width: 240px. Cách 2: calc(var(--sidebar-width) * 1px).",
+        ".content { margin-left: calc(var(--sidebar-width) + 16px); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <aside class=\"sidebar\">Menu</aside>\n  <main class=\"content\">Nội dung</main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — token thiếu đơn vị */\n:root { --sidebar-width: 240; }\n.sidebar { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-width); background: #0f172a; color: #fff; }\n.content { margin-left: 256px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <aside class=\"sidebar\">Menu</aside>\n  <main class=\"content\">Nội dung</main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — đơn vị nằm TRONG token; mọi chỗ khác tính từ token */\n:root { --sidebar-width: 240px; }\n.sidebar {\n  position: fixed; top: 0; left: 0; bottom: 0;\n  width: var(--sidebar-width);\n  background: #0f172a; color: #fff;\n}\n.content { margin-left: calc(var(--sidebar-width) + 16px); }   /* 240px + 16px = 256px */\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Custom property lưu chữ thô; <code>240</code> không phải độ dài, nên <code>width: 240</code> bị coi là \"không hợp lệ lúc tính giá trị\" và trình duyệt dùng giá trị khởi đầu (auto). <code>calc()</code> cộng được token với hằng số, nên khoảng cách luôn đi theo bề rộng sidebar.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Sửa width thành 240px trực tiếp — token vô dụng, margin lệch khi đổi.</li>\n  <li>calc(var(--sidebar-width)+16px) thiếu khoảng trắng quanh + — calc không hợp lệ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties#invalid_custom_properties",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Sidebar is 240px wide|||Sidebar rộng 240px",
+            "kiem": "kich-thuoc",
+            "selector": ".sidebar",
+            "thuocTinh": "width",
+            "giaTri": 240,
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Content margin-left 256px|||margin-left của content 256px",
+            "kiem": "css",
+            "selector": ".content",
+            "thuocTinh": "margin-left",
+            "giaTri": "256px",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "margin-left derived from the token with calc()|||margin-left tính từ token bằng calc()",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "margin-left\\s*:\\s*calc\\([^)]*var\\(--sidebar-width\\)"
+          },
+          {
+            "moTa": "The number 240 appears only once|||Số 240 chỉ xuất hiện một lần",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "240[\\s\\S]*240",
+            "phuDinh": true
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Sửa width thành 240px trực tiếp — token vô dụng, margin lệch khi đổi."
+        },
+        {
+          "loi": "calc(var(--sidebar-width)+16px) thiếu khoảng trắng quanh + — calc không hợp lệ."
+        }
+      ]
+    },
+    {
+      "title": "Theme tối bằng [data-theme]",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "data-theme",
+        "token ngữ nghĩa"
+      ],
+      "prerequisites": [
+        "attribute selector",
+        "token"
+      ],
+      "tags": [
+        "css",
+        "theme",
+        "dark mode"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p>Trang được mở với <code>&lt;html data-theme=\"dark\"&gt;</code>. Thêm khối <code>:root[data-theme=\"dark\"]</code> định nghĩa lại các token ngữ nghĩa: nền <code>#0f172a</code>, chữ <code>#f8fafc</code>, chữ phụ <code>#cbd5e1</code>, màu chính <code>#93c5fd</code>. KHÔNG sửa luật component nào; KHÔNG dùng <code>filter: invert</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Có khối :root[data-theme=\"dark\"] với bốn token.</li>\n  <li>Ở theme tối: nền body tính ra rgb(15, 23, 42), nút tính ra rgb(147, 197, 253).</li>\n  <li>Luật component giữ nguyên.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html (data-theme=\"dark\") + styles.css.",
+      "outputSpec": "Theme tối.",
+      "constraints": "Không đổi khối component.",
+      "examplesJson": [
+        {
+          "input": ":root[data-theme=\"dark\"] { --color-bg: #0f172a; }",
+          "output": "nền tối",
+          "explanation": "Chỉ tầng ngữ nghĩa đổi."
+        }
+      ],
+      "hintsJson": [
+        ":root[data-theme=\"dark\"] đặc hiệu hơn :root nên đè được.",
+        ":root[data-theme=\"dark\"] { --color-bg: #0f172a; --color-text: #f8fafc; --color-muted: #cbd5e1; --color-primary: #93c5fd; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\" data-theme=\"dark\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — chưa có theme tối */\n:root { --color-bg: #f8fafc; --color-text: #0f172a; --color-muted: #334155; --color-primary: #2563eb; }\nbody { background: var(--color-bg); color: var(--color-text); }\n.card__meta { color: var(--color-muted); }\n.btn { background: var(--color-primary); color: var(--color-bg); border: 0; padding: 8px 14px; border-radius: 8px; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\" data-theme=\"dark\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"card\">\n    <h3 class=\"card__title\">Đơn hàng #1024</h3>\n    <p class=\"card__meta\">Đã giao hôm qua</p>\n    <button class=\"btn\">Theo dõi</button>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.4 — theme tối = tráo tầng token ngữ nghĩa, component không đổi */\n:root { --color-bg: #f8fafc; --color-text: #0f172a; --color-muted: #334155; --color-primary: #2563eb; }\n:root[data-theme=\"dark\"] {\n  --color-bg: #0f172a;\n  --color-text: #f8fafc;\n  --color-muted: #cbd5e1;\n  --color-primary: #93c5fd;      /* xanh NHẠT hơn để còn đọc được trên nền tối */\n}\nbody { background: var(--color-bg); color: var(--color-text); }\n.card__meta { color: var(--color-muted); }\n.btn { background: var(--color-primary); color: var(--color-bg); border: 0; padding: 8px 14px; border-radius: 8px; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>:root[data-theme=\"dark\"]</code> khớp phần tử html có thuộc tính đó và nặng hơn <code>:root</code> nên các token bị đè. Mọi component đọc token nên tự đổi theo. Muốn theo hệ điều hành thì đặt cùng các khai báo đó trong <code>@media (prefers-color-scheme: dark)</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Viết [data-theme=dark] lên body thay vì html — :root[...] không khớp.</li>\n  <li>Sửa luật .btn cho theme tối — nhân đôi CSS.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/prefers-color-scheme",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Dark tokens defined|||Có token tối",
+            "kiem": "css",
+            "selector": "html",
+            "thuocTinh": "--color-bg",
+            "giaTri": "#0f172a"
+          },
+          {
+            "moTa": "Body background resolves dark|||Nền body tính ra màu tối",
+            "kiem": "css",
+            "selector": "body",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(15, 23, 42)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Button uses the lighter primary|||Nút dùng màu chính nhạt hơn",
+            "kiem": "css",
+            "selector": ".btn",
+            "thuocTinh": "background-color",
+            "giaTri": "rgb(147, 197, 253)",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "No filter: invert|||Không dùng filter: invert",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "invert\\(",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Component rule unchanged|||Luật component giữ nguyên",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\.btn\\s*\\{\\s*background:\\s*var\\(--color-primary\\)"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Viết [data-theme=dark] lên body thay vì html — :root[...] không khớp."
+        },
+        {
+          "loi": "Sửa luật .btn cho theme tối — nhân đôi CSS."
+        }
+      ]
+    },
+    {
+      "title": "Nút chuyển theme bằng JavaScript",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "dataset",
+        "addEventListener",
+        "try/catch localStorage"
+      ],
+      "prerequisites": [
+        "DOM",
+        "theme bằng data-theme"
+      ],
+      "tags": [
+        "javascript",
+        "theme"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p>Viết script cho nút <code>#toggle</code>: mỗi lần bấm đổi <code>document.documentElement.dataset.theme</code> giữa <code>\"light\"</code> và <code>\"dark\"</code> (lần đầu: đang light ⇒ dark), cập nhật chữ của nút thành <code>\"Light mode\"</code> khi đang tối và <code>\"Dark mode\"</code> khi đang sáng, và CỐ GẮNG lưu vào <code>localStorage</code> — bọc trong <code>try/catch</code> vì bộ nhớ có thể bị chặn (máy chấm chạy trong khung hộp cát).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bấm 1 lần ⇒ html data-theme=\"dark\", nút ghi \"Light mode\".</li>\n  <li>Bấm 2 lần ⇒ \"light\", nút ghi \"Dark mode\".</li>\n  <li>Không lỗi JavaScript nào kể cả khi localStorage bị chặn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html (có sẵn CSS theme).",
+      "outputSpec": "Nút chuyển theme.",
+      "constraints": "Không dùng thư viện.",
+      "examplesJson": [
+        {
+          "input": "bấm #toggle",
+          "output": "<html data-theme=\"dark\">",
+          "explanation": "CSS :root[data-theme=\"dark\"] tráo token."
+        }
+      ],
+      "hintsJson": [
+        "const root = document.documentElement; const next = root.dataset.theme === \"dark\" ? \"light\" : \"dark\";",
+        "try { localStorage.setItem(\"theme\", next); } catch {} — đặt chữ nút sau khi đổi."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\" data-theme=\"light\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <style>\n    :root { --color-bg: #f8fafc; --color-text: #0f172a; }\n    :root[data-theme=\"dark\"] { --color-bg: #0f172a; --color-text: #f8fafc; }\n    body { background: var(--color-bg); color: var(--color-text); }\n  </style>\n</head>\n<body>\n  <button id=\"toggle\">Dark mode</button>\n  <script>\n    document.getElementById('toggle').addEventListener('click', () => {\n      localStorage.setItem('theme', 'dark');\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\" data-theme=\"light\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.4</title>\n  <style>\n    :root { --color-bg: #f8fafc; --color-text: #0f172a; }\n    :root[data-theme=\"dark\"] { --color-bg: #0f172a; --color-text: #f8fafc; }\n    body { background: var(--color-bg); color: var(--color-text); }\n  </style>\n</head>\n<body>\n  <button id=\"toggle\">Dark mode</button>\n  <script>\n    const root = document.documentElement;\n    const button = document.getElementById('toggle');\n    button.addEventListener('click', () => {\n      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';\n      root.dataset.theme = next;                       // CSS :root[data-theme=\"dark\"] tráo token\n      button.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';\n      try {\n        localStorage.setItem('theme', next);           // có thể bị chặn (ẩn danh, hộp cát)\n      } catch (e) {\n        // không lưu được thì thôi — trang vẫn phải chạy\n      }\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>dataset.theme</code> đọc/ghi thuộc tính <code>data-theme</code> của <code>&lt;html&gt;</code>; CSS lo phần còn lại. <code>localStorage</code> ném <code>SecurityError</code> khi bộ nhớ bị chặn — không bọc try/catch thì cả handler dừng giữa chừng và nút \"hỏng\" chỉ với một số người dùng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Gọi localStorage trước khi đổi theme mà không try/catch — lỗi chặn mất bước đổi theme.</li>\n  <li>So sánh với class thay vì data-theme — CSS không khớp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/dataset",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "One click ⇒ dark|||Bấm một lần ⇒ tối",
+            "kiem": "thuoc-tinh",
+            "selector": "html",
+            "thuocTinh": "data-theme",
+            "giaTri": "dark",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle"
+              }
+            ]
+          },
+          {
+            "moTa": "Button says Light mode when dark|||Nút ghi Light mode khi đang tối",
+            "kiem": "text",
+            "selector": "#toggle",
+            "giaTri": "Light mode",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle"
+              }
+            ]
+          },
+          {
+            "moTa": "Two clicks ⇒ light again|||Bấm hai lần ⇒ sáng lại",
+            "kiem": "thuoc-tinh",
+            "selector": "html",
+            "thuocTinh": "data-theme",
+            "giaTri": "light",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "No JavaScript errors|||Không lỗi JavaScript",
+            "kiem": "khong-loi-js",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#toggle",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "localStorage guarded by try/catch|||localStorage được bọc try/catch",
+            "kiem": "ma-nguon",
+            "tep": "index.html",
+            "khop": "try\\s*\\{[^}]*localStorage"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Gọi localStorage trước khi đổi theme mà không try/catch — lỗi chặn mất bước đổi theme."
+        },
+        {
+          "loi": "So sánh với class thay vì data-theme — CSS không khớp."
+        }
+      ]
+    },
+    {
+      "title": "Hàm tính tỉ lệ tương phản WCAG",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "relative luminance",
+        "contrast ratio",
+        "WCAG AA"
+      ],
+      "prerequisites": [
+        "parseInt hex",
+        "Math"
+      ],
+      "tags": [
+        "javascript",
+        "a11y"
+      ],
+      "problemHtml": "<p><em>Bài 12.4 — Token thiết kế và chế độ sáng/tối.</em> Máy chấm đọc token trên <code>:root</code> và màu đã tính (sau khi trình duyệt thay <code>var()</code>) của các phần tử.</p><p>Viết <code>contrastRatio(fg, bg)</code> nhận hai màu dạng <code>\"#rrggbb\"</code> và trả tỉ lệ tương phản WCAG làm tròn 2 chữ số (number). Rồi <code>passesAA(fg, bg, large = false)</code>: true khi tỉ lệ ≥ 4.5 (chữ thường) hoặc ≥ 3 (chữ lớn). Công thức: mỗi kênh c = giá trị/255; c ≤ 0.03928 ? c/12.92 : ((c+0.055)/1.055)^2.4; L = 0.2126 R + 0.7152 G + 0.0722 B; tỉ lệ = (Lsáng + 0.05)/(Ltối + 0.05).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>contrastRatio(\"#000000\", \"#ffffff\")</code> là 21; thứ tự hai màu không quan trọng.</li>\n  <li><code>contrastRatio(\"#9ca3af\", \"#ffffff\")</code> là 2.54.</li>\n  <li>passesAA đúng ngưỡng 4.5 / 3.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "fg, bg: chuỗi \"#rrggbb\"; large: boolean.",
+      "outputSpec": "number; boolean.",
+      "constraints": "Không dùng thư viện màu.",
+      "examplesJson": [
+        {
+          "input": "contrastRatio(\"#2563eb\", \"#f8fafc\")",
+          "output": "4.94",
+          "explanation": "Nút xanh trên nền sáng — vừa đạt AA."
+        }
+      ],
+      "hintsJson": [
+        "Tách kênh: hex.match(/\\w\\w/g).map((h) => parseInt(h, 16) / 255)",
+        "Sắp xếp hai độ chói giảm dần trước khi chia; Math.round(r * 100) / 100."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 12.4 — tương phản (chưa xong)\nfunction contrastRatio(fg, bg) {\n  return 1;\n}\nfunction passesAA(fg, bg, large = false) {\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 12.4 — tỉ lệ tương phản theo WCAG 2.x\nfunction luminance(hex) {\n  const [r, g, b] = hex.replace('#', '').match(/\\w\\w/g)\n    .map((h) => parseInt(h, 16) / 255)\n    .map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));   // tuyến tính hoá sRGB\n  return 0.2126 * r + 0.7152 * g + 0.0722 * b;                                 // mắt nhạy với xanh lá nhất\n}\n\nfunction contrastRatio(fg, bg) {\n  const [hi, lo] = [luminance(fg), luminance(bg)].sort((a, b) => b - a);       // sáng / tối\n  return Math.round(((hi + 0.05) / (lo + 0.05)) * 100) / 100;\n}\n\nfunction passesAA(fg, bg, large = false) {\n  return contrastRatio(fg, bg) >= (large ? 3 : 4.5);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Độ chói tương đối đo độ sáng mà mắt cảm nhận, không phải trung bình cộng ba kênh — xanh lá chiếm 71,5%. Sắp xếp hai độ chói để thứ tự tham số không quan trọng. Ngưỡng AA: 4,5:1 cho chữ thường, 3:1 cho chữ lớn (≥ 24px, hoặc 18,66px đậm).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên bước tuyến tính hoá — kết quả lệch.</li>\n  <li>Chia Lfg/Lbg trực tiếp — thiếu +0.05 và phụ thuộc thứ tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.4 Design token và theming.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Black on white is 21|||Đen trên trắng là 21",
+            "goi": "contrastRatio(\"#000000\", \"#ffffff\")",
+            "mongDoi": 21
+          },
+          {
+            "moTa": "Light grey on white fails: 2.54|||Xám nhạt trên trắng trượt: 2,54",
+            "goi": "contrastRatio(\"#9ca3af\", \"#ffffff\")",
+            "mongDoi": 2.54
+          },
+          {
+            "moTa": "Order does not matter|||Thứ tự không quan trọng",
+            "goi": "[contrastRatio(\"#2563eb\", \"#f8fafc\"), contrastRatio(\"#f8fafc\", \"#2563eb\")]",
+            "mongDoi": [
+              4.94,
+              4.94
+            ]
+          },
+          {
+            "moTa": "passesAA thresholds|||Ngưỡng của passesAA",
+            "goi": "[passesAA(\"#2563eb\", \"#f8fafc\"), passesAA(\"#9ca3af\", \"#ffffff\"), passesAA(\"#9ca3af\", \"#ffffff\", true)]",
+            "mongDoi": [
+              true,
+              false,
+              false
+            ]
+          },
+          {
+            "moTa": "Hidden: dark theme pair|||Ẩn: cặp theme tối",
+            "an": true,
+            "goi": "contrastRatio(\"#0f172a\", \"#93c5fd\")",
+            "mongDoi": 9.9
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên bước tuyến tính hoá — kết quả lệch."
+        },
+        {
+          "loi": "Chia Lfg/Lbg trực tiếp — thiếu +0.05 và phụ thuộc thứ tự."
+        }
+      ]
+    }
+  ]
+}

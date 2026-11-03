@@ -1,0 +1,20 @@
+<!-- chay: tay — mở qua máy chủ trong _t2/chay.mjs -->
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Sending a form</title></head>
+<body>
+  <!-- GET: the data goes into the URL. Good for search: shareable, bookmarkable. -->
+  <form action="/search" method="get">
+    <input name="q" value="css grid">
+    <input name="sort" value="new">
+    <button id="tim">Search</button>
+  </form>
+
+  <!-- POST: the data goes into the request body. For anything that changes something. -->
+  <form action="/signup" method="post">
+    <input name="email" value="linh@example.com">
+    <input name="password" type="password" value="s3cret & safe">
+    <button id="dk">Sign up</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="chup" content="760x300">
+<title>absolute needs a positioned parent</title>
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; padding: 20px; display: flex; gap: 40px; }
+  .card { width: 260px; height: 150px; border: 2px solid #94a3b8; border-radius: 10px; padding: 14px; margin-top: 60px; }
+  .card.fixed-parent { position: relative; }          /* the fix */
+  .badge { position: absolute; top: 8px; right: 8px; background: #dc2626; color: #fff; padding: 2px 10px; border-radius: 999px; font-size: 14px; }
+  h3 { margin: 0; }
+</style>
+</head>
+<body>
+  <div class="card" id="broken"><h3>Card A</h3><p>no position on the card</p><span class="badge">NEW A</span></div>
+  <div class="card fixed-parent" id="fixed"><h3>Card B</h3><p>card has position: relative</p><span class="badge">NEW B</span></div>
+  <script>
+    for (const id of ['broken', 'fixed']) {
+      const card = document.getElementById(id);
+      const badge = card.querySelector('.badge');
+      const c = card.getBoundingClientRect(), b = badge.getBoundingClientRect();
+      console.log(id.padEnd(6), '| badge offsetParent =', badge.offsetParent.tagName.toLowerCase(),
+        '| badge top-right inside card?', b.top >= c.top && b.right <= c.right);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+done with BOOK
+BOOK: 120000
+done with PEN
+PEN: error — unknown product PEN

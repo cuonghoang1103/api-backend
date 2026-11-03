@@ -1,0 +1,4 @@
+<form method="put" action="/save"> … <button>Save</button>  — clicked Save
+What the server received:
+  GET /save?price=7000
+Address bar now: /save?price=7000

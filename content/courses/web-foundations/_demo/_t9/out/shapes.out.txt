@@ -1,0 +1,7 @@
+$ npx tsc --noEmit --strict shapes.ts
+shapes.ts(11,6): error TS2540: Cannot assign to 'id' because it is a read-only property.
+shapes.ts(13,7): error TS2741: Property 'price' is missing in type '{ id: number; name: string; }' but required in type 'Product'.
+shapes.ts(14,58): error TS2353: Object literal may only specify known properties, and 'colour' does not exist in type 'Product'.
+shapes.ts(17,10): error TS18048: 'p.category' is possibly 'undefined'.
+shapes.ts(27,71): error TS2322: Type '"sold"' is not assignable to type 'Status'.
+(exit code 2)

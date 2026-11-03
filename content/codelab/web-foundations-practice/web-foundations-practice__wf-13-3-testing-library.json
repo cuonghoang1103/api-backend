@@ -1,0 +1,773 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-13-3-testing-library",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-13-3-testing-library"
+  },
+  "exercises": [
+    {
+      "title": "Ô nhập phải có nhãn",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "label for",
+        "getByLabelText",
+        "khả năng tiếp cận"
+      ],
+      "prerequisites": [
+        "form HTML"
+      ],
+      "tags": [
+        "html",
+        "a11y",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>Test <code>getByLabelText('Email')</code> và <code>getByLabelText('Password')</code> đang đỏ vì form chỉ có chữ gợi ý (placeholder), không có nhãn. Thêm <code>&lt;label&gt;</code> nối với từng ô bằng <code>for</code>/<code>id</code>: \"Email\" và \"Password\". Giữ placeholder nếu muốn — nhưng placeholder không phải nhãn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi input có một label nối đúng (for = id).</li>\n  <li>Chữ của nhãn là \"Email\" và \"Password\".</li>\n  <li>Nút gửi là button type=\"submit\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Form có nhãn.",
+      "constraints": "Không dùng aria-label thay cho nhãn nhìn thấy được.",
+      "examplesJson": [
+        {
+          "input": "<label for=\"email\">Email</label><input id=\"email\">",
+          "output": "getByLabelText(\"Email\") tìm thấy",
+          "explanation": "Nhãn nối bằng for/id."
+        }
+      ],
+      "hintsJson": [
+        "Mỗi input cần một id duy nhất; label for trỏ đúng id đó.",
+        "<label for=\"email\">Email</label> <input id=\"email\" name=\"email\" type=\"email\">"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form>\n    <input name=\"email\" type=\"email\" placeholder=\"Email\">\n    <input name=\"password\" type=\"password\" placeholder=\"Password\">\n    <button type=\"submit\">Log in</button>\n  </form>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form>\n    <!-- nhãn nhìn thấy được, nối bằng for/id: người dùng, trình đọc màn hình và getByLabelText đều tìm được -->\n    <label for=\"email\">Email</label>\n    <input id=\"email\" name=\"email\" type=\"email\" placeholder=\"lan@example.com\">\n    <label for=\"password\">Password</label>\n    <input id=\"password\" name=\"password\" type=\"password\">\n    <button type=\"submit\">Log in</button>\n  </form>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Placeholder biến mất khi gõ và nhiều trình đọc màn hình không đọc nó — nó không phải nhãn. <code>&lt;label for&gt;</code> cho ô một tên truy cập; <code>getByLabelText</code> tìm theo đúng tên đó. Test tìm không thấy thường là lỗi tiếp cận thật.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>for không khớp id — nhãn không nối với ô nào.</li>\n  <li>Dùng hai id trùng nhau.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Every input has a label|||Mọi input đều có nhãn",
+            "kiem": "co-nhan",
+            "selector": "input"
+          },
+          {
+            "moTa": "A label reads \"Email\"|||Có nhãn \"Email\"",
+            "kiem": "text",
+            "selector": "label[for=\"email\"], label[for]:first-of-type",
+            "giaTri": "Email",
+            "tatCa": false
+          },
+          {
+            "moTa": "A label reads \"Password\"|||Có nhãn \"Password\"",
+            "kiem": "ton-tai",
+            "selector": "label[for=\"password\"]"
+          },
+          {
+            "moTa": "Submit is a real button|||Nút gửi là button thật",
+            "kiem": "thuoc-tinh",
+            "selector": "form button",
+            "thuocTinh": "type",
+            "giaTri": "submit"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "for không khớp id — nhãn không nối với ô nào."
+        },
+        {
+          "loi": "Dùng hai id trùng nhau."
+        }
+      ]
+    },
+    {
+      "title": "div bấm được thành button thật",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "role button",
+        "getByRole",
+        "bàn phím"
+      ],
+      "prerequisites": [
+        "addEventListener"
+      ],
+      "tags": [
+        "html",
+        "a11y",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>\"Nút\" Thêm vào giỏ là một <code>&lt;div class=\"btn\"&gt;</code> có <code>onclick</code> — test <code>getByRole('button', { name: 'Add to cart' })</code> không tìm thấy, và người dùng bàn phím không bấm được. Đổi thành <code>&lt;button type=\"button\"&gt;</code> thật, giữ hành vi: mỗi lần bấm tăng số trong <code>#count</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Có <button> với chữ \"Add to cart\".</li>\n  <li>Không còn div có onclick.</li>\n  <li>Bấm 2 lần ⇒ #count hiện 2.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Nút thật.",
+      "constraints": "Gắn sự kiện bằng addEventListener.",
+      "examplesJson": [
+        {
+          "input": "bấm \"Add to cart\" hai lần",
+          "output": "#count = 2",
+          "explanation": "Hành vi giữ nguyên."
+        }
+      ],
+      "hintsJson": [
+        "<button type=\"button\" id=\"add\">Add to cart</button>",
+        "document.getElementById('add').addEventListener('click', () => { … });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <div class=\"btn\" onclick=\"add()\">Add to cart</div>\n  <p>In cart: <span id=\"count\">0</span></p>\n  <script>\n    let n = 0;\n    function add() { n++; document.getElementById('count').textContent = n; }\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <!-- button thật: có vai trò \"button\", nhận focus và bấm được bằng Enter/Space -->\n  <button type=\"button\" id=\"add\">Add to cart</button>\n  <p>In cart: <span id=\"count\">0</span></p>\n  <script>\n    let n = 0;\n    document.getElementById('add').addEventListener('click', () => {\n      n++;\n      document.getElementById('count').textContent = n;\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>&lt;button&gt;</code> có sẵn vai trò, focus bằng Tab, và bấm được bằng Enter/Space — div thì không có gì cả. Đổi đúng phần tử là sửa được cả test lẫn trải nghiệm của người dùng bàn phím và trình đọc màn hình.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thêm role=\"button\" vào div — vẫn thiếu focus và phím Enter/Space.</li>\n  <li>Quên type=\"button\" trong form — nút thành submit.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "A real button named \"Add to cart\"|||Có button thật tên \"Add to cart\"",
+            "kiem": "text",
+            "selector": "button",
+            "giaTri": "Add to cart",
+            "tatCa": false
+          },
+          {
+            "moTa": "No clickable div left|||Không còn div bấm được",
+            "kiem": "khong-ton-tai",
+            "selector": "div[onclick]"
+          },
+          {
+            "moTa": "Two clicks ⇒ 2|||Bấm hai lần ⇒ 2",
+            "kiem": "text",
+            "selector": "#count",
+            "giaTri": "2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "button",
+                "lan": 2
+              }
+            ]
+          },
+          {
+            "moTa": "No JavaScript errors|||Không lỗi JavaScript",
+            "kiem": "khong-loi-js",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "button"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thêm role=\"button\" vào div — vẫn thiếu focus và phím Enter/Space."
+        },
+        {
+          "loi": "Quên type=\"button\" trong form — nút thành submit."
+        }
+      ]
+    },
+    {
+      "title": "Thông báo có vai trò: status và alert",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "role=\"status\"",
+        "role=\"alert\"",
+        "findByRole"
+      ],
+      "prerequisites": [
+        "form submit",
+        "preventDefault"
+      ],
+      "tags": [
+        "html",
+        "a11y",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>Form đăng ký tin: khi gửi với email KHÔNG có <code>@</code>, hiện <code>&lt;p role=\"alert\"&gt;</code> \"Please enter a valid email\"; khi hợp lệ, xoá cảnh báo (nếu có) và đặt chữ <code>\"Subscribed: &lt;email&gt;\"</code> vào phần tử <code>role=\"status\"</code> có sẵn. Không được tải lại trang. Code khởi đầu chỉ <code>console.log</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Email sai ⇒ có role=\"alert\" với đúng chữ.</li>\n  <li>Email đúng ⇒ status = \"Subscribed: <email>\", không còn alert.</li>\n  <li>Không tải lại trang (preventDefault).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Form có thông báo truy cập được.",
+      "constraints": "Thông báo nằm trong phần tử có role đúng.",
+      "examplesJson": [
+        {
+          "input": "gõ \"lan\" rồi gửi",
+          "output": "alert: Please enter a valid email",
+          "explanation": "findByRole(\"alert\") tìm thấy."
+        }
+      ],
+      "hintsJson": [
+        "form.addEventListener(\"submit\", (e) => { e.preventDefault(); … })",
+        "Tạo alert: const p = document.createElement(\"p\"); p.setAttribute(\"role\", \"alert\");"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form id=\"sub\">\n    <label for=\"email\">Email</label>\n    <input id=\"email\" name=\"email\">\n    <button type=\"submit\">Subscribe</button>\n    <p role=\"status\" id=\"status\"></p>\n  </form>\n  <script>\n    document.getElementById('sub').addEventListener('submit', () => {\n      console.log('submitted');\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form id=\"sub\">\n    <label for=\"email\">Email</label>\n    <input id=\"email\" name=\"email\">\n    <button type=\"submit\">Subscribe</button>\n    <p role=\"status\" id=\"status\"></p>\n  </form>\n  <script>\n    const form = document.getElementById('sub');\n    const status = document.getElementById('status');\n    form.addEventListener('submit', (e) => {\n      e.preventDefault();                                    // không tải lại trang\n      const email = document.getElementById('email').value.trim();\n      const old = form.querySelector('[role=\"alert\"]');\n      if (old) old.remove();                                 // xoá cảnh báo cũ\n      if (!email.includes('@')) {\n        const p = document.createElement('p');\n        p.setAttribute('role', 'alert');                     // trình đọc màn hình đọc ngay\n        p.textContent = 'Please enter a valid email';\n        form.append(p);\n        status.textContent = '';\n        return;\n      }\n      status.textContent = 'Subscribed: ' + email;          // role=\"status\": đọc khi rảnh\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>role=\"alert\"</code> được trình đọc màn hình đọc ngay lập tức (lỗi); <code>role=\"status\"</code> đọc lịch sự khi rảnh (thành công). Testing Library tìm chúng bằng <code>findByRole('alert')</code> — cùng một thuộc tính phục vụ cả người dùng lẫn test.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên preventDefault — trang tải lại, mọi thông báo mất.</li>\n  <li>Không xoá alert cũ — gửi đúng rồi vẫn còn chữ lỗi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/alert_role",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Invalid email ⇒ alert|||Email sai ⇒ có alert",
+            "kiem": "text",
+            "selector": "[role=\"alert\"]",
+            "giaTri": "Please enter a valid email",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#sub"
+              }
+            ]
+          },
+          {
+            "moTa": "Valid email ⇒ status text|||Email đúng ⇒ có chữ status",
+            "kiem": "text",
+            "selector": "[role=\"status\"]",
+            "giaTri": "Subscribed: lan@example.com",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#sub"
+              }
+            ]
+          },
+          {
+            "moTa": "Fixing the email removes the alert|||Sửa email thì mất alert",
+            "kiem": "khong-ton-tai",
+            "selector": "[role=\"alert\"]",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#sub"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#sub"
+              }
+            ]
+          },
+          {
+            "moTa": "The page does not reload|||Trang không tải lại",
+            "kiem": "khong-tai-lai",
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "a@b.c"
+              },
+              {
+                "hanhDong": "gui",
+                "selector": "#sub"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên preventDefault — trang tải lại, mọi thông báo mất."
+        },
+        {
+          "loi": "Không xoá alert cũ — gửi đúng rồi vẫn còn chữ lỗi."
+        }
+      ]
+    },
+    {
+      "title": "Bộ đếm: nút −1 khoá ở 0",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "disabled",
+        "role=\"status\"",
+        "trạng thái giao diện"
+      ],
+      "prerequisites": [
+        "DOM events"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>Bài luyện trong bài học. Có hai nút \"+1\", \"−1\" và một dòng <code>role=\"status\"</code> hiện <code>\"Count: 0\"</code>. Viết script: \"+1\" tăng, \"−1\" giảm, dòng status luôn hiện <code>\"Count: N\"</code>, và \"−1\" bị <code>disabled</code> khi số đếm là 0 (cả lúc mới vào trang).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ba lần \"+1\" ⇒ \"Count: 3\".</li>\n  <li>\"−1\" khoá khi 0, mở khi > 0.</li>\n  <li>\"+1\" ×3 rồi \"−1\" ⇒ \"Count: 2\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Bộ đếm truy cập được.",
+      "constraints": "Dùng thuộc tính disabled thật, không chỉ đổi màu.",
+      "examplesJson": [
+        {
+          "input": "mới vào trang",
+          "output": "\"−1\" disabled",
+          "explanation": "Không cho đếm âm."
+        }
+      ],
+      "hintsJson": [
+        "Một hàm render() cập nhật status và minus.disabled = count === 0; gọi nó lúc đầu và sau mỗi lần bấm.",
+        "plus.addEventListener('click', () => { count++; render(); });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <button type=\"button\" id=\"plus\">+1</button>\n  <button type=\"button\" id=\"minus\">−1</button>\n  <p role=\"status\" id=\"status\">Count: 0</p>\n  <script>\n    let count = 0;\n    document.getElementById('plus').addEventListener('click', () => { count++; });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <button type=\"button\" id=\"plus\">+1</button>\n  <button type=\"button\" id=\"minus\">−1</button>\n  <p role=\"status\" id=\"status\">Count: 0</p>\n  <script>\n    let count = 0;\n    const plus = document.getElementById('plus');\n    const minus = document.getElementById('minus');\n    const status = document.getElementById('status');\n    // một chỗ duy nhất vẽ lại giao diện từ trạng thái\n    function render() {\n      status.textContent = 'Count: ' + count;\n      minus.disabled = count === 0;          // không cho đếm âm — và người dùng THẤY là không bấm được\n    }\n    plus.addEventListener('click', () => { count++; render(); });\n    minus.addEventListener('click', () => { count--; render(); });\n    render();                                // trạng thái ban đầu\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một hàm <code>render()</code> vẽ lại toàn bộ giao diện từ trạng thái giúp không bao giờ quên cập nhật một chỗ (đây cũng là ý tưởng của React). <code>disabled</code> thật được trình đọc màn hình báo \"dimmed/unavailable\" và Testing Library kiểm bằng <code>toBeDisabled()</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên gọi render() lúc đầu — \"−1\" bấm được ở 0.</li>\n  <li>Chỉ làm mờ bằng CSS — vẫn bấm được.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://testing-library.com/docs/queries/byrole",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Minus starts disabled|||\"−1\" khởi đầu bị khoá",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#minus",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "Three +1 ⇒ Count: 3|||Ba lần +1 ⇒ Count: 3",
+            "kiem": "text",
+            "selector": "[role=\"status\"]",
+            "giaTri": "Count: 3",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus",
+                "lan": 3
+              }
+            ]
+          },
+          {
+            "moTa": "+1 ×3 then −1 ⇒ Count: 2|||+1 ×3 rồi −1 ⇒ Count: 2",
+            "kiem": "text",
+            "selector": "[role=\"status\"]",
+            "giaTri": "Count: 2",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus",
+                "lan": 3
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#minus"
+              }
+            ]
+          },
+          {
+            "moTa": "Minus enabled above zero|||\"−1\" mở khi lớn hơn 0",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#minus",
+            "thuocTinh": "disabled",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus"
+              }
+            ]
+          },
+          {
+            "moTa": "Hidden: back to zero disables again|||Ẩn: về 0 thì khoá lại",
+            "an": true,
+            "kiem": "thuoc-tinh-js",
+            "selector": "#minus",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#plus"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#minus"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên gọi render() lúc đầu — \"−1\" bấm được ở 0."
+        },
+        {
+          "loi": "Chỉ làm mờ bằng CSS — vẫn bấm được."
+        }
+      ]
+    },
+    {
+      "title": "Khoá nút tới khi form hợp lệ",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "sự kiện input",
+        "disabled",
+        "kiểm tra dữ liệu"
+      ],
+      "prerequisites": [
+        "DOM events"
+      ],
+      "tags": [
+        "javascript",
+        "dom",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>Như form trong bài học: nút \"Sign up\" phải <code>disabled</code> cho tới khi email chứa <code>@</code> VÀ mật khẩu có ít nhất 8 ký tự; kiểm lại sau mỗi lần gõ (sự kiện <code>input</code>). Code khởi đầu chỉ kiểm lúc bấm nút.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Ban đầu nút disabled.</li>\n  <li>Email đúng + mật khẩu 7 ký tự ⇒ vẫn disabled.</li>\n  <li>Email đúng + mật khẩu 8 ký tự ⇒ enabled; xoá @ ⇒ disabled lại.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Form khoá/mở đúng lúc.",
+      "constraints": "Nghe sự kiện input (không phải change).",
+      "examplesJson": [
+        {
+          "input": "gõ lan@example.com + correct-horse",
+          "output": "nút mở",
+          "explanation": "Cả hai điều kiện đều đúng."
+        }
+      ],
+      "hintsJson": [
+        "form.addEventListener(\"input\", update) — sự kiện input nổi bọt lên form.",
+        "button.disabled = !(email.value.includes(\"@\") && password.value.length >= 8);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form id=\"f\">\n    <label for=\"email\">Email</label> <input id=\"email\" type=\"email\">\n    <label for=\"password\">Password</label> <input id=\"password\" type=\"password\">\n    <button type=\"submit\" id=\"go\">Sign up</button>\n  </form>\n  <script>\n    document.getElementById('go').addEventListener('click', (e) => {\n      const ok = document.getElementById('email').value.includes('@');\n      if (!ok) e.preventDefault();\n    });\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <form id=\"f\">\n    <label for=\"email\">Email</label> <input id=\"email\" type=\"email\">\n    <label for=\"password\">Password</label> <input id=\"password\" type=\"password\">\n    <button type=\"submit\" id=\"go\" disabled>Sign up</button>\n  </form>\n  <script>\n    const form = document.getElementById('f');\n    const email = document.getElementById('email');\n    const password = document.getElementById('password');\n    const button = document.getElementById('go');\n    // kiểm lại sau MỖI lần gõ: sự kiện input nổi bọt từ ô nhập lên form\n    function update() {\n      button.disabled = !(email.value.includes('@') && password.value.length >= 8);\n    }\n    form.addEventListener('input', update);\n    update();                                   // trạng thái ban đầu: khoá\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Một listener <code>input</code> trên form bắt được mọi ô nhờ nổi bọt (Chương 4). Điều kiện tính lại từ đầu mỗi lần, nên xoá <code>@</code> sẽ khoá lại nút. Test trong bài học kiểm đúng chuỗi này bằng <code>user.type</code> rồi <code>toBeEnabled()</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Nghe change — chỉ bắn khi rời ô, nút mở trễ.</li>\n  <li>Chỉ mở mà không bao giờ khoá lại.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Element/input_event",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Disabled at first|||Ban đầu bị khoá",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#go",
+            "thuocTinh": "disabled",
+            "giaTri": true
+          },
+          {
+            "moTa": "Short password keeps it disabled|||Mật khẩu ngắn vẫn khoá",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#go",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "1234567"
+              }
+            ]
+          },
+          {
+            "moTa": "Valid ⇒ enabled|||Hợp lệ ⇒ mở",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#go",
+            "thuocTinh": "disabled",
+            "giaTri": false,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "12345678"
+              }
+            ]
+          },
+          {
+            "moTa": "Removing @ disables again|||Xoá @ thì khoá lại",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#go",
+            "thuocTinh": "disabled",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "nhap",
+                "selector": "#password",
+                "giaTri": "correct-horse"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan@example.com"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#email",
+                "giaTri": "lan.example.com"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nghe change — chỉ bắn khi rời ô, nút mở trễ."
+        },
+        {
+          "loi": "Chỉ mở mà không bao giờ khoá lại."
+        }
+      ]
+    },
+    {
+      "title": "Tab có ARIA: tablist, tab, tabpanel",
+      "language": "html",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "role=\"tab\"",
+        "aria-selected",
+        "aria-controls",
+        "hidden"
+      ],
+      "prerequisites": [
+        "DOM events",
+        "thuộc tính"
+      ],
+      "tags": [
+        "html",
+        "a11y",
+        "testing"
+      ],
+      "problemHtml": "<p><em>Bài 13.3 — Kiểm thử giao diện theo cách người dùng thấy.</em> Máy chấm dựng trang, chạy script của bạn, rồi gõ/bấm như người dùng và kiểm thứ hiện ra — giống một test Testing Library.</p><p>Biến ba nút và ba khối nội dung thành tab truy cập được: vùng chứa <code>role=\"tablist\"</code>; mỗi nút <code>role=\"tab\"</code> có <code>aria-selected</code> (<code>\"true\"</code>/<code>\"false\"</code>) và <code>aria-controls</code> trỏ tới khối của nó; mỗi khối <code>role=\"tabpanel\"</code>, chỉ khối đang chọn hiện (các khối khác có thuộc tính <code>hidden</code>). Bấm một tab ⇒ chọn nó, bỏ chọn tab khác. Tab đầu được chọn sẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng role cho tablist / tab / tabpanel.</li>\n  <li>aria-selected và hidden khớp với tab đang chọn.</li>\n  <li>Bấm \"Reviews\" ⇒ chỉ khối Reviews hiện, tab đó aria-selected=\"true\".</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html.",
+      "outputSpec": "Tab dùng được với trình đọc màn hình.",
+      "constraints": "Ẩn bằng thuộc tính hidden, không chỉ bằng CSS.",
+      "examplesJson": [
+        {
+          "input": "bấm tab \"Reviews\"",
+          "output": "getByRole(\"tabpanel\") là khối Reviews",
+          "explanation": "Các khối khác hidden."
+        }
+      ],
+      "hintsJson": [
+        "Thêm role và aria-controls trong HTML; script chỉ cần một hàm select(tab).",
+        "select: mọi tab aria-selected=\"false\", panel.hidden = true; rồi bật tab được chọn và panel = document.getElementById(tab.getAttribute(\"aria-controls\"))."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <div class=\"tabs\">\n    <button type=\"button\" id=\"t1\">Details</button>\n    <button type=\"button\" id=\"t2\">Reviews</button>\n    <button type=\"button\" id=\"t3\">Shipping</button>\n  </div>\n  <div id=\"p1\">Made of aluminium.</div>\n  <div id=\"p2\">4.8 stars from 120 reviews.</div>\n  <div id=\"p3\">Ships in 2 days.</div>\n  <script>\n    // TODO: tab hoạt động\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 13.3</title>\n</head>\n<body>\n  <div class=\"tabs\" role=\"tablist\" aria-label=\"Product information\">\n    <button type=\"button\" role=\"tab\" id=\"t1\" aria-controls=\"p1\" aria-selected=\"true\">Details</button>\n    <button type=\"button\" role=\"tab\" id=\"t2\" aria-controls=\"p2\" aria-selected=\"false\">Reviews</button>\n    <button type=\"button\" role=\"tab\" id=\"t3\" aria-controls=\"p3\" aria-selected=\"false\">Shipping</button>\n  </div>\n  <div role=\"tabpanel\" id=\"p1\" aria-labelledby=\"t1\">Made of aluminium.</div>\n  <div role=\"tabpanel\" id=\"p2\" aria-labelledby=\"t2\" hidden>4.8 stars from 120 reviews.</div>\n  <div role=\"tabpanel\" id=\"p3\" aria-labelledby=\"t3\" hidden>Ships in 2 days.</div>\n  <script>\n    const tabs = [...document.querySelectorAll('[role=\"tab\"]')];\n    // chọn một tab: cập nhật aria-selected của mọi tab và ẩn/hiện panel tương ứng\n    function select(tab) {\n      for (const t of tabs) {\n        const on = t === tab;\n        t.setAttribute('aria-selected', String(on));\n        document.getElementById(t.getAttribute('aria-controls')).hidden = !on;\n      }\n    }\n    tabs.forEach((t) => t.addEventListener('click', () => select(t)));\n  </script>\n</body>\n</html>\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vai trò ARIA cho trình đọc màn hình biết \"đây là tab 2 trên 3, đang chọn\"; <code>aria-controls</code> nối tab với khối của nó; thuộc tính <code>hidden</code> ẩn thật (cả với công nghệ hỗ trợ). Testing Library tìm <code>getByRole('tab', { name: 'Reviews', selected: true })</code> chính nhờ các thuộc tính này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Ẩn bằng class CSS — trình đọc màn hình vẫn đọc khối ẩn.</li>\n  <li>Đặt aria-selected là boolean thay vì chuỗi \"true\"/\"false\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 13.3 Testing Library.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 2,
+        "tepHtml": "index.html",
+        "chayScript": true,
+        "kiem": [
+          {
+            "moTa": "Roles: tablist, 3 tabs, 3 tabpanels|||Vai trò: tablist, 3 tab, 3 tabpanel",
+            "kiem": "so-luong",
+            "selector": "[role=\"tablist\"] [role=\"tab\"]",
+            "giaTri": 3
+          },
+          {
+            "moTa": "Each tab controls its panel|||Mỗi tab trỏ tới khối của nó",
+            "kiem": "thuoc-tinh",
+            "selector": "[role=\"tab\"]",
+            "thuocTinh": "aria-controls",
+            "khop": "^p[123]$"
+          },
+          {
+            "moTa": "First tab selected, other panels hidden|||Tab đầu được chọn, khối khác ẩn",
+            "kiem": "thuoc-tinh",
+            "selector": "#p2",
+            "thuocTinh": "hidden"
+          },
+          {
+            "moTa": "Click Reviews ⇒ selected|||Bấm Reviews ⇒ được chọn",
+            "kiem": "thuoc-tinh",
+            "selector": "#t2",
+            "thuocTinh": "aria-selected",
+            "giaTri": "true",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#t2"
+              }
+            ]
+          },
+          {
+            "moTa": "Click Reviews ⇒ only its panel is visible|||Bấm Reviews ⇒ chỉ khối của nó hiện",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#p1",
+            "thuocTinh": "hidden",
+            "giaTri": true,
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#t2"
+              }
+            ]
+          },
+          {
+            "moTa": "Hidden: the old tab is deselected|||Ẩn: tab cũ bị bỏ chọn",
+            "an": true,
+            "kiem": "thuoc-tinh",
+            "selector": "#t1",
+            "thuocTinh": "aria-selected",
+            "giaTri": "false",
+            "truoc": [
+              {
+                "hanhDong": "click",
+                "selector": "#t3"
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ẩn bằng class CSS — trình đọc màn hình vẫn đọc khối ẩn."
+        },
+        {
+          "loi": "Đặt aria-selected là boolean thay vì chuỗi \"true\"/\"false\"."
+        }
+      ]
+    }
+  ]
+}

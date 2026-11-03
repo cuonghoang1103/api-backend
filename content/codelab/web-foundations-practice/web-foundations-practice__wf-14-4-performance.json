@@ -1,0 +1,737 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-14-4-performance",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-14-4-performance"
+  },
+  "exercises": [
+    {
+      "title": "Xếp hạng một chỉ số",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 10,
+      "points": 10,
+      "concepts": [
+        "Core Web Vitals",
+        "ngưỡng good/poor"
+      ],
+      "prerequisites": [
+        "object",
+        "if/else"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Viết <code>rate(metric, value)</code> trả <code>\"good\"</code>, <code>\"needs-improvement\"</code> hoặc <code>\"poor\"</code> theo ngưỡng của Google: LCP 2500/4000 ms, INP 200/500 ms, CLS 0.1/0.25, FCP 1800/3000 ms, TTFB 800/1800 ms. Giá trị ≤ ngưỡng đầu ⇒ good; ≤ ngưỡng hai ⇒ needs-improvement; lớn hơn ⇒ poor. Tên chỉ số không biết ⇒ ném <code>RangeError('unknown metric: X')</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bảng ngưỡng là dữ liệu, không phải chuỗi if dài.</li>\n  <li>Đúng biên: bằng ngưỡng vẫn là mức tốt hơn.</li>\n  <li>Tên lạ ⇒ RangeError.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "metric: string; value: number.",
+      "outputSpec": "string.",
+      "constraints": "Tên chỉ số phân biệt hoa thường như trên.",
+      "examplesJson": [
+        {
+          "input": "rate(\"LCP\", 12340)",
+          "output": "\"poor\"",
+          "explanation": "Trang slow.html của bài."
+        }
+      ],
+      "hintsJson": [
+        "const T = { LCP: [2500, 4000], … };",
+        "if (!(metric in T)) throw new RangeError(…)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — xếp hạng chỉ số\nfunction rate(metric, value) {\n  return value < 2500 ? 'good' : 'poor';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — xếp hạng chỉ số theo ngưỡng Core Web Vitals\nconst THRESHOLDS = {\n  LCP: [2500, 4000], INP: [200, 500], CLS: [0.1, 0.25], FCP: [1800, 3000], TTFB: [800, 1800],\n};\n\nfunction rate(metric, value) {\n  if (!Object.hasOwn(THRESHOLDS, metric)) throw new RangeError('unknown metric: ' + metric);\n  const [good, poor] = THRESHOLDS[metric];\n  if (value <= good) return 'good';\n  if (value <= poor) return 'needs-improvement';\n  return 'poor';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ngưỡng được chọn theo nghiên cứu về cảm nhận người dùng: 2,5 giây là lúc phần lớn người dùng còn thấy trang \"nhanh\". Google đánh giá ở phân vị 75 của người dùng thật — tức 3/4 lượt truy cập phải đạt good.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng < thay vì ≤ — 2500 bị tính là needs-improvement.</li>\n  <li>CLS tính bằng mili giây — nó không có đơn vị.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/vitals",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson pages|||Các trang của bài",
+            "goi": "[rate(\"LCP\", 12340), rate(\"LCP\", 1240), rate(\"CLS\", 0.209), rate(\"CLS\", 0)]",
+            "mongDoi": [
+              "poor",
+              "good",
+              "needs-improvement",
+              "good"
+            ]
+          },
+          {
+            "moTa": "Boundaries belong to the better rating|||Biên thuộc mức tốt hơn",
+            "goi": "[rate(\"INP\", 200), rate(\"INP\", 500), rate(\"INP\", 501), rate(\"TTFB\", 800)]",
+            "mongDoi": [
+              "good",
+              "needs-improvement",
+              "poor",
+              "good"
+            ]
+          },
+          {
+            "moTa": "Unknown metric throws|||Chỉ số lạ ném lỗi",
+            "goi": "rate(\"FID\", 10)",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "unknown metric: FID"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng < thay vì ≤ — 2500 bị tính là needs-improvement."
+        },
+        {
+          "loi": "CLS tính bằng mili giây — nó không có đơn vị."
+        }
+      ]
+    },
+    {
+      "title": "Total Blocking Time từ tác vụ dài",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "long task",
+        "TBT",
+        "50 ms"
+      ],
+      "prerequisites": [
+        "filter",
+        "reduce"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Một tác vụ dài là tác vụ trên luồng chính chạy hơn 50 ms. Viết <code>blocking(tasks)</code> với <code>tasks = [{ start, duration }]</code> (ms) trả <code>{ longTasks, longest, tbt }</code>: số tác vụ > 50 ms, thời lượng dài nhất (0 nếu không có tác vụ nào), và TBT = tổng phần VƯỢT 50 ms của mỗi tác vụ dài.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng 50 ms không phải tác vụ dài.</li>\n  <li>TBT chỉ cộng phần vượt 50.</li>\n  <li>Mảng rỗng ⇒ mọi số là 0.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "tasks: mảng.",
+      "outputSpec": "{ longTasks, longest, tbt }.",
+      "constraints": "Không cần xét khoảng FCP–TTI.",
+      "examplesJson": [
+        {
+          "input": "một tác vụ 300 ms",
+          "output": "{ longTasks: 1, longest: 300, tbt: 250 }",
+          "explanation": "Người dùng bấm trong lúc đó phải chờ tới 250 ms \"thừa\"."
+        }
+      ],
+      "hintsJson": [
+        "const long = tasks.filter((t) => t.duration > 50);",
+        "Math.max(0, ...tasks.map((t) => t.duration))"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — TBT\nfunction blocking(tasks) {\n  return { longTasks: tasks.length, longest: 0, tbt: 0 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — TBT: phần vượt 50 ms của mỗi tác vụ dài là thời gian trang \"đơ\"\nfunction blocking(tasks) {\n  const long = tasks.filter((t) => t.duration > 50);\n  return {\n    longTasks: long.length,\n    longest: Math.max(0, ...tasks.map((t) => t.duration)),\n    tbt: long.reduce((sum, t) => sum + (t.duration - 50), 0),\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Vì sao trừ 50? Một tác vụ 50 ms vẫn kịp phản hồi trong 100 ms. Phần dư là khoảng người dùng bấm mà không có gì xảy ra. Bài học: chia 300 ms thành 30 mẩu 10 ms thì tổng việc như nhau nhưng TBT về 0.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cộng cả thời lượng — TBT bị thổi phồng.</li>\n  <li>Math.max(...[]) = -Infinity khi mảng rỗng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/tbt",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "One 300 ms task|||Một tác vụ 300 ms",
+            "goi": "blocking([{ start: 100, duration: 300 }])",
+            "mongDoi": {
+              "longTasks": 1,
+              "longest": 300,
+              "tbt": 250
+            }
+          },
+          {
+            "moTa": "The same work cut into 10 ms slices|||Cùng lượng việc chia thành mẩu 10 ms",
+            "goi": "blocking(Array.from({ length: 30 }, (_, i) => ({ start: i * 20, duration: 10 })))",
+            "mongDoi": {
+              "longTasks": 0,
+              "longest": 10,
+              "tbt": 0
+            }
+          },
+          {
+            "moTa": "Exactly 50 is not long; empty input|||Đúng 50 không dài; đầu vào rỗng",
+            "goi": "[blocking([{ start: 0, duration: 50 }, { start: 60, duration: 120 }, { start: 200, duration: 51 }]), blocking([])]",
+            "mongDoi": [
+              {
+                "longTasks": 2,
+                "longest": 120,
+                "tbt": 71
+              },
+              {
+                "longTasks": 0,
+                "longest": 0,
+                "tbt": 0
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng cả thời lượng — TBT bị thổi phồng."
+        },
+        {
+          "loi": "Math.max(...[]) = -Infinity khi mảng rỗng."
+        }
+      ]
+    },
+    {
+      "title": "CLS theo cửa sổ phiên",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "layout shift",
+        "session window",
+        "hadRecentInput"
+      ],
+      "prerequisites": [
+        "vòng lặp",
+        "Math.max"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Mỗi lần bố cục nhảy, trình duyệt báo <code>{ time, value, hadRecentInput }</code> (time bằng ms). Viết <code>cls(shifts)</code>: bỏ các lần có <code>hadRecentInput</code> (người dùng vừa bấm/gõ — nhảy là do họ); gom các lần còn lại thành \"cửa sổ phiên\": lần mới vào cùng cửa sổ nếu cách lần trước < 1000 ms VÀ cách lần đầu cửa sổ < 5000 ms, nếu không thì mở cửa sổ mới. CLS = tổng LỚN NHẤT của một cửa sổ, làm tròn 3 chữ số (<code>Math.round(x * 1000) / 1000</code>). Không có lần nào ⇒ 0. Đầu vào đã theo thứ tự thời gian.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ hadRecentInput.</li>\n  <li>Khoảng cách < 1 s và cửa sổ < 5 s.</li>\n  <li>Lấy cửa sổ có tổng lớn nhất.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "shifts: mảng.",
+      "outputSpec": "number.",
+      "constraints": "Một lượt duyệt.",
+      "examplesJson": [
+        {
+          "input": "hai lần 0.13 + 0.079 cách nhau 300 ms",
+          "output": "0.209",
+          "explanation": "Đúng CLS của slow.html."
+        }
+      ],
+      "hintsJson": [
+        "Giữ: windowStart, lastTime, windowSum, best.",
+        "Lần mới: nếu t - lastTime < 1000 && t - windowStart < 5000 ⇒ cộng; ngược lại windowStart = t, windowSum = value."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — CLS\nfunction cls(shifts) {\n  return shifts.reduce((s, x) => s + x.value, 0);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — CLS: tổng lớn nhất trong một cửa sổ phiên (khoảng hở < 1 s, dài < 5 s)\nfunction cls(shifts) {\n  let best = 0, sum = 0, start = -Infinity, last = -Infinity;\n  for (const s of shifts) {\n    if (s.hadRecentInput) continue;                         // nhảy do người dùng vừa thao tác ⇒ không tính\n    if (s.time - last < 1000 && s.time - start < 5000) {\n      sum += s.value;                                       // cùng cửa sổ\n    } else {\n      start = s.time;                                       // mở cửa sổ mới\n      sum = s.value;\n    }\n    last = s.time;\n    best = Math.max(best, sum);\n  }\n  return Math.round(best * 1000) / 1000;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Trước 2021, CLS cộng dồn mọi lần nhảy suốt đời trang — trang mở lâu (mạng xã hội, SPA) bị phạt oan. Cửa sổ phiên đo \"cơn nhảy tệ nhất\" thay vì tổng, và bỏ những lần nhảy người dùng tự gây ra (mở menu).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cộng tất cả — không phải CLS hiện nay.</li>\n  <li>Quên làm tròn — 0.30000000000000004.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/cls",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The slow page|||Trang chậm",
+            "goi": "cls([{ time: 400, value: 0.13, hadRecentInput: false }, { time: 700, value: 0.079, hadRecentInput: false }])",
+            "mongDoi": 0.209
+          },
+          {
+            "moTa": "Gap ≥ 1 s opens a new window; best window wins|||Hở ≥ 1 s mở cửa sổ mới; cửa sổ lớn nhất thắng",
+            "goi": "cls([{ time: 0, value: 0.05, hadRecentInput: false }, { time: 500, value: 0.05, hadRecentInput: false }, { time: 2000, value: 0.2, hadRecentInput: false }, { time: 2100, value: 0.1, hadRecentInput: false }])",
+            "mongDoi": 0.3
+          },
+          {
+            "moTa": "Window capped at 5 s; input shifts ignored; empty is 0|||Cửa sổ tối đa 5 s; bỏ lần do người dùng; rỗng là 0",
+            "goi": "[cls([0, 900, 1800, 2700, 3600, 4500, 5400].map((t) => ({ time: t, value: 0.1, hadRecentInput: false }))), cls([{ time: 0, value: 0.9, hadRecentInput: true }]), cls([])]",
+            "mongDoi": [
+              0.6,
+              0,
+              0
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng tất cả — không phải CLS hiện nay."
+        },
+        {
+          "loi": "Quên làm tròn — 0.30000000000000004."
+        }
+      ]
+    },
+    {
+      "title": "Trình duyệt chọn ảnh nào trong srcset",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "srcset",
+        "sizes",
+        "device pixel ratio"
+      ],
+      "prerequisites": [
+        "split",
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng",
+        "ảnh"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Viết <code>pickSource(srcset, slotWidth, dpr)</code>: <code>srcset</code> là chuỗi <code>\"a-480.webp 480w, a-960.webp 960w, a-1920.webp 1920w\"</code> (thứ tự bất kỳ), <code>slotWidth</code> là bề rộng CSS ảnh sẽ chiếm (px), <code>dpr</code> là <code>devicePixelRatio</code>. Cần <code>slotWidth * dpr</code> điểm ảnh thật: chọn ứng viên NHỎ NHẤT có bề rộng ≥ số đó; không có ⇒ chọn ứng viên lớn nhất. Trả tên file.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đọc được khoảng trắng tuỳ ý quanh dấu phẩy.</li>\n  <li>Không giả định thứ tự trong srcset.</li>\n  <li>Không đủ lớn ⇒ lấy lớn nhất.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "srcset: string; slotWidth: number; dpr: number.",
+      "outputSpec": "string.",
+      "constraints": "Chỉ xử lý mô tả \"w\".",
+      "examplesJson": [
+        {
+          "input": "slot 400 px, dpr 2",
+          "output": "\"a-960.webp\"",
+          "explanation": "Cần 800 px thật: 480 không đủ, 960 là nhỏ nhất đủ."
+        }
+      ],
+      "hintsJson": [
+        "srcset.split(\",\").map((s) => s.trim().split(/\\s+/)) ⇒ [url, \"960w\"]",
+        "parseInt(\"960w\") === 960"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — chọn ảnh từ srcset\nfunction pickSource(srcset, slotWidth, dpr) {\n  return srcset.split(',')[0].trim().split(' ')[0];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — chọn ảnh từ srcset: nhỏ nhất mà vẫn đủ nét\nfunction pickSource(srcset, slotWidth, dpr) {\n  const candidates = srcset.split(',')\n    .map((part) => part.trim().split(/\\s+/))\n    .map(([url, w]) => ({ url, width: parseInt(w, 10) }))\n    .sort((a, b) => a.width - b.width);\n  const needed = slotWidth * dpr;                                  // điểm ảnh thật cần có\n  const fit = candidates.find((cand) => cand.width >= needed);\n  return (fit || candidates[candidates.length - 1]).url;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là lý do <code>srcset</code> + <code>sizes</code> cứu LCP trong bài: điện thoại không tải ảnh 1920 px cho một ô 400 px. Trình duyệt thật còn xét ảnh đã có trong cache và chế độ tiết kiệm dữ liệu, nhưng quy tắc gốc là đây.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên nhân dpr — ảnh mờ trên màn hình Retina.</li>\n  <li>Chọn ứng viên đầu tiên đủ lớn mà không sắp xếp.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTML/Responsive_images",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Smallest that is big enough|||Nhỏ nhất mà đủ lớn",
+            "goi": "[pickSource(\"a-480.webp 480w, a-960.webp 960w, a-1920.webp 1920w\", 400, 2), pickSource(\"a-480.webp 480w, a-960.webp 960w, a-1920.webp 1920w\", 400, 1)]",
+            "mongDoi": [
+              "a-960.webp",
+              "a-480.webp"
+            ]
+          },
+          {
+            "moTa": "Unordered, messy whitespace|||Không theo thứ tự, khoảng trắng lộn xộn",
+            "goi": "pickSource(\"  big.jpg 1600w ,small.jpg   400w,  mid.jpg 800w\", 500, 1.5)",
+            "mongDoi": "mid.jpg"
+          },
+          {
+            "moTa": "Nothing big enough ⇒ largest|||Không ứng viên nào đủ ⇒ lớn nhất",
+            "goi": "pickSource(\"x-320.png 320w, x-640.png 640w\", 1200, 3)",
+            "mongDoi": "x-640.png"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên nhân dpr — ảnh mờ trên màn hình Retina."
+        },
+        {
+          "loi": "Chọn ứng viên đầu tiên đủ lớn mà không sắp xếp."
+        }
+      ]
+    },
+    {
+      "title": "Ngân sách dung lượng trang",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "performance budget",
+        "gom nhóm",
+        "KB"
+      ],
+      "prerequisites": [
+        "reduce",
+        "object"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng",
+        "CI"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Viết <code>checkBudget(resources, budgetKb)</code>: <code>resources = [{ url, type, bytes }]</code> (type: script, style, image, font, document…), <code>budgetKb = { script: 170, image: 300, total: 500 }</code> (khoá tuỳ ý, <code>total</code> là tổng mọi loại). Trả <code>{ totals, over }</code>: <code>totals</code> = KB theo từng type xuất hiện + <code>total</code>, mỗi số làm tròn 1 chữ số (<code>Math.round(bytes / 1024 * 10) / 10</code>); <code>over</code> = mảng <code>{ type, kb, budget }</code> cho mỗi khoá trong ngân sách bị VƯỢT (type không có tài nguyên nào ⇒ 0 KB), theo thứ tự khoá của <code>budgetKb</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Cộng byte trước, làm tròn sau.</li>\n  <li>Vượt nghĩa là lớn hơn hẳn.</li>\n  <li>over theo thứ tự khoá ngân sách.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "resources: mảng; budgetKb: object.",
+      "outputSpec": "{ totals, over }.",
+      "constraints": "1 KB = 1024 byte.",
+      "examplesJson": [
+        {
+          "input": "ảnh hero 2,3 MB, ngân sách ảnh 300 KB",
+          "output": "over: [{ type: \"image\", kb: 2271.5, budget: 300 }]",
+          "explanation": "Đúng thứ làm slow.html chậm."
+        }
+      ],
+      "hintsJson": [
+        "Gom byte: sums[r.type] = (sums[r.type] || 0) + r.bytes; tổng riêng.",
+        "Làm tròn khi dựng totals và khi so ngân sách dùng cùng số đã làm tròn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — ngân sách dung lượng\nfunction checkBudget(resources, budgetKb) {\n  return { totals: {}, over: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — ngân sách dung lượng: gom theo loại, so với ngân sách, báo chỗ vượt\nconst kb = (bytes) => Math.round((bytes / 1024) * 10) / 10;\n\nfunction checkBudget(resources, budgetKb) {\n  const sums = {};\n  let all = 0;\n  for (const r of resources) {\n    sums[r.type] = (sums[r.type] || 0) + r.bytes;      // cộng byte trước, làm tròn sau\n    all += r.bytes;\n  }\n  const totals = {};\n  for (const [type, bytes] of Object.entries(sums)) totals[type] = kb(bytes);\n  totals.total = kb(all);\n  const over = [];\n  for (const [type, budget] of Object.entries(budgetKb)) {\n    const used = totals[type] || 0;\n    if (used > budget) over.push({ type, kb: used, budget });\n  }\n  return { totals, over };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ngân sách biến \"trang hơi nặng\" thành một phép kiểm CI đỏ/xanh: ai thêm thư viện 200 KB sẽ thấy ngay bản dựng bị chặn. Lighthouse CI và <code>bundlesize</code> làm đúng việc này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Làm tròn từng file rồi cộng — sai số tích luỹ.</li>\n  <li>Quên loại không có tài nguyên — truy cập undefined.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/performance-budgets-101",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The slow page blows the image budget|||Trang chậm vượt ngân sách ảnh",
+            "goi": "checkBudget([{ url: \"/slow.html\", type: \"document\", bytes: 3000 }, { url: \"/hero.png\", type: \"image\", bytes: 2326016 }, { url: \"/tracking.js\", type: \"script\", bytes: 900 }], { script: 170, image: 300, total: 500 })",
+            "mongDoi": {
+              "totals": {
+                "document": 2.9,
+                "image": 2271.5,
+                "script": 0.9,
+                "total": 2275.3
+              },
+              "over": [
+                {
+                  "type": "image",
+                  "kb": 2271.5,
+                  "budget": 300
+                },
+                {
+                  "type": "total",
+                  "kb": 2275.3,
+                  "budget": 500
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "Within budget; missing type counts as 0|||Trong ngân sách; loại vắng tính là 0",
+            "goi": "checkBudget([{ url: \"/a.js\", type: \"script\", bytes: 51200 }], { script: 50, font: 100 })",
+            "mongDoi": {
+              "totals": {
+                "script": 50,
+                "total": 50
+              },
+              "over": []
+            }
+          },
+          {
+            "moTa": "Sum bytes before rounding|||Cộng byte trước khi làm tròn",
+            "goi": "checkBudget([{ url: \"1\", type: \"style\", bytes: 100 }, { url: \"2\", type: \"style\", bytes: 100 }, { url: \"3\", type: \"style\", bytes: 100 }], {}).totals.style",
+            "mongDoi": 0.3
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Làm tròn từng file rồi cộng — sai số tích luỹ."
+        },
+        {
+          "loi": "Quên loại không có tài nguyên — truy cập undefined."
+        }
+      ]
+    },
+    {
+      "title": "Chia việc dài, nhường luồng chính",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "yield to main thread",
+        "setTimeout 0",
+        "chunking"
+      ],
+      "prerequisites": [
+        "async/await",
+        "Promise",
+        "setTimeout"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng",
+        "bất đồng bộ"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Viết <code>async processInChunks(items, fn, chunkSize)</code>: gọi <code>fn(item, index)</code> cho mọi phần tử, theo thứ tự, mỗi lần <code>chunkSize</code> phần tử; GIỮA hai mẩu (không phải sau mẩu cuối) nhường luồng chính bằng <code>await new Promise((r) =&gt; setTimeout(r, 0))</code> để sự kiện của người dùng (một cú bấm đang xếp hàng) kịp chạy. Trả mảng kết quả của <code>fn</code>. Mẩu đầu chạy ngay, đồng bộ. <code>chunkSize</code> < 1 ⇒ ném <code>RangeError('chunkSize must be &gt;= 1')</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự kết quả đúng thứ tự items.</li>\n  <li>Nhường giữa các mẩu — việc đã xếp hàng chen vào được.</li>\n  <li>Không nhường sau mẩu cuối.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "items: mảng; fn: hàm; chunkSize: number.",
+      "outputSpec": "Promise<mảng>.",
+      "constraints": "Không dùng requestIdleCallback (không có trong máy chấm).",
+      "examplesJson": [
+        {
+          "input": "một cú bấm xếp hàng trước, 6 phần tử, mẩu 2",
+          "output": "thứ tự: 1, 2, click, 3, 4, 5, 6",
+          "explanation": "Cú bấm được xử lý sau mẩu đầu thay vì chờ hết."
+        }
+      ],
+      "hintsJson": [
+        "for (let i = 0; i < items.length; i += chunkSize) { if (i > 0) await yieldToMain(); … }",
+        "Trình duyệt mới có scheduler.yield() — cùng ý tưởng, ưu tiên tốt hơn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — chia việc dài\nasync function processInChunks(items, fn, chunkSize) {\n  return items.map(fn);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — chia việc dài: chạy từng mẩu, nhường luồng chính giữa các mẩu\nconst yieldToMain = () => new Promise((resolve) => setTimeout(resolve, 0));\n\nasync function processInChunks(items, fn, chunkSize) {\n  if (!(chunkSize >= 1)) throw new RangeError('chunkSize must be >= 1');\n  const results = [];\n  for (let i = 0; i < items.length; i += chunkSize) {\n    if (i > 0) await yieldToMain();                       // cho cú bấm đang xếp hàng chạy\n    for (let j = i; j < Math.min(i + chunkSize, items.length); j++) {\n      results.push(fn(items[j], j));\n    }\n  }\n  return results;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>JavaScript chỉ có một luồng chính: khi hàm của bạn chạy, trình duyệt không vẽ, không xử lý cú bấm. Chia việc thành mẩu và nhường bằng <code>setTimeout(0)</code> cho phép những việc đã xếp hàng chen vào — tổng việc không đổi, nhưng INP và TBT giảm hẳn (bài 14.4: TBT 1.150 ms → 0).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>await Promise.resolve() — chỉ là microtask, không nhường cho sự kiện.</li>\n  <li>Nhường sau mẩu cuối — chậm vô ích.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/optimize-long-tasks",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A queued click runs between chunks|||Cú bấm xếp hàng chạy giữa các mẩu",
+            "chuanBi": "const log = []; setTimeout(() => log.push(\"click\"), 0);",
+            "goi": "(await processInChunks([1, 2, 3, 4, 5, 6], (x) => { log.push(x); return x * 10; }, 2), log)",
+            "mongDoi": [
+              1,
+              2,
+              "click",
+              3,
+              4,
+              5,
+              6
+            ]
+          },
+          {
+            "moTa": "Results in order, with index|||Kết quả đúng thứ tự, kèm chỉ số",
+            "goi": "await processInChunks([\"a\", \"b\", \"c\", \"d\", \"e\"], (x, i) => x + i, 2)",
+            "mongDoi": [
+              "a0",
+              "b1",
+              "c2",
+              "d3",
+              "e4"
+            ]
+          },
+          {
+            "moTa": "First chunk runs synchronously|||Mẩu đầu chạy đồng bộ",
+            "chuanBi": "const seen = []; const p = processInChunks([1, 2, 3], (x) => seen.push(x), 2); const sync = [...seen]; await p;",
+            "goi": "[sync, seen]",
+            "mongDoi": [
+              [
+                1,
+                2
+              ],
+              [
+                1,
+                2,
+                3
+              ]
+            ]
+          },
+          {
+            "moTa": "Invalid chunk size|||Kích thước mẩu sai",
+            "goi": "await processInChunks([1], (x) => x, 0)",
+            "mongDoi": {
+              "loi": "RangeError",
+              "thongDiep": "chunkSize must be >= 1"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await Promise.resolve() — chỉ là microtask, không nhường cho sự kiện."
+        },
+        {
+          "loi": "Nhường sau mẩu cuối — chậm vô ích."
+        }
+      ]
+    },
+    {
+      "title": "Soát thẻ img theo checklist",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 20,
+      "points": 30,
+      "concepts": [
+        "width/height",
+        "loading=lazy",
+        "fetchpriority",
+        "checklist hiệu năng"
+      ],
+      "prerequisites": [
+        "object",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "hiệu năng",
+        "html"
+      ],
+      "problemHtml": "<p><em>Bài 14.4 — Đo thứ người dùng cảm nhận, sửa nguyên nhân lớn nhất, rồi đo lại.</em> Mỗi bài là một phép tính mà Lighthouse hoặc thư viện web-vitals làm cho bạn.</p><p>Viết <code>auditImages(images)</code>: mỗi ảnh <code>{ src, attrs, aboveFold, isLcp, naturalWidth, renderedWidth }</code> (<code>attrs</code> là object thuộc tính HTML, giá trị chuỗi). Trả mảng <code>{ src, problems }</code> CHỈ cho ảnh có vấn đề, <code>problems</code> theo đúng thứ tự kiểm sau: (1) thiếu <code>width</code> hoặc <code>height</code> ⇒ <code>\"missing width/height (CLS)\"</code>; (2) <code>aboveFold</code> mà <code>loading=\"lazy\"</code> ⇒ <code>\"lazy above the fold (LCP)\"</code>; (3) không aboveFold và không lazy ⇒ <code>\"add loading=lazy\"</code>; (4) <code>isLcp</code> mà <code>fetchpriority</code> khác <code>\"high\"</code> ⇒ <code>\"LCP image without fetchpriority=high\"</code>; (5) <code>naturalWidth &gt; 2 * renderedWidth</code> ⇒ <code>\"oversized: &lt;natural&gt;px for &lt;rendered&gt;px slot\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng thứ tự năm phép kiểm.</li>\n  <li>Ảnh không có vấn đề không xuất hiện.</li>\n  <li>Thông điệp đúng từng chữ.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "images: mảng.",
+      "outputSpec": "mảng { src, problems }.",
+      "constraints": "Không cần DOM — dữ liệu đã được đo sẵn.",
+      "examplesJson": [
+        {
+          "input": "hero của slow.html",
+          "output": "{ src: \"hero.png\", problems: [\"missing width/height (CLS)\", \"LCP image without fetchpriority=high\", \"oversized: 4000px for 960px slot\"] }",
+          "explanation": "Ba nguyên nhân bài đã sửa."
+        }
+      ],
+      "hintsJson": [
+        "const a = img.attrs; const lazy = a.loading === \"lazy\";",
+        "Dựng problems bằng một chuỗi if theo thứ tự rồi chỉ push kết quả khi problems.length > 0."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — soát thẻ img\nfunction auditImages(images) {\n  return [];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.4 — soát thẻ img: năm lỗi phổ biến làm hỏng LCP và CLS\nfunction auditImages(images) {\n  const report = [];\n  for (const img of images) {\n    const a = img.attrs || {};\n    const lazy = a.loading === 'lazy';\n    const problems = [];\n    if (!a.width || !a.height) problems.push('missing width/height (CLS)');           // không giữ chỗ ⇒ nhảy\n    if (img.aboveFold && lazy) problems.push('lazy above the fold (LCP)');           // trì hoãn đúng ảnh cần sớm\n    if (!img.aboveFold && !lazy) problems.push('add loading=lazy');                  // tải thứ chưa ai thấy\n    if (img.isLcp && a.fetchpriority !== 'high') problems.push('LCP image without fetchpriority=high');\n    if (img.naturalWidth > 2 * img.renderedWidth) {\n      problems.push('oversized: ' + img.naturalWidth + 'px for ' + img.renderedWidth + 'px slot');\n    }\n    if (problems.length) report.push({ src: img.src, problems });\n  }\n  return report;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là \"danh sách kiểm dùng lại được\" của bài biến thành mã. Lỗi phổ biến nhất ngoài đời là (2): ai đó thêm <code>loading=\"lazy\"</code> cho MỌI ảnh để \"tối ưu\" và vô tình làm ảnh hero tải chậm hơn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lazy mọi ảnh, kể cả ảnh hero.</li>\n  <li>Kiểm theo thứ tự khác — thông điệp lệch thứ tự.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.4 Performance.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/optimize-lcp",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The slow hero image|||Ảnh hero của trang chậm",
+            "goi": "auditImages([{ src: \"hero.png\", attrs: { alt: \"Hero\" }, aboveFold: true, isLcp: true, naturalWidth: 4000, renderedWidth: 960 }])",
+            "mongDoi": [
+              {
+                "src": "hero.png",
+                "problems": [
+                  "missing width/height (CLS)",
+                  "LCP image without fetchpriority=high",
+                  "oversized: 4000px for 960px slot"
+                ]
+              }
+            ]
+          },
+          {
+            "moTa": "The fixed page has no problems|||Trang đã sửa không còn vấn đề",
+            "goi": "auditImages([{ src: \"hero-960.webp\", attrs: { width: \"960\", height: \"540\", fetchpriority: \"high\" }, aboveFold: true, isLcp: true, naturalWidth: 1920, renderedWidth: 960 }, { src: \"card.webp\", attrs: { width: \"300\", height: \"200\", loading: \"lazy\" }, aboveFold: false, isLcp: false, naturalWidth: 600, renderedWidth: 300 }])",
+            "mongDoi": []
+          },
+          {
+            "moTa": "Lazy above the fold and eager below|||Lazy trên màn đầu và tải ngay bên dưới",
+            "goi": "auditImages([{ src: \"a.jpg\", attrs: { width: \"1\", height: \"1\", loading: \"lazy\" }, aboveFold: true, isLcp: false, naturalWidth: 100, renderedWidth: 100 }, { src: \"b.jpg\", attrs: { width: \"1\", height: \"1\" }, aboveFold: false, isLcp: false, naturalWidth: 100, renderedWidth: 100 }])",
+            "mongDoi": [
+              {
+                "src": "a.jpg",
+                "problems": [
+                  "lazy above the fold (LCP)"
+                ]
+              },
+              {
+                "src": "b.jpg",
+                "problems": [
+                  "add loading=lazy"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lazy mọi ảnh, kể cả ảnh hero."
+        },
+        {
+          "loi": "Kiểm theo thứ tự khác — thông điệp lệch thứ tự."
+        }
+      ]
+    }
+  ]
+}

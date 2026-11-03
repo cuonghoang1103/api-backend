@@ -338,6 +338,21 @@ ${slide('git-15', 6, 'License và topics')}
 
 <div class="pitfall co-tieu-de"><strong>Hồ sơ sinh viên đánh mất ba mươi giây thế nào.</strong> <b>Một file <code>.env</code> đã commit trong repo được ghim.</b> Người xem thấy mật khẩu CSDL ngay trong danh sách file đầu tiên, và cuộc nói chuyện kết thúc — thu hồi khoá và dọn lịch sử (bài 8.3) trước khi ghim bất cứ thứ gì. <b>Ghi "lập trình viên full-stack" trong một đồ án nhóm mà commit của bạn là hai lần sửa README.</b> Lịch sử là công khai; lời khai phải khớp với nó. <b>Link demo trả 404</b> vì gói host miễn phí đã hết hạn từ kỳ trước — kiểm lại mọi link đúng tuần bạn nộp đơn. <b>Ghim mấy repo môn học tên <code>lab1</code>, <code>lab2</code>, <code>lab3</code></b>: đổi tên, viết mô tả, hoặc đừng ghim.</div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 1.4 — GitHub: your code in the cloud</span><span class="lc-sub">The beginner version: first push, clone, a rejected push fixed with pull --rebase, all output real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-1-4-github" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 1.4 — GitHub: mã của bạn trên đám mây</span><span class="lc-sub">Bản cho người mới: push lần đầu, clone, push bị từ chối và sửa bằng pull --rebase, output thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 15.2 ─────────────────────────── */
@@ -708,6 +723,21 @@ src="/portfolio/assets/index-BlxItUYO.js"   <span class="tok-comment"># output t
 </a>
 
 <div class="pitfall co-tieu-de"><strong>Vì sao link portfolio trên CV của bạn hỏng.</strong> <b>Trang trắng, không báo lỗi.</b> Thiếu <code>base</code> hoặc nó không khớp đúng từng chữ với tên repo — <code>/Portfolio/</code> và <code>/portfolio/</code> là hai đường dẫn khác nhau. <b>Đang chạy, thêm tên miền xong thì 404 khắp nơi.</b> <code>base</code> vẫn là <code>/portfolio/</code>; tên miền riêng phục vụ từ <code>/</code>. <b>Lượt Actions xanh mà site vẫn là bản cũ.</b> Source vẫn đang là "Deploy from a branch", nên Pages tiếp tục phục vụ nhánh. <b>Trang trên mạng trắng trơn và trình duyệt đòi file <code>/src/main.jsx</code>.</b> Source đang là "Deploy from a branch" trên <code>main</code>, nên Pages phục vụ file <code>index.html</code> nguồn chưa build thay vì <code>dist/</code> đã build. <b>Commit luôn <code>dist/</code> "cho Pages tìm thấy".</b> Để workflow build nó; thêm <code>dist</code> vào <code>.gitignore</code>.</div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.3 — Deploying</span><span class="lc-sub">SPA fallback, cache headers and a smoke test, run against a real static server</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-3-deploy" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.3 — Deploy</span><span class="lc-sub">SPA fallback, header lưu đệm và smoke-test, chạy với một máy chủ tĩnh thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },
@@ -1218,6 +1248,21 @@ To ../oss-fork.git
 </a>
 
 <div class="pitfall co-tieu-de"><strong>Lần đóng góp đầu hỏng thế nào.</strong> <b>Làm trên <code>main</code> của fork.</b> PR thứ hai sẽ kéo theo commit của PR thứ nhất, và đồng bộ biến thành một đống merge commit — luôn tạo nhánh. <b>Một PR 2.000 dòng "refactor toàn bộ" không ai nhờ</b>: nó sẽ không được review, dù hay đến đâu. <b>Hai mươi PR sửa một chữ chính tả</b> để tô xanh biểu đồ đóng góp — maintainer nhận ra, và nhà tuyển dụng bấm vào xem cũng vậy. <b>Dán nguyên câu trả lời của AI vào issue</b> mà chưa tự tái hiện lỗi. <b><code>git push --force</code> không có <code>-with-lease</code></b> sau khi maintainer đã push một bản sửa lên nhánh của bạn — bạn vừa xoá commit của họ.</div>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.4 — How to keep learning</span><span class="lc-sub">Shrink a bug to one line, read the docs, ask a good question, read a library source in node_modules</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-4-keep-learning" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.4 — Cách tiếp tục học</span><span class="lc-sub">Thu lỗi về một dòng, đọc tài liệu, đặt câu hỏi tốt, đọc mã nguồn thư viện trong node_modules</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
 </div>
 `,
     },

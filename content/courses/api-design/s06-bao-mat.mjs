@@ -494,6 +494,21 @@ Retry-After: 180</div>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-1-auth-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 7.1 — authentication vs authorization</span><span class="lc-sub">HTTP forgets you, Base64 is not encryption, 401 then 403 on a real app</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-1-auth-basics" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 7.1 — xác thực và phân quyền</span><span class="lc-sub">HTTP quên bạn, Base64 không phải mã hoá, 401 rồi 403 trên app thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
     /* ─────────────────────────── 6.2 ─────────────────────────── */
@@ -1611,6 +1626,21 @@ Access-Control-Allow-Credentials: true</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Authentication — bài 3.4: CSRF, và ba lớp phòng xếp theo thứ tự</span><span class="lc-sub">Giống: trình duyệt tự gửi gì và cho trang đọc gì. Sâu hơn: năm cấu hình cookie/lớp phòng bị tấn công từ site khác trong Chromium 156 — fetch no-cors vẫn đổi được email (CORS giấu phản hồi, không chặn việc ghi), Lax ⇒ 401, Fetch Metadata hay token đồng bộ ⇒ 403 — và vì sao subdomain cùng site cũng bị từ chối.</span></span>
   <span class="lc-cta">MỞ BÀI AUTHENTICATION →</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 7.5 — HTTPS and CORS from zero</span><span class="lc-sub">A TLS handshake in curl, and proof that a CORS-blocked request still reaches the server</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-7-5-https-cors" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 7.5 — HTTPS và CORS từ số 0</span><span class="lc-sub">Bắt tay TLS trong curl, và bằng chứng request bị CORS chặn vẫn tới máy chủ</span></span>
+  <span class="lc-cta">Mở bài</span>
 </a>
 </div>
 `,

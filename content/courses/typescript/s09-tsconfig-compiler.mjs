@@ -118,6 +118,21 @@ console.log(shout(msg));</div>
   <span class="lc-body"><span class="lc-title">Luyện tập: đọc một tsconfig trên Code Lab</span><span class="lc-sub">Biên dịch một file và soi JavaScript xuất ra.</span></span>
 </a>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-5-ts-in-practice" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 9.5 — TypeScript in a real project</span><span class="lc-sub">strict measured (0 vs 7 errors), build to dist, @types, Node type stripping and zod at the boundary</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-9-5-ts-in-practice" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 9.5 — TypeScript trong dự án thật</span><span class="lc-sub">Đo strict (0 và 7 lỗi), build ra dist, @types, Node bóc kiểu và zod ở ranh giới</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>textContent vs innerHTML</title><meta name="chup" content="640x170"></head>
+<body>
+  <p id="a"></p>
+  <p id="b"></p>
+<script>
+  window.hacked = 0;
+  // Pretend this came from a user's comment:
+  const comment = '<img src=x onerror="window.hacked = 1">Nice post';
+
+  document.getElementById('a').textContent = comment;   // shown as plain text
+  document.getElementById('b').innerHTML = comment;     // parsed as HTML, and it runs
+
+  setTimeout(() => {
+    console.log('safe paragraph has', document.querySelectorAll('#a img').length, 'img elements');
+    console.log('unsafe paragraph has', document.querySelectorAll('#b img').length, 'img elements');
+    console.log('injected code ran:', window.hacked === 1);
+  }, 100);
+</script>
+</body>
+</html>

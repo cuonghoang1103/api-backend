@@ -1,0 +1,627 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-7-3-jwt",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-7-3-jwt"
+  },
+  "exercises": [
+    {
+      "title": "Tách ba phần",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "cấu trúc JWT"
+      ],
+      "prerequisites": [
+        "split"
+      ],
+      "tags": [
+        "javascript",
+        "jwt"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Viết <code>splitJwt(token)</code> trả <code>{ header, payload, signature }</code> (các chuỗi Base64URL, CHƯA giải mã). Token hợp lệ có đúng 2 dấu chấm, header và payload không rỗng; chữ ký được phép rỗng (token <code>alg: none</code> có dạng <code>xxx.yyy.</code> — vẫn tách được, việc từ chối nó là của bài sau). Sai hình dạng hoặc không phải chuỗi ⇒ <code>null</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Đúng 3 phần.</li>\n  <li>header, payload không rỗng.</li>\n  <li>Không phải chuỗi ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "token: any.",
+      "outputSpec": "{ header, payload, signature } hoặc null.",
+      "constraints": "Chưa giải mã gì ở bài này.",
+      "examplesJson": [
+        {
+          "input": "splitJwt(\"aaa.bbb.ccc\")",
+          "output": "{ header: \"aaa\", payload: \"bbb\", signature: \"ccc\" }",
+          "explanation": "Ba phần, hai dấu chấm."
+        }
+      ],
+      "hintsJson": [
+        "if (typeof token !== \"string\") return null;",
+        "const parts = token.split(\".\"); if (parts.length !== 3) return null;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — tách ba phần\nfunction splitJwt(token) {\n  const [header, payload, signature] = token.split('.');\n  return { header, payload, signature };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — header.payload.signature; chữ ký có thể rỗng (alg none), hai phần đầu thì không\nfunction splitJwt(token) {\n  if (typeof token !== 'string') return null;\n  const parts = token.split('.');\n  if (parts.length !== 3) return null;                       // đúng hai dấu chấm\n  const [header, payload, signature] = parts;\n  if (!header || !payload) return null;\n  return { header, payload, signature };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Kiểm hình dạng trước tiên giúp mọi bước sau khỏi phải lo <code>undefined</code>. Đếm phần cũng quan trọng: JWE (JWT mã hoá) có 5 phần — một hệ thống chỉ nhận JWS phải từ chối nó thay vì cố đọc.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Destructure mà không đếm phần — \"a.b\" thành signature undefined.</li>\n  <li>Coi chữ ký rỗng là hình dạng sai (thì không nhận ra đòn alg none để báo đúng lỗi).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc7519#section-7.2",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson token|||Token của bài",
+            "goi": "splitJwt([\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0\", \"pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g\"].join(\".\")).signature",
+            "mongDoi": "pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g"
+          },
+          {
+            "moTa": "alg none shape still splits|||Token alg none vẫn tách được",
+            "goi": "splitJwt(\"aaa.bbb.\")",
+            "mongDoi": {
+              "header": "aaa",
+              "payload": "bbb",
+              "signature": ""
+            }
+          },
+          {
+            "moTa": "Wrong shapes give null|||Sai hình dạng trả null",
+            "goi": "[splitJwt(\"a.b\"), splitJwt(\"a.b.c.d.e\"), splitJwt(\".b.c\"), splitJwt(\"a..c\"), splitJwt(null), splitJwt(42)]",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Destructure mà không đếm phần — \"a.b\" thành signature undefined."
+        },
+        {
+          "loi": "Coi chữ ký rỗng là hình dạng sai (thì không nhận ra đòn alg none để báo đúng lỗi)."
+        }
+      ]
+    },
+    {
+      "title": "Đã hết hạn chưa?",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "exp",
+        "độ lệch đồng hồ"
+      ],
+      "prerequisites": [
+        "so sánh số"
+      ],
+      "tags": [
+        "javascript",
+        "jwt"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Viết <code>isExpired(payload, nowSec, leewaySec = 0)</code>: <code>exp</code> và <code>nowSec</code> tính bằng GIÂY (không phải ms). Hết hạn khi <code>nowSec &gt;= exp + leewaySec</code>. <code>exp</code> vắng hoặc không phải số hữu hạn ⇒ coi là hết hạn (<code>true</code>) — an toàn hơn là cho token sống mãi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>So bằng giây.</li>\n  <li>Đúng mốc exp là hết hạn.</li>\n  <li>Thiếu exp ⇒ true.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "payload: object; nowSec: number; leewaySec?: number.",
+      "outputSpec": "boolean.",
+      "constraints": "Không dùng Date.now().",
+      "examplesJson": [
+        {
+          "input": "isExpired({ exp: 1793600900 }, 1793600000 + 16 * 60)",
+          "output": "true",
+          "explanation": "16 phút sau khi cấp token 15 phút — dòng \"expired\" trong bài."
+        }
+      ],
+      "hintsJson": [
+        "if (typeof payload?.exp !== \"number\" || !Number.isFinite(payload.exp)) return true;",
+        "return nowSec >= payload.exp + leewaySec;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — hết hạn chưa?\nfunction isExpired(payload, nowSec, leewaySec = 0) {\n  return payload.exp < Date.now();\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — exp tính bằng giây từ 1970; thiếu exp thì coi như hết hạn\nfunction isExpired(payload, nowSec, leewaySec = 0) {\n  const exp = payload?.exp;\n  if (typeof exp !== 'number' || !Number.isFinite(exp)) return true;\n  return nowSec >= exp + leewaySec;                          // leeway bù vài giây lệch đồng hồ giữa các máy\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu dính lỗi kinh điển: so giây (exp) với mili giây (<code>Date.now()</code>) — mọi token đều \"hết hạn từ năm 1970\". Leeway vài giây giúp hai máy chủ lệch đồng hồ không từ chối nhầm token vừa cấp.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>So exp với Date.now() (ms).</li>\n  <li>Token không có exp được coi là hợp lệ mãi.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc7519#section-4.1.4",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Before, exactly at, after exp|||Trước, đúng mốc, sau exp",
+            "goi": "[isExpired({ exp: 1793600900 }, 1793600000), isExpired({ exp: 1793600900 }, 1793600900), isExpired({ exp: 1793600900 }, 1793600960)]",
+            "mongDoi": [
+              false,
+              true,
+              true
+            ]
+          },
+          {
+            "moTa": "Leeway|||Độ lệch cho phép",
+            "goi": "[isExpired({ exp: 100 }, 105, 10), isExpired({ exp: 100 }, 110, 10)]",
+            "mongDoi": [
+              false,
+              true
+            ]
+          },
+          {
+            "moTa": "Missing or bad exp is expired|||exp thiếu hoặc sai là hết hạn",
+            "goi": "[isExpired({}, 1), isExpired({ exp: \"999999999999\" }, 1), isExpired({ exp: Infinity }, 1), isExpired(null, 1)]",
+            "mongDoi": [
+              true,
+              true,
+              true,
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "So exp với Date.now() (ms)."
+        },
+        {
+          "loi": "Token không có exp được coi là hợp lệ mãi."
+        }
+      ]
+    },
+    {
+      "title": "Giải mã không cần khoá",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "Base64URL",
+        "payload đọc được"
+      ],
+      "prerequisites": [
+        "JSON.parse",
+        "try/catch"
+      ],
+      "tags": [
+        "javascript",
+        "jwt"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Dùng hàm cho sẵn <code>b64urlToString</code>, viết <code>decodeJwt(token)</code> trả <code>{ header, payload }</code> là hai OBJECT đã parse. Bất kỳ lỗi nào — không đủ 3 phần, Base64URL sai, JSON hỏng, header/payload không phải object thường — ⇒ <code>null</code>. Bài này cho thấy: ai cũng đọc được payload, không cần khoá.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giải cả header và payload.</li>\n  <li>Mọi lỗi ⇒ null, không ném.</li>\n  <li>Phải là object (không phải mảng/số).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "token: string.",
+      "outputSpec": "{ header, payload } hoặc null.",
+      "constraints": "Không sửa hàm b64urlToString.",
+      "examplesJson": [
+        {
+          "input": "decodeJwt(token của bài)",
+          "output": "{ header: { alg: \"HS256\", typ: \"JWT\" }, payload: { sub: \"1\", name: \"An\", role: \"user\", … } }",
+          "explanation": "Đúng dòng \"decoded payload, without the secret\" trong output."
+        }
+      ],
+      "hintsJson": [
+        "const parts = token.split(\".\"); if (parts.length !== 3) return null;",
+        "try { const header = JSON.parse(b64urlToString(parts[0])); … } catch { return null; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// CHO SẴN — giải Base64URL thành chuỗi UTF-8 (đừng sửa). Ký tự lạ ⇒ ném SyntaxError.\nfunction b64urlToString(s) {\n  const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  let bits = 0, value = 0, bytes = '';\n  for (const ch of s) {\n    const v = abc.indexOf(ch);\n    if (v < 0) throw new SyntaxError('not base64url: ' + ch);\n    value = (value << 6) | v;\n    bits += 6;\n    if (bits >= 8) {\n      bits -= 8;\n      bytes += '%' + ((value >> bits) & 255).toString(16).padStart(2, '0');\n      value &= (1 << bits) - 1;\n    }\n  }\n  return decodeURIComponent(bytes);\n}\n\n// Bài 7.3 — giải mã không cần khoá\nfunction decodeJwt(token) {\n  const [h, p] = token.split('.');\n  return { header: JSON.parse(b64urlToString(h)), payload: JSON.parse(b64urlToString(p)) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// CHO SẴN — giải Base64URL thành chuỗi UTF-8 (đừng sửa). Ký tự lạ ⇒ ném SyntaxError.\nfunction b64urlToString(s) {\n  const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  let bits = 0, value = 0, bytes = '';\n  for (const ch of s) {\n    const v = abc.indexOf(ch);\n    if (v < 0) throw new SyntaxError('not base64url: ' + ch);\n    value = (value << 6) | v;\n    bits += 6;\n    if (bits >= 8) {\n      bits -= 8;\n      bytes += '%' + ((value >> bits) & 255).toString(16).padStart(2, '0');\n      value &= (1 << bits) - 1;\n    }\n  }\n  return decodeURIComponent(bytes);\n}\n\n// Bài 7.3 — header và payload chỉ là JSON viết bằng Base64URL: ai cũng đọc được\nfunction decodeJwt(token) {\n  const parts = typeof token === 'string' ? token.split('.') : [];\n  if (parts.length !== 3) return null;\n  const isObj = (x) => x !== null && typeof x === 'object' && !Array.isArray(x);\n  try {\n    const header = JSON.parse(b64urlToString(parts[0]));\n    const payload = JSON.parse(b64urlToString(parts[1]));\n    return isObj(header) && isObj(payload) ? { header, payload } : null;\n  } catch {\n    return null;                                             // Base64URL hay JSON hỏng\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là việc jwt.io và <code>jwt.decode()</code> làm — KHÔNG kiểm chữ ký. Dùng nó để hiện tên người dùng trên giao diện thì được; dùng kết quả của nó để quyết định quyền ở máy chủ là lỗ hổng (ai cũng sửa được payload).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Để JSON.parse ném ra ngoài.</li>\n  <li>Tin payload đã giải mã như đã được kiểm.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc7515#appendix-C",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Read the lesson token without a key|||Đọc token của bài không cần khoá",
+            "goi": "decodeJwt([\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0\", \"pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g\"].join(\".\"))",
+            "mongDoi": {
+              "header": {
+                "alg": "HS256",
+                "typ": "JWT"
+              },
+              "payload": {
+                "sub": "1",
+                "name": "An",
+                "role": "user",
+                "iat": 1793600000,
+                "exp": 1793600900
+              }
+            }
+          },
+          {
+            "moTa": "The forged alg-none token decodes too|||Token alg none giả cũng giải được",
+            "goi": "decodeJwt([\"eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkzNjAwMDAwLCJleHAiOjE3OTM2MDA5MDB9\", \"\"].join(\".\")).payload.role",
+            "mongDoi": "admin"
+          },
+          {
+            "moTa": "Broken input gives null|||Đầu vào hỏng trả null",
+            "goi": "[decodeJwt(\"a.b\"), decodeJwt(\"e30.!!!.x\"), decodeJwt(\"bm90IGpzb24.e30.x\"), decodeJwt(\"WzFd.e30.x\")]",
+            "mongDoi": [
+              null,
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Để JSON.parse ném ra ngoài."
+        },
+        {
+          "loi": "Tin payload đã giải mã như đã được kiểm."
+        }
+      ]
+    },
+    {
+      "title": "Kiểm các claim",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "nbf",
+        "iss",
+        "aud"
+      ],
+      "prerequisites": [
+        "mảng",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "jwt"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Viết <code>checkClaims(payload, { now, issuer, audience, leeway = 0 })</code> trả MẢNG lỗi theo thứ tự (rỗng = ổn): <code>\"expired\"</code> (exp thiếu hoặc <code>now &gt;= exp + leeway</code>); <code>\"not-yet-valid\"</code> (có <code>nbf</code> và <code>now + leeway &lt; nbf</code>); <code>\"wrong-issuer\"</code> (nếu truyền <code>issuer</code> mà <code>iss</code> khác); <code>\"wrong-audience\"</code> (nếu truyền <code>audience</code>: <code>aud</code> là chuỗi phải bằng, là mảng phải chứa nó; thiếu <code>aud</code> cũng sai).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Gom mọi lỗi, đúng thứ tự.</li>\n  <li>aud là chuỗi hoặc mảng.</li>\n  <li>issuer/audience không truyền ⇒ không kiểm.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "payload: object; opts: { now, issuer?, audience?, leeway? }.",
+      "outputSpec": "string[].",
+      "constraints": "Thời gian tính bằng giây.",
+      "examplesJson": [
+        {
+          "input": "checkClaims({ exp: 200, iss: \"evil\" }, { now: 100, issuer: \"https://auth.shop.example\" })",
+          "output": "[\"wrong-issuer\"]",
+          "explanation": "Token do nơi khác cấp, dù chữ ký có thể hợp lệ với khoá dùng chung."
+        }
+      ],
+      "hintsJson": [
+        "const errors = []; if (typeof payload.exp !== \"number\" || now >= payload.exp + leeway) errors.push(\"expired\");",
+        "const auds = Array.isArray(payload.aud) ? payload.aud : payload.aud === undefined ? [] : [payload.aud];"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — kiểm claim\nfunction checkClaims(payload, { now, issuer, audience, leeway = 0 }) {\n  return payload.exp > now ? [] : ['expired'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — chữ ký đúng mới chỉ là \"không bị sửa\"; claim cho biết token có dành cho ta, vào lúc này không\nfunction checkClaims(payload, { now, issuer, audience, leeway = 0 }) {\n  const errors = [];\n  if (typeof payload.exp !== 'number' || now >= payload.exp + leeway) errors.push('expired');\n  if (typeof payload.nbf === 'number' && now + leeway < payload.nbf) errors.push('not-yet-valid');\n  if (issuer !== undefined && payload.iss !== issuer) errors.push('wrong-issuer');\n  if (audience !== undefined) {\n    const auds = Array.isArray(payload.aud) ? payload.aud : payload.aud === undefined ? [] : [payload.aud];\n    if (!auds.includes(audience)) errors.push('wrong-audience');\n  }\n  return errors;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>aud</code> chặn một lỗi tinh vi: token cấp cho app A (cùng nhà cung cấp đăng nhập) bị đem sang dùng ở API B. <code>jwt.verify(token, key, { issuer, audience })</code> làm đúng các phép kiểm này.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Chỉ kiểm exp.</li>\n  <li>Coi aud luôn là chuỗi — mảng làm includes so sai.</li>\n  <li>Thiếu aud mà vẫn cho qua khi đã yêu cầu audience.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.rfc-editor.org/rfc/rfc7519#section-4.1",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A good token has no errors|||Token tốt không có lỗi",
+            "goi": "checkClaims({ exp: 200, nbf: 50, iss: \"auth\", aud: [\"web\", \"api\"] }, { now: 100, issuer: \"auth\", audience: \"api\" })",
+            "mongDoi": []
+          },
+          {
+            "moTa": "All errors in order|||Mọi lỗi đúng thứ tự",
+            "goi": "checkClaims({ exp: 90, nbf: 150, iss: \"evil\", aud: \"mobile\" }, { now: 100, issuer: \"auth\", audience: \"api\" })",
+            "mongDoi": [
+              "expired",
+              "not-yet-valid",
+              "wrong-issuer",
+              "wrong-audience"
+            ]
+          },
+          {
+            "moTa": "Leeway, missing aud, unchecked fields|||Độ lệch, thiếu aud, trường không kiểm",
+            "goi": "[checkClaims({ exp: 100, nbf: 105 }, { now: 99, leeway: 10 }), checkClaims({ exp: 200 }, { now: 1, audience: \"api\" }), checkClaims({ exp: 200, iss: \"x\" }, { now: 1 })]",
+            "mongDoi": [
+              [],
+              [
+                "wrong-audience"
+              ],
+              []
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Chỉ kiểm exp."
+        },
+        {
+          "loi": "Coi aud luôn là chuỗi — mảng làm includes so sai."
+        },
+        {
+          "loi": "Thiếu aud mà vẫn cho qua khi đã yêu cầu audience."
+        }
+      ]
+    },
+    {
+      "title": "Từ chối alg none và thuật toán lạ",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "alg none",
+        "danh sách thuật toán"
+      ],
+      "prerequisites": [
+        "try/catch",
+        "includes"
+      ],
+      "tags": [
+        "javascript",
+        "jwt",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Dùng <code>b64urlToString</code> cho sẵn, viết <code>checkHeader(token, allowedAlgs)</code> trả <code>\"malformed\"</code> (không đủ 3 phần, header không giải được hoặc không phải object có <code>alg</code> là chuỗi), <code>\"alg-not-allowed\"</code> (<code>alg</code> không nằm ĐÚNG NGUYÊN VĂN trong <code>allowedAlgs</code>, và <code>\"none\"</code> thì luôn bị từ chối kể cả viết hoa hay có trong danh sách), <code>\"missing-signature\"</code> (phần chữ ký rỗng), hoặc <code>\"ok\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Thứ tự: malformed → alg-not-allowed → missing-signature → ok.</li>\n  <li>none/NONE/None luôn bị từ chối.</li>\n  <li>So alg phân biệt hoa thường với danh sách.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "token: string; allowedAlgs: string[].",
+      "outputSpec": "string.",
+      "constraints": "Danh sách thuật toán do MÁY CHỦ quyết định, không phải token.",
+      "examplesJson": [
+        {
+          "input": "checkHeader(token alg none của bài, [\"HS256\"])",
+          "output": "\"alg-not-allowed\"",
+          "explanation": "Dòng verify(alg: none) trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const header = JSON.parse(b64urlToString(parts[0]));",
+        "if (header.alg.toLowerCase() === \"none\" || !allowedAlgs.includes(header.alg)) return \"alg-not-allowed\";"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// CHO SẴN — giải Base64URL thành chuỗi UTF-8 (đừng sửa). Ký tự lạ ⇒ ném SyntaxError.\nfunction b64urlToString(s) {\n  const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  let bits = 0, value = 0, bytes = '';\n  for (const ch of s) {\n    const v = abc.indexOf(ch);\n    if (v < 0) throw new SyntaxError('not base64url: ' + ch);\n    value = (value << 6) | v;\n    bits += 6;\n    if (bits >= 8) {\n      bits -= 8;\n      bytes += '%' + ((value >> bits) & 255).toString(16).padStart(2, '0');\n      value &= (1 << bits) - 1;\n    }\n  }\n  return decodeURIComponent(bytes);\n}\n\n// Bài 7.3 — kiểm header\nfunction checkHeader(token, allowedAlgs) {\n  const header = JSON.parse(b64urlToString(token.split('.')[0]));\n  return header.alg ? 'ok' : 'malformed';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// CHO SẴN — giải Base64URL thành chuỗi UTF-8 (đừng sửa). Ký tự lạ ⇒ ném SyntaxError.\nfunction b64urlToString(s) {\n  const abc = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';\n  let bits = 0, value = 0, bytes = '';\n  for (const ch of s) {\n    const v = abc.indexOf(ch);\n    if (v < 0) throw new SyntaxError('not base64url: ' + ch);\n    value = (value << 6) | v;\n    bits += 6;\n    if (bits >= 8) {\n      bits -= 8;\n      bytes += '%' + ((value >> bits) & 255).toString(16).padStart(2, '0');\n      value &= (1 << bits) - 1;\n    }\n  }\n  return decodeURIComponent(bytes);\n}\n\n// Bài 7.3 — đừng để token tự chọn thuật toán: máy chủ có danh sách, \"none\" không bao giờ được\nfunction checkHeader(token, allowedAlgs) {\n  const parts = typeof token === 'string' ? token.split('.') : [];\n  if (parts.length !== 3) return 'malformed';\n  let header;\n  try { header = JSON.parse(b64urlToString(parts[0])); } catch { return 'malformed'; }\n  if (header === null || typeof header !== 'object' || typeof header.alg !== 'string') return 'malformed';\n  if (header.alg.toLowerCase() === 'none' || !allowedAlgs.includes(header.alg)) return 'alg-not-allowed';\n  if (!parts[2]) return 'missing-signature';\n  return 'ok';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đòn <code>alg: none</code> từng hạ nhiều thư viện JWT năm 2015: chúng đọc <code>alg</code> từ chính token và \"kiểm\" chữ ký theo thuật toán không-có-chữ-ký. Một biến thể khác (algorithm confusion) đổi RS256 thành HS256 để lấy khoá công khai làm khoá bí mật. Cách chặn cả hai: máy chủ cố định danh sách <code>algorithms</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tin header.alg để chọn cách kiểm.</li>\n  <li>Chỉ chặn \"none\" chữ thường.</li>\n  <li>Để JSON.parse ném ra ngoài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://auth0.com/blog/critical-vulnerabilities-in-json-web-token-libraries/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Lesson token ok, alg none refused|||Token của bài ok, alg none bị từ chối",
+            "goi": "[checkHeader([\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0\", \"pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g\"].join(\".\"), [\"HS256\"]), checkHeader([\"eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzkzNjAwMDAwLCJleHAiOjE3OTM2MDA5MDB9\", \"\"].join(\".\"), [\"HS256\", \"none\"])]",
+            "mongDoi": [
+              "ok",
+              "alg-not-allowed"
+            ]
+          },
+          {
+            "moTa": "Not in the list; case matters|||Không có trong danh sách; phân biệt hoa thường",
+            "goi": "[checkHeader([\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\", \"eyJzdWIiOiIxIiwibmFtZSI6IkFuIiwicm9sZSI6InVzZXIiLCJpYXQiOjE3OTM2MDAwMDAsImV4cCI6MTc5MzYwMDkwMH0\", \"pm_1On9_YHV3D91ZPFRlh-2qRvgxRCrlXTBsSK_5v0g\"].join(\".\"), [\"RS256\"]), checkHeader(\"eyJhbGciOiJOT05FIn0.e30.sig\", [\"NONE\"]), checkHeader(\"eyJhbGciOiJoczI1NiJ9.e30.sig\", [\"HS256\"])]",
+            "mongDoi": [
+              "alg-not-allowed",
+              "alg-not-allowed",
+              "alg-not-allowed"
+            ]
+          },
+          {
+            "moTa": "Malformed and missing signature|||Sai hình dạng và thiếu chữ ký",
+            "goi": "[checkHeader(\"a.b\", [\"HS256\"]), checkHeader(\"!!.e30.x\", [\"HS256\"]), checkHeader(\"e30.e30.x\", [\"HS256\"]), checkHeader(\"eyJhbGciOiJIUzI1NiJ9.e30.\", [\"HS256\"])]",
+            "mongDoi": [
+              "malformed",
+              "malformed",
+              "malformed",
+              "missing-signature"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tin header.alg để chọn cách kiểm."
+        },
+        {
+          "loi": "Chỉ chặn \"none\" chữ thường."
+        },
+        {
+          "loi": "Để JSON.parse ném ra ngoài."
+        }
+      ]
+    },
+    {
+      "title": "Xoay vòng refresh token",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "refresh token",
+        "xoay vòng",
+        "phát hiện dùng lại"
+      ],
+      "prerequisites": [
+        "Map",
+        "closure"
+      ],
+      "tags": [
+        "javascript",
+        "jwt",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 7.3 — JWT.</em> Các bài là từng bước mà thư viện <code>jsonwebtoken</code> làm khi bạn gọi <code>verify</code> — trừ phần tính chữ ký.</p><p>Access token ngắn hạn không thu hồi được; refresh token thì lưu ở máy chủ nên thu hồi được. Viết <code>createRefreshStore(newToken)</code> (<code>newToken()</code> cho sẵn) trả: <code>issue(userId)</code> → token mới, mở một \"họ\" (family) mới; <code>use(token)</code> → nếu token hợp lệ và CHƯA dùng: đánh dấu đã dùng, cấp token mới cùng họ, trả <code>{ ok: true, userId, token: &lt;mới&gt; }</code>; token đã dùng rồi ⇒ dấu hiệu bị trộm: THU HỒI cả họ, trả <code>{ ok: false, reason: \"reuse\" }</code>; token thuộc họ đã thu hồi ⇒ <code>{ ok: false, reason: \"revoked\" }</code>; token lạ ⇒ <code>{ ok: false, reason: \"unknown\" }</code>. <code>logout(token)</code> thu hồi họ của token đó (token lạ thì bỏ qua).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Mỗi token dùng được đúng một lần.</li>\n  <li>Dùng lại ⇒ thu hồi cả họ (cả token mới nhất).</li>\n  <li>Họ của người khác không bị ảnh hưởng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "newToken: () => string.",
+      "outputSpec": "{ issue, use, logout }.",
+      "constraints": "Không cần hạn dùng thời gian ở bài này.",
+      "examplesJson": [
+        {
+          "input": "issue(1) → \"t1\"; use(\"t1\") → t2; use(\"t1\") lần nữa",
+          "output": "{ ok: false, reason: \"reuse\" } và từ đó use(\"t2\") → \"revoked\"",
+          "explanation": "Kẻ trộm và người dùng thật cùng cầm t1: lần dùng thứ hai lộ ra vụ trộm."
+        }
+      ],
+      "hintsJson": [
+        "const tokens = new Map(); // token → { userId, family, used }",
+        "const revoked = new Set(); // các family đã thu hồi"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — xoay vòng refresh token\nfunction createRefreshStore(newToken) {\n  const tokens = new Map();\n  return {\n    issue(userId) { const t = newToken(); tokens.set(t, userId); return t; },\n    use(token) {\n      if (!tokens.has(token)) return { ok: false, reason: 'unknown' };\n      return { ok: true, userId: tokens.get(token), token };\n    },\n    logout(token) { tokens.delete(token); },\n  };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 7.3 — mỗi refresh token dùng một lần; dùng lại nghĩa là bị trộm ⇒ khoá cả họ\nfunction createRefreshStore(newToken) {\n  const tokens = new Map();                                  // token → { userId, family, used }\n  const revoked = new Set();                                 // family đã thu hồi\n  let nextFamily = 1;\n  const add = (userId, family) => {\n    const t = newToken();\n    tokens.set(t, { userId, family, used: false });\n    return t;\n  };\n  return {\n    issue(userId) { return add(userId, nextFamily++); },\n    use(token) {\n      const rec = tokens.get(token);\n      if (!rec) return { ok: false, reason: 'unknown' };\n      if (revoked.has(rec.family)) return { ok: false, reason: 'revoked' };\n      if (rec.used) {                                        // lần dùng thứ hai: ai đó đang cầm bản sao\n        revoked.add(rec.family);\n        return { ok: false, reason: 'reuse' };\n      }\n      rec.used = true;\n      return { ok: true, userId: rec.userId, token: add(rec.userId, rec.family) };\n    },\n    logout(token) {\n      const rec = tokens.get(token);\n      if (rec) revoked.add(rec.family);\n    },\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là cách các nhà cung cấp đăng nhập (Auth0, Okta, Supabase) giải \"điểm yếu lớn nhất\" của JWT ở cuối bài: access token sống vài phút, refresh token xoay vòng và nằm trong cookie HttpOnly. Kẻ trộm dùng refresh token cũ sẽ đụng phải dấu \"đã dùng\" — và kéo theo việc đăng xuất cả họ, kể cả bản mà kẻ trộm vừa lấy được.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cho dùng một token nhiều lần.</li>\n  <li>Chỉ thu hồi token bị dùng lại, để token mới nhất của kẻ trộm còn sống.</li>\n  <li>Đăng xuất chỉ xoá một token, họ vẫn sống.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 7.3 JWT: tokens that prove themselves.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://datatracker.ietf.org/doc/html/rfc9700#name-refresh-token-protection",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Rotation: each use gives a new token|||Xoay vòng: mỗi lần dùng cho token mới",
+            "chuanBi": "let n = 0; const S = createRefreshStore(() => \"t\" + (++n)); const t1 = S.issue(7); const a = S.use(t1); const b = S.use(a.token);",
+            "goi": "[t1, a, b]",
+            "mongDoi": [
+              "t1",
+              {
+                "ok": true,
+                "userId": 7,
+                "token": "t2"
+              },
+              {
+                "ok": true,
+                "userId": 7,
+                "token": "t3"
+              }
+            ]
+          },
+          {
+            "moTa": "Reuse revokes the whole family|||Dùng lại thu hồi cả họ",
+            "chuanBi": "let n = 0; const S = createRefreshStore(() => \"t\" + (++n)); const t1 = S.issue(7); const r = S.use(t1);",
+            "goi": "[S.use(t1), S.use(r.token), S.use(\"t99\")]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "reuse"
+              },
+              {
+                "ok": false,
+                "reason": "revoked"
+              },
+              {
+                "ok": false,
+                "reason": "unknown"
+              }
+            ]
+          },
+          {
+            "moTa": "Logout and other families|||Đăng xuất và họ khác",
+            "chuanBi": "let n = 0; const S = createRefreshStore(() => \"t\" + (++n)); const a = S.issue(1); const b = S.issue(2); const a2 = S.use(a).token; S.logout(a2); S.logout(\"nope\");",
+            "goi": "[S.use(a2), S.use(b).ok]",
+            "mongDoi": [
+              {
+                "ok": false,
+                "reason": "revoked"
+              },
+              true
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cho dùng một token nhiều lần."
+        },
+        {
+          "loi": "Chỉ thu hồi token bị dùng lại, để token mới nhất của kẻ trộm còn sống."
+        },
+        {
+          "loi": "Đăng xuất chỉ xoá một token, họ vẫn sống."
+        }
+      ]
+    }
+  ]
+}

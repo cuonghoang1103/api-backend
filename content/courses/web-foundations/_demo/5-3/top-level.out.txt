@@ -1,0 +1,2 @@
+module starts
+50 ms later, still at the top level

@@ -10,7 +10,7 @@ import { chonModelPhu, docMucModelPhu } from './modelPhu.js';
 import { sapTool, thanAnToan } from './thanYeuCau.js';
 import { tinhUsd, giaCua } from './gia.js';
 import { phanLoaiLoi, ganCache } from './goi.js';
-import { docKhoaMoiTruong, dauChuKy, chuKyKe } from './khoKey.js';
+import { docKhoaMoiTruong, dauChuKy, chuKyKe, ngayLamMoiHieuLuc } from './khoKey.js';
 import { giaiMaKhoa, maHoaKhoa, duoiKhoa } from './maHoa.js';
 
 test('phân loại lỗi HTTP ⇒ đúng hành động chuyển key', () => {
@@ -66,11 +66,24 @@ test('đọc ANTHROPIC_CHINH_HANG_KEYS: thứ tự ưu tiên + nhãn/ngân sách
   assert.deepEqual(docKhoaMoiTruong('nhan|ngan'), [], 'mục không có khoá thật bị bỏ');
 });
 
+test('ngày làm mới 0 = không làm mới: cộng dồn từ đầu, không có mốc kế (02/11/2026)', () => {
+  const luc = new Date('2026-11-02T03:00:00Z');
+  assert.equal(dauChuKy(0, luc).getTime(), 0);
+  assert.equal(chuKyKe(0, luc), null);
+  // Chế độ tháng giữ nguyên: ngày 1 ⇒ chu kỳ từ 1/11 00:00 VN.
+  assert.equal(dauChuKy(1, luc).toISOString(), '2026-10-31T17:00:00.000Z');
+});
+
+test('key có ngày hết hạn ⇒ tự coi là gói credit (không làm mới)', () => {
+  assert.equal(ngayLamMoiHieuLuc({ ngayLamMoi: 1, hetHanLuc: new Date('2026-11-14T00:00:00Z') }), 0);
+  assert.equal(ngayLamMoiHieuLuc({ ngayLamMoi: 15, hetHanLuc: null }), 15);
+});
+
 test('chu kỳ tháng theo giờ Việt Nam', () => {
   // 17/10/2026 10:00 VN = 03:00Z. Ngày làm mới 15 ⇒ chu kỳ từ 15/10 00:00 VN = 14/10 17:00Z.
   const luc = new Date('2026-10-17T03:00:00Z');
   assert.equal(dauChuKy(15, luc).toISOString(), '2026-10-14T17:00:00.000Z');
-  assert.equal(chuKyKe(15, luc).toISOString(), '2026-11-14T17:00:00.000Z');
+  assert.equal(chuKyKe(15, luc)?.toISOString(), '2026-11-14T17:00:00.000Z');
   // Ngày làm mới 20 chưa tới ⇒ chu kỳ bắt đầu 20/09.
   assert.equal(dauChuKy(20, luc).toISOString(), '2026-09-19T17:00:00.000Z');
   // Biên: 31/10 23:30 VN (16:30Z) vẫn thuộc tháng 10.

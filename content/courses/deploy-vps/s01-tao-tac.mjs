@@ -1251,6 +1251,21 @@ ma thoat cua C: 0</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">package-lock.json — bên trong nó có gì</span><span class="lc-sub">docs.npmjs.com/cli/configuring-npm/package-lock-json — trường <code>integrity</code>, và vì sao tệp khoá phải nằm trong quản lý phiên bản.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Docker — dựng cho đúng nền tảng bạn sẽ chạy</span><span class="lc-sub">/courses/docker/learn${REF} — ảnh nền, musl so với glibc, và bản dựng nhiều tầng giữ cho dev dependency không lọt vào ảnh cuối.</span></span></div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-1-build" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 14.1 — What a production build does</span><span class="lc-sub">Dev 225 KB vs build 1.4 KB, measured; bundle, minify, tree-shake, hash</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-14-1-build" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 14.1 — Bản dựng production làm gì</span><span class="lc-sub">Dev 225 KB so với build 1,4 KB, đo thật; gộp gói, thu gọn, rung cây, băm tên</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

@@ -1,0 +1,3 @@
+details open? false
+after one click on summary: true — no JavaScript of ours toggled it
+figure caption: Figure 1 — a caption is tied to its image.

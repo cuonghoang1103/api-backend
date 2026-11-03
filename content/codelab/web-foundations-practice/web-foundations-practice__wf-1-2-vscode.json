@@ -1,0 +1,630 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-1-2-vscode",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-1-2-vscode"
+  },
+  "exercises": [
+    {
+      "title": "Ctrl+/ — bật/tắt chú thích",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "mảng dòng",
+        "every",
+        "thụt lề"
+      ],
+      "prerequisites": [
+        "chuỗi",
+        "map"
+      ],
+      "tags": [
+        "javascript",
+        "editor"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p>Viết <code>toggleComment(lines)</code> nhận mảng dòng đang chọn và trả mảng mới. Nếu MỌI dòng không rỗng đều đã bắt đầu (sau thụt lề) bằng <code>// </code> ⇒ bỏ <code>// </code> ở từng dòng (giữ thụt lề). Ngược lại ⇒ chèn <code>// </code> vào mỗi dòng không rỗng, ngay sau phần thụt lề. Dòng rỗng (chỉ khoảng trắng) giữ nguyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Quyết định chung cho cả khối, không từng dòng.</li>\n  <li>Giữ nguyên thụt lề.</li>\n  <li>Dòng rỗng không bị đụng tới.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "lines: string[].",
+      "outputSpec": "string[].",
+      "constraints": "Không sửa mảng vào.",
+      "examplesJson": [
+        {
+          "input": "toggleComment([\"  let a = 1;\", \"  a++;\"])",
+          "output": "[\"  // let a = 1;\", \"  // a++;\"]",
+          "explanation": "Bấm lần nữa là trở lại như cũ."
+        }
+      ],
+      "hintsJson": [
+        "Tách thụt lề: const m = /^(\\s*)(.*)$/.exec(line); m[1] là thụt lề, m[2] là phần còn lại.",
+        "const allCommented = lines.filter((l) => l.trim()).every((l) => l.trim().startsWith(\"// \"));"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+/\nfunction toggleComment(lines) {\n  return lines.map((l) => '// ' + l);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+/: cả khối đã là chú thích ⇒ bỏ; còn không ⇒ thêm\nfunction toggleComment(lines) {\n  const nonEmpty = lines.filter((l) => l.trim() !== '');\n  const allCommented = nonEmpty.length > 0 && nonEmpty.every((l) => l.trim().startsWith('// '));\n  return lines.map((line) => {\n    if (line.trim() === '') return line;                   // dòng rỗng giữ nguyên\n    const [, indent, rest] = /^(\\s*)(.*)$/.exec(line);       // tách thụt lề và phần chữ\n    return allCommented ? indent + rest.slice(3) : indent + '// ' + rest;\n  });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>VS Code quyết định cho cả vùng chọn: chỉ khi mọi dòng đều đã là chú thích thì mới bỏ. Nhờ vậy bấm hai lần luôn trả về đúng như cũ — tính chất mà một phím tắt tốt phải có.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quyết định từng dòng — khối lẫn lộn bị đảo ngược lung tung.</li>\n  <li>Chèn // ở đầu dòng thay vì sau thụt lề.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/editor/codebasics",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Comment a block, keep indentation|||Chú thích một khối, giữ thụt lề",
+            "goi": "toggleComment([\"  let a = 1;\", \"\", \"  a++;\"])",
+            "mongDoi": [
+              "  // let a = 1;",
+              "",
+              "  // a++;"
+            ]
+          },
+          {
+            "moTa": "Uncomment when every line is commented|||Bỏ chú thích khi mọi dòng đã là chú thích",
+            "goi": "toggleComment([\"// x();\", \"    // y();\"])",
+            "mongDoi": [
+              "x();",
+              "    y();"
+            ]
+          },
+          {
+            "moTa": "Mixed block ⇒ comment all; toggling twice is identity|||Khối lẫn ⇒ chú thích hết; bấm hai lần là như cũ",
+            "goi": "(() => { const a = [\"// a\", \"b\"]; const once = toggleComment(a); return [once, toggleComment(once)]; })()",
+            "mongDoi": [
+              [
+                "// // a",
+                "// b"
+              ],
+              [
+                "// a",
+                "b"
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quyết định từng dòng — khối lẫn lộn bị đảo ngược lung tung."
+        },
+        {
+          "loi": "Chèn // ở đầu dòng thay vì sau thụt lề."
+        }
+      ]
+    },
+    {
+      "title": "Alt+↑ / Alt+↓ — dời dòng",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "hoán đổi phần tử",
+        "chỉ số biên"
+      ],
+      "prerequisites": [
+        "mảng",
+        "slice"
+      ],
+      "tags": [
+        "javascript",
+        "editor"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p>Viết <code>moveLines(lines, from, to, dir)</code>: dời khối dòng có chỉ số từ <code>from</code> tới <code>to</code> (gồm cả hai) lên (<code>dir = -1</code>) hoặc xuống (<code>dir = 1</code>) một dòng. Trả <code>{ lines, from, to }</code> — mảng mới và vị trí mới của khối (con trỏ đi theo khối). Ở mép trên/dưới thì không đổi gì.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khối nhiều dòng di chuyển cùng nhau.</li>\n  <li>Ở mép ⇒ trả nguyên (bản sao).</li>\n  <li>Trả cả vị trí mới.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "lines: string[]; from, to: số; dir: -1 | 1.",
+      "outputSpec": "{ lines, from, to }.",
+      "constraints": "Không sửa mảng vào.",
+      "examplesJson": [
+        {
+          "input": "moveLines([\"a\",\"b\",\"c\"], 1, 1, -1)",
+          "output": "{ lines: [\"b\",\"a\",\"c\"], from: 0, to: 0 }",
+          "explanation": "Dòng \"b\" lên trên \"a\"."
+        }
+      ],
+      "hintsJson": [
+        "Lên: phần tử ngay trên khối (from-1) chuyển xuống dưới khối.",
+        "const block = lines.slice(from, to + 1);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — dời dòng\nfunction moveLines(lines, from, to, dir) {\n  return { lines, from, to };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — dời dòng: khối đổi chỗ với đúng một dòng hàng xóm\nfunction moveLines(lines, from, to, dir) {\n  if ((dir < 0 && from === 0) || (dir > 0 && to === lines.length - 1)) {\n    return { lines: [...lines], from, to };               // đã chạm mép\n  }\n  const block = lines.slice(from, to + 1);\n  if (dir < 0) {\n    const above = lines[from - 1];\n    return { lines: [...lines.slice(0, from - 1), ...block, above, ...lines.slice(to + 1)], from: from - 1, to: to - 1 };\n  }\n  const below = lines[to + 1];\n  return { lines: [...lines.slice(0, from), below, ...block, ...lines.slice(to + 2)], from: from + 1, to: to + 1 };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Dời một khối thực chất là đổi chỗ khối với MỘT dòng hàng xóm. Cách nghĩ này đơn giản hơn nhiều so với \"xoá khối rồi chèn lại\", và tự xử lý khối nhiều dòng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên cập nhật from/to — con trỏ ở lại chỗ cũ.</li>\n  <li>Không kiểm mép — undefined chen vào mảng.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/getstarted/keybindings",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Move one line up|||Dời một dòng lên",
+            "goi": "moveLines([\"a\", \"b\", \"c\"], 1, 1, -1)",
+            "mongDoi": {
+              "lines": [
+                "b",
+                "a",
+                "c"
+              ],
+              "from": 0,
+              "to": 0
+            }
+          },
+          {
+            "moTa": "Move a block down|||Dời một khối xuống",
+            "goi": "moveLines([\"a\", \"b\", \"c\", \"d\"], 0, 1, 1)",
+            "mongDoi": {
+              "lines": [
+                "c",
+                "a",
+                "b",
+                "d"
+              ],
+              "from": 1,
+              "to": 2
+            }
+          },
+          {
+            "moTa": "At the edge nothing changes|||Ở mép không đổi gì",
+            "goi": "[moveLines([\"a\", \"b\"], 0, 0, -1), moveLines([\"a\", \"b\"], 0, 1, 1)]",
+            "mongDoi": [
+              {
+                "lines": [
+                  "a",
+                  "b"
+                ],
+                "from": 0,
+                "to": 0
+              },
+              {
+                "lines": [
+                  "a",
+                  "b"
+                ],
+                "from": 0,
+                "to": 1
+              }
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên cập nhật from/to — con trỏ ở lại chỗ cũ."
+        },
+        {
+          "loi": "Không kiểm mép — undefined chen vào mảng."
+        }
+      ]
+    },
+    {
+      "title": "Ctrl+D — chọn lần xuất hiện kế tiếp",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "tìm theo từ nguyên",
+        "quay vòng",
+        "đa con trỏ"
+      ],
+      "prerequisites": [
+        "indexOf",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "editor"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p>Viết <code>nextOccurrence(text, word, selections)</code>: <code>selections</code> là mảng vị trí bắt đầu đã chọn (theo thứ tự đã chọn). Tìm lần xuất hiện kế tiếp của <code>word</code> dưới dạng <strong>từ nguyên</strong> (ký tự trước và sau không phải chữ, số hay <code>_</code>/<code>$</code>), bắt đầu tìm SAU lần chọn cuối cùng; hết văn bản thì quay lại từ đầu. Bỏ qua vị trí đã chọn. Trả mảng <code>selections</code> mới có thêm vị trí đó; không còn gì ⇒ trả bản sao như cũ.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ khớp từ nguyên (\"total\" không khớp trong \"subtotal\").</li>\n  <li>Tìm sau lần chọn cuối, rồi quay vòng.</li>\n  <li>Không chọn trùng.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text, word: string; selections: number[].",
+      "outputSpec": "number[].",
+      "constraints": "Không dựng regex từ word (word có thể chứa $).",
+      "examplesJson": [
+        {
+          "input": "nextOccurrence(\"a total; subtotal; total\", \"total\", [2])",
+          "output": "[2, 19]",
+          "explanation": "Bỏ qua \"subtotal\"."
+        }
+      ],
+      "hintsJson": [
+        "Hàm isWordChar(ch) = /[A-Za-z0-9_$]/.test(ch ?? \"\")",
+        "Thu mọi vị trí từ nguyên bằng vòng indexOf, rồi chọn vị trí đầu tiên > lần chọn cuối chưa có; không có thì vị trí nhỏ nhất chưa có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+D\nfunction nextOccurrence(text, word, selections) {\n  return [...selections, text.indexOf(word, selections.at(-1) + 1)];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+D: lần xuất hiện kế tiếp (từ nguyên), quay vòng, không trùng\nconst isWordChar = (ch) => ch !== undefined && /[A-Za-z0-9_$]/.test(ch);\n\nfunction nextOccurrence(text, word, selections) {\n  const all = [];\n  for (let i = text.indexOf(word); i !== -1; i = text.indexOf(word, i + 1)) {\n    if (!isWordChar(text[i - 1]) && !isWordChar(text[i + word.length])) all.push(i);   // từ nguyên\n  }\n  const free = all.filter((p) => !selections.includes(p));\n  if (free.length === 0) return [...selections];\n  const last = selections.length ? selections[selections.length - 1] : -1;\n  const next = free.find((p) => p > last) ?? free[0];          // sau lần chọn cuối, hoặc quay vòng\n  return [...selections, next];\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ctrl+D là cách sửa nhiều chỗ cùng lúc mà vẫn kiểm từng chỗ bằng mắt — an toàn hơn thay-tất-cả. Từ nguyên là điểm mấu chốt: chọn <code>total</code> không được dính vào <code>subtotal</code>.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Khớp cả trong từ khác.</li>\n  <li>Không quay vòng — dừng ở cuối file.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/editor/codebasics#_multiple-selections-multicursor",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Whole words only|||Chỉ từ nguyên",
+            "goi": "nextOccurrence(\"a total; subtotal; total\", \"total\", [2])",
+            "mongDoi": [
+              2,
+              19
+            ]
+          },
+          {
+            "moTa": "Wraps around to the start|||Quay vòng về đầu",
+            "goi": "nextOccurrence(\"x = x + x\", \"x\", [8])",
+            "mongDoi": [
+              8,
+              0
+            ]
+          },
+          {
+            "moTa": "Nothing left ⇒ unchanged; $ is a word character|||Hết ⇒ giữ nguyên; $ là ký tự của từ",
+            "goi": "[nextOccurrence(\"x = x\", \"x\", [0, 4]), nextOccurrence(\"$el el\", \"el\", [])]",
+            "mongDoi": [
+              [
+                0,
+                4
+              ],
+              [
+                4
+              ]
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Khớp cả trong từ khác."
+        },
+        {
+          "loi": "Không quay vòng — dừng ở cuối file."
+        }
+      ]
+    },
+    {
+      "title": "Ctrl+P — khớp tên file",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "fuzzy match",
+        "dãy con",
+        "xếp hạng"
+      ],
+      "prerequisites": [
+        "vòng lặp",
+        "sort"
+      ],
+      "tags": [
+        "javascript",
+        "editor",
+        "thuật toán"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p>Viết <code>quickOpen(query, files)</code>: một file khớp nếu các ký tự của <code>query</code> (không phân biệt hoa thường, bỏ dấu cách) xuất hiện <strong>theo thứ tự</strong> trong đường dẫn (không cần liền nhau). Điểm: duyệt tham lam từ trái sang; mỗi ký tự khớp +1; +5 nếu ký tự khớp nằm ngay sau ký tự khớp trước đó (liền nhau); +3 nếu nó là ký tự đầu của tên file (ngay sau <code>/</code> cuối) hoặc ngay sau <code>/ - _ .</code>. Trả các đường dẫn khớp, điểm cao trước; bằng điểm thì đường dẫn ngắn trước, rồi theo thứ tự chữ cái.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Khớp dãy con, không phân biệt hoa thường.</li>\n  <li>Tính điểm đúng ba quy tắc.</li>\n  <li>Sắp xếp ổn định theo ba khoá.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "query: string; files: string[].",
+      "outputSpec": "string[].",
+      "constraints": "Duyệt tham lam (ký tự query khớp vị trí sớm nhất còn lại).",
+      "examplesJson": [
+        {
+          "input": "quickOpen(\"cart\", [\"src/cart.js\", \"src/components/CartItem.jsx\", \"README.md\"])",
+          "output": "[\"src/cart.js\", \"src/components/CartItem.jsx\"]",
+          "explanation": "Cùng điểm, đường dẫn ngắn hơn đứng trước."
+        }
+      ],
+      "hintsJson": [
+        "score(q, path): let pos = -1; for (const ch of q) { const i = lower.indexOf(ch, pos + 1); if (i < 0) return null; … pos = i; }",
+        "Ký tự trước vị trí i: path[i - 1]; i === 0 cũng tính là đầu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+P\nfunction quickOpen(query, files) {\n  return files.filter((f) => f.includes(query));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — Ctrl+P: khớp dãy con + điểm cho chữ liền nhau và đầu từ\nfunction score(query, path) {\n  const q = query.toLowerCase().replace(/\\s+/g, '');\n  const lower = path.toLowerCase();\n  let pos = -1, total = 0;\n  for (const ch of q) {\n    const i = lower.indexOf(ch, pos + 1);                 // tham lam: vị trí sớm nhất còn lại\n    if (i < 0) return null;\n    total += 1;\n    if (pos >= 0 && i === pos + 1) total += 5;            // liền nhau\n    if (i === 0 || '/-_.'.includes(path[i - 1])) total += 3;   // đầu tên / đầu từ\n    pos = i;\n  }\n  return total;\n}\n\nfunction quickOpen(query, files) {\n  return files\n    .map((f) => ({ f, s: score(query, f) }))\n    .filter((x) => x.s !== null)\n    .sort((a, b) => b.s - a.s || a.f.length - b.f.length || (a.f < b.f ? -1 : a.f > b.f ? 1 : 0))\n    .map((x) => x.f);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là bản rút gọn của thuật toán sau Ctrl+P: khớp dãy con cho phép gõ tắt (<code>crt</code> vẫn ra <code>cart.js</code>), còn điểm thưởng cho chữ liền nhau và đầu từ đẩy kết quả \"giống điều bạn nghĩ\" lên đầu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Dùng includes — gõ tắt không ra gì.</li>\n  <li>Quên bỏ dấu cách trong query.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/getstarted/tips-and-tricks#_quick-open",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Subsequence match, shorter path first on ties|||Khớp dãy con, bằng điểm thì đường dẫn ngắn trước",
+            "goi": "quickOpen(\"cart\", [\"src/components/CartItem.jsx\", \"README.md\", \"src/cart.js\"])",
+            "mongDoi": [
+              "src/cart.js",
+              "src/components/CartItem.jsx"
+            ]
+          },
+          {
+            "moTa": "Abbreviations work; contiguous letters rank higher|||Gõ tắt được; chữ liền nhau xếp cao hơn",
+            "goi": "[quickOpen(\"ca\", [\"chart.js\", \"c_a.js\", \"cart.js\"]), quickOpen(\"ec\", [\"src/exec.js\", \"index.css\", \"eslint.config.js\"])]",
+            "mongDoi": [
+              [
+                "cart.js",
+                "c_a.js",
+                "chart.js"
+              ],
+              [
+                "eslint.config.js",
+                "index.css",
+                "src/exec.js"
+              ]
+            ]
+          },
+          {
+            "moTa": "Case-insensitive, spaces ignored, no match ⇒ empty|||Không phân biệt hoa thường, bỏ dấu cách, không khớp ⇒ rỗng",
+            "goi": "[quickOpen(\"PK J\", [\"package.json\", \"src/pk.ts\"]), quickOpen(\"zz\", [\"a.js\"])]",
+            "mongDoi": [
+              [
+                "package.json"
+              ],
+              []
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Dùng includes — gõ tắt không ra gì."
+        },
+        {
+          "loi": "Quên bỏ dấu cách trong query."
+        }
+      ]
+    },
+    {
+      "title": "Đọc settings.json (JSON có chú thích)",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "JSONC",
+        "máy trạng thái",
+        "chuỗi trong nháy"
+      ],
+      "prerequisites": [
+        "vòng lặp ký tự",
+        "JSON.parse"
+      ],
+      "tags": [
+        "javascript",
+        "editor",
+        "json"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p><code>.vscode/settings.json</code> cho phép chú thích <code>// …</code> và <code>/* … */</code> cùng dấu phẩy thừa trước <code>}</code> hoặc <code>]</code> — <code>JSON.parse</code> thường sẽ ném lỗi. Viết <code>parseJsonc(text)</code>: bỏ chú thích (nhưng KHÔNG đụng vào nội dung trong chuỗi nháy kép, kể cả <code>\"http://…\"</code> và nháy thoát <code>\\\"</code>), bỏ dấu phẩy thừa (ngoài chuỗi), rồi <code>JSON.parse</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chuỗi chứa // hay /* giữ nguyên.</li>\n  <li>Xử lý \\\" trong chuỗi.</li>\n  <li>Dấu phẩy thừa trước } hoặc ] (có thể có khoảng trắng xen giữa).</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "text: string.",
+      "outputSpec": "giá trị JSON.",
+      "constraints": "Không dùng regex xoá chú thích trên cả văn bản (sẽ phá URL trong chuỗi).",
+      "examplesJson": [
+        {
+          "input": "parseJsonc('{ // a\\n \"x\": 1, }')",
+          "output": "{ x: 1 }",
+          "explanation": "Đúng kiểu settings.json của bài."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt từng ký tự với cờ inString; trong chuỗi: gặp \\\\ thì chép cả ký tự sau, gặp \" thì thoát chuỗi.",
+        "Ngoài chuỗi: \"//\" ⇒ bỏ tới hết dòng; \"/*\" ⇒ bỏ tới \"*/\"; \",\" ⇒ nhìn trước ký tự không phải khoảng trắng kế tiếp, là } hoặc ] thì bỏ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — JSONC\nfunction parseJsonc(text) {\n  return JSON.parse(text.replace(/\\/\\/.*$/gm, ''));\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — JSONC: duyệt từng ký tự, nhớ đang ở trong chuỗi hay không\nfunction parseJsonc(text) {\n  let out = '';\n  let inString = false;\n  for (let i = 0; i < text.length; i++) {\n    const ch = text[i];\n    if (inString) {\n      out += ch;\n      if (ch === '\\\\') { out += text[i + 1]; i++; }   // ký tự thoát: chép nguyên cặp\n      else if (ch === '\"') inString = false;\n      continue;\n    }\n    if (ch === '\"') { inString = true; out += ch; continue; }\n    if (ch === '/' && text[i + 1] === '/') {              // chú thích một dòng\n      while (i < text.length && text[i] !== '\\n') i++;\n      out += '\\n';\n      continue;\n    }\n    if (ch === '/' && text[i + 1] === '*') {              // chú thích khối\n      const end = text.indexOf('*/', i + 2);\n      i = end === -1 ? text.length : end + 1;\n      continue;\n    }\n    if (ch === ',') {                                       // dấu phẩy thừa?\n      let j = i + 1;\n      while (j < text.length && /\\s/.test(text[j])) j++;\n      if (text[j] === '}' || text[j] === ']') continue;\n    }\n    out += ch;\n  }\n  return JSON.parse(out);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Đây là lý do một \"máy trạng thái\" nhỏ tốt hơn regex: chỉ khi biết mình đang ở ngoài chuỗi thì <code>//</code> mới là chú thích. VS Code dùng thư viện <code>jsonc-parser</code> làm đúng việc này cho mọi file cấu hình của nó.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Regex xoá // trên cả văn bản — URL trong chuỗi bị cắt.</li>\n  <li>Quên chuỗi có \\\" — thoát chuỗi sai chỗ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/languages/json#_json-with-comments",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson settings file|||File settings của bài",
+            "goi": "parseJsonc(\"{\\n  // Workspace settings\\n  \\\"editor.formatOnSave\\\": true,\\n  \\\"editor.codeActionsOnSave\\\": { \\\"source.fixAll.eslint\\\": \\\"explicit\\\" },\\n}\\n\")",
+            "mongDoi": {
+              "editor.formatOnSave": true,
+              "editor.codeActionsOnSave": {
+                "source.fixAll.eslint": "explicit"
+              }
+            }
+          },
+          {
+            "moTa": "Strings with // and /* are kept|||Chuỗi chứa // và /* được giữ",
+            "goi": "parseJsonc(\"{ \\\"url\\\": \\\"http://localhost:5173\\\", /* port */ \\\"glob\\\": \\\"src/**/*.js\\\" }\")",
+            "mongDoi": {
+              "url": "http://localhost:5173",
+              "glob": "src/**/*.js"
+            }
+          },
+          {
+            "moTa": "Escaped quotes and trailing comma in arrays|||Nháy thoát và dấu phẩy thừa trong mảng",
+            "goi": "parseJsonc(\"[\\\"say \\\\\\\"hi\\\\\\\" // not a comment\\\", 2,\\n ]\")",
+            "mongDoi": [
+              "say \"hi\" // not a comment",
+              2
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Regex xoá // trên cả văn bản — URL trong chuỗi bị cắt."
+        },
+        {
+          "loi": "Quên chuỗi có \\\" — thoát chuỗi sai chỗ."
+        }
+      ]
+    },
+    {
+      "title": "Đổi tên định danh, bỏ qua chuỗi và chú thích",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 25,
+      "points": 30,
+      "concepts": [
+        "tokenizer",
+        "định danh",
+        "F2 rename"
+      ],
+      "prerequisites": [
+        "vòng lặp ký tự",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "editor"
+      ],
+      "problemHtml": "<p><em>Bài 1.2 — VS Code: xưởng làm việc.</em> Bạn bấm phím tắt này hằng ngày; giờ tự viết logic đằng sau nó.</p><p>F2 thật cần hiểu phạm vi; ở đây ta làm một nửa quan trọng: <code>renameIdentifier(code, from, to)</code> đổi mọi <strong>định danh</strong> đúng bằng <code>from</code> thành <code>to</code>, NHƯNG không đụng vào: nội dung chuỗi (<code>'…'</code>, <code>\"…\"</code>, <code>&amp;#96;…&amp;#96;</code> — không cần xử lý <code>${}</code>), chú thích (<code>//</code> và <code>/* */</code>), phần của định danh dài hơn (<code>subtotal</code>), và tên thuộc tính sau dấu chấm (<code>obj.total</code>). Trả <code>{ code, count }</code> với <code>count</code> = số chỗ đã đổi.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bỏ qua chuỗi, chú thích, từ dài hơn, thuộc tính sau dấu chấm.</li>\n  <li>Xử lý ký tự thoát trong chuỗi.</li>\n  <li>Đếm đúng số chỗ đổi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "code, from, to: string.",
+      "outputSpec": "{ code, count }.",
+      "constraints": "Định danh: [A-Za-z_$][A-Za-z0-9_$]*.",
+      "examplesJson": [
+        {
+          "input": "renameIdentifier('let total = 0; // total\\nlog(\"total\", total, subtotal, o.total);', \"total\", \"sum\")",
+          "output": "{ code: 'let sum = 0; // total\\nlog(\"total\", sum, subtotal, o.total);', count: 2 }",
+          "explanation": "Text search ra 6, đổi đúng 2."
+        }
+      ],
+      "hintsJson": [
+        "Duyệt i từ 0: nếu gặp nháy ⇒ chép tới nháy đóng (bỏ qua \\\\x); nếu // hoặc /* ⇒ chép nguyên chú thích; nếu ký tự đầu định danh ⇒ đọc cả định danh.",
+        "Thuộc tính: ký tự không phải khoảng trắng ngay trước định danh là \".\" ⇒ giữ nguyên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — đổi tên định danh\nfunction renameIdentifier(code, from, to) {\n  const parts = code.split(from);\n  return { code: parts.join(to), count: parts.length - 1 };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 1.2 — đổi tên định danh: tokenizer tối giản, chép nguyên chuỗi và chú thích\nfunction renameIdentifier(code, from, to) {\n  let out = '', count = 0, i = 0;\n  const isStart = (ch) => /[A-Za-z_$]/.test(ch);\n  const isPart = (ch) => ch !== undefined && /[A-Za-z0-9_$]/.test(ch);\n  while (i < code.length) {\n    const ch = code[i];\n    if (ch === '\"' || ch === \"'\" || ch === '`') {                 // chuỗi: chép tới nháy đóng\n      let j = i + 1;\n      while (j < code.length && code[j] !== ch) j += code[j] === '\\\\' ? 2 : 1;\n      out += code.slice(i, j + 1); i = j + 1; continue;\n    }\n    if (ch === '/' && code[i + 1] === '/') {                       // chú thích dòng\n      let j = code.indexOf('\\n', i); if (j === -1) j = code.length;\n      out += code.slice(i, j); i = j; continue;\n    }\n    if (ch === '/' && code[i + 1] === '*') {                       // chú thích khối\n      let j = code.indexOf('*/', i + 2); j = j === -1 ? code.length : j + 2;\n      out += code.slice(i, j); i = j; continue;\n    }\n    if (isStart(ch)) {                                              // một định danh trọn vẹn\n      let j = i; while (isPart(code[j])) j++;\n      const word = code.slice(i, j);\n      const before = out.trimEnd().slice(-1);                       // ký tự đáng kể ngay trước\n      if (word === from && before !== '.') { out += to; count++; } else out += word;\n      i = j; continue;\n    }\n    out += ch; i++;\n  }\n  return { code: out, count };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Ở bài học, text search ra 9 chỗ còn F2 đổi 3. Hàm này loại được chuỗi, chú thích, từ dài hơn và thuộc tính — phần còn thiếu so với F2 thật là <em>phạm vi</em>: hai biến cùng tên ở hai hàm khác nhau. Để làm được việc đó cần một trình phân tích cú pháp đầy đủ, và đó chính là dịch vụ ngôn ngữ TypeScript mà VS Code dùng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Thay theo chữ — phá chuỗi hiện cho người dùng.</li>\n  <li>Đọc định danh từng ký tự — \"subtotal\" bị đổi một phần.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 1.2 VS Code.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://code.visualstudio.com/docs/editor/refactoring#_rename-symbol",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Skips strings, comments, longer words, properties|||Bỏ qua chuỗi, chú thích, từ dài hơn, thuộc tính",
+            "goi": "renameIdentifier(\"let total = 0; // total\\nlog(\\\"total\\\", total, subtotal, o.total);\", \"total\", \"sum\")",
+            "mongDoi": {
+              "code": "let sum = 0; // total\nlog(\"total\", sum, subtotal, o.total);",
+              "count": 2
+            }
+          },
+          {
+            "moTa": "Block comments and escaped quotes|||Chú thích khối và nháy thoát",
+            "goi": "renameIdentifier(\"/* x */ x = 'it\\\\'s x' + x;\", \"x\", \"y\")",
+            "mongDoi": {
+              "code": "/* x */ y = 'it\\'s x' + y;",
+              "count": 2
+            }
+          },
+          {
+            "moTa": "Template literals and $ in names|||Template literal và $ trong tên",
+            "goi": "renameIdentifier(\"const $el = q(\\\"#a\\\"); $el.x = \\u0060$el\\u0060; $elem;\", \"$el\", \"node\")",
+            "mongDoi": {
+              "code": "const node = q(\"#a\"); node.x = `$el`; $elem;",
+              "count": 2
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thay theo chữ — phá chuỗi hiện cho người dùng."
+        },
+        {
+          "loi": "Đọc định danh từng ký tự — \"subtotal\" bị đổi một phần."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,705 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-14-3-deploy",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-14-3-deploy"
+  },
+  "exercises": [
+    {
+      "title": "Giải đường dẫn yêu cầu thành file",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 15,
+      "points": 10,
+      "concepts": [
+        "URL path",
+        "chuẩn hoá đường dẫn",
+        "path traversal"
+      ],
+      "prerequisites": [
+        "split",
+        "mảng"
+      ],
+      "tags": [
+        "javascript",
+        "deploy",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Viết <code>resolvePath(urlPath)</code> trả tên file trong <code>dist/</code> (không có / ở đầu) mà máy chủ cần đọc: bỏ query <code>?…</code> và <code>#…</code>; giải mã <code>%20</code> bằng <code>decodeURIComponent</code>; bỏ đoạn rỗng và <code>.</code>; <code>..</code> lùi một cấp — nhưng nếu lùi QUÁ gốc thì trả <code>null</code> (yêu cầu bị từ chối, 403); đường dẫn kết thúc bằng <code>/</code> (hoặc rỗng) ⇒ thêm <code>index.html</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>\"/\" ⇒ \"index.html\"; \"/docs/\" ⇒ \"docs/index.html\".</li>\n  <li>\"..\" vượt gốc ⇒ null.</li>\n  <li>Bỏ query/hash, giải mã %XX.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "urlPath: string bắt đầu bằng \"/\".",
+      "outputSpec": "string | null.",
+      "constraints": "Không dùng module path của Node (chạy cả trong trình duyệt).",
+      "examplesJson": [
+        {
+          "input": "resolvePath(\"/../../etc/passwd\")",
+          "output": "null",
+          "explanation": "Đây là kiểu tấn công path traversal kinh điển."
+        }
+      ],
+      "hintsJson": [
+        "const clean = urlPath.split(/[?#]/)[0];",
+        "Dùng một mảng làm ngăn xếp: \"..\" ⇒ nếu rỗng thì trả null, ngược lại pop()."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — giải đường dẫn\nfunction resolvePath(urlPath) {\n  return urlPath.slice(1);\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — giải đường dẫn: chuẩn hoá bằng ngăn xếp, chặn vượt gốc\nfunction resolvePath(urlPath) {\n  const clean = decodeURIComponent(urlPath.split(/[?#]/)[0]);\n  const parts = [];\n  for (const seg of clean.split('/')) {\n    if (seg === '' || seg === '.') continue;\n    if (seg === '..') {\n      if (parts.length === 0) return null;          // muốn ra ngoài dist/ ⇒ từ chối\n      parts.pop();\n    } else parts.push(seg);\n  }\n  if (clean.endsWith('/') || parts.length === 0) parts.push('index.html');\n  return parts.join('/');\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Máy chủ tĩnh nào cũng phải chuẩn hoá đường dẫn trước khi chạm ổ đĩa; không thì <code>/../.env</code> đọc được file ngoài thư mục phục vụ. <code>server.mjs</code> của bài dùng <code>path.normalize</code> rồi kiểm <code>startsWith(ROOT)</code> — cùng ý tưởng.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Ghép chuỗi thẳng vào đường dẫn ổ đĩa.</li>\n  <li>Giải mã SAU khi xử lý \"..\" — %2e%2e lách được.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://owasp.org/www-community/attacks/Path_Traversal",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Directory index|||Trang chỉ mục thư mục",
+            "goi": "[resolvePath(\"/\"), resolvePath(\"/docs/\"), resolvePath(\"\")]",
+            "mongDoi": [
+              "index.html",
+              "docs/index.html",
+              "index.html"
+            ]
+          },
+          {
+            "moTa": "Query, hash and encoding|||Query, hash và mã hoá",
+            "goi": "[resolvePath(\"/assets/index-27wt_Xcd.js?v=2\"), resolvePath(\"/my%20file.txt#top\")]",
+            "mongDoi": [
+              "assets/index-27wt_Xcd.js",
+              "my file.txt"
+            ]
+          },
+          {
+            "moTa": "Dot segments inside the root|||Đoạn chấm bên trong gốc",
+            "goi": "resolvePath(\"/a/./b/../c.css\")",
+            "mongDoi": "a/c.css"
+          },
+          {
+            "moTa": "Escaping the root is refused|||Vượt gốc bị từ chối",
+            "goi": "[resolvePath(\"/../../etc/passwd\"), resolvePath(\"/%2e%2e/.env\"), resolvePath(\"/a/../../x\")]",
+            "mongDoi": [
+              null,
+              null,
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép chuỗi thẳng vào đường dẫn ổ đĩa."
+        },
+        {
+          "loi": "Giải mã SAU khi xử lý \"..\" — %2e%2e lách được."
+        }
+      ]
+    },
+    {
+      "title": "SPA fallback: khi nào trả index.html",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "SPA fallback",
+        "client-side routing",
+        "404"
+      ],
+      "prerequisites": [
+        "Set",
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "deploy"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Viết <code>serve(urlPath, files, spa)</code> trả <code>{ status, file }</code>: <code>files</code> là <code>Set</code> tên file trong dist/ (không có / đầu). Tìm file theo đường dẫn (bỏ query, <code>/</code> ⇒ <code>index.html</code>, <code>/x/</code> ⇒ <code>x/index.html</code>). Có ⇒ <code>{ status: 200, file }</code>. Không có: nếu <code>spa</code> bật VÀ đoạn cuối của đường dẫn KHÔNG có đuôi file (không có dấu chấm) ⇒ <code>{ status: 200, file: \"index.html\" }</code>; ngược lại ⇒ <code>{ status: 404, file: null }</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Route của app (/products/42) ⇒ index.html khi bật SPA.</li>\n  <li>Asset thiếu (/assets/old.js) ⇒ 404 kể cả khi bật SPA.</li>\n  <li>Tắt SPA ⇒ route của app cũng 404.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "urlPath: string; files: Set<string>; spa: boolean.",
+      "outputSpec": "{ status, file }.",
+      "constraints": "Chỉ xét dấu chấm ở đoạn CUỐI (\"/v1.2/products\" vẫn là route).",
+      "examplesJson": [
+        {
+          "input": "serve(\"/products/42\", files, true)",
+          "output": "{ status: 200, file: \"index.html\" }",
+          "explanation": "Đúng như smoke-spa trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const last = path.split(\"/\").pop(); const hasExt = last.includes(\".\");",
+        "Asset thiếu mà trả index.html ⇒ trình duyệt chạy HTML như JS và báo lỗi cú pháp khó hiểu."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — SPA fallback\nfunction serve(urlPath, files, spa) {\n  const name = urlPath.slice(1) || 'index.html';\n  return files.has(name) ? { status: 200, file: name } : { status: 200, file: 'index.html' };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — SPA fallback: route của app ⇒ index.html, file thiếu ⇒ 404 thật\nfunction serve(urlPath, files, spa) {\n  const path = urlPath.split(/[?#]/)[0];\n  let name = path.replace(/^\\/+/, '');\n  if (name === '' || name.endsWith('/')) name += 'index.html';\n  if (files.has(name)) return { status: 200, file: name };\n  const last = path.split('/').pop();\n  if (spa && !last.includes('.')) return { status: 200, file: 'index.html' };   // để router phía trình duyệt lo\n  return { status: 404, file: null };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Với SPA, <code>/products/42</code> không có file nào: router chạy trong trình duyệt mới biết trang đó. Máy chủ phải trả <code>index.html</code> cho những đường dẫn đó — nhưng KHÔNG cho file tĩnh bị thiếu, nếu không lỗi 404 thật biến thành lỗi cú pháp bí ẩn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Fallback mọi thứ về index.html — che mất 404 của asset.</li>\n  <li>Quên bật fallback — F5 ở /products/42 ra 404.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://vite.dev/guide/static-deploy.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Existing files and index|||File có sẵn và trang chỉ mục",
+            "chuanBi": "const f = new Set([\"index.html\", \"assets/index-1.js\", \"robots.txt\", \"docs/index.html\"]);",
+            "goi": "[serve(\"/\", f, false), serve(\"/robots.txt?x=1\", f, false), serve(\"/docs/\", f, false)]",
+            "mongDoi": [
+              {
+                "status": 200,
+                "file": "index.html"
+              },
+              {
+                "status": 200,
+                "file": "robots.txt"
+              },
+              {
+                "status": 200,
+                "file": "docs/index.html"
+              }
+            ]
+          },
+          {
+            "moTa": "App route with and without SPA|||Route của app khi bật và tắt SPA",
+            "chuanBi": "const f = new Set([\"index.html\"]);",
+            "goi": "[serve(\"/products/42\", f, true), serve(\"/products/42\", f, false)]",
+            "mongDoi": [
+              {
+                "status": 200,
+                "file": "index.html"
+              },
+              {
+                "status": 404,
+                "file": null
+              }
+            ]
+          },
+          {
+            "moTa": "Missing asset stays 404; dots only matter in the last segment|||Asset thiếu vẫn 404; chỉ xét dấu chấm ở đoạn cuối",
+            "chuanBi": "const f = new Set([\"index.html\"]);",
+            "goi": "[serve(\"/assets/old-abc.js\", f, true).status, serve(\"/v1.2/products\", f, true).status]",
+            "mongDoi": [
+              404,
+              200
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Fallback mọi thứ về index.html — che mất 404 của asset."
+        },
+        {
+          "loi": "Quên bật fallback — F5 ở /products/42 ra 404."
+        }
+      ]
+    },
+    {
+      "title": "Chính sách Cache-Control",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "Cache-Control",
+        "immutable",
+        "no-cache",
+        "mã băm trong tên"
+      ],
+      "prerequisites": [
+        "regex"
+      ],
+      "tags": [
+        "javascript",
+        "deploy",
+        "http"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Viết <code>cacheHeader(file)</code> trả giá trị header <code>Cache-Control</code> cho một file trong dist/: file có mã băm nội dung trong tên (đoạn cuối khớp <code>/-[A-Za-z0-9_]{8}\\.(js|css|woff2|png|webp|svg)$/</code>) ⇒ <code>\"public, max-age=31536000, immutable\"</code>; file <code>.html</code> ⇒ <code>\"no-cache\"</code>; ảnh/phông không băm (<code>png jpg webp svg ico woff2</code>) ⇒ <code>\"public, max-age=86400\"</code>; còn lại ⇒ <code>\"public, max-age=0, must-revalidate\"</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Bốn nhóm đúng thứ tự ưu tiên: băm → html → tĩnh không băm → còn lại.</li>\n  <li>Không nhầm \"index.html\" là file băm.</li>\n  <li>Đuôi không phân biệt hoa thường.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "file: string (có thể có thư mục).",
+      "outputSpec": "string.",
+      "constraints": "Không dùng thư viện mime.",
+      "examplesJson": [
+        {
+          "input": "cacheHeader(\"assets/index-27wt_Xcd.js\")",
+          "output": "\"public, max-age=31536000, immutable\"",
+          "explanation": "Đúng như headers.out.txt của bài."
+        }
+      ],
+      "hintsJson": [
+        "Kiểm băm trước — \"logo-AbCd1234.png\" là file băm, không phải \"ảnh không băm\".",
+        "Lấy đuôi: (/\\.([a-z0-9]+)$/i.exec(file) || [])[1]?.toLowerCase()"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — Cache-Control\nfunction cacheHeader(file) {\n  return 'public, max-age=31536000';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — Cache-Control: tên có mã băm ⇒ giữ một năm; HTML ⇒ luôn hỏi lại\nconst HASHED = /-[A-Za-z0-9_]{8}\\.(js|css|woff2|png|webp|svg)$/i;\nconst STATIC = new Set(['png', 'jpg', 'webp', 'svg', 'ico', 'woff2']);\n\nfunction cacheHeader(file) {\n  if (HASHED.test(file)) return 'public, max-age=31536000, immutable';    // nội dung đổi ⇒ tên đổi\n  const ext = ((/\\.([a-z0-9]+)$/i.exec(file) || [])[1] || '').toLowerCase();\n  if (ext === 'html') return 'no-cache';                                   // HTML trỏ tới tên mới mỗi lần dựng\n  if (STATIC.has(ext)) return 'public, max-age=86400';                     // không băm ⇒ giữ ngắn\n  return 'public, max-age=0, must-revalidate';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>no-cache</code> KHÔNG có nghĩa \"đừng lưu\": nó nghĩa là \"lưu nhưng hỏi lại máy chủ mỗi lần\" (ETag ⇒ 304 rất rẻ). Kết hợp với asset băm <code>immutable</code>: người dùng nhận HTML mới ngay sau deploy, còn JS/CSS cũ vẫn dùng lại từ ổ đĩa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cache HTML một năm — người dùng kẹt ở bản cũ.</li>\n  <li>Cache file không băm lâu — sửa logo.png không ai thấy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Hashed assets for a year|||Asset có mã băm giữ một năm",
+            "goi": "[cacheHeader(\"assets/index-27wt_Xcd.js\"), cacheHeader(\"assets/index-BKlmIFzn.css\"), cacheHeader(\"assets/logo-AbCd1234.PNG\")]",
+            "mongDoi": [
+              "public, max-age=31536000, immutable",
+              "public, max-age=31536000, immutable",
+              "public, max-age=31536000, immutable"
+            ]
+          },
+          {
+            "moTa": "HTML is always revalidated|||HTML luôn được hỏi lại",
+            "goi": "[cacheHeader(\"index.html\"), cacheHeader(\"docs/getting-started.html\")]",
+            "mongDoi": [
+              "no-cache",
+              "no-cache"
+            ]
+          },
+          {
+            "moTa": "Unhashed static files and the rest|||File tĩnh không băm và phần còn lại",
+            "goi": "[cacheHeader(\"favicon.ico\"), cacheHeader(\"og-image.webp\"), cacheHeader(\"robots.txt\"), cacheHeader(\"manifest.json\")]",
+            "mongDoi": [
+              "public, max-age=86400",
+              "public, max-age=86400",
+              "public, max-age=0, must-revalidate",
+              "public, max-age=0, must-revalidate"
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cache HTML một năm — người dùng kẹt ở bản cũ."
+        },
+        {
+          "loi": "Cache file không băm lâu — sửa logo.png không ai thấy."
+        }
+      ]
+    },
+    {
+      "title": "Luật chuyển hướng kiểu _redirects",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "_redirects",
+        "splat",
+        "placeholder",
+        "301/302/200"
+      ],
+      "prerequisites": [
+        "split",
+        "regex",
+        "replace"
+      ],
+      "tags": [
+        "javascript",
+        "deploy"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Nhiều nhà cung cấp (Netlify, Cloudflare Pages) đọc file <code>_redirects</code>: mỗi dòng <code>từ đến [mã]</code> (mã mặc định 301; dòng trống và <code>#</code> bỏ qua). Viết <code>matchRedirect(rulesText, urlPath)</code> trả <code>{ to, status }</code> của luật ĐẦU TIÊN khớp, hoặc <code>null</code>. Mẫu <code>từ</code> có thể chứa <code>:tên</code> (khớp một đoạn không chứa /) và <code>*</code> ở cuối (khớp phần còn lại, có thể rỗng); trong <code>đến</code>, <code>:tên</code> và <code>:splat</code> được thay bằng giá trị đã khớp.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Luật đầu tiên khớp thắng.</li>\n  <li>:tên khớp một đoạn; * khớp phần còn lại.</li>\n  <li>Mã mặc định 301; 200 = rewrite.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "rulesText: string; urlPath: string.",
+      "outputSpec": "{ to, status } | null.",
+      "constraints": "Khớp cả đường dẫn (từ đầu tới cuối), không khớp một phần.",
+      "examplesJson": [
+        {
+          "input": "luật \"/blog/:slug /posts/:slug 301\" với \"/blog/hello\"",
+          "output": "{ to: \"/posts/hello\", status: 301 }",
+          "explanation": "Đổi cấu trúc URL mà không làm gãy link cũ."
+        }
+      ],
+      "hintsJson": [
+        "Dựng regex từ mẫu: thoát ký tự đặc biệt, rồi \":tên\" ⇒ \"([^/]+)\", \"*\" cuối ⇒ \"(.*)\"; nhớ tên theo thứ tự.",
+        "Thay trong đích: to.replace(/:([a-z]+)/gi, (_, n) => values[n] ?? \":\" + n)"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — _redirects\nfunction matchRedirect(rulesText, urlPath) {\n  for (const line of rulesText.split('\\n')) {\n    const [from, to] = line.trim().split(/\\s+/);\n    if (from === urlPath) return { to, status: 301 };\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — _redirects: luật đầu tiên khớp thắng, :tên và * (splat)\nfunction matchRedirect(rulesText, urlPath) {\n  for (const raw of rulesText.split(/\\r?\\n/)) {\n    const line = raw.trim();\n    if (!line || line.startsWith('#')) continue;\n    const [from, to, code] = line.split(/\\s+/);\n    const names = [];\n    let pattern = '';\n    for (const seg of from.split(/(:[A-Za-z]+|\\*$)/)) {           // tách placeholder và splat ra khỏi phần chữ\n      if (seg.startsWith(':')) { names.push(seg.slice(1)); pattern += '([^/]+)'; }\n      else if (seg === '*') { names.push('splat'); pattern += '(.*)'; }\n      else pattern += seg.replace(/[.+?^${}()|[\\]\\\\]/g, '\\\\$&');   // thoát ký tự regex\n    }\n    const m = new RegExp('^' + pattern + '$').exec(urlPath);\n    if (!m) continue;\n    const values = Object.fromEntries(names.map((n, i) => [n, m[i + 1]]));\n    const target = to.replace(/:([A-Za-z]+)/g, (all, n) => (n in values ? values[n] : all));\n    return { to: target, status: code ? Number(code) : 301 };\n  }\n  return null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Thứ tự quan trọng: luật cụ thể phải đứng trước luật chung, vì luật đầu tiên khớp thắng. Dòng cuối kinh điển của một SPA trên Netlify là <code>/* /index.html 200</code> — mã 200 nghĩa là \"rewrite\": URL trên thanh địa chỉ giữ nguyên, nội dung lấy từ index.html.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt \"/* /index.html 200\" lên đầu — nuốt mọi luật bên dưới.</li>\n  <li>Không thoát dấu chấm — \"/a.html\" khớp cả \"/aXhtml\".</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.netlify.com/routing/redirects/",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Placeholder and default status|||Placeholder và mã mặc định",
+            "goi": "matchRedirect(\"# moved\\n/blog/:slug /posts/:slug\", \"/blog/hello-web\")",
+            "mongDoi": {
+              "to": "/posts/hello-web",
+              "status": 301
+            }
+          },
+          {
+            "moTa": "First match wins; SPA rewrite last|||Luật đầu tiên khớp thắng; rewrite SPA ở cuối",
+            "chuanBi": "const R = \"/old-shop/* /shop/:splat 302\\n/about.html /about 301\\n/* /index.html 200\";",
+            "goi": "[matchRedirect(R, \"/old-shop/cart/42\"), matchRedirect(R, \"/about.html\"), matchRedirect(R, \"/products/7\")]",
+            "mongDoi": [
+              {
+                "to": "/shop/cart/42",
+                "status": 302
+              },
+              {
+                "to": "/about",
+                "status": 301
+              },
+              {
+                "to": "/index.html",
+                "status": 200
+              }
+            ]
+          },
+          {
+            "moTa": "Whole-path match, dots are literal|||Khớp cả đường dẫn, dấu chấm là chữ thường",
+            "goi": "[matchRedirect(\"/about.html /about\", \"/aboutXhtml\"), matchRedirect(\"/a /b\", \"/a/c\")]",
+            "mongDoi": [
+              null,
+              null
+            ]
+          },
+          {
+            "moTa": "Hidden: two placeholders|||Ẩn: hai placeholder",
+            "an": true,
+            "goi": "matchRedirect(\"/u/:user/p/:id /profile/:user?post=:id 301\", \"/u/an/p/9\")",
+            "mongDoi": {
+              "to": "/profile/an?post=9",
+              "status": 301
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt \"/* /index.html 200\" lên đầu — nuốt mọi luật bên dưới."
+        },
+        {
+          "loi": "Không thoát dấu chấm — \"/a.html\" khớp cả \"/aXhtml\"."
+        }
+      ]
+    },
+    {
+      "title": "Smoke-test sau deploy",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 20,
+      "points": 20,
+      "concepts": [
+        "smoke test",
+        "fetch",
+        "async/await",
+        "kiểm header"
+      ],
+      "prerequisites": [
+        "async/await",
+        "fetch",
+        "Promise.all"
+      ],
+      "tags": [
+        "javascript",
+        "deploy",
+        "kiểm thử"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Viết <code>async smokeTest(baseUrl, checks)</code> như <code>smoke.mjs</code> của bài. Mỗi <code>check</code>: <code>{ path, status, contains?, header? }</code> với <code>header</code> dạng <code>[tên, chuỗiCon]</code>. Với từng check (chạy SONG SONG), <code>fetch(baseUrl + path)</code> rồi so: mã trạng thái, <code>contains</code> có trong thân trả về, header tồn tại và chứa chuỗi con. Trả <code>{ ok, results }</code>: <code>results[i] = { path, ok, problems }</code> (<code>problems</code> là mảng chuỗi tiếng Anh: <code>\"status 404, expected 200\"</code>, <code>\"body does not contain …\"</code>, <code>\"header cache-control does not contain …\"</code>; lỗi mạng ⇒ <code>\"network error\"</code>). <code>ok</code> chung là true khi mọi check đạt.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chạy song song bằng Promise.all.</li>\n  <li>Một check có thể có nhiều problem.</li>\n  <li>Lỗi mạng không làm hàm ném — chỉ ghi problem.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "baseUrl: string; checks: mảng.",
+      "outputSpec": "Promise<{ ok, results }>.",
+      "constraints": "Chỉ dùng fetch (máy chấm cung cấp fetch giả).",
+      "examplesJson": [
+        {
+          "input": "{ path: \"/products/42\", status: 200, contains: \"CT Shop\" }",
+          "output": "{ path: \"/products/42\", ok: true, problems: [] }",
+          "explanation": "SPA fallback đã bật."
+        }
+      ],
+      "hintsJson": [
+        "const results = await Promise.all(checks.map(async (ch) => { … }));",
+        "try { const res = await fetch(…); const body = await res.text(); … } catch { problems.push(\"network error\"); }",
+        "res.headers.get(name) trả null nếu không có."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — smoke-test\nasync function smokeTest(baseUrl, checks) {\n  return { ok: true, results: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — smoke-test: gọi song song, gom mọi vấn đề, không bao giờ ném\nasync function smokeTest(baseUrl, checks) {\n  const results = await Promise.all(checks.map(async (ch) => {\n    const problems = [];\n    try {\n      const res = await fetch(baseUrl + ch.path);\n      const body = await res.text();\n      if (res.status !== ch.status) problems.push('status ' + res.status + ', expected ' + ch.status);\n      if (ch.contains && !body.includes(ch.contains)) problems.push('body does not contain ' + ch.contains);\n      if (ch.header) {\n        const [name, part] = ch.header;\n        const value = res.headers.get(name);\n        if (value === null || !value.includes(part)) problems.push('header ' + name + ' does not contain ' + part);\n      }\n    } catch {\n      problems.push('network error');                    // máy chủ chết, DNS sai... vẫn là một kết quả\n    }\n    return { path: ch.path, ok: problems.length === 0, problems };\n  }));\n  return { ok: results.every((r) => r.ok), results };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>\"Deploy thành công\" chỉ nghĩa là file đã được chép. Smoke-test hỏi đúng câu cần hỏi: trang chủ có lên không, route SPA có lên không, asset có header cache đúng không. Chạy nó ngay sau mỗi deploy và từ chối đánh dấu xong nếu có problem.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>await từng check một — chậm gấp N lần.</li>\n  <li>Để lỗi mạng ném ra ngoài — mất kết quả của các check khác.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "fetchGia": {
+          "https://ctshop.example/": {
+            "status": 200,
+            "text": "<title>CT Shop</title>",
+            "headers": {
+              "cache-control": "no-cache"
+            }
+          },
+          "https://ctshop.example/products/42": {
+            "status": 200,
+            "text": "<title>CT Shop</title>",
+            "headers": {
+              "cache-control": "no-cache"
+            }
+          },
+          "https://ctshop.example/assets/index-27wt_Xcd.js": {
+            "status": 200,
+            "text": "console.log(1)",
+            "headers": {
+              "cache-control": "public, max-age=31536000, immutable"
+            }
+          },
+          "https://ctshop.example/nope.js": {
+            "status": 404,
+            "text": "Not Found",
+            "headers": {}
+          },
+          "https://ctshop.example/broken": {
+            "loiMang": true
+          }
+        },
+        "kiem": [
+          {
+            "moTa": "All checks pass|||Mọi kiểm đều đạt",
+            "goi": "await smokeTest(\"https://ctshop.example\", [{ path: \"/\", status: 200, contains: \"CT Shop\", header: [\"cache-control\", \"no-cache\"] }, { path: \"/products/42\", status: 200, contains: \"CT Shop\" }, { path: \"/assets/index-27wt_Xcd.js\", status: 200, header: [\"cache-control\", \"immutable\"] }])",
+            "mongDoi": {
+              "ok": true,
+              "results": [
+                {
+                  "path": "/",
+                  "ok": true,
+                  "problems": []
+                },
+                {
+                  "path": "/products/42",
+                  "ok": true,
+                  "problems": []
+                },
+                {
+                  "path": "/assets/index-27wt_Xcd.js",
+                  "ok": true,
+                  "problems": []
+                }
+              ]
+            }
+          },
+          {
+            "moTa": "Several problems in one check|||Nhiều vấn đề trong một kiểm",
+            "goi": "(await smokeTest(\"https://ctshop.example\", [{ path: \"/nope.js\", status: 200, contains: \"console\", header: [\"cache-control\", \"immutable\"] }])).results[0].problems",
+            "mongDoi": [
+              "status 404, expected 200",
+              "body does not contain console",
+              "header cache-control does not contain immutable"
+            ]
+          },
+          {
+            "moTa": "Network error is a result, not a crash|||Lỗi mạng là một kết quả, không phải sập",
+            "goi": "await smokeTest(\"https://ctshop.example\", [{ path: \"/broken\", status: 200 }, { path: \"/\", status: 200 }])",
+            "mongDoi": {
+              "ok": false,
+              "results": [
+                {
+                  "path": "/broken",
+                  "ok": false,
+                  "problems": [
+                    "network error"
+                  ]
+                },
+                {
+                  "path": "/",
+                  "ok": true,
+                  "problems": []
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "await từng check một — chậm gấp N lần."
+        },
+        {
+          "loi": "Để lỗi mạng ném ra ngoài — mất kết quả của các check khác."
+        }
+      ]
+    },
+    {
+      "title": "Chọn bản để rollback",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 18,
+      "points": 30,
+      "concepts": [
+        "rollback",
+        "lịch sử deploy",
+        "bản tốt cuối cùng"
+      ],
+      "prerequisites": [
+        "mảng",
+        "sort",
+        "Date"
+      ],
+      "tags": [
+        "javascript",
+        "deploy"
+      ],
+      "problemHtml": "<p><em>Bài 14.3 — Đưa dist/ lên Internet và chứng minh nó chạy.</em> Mỗi bài cài lại một quyết định mà máy chủ tĩnh trong bài (server.mjs) hay một nhà cung cấp hosting đưa ra.</p><p>Mỗi lần deploy ghi <code>{ id, at, commit, smoke }</code> (<code>at</code> là chuỗi ISO, <code>smoke</code> là <code>\"pass\" | \"fail\" | null</code> — null là chưa chạy). Viết <code>pickRollback(deploys, currentId)</code>: trả <code>id</code> của bản MỚI NHẤT có <code>at</code> TRƯỚC bản hiện tại, có <code>smoke === \"pass\"</code> và có <code>commit</code> KHÁC commit của bản hiện tại (deploy lại cùng commit không sửa được gì). Không có ⇒ <code>null</code>. <code>currentId</code> không tồn tại ⇒ ném <code>Error('unknown deploy: &lt;id&gt;')</code>. Mảng vào có thể không theo thứ tự.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Chỉ xét bản cũ hơn bản hiện tại.</li>\n  <li>Bỏ bản smoke fail/null và bản cùng commit.</li>\n  <li>Không giả định thứ tự đầu vào.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "deploys: mảng; currentId: string.",
+      "outputSpec": "string | null.",
+      "constraints": "Không sửa mảng vào (sort trên bản sao).",
+      "examplesJson": [
+        {
+          "input": "d3 (lỗi) mới nhất, d2 smoke fail, d1 pass",
+          "output": "\"d1\"",
+          "explanation": "Quay về bản tốt cuối cùng đã được kiểm chứng."
+        }
+      ],
+      "hintsJson": [
+        "const cur = deploys.find((d) => d.id === currentId);",
+        "[...deploys].filter(…).sort((a, b) => Date.parse(b.at) - Date.parse(a.at))[0]"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — chọn bản rollback\nfunction pickRollback(deploys, currentId) {\n  return deploys[deploys.length - 2].id;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 14.3 — chọn bản rollback: bản tốt cuối cùng, cũ hơn, khác commit\nfunction pickRollback(deploys, currentId) {\n  const cur = deploys.find((d) => d.id === currentId);\n  if (!cur) throw new Error('unknown deploy: ' + currentId);\n  const candidates = deploys\n    .filter((d) => Date.parse(d.at) < Date.parse(cur.at))   // chỉ bản cũ hơn\n    .filter((d) => d.smoke === 'pass')                       // đã được kiểm chứng là chạy\n    .filter((d) => d.commit !== cur.commit)                  // cùng mã thì quay lại cũng vô ích\n    .sort((a, b) => Date.parse(b.at) - Date.parse(a.at));    // filter đã tạo mảng mới ⇒ không đụng mảng vào\n  return candidates.length ? candidates[0].id : null;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hosting tĩnh giữ mọi bản dựng cũ, nên rollback chỉ là trỏ lại — nhanh hơn sửa lỗi dưới áp lực. Nhưng phải trỏ về bản ĐÃ được smoke-test, nếu không bạn có thể quay về một bản hỏng khác. Lưu ý: rollback mã không rollback cơ sở dữ liệu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Lấy \"bản trước đó\" theo vị trí mảng — dữ liệu không theo thứ tự.</li>\n  <li>Quay về bản smoke chưa chạy.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 14.3 Deploy & verify.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://docs.netlify.com/site-deploys/manage-deploys/#rollbacks",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Last known good release|||Bản tốt cuối cùng",
+            "chuanBi": "const D = [{ id: \"d3\", at: \"2026-11-01T10:00:00Z\", commit: \"c3\", smoke: \"fail\" }, { id: \"d1\", at: \"2026-10-30T09:00:00Z\", commit: \"c1\", smoke: \"pass\" }, { id: \"d2\", at: \"2026-10-31T09:00:00Z\", commit: \"c2\", smoke: \"fail\" }];",
+            "goi": "pickRollback(D, \"d3\")",
+            "mongDoi": "d1"
+          },
+          {
+            "moTa": "Same commit and unverified releases are skipped|||Bỏ bản cùng commit và bản chưa kiểm",
+            "chuanBi": "const D = [{ id: \"a\", at: \"2026-10-01T00:00:00Z\", commit: \"x\", smoke: \"pass\" }, { id: \"b\", at: \"2026-10-02T00:00:00Z\", commit: \"y\", smoke: \"pass\" }, { id: \"c\", at: \"2026-10-03T00:00:00Z\", commit: \"z\", smoke: null }, { id: \"d\", at: \"2026-10-04T00:00:00Z\", commit: \"y\", smoke: \"pass\" }];",
+            "goi": "[pickRollback(D, \"d\"), pickRollback(D, \"a\")]",
+            "mongDoi": [
+              "a",
+              null
+            ]
+          },
+          {
+            "moTa": "Unknown deploy throws|||Bản không tồn tại ném lỗi",
+            "goi": "pickRollback([], \"zz\")",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "unknown deploy: zz"
+            }
+          },
+          {
+            "moTa": "Hidden: never picks a newer release|||Ẩn: không bao giờ chọn bản mới hơn",
+            "an": true,
+            "chuanBi": "const D = [{ id: \"new\", at: \"2026-10-05T00:00:00Z\", commit: \"n\", smoke: \"pass\" }, { id: \"cur\", at: \"2026-10-04T00:00:00Z\", commit: \"c\", smoke: \"fail\" }, { id: \"old\", at: \"2026-10-03T00:00:00Z\", commit: \"o\", smoke: \"pass\" }];",
+            "goi": "pickRollback(D, \"cur\")",
+            "mongDoi": "old"
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Lấy \"bản trước đó\" theo vị trí mảng — dữ liệu không theo thứ tự."
+        },
+        {
+          "loi": "Quay về bản smoke chưa chạy."
+        }
+      ]
+    }
+  ]
+}

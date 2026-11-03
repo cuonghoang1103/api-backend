@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>A specificity war</title>
+<style>
+  /* week 1: a simple rule */
+  .btn { color: white; background: rgb(37, 99, 235); }
+  /* week 3: someone needs red buttons in the sidebar */
+  #sidebar .btn { background: rgb(220, 38, 38); }
+  /* week 5: a "danger" variant that must work everywhere… */
+  .btn-danger { background: rgb(234, 88, 12); }
+  /* week 6: …but it loses in the sidebar, so: */
+  .btn-danger.btn-danger.btn-danger { background: rgb(234, 88, 12); }
+  /* week 8: the sidebar still wins (an id beats any number of classes), so: */
+  .btn-final { background: rgb(22, 163, 74) !important; }
+</style>
+</head>
+<body>
+  <main><button class="btn btn-danger">main danger</button></main>
+  <aside id="sidebar"><button class="btn btn-danger">sidebar danger</button>
+                      <button class="btn btn-final">sidebar final</button></aside>
+  <script>
+    for (const b of document.querySelectorAll('button')) {
+      console.log(b.textContent.padEnd(15), '→', getComputedStyle(b).backgroundColor);
+    }
+  </script>
+</body>
+</html>

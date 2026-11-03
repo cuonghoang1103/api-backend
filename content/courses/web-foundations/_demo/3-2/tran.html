@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Overflow</title><meta name="chup" content="640x290">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; }
+  .card { width: 260px; height: 60px; border: 2px solid #1f4e8c; padding: 6px; margin-bottom: 14px; background: #e8eef7; }
+  .wrap { overflow-wrap: anywhere; }
+  .cut { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; height: auto; }
+  .scroll { overflow: auto; }
+</style></head>
+<body>
+  <div class="card" id="a">https://example.com/a/very/long/address/with/no/spaces/that/does/not/wrap</div>
+  <div class="card wrap" id="b">https://example.com/a/very/long/address/with/no/spaces/that/does/not/wrap</div>
+  <div class="card cut" id="c">A long title that must stay on one line and end with dots</div>
+<script>
+  for (const id of ['a', 'b', 'c']) {
+    const e = document.getElementById(id);
+    console.log(id, 'content width', e.scrollWidth, '· box inner width', e.clientWidth, e.scrollWidth > e.clientWidth ? '← overflows' : '');
+  }
+</script>
+</body>
+</html>

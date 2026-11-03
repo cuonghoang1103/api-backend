@@ -1,0 +1,13 @@
+$ curl -s -i -X POST http://localhost:3457/login -H 'Content-Type: application/json' -d '{"email":"an@example.com","password":"correct horse battery"}'
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Set-Cookie: sid=mrV-d3w22aPoRHPsMdMBtjZrvvCjfqTg3fAfyH0QaMw; HttpOnly; SameSite=Lax; Path=/; Max-Age=3600
+
+{"name":"An"}
+
+$ curl -s -i http://localhost:3457/api/me
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json; charset=utf-8
+
+{"error":"Log in first"}
+

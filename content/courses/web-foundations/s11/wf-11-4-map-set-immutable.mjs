@@ -52,7 +52,8 @@ export default {
   type: 'DOCUMENT',
   isFreePreview: true,
   description: 'Vì sao object làm từ điển dễ mất dữ liệu, Map và Set, tham chiếu khác giá trị, cập nhật object/mảng bất biến (spread, toSorted, structuredClone), spread và freeze chỉ nông, vì sao React cần điều này — chạy thật trong Chromium.',
-  content: `${G}
+  content: `
+${G}
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.4</span>
 <h2>The right container — and the habit of replacing instead of changing</h2>

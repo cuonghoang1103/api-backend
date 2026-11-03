@@ -597,7 +597,7 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p also prints the diff of each hit</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># every commit that touched an env var read</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># across ALL branches — a mini secret audit</span></code></pre>
-<div class="callout warn">That last one is worth running on any repository you inherit. <code>git log -G"password|api_key" --all</code> finds credentials that were committed and later deleted (use one regex with <code>|</code>: if you write <code>-S"password" -S"api_key"</code>, Git silently keeps only the <em>last</em> <code>-S</code> and searches for <code>api_key</code> alone) — deleted from the working tree, still in every clone. Chapter 8.4 covers removing them properly; finding them is step one.</div>
+<div class="callout warn">That last one is worth running on any repository you inherit. <code>git log -G"password|api_key" --all</code> finds credentials that were committed and later deleted (use one regex with <code>|</code>: if you write <code>-S"password" -S"api_key"</code>, Git silently keeps only the <em>last</em> <code>-S</code> and searches for <code>api_key</code> alone) — deleted from the working tree, still in every clone. Chapter 8.3 covers removing them properly; finding them is step one.</div>
 
 <h3>Following a file through renames</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}
@@ -703,7 +703,7 @@ git log -S<span class="tok-string">"legacyAuth"</span> --oneline</code></pre>
 <pre><code class="language-bash">git log -S<span class="tok-string">"MAX_RETRIES"</span> -p --oneline        <span class="tok-comment"># -p in luôn diff của từng kết quả</span>
 git log -G<span class="tok-string">"process\\.env\\.[A-Z_]+"</span> --oneline   <span class="tok-comment"># mọi commit chạm vào việc đọc biến môi trường</span>
 git log -S<span class="tok-string">"password"</span> --all --oneline       <span class="tok-comment"># trên MỌI nhánh — một cuộc soát bí mật thu nhỏ</span></code></pre>
-<div class="callout warn">Lệnh cuối đáng chạy trên bất kỳ kho mã nào bạn tiếp quản. <code>git log -G"password|api_key" --all</code> tìm ra những chứng chỉ từng được commit rồi xoá đi (dùng MỘT biểu thức với <code>|</code>: nếu viết <code>-S"password" -S"api_key"</code> thì Git lặng lẽ chỉ giữ <code>-S</code> <em>cuối cùng</em> và chỉ tìm <code>api_key</code>) — xoá khỏi cây làm việc, nhưng vẫn nằm trong mọi bản clone. Chương 8.4 nói cách gỡ chúng cho đúng; tìm ra chúng là bước một.</div>
+<div class="callout warn">Lệnh cuối đáng chạy trên bất kỳ kho mã nào bạn tiếp quản. <code>git log -G"password|api_key" --all</code> tìm ra những chứng chỉ từng được commit rồi xoá đi (dùng MỘT biểu thức với <code>|</code>: nếu viết <code>-S"password" -S"api_key"</code> thì Git lặng lẽ chỉ giữ <code>-S</code> <em>cuối cùng</em> và chỉ tìm <code>api_key</code>) — xoá khỏi cây làm việc, nhưng vẫn nằm trong mọi bản clone. Chương 8.3 nói cách gỡ chúng cho đúng; tìm ra chúng là bước một.</div>
 
 <h3>Bám theo một file qua các lần đổi tên</h3>
 ${slide('git-02', 12, '--follow đi xuyên lần đổi tên')}
@@ -1007,6 +1007,21 @@ done</code></pre>
 <div class="pitfall"><strong>Bẫy:</strong> bisect với một test chớp nháy. Nếu test hỏng lúc được lúc không, một câu trả lời sai đẩy cuộc tìm xuống nửa sai và "commit hỏng đầu tiên" trở thành vô nghĩa — mà không có một lời cảnh báo nào. Trước khi bắt đầu, hãy chạy phép kiểm ba lần trên một commit đã biết là hỏng và ba lần trên một commit đã biết là tốt. Nếu nó không tất định, hãy sửa phép kiểm trước; bisect khuếch đại sự chớp nháy thành những câu trả lời sai đầy tự tin.</div>
 <p class="note-ct"><strong>Vì sao commit nhỏ sinh lời ở đây:</strong> bisect chỉ vào MỘT commit. Nếu commit đó đổi 40 file, bạn mới thu hẹp được thành "đâu đó trong cái thay đổi khổng lồ này" — hữu ích, nhưng chưa phải câu trả lời. Nếu nó đổi một hàm, bạn xong việc. Lời khuyên commit nhỏ ở bài 1.3 sinh lời lớn nhất vào đúng ngày bạn chạy lệnh này.</p>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.2 — Reading errors and debugging</span><span class="lc-sub">Stack traces, a real breakpoint in Chromium, and git bisect run finding a broken price commit</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-2-reading-errors-debugging" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.2 — Đọc lỗi và gỡ lỗi</span><span class="lc-sub">Stack trace, breakpoint thật trong Chromium, và git bisect run tìm commit làm hỏng giá</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 
@@ -1068,14 +1083,14 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// must REJECT</span></code></pre>
 <pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># fails on HEAD → the bug is real</span>
-git stash                                       <span class="tok-comment"># keep the test out of the checkouts</span>
+git stash -u                                    <span class="tok-comment"># -u: the test file is NEW (untracked) — plain git stash leaves it behind</span>
 git bisect start HEAD v1.3.0
-git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
+git bisect run sh -c <span class="tok-string">'git stash pop -q || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u -q; exit \$r'</span></code></pre>
 <div class="out">c4a8f2e1… is the first bad commit
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
  src/services/auth.service.ts | 22 ++++++++++++++++++++++</div>
 <p>Bisect lands on the same commit blame pointed at. Two independent methods agreeing is what turns a theory into a diagnosis.</p>
-<div class="callout warn">Note the awkward stash dance. The test file does not exist in old commits, so it must be carried across each checkout. In a real repository the cleaner route is to put the test in <code>/tmp</code> and run it from there — bisect changes tracked files, and anything untracked survives the checkouts untouched.</div>
+<div class="callout warn">Note the awkward stash dance. The test file does not exist in old commits, so it must be carried across each checkout — with <code>-u</code>, because a plain <code>git stash</code> ignores untracked files and answers "No local changes to save". The script is in <strong>single</strong> quotes on purpose: inside double quotes your own shell expands <code>$?</code> and <code>$r</code> the moment you press Enter, and bisect receives a broken command. In a real repository the cleaner route is to put the test in <code>/tmp</code> and run it from there — bisect changes tracked files, and anything untracked survives the checkouts untouched.</div>
 
 <h3>Step 6 — The second dead end: blaming the config</h3>
 <p>A plausible competing theory: someone changed <code>JWT_EXPIRES_IN</code> on the server. Check whether the code could even express that:</p>
@@ -1196,14 +1211,14 @@ c4a8f2e fix(auth): add /auth/refresh so 24h sessions stop dying silently
 <span class="tok-keyword">const</span> old = jwt.sign({ sub: 1, exp: Math.floor(Date.now()/1000) - 3600 }, SECRET);
 <span class="tok-keyword">await</span> expect(refreshToken(old)).rejects.toThrow();   <span class="tok-comment">// phải TỪ CHỐI</span></code></pre>
 <pre><code class="language-bash">npx vitest run test/refresh-expiry.test.ts     <span class="tok-comment"># hỏng trên HEAD → lỗi là thật</span>
-git stash                                       <span class="tok-comment"># giữ file test ra khỏi các lần checkout</span>
+git stash -u                                    <span class="tok-comment"># -u: file test là file MỚI (chưa theo dõi) — git stash trơn bỏ nó lại</span>
 git bisect start HEAD v1.3.0
-git bisect run sh -c <span class="tok-string">"git stash pop || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u; exit \$r"</span></code></pre>
+git bisect run sh -c <span class="tok-string">'git stash pop -q || true; npx vitest run test/refresh-expiry.test.ts; r=\$?; git stash -u -q; exit \$r'</span></code></pre>
 <div class="out">c4a8f2e1… is the first bad commit
     fix(auth): add /auth/refresh so 24h sessions stop dying silently
  src/services/auth.service.ts | 22 ++++++++++++++++++++++</div>
 <p>Bisect đáp xuống đúng commit mà blame đã chỉ tới. Hai phương pháp độc lập đồng ý với nhau là thứ biến một giả thuyết thành một chẩn đoán.</p>
-<div class="callout warn">Để ý màn stash lúng túng đó. File test không tồn tại trong các commit cũ, nên phải mang nó qua từng lần checkout. Trong kho mã thật, đường sạch hơn là để file test ở <code>/tmp</code> và chạy từ đó — bisect chỉ đổi các file được theo dõi, còn thứ chưa theo dõi thì sống sót nguyên vẹn qua mọi lần checkout.</div>
+<div class="callout warn">Để ý màn stash lúng túng đó. File test không tồn tại trong các commit cũ, nên phải mang nó qua từng lần checkout — bằng <code>-u</code>, vì <code>git stash</code> trơn bỏ qua file chưa theo dõi và chỉ đáp "No local changes to save". Đoạn script cố ý nằm trong ngoặc <strong>đơn</strong>: trong ngoặc kép, chính shell của bạn nở <code>$?</code> và <code>$r</code> ngay lúc bấm Enter, và bisect nhận một lệnh đã hỏng. Trong kho mã thật, đường sạch hơn là để file test ở <code>/tmp</code> và chạy từ đó — bisect chỉ đổi các file được theo dõi, còn thứ chưa theo dõi thì sống sót nguyên vẹn qua mọi lần checkout.</div>
 
 <h3>Bước 6 — Ngã cụt thứ hai: đổ cho cấu hình</h3>
 <p>Một giả thuyết cạnh tranh nghe rất hợp lý: ai đó đã đổi <code>JWT_EXPIRES_IN</code> trên máy chủ. Hãy kiểm xem mã có diễn đạt nổi điều đó không:</p>
@@ -1266,7 +1281,7 @@ done</code></pre>
 </a>
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Tools-Debugging-with-Git" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 7.10 (tiếng Việt) — Gỡ lỗi với Git</span><span class="lc-sub">Chương chính thức về blame và bisect, kèm một ví dụ chạy trọn vẹn.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 7.10 (tiếng Anh) — Debugging with Git</span><span class="lc-sub">Chương chính thức về blame và bisect, kèm một ví dụ chạy trọn vẹn.</span></span>
 </a>
 
 <div class="pitfall"><strong>Cái bẫy tốn thời gian nhất:</strong> bắt đầu bằng <code>git log</code> trên cả kho mã rồi ngồi đọc. Nó cho cảm giác đang tiến triển và gần như không bao giờ tìm ra gì — 2.400 dòng tiêu đề không phải thứ tìm được bằng mắt. Hãy bắt đầu từ <em>mã</em> (grep), lấy một mã băm (blame), rồi thu hẹp lịch sử bằng một bộ lọc khớp với đúng câu hỏi (<code>-S</code>, một đường dẫn, một khoảng). Lướt là việc cuối cùng, không bao giờ là việc đầu tiên.</div>

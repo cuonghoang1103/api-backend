@@ -1,0 +1,5 @@
+t≈  0ms  height:auto 104px  |  grid 0fr→1fr 2px
+t≈100ms  height:auto 104px  |  grid 0fr→1fr 29px
+t≈200ms  height:auto 104px  |  grid 0fr→1fr 55px
+t≈300ms  height:auto 104px  |  grid 0fr→1fr 81px
+t≈450ms  height:auto 104px  |  grid 0fr→1fr 104px

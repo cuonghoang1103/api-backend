@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Heading outline</title></head>
+<body>
+  <h1>Learn to bake bread</h1>
+  <h2>Ingredients</h2>
+  <h2>Steps</h2>
+  <h4>Knead the dough</h4>   <!-- jumped from h2 to h4 -->
+  <h3>Let it rise</h3>
+<script>
+  // What a screen-reader user sees when they ask for the headings of the page
+  let last = 0;
+  for (const h of document.querySelectorAll('h1, h2, h3, h4, h5, h6')) {
+    const level = Number(h.tagName[1]);
+    const warn = level > last + 1 ? '  ← skipped a level' : '';
+    console.log('  '.repeat(level - 1) + 'h' + level + ' ' + h.textContent + warn);
+    last = level;
+  }
+</script>
+</body>
+</html>

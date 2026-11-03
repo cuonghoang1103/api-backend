@@ -93,7 +93,8 @@ function validate(ex, i) {
   if (/(\/\/|#|\/\*|\*)\s*(TODO|FIXME)\b/.test(sol)
       // 28/10/2026: "…" trần là chữ bình thường (chú thích "90.476…", đáp án trắc nghiệm, "B8…E8") — chỉ bắt
       // dòng CHỈ có "…"/"..." hoặc chú thích chỉ có "…"/"..." (dấu hiệu lược code thật).
-      || /^\s*…\s*$|(\/\/|#)\s*(\.\.\.|…)\s*$|rest omitted|omitted for brevity|implementation left/im.test(sol)) {
+      // 01/11: [ \t]* thay \s* — \s vắt qua xuống dòng nên dữ liệu mê cung "#\n..." bị bắt nhầm (2 đề CSD201).
+      || /^[ \t]*…[ \t]*$|(\/\/|#)[ \t]*(\.\.\.|…)[ \t]*$|rest omitted|omitted for brevity|implementation left/im.test(sol)) {
     errs.push('solution still contains an unfinished-work marker');
   }
   return errs.length ? `#${i + 1} "${ex.title || '?'}": ${errs.join(', ')}` : null;

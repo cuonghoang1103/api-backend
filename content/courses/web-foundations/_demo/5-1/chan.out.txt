@@ -1,0 +1,2 @@
+busy loop finished after 300 ms
+timer asked for 0 ms, ran after 301 ms

@@ -1,0 +1,4 @@
+window  360px → 1 columns of 360px
+window  640px → 3 columns of 205px
+window  900px → 4 columns of 216px
+window 1300px → 6 columns of 207px

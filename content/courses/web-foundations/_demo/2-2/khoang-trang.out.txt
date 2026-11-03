@@ -1,0 +1,2 @@
+source  : "This    sentence\n     has many     spaces\n     and three line breaks in the file."
+rendered: "This sentence has many spaces and three line breaks in the file."

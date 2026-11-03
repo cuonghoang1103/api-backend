@@ -1,0 +1,14 @@
+── browser (DevTools console) ──
+event   submit #add
+fetch   POST /api/notes {"title":"   "}
+Failed to load resource: the server responded with a status of 422 (Unprocessable Entity)
+reply   422 {"errors":["title is required"]} (6 ms)
+
+── server (terminal) ──
+[req 7] http   POST /api/notes (cookie: sid=…)
+[req 7] auth   session ok → user 1
+[req 7] valid  rejected: title is required
+[req 7] reply  422 Unprocessable Entity
+
+── page ──
+#status: "title is required"

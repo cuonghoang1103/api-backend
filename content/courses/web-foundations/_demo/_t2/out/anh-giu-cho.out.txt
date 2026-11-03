@@ -1,0 +1,3 @@
+while the images download: text A at y=42, text B at y=228
+after they arrive:        text A at y=228, text B at y=228
+layout shift:             text A jumped 186px, text B jumped 0px

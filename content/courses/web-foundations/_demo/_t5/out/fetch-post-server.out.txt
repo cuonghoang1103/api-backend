@@ -1,0 +1,3 @@
+server received: application/json {"title":"Write the report"}
+server received: application/json [object Object]
+server received: application/json {}

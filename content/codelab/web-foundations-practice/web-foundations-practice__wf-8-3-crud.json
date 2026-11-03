@@ -1,0 +1,677 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-8-3-crud",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-8-3-crud"
+  },
+  "exercises": [
+    {
+      "title": "Dựng INSERT có tham số",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "câu lệnh có tham số",
+        "tên định danh"
+      ],
+      "prerequisites": [
+        "Object.keys",
+        "join"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Viết <code>buildInsert(table, data)</code> trả <code>{ sql, params }</code>: <code>sql</code> là <code>\"INSERT INTO &lt;table&gt; (&lt;c1&gt;, &lt;c2&gt;) VALUES (?, ?) RETURNING *\"</code> theo thứ tự khoá của <code>data</code>, <code>params</code> là các giá trị tương ứng. Tên bảng và tên cột KHÔNG làm tham số được, nên phải khớp <code>/^[A-Za-z_][A-Za-z0-9_]*$/</code>, sai ⇒ ném <code>TypeError</code>. <code>data</code> không có khoá nào ⇒ ném <code>RangeError</code>. Giá trị <code>undefined</code> bị bỏ (để CSDL dùng DEFAULT).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị đi trong params, không bao giờ trong sql.</li>\n  <li>Tên kiểm bằng regex.</li>\n  <li>Bỏ undefined.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "table: string; data: object.",
+      "outputSpec": "{ sql, params }.",
+      "constraints": "Không dùng thư viện query builder.",
+      "examplesJson": [
+        {
+          "input": "buildInsert(\"posts\", { user_id: 3, title: \"My first post\" })",
+          "output": "{ sql: \"INSERT INTO posts (user_id, title) VALUES (?, ?) RETURNING *\", params: [3, \"My first post\"] }",
+          "explanation": "Như lệnh INSERT … RETURNING trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const entries = Object.entries(data).filter(([, v]) => v !== undefined);",
+        "const IDENT = /^[A-Za-z_][A-Za-z0-9_]*$/;"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — dựng INSERT\nfunction buildInsert(table, data) {\n  const cols = Object.keys(data).join(', ');\n  const vals = Object.values(data).map((v) => \"'\" + v + \"'\").join(', ');\n  return { sql: 'INSERT INTO ' + table + ' (' + cols + ') VALUES (' + vals + ')', params: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — giá trị đi riêng (?), tên thì kiểm theo mẫu vì không làm tham số được\nconst IDENT = /^[A-Za-z_][A-Za-z0-9_]*$/;\nfunction buildInsert(table, data) {\n  const entries = Object.entries(data).filter(([, v]) => v !== undefined);   // undefined ⇒ để DEFAULT\n  if (entries.length === 0) throw new RangeError('nothing to insert');\n  for (const name of [table, ...entries.map(([k]) => k)]) {\n    if (!IDENT.test(name)) throw new TypeError('bad identifier: ' + name);\n  }\n  const cols = entries.map(([k]) => k).join(', ');\n  const marks = entries.map(() => '?').join(', ');\n  return { sql: `INSERT INTO ${table} (${cols}) VALUES (${marks}) RETURNING *`, params: entries.map(([, v]) => v) };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là đúng lỗi injection của bài, cộng thêm một lỗi nữa: mọi giá trị thành chuỗi trong nháy, nên số 3 thành <code>'3'</code> và null thành <code>'null'</code>. Tên cột lấy từ khoá của <code>req.body</code> cũng là đường tấn công — vì thế phải kiểm (tốt hơn nữa: chỉ cho phép danh sách cột cố định, Bài 7.1).</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Ghép giá trị vào chuỗi SQL.</li>\n  <li>Không kiểm tên cột.</li>\n  <li>Gửi undefined thành NULL thay vì để DEFAULT.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://cheatsheetseries.owasp.org/cheatsheets/Query_Parameterization_Cheat_Sheet.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson insert|||Lệnh chèn của bài",
+            "goi": "buildInsert(\"posts\", { user_id: 3, title: \"My first post\", created_at: \"2026-11-02 10:00:00\" })",
+            "mongDoi": {
+              "sql": "INSERT INTO posts (user_id, title, created_at) VALUES (?, ?, ?) RETURNING *",
+              "params": [
+                3,
+                "My first post",
+                "2026-11-02 10:00:00"
+              ]
+            }
+          },
+          {
+            "moTa": "Dangerous values stay in params; undefined dropped|||Giá trị nguy hiểm ở trong params; bỏ undefined",
+            "goi": "buildInsert(\"notes\", { text: \"x'); DROP TABLE users; --\", done: undefined, user_id: null })",
+            "mongDoi": {
+              "sql": "INSERT INTO notes (text, user_id) VALUES (?, ?) RETURNING *",
+              "params": [
+                "x'); DROP TABLE users; --",
+                null
+              ]
+            }
+          },
+          {
+            "moTa": "Bad identifiers throw TypeError|||Tên sai ném TypeError",
+            "goi": "buildInsert(\"users\", { \"name) VALUES (1); --\": 1 })",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          },
+          {
+            "moTa": "Nothing to insert throws RangeError|||Không có gì để chèn thì ném RangeError",
+            "goi": "buildInsert(\"users\", { a: undefined })",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép giá trị vào chuỗi SQL."
+        },
+        {
+          "loi": "Không kiểm tên cột."
+        },
+        {
+          "loi": "Gửi undefined thành NULL thay vì để DEFAULT."
+        }
+      ]
+    },
+    {
+      "title": "Dựng UPDATE theo id",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 12,
+      "points": 10,
+      "concepts": [
+        "UPDATE",
+        "danh sách cột cho phép"
+      ],
+      "prerequisites": [
+        "filter",
+        "map"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Viết <code>buildUpdate(table, changes, id, allowed)</code> trả <code>{ sql, params }</code> dạng <code>\"UPDATE &lt;table&gt; SET a = ?, b = ? WHERE id = ? RETURNING *\"</code>: chỉ giữ các khoá của <code>changes</code> có trong mảng <code>allowed</code> (bỏ mọi khoá khác, kể cả <code>id</code>), theo thứ tự của <code>changes</code>; <code>id</code> là tham số cuối. Không còn cột nào ⇒ ném <code>RangeError</code>. <code>id</code> không phải số nguyên dương ⇒ ném <code>TypeError</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>WHERE id = ? luôn có.</li>\n  <li>Chỉ cột trong allowed.</li>\n  <li>id là tham số cuối.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "table: string; changes: object; id: number; allowed: string[].",
+      "outputSpec": "{ sql, params }.",
+      "constraints": "table do lập trình viên truyền (tin được).",
+      "examplesJson": [
+        {
+          "input": "buildUpdate(\"posts\", { views: 0, role: \"admin\" }, 7, [\"title\", \"views\", \"published\"])",
+          "output": "{ sql: \"UPDATE posts SET views = ? WHERE id = ? RETURNING *\", params: [0, 7] }",
+          "explanation": "role bị bỏ; không bao giờ thiếu WHERE."
+        }
+      ],
+      "hintsJson": [
+        "const cols = Object.keys(changes).filter((k) => allowed.includes(k) && k !== \"id\");",
+        "cols.map((k) => k + \" = ?\").join(\", \")"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — dựng UPDATE\nfunction buildUpdate(table, changes, id, allowed) {\n  const sets = Object.keys(changes).map((k) => k + ' = ?').join(', ');\n  return { sql: 'UPDATE ' + table + ' SET ' + sets, params: Object.values(changes) };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — một hàm không thể sinh ra UPDATE thiếu WHERE\nfunction buildUpdate(table, changes, id, allowed) {\n  if (!Number.isInteger(id) || id < 1) throw new TypeError('id must be a positive integer');\n  const cols = Object.keys(changes).filter((k) => k !== 'id' && allowed.includes(k));   // danh sách cho phép\n  if (cols.length === 0) throw new RangeError('nothing to update');\n  return {\n    sql: `UPDATE ${table} SET ${cols.map((k) => k + ' = ?').join(', ')} WHERE id = ? RETURNING *`,\n    params: [...cols.map((k) => changes[k]), id],\n  };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là đúng câu \"UPDATE posts SET views = 0\" làm mọi bài về 0 lượt xem trong bài. Cách chắc nhất để không bao giờ quên WHERE là không để con người gõ nó: hàm dựng câu lệnh luôn thêm, và luôn kiểm id.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên WHERE.</li>\n  <li>Cho body đổi id hay role.</li>\n  <li>Đặt id ở đầu params.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_update.html",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Only allowed columns, WHERE always present|||Chỉ cột được phép, luôn có WHERE",
+            "goi": "buildUpdate(\"posts\", { views: 0, role: \"admin\", id: 1 }, 7, [\"title\", \"views\", \"published\"])",
+            "mongDoi": {
+              "sql": "UPDATE posts SET views = ? WHERE id = ? RETURNING *",
+              "params": [
+                0,
+                7
+              ]
+            }
+          },
+          {
+            "moTa": "Several columns in order|||Nhiều cột theo thứ tự",
+            "goi": "buildUpdate(\"posts\", { published: 1, title: \"Hi\" }, 2, [\"title\", \"published\"])",
+            "mongDoi": {
+              "sql": "UPDATE posts SET published = ?, title = ? WHERE id = ? RETURNING *",
+              "params": [
+                1,
+                "Hi",
+                2
+              ]
+            }
+          },
+          {
+            "moTa": "Nothing allowed: RangeError|||Không cột nào được phép: RangeError",
+            "goi": "buildUpdate(\"posts\", { role: \"admin\" }, 2, [\"title\"])",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Bad id: TypeError|||id sai: TypeError",
+            "goi": "buildUpdate(\"posts\", { title: \"x\" }, \"1 OR 1=1\", [\"title\"])",
+            "mongDoi": {
+              "loi": "TypeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên WHERE."
+        },
+        {
+          "loi": "Cho body đổi id hay role."
+        },
+        {
+          "loi": "Đặt id ở đầu params."
+        }
+      ]
+    },
+    {
+      "title": "Bắt UPDATE và DELETE thiếu WHERE",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "câu lệnh nguy hiểm",
+        "chú thích SQL"
+      ],
+      "prerequisites": [
+        "regex",
+        "replace"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Viết <code>dangerousStatements(script)</code> cho một đoạn SQL có thể gồm nhiều câu lệnh tách bằng <code>;</code>. Trả mảng chuỗi cảnh báo theo thứ tự: <code>\"UPDATE without WHERE: &lt;bảng&gt;\"</code> và <code>\"DELETE without WHERE: &lt;bảng&gt;\"</code>. Trước khi xét, bỏ chú thích <code>-- …</code> (tới cuối dòng) và <code>/* … */</code>, và bỏ nội dung bên trong chuỗi nháy đơn (để chữ \"where\" trong một giá trị không đánh lừa). Không phân biệt hoa thường. Câu không phải UPDATE/DELETE bỏ qua.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Tách theo \";\".</li>\n  <li>Bỏ chú thích và nội dung chuỗi.</li>\n  <li>Tên bảng sau UPDATE / DELETE FROM.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "script: string.",
+      "outputSpec": "string[].",
+      "constraints": "Không cần xử lý dấu \";\" nằm trong chuỗi.",
+      "examplesJson": [
+        {
+          "input": "dangerousStatements(\"UPDATE posts SET views = 0;\")",
+          "output": "[\"UPDATE without WHERE: posts\"]",
+          "explanation": "Câu đổi cả 6 dòng trong bài."
+        }
+      ],
+      "hintsJson": [
+        "const clean = script.replace(/\\/\\*[\\s\\S]*?\\*\\//g, ' ').replace(/--[^\\n]*/g, ' ').replace(/'(?:[^']|'')*'/g, \"''\");",
+        "const m = /^\\s*update\\s+(\\w+)/i.exec(stmt);"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — bắt câu lệnh thiếu WHERE\nfunction dangerousStatements(script) {\n  return script.includes('WHERE') ? [] : ['missing WHERE'];\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — UPDATE/DELETE không có WHERE chạm vào MỌI dòng\nfunction dangerousStatements(script) {\n  const clean = script\n    .replace(/\\/\\*[\\s\\S]*?\\*\\//g, ' ')                  // /* chú thích */\n    .replace(/--[^\\n]*/g, ' ')                               // -- chú thích\n    .replace(/'(?:[^']|'')*'/g, \"''\");                       // 'giá trị' — bỏ nội dung, giữ dấu nháy\n  const warnings = [];\n  for (const stmt of clean.split(';')) {\n    const up = /^\\s*update\\s+(\\w+)/i.exec(stmt);\n    const del = /^\\s*delete\\s+from\\s+(\\w+)/i.exec(stmt);\n    const m = up ?? del;\n    if (m && !/\\bwhere\\b/i.test(stmt)) {\n      warnings.push((up ? 'UPDATE' : 'DELETE') + ' without WHERE: ' + m[1]);\n    }\n  }\n  return warnings;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Nhiều công cụ quản trị CSDL (và chế độ <code>--safe-updates</code> của MySQL) có đúng phép kiểm này: từ chối UPDATE/DELETE không có WHERE trừ khi bạn nói rõ. Bỏ chú thích và nội dung chuỗi trước tiên vì <code>-- WHERE id = 1</code> hay <code>SET note = 'where?'</code> sẽ đánh lừa một phép tìm chữ đơn giản.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Tìm \"WHERE\" trong cả đoạn — câu khác có WHERE làm câu này lọt.</li>\n  <li>Bị chú thích \"-- WHERE\" đánh lừa.</li>\n  <li>Phân biệt hoa thường.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://dev.mysql.com/doc/refman/8.4/en/mysql-tips.html#safe-updates",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "The lesson mistake|||Lỗi trong bài",
+            "goi": "dangerousStatements(\"UPDATE posts SET title = 'Hello World!' WHERE id = 1; UPDATE posts SET views = 0;\")",
+            "mongDoi": [
+              "UPDATE without WHERE: posts"
+            ]
+          },
+          {
+            "moTa": "Comments and strings do not count|||Chú thích và chuỗi không tính",
+            "goi": "dangerousStatements(\"update notes set text = 'where?' -- WHERE id = 1\\n; DELETE FROM comments /* where post_id = 4 */;\")",
+            "mongDoi": [
+              "UPDATE without WHERE: notes",
+              "DELETE without WHERE: comments"
+            ]
+          },
+          {
+            "moTa": "Safe statements and other kinds pass|||Câu an toàn và loại khác được qua",
+            "goi": "dangerousStatements(\"delete from posts where id = 3; SELECT * FROM posts; INSERT INTO t VALUES (1);\")",
+            "mongDoi": []
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Tìm \"WHERE\" trong cả đoạn — câu khác có WHERE làm câu này lọt."
+        },
+        {
+          "loi": "Bị chú thích \"-- WHERE\" đánh lừa."
+        },
+        {
+          "loi": "Phân biệt hoa thường."
+        }
+      ]
+    },
+    {
+      "title": "Chuyển tiền: tất cả hoặc không",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 18,
+      "points": 20,
+      "concepts": [
+        "giao dịch",
+        "tính nguyên tử",
+        "không đột biến"
+      ],
+      "prerequisites": [
+        "map",
+        "spread"
+      ],
+      "tags": [
+        "javascript",
+        "giao dịch"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Viết <code>transfer(accounts, fromId, toId, amount)</code> trên mảng <code>{ id, owner, balance }</code> và trả MẢNG MỚI sau khi chuyển. Như một giao dịch: nếu có bất kỳ vấn đề nào thì ném lỗi và mảng gốc KHÔNG đổi chút nào — <code>amount</code> không phải số nguyên dương ⇒ <code>RangeError</code>; tài khoản không tồn tại hay <code>fromId === toId</code> ⇒ <code>Error</code>; số dư nguồn sau khi trừ âm ⇒ <code>Error(\"CHECK constraint failed: balance &gt;= 0\")</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không sửa mảng gốc, kể cả khi thành công.</li>\n  <li>Kiểm tất cả trước khi \"ghi\".</li>\n  <li>Đúng loại lỗi.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "accounts: object[]; fromId, toId, amount: number.",
+      "outputSpec": "object[] mới.",
+      "constraints": "Không dùng try/catch để \"hoàn tác\" sau khi đã sửa.",
+      "examplesJson": [
+        {
+          "input": "transfer(accounts, 2, 1, 700000) khi Minh có 100 000",
+          "output": "ném Error \"CHECK constraint failed: balance >= 0\", accounts không đổi",
+          "explanation": "Phiên bản (c) của bài, không phải (a) hay (b)."
+        }
+      ],
+      "hintsJson": [
+        "const from = accounts.find((a) => a.id === fromId);",
+        "return accounts.map((a) => a.id === fromId ? { ...a, balance: a.balance - amount } : a.id === toId ? { ...a, balance: a.balance + amount } : { ...a });"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — chuyển tiền\nfunction transfer(accounts, fromId, toId, amount) {\n  accounts.find((a) => a.id === toId).balance += amount;\n  const from = accounts.find((a) => a.id === fromId);\n  if (from.balance - amount < 0) throw new Error('CHECK constraint failed: balance >= 0');\n  from.balance -= amount;\n  return accounts;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — kiểm mọi thứ trước, rồi tạo trạng thái mới một lần: không bao giờ dở dang\nfunction transfer(accounts, fromId, toId, amount) {\n  if (!Number.isInteger(amount) || amount <= 0) throw new RangeError('amount must be a positive integer');\n  if (fromId === toId) throw new Error('cannot transfer to the same account');\n  const from = accounts.find((a) => a.id === fromId);\n  const to = accounts.find((a) => a.id === toId);\n  if (!from || !to) throw new Error('account not found');\n  if (from.balance - amount < 0) throw new Error('CHECK constraint failed: balance >= 0');\n  return accounts.map((a) =>                                 // \"COMMIT\": mảng mới, mảng cũ nguyên vẹn\n    a.id === fromId ? { ...a, balance: a.balance - amount }\n      : a.id === toId ? { ...a, balance: a.balance + amount }\n      : { ...a });\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Code khởi đầu là phiên bản (a) của bài: cộng cho Lan trước, rồi mới phát hiện Minh không đủ tiền — tiền tự sinh ra. Trong CSDL bạn có BEGIN/ROLLBACK; trong mã JS thuần, cách tương đương là kiểm tất cả rồi mới tạo trạng thái mới — không có bước nào để \"hoàn tác\".</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Cộng trước, kiểm sau.</li>\n  <li>Sửa trực tiếp object trong mảng gốc.</li>\n  <li>Cho chuyển số âm (đảo chiều chuyển tiền).</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://en.wikipedia.org/wiki/Atomicity_(database_systems)",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A good transfer|||Một lần chuyển hợp lệ",
+            "chuanBi": "const A = [{ id: 1, owner: \"Lan\", balance: 500000 }, { id: 2, owner: \"Minh\", balance: 100000 }];",
+            "goi": "[transfer(A, 2, 1, 50000), A]",
+            "mongDoi": [
+              [
+                {
+                  "id": 1,
+                  "owner": "Lan",
+                  "balance": 550000
+                },
+                {
+                  "id": 2,
+                  "owner": "Minh",
+                  "balance": 50000
+                }
+              ],
+              [
+                {
+                  "id": 1,
+                  "owner": "Lan",
+                  "balance": 500000
+                },
+                {
+                  "id": 2,
+                  "owner": "Minh",
+                  "balance": 100000
+                }
+              ]
+            ]
+          },
+          {
+            "moTa": "Insufficient funds: error, nothing changed|||Không đủ tiền: lỗi, không gì đổi",
+            "chuanBi": "const A = [{ id: 1, owner: \"Lan\", balance: 500000 }, { id: 2, owner: \"Minh\", balance: 100000 }]; let msg = \"\"; try { transfer(A, 2, 1, 700000); } catch (e) { msg = e.message; }",
+            "goi": "[msg, A[0].balance, A[1].balance]",
+            "mongDoi": [
+              "CHECK constraint failed: balance >= 0",
+              500000,
+              100000
+            ]
+          },
+          {
+            "moTa": "Bad amount: RangeError|||Số tiền sai: RangeError",
+            "goi": "transfer([{ id: 1, balance: 5 }, { id: 2, balance: 5 }], 1, 2, -3)",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          },
+          {
+            "moTa": "Unknown or same account: Error|||Tài khoản lạ hoặc trùng: Error",
+            "goi": "transfer([{ id: 1, balance: 5 }], 1, 9, 1)",
+            "mongDoi": {
+              "loi": "Error",
+              "thongDiep": "not found"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Cộng trước, kiểm sau."
+        },
+        {
+          "loi": "Sửa trực tiếp object trong mảng gốc."
+        },
+        {
+          "loi": "Cho chuyển số âm (đảo chiều chuyển tiền)."
+        }
+      ]
+    },
+    {
+      "title": "Tìm kiếm LIKE an toàn",
+      "language": "javascript",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "LIKE ESCAPE",
+        "ký tự đại diện do người dùng gõ"
+      ],
+      "prerequisites": [
+        "replace"
+      ],
+      "tags": [
+        "javascript",
+        "sql"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Tham số chặn injection, nhưng <code>%</code> và <code>_</code> do người dùng gõ vẫn là ký tự đại diện của LIKE (gõ <code>%</code> là khớp mọi thứ). Viết <code>buildSearch(term)</code> trả <code>{ sql, params }</code> với <code>sql</code> cố định <code>SELECT id, title FROM posts WHERE published = 1 AND title LIKE ? ESCAPE '\\\\' ORDER BY id</code> và <code>params</code> là <code>['%' + term_đã_thoát + '%']</code>: thoát <code>\\\\</code> thành <code>\\\\\\\\</code> TRƯỚC, rồi <code>%</code> thành <code>\\\\%</code> và <code>_</code> thành <code>\\\\_</code>. <code>term</code> được trim; rỗng ⇒ <code>null</code> (không tìm).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>SQL cố định, giá trị trong params.</li>\n  <li>Thoát \\ trước % và _.</li>\n  <li>Rỗng ⇒ null.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "term: string.",
+      "outputSpec": "{ sql, params } | null.",
+      "constraints": "Câu SQL giống hệt mỗi lần gọi (để CSDL dùng lại kế hoạch truy vấn).",
+      "examplesJson": [
+        {
+          "input": "buildSearch(\"%' OR 1=1 --\")",
+          "output": "params: [\"%\\\\%' OR 1=1 --%\"]",
+          "explanation": "Vừa không injection, vừa không khớp mọi thứ."
+        }
+      ],
+      "hintsJson": [
+        "term.replace(/\\\\/g, '\\\\\\\\').replace(/[%_]/g, '\\\\$&')",
+        "Đặt ESCAPE ngay sau LIKE ?."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — tìm kiếm LIKE an toàn\nfunction buildSearch(term) {\n  return { sql: \"SELECT id, title FROM posts WHERE title LIKE '%\" + term + \"%'\", params: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — tham số chặn injection; ESCAPE chặn ký tự đại diện do người dùng gõ\nconst SEARCH_SQL = \"SELECT id, title FROM posts WHERE published = 1 AND title LIKE ? ESCAPE '\\\\' ORDER BY id\";\nfunction buildSearch(term) {\n  const t = String(term ?? '').trim();\n  if (t === '') return null;\n  const escaped = t.replace(/\\\\/g, '\\\\\\\\').replace(/[%_]/g, '\\\\$&');   // \\ trước, rồi % và _\n  return { sql: SEARCH_SQL, params: ['%' + escaped + '%'] };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khác biệt nhỏ mà thật: không thoát thì người dùng gõ <code>%</code> nhận về mọi bài (vô hại ở đây, nhưng là tìm kiếm sai và có thể là truy vấn rất nặng trên bảng lớn). Thứ tự quan trọng: thoát <code>\\\\</code> trước, nếu không ký tự thoát vừa thêm sẽ bị thoát lần nữa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Ghép term vào SQL.</li>\n  <li>Thoát % trước \\ — ra \\\\%.</li>\n  <li>Quên ESCAPE trong câu SQL.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://sqlite.org/lang_expr.html#the_like_glob_regexp_match_and_extract_operators",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "A normal search|||Tìm kiếm bình thường",
+            "goi": "buildSearch(\"  SQL \")",
+            "mongDoi": {
+              "sql": "SELECT id, title FROM posts WHERE published = 1 AND title LIKE ? ESCAPE '\\' ORDER BY id",
+              "params": [
+                "%SQL%"
+              ]
+            }
+          },
+          {
+            "moTa": "The injection becomes a plain value|||Đòn injection thành giá trị thường",
+            "goi": "buildSearch(\"%' OR 1=1 --\").params",
+            "mongDoi": [
+              "%\\%' OR 1=1 --%"
+            ]
+          },
+          {
+            "moTa": "Wildcards and backslashes escaped in order|||Ký tự đại diện và \\ được thoát đúng thứ tự",
+            "goi": "[buildSearch(\"50%_off\").params[0], buildSearch(\"a\\\\b\").params[0], buildSearch(\"   \")]",
+            "mongDoi": [
+              "%50\\%\\_off%",
+              "%a\\\\b%",
+              null
+            ]
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Ghép term vào SQL."
+        },
+        {
+          "loi": "Thoát % trước \\ — ra \\\\%."
+        },
+        {
+          "loi": "Quên ESCAPE trong câu SQL."
+        }
+      ]
+    },
+    {
+      "title": "Tagged template sql`…`",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 30,
+      "points": 30,
+      "concepts": [
+        "tagged template",
+        "tham số",
+        "mảnh SQL lồng nhau"
+      ],
+      "prerequisites": [
+        "template literal",
+        "rest parameters"
+      ],
+      "tags": [
+        "javascript",
+        "sql",
+        "bảo mật"
+      ],
+      "problemHtml": "<p><em>Bài 8.3 — INSERT, UPDATE, DELETE và giao dịch.</em> Các bài là những mảnh giúp mã ghi dữ liệu an toàn: không ghép chuỗi, không quên WHERE, không để lại công việc dở dang.</p><p>Đây là cách <code>prisma.$queryRaw</code> và thư viện như <code>postgres</code>/<code>slonik</code> làm. Viết hàm tag <code>sql(strings, ...values)</code> trả object <code>{ text, values }</code>: mỗi giá trị thường thành một <code>?</code> và vào <code>values</code>; giá trị là MẢNG thành <code>(?, ?, ?)</code> (cho <code>IN</code>) — mảng rỗng ⇒ ném <code>RangeError</code>; giá trị là một kết quả <code>sql`…`</code> khác thì được NHÚNG (text của nó chèn vào, values nối theo đúng thứ tự). Đánh dấu kết quả bằng <code>Symbol.for(\"sql\")</code> để nhận ra mảnh SQL (chuỗi thường không bao giờ được nhúng).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Giá trị → ?.</li>\n  <li>Mảng → (?, ?, …).</li>\n  <li>Mảnh sql lồng được nhúng.</li>\n  <li>Chuỗi thường không bao giờ thành SQL.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "được gọi dạng tag: sql`…${x}…`.",
+      "outputSpec": "{ text, values }.",
+      "constraints": "Thuộc tính đánh dấu là Symbol.for(\"sql\") với giá trị true.",
+      "examplesJson": [
+        {
+          "input": "sql`SELECT * FROM posts WHERE user_id IN ${[1, 2]} AND title LIKE ${q}`",
+          "output": "{ text: \"SELECT * FROM posts WHERE user_id IN (?, ?) AND title LIKE ?\", values: [1, 2, q] }",
+          "explanation": "Như $queryRaw: mọi ${} là tham số."
+        }
+      ],
+      "hintsJson": [
+        "let text = strings[0]; const out = []; values.forEach((v, i) => { … text += strings[i + 1]; });",
+        "const MARK = Symbol.for(\"sql\"); return { [MARK]: true, text, values: out };"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — tagged template sql`…`\nfunction sql(strings, ...values) {\n  let text = strings[0];\n  values.forEach((v, i) => { text += v + strings[i + 1]; });\n  return { text, values: [] };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "main.js",
+          "language": "javascript",
+          "code": "// Bài 8.3 — mọi ${giá trị} thành tham số; mảng thành (?, ?); mảnh sql`...` lồng được nhúng\nconst MARK = Symbol.for('sql');\nfunction sql(strings, ...values) {\n  let text = strings[0];\n  const out = [];\n  values.forEach((v, i) => {\n    if (v && v[MARK] === true) {                             // mảnh SQL do chính sql`...` tạo ra\n      text += v.text;\n      out.push(...v.values);\n    } else if (Array.isArray(v)) {\n      if (v.length === 0) throw new RangeError('empty list in IN (...)');\n      text += '(' + v.map(() => '?').join(', ') + ')';\n      out.push(...v);\n    } else {\n      text += '?';                                           // chuỗi, số, null... luôn là tham số\n      out.push(v);\n    }\n    text += strings[i + 1];\n  });\n  return { [MARK]: true, text, values: out };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Điểm mấu chốt: hàm tag nhận các mảnh chữ do LẬP TRÌNH VIÊN viết (<code>strings</code>) tách riêng khỏi các giá trị — nên nó biết chắc phần nào là SQL, phần nào là dữ liệu. Đó là lý do <code>$queryRaw</code> an toàn còn <code>$queryRawUnsafe(chuỗi)</code> thì không: khi đã ghép thành một chuỗi, ranh giới đó mất. Mảnh lồng nhau cho phép dựng điều kiện tuỳ chọn mà vẫn an toàn.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Nhúng chuỗi thường thành SQL.</li>\n  <li>Quên values của mảnh lồng.</li>\n  <li>IN () rỗng — lỗi cú pháp ở CSDL.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 8.3 INSERT, UPDATE, DELETE and transactions.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://www.prisma.io/docs/orm/prisma-client/using-raw-sql/raw-queries#queryraw",
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "main.js",
+        "kiem": [
+          {
+            "moTa": "Values become placeholders|||Giá trị thành chỗ giữ chỗ",
+            "chuanBi": "const q = \"%' OR 1=1 --\"; const r = sql`SELECT id, title FROM Post WHERE title LIKE ${q}`;",
+            "goi": "[r.text, r.values]",
+            "mongDoi": [
+              "SELECT id, title FROM Post WHERE title LIKE ?",
+              [
+                "%' OR 1=1 --"
+              ]
+            ]
+          },
+          {
+            "moTa": "Arrays expand for IN|||Mảng mở rộng cho IN",
+            "chuanBi": "const r = sql`SELECT * FROM posts WHERE user_id IN ${[1, 2]} AND views > ${40}`;",
+            "goi": "[r.text, r.values]",
+            "mongDoi": [
+              "SELECT * FROM posts WHERE user_id IN (?, ?) AND views > ?",
+              [
+                1,
+                2,
+                40
+              ]
+            ]
+          },
+          {
+            "moTa": "Nested fragments keep order|||Mảnh lồng giữ đúng thứ tự",
+            "chuanBi": "const pub = sql`published = ${1}`; const r = sql`SELECT * FROM posts WHERE ${pub} AND user_id = ${2} LIMIT ${10}`;",
+            "goi": "[r.text, r.values]",
+            "mongDoi": [
+              "SELECT * FROM posts WHERE published = ? AND user_id = ? LIMIT ?",
+              [
+                1,
+                2,
+                10
+              ]
+            ]
+          },
+          {
+            "moTa": "A plain string that looks like SQL is still a value|||Chuỗi trông như SQL vẫn là giá trị",
+            "chuanBi": "const evil = { text: \"1=1 --\", values: [] }; const r = sql`DELETE FROM posts WHERE id = ${evil}`;",
+            "goi": "r.text",
+            "mongDoi": "DELETE FROM posts WHERE id = ?"
+          },
+          {
+            "moTa": "Empty IN list throws|||Danh sách IN rỗng thì ném lỗi",
+            "goi": "sql`SELECT 1 WHERE x IN ${[]}`",
+            "mongDoi": {
+              "loi": "RangeError"
+            }
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Nhúng chuỗi thường thành SQL."
+        },
+        {
+          "loi": "Quên values của mảnh lồng."
+        },
+        {
+          "loi": "IN () rỗng — lỗi cú pháp ở CSDL."
+        }
+      ]
+    }
+  ]
+}

@@ -26,7 +26,7 @@ interface KeyRow {
   id: number; nhan: string; duoiKhoa: string; thuTu: number; trangThai: TrangThai;
   nganSachThangUsd: number; ngayLamMoi: number; hetHanLuc: string | null;
   loiCuoi: string | null; loiCuoiLuc: string | null; hetCreditLuc: string | null;
-  chuKy: { tu: string; lamMoiLuc: string };
+  chuKy: { tu: string; lamMoiLuc: string | null };
   daDungUsd: number; conLaiUocUsd: number | null; soLuot: number; soLoi: number;
   tbThoiGianMs: number | null; tbTtfbMs: number | null; boQua: 'hetHan' | 'chamNganSach' | null;
   tiLeTrungDem: number | null;
@@ -253,15 +253,15 @@ function KhoKey({ keys, onDoi, onNap }: { keys: KeyRow[]; onDoi: (k: KeyRow[]) =
                   <td className="py-2 min-w-[140px]">
                     <div className="text-text-primary">{usd(k.daDungUsd, 4)} / <button className="underline decoration-dotted" onClick={() => suaSo(k, 'nganSachThangUsd', 'Ngân sách USD mỗi tháng (0 = không đặt)')}>{k.nganSachThangUsd ? usd(k.nganSachThangUsd) : 'chưa đặt'}</button></div>
                     {k.nganSachThangUsd > 0 && <div className="h-1.5 mt-1 rounded bg-darkbg overflow-hidden"><div className={`h-full ${pt >= 90 ? 'bg-red-500' : pt >= 70 ? 'bg-amber-500' : 'bg-green-500'}`} style={{ width: `${pt}%` }} /></div>}
-                    <div className="text-text-muted mt-1">từ {ngayVN(k.chuKy.tu)}</div>
+                    <div className="text-text-muted mt-1">{k.ngayLamMoi === 0 ? 'từ lúc thêm key' : `từ ${ngayVN(k.chuKy.tu)}`}</div>
                   </td>
                   <td className="py-2">{k.conLaiUocUsd == null ? '—' : usd(k.conLaiUocUsd)}</td>
                   <td className="py-2">{k.soLuot} / <span className={k.soLoi ? 'text-red-400' : ''}>{k.soLoi}</span></td>
                   <td className="py-2">{k.tiLeTrungDem == null ? '—' : `${Math.round(k.tiLeTrungDem * 100)}%`}</td>
                   <td className="py-2">{k.tbThoiGianMs != null ? `${(k.tbThoiGianMs / 1000).toFixed(1)}s` : '—'} / {k.tbTtfbMs != null ? `${(k.tbTtfbMs / 1000).toFixed(1)}s` : '—'}</td>
                   <td className="py-2">
-                    <button className="underline decoration-dotted" onClick={() => suaSo(k, 'ngayLamMoi', 'Ngày làm mới trong tháng (1–28)')}>ngày {k.ngayLamMoi}</button>
-                    <div className="text-text-muted">kế: {ngayVN(k.chuKy.lamMoiLuc)}</div>
+                    <button className="underline decoration-dotted" onClick={() => suaSo(k, 'ngayLamMoi', 'Ngày làm mới trong tháng (1–28) — 0 = KHÔNG làm mới (gói credit cộng dồn tới hết hạn)')}>{k.ngayLamMoi === 0 ? 'không làm mới' : `ngày ${k.ngayLamMoi}`}</button>
+                    <div className="text-text-muted">{k.chuKy.lamMoiLuc ? `kế: ${ngayVN(k.chuKy.lamMoiLuc)}` : 'cộng dồn tới hết hạn'}</div>
                   </td>
                   <td className="py-2">
                     <input type="date" className={`${o} text-xs`} value={k.hetHanLuc ? k.hetHanLuc.slice(0, 10) : ''}

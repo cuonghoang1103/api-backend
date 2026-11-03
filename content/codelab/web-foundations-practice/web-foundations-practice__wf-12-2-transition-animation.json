@@ -1,0 +1,706 @@
+{
+  "trackSlug": "web-foundations-practice",
+  "moduleSlug": "wf-12-2-transition-animation",
+  "lesson": {
+    "course": "web-foundations",
+    "slug": "wf-12-2-transition-animation"
+  },
+  "exercises": [
+    {
+      "title": "Nút đổi màu mượt khi hover",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "transition",
+        "duration",
+        "easing"
+      ],
+      "prerequisites": [
+        ":hover"
+      ],
+      "tags": [
+        "css",
+        "transition"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p>Nút <code>.btn</code> đổi màu nền khi hover nhưng \"giật\" từ màu này sang màu kia. Thêm transition CHỈ cho <code>background-color</code>, thời lượng 200ms, đường cong <code>ease-out</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>transition-property</code> là <code>background-color</code>.</li>\n  <li><code>transition-duration</code> là <code>200ms</code> (trình duyệt báo <code>0.2s</code>).</li>\n  <li><code>transition-timing-function</code> là <code>ease-out</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Nút đổi màu mượt.",
+      "constraints": "Không dùng transition: all.",
+      "examplesJson": [
+        {
+          "input": "transition: background-color 200ms ease-out",
+          "output": "màu đổi trong 0,2 giây",
+          "explanation": "Cú pháp rút gọn: thuộc tính, thời lượng, đường cong."
+        }
+      ],
+      "hintsJson": [
+        "Viết rút gọn: transition: <thuộc tính> <thời lượng> <đường cong>;",
+        ".btn { transition: background-color 200ms ease-out; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <button class=\"btn\">Mua ngay</button>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — nút */\n.btn { background: #2563eb; color: #fff; border: 0; padding: 10px 18px; border-radius: 8px; }\n.btn:hover { background: #1d4ed8; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <button class=\"btn\">Mua ngay</button>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — nút: chỉ animate đúng thuộc tính đổi */\n.btn {\n  background: #2563eb; color: #fff; border: 0; padding: 10px 18px; border-radius: 8px;\n  transition: background-color 200ms ease-out;   /* thuộc tính · thời lượng · đường cong */\n}\n.btn:hover { background: #1d4ed8; }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Transition đặt trên trạng thái THƯỜNG (<code>.btn</code>), không phải <code>:hover</code>, để cả lúc vào lẫn lúc ra đều mượt. 200ms là khoảng hợp cho tương tác nhỏ; <code>ease-out</code> phản hồi nhanh ngay đầu.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt transition trong :hover — rời chuột ra thì giật.</li>\n  <li>Viết 200 (thiếu ms) — cả khai báo bị bỏ.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Only background-color is transitioned|||Chỉ background-color có transition",
+            "kiem": "css",
+            "selector": ".btn",
+            "thuocTinh": "transition-property",
+            "giaTri": "background-color",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Duration 200ms|||Thời lượng 200ms",
+            "kiem": "css",
+            "selector": ".btn",
+            "thuocTinh": "transition-duration",
+            "giaTri": "0.2s",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "ease-out curve|||Đường cong ease-out",
+            "kiem": "css",
+            "selector": ".btn",
+            "thuocTinh": "transition-timing-function",
+            "giaTri": "ease-out",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "transition declared on .btn (not :hover)|||transition khai trên .btn (không phải :hover)",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\.btn\\s*\\{[^}]*transition"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt transition trong :hover — rời chuột ra thì giật."
+        },
+        {
+          "loi": "Viết 200 (thiếu ms) — cả khai báo bị bỏ."
+        }
+      ]
+    },
+    {
+      "title": "Bỏ transition: all",
+      "language": "html",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "transition-property",
+        "nhiều transition"
+      ],
+      "prerequisites": [
+        "transition"
+      ],
+      "tags": [
+        "css",
+        "transition"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p>Thẻ <code>.card</code> khi hover thì nổi lên (<code>transform</code>) và đậm bóng (<code>box-shadow</code>). Code khởi đầu dùng <code>transition: all 300ms</code> — nó animate cả những thứ không định (ví dụ màu nền khi đổi theme). Viết lại thành HAI transition có tên, cùng 300ms <code>ease</code>.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không còn <code>all</code> trong transition.</li>\n  <li><code>transition-property</code> là <code>transform, box-shadow</code>.</li>\n  <li>Mỗi cái 300ms.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Thẻ nổi lên mượt.",
+      "constraints": "Giữ nguyên hiệu ứng hover.",
+      "examplesJson": [
+        {
+          "input": "transition: transform 300ms ease, box-shadow 300ms ease",
+          "output": "hai thuộc tính",
+          "explanation": "Phân cách bằng dấu phẩy."
+        }
+      ],
+      "hintsJson": [
+        "Nhiều transition cách nhau bằng dấu phẩy.",
+        ".card { transition: transform 300ms ease, box-shadow 300ms ease; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"card\"><h3>Áo khoác</h3><p>590.000đ</p></article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — thẻ */\n.card { width: 240px; padding: 16px; border-radius: 10px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15); transition: all 300ms; }\n.card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,.2); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <article class=\"card\"><h3>Áo khoác</h3><p>590.000đ</p></article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — thẻ: gọi tên đúng hai thuộc tính thay đổi */\n.card {\n  width: 240px; padding: 16px; border-radius: 10px; background: #fff;\n  box-shadow: 0 1px 3px rgba(0, 0, 0, .15);\n  transition: transform 300ms ease, box-shadow 300ms ease;   /* không dùng all */\n}\n.card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0, 0, 0, .2); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Gọi tên thuộc tính giúp người đọc biết cái gì chuyển động, và trình duyệt không phải theo dõi mọi thuộc tính. <code>transform</code> (không phải <code>top</code>) để nổi lên — rẻ cho trình duyệt.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>transition: transform, box-shadow 300ms — transform không có thời lượng (0s).</li>\n  <li>Dùng top: -4px thay vì transform — phải tính lại bố cục mỗi khung.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/transition-property",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "No transition: all|||Không còn transition: all",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "transition[^;]*\\ball\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Properties: transform, box-shadow|||Thuộc tính: transform, box-shadow",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "transition-property",
+            "giaTri": "transform, box-shadow",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Each lasts 300ms|||Mỗi cái 300ms",
+            "kiem": "css",
+            "selector": ".card",
+            "thuocTinh": "transition-duration",
+            "giaTri": "0.3s, 0.3s",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Hover still lifts with transform|||Hover vẫn nổi bằng transform",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": ":hover\\s*\\{[^}]*transform"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "transition: transform, box-shadow 300ms — transform không có thời lượng (0s)."
+        },
+        {
+          "loi": "Dùng top: -4px thay vì transform — phải tính lại bố cục mỗi khung."
+        }
+      ]
+    },
+    {
+      "title": "Accordion: animate chiều cao bằng grid",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 15,
+      "points": 20,
+      "concepts": [
+        "grid-template-rows",
+        "0fr → 1fr",
+        "min-height: 0"
+      ],
+      "prerequisites": [
+        "grid",
+        "transition"
+      ],
+      "tags": [
+        "css",
+        "transition",
+        "grid"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p><code>height: auto</code> không animate được. Dùng mẹo grid: <code>.answer</code> là grid một hàng <code>0fr</code>; khi <code>.item</code> có class <code>open</code> thì <code>1fr</code>; con trực tiếp của <code>.answer</code> có <code>min-height: 0</code> và <code>overflow: hidden</code>; transition <code>grid-template-rows</code> 300ms. Icon <code>.icon</code> của mục mở xoay 180° bằng <code>transform</code>. Mục thứ hai trong HTML đang mở sẵn.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>.answer</code>: <code>display: grid</code>, đóng thì cao 0px.</li>\n  <li>Mục <code>.open</code>: câu trả lời cao hơn 0 (đo thật).</li>\n  <li><code>.answer &gt; div</code>: <code>min-height: 0</code>, <code>overflow: hidden</code>; icon mở xoay bằng transform.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Accordion có chiều cao chuyển động.",
+      "constraints": "Không dùng height/max-height để animate.",
+      "examplesJson": [
+        {
+          "input": ".item.open .answer { grid-template-rows: 1fr }",
+          "output": "mở ra mượt",
+          "explanation": "fr là số nên nội suy được."
+        }
+      ],
+      "hintsJson": [
+        ".answer { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms ease; } .item.open .answer { grid-template-rows: 1fr; }",
+        ".answer > div { min-height: 0; overflow: hidden; } .item.open .icon { transform: rotate(180deg); }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"faq\">\n    <div class=\"item\">\n      <button class=\"question\">Giao hàng mất bao lâu? <span class=\"icon\">▾</span></button>\n      <div class=\"answer\"><div><p>Hai đến bốn ngày làm việc.</p></div></div>\n    </div>\n    <div class=\"item open\">\n      <button class=\"question\">Đổi trả thế nào? <span class=\"icon\">▾</span></button>\n      <div class=\"answer\"><div><p>Trong 7 ngày, còn nguyên tem.</p></div></div>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — accordion (đang dùng height) */\n.question { display: block; width: 100%; text-align: left; padding: 10px; }\n.answer { height: 0; overflow: hidden; transition: height 300ms; }\n.item.open .answer { height: auto; }\n.icon { display: inline-block; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"faq\">\n    <div class=\"item\">\n      <button class=\"question\">Giao hàng mất bao lâu? <span class=\"icon\">▾</span></button>\n      <div class=\"answer\"><div><p>Hai đến bốn ngày làm việc.</p></div></div>\n    </div>\n    <div class=\"item open\">\n      <button class=\"question\">Đổi trả thế nào? <span class=\"icon\">▾</span></button>\n      <div class=\"answer\"><div><p>Trong 7 ngày, còn nguyên tem.</p></div></div>\n    </div>\n  </div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — accordion bằng grid: fr là số ⇒ trình duyệt nội suy được */\n.question { display: block; width: 100%; text-align: left; padding: 10px; }\n.answer {\n  display: grid;\n  grid-template-rows: 0fr;                         /* đóng: hàng cao 0 */\n  transition: grid-template-rows 300ms ease;\n}\n.item.open .answer { grid-template-rows: 1fr; }    /* mở: cao bằng nội dung */\n.answer > div {\n  min-height: 0;                                   /* cho phép co nhỏ hơn nội dung */\n  overflow: hidden;\n}\n.icon { display: inline-block; transition: transform 300ms ease; }\n.item.open .icon { transform: rotate(180deg); }\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Hàng <code>0fr</code> chiếm 0 phần chỗ trống còn lại ⇒ cao 0; <code>1fr</code> ⇒ cao vừa nội dung. Vì đều là số, transition chạy mượt. <code>min-height: 0</code> rất quan trọng: mặc định một grid item không co nhỏ hơn nội dung của nó.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Quên min-height: 0 — hàng 0fr vẫn cao bằng nội dung.</li>\n  <li>Dùng max-height: 1000px — tốc độ sai và bị cắt nếu nội dung dài.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/grid-template-rows",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": ".answer is a grid|||.answer là grid",
+            "kiem": "css",
+            "selector": ".answer",
+            "thuocTinh": "display",
+            "giaTri": "grid"
+          },
+          {
+            "moTa": "Closed answer is 0px tall|||Câu trả lời đóng cao 0px",
+            "kiem": "kich-thuoc",
+            "selector": ".item:not(.open) .answer",
+            "thuocTinh": "height",
+            "giaTri": 0,
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Inner block may shrink (min-height 0)|||Khối trong được co (min-height 0)",
+            "kiem": "css",
+            "selector": ".answer > div",
+            "thuocTinh": "min-height",
+            "khop": "^0(px)?$"
+          },
+          {
+            "moTa": "Uses 0fr / 1fr|||Dùng 0fr / 1fr",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "0fr[\\s\\S]*1fr"
+          },
+          {
+            "moTa": "No height animation|||Không animate height",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "transition[^;]*\\b(max-)?height\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Open icon rotated|||Icon mục mở đã xoay",
+            "kiem": "css",
+            "selector": ".item.open .icon",
+            "thuocTinh": "transform",
+            "khop": "^(matrix\\(-1, 0, 0, -1, 0, 0\\)|matrix\\(-1, 1\\.2\\d*e-16, -1\\.2\\d*e-16, -1, 0, 0\\)|rotate\\(180deg\\))$"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Quên min-height: 0 — hàng 0fr vẫn cao bằng nội dung."
+        },
+        {
+          "loi": "Dùng max-height: 1000px — tốc độ sai và bị cắt nếu nội dung dài."
+        }
+      ]
+    },
+    {
+      "title": "Spinner bằng @keyframes",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "@keyframes",
+        "animation",
+        "infinite"
+      ],
+      "prerequisites": [
+        "transform"
+      ],
+      "tags": [
+        "css",
+        "animation"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p>Viết <code>@keyframes spin</code> xoay từ 0 tới <code>rotate(360deg)</code>, rồi gắn cho <code>.spinner</code>: tên <code>spin</code>, 800ms, <code>linear</code>, lặp vô hạn. Spinner là hình tròn 40×40px viền 4px, viền trên khác màu. Có <code>role=\"status\"</code> và <code>aria-label</code> sẵn trong HTML.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li><code>@keyframes spin</code> có <code>rotate(360deg)</code>.</li>\n  <li><code>animation-name: spin</code>, <code>animation-duration: 0.8s</code>, <code>linear</code>, <code>infinite</code>.</li>\n  <li><code>.spinner</code> 40×40px, <code>border-radius: 50%</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Spinner xoay.",
+      "constraints": "Không dùng JavaScript.",
+      "examplesJson": [
+        {
+          "input": "animation: spin 800ms linear infinite",
+          "output": "xoay một vòng mỗi 0,8 giây",
+          "explanation": "Rút gọn: tên, thời lượng, đường cong, số lần."
+        }
+      ],
+      "hintsJson": [
+        "@keyframes spin { to { transform: rotate(360deg); } }",
+        ".spinner { animation: spin 800ms linear infinite; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"spinner\" role=\"status\" aria-label=\"Đang tải\"></div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — spinner */\n.spinner { width: 40px; height: 40px; border: 4px solid #cbd5e1; border-top-color: #2563eb; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"spinner\" role=\"status\" aria-label=\"Đang tải\"></div>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — spinner: một vòng mỗi 800ms, đều tốc, lặp mãi */\n.spinner {\n  width: 40px; height: 40px; box-sizing: border-box;\n  border: 4px solid #cbd5e1;\n  border-top-color: #2563eb;      /* một cung khác màu ⇒ thấy được chuyển động */\n  border-radius: 50%;\n  animation: spin 800ms linear infinite;\n}\n@keyframes spin {\n  to { transform: rotate(360deg); }   /* from mặc định = trạng thái hiện tại (0deg) */\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Keyframes chỉ cần <code>to</code>: <code>from</code> mặc định là giá trị đang có. <code>linear</code> để tốc độ đều — <code>ease</code> sẽ làm spinner \"khựng\" mỗi vòng. Animation dùng transform nên không gây layout.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt tên khác nhau ở @keyframes và animation-name.</li>\n  <li>Quên border-radius — một hình vuông xoay.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "@keyframes spin rotates 360deg|||@keyframes spin xoay 360deg",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@keyframes\\s+spin\\s*\\{[\\s\\S]*rotate\\(\\s*360deg\\s*\\)"
+          },
+          {
+            "moTa": "animation-name is spin|||animation-name là spin",
+            "kiem": "css",
+            "selector": ".spinner",
+            "thuocTinh": "animation-name",
+            "giaTri": "spin",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "0.8s, linear, infinite|||0,8s, linear, vô hạn",
+            "kiem": "css",
+            "selector": ".spinner",
+            "thuocTinh": "animation-iteration-count",
+            "giaTri": "infinite",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Duration 0.8s|||Thời lượng 0,8s",
+            "kiem": "css",
+            "selector": ".spinner",
+            "thuocTinh": "animation-duration",
+            "giaTri": "0.8s",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Round 40×40|||Tròn 40×40",
+            "kiem": "css",
+            "selector": ".spinner",
+            "thuocTinh": "border-radius",
+            "giaTri": "50%"
+          },
+          {
+            "moTa": "Hidden: 40px wide|||Ẩn: rộng 40px",
+            "an": true,
+            "kiem": "kich-thuoc",
+            "selector": ".spinner",
+            "thuocTinh": "width",
+            "giaTri": 40
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt tên khác nhau ở @keyframes và animation-name."
+        },
+        {
+          "loi": "Quên border-radius — một hình vuông xoay."
+        }
+      ]
+    },
+    {
+      "title": "Ngăn kéo trượt bằng transform",
+      "language": "html",
+      "difficulty": "MEDIUM",
+      "estimatedMinutes": 12,
+      "points": 20,
+      "concepts": [
+        "transform",
+        "translateX",
+        "thuộc tính rẻ"
+      ],
+      "prerequisites": [
+        "position: fixed",
+        "transition"
+      ],
+      "tags": [
+        "css",
+        "hiệu năng"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p>Ngăn kéo <code>.drawer</code> (rộng 280px, fixed bên trái) đang trượt bằng <code>left: -280px → 0</code> — mỗi khung hình phải tính lại bố cục. Viết lại: luôn <code>left: 0</code>, đóng thì <code>transform: translateX(-100%)</code>, <code>.drawer.open</code> thì <code>transform: none</code>, transition <code>transform</code> 250ms. Trong HTML ngăn kéo đang ĐÓNG.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Không animate <code>left</code>; <code>left</code> luôn là 0.</li>\n  <li>Đóng: <code>translateX(-100%)</code>; mở: <code>none</code>.</li>\n  <li>Transition trên <code>transform</code>.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Ngăn kéo trượt mượt.",
+      "constraints": "Không dùng JavaScript để đặt vị trí.",
+      "examplesJson": [
+        {
+          "input": "transform: translateX(-100%)",
+          "output": "dịch sang trái đúng bằng bề rộng của nó",
+          "explanation": "% của transform tính theo chính phần tử."
+        }
+      ],
+      "hintsJson": [
+        "% trong translateX là % bề rộng CỦA CHÍNH phần tử.",
+        ".drawer { left: 0; transform: translateX(-100%); transition: transform 250ms ease; } .drawer.open { transform: none; }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <aside class=\"drawer\"><nav>Menu</nav></aside>\n  <main><p>Nội dung</p></main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — ngăn kéo (đang animate left) */\n.drawer { position: fixed; top: 0; bottom: 0; width: 280px; left: -280px; background: #0f172a; color: #fff; transition: left 250ms ease; }\n.drawer.open { left: 0; }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <aside class=\"drawer\"><nav>Menu</nav></aside>\n  <main><p>Nội dung</p></main>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — ngăn kéo: vị trí cố định, chỉ transform thay đổi ⇒ không layout mỗi khung */\n.drawer {\n  position: fixed; top: 0; bottom: 0; left: 0;\n  width: 280px; background: #0f172a; color: #fff;\n  transform: translateX(-100%);            /* đóng: dịch sang trái đúng bằng bề rộng */\n  transition: transform 250ms ease;\n}\n.drawer.open { transform: none; }          /* mở */\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><code>left</code> là thuộc tính bố cục: đổi nó mỗi khung kéo theo layout, paint, composite. <code>transform</code> chỉ cần composite. <code>translateX(-100%)</code> dùng % theo chính ngăn kéo nên đổi bề rộng cũng không phải sửa.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>translateX(-280px) cứng — đổi width là vỡ.</li>\n  <li>Vẫn để transition: left.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://web.dev/articles/animations-guide",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "left is always 0|||left luôn là 0",
+            "kiem": "css",
+            "selector": ".drawer",
+            "thuocTinh": "left",
+            "khop": "^0(px)?$"
+          },
+          {
+            "moTa": "Closed drawer is translated left|||Ngăn kéo đóng dịch sang trái",
+            "kiem": "css",
+            "selector": ".drawer",
+            "thuocTinh": "transform",
+            "khop": "^(matrix\\(1, 0, 0, 1, -280, 0\\)|translateX\\(-100%\\))$"
+          },
+          {
+            "moTa": "Transition on transform, not left|||Transition trên transform, không phải left",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "transition\\s*:\\s*transform"
+          },
+          {
+            "moTa": "No left in any transition|||Không có left trong transition",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "transition[^;]*\\bleft\\b",
+            "phuDinh": true
+          },
+          {
+            "moTa": "Hidden: .open resets transform|||Ẩn: .open đặt lại transform",
+            "an": true,
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\.drawer\\.open\\s*\\{[^}]*transform\\s*:\\s*(none|translateX\\(0\\))"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "translateX(-280px) cứng — đổi width là vỡ."
+        },
+        {
+          "loi": "Vẫn để transition: left."
+        }
+      ]
+    },
+    {
+      "title": "Tôn trọng prefers-reduced-motion",
+      "language": "html",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "prefers-reduced-motion",
+        "media query",
+        "khả năng tiếp cận"
+      ],
+      "prerequisites": [
+        "@media",
+        "animation"
+      ],
+      "tags": [
+        "css",
+        "a11y"
+      ],
+      "problemHtml": "<p><em>Bài 12.2 — Chuyển cảnh và hoạt hình.</em> Máy chấm đọc giá trị đã tính của các thuộc tính <code>transition-*</code> / <code>animation-*</code> và soi mã nguồn tìm những thói quen cần tránh.</p><p>Trang có spinner, toast trượt vào và thẻ phóng to khi hover. Thêm một khối <code>@media (prefers-reduced-motion: reduce)</code> áp cho MỌI phần tử (cả <code>::before</code>/<code>::after</code>): <code>animation-duration</code> và <code>transition-duration</code> <code>0.01ms</code>, <code>animation-iteration-count: 1</code>, đều <code>!important</code> (ngoại lệ hợp lý duy nhất của !important trong khoá này). Ở chế độ bình thường mọi thứ phải giữ nguyên.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Có khối @media (prefers-reduced-motion: reduce).</li>\n  <li>Trong khối: selector phủ *, *::before, *::after; ba thuộc tính như mô tả.</li>\n  <li>Chế độ bình thường: spinner vẫn 0,8s lặp vô hạn.</li>\n</ul>",
+      "problemHtmlVi": null,
+      "inputSpec": "index.html + styles.css.",
+      "outputSpec": "Trang tôn trọng cài đặt giảm chuyển động.",
+      "constraints": "Không xoá animation gốc.",
+      "examplesJson": [
+        {
+          "input": "Bật \"Reduce motion\" trong hệ điều hành",
+          "output": "spinner chạy 1 vòng 0,01ms",
+          "explanation": "Gần như tắt, nhưng animationend vẫn bắn."
+        }
+      ],
+      "hintsJson": [
+        "Dùng 0.01ms thay vì none để sự kiện kết thúc vẫn bắn.",
+        "@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }"
+      ],
+      "starterCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"spinner\"></div>\n  <div class=\"toast\">Đã lưu</div>\n  <article class=\"card\">Thẻ</article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — chuyển động */\n.spinner { width: 40px; height: 40px; border: 4px solid #cbd5e1; border-top-color: #2563eb; border-radius: 50%; animation: spin 800ms linear infinite; }\n@keyframes spin { to { transform: rotate(360deg); } }\n.toast { animation: slide-in 600ms ease-out both; }\n@keyframes slide-in { from { opacity: 0; transform: translateY(20px); } }\n.card { transition: transform 300ms ease; }\n.card:hover { transform: scale(1.05); }\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "index.html",
+          "language": "html",
+          "code": "<!doctype html>\n<html lang=\"vi\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Bài 12.2</title>\n  <link rel=\"stylesheet\" href=\"styles.css\">\n</head>\n<body>\n  <div class=\"spinner\"></div>\n  <div class=\"toast\">Đã lưu</div>\n  <article class=\"card\">Thẻ</article>\n</body>\n</html>\n"
+        },
+        {
+          "name": "styles.css",
+          "language": "css",
+          "code": "/* Bài 12.2 — chuyển động + chế độ giảm chuyển động */\n.spinner { width: 40px; height: 40px; border: 4px solid #cbd5e1; border-top-color: #2563eb; border-radius: 50%; animation: spin 800ms linear infinite; }\n@keyframes spin { to { transform: rotate(360deg); } }\n.toast { animation: slide-in 600ms ease-out both; }\n@keyframes slide-in { from { opacity: 0; transform: translateY(20px); } }\n.card { transition: transform 300ms ease; }\n.card:hover { transform: scale(1.05); }\n\n/* người dùng bật \"giảm chuyển động\" trong hệ điều hành */\n@media (prefers-reduced-motion: reduce) {\n  *, *::before, *::after {\n    animation-duration: 0.01ms !important;        /* gần như tức thì, nhưng animationend vẫn bắn */\n    animation-iteration-count: 1 !important;      /* spinner không lặp */\n    transition-duration: 0.01ms !important;\n  }\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Khối media chỉ có hiệu lực khi hệ điều hành bật giảm chuyển động. <code>!important</code> ở đây có lý: nó phải thắng MỌI luật animation của trang, kể cả của thư viện. Thời lượng 0.01ms thay vì <code>none</code> giữ cho JavaScript đang chờ <code>animationend</code>/<code>transitionend</code> không bị treo.</p>\n<h4>Lỗi hay gặp</h4>\n<ul>\n  <li>Đặt animation: none — code chờ animationend treo mãi.</li>\n  <li>Quên ::before/::after — spinner vẽ bằng giả phần tử vẫn quay.</li>\n</ul>\n<p><em>Ôn lại: Nền tảng Web — Bài 12.2 Transition và animation.</em></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": "https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion",
+      "testsJson": {
+        "loai": "dom",
+        "phienBan": 1,
+        "tepHtml": "index.html",
+        "kiem": [
+          {
+            "moTa": "Has a prefers-reduced-motion: reduce block|||Có khối prefers-reduced-motion: reduce",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "@media\\s*\\(\\s*prefers-reduced-motion\\s*:\\s*reduce\\s*\\)"
+          },
+          {
+            "moTa": "Covers *, *::before, *::after|||Phủ *, *::before, *::after",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "\\*\\s*,\\s*\\*::before\\s*,\\s*\\*::after"
+          },
+          {
+            "moTa": "Durations near zero, one iteration|||Thời lượng gần 0, một vòng",
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "animation-iteration-count\\s*:\\s*1\\s*!important[\\s\\S]*transition-duration\\s*:\\s*0?\\.01ms\\s*!important|transition-duration\\s*:\\s*0?\\.01ms\\s*!important[\\s\\S]*animation-iteration-count\\s*:\\s*1\\s*!important"
+          },
+          {
+            "moTa": "Normal mode unchanged: spinner 0.8s|||Chế độ thường giữ nguyên: spinner 0,8s",
+            "kiem": "css",
+            "selector": ".spinner",
+            "thuocTinh": "animation-duration",
+            "giaTri": "0.8s",
+            "chiTrinhDuyet": true
+          },
+          {
+            "moTa": "Hidden: animation-duration near zero inside the block|||Ẩn: animation-duration gần 0 trong khối",
+            "an": true,
+            "kiem": "ma-nguon",
+            "tep": "styles.css",
+            "khop": "animation-duration\\s*:\\s*0?\\.01ms\\s*!important"
+          }
+        ]
+      },
+      "gradeKind": "dom",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Đặt animation: none — code chờ animationend treo mãi."
+        },
+        {
+          "loi": "Quên ::before/::after — spinner vẽ bằng giả phần tử vẫn quay."
+        }
+      ]
+    }
+  ]
+}

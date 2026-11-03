@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Navbar</title><meta name="chup" content="760x90">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 0; }
+  .nav { display: flex; align-items: center; gap: 16px; padding: 12px 16px; background: #1f4e8c; color: #fff; }
+  .nav a { color: #fff; text-decoration: none; }
+  .logo { font-weight: 700; font-size: 20px; }
+  .push { margin-left: auto; }   /* takes all the free space on its left */
+  .btn { background: #e08a1e; padding: 6px 12px; border-radius: 6px; }
+</style></head>
+<body>
+  <nav class="nav">
+    <span class="logo">CuongThai</span>
+    <a href="#">Courses</a>
+    <a href="#">Blog</a>
+    <a class="push" href="#">Log in</a>
+    <a class="btn" href="#">Sign up</a>
+  </nav>
+<script>
+  const x = (s) => Math.round(document.querySelector(s).getBoundingClientRect().left);
+  console.log('logo x:', x('.logo'), '· Log in x:', x('.push'), '· Sign up right edge:', Math.round(document.querySelector('.btn').getBoundingClientRect().right), 'of', innerWidth);
+</script>
+</body>
+</html>

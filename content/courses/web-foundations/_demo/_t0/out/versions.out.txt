@@ -1,0 +1,8 @@
+$ node --version
+v22.23.3
+$ npm --version
+10.9.9
+$ git --version
+git version 2.51.1
+$ code --version
+1.124.2

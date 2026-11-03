@@ -1,0 +1,3 @@
+transitionend for opacity after ~298ms
+removed from the DOM: true
+transitionend for transform after ~299ms

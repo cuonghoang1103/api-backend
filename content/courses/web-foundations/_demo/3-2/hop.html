@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Box model</title><meta name="chup" content="640x270">
+<style>
+  body { font-family: system-ui, sans-serif; margin: 12px; }
+  .box { width: 300px; padding: 20px; border: 5px solid #1f4e8c; margin-bottom: 12px; background: #e8eef7; }
+  .a { box-sizing: content-box; }   /* the default */
+  .b { box-sizing: border-box; }
+</style></head>
+<body>
+  <div class="box a">width: 300px, content-box</div>
+  <div class="box b">width: 300px, border-box</div>
+<script>
+  for (const s of ['.a', '.b']) {
+    const el = document.querySelector(s), c = getComputedStyle(el);
+    console.log(s, 'width:', c.width, '· drawn width (offsetWidth):', el.offsetWidth + 'px', '· inner text area:', el.clientWidth - 40 + 'px');
+  }
+</script>
+</body>
+</html>

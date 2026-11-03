@@ -207,6 +207,36 @@ Tests:       12 passed, 12 total</div>
   <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Nền tảng viết test cho JavaScript</span></a>
 </div>
 </div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-1-why-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 13.1 — Why tests exist</span><span class="lc-sub">The beginner version: the pyramid and a regression caught for real</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-13-1-why-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 13.1 — Vì sao có test</span><span class="lc-sub">Bản cho người mới: tháp kiểm thử và một lỗi hồi quy bị bắt thật</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
+
+<div class="ml-en">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-1-think-like-a-programmer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Web Foundations 10.1 — Thinking like a programmer</span><span class="lc-sub">Plan, trace, then turn edge cases into node --test tests: a first version passing 1 of 5, fixed to 5 of 5</span></span>
+  <span class="lc-cta">Open lesson</span>
+</a>
+</div>
+<div class="ml-vi">
+<a class="link-card lien-ket-cheo" href="/courses/web-foundations/learn?lessonSlug=wf-10-1-think-like-a-programmer" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Nền tảng Web 10.1 — Tư duy như lập trình viên</span><span class="lc-sub">Lập kế hoạch, dò tay, rồi biến ca biên thành phép kiểm node --test: bản đầu đạt 1/5, sửa tới 5/5</span></span>
+  <span class="lc-cta">Mở bài</span>
+</a>
+</div>
 `,
     },
 

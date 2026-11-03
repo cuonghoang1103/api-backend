@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Native HTML that works without JavaScript</title><meta name="chup" content="640x320">
+<style>body{font-family:system-ui,sans-serif;margin:14px} figure{margin:0 0 10px} blockquote{margin:8px 0;padding-left:12px;border-left:3px solid #1f4e8c}</style></head>
+<body>
+  <figure>
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='70'%3E%3Crect width='240' height='70' fill='%231f4e8c'/%3E%3C/svg%3E" width="240" height="70" alt="A blue rectangle">
+    <figcaption>Figure 1 — a caption is tied to its image.</figcaption>
+  </figure>
+  <blockquote cite="https://example.com/talk">
+    <p>Good HTML is the cheapest accessibility you will ever buy.</p>
+  </blockquote>
+  <details id="q">
+    <summary>What is a landmark?</summary>
+    <p>A region a screen reader can jump to.</p>
+  </details>
+<script>
+  const q = document.getElementById('q');
+  console.log('details open?', q.open);
+  q.querySelector('summary').click();
+  console.log('after one click on summary:', q.open, '— no JavaScript of ours toggled it');
+  console.log('figure caption:', document.querySelector('figcaption').textContent);
+</script>
+</body>
+</html>

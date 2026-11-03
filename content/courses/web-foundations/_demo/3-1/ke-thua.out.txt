@@ -1,0 +1,5 @@
+p color inherited: rgb(31, 78, 140)
+p font inherited: Georgia, serif
+p border inherited? none
+a color: rgb(0, 0, 238) (browser style for links wins)
+button font: Arial (controls do not inherit)

@@ -292,7 +292,7 @@ HEAD is now at 6a952eb feat: doi loi chao
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 10.1 (tiếng Việt) — Plumbing và Porcelain</span><span class="lc-sub">Phân biệt giữa những lệnh người ta dùng và những lệnh dựng nên chúng.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 10.1 (tiếng Anh) — Plumbing và Porcelain</span><span class="lc-sub">Phân biệt giữa những lệnh người ta dùng và những lệnh dựng nên chúng.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/gitrepository-layout" target="_blank" rel="noopener">
   <span class="lc-ico">🗂️</span>
@@ -583,7 +583,7 @@ git status -s
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects" target="_blank" rel="noopener">
   <span class="lc-ico">📘</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 10.2 (tiếng Việt) — Đối tượng Git</span><span class="lc-sub">Cùng cách dựng bằng tay, kèm chi tiết hơn về định dạng mục trong tree.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 10.2 (tiếng Anh) — Đối tượng Git</span><span class="lc-sub">Cùng cách dựng bằng tay, kèm chi tiết hơn về định dạng mục trong tree.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/git-cat-file" target="_blank" rel="noopener">
   <span class="lc-ico">🔬</span>
@@ -846,7 +846,7 @@ fatal: Not a valid object name 4098f32</code></pre>
 
 <a class="link-card" href="https://git-scm.com/book/en/v2/Git-Internals-Packfiles" target="_blank" rel="noopener">
   <span class="lc-ico">📦</span>
-  <span class="lc-body"><span class="lc-title">Pro Git 10.4 (tiếng Việt) — Packfile</span><span class="lc-sub">Cách chọn đối tượng gốc cho delta, và đọc output của verify-pack.</span></span>
+  <span class="lc-body"><span class="lc-title">Pro Git 10.4 (tiếng Anh) — Packfile</span><span class="lc-sub">Cách chọn đối tượng gốc cho delta, và đọc output của verify-pack.</span></span>
 </a>
 <a class="link-card" href="https://git-scm.com/docs/partial-clone" target="_blank" rel="noopener">
   <span class="lc-ico">🪶</span>

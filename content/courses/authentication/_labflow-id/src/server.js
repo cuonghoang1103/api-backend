@@ -1,3 +1,5 @@
+// src/server.js — LabFlow ID v0.8 (end of Chapter 8). Chapter 8 makes LabFlow ID an OpenID Connect PROVIDER:
+//   discovery, /oauth/authorize (code + PKCE, exact redirect_uri, state), /oauth/token (PKCE verify ⇒ access + ID token), JWKS.
 // src/server.js — LabFlow ID v0.7 (end of Chapter 7). Chapter 6 added the account lifecycle; Chapter 7 adds a SECOND factor:
 //   TOTP (RFC 6238, src/totp), single-use recovery codes, and passkeys (WebAuthn, src/webauthn over @simplewebauthn).
 // src/server.js — LabFlow ID v0.5 (end of Chapter 5). Fixed so far:
@@ -25,6 +27,8 @@ import { generateSecret, verifyTotp, otpauthURI } from './totp/index.js';
 import { generateRecoveryCodes, consumeRecoveryCode, recoveryDigest } from './totp/recovery.js';
 import { totpStore, recoveryStore, passkeyStore } from './mfa/store.js';
 import { makeWebAuthn } from './webauthn/index.js';
+import { oidcProvider } from './oidc/provider.js';
+import { clientStore } from './oidc/store.js';
 import { tokenDigest } from './crypto/index.js';
 import { log, requestLog } from './log.js';
 
@@ -300,7 +304,31 @@ app.post('/webauthn/auth/verify', async (req, res) => {
   res.json({ ok: true, userId: stored.userId });
 });
 
+// ── Chapter 8: LabFlow ID is an OpenID Connect provider ─────────────────────────────────────────────────────────────
+const oidc = oidcProvider({ issuer: ISSUER, keyring, activeKid: ACTIVE_KID });
+app.get('/.well-known/openid-configuration', (req, res) => res.json(oidc.discovery()));   // lesson 8.1: discovery
+// lesson 8.2: the authorization endpoint. The user must already be signed in here (a Chapter 3 session) — that session,
+// not anything the client sends, is who the ID token will be about. We mint a one-time code and 302 back to the client.
+app.get('/oauth/authorize', needSession, async (req, res) => {
+  const client = await clientStore.get(String(req.query.client_id ?? ''));
+  const r = oidc.authorize(client, req.query, req.session.userId);
+  if (r.error) {                                                             // an invalid client/redirect must NOT redirect (open-redirect)
+    if (client && r.error === 'invalid_redirect_uri') return res.status(400).json({ error: r.error });
+    if (!client) return res.status(400).json({ error: r.error });
+    return res.redirect(`${req.query.redirect_uri}?error=${r.error}&state=${encodeURIComponent(req.query.state ?? '')}`);
+  }
+  res.redirect(r.redirect);
+});
+// lesson 8.2: the token endpoint. Server-to-server; trades the code + PKCE verifier for an access token + ID token.
+app.post('/oauth/token', async (req, res) => {
+  const client = await clientStore.get(String(req.body?.client_id ?? ''));
+  const p = { ...(req.body ?? {}), grant_type: req.body?.grant_type ?? 'authorization_code' };
+  const out = await oidc.token(client, p, (id) => users.findById(id));
+  if (out.error) return res.status(400).json({ error: out.error });
+  res.json(out);
+});
+
 app.use((err, req, res, next) => res.status(err.status ?? 500).json({ error: err.type ?? 'INTERNAL' }));
 
 const port = Number(process.env.PORT ?? 4800);
-app.listen(port, () => log.info(`LabFlow ID v0.7 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));
+app.listen(port, () => log.info(`LabFlow ID v0.8 on http://localhost:${port} (JWKS kid ${ACTIVE_KID})`));

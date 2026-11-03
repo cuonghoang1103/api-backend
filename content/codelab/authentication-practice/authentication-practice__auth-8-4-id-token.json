@@ -1,0 +1,397 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-8-4-id-token",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-8-4-id-token"
+  },
+  "exercises": [
+    {
+      "title": "8.4-1 — ID token vs access token, read the run",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.8 (real run):<pre>   token → id_token verified: {\"ok\":true,\"sub\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\n   nonce: id_token.nonce matches the client's nonce → replay of an old id_token ⇒ {\"error\":\"bad_nonce\"}\n   aud: same token, expectedAudience 'other-app' ⇒ {\"error\":\"bad_aud\"}</pre></p><p><i>This set has 2 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.8 (chạy thật):<pre>   token → id_token verified: {\"ok\":true,\"sub\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\n   nonce: id_token.nonce matches the client's nonce → replay of an old id_token ⇒ {\"error\":\"bad_nonce\"}\n   aud: same token, expectedAudience 'other-app' ⇒ {\"error\":\"bad_aud\"}</pre></p><p><i>Bộ này có 2 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The ID token’s audience is the client; the access token’s is the API.|||audience của ID token là client; của access token là API.",
+        "aud ties a token to its intended consumer.|||aud buộc một token với bên tiêu dự định."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.4-1 — ID token vs access token, read the run\n\nAnswer in the answer panel (no code needed).\n\n1. Which token tells the client who logged in, and which is a pass for the API?Token nào nói cho client ai đã đăng nhập, và cái nào là tấm vé cho API?\n2. The same token re-verified with expectedAudience \"other-app\" ⇒ bad_aud. Why reject it?Cùng token verify lại với expectedAudience \"other-app\" ⇒ bad_aud. Vì sao từ chối?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.4-1 — ID token vs access token, read the run — answer key\n\n1. Which token tells the client who logged in, and which is a pass for the API?Token nào nói cho client ai đã đăng nhập, và cái nào là tấm vé cho API?\n   Answer: a) The ID token (aud = client) is identity; the access token (aud = API) is the pass\n   The ID token is consumed by the client for identity; the access token targets the API and is opaque to the client (8.4).VI: ID token được client tiêu cho danh tính; access token nhắm API và mờ đục với client (8.4).\n\n2. The same token re-verified with expectedAudience \"other-app\" ⇒ bad_aud. Why reject it?Cùng token verify lại với expectedAudience \"other-app\" ⇒ bad_aud. Vì sao từ chối?\n   Answer: c) A token minted for another client must not be accepted here — else app A’s token logs you into app B\n   The aud check stops cross-client token use — a classic bypass (8.4).VI: Phép kiểm aud chặn dùng token chéo client — một cú bypass kinh điển (8.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The ID token (aud = client) is identity; the access token (aud = API) is the pass</p><p>The ID token is consumed by the client for identity; the access token targets the API and is opaque to the client (8.4).</p><p><i>VI: ID token được client tiêu cho danh tính; access token nhắm API và mờ đục với client (8.4).</i></p></li><li><p><b>c)</b> A token minted for another client must not be accepted here — else app A’s token logs you into app B</p><p>The aud check stops cross-client token use — a classic bypass (8.4).</p><p><i>VI: Phép kiểm aud chặn dùng token chéo client — một cú bypass kinh điển (8.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>Which token tells the client who logged in, and which is a pass for the API?</p><p style=\"opacity:.75;font-size:.92em\"><i>Token nào nói cho client ai đã đăng nhập, và cái nào là tấm vé cho API?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The ID token (aud = client) is identity; the access token (aud = API) is the pass"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Neither carries identity"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Both are identity"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The access token is identity; the ID token is the pass"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>The ID token is consumed by the client for identity; the access token targets the API and is opaque to the client (8.4).</p><p><i>VI: ID token được client tiêu cho danh tính; access token nhắm API và mờ đục với client (8.4).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>The same token re-verified with expectedAudience \"other-app\" ⇒ bad_aud. Why reject it?</p><p style=\"opacity:.75;font-size:.92em\"><i>Cùng token verify lại với expectedAudience \"other-app\" ⇒ bad_aud. Vì sao từ chối?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Because the issuer claim no longer matches on the second pass"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Because re-verifying somehow changed the token signature"
+              },
+              {
+                "ma": "c",
+                "noiDung": "A token minted for another client must not be accepted here — else app A’s token logs you into app B"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Because the token nonce expires on the second verification"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The aud check stops cross-client token use — a classic bypass (8.4).</p><p><i>VI: Phép kiểm aud chặn dùng token chéo client — một cú bypass kinh điển (8.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Authenticating with an access token.|||Xác thực bằng một access token."
+        },
+        {
+          "loi": "Ignoring aud because the signature is valid.|||Lờ aud vì chữ ký hợp lệ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "ID token",
+          "vi": "ID token"
+        },
+        {
+          "en": "access token",
+          "vi": "access token"
+        }
+      ]
+    },
+    {
+      "title": "8.4-2 — Write verifyIdToken(payload, ctx): the seven checks",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The most security-critical function in a \"sign in with…\" client. Return <code>{ ok, sub }</code> or <code>{ error }</code>, checking in this order: <code>malformed</code> (null/non-object) → <code>bad_signature</code> (<code>!ctx.signatureValid</code>) → <code>bad_iss</code> → <code>bad_aud</code> (aud may be a string OR an array that must contain <code>expectedAudience</code>) → <code>expired</code> (<code>exp &lt;= now</code>) → <code>bad_iat</code> (<code>iat &gt; now + 60</code>) → <code>bad_nonce</code> (only if <code>ctx.nonce</code> is given). The signature is checked elsewhere; its result is <code>signatureValid</code> — do not skip it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Hàm trọng yếu bảo mật nhất trong một client \"đăng nhập bằng…\". Trả <code>{ ok, sub }</code> hoặc <code>{ error }</code>, kiểm theo thứ tự: <code>malformed</code> (null/không-object) → <code>bad_signature</code> (<code>!ctx.signatureValid</code>) → <code>bad_iss</code> → <code>bad_aud</code> (aud có thể là chuỗi HOẶC mảng phải chứa <code>expectedAudience</code>) → <code>expired</code> (<code>exp &lt;= now</code>) → <code>bad_iat</code> (<code>iat &gt; now + 60</code>) → <code>bad_nonce</code> (chỉ khi có <code>ctx.nonce</code>). Chữ ký kiểm ở nơi khác; kết quả là <code>signatureValid</code> — đừng bỏ nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+          "output": "{\"ok\":true,\"sub\":\"usr_1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Gate on signatureValid right after the malformed guard.|||Chặn theo signatureValid ngay sau guard malformed.",
+        "Normalise aud to an array, then check includes.|||Chuẩn hoá aud về mảng, rồi kiểm includes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { ok, sub } or { error } — the seven checks, in order */\nfunction verifyIdToken(payload, ctx) {\n  // Write your solution here\n  return { ok: true };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyIdToken(payload, { signatureValid, expectedIssuer, expectedAudience, nonce, now }) {\n  if (!payload || typeof payload !== 'object') return { error: 'malformed' };\n  if (!signatureValid) return { error: 'bad_signature' };\n  if (payload.iss !== expectedIssuer) return { error: 'bad_iss' };\n  const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (!aud.includes(expectedAudience)) return { error: 'bad_aud' };\n  if (typeof payload.exp !== 'number' || payload.exp <= now) return { error: 'expired' };\n  if (typeof payload.iat !== 'number' || payload.iat > now + 60) return { error: 'bad_iat' };\n  if (nonce !== undefined && payload.nonce !== nonce) return { error: 'bad_nonce' };\n  return { ok: true, sub: payload.sub };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Skip the signature and anyone forges a token for any sub; skip aud and another client’s token is accepted here — the two checks that are full bypasses (8.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Bỏ chữ ký và ai cũng giả một token cho bất kỳ sub nào; bỏ aud và token của client khác được nhận ở đây — hai phép là bypass trọn vẹn (8.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "valid",
+              "vi": "hợp lệ"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "ok": true,
+              "sub": "usr_1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "bad signature",
+              "vi": "sai chữ ký"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":false,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_signature"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "wrong aud",
+              "vi": "sai aud"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"other\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_aud"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "array aud ⇒ ok",
+              "vi": "aud mảng ⇒ ok"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":[\"x\",\"labflow-api\"],\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "ok": true,
+              "sub": "usr_1"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "wrong nonce",
+              "vi": "sai nonce"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n2\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_nonce"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "malformed",
+              "vi": "malformed"
+            },
+            "goi": "verifyIdToken(null, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "malformed"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the signature check.|||Bỏ phép kiểm chữ ký."
+        },
+        {
+          "loi": "Treating aud as a plain string only.|||Coi aud chỉ là một chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audience (aud)",
+          "vi": "audience (aud)"
+        },
+        {
+          "en": "token confusion",
+          "vi": "lẫn token"
+        }
+      ]
+    },
+    {
+      "title": "8.4-3 — Check → what its omission allows",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each omitted ID-token check with the bug it causes.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi phép kiểm ID token bị bỏ với con lỗi nó gây.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two of these are complete bypasses.|||Hai cái là bypass trọn vẹn.",
+        "nonce is about replay; expiry is about staleness.|||nonce về phát lại; hết hạn về cũ."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.4-3 — Check → what its omission allows\n\nAnswer in the answer panel (no code needed).\n\n1. Omit → bugBỏ → lỗi\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.4-3 — Check → what its omission allows — answer key\n\n1. Omit → bugBỏ → lỗi\n   - r1.q: anyone forges a token for any user\n   - r2.q: app A’s token logs into app B\n   - r3.q: an old token replays\n   - r4.q: a stale token is accepted\n   Signature and audience are full bypasses; nonce stops replay; expiry stops stale tokens (8.4).VI: Chữ ký và audience là bypass trọn vẹn; nonce chặn phát lại; hết hạn chặn token cũ (8.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Signature and audience are full bypasses; nonce stops replay; expiry stops stale tokens (8.4).</p><p><i>VI: Chữ ký và audience là bypass trọn vẹn; nonce chặn phát lại; hết hạn chặn token cũ (8.4).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Omit → bug</p><p style=\"opacity:.75;font-size:.92em\"><i>Bỏ → lỗi</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Omitted check"
+              },
+              {
+                "ma": "q",
+                "ten": "Bug",
+                "luaChon": [
+                  "anyone forges a token for any user",
+                  "app A’s token logs into app B",
+                  "an old token replays",
+                  "a stale token is accepted"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "signature"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "audience"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "nonce"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "expiry"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "anyone forges a token for any user",
+              "r2.q": "app A’s token logs into app B",
+              "r3.q": "an old token replays",
+              "r4.q": "a stale token is accepted"
+            },
+            "giaiThich": "<p>Signature and audience are full bypasses; nonce stops replay; expiry stops stale tokens (8.4).</p><p><i>VI: Chữ ký và audience là bypass trọn vẹn; nonce chặn phát lại; hết hạn chặn token cũ (8.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a valid signature is sufficient.|||Tưởng một chữ ký hợp lệ là đủ."
+        },
+        {
+          "loi": "Confusing the replay bug with the staleness bug.|||Lẫn lỗi phát lại với lỗi cũ."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

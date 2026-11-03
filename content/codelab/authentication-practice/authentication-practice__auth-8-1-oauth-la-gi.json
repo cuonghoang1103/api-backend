@@ -1,0 +1,476 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-8-1-oauth-la-gi",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-8-1-oauth-la-gi"
+  },
+  "exercises": [
+    {
+      "title": "8.1-1 — OAuth vs OIDC, read the discovery",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.8 as an OIDC provider:<pre>1) Discovery — a client reads one document to learn every endpoint:\n   authorization_endpoint https://id.labflow.example/oauth/authorize  token_endpoint https://id.labflow.example/oauth/token\n   code_challenge_methods_supported [\"S256\"]  (S256 only — PKCE required, OAuth 2.1)\n\n2) The full login (code + PKCE), driven like a browser:</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.8 là một OIDC provider:<pre>1) Discovery — a client reads one document to learn every endpoint:\n   authorization_endpoint https://id.labflow.example/oauth/authorize  token_endpoint https://id.labflow.example/oauth/token\n   code_challenge_methods_supported [\"S256\"]  (S256 only — PKCE required, OAuth 2.1)\n\n2) The full login (code + PKCE), driven like a browser:</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Authorization answers \"allowed?\"; authentication answers \"who?\".|||Uỷ quyền trả lời \"được phép?\"; xác thực trả lời \"ai?\".",
+        "The ID token is the identity half.|||ID token là nửa danh tính."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-1 — OAuth vs OIDC, read the discovery\n\nAnswer in the answer panel (no code needed).\n\n1. A teammate says \"we use OAuth to log users in\". The precise correction?Một đồng đội nói \"ta dùng OAuth để đăng nhập\". Chỉnh lại chính xác?\n2. discovery shows code_challenge_methods_supported [\"S256\"] and no \"plain\". What does that mean?discovery khai code_challenge_methods_supported [\"S256\"] và không \"plain\". Nghĩa là gì?\n3. Why can a client NOT read the user identity from the access token?Vì sao một client KHÔNG đọc danh tính người dùng từ access token được?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-1 — OAuth vs OIDC, read the discovery — answer key\n\n1. A teammate says \"we use OAuth to log users in\". The precise correction?Một đồng đội nói \"ta dùng OAuth để đăng nhập\". Chỉnh lại chính xác?\n   Answer: a) OAuth is authorization (delegated access); login is OpenID Connect, which adds an ID token\n   OAuth delegates access and never says who the user is; OIDC adds an ID token for identity (8.1).VI: OAuth uỷ quyền truy cập và không bao giờ nói người dùng là ai; OIDC thêm một ID token cho danh tính (8.1).\n\n2. discovery shows code_challenge_methods_supported [\"S256\"] and no \"plain\". What does that mean?discovery khai code_challenge_methods_supported [\"S256\"] và không \"plain\". Nghĩa là gì?\n   Answer: c) PKCE is required and only the strong S256 method is offered\n   S256-only means every client must use PKCE with a SHA-256 challenge; plain is deliberately absent (8.1, OAuth 2.1).VI: Chỉ S256 nghĩa là mọi client phải dùng PKCE với challenge SHA-256; plain cố ý vắng (8.1, OAuth 2.1).\n\n3. Why can a client NOT read the user identity from the access token?Vì sao một client KHÔNG đọc danh tính người dùng từ access token được?\n   Answer: b) The access token is for the resource server and may be opaque; identity comes from the ID token\n   The access token targets the API and may be opaque; use the ID token’s verified claims for identity (8.1, 8.4).VI: Access token nhắm API và có thể mờ đục; dùng claim đã xác minh của ID token cho danh tính (8.1, 8.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> OAuth is authorization (delegated access); login is OpenID Connect, which adds an ID token</p><p>OAuth delegates access and never says who the user is; OIDC adds an ID token for identity (8.1).</p><p><i>VI: OAuth uỷ quyền truy cập và không bao giờ nói người dùng là ai; OIDC thêm một ID token cho danh tính (8.1).</i></p></li><li><p><b>c)</b> PKCE is required and only the strong S256 method is offered</p><p>S256-only means every client must use PKCE with a SHA-256 challenge; plain is deliberately absent (8.1, OAuth 2.1).</p><p><i>VI: Chỉ S256 nghĩa là mọi client phải dùng PKCE với challenge SHA-256; plain cố ý vắng (8.1, OAuth 2.1).</i></p></li><li><p><b>b)</b> The access token is for the resource server and may be opaque; identity comes from the ID token</p><p>The access token targets the API and may be opaque; use the ID token’s verified claims for identity (8.1, 8.4).</p><p><i>VI: Access token nhắm API và có thể mờ đục; dùng claim đã xác minh của ID token cho danh tính (8.1, 8.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>A teammate says \"we use OAuth to log users in\". The precise correction?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một đồng đội nói \"ta dùng OAuth để đăng nhập\". Chỉnh lại chính xác?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "OAuth is authorization (delegated access); login is OpenID Connect, which adds an ID token"
+              },
+              {
+                "ma": "b",
+                "noiDung": "OAuth and OpenID Connect are two names for the exact same protocol"
+              },
+              {
+                "ma": "c",
+                "noiDung": "OAuth manages sessions while OIDC manages API keys for services"
+              },
+              {
+                "ma": "d",
+                "noiDung": "OAuth logs users in directly; OIDC is only needed for mobile apps"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>OAuth delegates access and never says who the user is; OIDC adds an ID token for identity (8.1).</p><p><i>VI: OAuth uỷ quyền truy cập và không bao giờ nói người dùng là ai; OIDC thêm một ID token cho danh tính (8.1).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>discovery shows code_challenge_methods_supported [\"S256\"] and no \"plain\". What does that mean?</p><p style=\"opacity:.75;font-size:.92em\"><i>discovery khai code_challenge_methods_supported [\"S256\"] và không \"plain\". Nghĩa là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Only native mobile apps, not web clients, may connect to it"
+              },
+              {
+                "ma": "b",
+                "noiDung": "User passwords must now be at least 256 bits of entropy"
+              },
+              {
+                "ma": "c",
+                "noiDung": "PKCE is required and only the strong S256 method is offered"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The provider is currently down and only offering a fallback"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>S256-only means every client must use PKCE with a SHA-256 challenge; plain is deliberately absent (8.1, OAuth 2.1).</p><p><i>VI: Chỉ S256 nghĩa là mọi client phải dùng PKCE với challenge SHA-256; plain cố ý vắng (8.1, OAuth 2.1).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>Why can a client NOT read the user identity from the access token?</p><p style=\"opacity:.75;font-size:.92em\"><i>Vì sao một client KHÔNG đọc danh tính người dùng từ access token được?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The browser strips the identity claims out before the client sees them"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The access token is for the resource server and may be opaque; identity comes from the ID token"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Access tokens are encrypted so the client cannot read them at all"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Access tokens are too short to hold a user identifier"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>The access token targets the API and may be opaque; use the ID token’s verified claims for identity (8.1, 8.4).</p><p><i>VI: Access token nhắm API và có thể mờ đục; dùng claim đã xác minh của ID token cho danh tính (8.1, 8.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Calling OAuth \"login\".|||Gọi OAuth là \"đăng nhập\"."
+        },
+        {
+          "loi": "Reading identity from an access token.|||Đọc danh tính từ một access token."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "OAuth 2.1",
+          "vi": "OAuth 2.1"
+        },
+        {
+          "en": "OpenID Connect",
+          "vi": "OpenID Connect"
+        }
+      ]
+    },
+    {
+      "title": "8.1-2 — Write tokenAudience(kind): who each token is for",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Return who a token’s audience is: an <code>'id'</code> token is for the <code>'client'</code> (it reads the claims); an <code>'access'</code> token is for the <code>'api'</code> (resource server, opaque to the client); anything else ⇒ <code>'unknown'</code>. Confusing the two is a classic bypass.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Trả về audience của một token là ai: một token <code>'id'</code> dành cho <code>'client'</code> (nó đọc claim); một token <code>'access'</code> dành cho <code>'api'</code> (máy chủ tài nguyên, mờ đục với client); còn lại ⇒ <code>'unknown'</code>. Lẫn hai cái là một cú bypass kinh điển.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "tokenAudience(\"id\")",
+          "output": "\"client\"",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "The ID token is consumed by the client.|||ID token được client tiêu.",
+        "The access token is for the API.|||Access token dành cho API."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ 'client' | 'api' | 'unknown' */\nfunction tokenAudience(kind) {\n  // Write your solution here\n  return 'client';\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction tokenAudience(kind) {\n  // The ID token is for the client; the access token is for the API (resource server).\n  if (kind === 'id') return 'client';\n  if (kind === 'access') return 'api';\n  return 'unknown';\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The ID token answers \"who logged in\" for the client; the access token is a pass for the API — never authenticate with it (8.4).</p>",
+      "solutionExplanationHtmlVi": "<p>ID token trả lời \"ai đã đăng nhập\" cho client; access token là một tấm vé cho API — đừng xác thực bằng nó (8.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "ID token",
+              "vi": "ID token"
+            },
+            "goi": "tokenAudience(\"id\")",
+            "mongDoi": "client"
+          },
+          {
+            "moTa": {
+              "en": "access token",
+              "vi": "access token"
+            },
+            "goi": "tokenAudience(\"access\")",
+            "mongDoi": "api",
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "unknown kind",
+              "vi": "kind lạ"
+            },
+            "goi": "tokenAudience(\"refresh\")",
+            "mongDoi": "unknown",
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Swapping the two audiences.|||Đổi chỗ hai audience."
+        },
+        {
+          "loi": "Returning a value for an unknown kind.|||Trả một giá trị cho một kind lạ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audience (aud)",
+          "vi": "audience (aud)"
+        }
+      ]
+    },
+    {
+      "title": "8.1-3 — Order the roles in one login",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the four OAuth roles as they appear in a login, from the human to the data.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp bốn vai OAuth như chúng xuất hiện trong một đăng nhập, từ con người tới dữ liệu.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The user starts it; the API holds the data.|||Người dùng bắt đầu; API giữ dữ liệu.",
+        "LabFlow ID issues the tokens.|||LabFlow ID phát token."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-3 — Order the roles in one login\n\nAnswer in the answer panel (no code needed).\n\n1. Human → dataCon người → dữ liệu\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-3 — Order the roles in one login — answer key\n\n1. Human → dataCon người → dữ liệu\n   Answer: m1) Resource owner — the user (An) who authorizes access  →  m3) Client — LabFlow API, which wants to act for the user  →  m2) Authorization server — LabFlow ID, which authenticates and issues tokens  →  m4) Resource server — the API that holds the data and accepts the access token\n   The owner authorizes; the client asks; the authorization server issues; the resource server serves the data (8.1).VI: Chủ uỷ quyền; client xin; máy chủ uỷ quyền phát; máy chủ tài nguyên phục vụ dữ liệu (8.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>The owner authorizes; the client asks; the authorization server issues; the resource server serves the data (8.1).</p><p><i>VI: Chủ uỷ quyền; client xin; máy chủ uỷ quyền phát; máy chủ tài nguyên phục vụ dữ liệu (8.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>Human → data</p><p style=\"opacity:.75;font-size:.92em\"><i>Con người → dữ liệu</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Resource owner — the user (An) who authorizes access"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Authorization server — LabFlow ID, which authenticates and issues tokens"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "Client — LabFlow API, which wants to act for the user"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Resource server — the API that holds the data and accepts the access token"
+              }
+            ],
+            "dapAn": [
+              "m1",
+              "m3",
+              "m2",
+              "m4"
+            ],
+            "giaiThich": "<p>The owner authorizes; the client asks; the authorization server issues; the resource server serves the data (8.1).</p><p><i>VI: Chủ uỷ quyền; client xin; máy chủ uỷ quyền phát; máy chủ tài nguyên phục vụ dữ liệu (8.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Putting the client before the owner.|||Đặt client trước chủ."
+        },
+        {
+          "loi": "Confusing the two servers.|||Lẫn hai máy chủ."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "relying party",
+          "vi": "bên tin cậy"
+        }
+      ]
+    },
+    {
+      "title": "8.1-4 — Confused-with → what it is",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each thing OAuth is confused with to what it actually is.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi thứ OAuth bị lẫn với cái nó thực sự là.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Only one of these is about identity.|||Chỉ một cái về danh tính.",
+        "One is removed entirely.|||Một cái bị bỏ hẳn."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-4 — Confused-with → what it is\n\nAnswer in the answer panel (no code needed).\n\n1. Confused → realityLẫn → thực tế\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.1-4 — Confused-with → what it is — answer key\n\n1. Confused → realityLẫn → thực tế\n   - r1.q: OpenID Connect (an ID token)\n   - r2.q: a Chapter-3 session\n   - r3.q: a machine credential\n   - r4.q: dead (OAuth 2.1)\n   Login is OIDC; a session is yours after login; an API key is machine-to-machine; implicit is removed (8.1).VI: Đăng nhập là OIDC; một phiên là của bạn sau đăng nhập; một API key là máy-với-máy; implicit bị bỏ (8.1).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Login is OIDC; a session is yours after login; an API key is machine-to-machine; implicit is removed (8.1).</p><p><i>VI: Đăng nhập là OIDC; một phiên là của bạn sau đăng nhập; một API key là máy-với-máy; implicit bị bỏ (8.1).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Confused → reality</p><p style=\"opacity:.75;font-size:.92em\"><i>Lẫn → thực tế</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Called"
+              },
+              {
+                "ma": "q",
+                "ten": "Actually",
+                "luaChon": [
+                  "OpenID Connect (an ID token)",
+                  "a Chapter-3 session",
+                  "a machine credential",
+                  "dead (OAuth 2.1)"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "\"login\""
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "a session"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "an API key"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "the implicit flow"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "OpenID Connect (an ID token)",
+              "r2.q": "a Chapter-3 session",
+              "r3.q": "a machine credential",
+              "r4.q": "dead (OAuth 2.1)"
+            },
+            "giaiThich": "<p>Login is OIDC; a session is yours after login; an API key is machine-to-machine; implicit is removed (8.1).</p><p><i>VI: Đăng nhập là OIDC; một phiên là của bạn sau đăng nhập; một API key là máy-với-máy; implicit bị bỏ (8.1).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking implicit is still recommended.|||Tưởng implicit vẫn được khuyên."
+        },
+        {
+          "loi": "Thinking an API key is a user delegation.|||Tưởng một API key là uỷ quyền của người dùng."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

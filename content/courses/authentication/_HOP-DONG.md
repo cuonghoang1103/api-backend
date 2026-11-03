@@ -366,4 +366,17 @@ không `git add -A`, không stash, không Co-Authored-By, không push/deploy.
   **passkey ĐO BẰNG CHROMIUM THẬT (virtual authenticator qua Playwright CDP):** đăng ký + xác thực `verified=true`, rồi CÙNG assertion
   xác minh lại với `expectedOrigin=https://evil.example` ⇒ `verified=false` (gắn origin = chống lừa đảo). Chuẩn: NIST SP 800-63B,
   RFC 6238/4226, W3C WebAuthn L3, FIDO. Môi trường: `auth2-pg` (4832) + `npm i` thêm 2 dep; demo passkey tự chạy express :4811 + Chromium.
-- **TẠM DỪNG sau Ch7 ngày 04/11 (theo yêu cầu chủ kênh — soạn trọn khoá, dừng báo soát MỖI chương); tiếp theo là Ch8** (OAuth 2.1 + OpenID Connect, §11) — chưa bắt đầu.
+- **04/11/2026 — Ch8 trọn:** 5 bài + Lab 8 (`auth-8-7-lab-id-token`, máy chấm `scripts/cham-lab-8.mjs` 6 phép, hàm thuần —
+  không CSDL) + quiz 10 câu (A3 B2 C2 D3, slug `auth-8-6-quiz`); bài ~179k ký tự cả chương (depth-audit đạt); 6 deck 50 slide
+  AUTH/v1 (đã đẩy, 0 lỗi kiem-lap-day + kiem-tran); Code Lab +6 module/22 đề (track 53 module/204 đề, 0 lỗi nội dung + 0 cảnh báo
+  đáp-án-dài, máy chấm trình duyệt đạt); liên kết chéo (api-design 6.1 ↔ 8.1, auth 3.4 ↔ 8.2/8.3, auth 4.4 ↔ 8.4, auth 6.3 ↔ 8.5);
+  video YouTube 8.1–8.5 đã có (Lab 8 video dùng tạm 8.2, credit rỗng). `_labflow-id` = v0.8 (**LabFlow ID là OIDC provider cho
+  LabFlow API**): `src/oidc/` provider (discovery + authorize + token, authorization-code + PKCE S256, code 60s một-lần, ID token
+  EdDSA) + client (begin + 7 phép) + `verify.js` lõi thuần; `sql/006_oidc.sql` bảng `oauth_clients`; tuyến
+  `/.well-known/openid-configuration` + `/oauth/authorize` + `/oauth/token`; `demo8/oidc-flow.mjs`, `test/oidc.test.js` ⇒ npm test 46 pass.
+  **Số đo thật (macOS arm64, Node 22.23.3, PG 17.11, không trình duyệt — provider :4800 + client :4810 qua fetch theo redirect):**
+  discovery khai `code_challenge_methods ["S256"]`; login đầy-đủ authorize→code (state dội nguyên vẹn)→token→id_token verified
+  `{ ok, sub: usr_1, email }`; PKCE code + verifier SAI ⇒ `invalid_grant`; nonce sai ⇒ `bad_nonce`; aud sai ⇒ `bad_aud`;
+  redirect_uri ngoài danh sách ⇒ HTTP 400 `invalid_redirect_uri` (KHÔNG redirect). Chuẩn: OAuth 2.1/RFC 9700, RFC 7636 (PKCE),
+  OpenID Connect Core, RFC 8725. Môi trường: `auth2-pg` (4832); demo tự chạy client express :4810.
+- **TẠM DỪNG sau Ch8 ngày 04/11 (đang chạy liên tục Ch8→Ch10 theo yêu cầu chủ kênh); tiếp theo là Ch9** (phân quyền RBAC/ABAC/ReBAC, đa tenant, §11) — đang làm.

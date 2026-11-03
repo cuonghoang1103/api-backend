@@ -1,0 +1,347 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-8-7-lab-id-token",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-8-7-lab-id-token"
+  },
+  "exercises": [
+    {
+      "title": "Lab 8-1 — Write verifyIdToken(payload, ctx): the seven checks",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 15,
+      "points": 30,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The client’s ID-token check. Return <code>{ ok, sub }</code> or <code>{ error }</code> in order: <code>malformed</code> → <code>bad_signature</code> (<code>!ctx.signatureValid</code>) → <code>bad_iss</code> → <code>bad_aud</code> (string or array) → <code>expired</code> → <code>bad_iat</code> (<code>iat &gt; now + 60</code>) → <code>bad_nonce</code>. The signature is verified elsewhere and passed in as <code>signatureValid</code> — gate on it.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép kiểm ID token của client. Trả <code>{ ok, sub }</code> hoặc <code>{ error }</code> theo thứ tự: <code>malformed</code> → <code>bad_signature</code> (<code>!ctx.signatureValid</code>) → <code>bad_iss</code> → <code>bad_aud</code> (chuỗi hoặc mảng) → <code>expired</code> → <code>bad_iat</code> (<code>iat &gt; now + 60</code>) → <code>bad_nonce</code>. Chữ ký kiểm ở nơi khác và truyền vào dạng <code>signatureValid</code> — chặn theo nó.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+          "output": "{\"ok\":true,\"sub\":\"usr_1\"}",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Gate on signatureValid right after the malformed guard.|||Chặn theo signatureValid ngay sau guard malformed.",
+        "aud: normalise to an array then check includes.|||aud: chuẩn hoá về mảng rồi kiểm includes."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ { ok, sub } or { error } */\nfunction verifyIdToken(payload, ctx) {\n  // Write your solution here\n  return { ok: true };\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction verifyIdToken(payload, { signatureValid, expectedIssuer, expectedAudience, nonce, now }) {\n  if (!payload || typeof payload !== 'object') return { error: 'malformed' };\n  if (!signatureValid) return { error: 'bad_signature' };\n  if (payload.iss !== expectedIssuer) return { error: 'bad_iss' };\n  const aud = Array.isArray(payload.aud) ? payload.aud : [payload.aud];\n  if (!aud.includes(expectedAudience)) return { error: 'bad_aud' };\n  if (typeof payload.exp !== 'number' || payload.exp <= now) return { error: 'expired' };\n  if (typeof payload.iat !== 'number' || payload.iat > now + 60) return { error: 'bad_iat' };\n  if (nonce !== undefined && payload.nonce !== nonce) return { error: 'bad_nonce' };\n  return { ok: true, sub: payload.sub };\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Signature and audience are the two whose omission is a full bypass — a forged token, or another client’s token, otherwise walks in (8.4).</p>",
+      "solutionExplanationHtmlVi": "<p>Chữ ký và audience là hai cái mà bỏ đi là bypass trọn vẹn — một token giả, hay token của client khác, nếu không sẽ lọt (8.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "valid",
+              "vi": "hợp lệ"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "ok": true,
+              "sub": "usr_1"
+            }
+          },
+          {
+            "moTa": {
+              "en": "bad signature",
+              "vi": "sai chữ ký"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":false,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_signature"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "bad iss",
+              "vi": "sai iss"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://evil.example\",\"aud\":\"labflow-api\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_iss"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "bad aud",
+              "vi": "sai aud"
+            },
+            "goi": "verifyIdToken({\"iss\":\"https://id.labflow.example\",\"aud\":\"other\",\"exp\":1700000300,\"iat\":1700000000,\"nonce\":\"n1\",\"sub\":\"usr_1\"}, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "bad_aud"
+            },
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "malformed",
+              "vi": "malformed"
+            },
+            "goi": "verifyIdToken(null, {\"signatureValid\":true,\"expectedIssuer\":\"https://id.labflow.example\",\"expectedAudience\":\"labflow-api\",\"nonce\":\"n1\",\"now\":1700000000})",
+            "mongDoi": {
+              "error": "malformed"
+            },
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Skipping the signature gate.|||Bỏ chặn chữ ký."
+        },
+        {
+          "loi": "Treating aud as a string only.|||Coi aud chỉ là chuỗi."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "token confusion",
+          "vi": "lẫn token"
+        },
+        {
+          "en": "audience (aud)",
+          "vi": "audience (aud)"
+        }
+      ]
+    },
+    {
+      "title": "Lab 8-2 — Write audienceOk(aud, expected): string or array",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The aud claim may be a single string or an array of strings. Return <code>true</code> only if <code>expected</code> is the string, or is a member of the array. This is the subtle part of check 4 (8.4).</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Claim aud có thể là một chuỗi hoặc một mảng chuỗi. Trả <code>true</code> chỉ khi <code>expected</code> là chuỗi đó, hoặc là một thành viên của mảng. Đây là phần tinh tế của phép kiểm 4 (8.4).</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "audienceOk('labflow-api', 'labflow-api')",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Normalise to an array, then use includes.|||Chuẩn hoá về mảng, rồi dùng includes.",
+        "A string aud must equal expected exactly.|||Một aud chuỗi phải bằng expected chính xác."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true if expected is the aud string or in the aud array */\nfunction audienceOk(aud, expected) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction audienceOk(aud, expected) {\n  const list = Array.isArray(aud) ? aud : [aud];\n  return list.includes(expected);\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>OIDC allows aud to be an array; a client must check its id is present, not merely that aud is non-empty (8.4).</p>",
+      "solutionExplanationHtmlVi": "<p>OIDC cho phép aud là một mảng; một client phải kiểm id của nó có mặt, không chỉ aud khác rỗng (8.4).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "string match",
+              "vi": "khớp chuỗi"
+            },
+            "goi": "audienceOk('labflow-api', 'labflow-api')",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "array member",
+              "vi": "thành viên mảng"
+            },
+            "goi": "audienceOk(['x', 'labflow-api'], 'labflow-api')",
+            "mongDoi": true,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "string mismatch",
+              "vi": "lệch chuỗi"
+            },
+            "goi": "audienceOk('other', 'labflow-api')",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "not in array",
+              "vi": "không trong mảng"
+            },
+            "goi": "audienceOk(['a', 'b'], 'labflow-api')",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Only handling the string case.|||Chỉ xử lý trường hợp chuỗi."
+        },
+        {
+          "loi": "Using substring instead of equality.|||Dùng chuỗi con thay vì bằng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "audience (aud)",
+          "vi": "audience (aud)"
+        }
+      ]
+    },
+    {
+      "title": "Lab 8-3 — Read the reference grade",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 5,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>The reference ID-token check, graded and tested:<pre>✓ T4 the wrong audience is rejected (string or array aud)  2/2\n✓ T5 expired and future-dated are rejected                 1.5/1.5\n✓ T6 a wrong nonce is rejected; malformed never crashes    1.5/1.5\nTOTAL 10/10 — PASS</pre></p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Phép kiểm ID token tham khảo, chấm và test:<pre>✓ T4 the wrong audience is rejected (string or array aud)  2/2\n✓ T5 expired and future-dated are rejected                 1.5/1.5\n✓ T6 a wrong nonce is rejected; malformed never crashes    1.5/1.5\nTOTAL 10/10 — PASS</pre></p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Two checks are complete bypasses.|||Hai phép là bypass trọn vẹn.",
+        "\"Logs me in\" is not \"correct\".|||\"Đăng nhập được\" không phải \"đúng\"."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 8-3 — Read the reference grade\n\nAnswer in the answer panel (no code needed).\n\n1. The first attempt checks iss and expiry and \"logs the user in\", scoring 3/10. Which omissions are the full bypasses?Lần thử đầu kiểm iss và hết hạn và \"đăng nhập người dùng\", được 3/10. Những cái bỏ nào là bypass trọn vẹn?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# Lab 8-3 — Read the reference grade — answer key\n\n1. The first attempt checks iss and expiry and \"logs the user in\", scoring 3/10. Which omissions are the full bypasses?Lần thử đầu kiểm iss và hết hạn và \"đăng nhập người dùng\", được 3/10. Những cái bỏ nào là bypass trọn vẹn?\n   Answer: b) Skipping the signature (forgery) and the audience (another client’s token)\n   No signature ⇒ a forged token for any sub; no audience ⇒ a token minted for another client is accepted (8.4).VI: Không chữ ký ⇒ một token giả cho bất kỳ sub; không audience ⇒ một token đúc cho client khác được nhận (8.4).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>b)</b> Skipping the signature (forgery) and the audience (another client’s token)</p><p>No signature ⇒ a forged token for any sub; no audience ⇒ a token minted for another client is accepted (8.4).</p><p><i>VI: Không chữ ký ⇒ một token giả cho bất kỳ sub; không audience ⇒ một token đúc cho client khác được nhận (8.4).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>The first attempt checks iss and expiry and \"logs the user in\", scoring 3/10. Which omissions are the full bypasses?</p><p style=\"opacity:.75;font-size:.92em\"><i>Lần thử đầu kiểm iss và hết hạn và \"đăng nhập người dùng\", được 3/10. Những cái bỏ nào là bypass trọn vẹn?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "None of them — a score of 3 out of 10 already counts as a pass"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Skipping the signature (forgery) and the audience (another client’s token)"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Skipping only the issuer and expiry checks, nothing more serious"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Skipping only the malformed-input guard at the very top"
+              }
+            ],
+            "dapAn": [
+              "b"
+            ],
+            "giaiThich": "<p>No signature ⇒ a forged token for any sub; no audience ⇒ a token minted for another client is accepted (8.4).</p><p><i>VI: Không chữ ký ⇒ một token giả cho bất kỳ sub; không audience ⇒ một token đúc cho client khác được nhận (8.4).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Thinking a valid happy path means a safe check.|||Tưởng một đường thuận hợp lệ là một phép kiểm an toàn."
+        },
+        {
+          "loi": "Thinking 3/10 is a pass.|||Tưởng 3/10 là đạt."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "machine-graded lab",
+          "vi": "lab chấm bằng máy"
+        }
+      ]
+    }
+  ]
+}

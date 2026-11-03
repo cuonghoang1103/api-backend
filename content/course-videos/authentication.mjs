@@ -94,6 +94,8 @@ export default {
     'auth-8-4-id-token': { yt: 'IW15Q68V50E', credit: 'hexaDefence — Keycloak Authorization Code Flow | OpenID Connect' },             // Keycloak Authorization Code Flow | OpenID Connect
     'auth-8-5-lam-client-that': { yt: 'TfQZqhhWxVs', credit: 'Tech Journey With Ankit — Unlock the Power of OAuth 2.0 🔐 | Authorization Code Flow + Step-by-Step Demo #salesforce' },      // Unlock the Power of OAuth 2.0 | Authorization Code Flow + Step-by-Step Demo
 
+    'auth-8-7-lab-id-token': { yt: '7JlIQ6Wwu4k', credit: '' },  // 04/11/2026: Lab 8 (kiểm ID token) — dùng tạm video OAuth/OIDC của 8.2; CHẠY verify-youtube-videos --fix-credits
+
     /* ── Chương 9 — Các mô hình phân quyền ── */
     'auth-9-1-phan-quyen-la-gi': { yt: 'qprypVZ6Pxo', credit: 'Descope — Authorization 101 For Developers | RBAC, ReBAC, and ABAC' },      // Authorization 101 For Developers | RBAC, ReBAC, and ABAC
     'auth-9-2-rbac': { yt: 'HHuiV841g_w', credit: 'Dipesh Malvia — Node.js & Express Role-Based Authorization Tutorial | How to Manage User Roles and Permission' },                  // Node.js & Express Role-Based Authorization Tutorial | How to Manage User Roles and Permission

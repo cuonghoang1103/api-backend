@@ -1,0 +1,476 @@
+{
+  "trackSlug": "authentication-practice",
+  "moduleSlug": "auth-8-5-lam-client-that",
+  "lesson": {
+    "course": "authentication",
+    "slug": "auth-8-5-lam-client-that"
+  },
+  "exercises": [
+    {
+      "title": "8.5-1 — Linking, read the verified result",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>LabFlow ID v0.8 (real run):<pre>   authorize → code lfc_Eg48341J…  state echoed unchanged ✓\n   token → id_token verified: {\"ok\":true,\"sub\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\n\n3) The parameters are not decoration — each stops an attack:</pre></p><p><i>This set has 3 questions. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>LabFlow ID v0.8 (chạy thật):<pre>   authorize → code lfc_Eg48341J…  state echoed unchanged ✓\n   token → id_token verified: {\"ok\":true,\"sub\":\"usr_1\",\"email\":\"an@student.labflow.example\"}\n\n3) The parameters are not decoration — each stops an attack:</pre></p><p><i>Bộ này có 3 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "sub is the stable join key.|||sub là khoá nối ổn định.",
+        "The ID token is not a session.|||ID token không phải một phiên."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-1 — Linking, read the verified result\n\nAnswer in the answer panel (no code needed).\n\n1. What identifier should a client link a federated account on?Một client nên nối một tài khoản liên kết theo định danh nào?\n2. A user’s only way in is \"Sign in with X\" and X has an outage. What was the design mistake?Đường vào duy nhất của một người là \"Đăng nhập bằng X\" và X có sự cố. Lỗi thiết kế là gì?\n3. After the ID token verifies, what should the client do next?Sau khi ID token xác minh, client nên làm gì kế?\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-1 — Linking, read the verified result — answer key\n\n1. What identifier should a client link a federated account on?Một client nên nối một tài khoản liên kết theo định danh nào?\n   Answer: a) The provider’s stable sub, not the email\n   sub is stable and provider-local; email can be unverified or change — linking on it is a takeover (8.5).VI: sub ổn định và cục-bộ-theo-provider; email có thể chưa xác minh hoặc đổi — nối theo nó là một cú chiếm (8.5).\n\n2. A user’s only way in is \"Sign in with X\" and X has an outage. What was the design mistake?Đường vào duy nhất của một người là \"Đăng nhập bằng X\" và X có sự cố. Lỗi thiết kế là gì?\n   Answer: a) Single-homed identity — keep a local credential or a second provider\n   Identity must not be single-homed; one provider’s outage should not lock a user out of your product (8.5).VI: Danh tính không được một-nhà; sự cố của một provider không nên khoá một người khỏi sản phẩm của bạn (8.5).\n\n3. After the ID token verifies, what should the client do next?Sau khi ID token xác minh, client nên làm gì kế?\n   Answer: c) Start its OWN session (Chapter 3); the ID token is a one-time statement, not a session\n   The federated login is a moment; verify once, then run your own session — do not hammer the provider or store the token as a session (8.5).VI: Đăng nhập liên kết là một khoảnh khắc; xác minh một lần, rồi chạy phiên của mình — đừng dội provider hay lưu token làm phiên (8.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Answer key / Đáp án</b></p><ol><li><p><b>a)</b> The provider’s stable sub, not the email</p><p>sub is stable and provider-local; email can be unverified or change — linking on it is a takeover (8.5).</p><p><i>VI: sub ổn định và cục-bộ-theo-provider; email có thể chưa xác minh hoặc đổi — nối theo nó là một cú chiếm (8.5).</i></p></li><li><p><b>a)</b> Single-homed identity — keep a local credential or a second provider</p><p>Identity must not be single-homed; one provider’s outage should not lock a user out of your product (8.5).</p><p><i>VI: Danh tính không được một-nhà; sự cố của một provider không nên khoá một người khỏi sản phẩm của bạn (8.5).</i></p></li><li><p><b>c)</b> Start its OWN session (Chapter 3); the ID token is a one-time statement, not a session</p><p>The federated login is a moment; verify once, then run your own session — do not hammer the provider or store the token as a session (8.5).</p><p><i>VI: Đăng nhập liên kết là một khoảnh khắc; xác minh một lần, rồi chạy phiên của mình — đừng dội provider hay lưu token làm phiên (8.5).</i></p></li></ol>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "choice",
+        "cauHoi": [
+          {
+            "ma": "c1",
+            "de": "<p>What identifier should a client link a federated account on?</p><p style=\"opacity:.75;font-size:.92em\"><i>Một client nên nối một tài khoản liên kết theo định danh nào?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "The provider’s stable sub, not the email"
+              },
+              {
+                "ma": "b",
+                "noiDung": "The user’s display name as shown by the provider"
+              },
+              {
+                "ma": "c",
+                "noiDung": "The email address returned in the ID token claims"
+              },
+              {
+                "ma": "d",
+                "noiDung": "The opaque access token issued alongside the ID token"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>sub is stable and provider-local; email can be unverified or change — linking on it is a takeover (8.5).</p><p><i>VI: sub ổn định và cục-bộ-theo-provider; email có thể chưa xác minh hoặc đổi — nối theo nó là một cú chiếm (8.5).</i></p>"
+          },
+          {
+            "ma": "c2",
+            "de": "<p>A user’s only way in is \"Sign in with X\" and X has an outage. What was the design mistake?</p><p style=\"opacity:.75;font-size:.92em\"><i>Đường vào duy nhất của một người là \"Đăng nhập bằng X\" và X có sự cố. Lỗi thiết kế là gì?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Single-homed identity — keep a local credential or a second provider"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Using PKCE on the authorization code flow at all"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Failing to cache the ID token for reuse across requests"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Requesting too few OAuth scopes at the consent screen"
+              }
+            ],
+            "dapAn": [
+              "a"
+            ],
+            "giaiThich": "<p>Identity must not be single-homed; one provider’s outage should not lock a user out of your product (8.5).</p><p><i>VI: Danh tính không được một-nhà; sự cố của một provider không nên khoá một người khỏi sản phẩm của bạn (8.5).</i></p>"
+          },
+          {
+            "ma": "c3",
+            "de": "<p>After the ID token verifies, what should the client do next?</p><p style=\"opacity:.75;font-size:.92em\"><i>Sau khi ID token xác minh, client nên làm gì kế?</i></p>",
+            "luaChon": [
+              {
+                "ma": "a",
+                "noiDung": "Re-run the entire OAuth authorization flow on every page load"
+              },
+              {
+                "ma": "b",
+                "noiDung": "Store the raw ID token and send it back as the session cookie"
+              },
+              {
+                "ma": "c",
+                "noiDung": "Start its OWN session (Chapter 3); the ID token is a one-time statement, not a session"
+              },
+              {
+                "ma": "d",
+                "noiDung": "Call the provider to re-check the user on every single request"
+              }
+            ],
+            "dapAn": [
+              "c"
+            ],
+            "giaiThich": "<p>The federated login is a moment; verify once, then run your own session — do not hammer the provider or store the token as a session (8.5).</p><p><i>VI: Đăng nhập liên kết là một khoảnh khắc; xác minh một lần, rồi chạy phiên của mình — đừng dội provider hay lưu token làm phiên (8.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "choice",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Linking on email.|||Nối theo email."
+        },
+        {
+          "loi": "Storing the ID token as the session.|||Lưu ID token làm phiên."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "account linking",
+          "vi": "nối tài khoản"
+        },
+        {
+          "en": "single-homed identity",
+          "vi": "danh tính một-nhà"
+        }
+      ]
+    },
+    {
+      "title": "8.5-2 — Write canUnlink(methods): never remove the last way in",
+      "language": "javascript",
+      "difficulty": "EASY",
+      "estimatedMinutes": 8,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Given the login methods currently on an account (an array like <code>['password', 'labflow', 'google']</code>), return <code>true</code> if the user may unlink one — i.e. at least two remain, so unlinking leaves one. With one method (or none), return <code>false</code>: unlinking the only way in is a self-inflicted lockout.</p>\n<h4>Requirements</h4>\n<ul>\n  <li>Return the value; do not print it.</li>\n  <li>Do not modify the arguments.</li>\n</ul>",
+      "problemHtmlVi": "<p>Cho các cách đăng nhập hiện có trên một tài khoản (một mảng như <code>['password', 'labflow', 'google']</code>), trả <code>true</code> nếu người dùng được gỡ một — tức còn ít nhất hai, nên gỡ vẫn còn một. Với một cách (hoặc không), trả <code>false</code>: gỡ đường vào duy nhất là tự khoá mình.</p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả về giá trị, đừng in ra.</li>\n  <li>Không sửa các đối số.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "canUnlink([\"password\",\"labflow\"])",
+          "output": "true",
+          "explanation": "The first sample case (more cases run when you press Run; hidden ones only on Submit).|||Ca mẫu đầu tiên (Chạy thử chạy thêm các ca hiện; ca ẩn chỉ chạy khi Nộp)."
+        }
+      ],
+      "hintsJson": [
+        "Count the methods; need ≥ 2 to allow an unlink.|||Đếm các cách; cần ≥ 2 để cho gỡ.",
+        "One method left means refuse.|||Còn một cách nghĩa là từ chối."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "/** ⇒ true only if unlinking still leaves a way in */\nfunction canUnlink(methods) {\n  // Write your solution here\n  return true;\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answer.js",
+          "language": "javascript",
+          "code": "// Reference solution\nfunction canUnlink(methods) {\n  // Refuse to remove the LAST way in: after unlinking, at least one login method must remain.\n  return Array.isArray(methods) && methods.length >= 2;\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Unlinking the last method locks the user out; require another way in (a local password or a second provider) to exist first (8.5).</p>",
+      "solutionExplanationHtmlVi": "<p>Gỡ cách cuối khoá người dùng ra ngoài; đòi một đường vào khác (mật khẩu nội bộ hoặc provider thứ hai) tồn tại trước (8.5).</p>",
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "js",
+        "phienBan": 1,
+        "tepChinh": "answer.js",
+        "tepNap": [
+          "answer.js"
+        ],
+        "kiem": [
+          {
+            "moTa": {
+              "en": "two methods ⇒ ok",
+              "vi": "hai cách ⇒ ok"
+            },
+            "goi": "canUnlink([\"password\",\"labflow\"])",
+            "mongDoi": true
+          },
+          {
+            "moTa": {
+              "en": "last one ⇒ refuse",
+              "vi": "cái cuối ⇒ từ chối"
+            },
+            "goi": "canUnlink([\"labflow\"])",
+            "mongDoi": false,
+            "an": true
+          },
+          {
+            "moTa": {
+              "en": "none ⇒ refuse",
+              "vi": "không ⇒ từ chối"
+            },
+            "goi": "canUnlink([])",
+            "mongDoi": false,
+            "an": true
+          }
+        ]
+      },
+      "gradeKind": "js",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Allowing an unlink down to zero methods.|||Cho gỡ xuống còn không cách nào."
+        },
+        {
+          "loi": "Not handling a non-array input.|||Không xử lý đầu vào không phải mảng."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "unlink guard",
+          "vi": "chốt gỡ nối"
+        }
+      ]
+    },
+    {
+      "title": "8.5-3 — Order a safe passwordless-ish migration",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Order the steps to add \"Sign in with LabFlow\" without locking anyone out.</p><p><i>This set has 1 question. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Xếp các bước thêm \"Đăng nhập bằng LabFlow\" mà không khoá ai ra ngoài.</p><p><i>Bộ này có 1 câu. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "Verify before you link.|||Xác minh trước khi nối.",
+        "Your session comes after verification.|||Phiên của bạn tới sau xác minh."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-3 — Order a safe passwordless-ish migration\n\nAnswer in the answer panel (no code needed).\n\n1. First → lastĐầu → cuối\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-3 — Order a safe passwordless-ish migration — answer key\n\n1. First → lastĐầu → cuối\n   Answer: m4) Verify the ID token (seven checks) and read the stable sub  →  m2) Link the sub to the local account (keeping the local credential)  →  m1) Start your own Chapter-3 session  →  m3) On unlink later, refuse to remove the last remaining method\n   Verify → link on sub → your own session → guard the last method on unlink (8.5).VI: Xác minh → nối theo sub → phiên của mình → chốt cách cuối khi gỡ (8.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Verify → link on sub → your own session → guard the last method on unlink (8.5).</p><p><i>VI: Xác minh → nối theo sub → phiên của mình → chốt cách cuối khi gỡ (8.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "order",
+        "cauHoi": [
+          {
+            "ma": "o1",
+            "de": "<p>First → last</p><p style=\"opacity:.75;font-size:.92em\"><i>Đầu → cuối</i></p>",
+            "muc": [
+              {
+                "ma": "m1",
+                "noiDung": "Start your own Chapter-3 session"
+              },
+              {
+                "ma": "m2",
+                "noiDung": "Link the sub to the local account (keeping the local credential)"
+              },
+              {
+                "ma": "m3",
+                "noiDung": "On unlink later, refuse to remove the last remaining method"
+              },
+              {
+                "ma": "m4",
+                "noiDung": "Verify the ID token (seven checks) and read the stable sub"
+              }
+            ],
+            "dapAn": [
+              "m4",
+              "m2",
+              "m1",
+              "m3"
+            ],
+            "giaiThich": "<p>Verify → link on sub → your own session → guard the last method on unlink (8.5).</p><p><i>VI: Xác minh → nối theo sub → phiên của mình → chốt cách cuối khi gỡ (8.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "order",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Linking before verifying.|||Nối trước khi xác minh."
+        },
+        {
+          "loi": "Dropping the local credential at link time.|||Bỏ tín vật nội bộ lúc nối."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "sub claim",
+          "vi": "claim sub"
+        }
+      ]
+    },
+    {
+      "title": "8.5-4 — Client decision → rule",
+      "language": "text",
+      "difficulty": "EASY",
+      "estimatedMinutes": 6,
+      "points": 10,
+      "concepts": [
+        "authentication"
+      ],
+      "prerequisites": [],
+      "tags": [
+        "authentication"
+      ],
+      "problemHtml": "<p>Match each client decision with the rule that governs it.</p><p><i>This set has 1 table. There is nothing to run: answer in the panel on the right and press Submit. Work each one out yourself first (on paper or in the lab), then check — every explanation after Submit says why the tempting wrong answer is wrong.</i></p>\n<h4>Requirements</h4>\n<ul>\n  <li>Answer every question in the answer panel, then press <b>Submit</b>.</li>\n  <li>All answers must be correct to get <b>Accepted</b>; the explanation of every question appears after you submit.</li>\n</ul>",
+      "problemHtmlVi": "<p>Ghép mỗi quyết định của client với luật chi phối nó.</p><p><i>Bộ này có 1 bảng. Không có gì để chạy: trả lời trong khung bên phải rồi bấm Nộp. Hãy tự giải trước (ra giấy hoặc chạy trong phòng lab) rồi mới kiểm — giải thích sau khi Nộp nói rõ vì sao phương án \"trông đúng\" lại sai.</i></p>\n<h4>Yêu cầu</h4>\n<ul>\n  <li>Trả lời mọi câu trong khung trả lời rồi bấm <b>Nộp</b>.</li>\n  <li>Đúng hết mới được <b>Accepted</b>; giải thích từng câu hiện sau khi nộp.</li>\n</ul>",
+      "inputSpec": null,
+      "outputSpec": null,
+      "constraints": "",
+      "examplesJson": [
+        {
+          "input": "Question → choose / fill",
+          "output": "Correct / Incorrect + explanation after Submit|||Đúng / Sai + giải thích sau khi Nộp",
+          "explanation": "Each question (or table cell) is one check.|||Mỗi câu (hoặc ô) là một kiểm."
+        }
+      ],
+      "hintsJson": [
+        "The sub is the join key; the session is yours after verifying.|||sub là khoá nối; phiên là của bạn sau xác minh.",
+        "Never single-home identity; ask only for what you need.|||Không bao giờ một-nhà danh tính; chỉ xin cái cần."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-4 — Client decision → rule\n\nAnswer in the answer panel (no code needed).\n\n1. Decision → ruleQuyết định → luật\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "answers.md",
+          "language": "text",
+          "code": "# 8.5-4 — Client decision → rule — answer key\n\n1. Decision → ruleQuyết định → luật\n   - r1.q: link on the stable sub\n   - r2.q: keep a non-provider way in\n   - r3.q: start your own session\n   - r4.q: request the narrowest scopes\n   Join on sub, never single-home identity, run your own session, and ask for only what you need (8.5).VI: Nối theo sub, không bao giờ một-nhà danh tính, chạy phiên của mình, và chỉ xin cái bạn cần (8.5).\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p>Join on sub, never single-home identity, run your own session, and ask for only what you need (8.5).</p><p><i>VI: Nối theo sub, không bao giờ một-nhà danh tính, chạy phiên của mình, và chỉ xin cái bạn cần (8.5).</i></p>",
+      "solutionExplanationHtmlVi": null,
+      "diagramMermaid": null,
+      "referenceUrl": null,
+      "testsJson": {
+        "loai": "table",
+        "bang": [
+          {
+            "ma": "b1",
+            "de": "<p>Decision → rule</p><p style=\"opacity:.75;font-size:.92em\"><i>Quyết định → luật</i></p>",
+            "cot": [
+              {
+                "ma": "x",
+                "ten": "Decision"
+              },
+              {
+                "ma": "q",
+                "ten": "Rule",
+                "luaChon": [
+                  "link on the stable sub",
+                  "keep a non-provider way in",
+                  "start your own session",
+                  "request the narrowest scopes"
+                ]
+              }
+            ],
+            "hang": [
+              {
+                "ma": "r1",
+                "o": {
+                  "x": "which id to join accounts on"
+                }
+              },
+              {
+                "ma": "r2",
+                "o": {
+                  "x": "what if the provider is down"
+                }
+              },
+              {
+                "ma": "r3",
+                "o": {
+                  "x": "what after the ID token verifies"
+                }
+              },
+              {
+                "ma": "r4",
+                "o": {
+                  "x": "which scopes to ask for"
+                }
+              }
+            ],
+            "dapAn": {
+              "r1.q": "link on the stable sub",
+              "r2.q": "keep a non-provider way in",
+              "r3.q": "start your own session",
+              "r4.q": "request the narrowest scopes"
+            },
+            "giaiThich": "<p>Join on sub, never single-home identity, run your own session, and ask for only what you need (8.5).</p><p><i>VI: Nối theo sub, không bao giờ một-nhà danh tính, chạy phiên của mình, và chỉ xin cái bạn cần (8.5).</i></p>"
+          }
+        ]
+      },
+      "gradeKind": "table",
+      "kind": "practice",
+      "mistakesJson": [
+        {
+          "loi": "Joining on email.|||Nối theo email."
+        },
+        {
+          "loi": "Treating the ID token as the session.|||Coi ID token là phiên."
+        }
+      ],
+      "glossaryJson": []
+    }
+  ]
+}

@@ -290,6 +290,42 @@
       "name": "Lab 7 TOTP from scratch",
       "level": "INTERMEDIATE",
       "description": "Luyện: Lab 7-1 — Write base32Encode(bytes): RFC 4648, no padding · Lab 7-2 — Write base32Decode(str): back to bytes · Lab 7-3 — Read the reference grade"
+    },
+    {
+      "slug": "auth-8-1-oauth-la-gi",
+      "name": "8.1 What OAuth is",
+      "level": "BEGINNER",
+      "description": "Luyện: 8.1-1 — OAuth vs OIDC, read the discovery · 8.1-2 — Write tokenAudience(kind): who each token is for · 8.1-3 — Order the roles in one login · 8.1-4 — Confused-with → what it is"
+    },
+    {
+      "slug": "auth-8-2-luong-code-pkce",
+      "name": "8.2 Code + PKCE",
+      "level": "BEGINNER",
+      "description": "Luyện: 8.2-1 — The code+PKCE login, read the run · 8.2-2 — Write codeStatus(rec, now): the code lifecycle · 8.2-3 — Order the three moves · 8.2-4 — Where does each value travel?"
+    },
+    {
+      "slug": "auth-8-3-state-nonce-redirect",
+      "name": "8.3 state/nonce/redirect",
+      "level": "BEGINNER",
+      "description": "Luyện: 8.3-1 — Three parameters, three attacks · 8.3-2 — Write redirectUriAllowed(uri, allow): exact match only · 8.3-3 — Order an audit of the three · 8.3-4 — Parameter → attack it stops"
+    },
+    {
+      "slug": "auth-8-4-id-token",
+      "name": "8.4 ID token",
+      "level": "BEGINNER",
+      "description": "Luyện: 8.4-1 — ID token vs access token, read the run · 8.4-2 — Write verifyIdToken(payload, ctx): the seven checks · 8.4-3 — Check → what its omission allows"
+    },
+    {
+      "slug": "auth-8-5-lam-client-that",
+      "name": "8.5 Being a client",
+      "level": "BEGINNER",
+      "description": "Luyện: 8.5-1 — Linking, read the verified result · 8.5-2 — Write canUnlink(methods): never remove the last way in · 8.5-3 — Order a safe passwordless-ish migration · 8.5-4 — Client decision → rule"
+    },
+    {
+      "slug": "auth-8-7-lab-id-token",
+      "name": "Lab 8 ID-token check",
+      "level": "INTERMEDIATE",
+      "description": "Luyện: Lab 8-1 — Write verifyIdToken(payload, ctx): the seven checks · Lab 8-2 — Write audienceOk(aud, expected): string or array · Lab 8-3 — Read the reference grade"
     }
   ]
 }

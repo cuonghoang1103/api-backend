@@ -1,0 +1,22 @@
+/** Giảng theo slide — bài 15.4 Trimming the module graph (deck ts-15-4, 6 slide). */
+import { walkTs } from '../_slides.mjs';
+export default walkTs('ts-15-4', 'Trimming the module graph', 'Cắt gọn đồ thị module', [
+  [1, 'Trimming the module graph',
+    `<p>Every <code>import</code> is an edge in your build’s module graph — a file the bundler must load, parse and follow. But a <code>type</code> you import exists only at compile time; it should leave no edge at all. <code>import type</code> says exactly that, so the type is erased and never pulls its module into the runtime graph.</p>`,
+    `<p>Mỗi <code>import</code> là một cạnh trong đồ thị module của build — một tệp bundler phải nạp, parse và đi theo. Nhưng một <code>type</code> bạn import chỉ tồn tại lúc biên dịch; nó không nên để lại cạnh nào cả. <code>import type</code> nói đúng điều đó, nên kiểu bị xoá và không bao giờ kéo module của nó vào đồ thị lúc chạy.</p>`],
+  [2, 'A value import of a type is refused',
+    `<p>Import a type with a plain <code>import { Booking }</code> and under <code>verbatimModuleSyntax</code> it is TS1484 — a type must be imported with <code>import type</code>. The plain import would survive to run time as an edge to a module that, after types are erased, might have nothing to export.</p>`,
+    `<p>Import một kiểu bằng một <code>import { Booking }</code> thường và dưới <code>verbatimModuleSyntax</code> nó là TS1484 — một kiểu phải được import bằng <code>import type</code>. Import thường sẽ sống tới lúc chạy như một cạnh tới một module mà, sau khi kiểu bị xoá, có thể không còn gì để export.</p>`],
+  [3, 'import type is erased',
+    `<p>Write <code>import type { Booking }</code> and the import disappears from the emitted JavaScript — no edge, no module loaded for a type that does not exist at run time. Mix the two: <code>import type</code> for the shapes, plain <code>import</code> for the values you actually run. The runtime pulls in only what it needs.</p>`,
+    `<p>Viết <code>import type { Booking }</code> và import biến mất khỏi JavaScript phát ra — không cạnh, không module nào được nạp cho một kiểu không tồn tại lúc chạy. Trộn hai cái: <code>import type</code> cho các dáng, <code>import</code> thường cho các giá trị bạn thật sự chạy. Lúc chạy chỉ kéo vào thứ nó cần.</p>`],
+  [4, 'Smaller graph, faster everything',
+    `<p>A trimmed graph is faster at every stage: the bundler follows fewer edges, the output is smaller, and circular type dependencies (which would deadlock a runtime import) become harmless because the type edges are gone. It is also what makes the per-file transpile of 15.3 correct — a type import has nothing to emit.</p>`,
+    `<p>Một đồ thị được cắt gọn nhanh hơn ở mọi khâu: bundler đi theo ít cạnh hơn, output nhỏ hơn, và phụ thuộc kiểu vòng (vốn sẽ kẹt một import lúc chạy) thành vô hại vì các cạnh kiểu đã mất. Nó cũng là thứ làm transpile từng-tệp của 15.3 đúng — một import kiểu không có gì để phát.</p>`],
+  [5, 'At a glance',
+    `<p>Each <code>import</code> is a graph edge; a <code>type</code> import should be none. <code>verbatimModuleSyntax</code> makes a value import of a type TS1484 — write <code>import type</code>, which is erased from the output. Use <code>import type</code> for shapes and plain <code>import</code> for values: a smaller graph, a smaller bundle, no accidental runtime edge.</p>`,
+    `<p>Mỗi <code>import</code> là một cạnh đồ thị; một import <code>type</code> nên không là cạnh nào. <code>verbatimModuleSyntax</code> làm một value-import của một kiểu thành TS1484 — viết <code>import type</code>, nó bị xoá khỏi output. Dùng <code>import type</code> cho dáng và <code>import</code> thường cho giá trị: đồ thị nhỏ hơn, bundle nhỏ hơn, không cạnh lúc chạy do nhầm.</p>`],
+  [6, 'Practice & what is next',
+    `<p>Practice: an app does <code>import { Lab, MAX }</code> where <code>Lab</code> is a type — TS1484; split it into <code>import type { Lab }</code> and <code>import { MAX }</code> and it runs. That closes Chapter 15 — skipLibCheck, incremental, isolated files, trimmed graph: every lever for a fast build. Next: Lab 15, a transpile-ready boundary module.</p>`,
+    `<p>Luyện tập: một app làm <code>import { Lab, MAX }</code> nơi <code>Lab</code> là một kiểu — TS1484; tách thành <code>import type { Lab }</code> và <code>import { MAX }</code> và nó chạy. Điều đó khép lại Chương 15 — skipLibCheck, incremental, tệp cô lập, đồ thị cắt gọn: mọi đòn bẩy cho một build nhanh. Tiếp: Lab 15, một module biên sẵn-sàng-transpile.</p>`],
+]);

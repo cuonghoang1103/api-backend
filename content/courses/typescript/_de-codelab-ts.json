@@ -8422,5 +8422,319 @@
         }
       }
     ]
+  },
+  {
+    "id": "ts-cl-15-3-a",
+    "bai": "typescript-15-3-isolated-modules",
+    "tieuDe": "Re-export a type with export type|||Re-export một kiểu bằng export type",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p>Under <code>verbatimModuleSyntax</code>, a plain <code>export { Booking }</code> of a type is TS1205 — a per-file transpiler cannot tell whether to emit or erase it. Write <code>export type</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Dưới <code>verbatimModuleSyntax</code>, một <code>export { Booking }</code> thường của một kiểu là TS1205 — một transpiler từng-tệp không biết nên phát hay xoá. Viết <code>export type</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\n// A plain re-export of a type — not transpile-ready.\nexport { Booking };\nexport { makeBooking };\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/barrel.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { makeBooking } from '../src/barrel.ts';\ntest('the barrel re-exports the value', () => { assert.equal(makeBooking(1, 'BE-201').lab, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/barrel.ts",
+        "src/model.ts",
+        "test/barrel.test.ts"
+      ],
+      "chay": [
+        "node --test test/barrel.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport type { Booking };\nexport { makeBooking };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still a plain export of the type (TS1205)",
+        "tep": {
+          "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport { Booking };\nexport { makeBooking };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-15-3-b",
+    "bai": "typescript-15-3-isolated-modules",
+    "tieuDe": "Re-export from a module|||Re-export từ một module",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>An <code>export { Lab } from './model.ts'</code> re-exports a type straight from another module — TS1205. Mark it with <code>export type { Lab } from …</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một <code>export { Lab } from './model.ts'</code> re-export một kiểu thẳng từ một module khác — TS1205. Đánh dấu bằng <code>export type { Lab } from …</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/api.ts": "// Re-export a type straight from the model — must say 'type'.\nexport { Lab } from './model.ts';\nexport { MAX } from './model.ts';\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/api.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { MAX } from '../src/api.ts';\ntest('the value re-export works', () => { assert.equal(MAX, 40); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/api.ts",
+        "src/model.ts",
+        "test/api.test.ts"
+      ],
+      "chay": [
+        "node --test test/api.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/api.ts": "export type { Lab } from './model.ts';\nexport { MAX } from './model.ts';\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still re-exports the type as a value (TS1205)",
+        "tep": {
+          "src/api.ts": "export { Lab } from './model.ts';\nexport { MAX } from './model.ts';\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-15-3-c",
+    "bai": "typescript-15-3-isolated-modules",
+    "tieuDe": "Keep the value re-export plain|||Giữ re-export giá trị thường",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>The type is already marked, but the code over-corrected and wrote <code>export type { makeBooking }</code> for a <em>value</em> — that erases the function from the output (and the test cannot import it). Re-export the value plainly.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Kiểu đã được đánh dấu, nhưng code sửa quá tay và viết <code>export type { makeBooking }</code> cho một <em>giá trị</em> — nó xoá hàm khỏi output (và test không import được). Re-export giá trị thường.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport type { Booking };\n// Over-corrected: makeBooking is a VALUE — export type erases it at run time.\nexport type { makeBooking };\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/barrel.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { makeBooking } from '../src/barrel.ts';\ntest('the value is re-exported, not erased', () => { assert.equal(typeof makeBooking, 'function'); assert.equal(makeBooking(1, 'x').id, 1); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/barrel.ts",
+        "src/model.ts",
+        "test/barrel.test.ts"
+      ],
+      "chay": [
+        "node --test test/barrel.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport type { Booking };\nexport { makeBooking };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "export type on a value erases it — the test cannot import makeBooking",
+        "tep": {
+          "src/barrel.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport type { Booking };\nexport type { makeBooking };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-15-4-a",
+    "bai": "typescript-15-4-import-type",
+    "tieuDe": "Import a type with import type|||Import một kiểu bằng import type",
+    "doKho": "EASY",
+    "phut": 6,
+    "moTa": "<p>A plain <code>import { Booking }</code> of a type is TS1484 under <code>verbatimModuleSyntax</code> — it would survive as a runtime edge. Write <code>import type</code>.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một <code>import { Booking }</code> thường của một kiểu là TS1484 dưới <code>verbatimModuleSyntax</code> — nó sẽ sống như một cạnh lúc chạy. Viết <code>import type</code>.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "// Booking is only a type — a plain import keeps a runtime edge.\nimport { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { first } from '../src/app.ts';\ntest('first builds a booking', () => { assert.equal(first().lab, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/model.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still a plain import of the type (TS1484)",
+        "tep": {
+          "src/app.ts": "import { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-15-4-b",
+    "bai": "typescript-15-4-import-type",
+    "tieuDe": "Split a mixed import|||Tách một import trộn",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>One import mixes a type (<code>Lab</code>) with a value (<code>MAX</code>): <code>import { Lab, MAX }</code> — TS1484 for the type. Split it into an <code>import type</code> for the type and a plain <code>import</code> for the value.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Một import trộn một kiểu (<code>Lab</code>) với một giá trị (<code>MAX</code>): <code>import { Lab, MAX }</code> — TS1484 cho kiểu. Tách thành một <code>import type</code> cho kiểu và một <code>import</code> thường cho giá trị.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "// A type and a value in one import — the type makes it TS1484.\nimport { Lab, MAX } from './model.ts';\nexport const lab: Lab = { code: 'BE-' + MAX };\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { lab } from '../src/app.ts';\ntest('lab is built from the value', () => { assert.equal(lab.code, 'BE-40'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/model.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Lab } from './model.ts';\nimport { MAX } from './model.ts';\nexport const lab: Lab = { code: 'BE-' + MAX };\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "still imports the type as a value (TS1484)",
+        "tep": {
+          "src/app.ts": "import { Lab, MAX } from './model.ts';\nexport const lab: Lab = { code: 'BE-' + MAX };\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-15-4-c",
+    "bai": "typescript-15-4-import-type",
+    "tieuDe": "Keep the value import plain|||Giữ import giá trị thường",
+    "doKho": "MEDIUM",
+    "phut": 7,
+    "moTa": "<p>The code over-corrected and wrote <code>import type { makeBooking }</code> for a <em>value</em> — then calling it is TS1361 (a value imported as a type). Import the value plainly.</p><p><strong>Done when:</strong> tsc clean and the test passes.</p>|||<p>Code sửa quá tay và viết <code>import type { makeBooking }</code> cho một <em>giá trị</em> — rồi gọi nó là TS1361 (một giá trị import như một kiểu). Import giá trị thường.</p><p><strong>Đạt khi:</strong> tsc sạch và test qua.</p>",
+    "khoiDau": {
+      "src/app.ts": "import type { Booking } from './model.ts';\n// Over-corrected: makeBooking is a VALUE, imported as a type — it cannot be called.\nimport type { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const MAX = 40;\n",
+      "test/app.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { first } from '../src/app.ts';\ntest('first calls the value', () => { assert.equal(first().lab, 'BE-201'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/app.ts",
+        "src/model.ts",
+        "test/app.test.ts"
+      ],
+      "chay": [
+        "node --test test/app.test.ts"
+      ],
+      "cam": [
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/app.ts": "import type { Booking } from './model.ts';\nimport { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "import type on a value — calling it is TS1361",
+        "tep": {
+          "src/app.ts": "import type { Booking } from './model.ts';\nimport type { makeBooking } from './model.ts';\nexport function first(): Booking { return makeBooking(1, 'BE-201'); }\n"
+        }
+      }
+    ]
+  },
+  {
+    "id": "ts-cl-lab-15",
+    "bai": "typescript-15-6-lab-bien-transpile",
+    "tieuDe": "Lab 15 — a transpile-ready boundary|||Lab 15 — một biên sẵn-sàng-transpile",
+    "doKho": "HARD",
+    "phut": 15,
+    "moTa": "<p>The lab in miniature. Make <code>boundary.ts</code> build under <code>verbatimModuleSyntax</code>: <code>import type</code> the shape, plain <code>import</code> the values, <code>export type</code> the type re-export. The correct uses must compile, the wrong uses must be refused, and the test must pass. No <code>any</code>, <code>as</code> or <code>!</code>.</p><p><strong>Done when:</strong> tsc clean on src + kiem/dung.ts, every <code>// expect</code> line of kiem/sai.ts refused, test green.</p>|||<p>Lab thu nhỏ. Làm <code>boundary.ts</code> build dưới <code>verbatimModuleSyntax</code>: <code>import type</code> cho dáng, <code>import</code> thường cho giá trị, <code>export type</code> cho re-export kiểu. Cách dùng đúng phải biên dịch, cách dùng sai phải bị từ chối, và test phải qua. Không <code>any</code>, <code>as</code> hay <code>!</code>.</p><p><strong>Đạt khi:</strong> tsc sạch trên src + kiem/dung.ts, mọi dòng <code>// expect</code> của kiem/sai.ts bị từ chối, test xanh.</p>",
+    "khoiDau": {
+      "src/boundary.ts": "// A teammate value-imported and value-re-exported the type.\nimport { Booking, makeBooking, VERSION } from './model.ts';\nexport { Booking };\nexport function describe(b: Booking): string { return b.lab + ' v' + VERSION; }\nexport const demo = makeBooking(1, 'BE-201');\n"
+    },
+    "coDinh": {
+      "src/model.ts": "export type Booking = { id: number; lab: string };\nexport type Lab = { code: string };\nexport const makeBooking = (id: number, lab: string): Booking => ({ id, lab });\nexport const VERSION = 1;\n",
+      "kiem/dung.ts": "import type { Booking } from '../src/boundary.ts';\nimport { describe, demo } from '../src/boundary.ts';\nconst b: Booking = { id: 1, lab: 'BE-201' };\nexport const text: string = describe(b);\nexport { demo };\n",
+      "kiem/sai.ts": "import { Booking } from '../src/model.ts'; // expect TS1484\nimport { Lab } from '../src/model.ts'; // expect TS1484\nexport { Booking } from '../src/model.ts'; // expect TS1205\nexport { Lab } from '../src/model.ts'; // expect TS1205\n",
+      "test/boundary.test.ts": "import { test } from 'node:test';\nimport assert from 'node:assert/strict';\nimport { describe, demo } from '../src/boundary.ts';\ntest('the boundary runs after types are erased', () => { assert.equal(demo.lab, 'BE-201'); assert.equal(describe({ id: 2, lab: 'CS-101' }), 'CS-101 v1'); });\n"
+    },
+    "kiem": {
+      "sach": [
+        "src/boundary.ts",
+        "src/model.ts",
+        "kiem/dung.ts",
+        "test/boundary.test.ts"
+      ],
+      "phaiLoi": [
+        "kiem/sai.ts"
+      ],
+      "chay": [
+        "node --test test/boundary.test.ts"
+      ],
+      "cam": [
+        "\\bas\\s+(?!const\\b)",
+        "\\bany\\b",
+        "@ts-ignore",
+        "@ts-nocheck",
+        "@ts-expect-error",
+        "[\\w$)\\]]!(?=[.\\[;,)\\s])"
+      ]
+    },
+    "loiGiai": {
+      "src/boundary.ts": "import type { Booking } from './model.ts';\nimport { makeBooking, VERSION } from './model.ts';\nexport type { Booking };\nexport function describe(b: Booking): string { return b.lab + ' v' + VERSION; }\nexport const demo = makeBooking(1, 'BE-201');\n"
+    },
+    "saiMau": [
+      {
+        "nhan": "value import + value re-export of the type (TS1484 + TS1205)",
+        "tep": {
+          "src/boundary.ts": "import { Booking, makeBooking, VERSION } from './model.ts';\nexport { Booking };\nexport function describe(b: Booking): string { return b.lab + ' v' + VERSION; }\nexport const demo = makeBooking(1, 'BE-201');\n"
+        }
+      },
+      {
+        "nhan": "import fixed but re-export still a value (TS1205)",
+        "tep": {
+          "src/boundary.ts": "import type { Booking } from './model.ts';\nimport { makeBooking, VERSION } from './model.ts';\nexport { Booking };\nexport function describe(b: Booking): string { return b.lab + ' v' + VERSION; }\nexport const demo = makeBooking(1, 'BE-201');\n"
+        }
+      }
+    ]
   }
 ]

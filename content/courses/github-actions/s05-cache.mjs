@@ -272,6 +272,11 @@ tai artifact len          8s</div>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 9.1: a test workflow, rehearsed with act</span><span class="lc-sub">Same: cache: npm saves ~/.npm and npm ci still runs. Different: here it is measured on GitHub’s runners; there the whole test workflow (unit, a PostgreSQL service, Playwright with --with-deps) runs locally with act — npm ci 49.6 s cold, 15.0 s warm on a laptop.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-15-2-incremental-references" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cache the type-check too — TypeScript 15.2: Incremental & project references</span><span class="lc-sub">Same: a build is fast when it reuses what the last build already did. Different: here you cache dependencies and build outputs between CI runs with a key; there <code>tsc</code>’s <code>.tsbuildinfo</code> is that cache for the type-check — a second <code>tsc -b</code> with no changes reports every project “up to date” instead of rebuilding.</span></span>
+  <span class="lc-cta">OPEN TYPESCRIPT LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.1</span>
@@ -466,6 +471,11 @@ tai artifact len          8s</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — bài 9.1: một workflow test, tổng duyệt bằng act</span><span class="lc-sub">Giống: cache: npm lưu ~/.npm và npm ci vẫn chạy. Khác: ở đây đo trên runner của GitHub; ở đó cả workflow test (unit, service PostgreSQL, Playwright kèm --with-deps) chạy trên máy bằng act — npm ci lạnh 49,6 s, ấm 15,0 s trên một laptop.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/typescript/learn?lessonSlug=typescript-15-2-incremental-references" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cache cả lượt kiểm kiểu — TypeScript 15.2: Incremental & project references</span><span class="lc-sub">Giống: một build nhanh khi nó dùng lại thứ build trước đã làm. Khác: ở đây bạn cache dependency và output build giữa các lượt CI bằng một khoá; ở đó <code>.tsbuildinfo</code> của <code>tsc</code> là cache đó cho lượt kiểm kiểu — một <code>tsc -b</code> thứ hai không đổi báo mọi dự án “up to date” thay vì build lại.</span></span>
+  <span class="lc-cta">MỞ BÀI TYPESCRIPT →</span>
 </a>
 </div>
 `,

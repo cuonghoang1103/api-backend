@@ -464,6 +464,24 @@
       "name": "14.6 Lab 14 — A service over an abstract repo",
       "level": "ADVANCED",
       "description": "1 đề: Lab 14 — a service over an abstract repo (abstract + #private)"
+    },
+    {
+      "slug": "typescript-15-3-isolated-modules",
+      "name": "15.3 — Separate checking from transpiling",
+      "level": "ADVANCED",
+      "description": "3 đề: Re-export a type with export type · Re-export from a module · Keep the value re-export plain"
+    },
+    {
+      "slug": "typescript-15-4-import-type",
+      "name": "15.4 — Trimming the module graph",
+      "level": "ADVANCED",
+      "description": "3 đề: Import a type with import type · Split a mixed import · Keep the value import plain"
+    },
+    {
+      "slug": "typescript-15-6-lab-bien-transpile",
+      "name": "15.6 Lab 15 — A transpile-ready boundary module",
+      "level": "ADVANCED",
+      "description": "1 đề: Lab 15 — a transpile-ready boundary module (import type / export type)"
     }
   ]
 }

@@ -390,7 +390,15 @@ typescript: 'typescript-practice',
   Lab 14 (máy chấm `cham-lab-14.mjs`, chạy service THẬT + memory repo): `BookingService` giữ một `#repo` abstract `BookingRepo`, book + find. A biên dịch · B cách dùng đúng · C no any/as/! · D service book + find · E 8 cách dùng sai.
   Số đo: any stub **5.5** · Booking any **7.5** · private không # **9.5** · tham khảo **10**. `demo14/` (demo class native; 14.4/run dùng `tsconfig.emit.json` — KHÔNG commit thư mục `out/`). LabFlow TS: `npm test` giữ **60**.
   **1 cặp liên kết chéo hai chiều** (web-foundations `wf-11-3-prototype-class` ↔ 14.1 class & modifier — bên WF đã có sẵn chiều ngược; 14.2 nối nội khoá 6.3). Soạn MỘT phiên, KHÔNG fork; re-read HEAD trước commit-tree.
-- **⏸ Tiếp theo: Chương 15–16** (chờ chủ kênh soát Ch13–15 + gom deploy). Làm y Ch5–14: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
+- 04/11/2026 — **Chương 15 trọn** (thay placeholder cũ một tệp): 4 bài (slug giữ: 15.1 where-time-goes, 15.2 incremental-references, 15.3 isolated-modules, 15.4 import-type)
+  + Lab 15 (MỚI `typescript-15-6-lab-bien-transpile`) + quiz 10 câu (slug giữ `typescript-15-5-quiz`); tệp chương `s15-build-performance.mjs` soạn lại.
+  **Đo build THẬT, TÁI LẬP ĐƯỢC** (tsc 7.0.2 + Node 22.23.3): skipLibCheck (.d.ts hỏng ⇒ TS2304 khi tắt), `tsc -b --verbose` (incremental/project refs — bỏ timestamp bằng sed, build-first "Building"/build-second "up to date"), export type ⇒ TS1205, import type ⇒ TS1484. ⚠ `demo15/ts-15-2/refs` dùng composite/emit — KHÔNG commit `dist/` và `*.tsbuildinfo`.
+  5 deck / **33 slide** đẩy `TS/v1` (ts-15-1..4 mỗi cái 6, ts-lab-15 **9**; 0 lỗi kiem-slide). **7 đề Code Lab `ts`** (15-3 a/b/c, 15-4 a/b/c, ts-cl-lab-15; 15.1/15.2 là bài config/quan-sát nên không có đề code-fix)
+  — kiem-de-ts **193/193** (tsc 7.0.2), máy chấm trình duyệt TS 6.0.3 **3/3 module ch15 xanh** (TS1484/TS1205 khớp 6↔7, KHÔNG cần MA_THEM_TS6); track +3 module (⇒ **79 module / 193 đề**).
+  Lab 15 (máy chấm `cham-lab-15.mjs`): làm `boundary.ts` build dưới verbatimModuleSyntax — import type cho dáng, import thường cho giá trị, export type cho re-export. A biên dịch · B · C no any/as/! · D module chạy sau khi xoá kiểu · E 8 dòng (4×TS1484 + 4×TS1205).
+  Số đo: stub **6** (value import+re-export) · import sửa re-export chưa **6** · as thừa **9** · tham khảo **10**. LabFlow TS: `npm test` giữ **60**.
+  **1 cặp liên kết chéo hai chiều** (github-actions `ga-5-1-cache-mua-gi` ↔ 15.2 .tsbuildinfo là cache của lượt kiểm kiểu; 15.3 nối nội khoá 10.1 import type). Soạn MỘT phiên, KHÔNG fork; re-read HEAD trước commit-tree.
+- **⏸ Tiếp theo: Chương 16** (dự án cuối khoá — chờ chủ kênh soát Ch13–15 + gom deploy). Làm y Ch5–15: MỘT phiên KHÔNG fork, re-read HEAD trước commit-tree.
 - Bài mẫu để chép: `s01/ba-con-bug.mjs` (bài thường), `s01/lab.mjs` (lab), `s01/quiz.mjs` (quiz). Deck đọc `CODE/OUT` thẳng từ `_ma-<deck>.mjs`
   (`import { CODE, OUT } from '../../content/courses/typescript/s01/_ma-ts-01-1.mjs'`) ⇒ slide không bao giờ lệch output bài đọc.
 - Bẫy khi soạn đã gặp: `tsc <file>` trong dự án ⇒ TS5112 (dùng `-p`); emit `.d.ts` từ thư mục demo mà import `../../src` ⇒ cần `"rootDir": "../.."`

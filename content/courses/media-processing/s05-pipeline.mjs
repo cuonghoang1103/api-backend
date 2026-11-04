@@ -173,6 +173,23 @@ const result = await uploadImage(input, 'images/thumbnails', { userId })
 <p><strong>One sentence.</strong> Funnel every upload — user-supplied and server-generated alike — through one module that owns preprocessing, key construction, and persistence, ordering its guards cheapest-first, translating error classes into 4xx-vs-5xx at that boundary, deriving keys from the output format rather than the input's extension, and logging a size-savings line that doubles as a regression signal; enforce it with a CI grep rather than a convention, because every route that bypasses the door reintroduces exactly the bugs Chapters 1-4 spent their length removing.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Grep the codebase for direct Sharp or storage calls outside the upload module. List every route that bypasses the one door.</li><li>Pick one bypass and route it through the single upload module instead.</li><li>Add a check idea: a test that fails if <code>sharp</code> is imported anywhere but the allowed module.</li></ol>
+<pre><code class="language-bash">grep -rn "sharp" src | grep -v imageOptimizer</code></pre>
+<p><strong>Done when:</strong> every upload path goes through one module, and you have a check that catches a new bypass.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">One door / single entry</span><span class="v">Every upload passes through one module that applies all the guards.</span></div>
+  <div class="kv"><span class="k">Bypass</span><span class="v">A route that calls Sharp or storage directly and skips the guards.</span></div>
+  <div class="kv"><span class="k">Choke point</span><span class="v">The single place to enforce pixel budget, EXIF, and SVG rejection.</span></div>
+  <div class="kv"><span class="k">Invariant</span><span class="v">A rule the module guarantees for every upload.</span></div>
+  <div class="kv"><span class="k">Defense in depth</span><span class="v">Guards enforced centrally, not scattered per route.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Guards only help if no route can skip them — funnel every upload through one module.</li><li>Scattered Sharp calls each forget a different guard; centralize them.</li><li>The module is the choke point for pixel budget, EXIF, SVG, and typing.</li><li>Enforce the discipline with a check that fails on a new bypass.</li><li>One door makes future hardening a one-file change, not a repo-wide hunt.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/uploadService.ts</span><span class="lc-sub">Ba mối quan tâm, sáu hàm công khai, và thứ tự chốt chặn rẻ-trước.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/StorageProvider.ts</span><span class="lc-sub">Lớp trừu tượng khiến R2 và local dùng chung một API.</span></span></div>
@@ -337,6 +354,23 @@ const result = await uploadImage(input, 'images/thumbnails', { userId })
 <div class="callout">
 <p><strong>Một câu.</strong> Dồn mọi upload — cả do người dùng gửi lẫn do server sinh — qua một module duy nhất sở hữu việc tiền xử lý, dựng key, và lưu trữ, xếp chốt chặn theo thứ tự rẻ-trước, dịch lớp lỗi thành 4xx-hay-5xx ngay tại ranh giới đó, suy key từ format output chứ không phải extension của input, và ghi một dòng log mức tiết kiệm vốn kiêm luôn tín hiệu hồi quy; hãy thi hành bằng một lệnh grep trong CI thay vì bằng quy ước, vì mỗi route đi vòng qua cửa đều tái tạo lại đúng những bug mà Chương 1-4 đã tốn cả độ dài của mình để loại bỏ.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Grep codebase tìm lời gọi Sharp hoặc storage trực tiếp ngoài module upload. Liệt kê mọi route đi vòng qua cửa duy nhất.</li><li>Chọn một chỗ đi vòng và cho nó đi qua module upload duy nhất.</li><li>Thêm ý tưởng kiểm: một test thất bại nếu <code>sharp</code> được import ở bất cứ đâu ngoài module cho phép.</li></ol>
+<pre><code class="language-bash">grep -rn "sharp" src | grep -v imageOptimizer</code></pre>
+<p><strong>Đạt khi:</strong> mọi đường upload đi qua một module, và bạn có một phép kiểm bắt được một chỗ đi vòng mới.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một cửa / lối vào duy nhất</span><span class="v">Mọi upload đi qua một module áp dụng tất cả chốt chặn.</span></div>
+  <div class="kv"><span class="k">Đi vòng (bypass)</span><span class="v">Một route gọi Sharp hoặc storage trực tiếp và bỏ qua các chốt.</span></div>
+  <div class="kv"><span class="k">Điểm nghẽn (choke point)</span><span class="v">Chỗ duy nhất để áp ngân sách pixel, EXIF, từ chối SVG.</span></div>
+  <div class="kv"><span class="k">Bất biến (invariant)</span><span class="v">Một luật mà module bảo đảm cho mọi upload.</span></div>
+  <div class="kv"><span class="k">Phòng thủ theo chiều sâu</span><span class="v">Chốt chặn áp tập trung, không rải rác theo từng route.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chốt chặn chỉ giúp nếu không route nào bỏ qua được — dồn mọi upload qua một module.</li><li>Các lời gọi Sharp rải rác mỗi chỗ quên một chốt khác nhau; hãy gom lại.</li><li>Module là điểm nghẽn cho ngân sách pixel, EXIF, SVG và kiểm kiểu.</li><li>Giữ kỷ luật bằng một phép kiểm thất bại khi có chỗ đi vòng mới.</li><li>Một cửa biến việc siết an toàn tương lai thành sửa một file, không phải lùng cả kho.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/uploadService.ts</span><span class="lc-sub">Ba mối quan tâm, sáu hàm công khai, và thứ tự chốt chặn rẻ-trước.</span></span></div>
@@ -522,6 +556,23 @@ category first and you must scan every category to find one tenant.
 <p><strong>One sentence.</strong> A key is a composite index you can never <code>ALTER</code>, so encode the four things you will need later — category prefix (what lifecycle rules and listings can target), owner segment (so ownership is a string check rather than a DB round-trip, and a missing check is an IDOR), millisecond timestamp (sortable, makes incident scans a prefix query), and crypto-random suffix (collisions plus enumeration hardening) — and deliberately discard the user's original filename into a database column, serving it back at download time via <code>Content-Disposition</code> with the RFC 5987 <code>filename*=UTF-8''</code> form.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Design an object key for a user avatar: include the tenant or user id, a random component, and the variant or size. Write three example keys.</li><li>From your key, answer: can you list a user objects? Can two concurrent uploads collide? Can a lifecycle rule match a prefix?</li><li>Try to rename the scheme mentally and note every URL already handed out that would break.</li></ol>
+<pre><code class="language-bash">node -e "const{randomUUID}=require('crypto');console.log('u/42/'+randomUUID()+'/orig.jpg');console.log('u/42/'+randomUUID()+'/w800.webp')"</code></pre>
+<p><strong>Done when:</strong> your key supports listing, ownership, lifecycle, and collision-safety — and you can say why you cannot change it later.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object key</span><span class="v">The full path or name of a stored object; it acts like a composite index.</span></div>
+  <div class="kv"><span class="k">Prefix</span><span class="v">A leading key segment used for listing and lifecycle rules.</span></div>
+  <div class="kv"><span class="k">Collision</span><span class="v">Two uploads writing the same key — avoid with a random component.</span></div>
+  <div class="kv"><span class="k">Lifecycle rule</span><span class="v">Auto-delete or transition by key prefix and age.</span></div>
+  <div class="kv"><span class="k">Scheme immutability</span><span class="v">Changing the key format breaks every URL already issued.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A key is closer to a composite index than a filename.</li><li>Encode what you must query: owner, variant, and a uniqueness component.</li><li>A random segment prevents concurrent-upload collisions.</li><li>Prefixes drive listing and lifecycle — design them deliberately.</li><li>You cannot ALTER a key scheme; changing it rewrites every URL you have shared.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/keys.ts</span><span class="lc-sub">Năm luật key, <code>buildKey()</code>, và comment SECURITY về đoạn <code>u&lt;id&gt;</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 5987 — Content-Disposition filename*</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc5987 — cách tên file non-ASCII sống sót.</span></span></div>
@@ -694,6 +745,23 @@ mục lên trước thì bạn phải quét mọi danh mục để tìm ra một
 <div class="callout">
 <p><strong>Một câu.</strong> Một key là một chỉ mục ghép mà bạn không bao giờ <code>ALTER</code> được, nên hãy mã hoá vào đó bốn thứ bạn sẽ cần sau này — tiền tố danh mục (thứ mà lifecycle rule và listing nhắm tới được), đoạn chủ sở hữu (để quyền sở hữu là một phép so chuỗi thay vì một vòng gọi DB, và thiếu phép kiểm đó là một IDOR), dấu thời gian mili giây (sắp xếp được, biến việc quét sự cố thành một truy vấn theo tiền tố), và hậu tố ngẫu nhiên mật mã (chống đụng độ cộng chống dò tìm) — rồi chủ động vứt tên file gốc của người dùng vào một cột database, trả nó lại lúc tải xuống qua <code>Content-Disposition</code> với dạng RFC 5987 <code>filename*=UTF-8''</code>.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Thiết kế object key cho ảnh đại diện: gồm id tenant hoặc user, một phần ngẫu nhiên, và variant hoặc cỡ. Viết ba key ví dụ.</li><li>Từ key của bạn, trả lời: list được object của một user không? Hai upload đồng thời có đụng nhau không? Một lifecycle rule khớp được prefix không?</li><li>Thử đổi tên lược đồ trong đầu và ghi mọi URL đã phát ra sẽ vỡ.</li></ol>
+<pre><code class="language-bash">node -e "const{randomUUID}=require('crypto');console.log('u/42/'+randomUUID()+'/orig.jpg');console.log('u/42/'+randomUUID()+'/w800.webp')"</code></pre>
+<p><strong>Đạt khi:</strong> key của bạn hỗ trợ list, quyền sở hữu, lifecycle và chống đụng — và bạn nói được vì sao không đổi nó về sau được.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object key</span><span class="v">Toàn bộ đường dẫn hoặc tên của object lưu; nó hành xử như một chỉ mục ghép.</span></div>
+  <div class="kv"><span class="k">Prefix</span><span class="v">Đoạn key đầu dùng cho list và lifecycle rule.</span></div>
+  <div class="kv"><span class="k">Đụng (collision)</span><span class="v">Hai upload ghi cùng một key — tránh bằng phần ngẫu nhiên.</span></div>
+  <div class="kv"><span class="k">Lifecycle rule</span><span class="v">Tự xoá hoặc chuyển tầng theo prefix key và tuổi.</span></div>
+  <div class="kv"><span class="k">Bất biến lược đồ</span><span class="v">Đổi format key làm vỡ mọi URL đã phát.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một key gần với chỉ mục ghép hơn là một tên file.</li><li>Mã hoá thứ bạn phải truy vấn: chủ sở hữu, variant, và một phần duy nhất.</li><li>Một đoạn ngẫu nhiên chặn đụng khi upload đồng thời.</li><li>Prefix điều khiển list và lifecycle — thiết kế chúng có chủ đích.</li><li>Bạn không ALTER được lược đồ key; đổi nó là viết lại mọi URL đã chia sẻ.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/storage/keys.ts</span><span class="lc-sub">Năm luật key, <code>buildKey()</code>, và comment SECURITY về đoạn <code>u&lt;id&gt;</code>.</span></span></div>
@@ -895,6 +963,23 @@ wrong — pass -threads explicitly and size it as cores ÷ workers.
 <p><strong>One sentence.</strong> Moving encoding to a queue means modelling four states rather than two — the extra two, FAILED and ORPHANED, are where the operational cost lives — so record a <code>pending_uploads</code> row at upload time (before the object is claimed, since a cleanup list built later cannot see never-referenced uploads), make the job idempotent by deriving output keys deterministically from the input key rather than calling the timestamp-and-random key builder, classify errors so corrupt inputs fail immediately while infrastructure errors back off, throttle progress writes, and size <code>-threads</code> as cores ÷ workers so the pool does not thrash.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Model a job row: status (queued/running/done/failed), attempts, input key, output key, updatedAt.</li><li>Make a worker idempotent: re-running a done job must not duplicate output — check the output exists or use a deterministic key.</li><li>Add an orphan sweep: find uploads with no finished job older than N hours and delete the raw bytes.</li></ol>
+<pre><code class="language-bash">node -e "const s=['queued','running','done','failed'];console.log('transitions:',s.join(' -&gt; '))"</code></pre>
+<p><strong>Done when:</strong> a retried job is safe to run twice, the user can see progress, and abandoned uploads get cleaned up.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Job status</span><span class="v">queued/running/done/failed — what the user and the worker read.</span></div>
+  <div class="kv"><span class="k">Idempotent retry</span><span class="v">Running the same job twice yields one correct result.</span></div>
+  <div class="kv"><span class="k">Orphan</span><span class="v">A stored raw upload whose job never finished; it must be swept.</span></div>
+  <div class="kv"><span class="k">Placeholder URL</span><span class="v">Returned immediately while the worker finishes.</span></div>
+  <div class="kv"><span class="k">At-least-once delivery</span><span class="v">Queues may deliver twice — hence the need for idempotency.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Moving work to a background job owes three things: progress, idempotent retries, and cleanup.</li><li>Store status so the client can poll or subscribe to progress.</li><li>Retries are inevitable; make the worker idempotent with deterministic output keys.</li><li>Abandoned or half-done uploads become orphans — sweep them on a schedule.</li><li>Return a placeholder immediately; fill in the real URL when the job completes.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/routes/upload.routes.ts</span><span class="lc-sub">Bảng <code>pending_uploads</code> với hạn 24 giờ và cron dọn mồ côi.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">BullMQ — retries and backoff</span><span class="lc-sub">docs.bullmq.io/guide/retrying-failing-jobs — chính sách retry và job chết.</span></span></div>
@@ -1086,6 +1171,23 @@ là sai — hãy truyền -threads tường minh và đặt bằng số nhân ÷
 <div class="callout">
 <p><strong>Một câu.</strong> Đưa việc encode vào hàng đợi nghĩa là phải mô hình hoá bốn trạng thái chứ không phải hai — hai cái thừa ra, FAILED và MỒ CÔI, mới là nơi chứa chi phí vận hành — nên hãy ghi một dòng <code>pending_uploads</code> ngay lúc upload (trước khi object được nhận, vì một danh sách dọn dẹp dựng về sau không thấy được những lần upload chưa bao giờ được tham chiếu), làm job idempotent bằng cách suy key output một cách tất định từ key input thay vì gọi bộ dựng key có dấu-thời-gian-và-ngẫu-nhiên, phân loại lỗi để input hỏng thất bại ngay còn lỗi hạ tầng thì lùi lại thử lại, tiết chế việc ghi tiến độ, và đặt <code>-threads</code> bằng số nhân ÷ số worker để pool không giành giật nhau.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Mô hình một dòng job: status (queued/running/done/failed), số lần thử, input key, output key, updatedAt.</li><li>Làm worker idempotent: chạy lại một job đã done không được nhân đôi output — kiểm output đã tồn tại hoặc dùng key tất định.</li><li>Thêm quét mồ côi: tìm upload không có job hoàn tất cũ hơn N giờ và xoá byte thô.</li></ol>
+<pre><code class="language-bash">node -e "const s=['queued','running','done','failed'];console.log('transitions:',s.join(' -&gt; '))"</code></pre>
+<p><strong>Đạt khi:</strong> một job thử lại an toàn chạy hai lần, người dùng thấy được tiến độ, và upload bị bỏ dở được dọn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Job status</span><span class="v">queued/running/done/failed — thứ người dùng và worker đọc.</span></div>
+  <div class="kv"><span class="k">Retry idempotent</span><span class="v">Chạy cùng một job hai lần cho một kết quả đúng.</span></div>
+  <div class="kv"><span class="k">Mồ côi (orphan)</span><span class="v">Một upload thô đã lưu mà job chưa bao giờ xong; phải quét dọn.</span></div>
+  <div class="kv"><span class="k">URL placeholder</span><span class="v">Trả ngay trong khi worker làm nốt.</span></div>
+  <div class="kv"><span class="k">Giao ít nhất một lần</span><span class="v">Hàng đợi có thể giao hai lần — nên cần idempotency.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chuyển việc sang job nền thì nợ ba thứ: tiến độ, retry idempotent, và dọn dẹp.</li><li>Lưu status để client poll hoặc đăng ký theo dõi tiến độ.</li><li>Retry là tất yếu; làm worker idempotent bằng output key tất định.</li><li>Upload bị bỏ hoặc làm dở thành mồ côi — quét chúng theo lịch.</li><li>Trả placeholder ngay; điền URL thật khi job hoàn tất.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/routes/upload.routes.ts</span><span class="lc-sub">Bảng <code>pending_uploads</code> với hạn 24 giờ và cron dọn mồ côi.</span></span></div>

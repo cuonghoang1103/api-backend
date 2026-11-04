@@ -161,6 +161,23 @@ The repo already logs the savings part of this in uploadImage(). &#96;ms&#96; ma
 <p><strong>One sentence.</strong> Media adds CPU-seconds as a cost axis that no invoice shows, and on a fixed VPS that axis runs out as a silently growing queue rather than as a bill — so measure the real per-operation costs (an image is ~180 ms, a video is 19-81 s, and they must never share a worker pool), reach for the free levers first (preset/effort trades 4.3× throughput for 14% more bytes; stream copy is 200× faster than re-encoding a file that was already fine), remember that CPU is spent once while storage is cumulative (so skipping a variant beats encoding it faster), and log <code>{kind, op, ms, bytesIn, bytesOut}</code> per operation because those four fields answer every capacity question you will be asked later.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Measure encode CPU: time 50 WebP encodes of a typical photo on your machine and compute encodes per second per core.</li><li>From an upload rate (say 5 uploads/sec, 5 variants each) compute required CPU-seconds per second and compare to your core count.</li><li>Decide: does the queue keep up, or back up? If it backs up, which knob moves — concurrency, preset, or background?</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{const t=Date.now();for(let i=0;i&lt;50;i++)await sharp(b).resize(800).webp({quality:80}).toBuffer();console.log((50000/(Date.now()-t)).toFixed(1),'encodes/sec')})()"</code></pre>
+<p><strong>Done when:</strong> you can state your server encodes per second and whether your peak upload rate fits in your cores.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CPU-seconds</span><span class="v">The real currency of media work; it is not on a cloud invoice.</span></div>
+  <div class="kv"><span class="k">Throughput</span><span class="v">Encodes or transcodes per second your hardware sustains.</span></div>
+  <div class="kv"><span class="k">Queue backlog</span><span class="v">What running out of CPU looks like — latency grows, not a bill.</span></div>
+  <div class="kv"><span class="k">Concurrency limit</span><span class="v">The cap that keeps CPU and RAM bounded under load.</span></div>
+  <div class="kv"><span class="k">Headroom</span><span class="v">Spare CPU kept for spikes above average load.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Media adds a cost axis clouds do not invoice: CPU-seconds.</li><li>On a fixed VPS, CPU runs out as a growing queue, not as a bill.</li><li>Measure encodes or transcodes per second, then compare to peak arrival rate.</li><li>If demand exceeds cores, the levers are concurrency, preset/effort, or going background.</li><li>Budget headroom; average load that equals capacity means spikes always queue.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Object Storage course — Chapter 7</span><span class="lc-sub">Năm line item chi phí, và vì sao Class A từ LIST là kẻ gây spike nham hiểm nhất.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — $0.015/GB-tháng, egress bằng 0.</span></span></div>
@@ -316,6 +333,23 @@ là biến nó từ một phép kiểm sức khoẻ thành một mô hình dung 
 <div class="callout">
 <p><strong>Một câu.</strong> Media thêm CPU-giây làm một trục chi phí mà không hoá đơn nào thể hiện, và trên một VPS cố định trục đó cạn dưới dạng một hàng đợi lớn dần trong im lặng chứ không phải một hoá đơn — nên hãy đo chi phí thật của từng thao tác (một tấm ảnh là ~180 ms, một video là 19-81 s, và chúng không bao giờ được dùng chung pool worker), với tới những đòn bẩy miễn phí trước (preset/effort đổi 4,3 lần thông lượng lấy 14% byte; stream copy nhanh gấp 200 lần so với re-encode một file vốn đã ổn), nhớ rằng CPU tiêu một lần còn lưu trữ thì dồn tích (nên bỏ qua một variant thắng encode nó nhanh hơn), và ghi log <code>{kind, op, ms, bytesIn, bytesOut}</code> cho mỗi thao tác vì bốn trường đó trả lời mọi câu hỏi dung lượng mà bạn sẽ bị hỏi về sau.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Đo CPU encode: bấm giờ 50 lần encode WebP một ảnh điển hình trên máy bạn và tính số encode mỗi giây mỗi nhân.</li><li>Từ một tốc độ upload (giả sử 5 upload/giây, mỗi cái 5 variant) tính CPU-giây cần mỗi giây và so với số nhân.</li><li>Quyết định: hàng đợi theo kịp hay dồn ứ? Nếu dồn, núm nào xoay — concurrency, preset, hay chuyển nền?</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{const t=Date.now();for(let i=0;i&lt;50;i++)await sharp(b).resize(800).webp({quality:80}).toBuffer();console.log((50000/(Date.now()-t)).toFixed(1),'encodes/sec')})()"</code></pre>
+<p><strong>Đạt khi:</strong> bạn nói được số encode mỗi giây của server và liệu tốc độ upload đỉnh có lọt vào số nhân không.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CPU-giây</span><span class="v">Đồng tiền thật của việc media; nó không nằm trên hoá đơn cloud.</span></div>
+  <div class="kv"><span class="k">Throughput</span><span class="v">Số encode hoặc transcode mỗi giây phần cứng chịu được.</span></div>
+  <div class="kv"><span class="k">Hàng đợi dồn ứ</span><span class="v">Hình hài của việc cạn CPU — độ trễ tăng, không phải một hoá đơn.</span></div>
+  <div class="kv"><span class="k">Giới hạn concurrency</span><span class="v">Trần giữ CPU và RAM bị chặn dưới tải.</span></div>
+  <div class="kv"><span class="k">Headroom (dự phòng)</span><span class="v">CPU dư giữ lại cho đỉnh vượt tải trung bình.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Media thêm một trục chi phí mà cloud không xuất hoá đơn: CPU-giây.</li><li>Trên một VPS cố định, CPU cạn dưới dạng hàng đợi dồn lên, không phải một hoá đơn.</li><li>Đo số encode hoặc transcode mỗi giây, rồi so với tốc độ đến đỉnh.</li><li>Nếu nhu cầu vượt số nhân, các đòn bẩy là concurrency, preset/effort, hoặc chuyển nền.</li><li>Dự trù headroom; tải trung bình bằng công suất nghĩa là đỉnh luôn phải xếp hàng.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Khoá Object Storage — Chương 7</span><span class="lc-sub">Năm line item chi phí, và vì sao Class A từ LIST là kẻ gây spike nham hiểm nhất.</span></span></div>
@@ -523,6 +557,23 @@ group by op, look at p50 vs p99, and the tail IS your capacity limit.
 <p><strong>One sentence.</strong> Every number in Chapters 1-4 came from a harness you can re-run, and you should — the same settings produce a 4.4× spread in output size across photo, product shot, and screenshot, with one case (screenshots) reversing the &quot;always WebP&quot; conclusion and another (already-optimized JPEGs) coming out 19% larger and justifying a keep-the-original branch; benchmark on your own corpus, take the median of three rather than the mean, record inputs alongside outputs, and then measure again in production where concurrency, the real upload mix, and cold starts create a p99 that no laptop run can show you.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Build a tiny harness: for one representative image, loop over formats and qualities and print bytes and milliseconds as a table.</li><li>Run it on TWO different image classes (a flat product shot and a night phone photo). Compare the curves.</li><li>Pick per-class settings from YOUR numbers; note where a single global setting would be wrong.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{for(const q of[70,80,90]){const t=Date.now();const o=await sharp(b).webp({quality:q}).toBuffer();console.log('q'+q,o.length,Date.now()-t+'ms')}})()"</code></pre>
+<p><strong>Done when:</strong> your settings come from a harness you can re-run, not from a table you copied.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Harness</span><span class="v">A small repeatable script that produces the measurement table.</span></div>
+  <div class="kv"><span class="k">Image class</span><span class="v">A group of similar inputs (product shots, selfies, screenshots) with similar curves.</span></div>
+  <div class="kv"><span class="k">Representative sample</span><span class="v">Inputs that match real production, not a single lucky file.</span></div>
+  <div class="kv"><span class="k">Regression check</span><span class="v">Re-running the harness to catch a settings change that hurt.</span></div>
+  <div class="kv"><span class="k">p50 / p95</span><span class="v">Median vs tail — tune for the tail, not just the average.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every tuning table in this course is a measurement, not a citation — the numbers move.</li><li>Build a harness so tables become regenerated, not inherited.</li><li>Different image classes have different quality and effort curves.</li><li>A global setting optimal for one class wastes bytes or CPU on another.</li><li>Re-measure after any encoder or version change; treat it as a regression check.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — Performance</span><span class="lc-sub">sharp.pixelplumbing.com/performance — phương pháp benchmark của chính Sharp.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — process.hrtime.bigint()</span><span class="lc-sub">nodejs.org/api/process.html — đồng hồ đơn điệu, không bị chỉnh giờ hệ thống làm lệch.</span></span></div>
@@ -717,6 +768,23 @@ nhìn p50 so với p99, và cái đuôi CHÍNH LÀ giới hạn dung lượng c�
 <div class="callout">
 <p><strong>Một câu.</strong> Mọi con số trong Chương 1-4 đều đến từ một bộ đo mà bạn chạy lại được, và bạn nên chạy — cùng một cài đặt tạo ra chênh lệch 4,4 lần về kích thước output giữa ảnh chân dung, ảnh sản phẩm, và ảnh chụp màn hình, với một trường hợp (ảnh chụp màn hình) đảo ngược kết luận &quot;luôn dùng WebP&quot; và một trường hợp khác (JPEG vốn đã tối ưu) ra to hơn 19% và biện minh cho một nhánh giữ-bản-gốc; hãy benchmark trên tập mẫu của chính bạn, lấy trung vị của ba lần thay vì trung bình, ghi input cùng với output, rồi đo lại lần nữa trên production nơi concurrency, hỗn hợp upload thật, và khởi động lạnh tạo ra một p99 mà không lần chạy nào trên laptop cho bạn thấy được.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Dựng một bộ đo nhỏ: với một ảnh đại diện, lặp qua các format và quality rồi in byte và mili giây thành một bảng.</li><li>Chạy nó trên HAI lớp ảnh khác nhau (một ảnh sản phẩm nền phẳng và một ảnh điện thoại chụp đêm). So hai đường cong.</li><li>Chọn cấu hình theo từng lớp từ số của BẠN; ghi chỗ một cấu hình toàn cục sẽ sai.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{for(const q of[70,80,90]){const t=Date.now();const o=await sharp(b).webp({quality:q}).toBuffer();console.log('q'+q,o.length,Date.now()-t+'ms')}})()"</code></pre>
+<p><strong>Đạt khi:</strong> cấu hình của bạn đến từ một bộ đo bạn chạy lại được, không phải từ một bảng bạn chép.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bộ đo (harness)</span><span class="v">Một script nhỏ lặp lại được, sinh ra bảng đo.</span></div>
+  <div class="kv"><span class="k">Lớp ảnh</span><span class="v">Một nhóm input tương tự (ảnh sản phẩm, selfie, ảnh chụp màn hình) có đường cong giống nhau.</span></div>
+  <div class="kv"><span class="k">Mẫu đại diện</span><span class="v">Input khớp với production thật, không phải một file may mắn.</span></div>
+  <div class="kv"><span class="k">Kiểm hồi quy</span><span class="v">Chạy lại bộ đo để bắt một thay đổi cấu hình làm tệ đi.</span></div>
+  <div class="kv"><span class="k">p50 / p95</span><span class="v">Trung vị vs đuôi — chỉnh cho đuôi, không chỉ trung bình.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi bảng tinh chỉnh trong khoá này là một phép đo, không phải trích dẫn — các con số dịch chuyển.</li><li>Dựng một bộ đo để bảng thành thứ tự sinh lại, không phải thừa hưởng.</li><li>Các lớp ảnh khác nhau có đường cong quality và effort khác nhau.</li><li>Một cấu hình toàn cục tối ưu cho một lớp là phí byte hoặc CPU cho lớp khác.</li><li>Đo lại sau mỗi lần đổi encoder hoặc phiên bản; coi đó là một kiểm hồi quy.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — Performance</span><span class="lc-sub">sharp.pixelplumbing.com/performance — phương pháp benchmark của chính Sharp.</span></span></div>

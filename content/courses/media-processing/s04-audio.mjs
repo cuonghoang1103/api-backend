@@ -220,6 +220,23 @@ through 64 KB at a time.
 <p><strong>One sentence.</strong> Piping through <code>pipe:0</code>/<code>pipe:1</code> removes the disk dependency, the unique-name problem, and the cleanup obligation that the write-run-read-unlink pattern imposes on every error path — but it requires you to drain stderr (or a child writing past the ~64 KB pipe buffer deadlocks), to settle your promise exactly once (<code>'error'</code> and <code>'close'</code> can both fire), to SIGKILL rather than SIGTERM on timeout, and to fall back to temp files for formats like MP4 that need a seekable input or output.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take the temp-file shape (write input, run ffmpeg on the path, read output, unlink) and list every error path that must clean up.</li><li>Rewrite it as a pure pipe: feed input on stdin, read output on stdout, no disk.</li><li>Handle the error channel: collect stderr, and reject if the process exits non-zero.</li></ol>
+<pre><code class="language-bash">node -e "const{spawn}=require('child_process');const p=spawn('ffmpeg',['-i','pipe:0','-f','wav','pipe:1']);require('fs').createReadStream('in.mp3').pipe(p.stdin);let n=0;p.stdout.on('data',d=&gt;n+=d.length);p.on('close',c=&gt;console.log('exit',c,'bytes',n))"</code></pre>
+<p><strong>Done when:</strong> your audio decode uses no temp files and still fails loudly on a bad input.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">pipe:0 / pipe:1</span><span class="v">FFmpeg stdin and stdout used as input and output targets.</span></div>
+  <div class="kv"><span class="k">stdin/stdout streaming</span><span class="v">Feeding and reading bytes without touching disk.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">The stream pausing a fast producer so a slow consumer keeps up.</span></div>
+  <div class="kv"><span class="k">stderr</span><span class="v">Where FFmpeg writes logs and errors — collect it for diagnostics.</span></div>
+  <div class="kv"><span class="k">Temp-file obligation</span><span class="v">The cleanup you owe on every error path when you use disk.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>For small audio, pipes beat temp files: no disk dependency, no cleanup obligation.</li><li>Feed input on stdin (pipe:0), read output on stdout (pipe:1).</li><li>Always consume stderr and check the exit code — silence hides failures.</li><li>Temp files still win for random-access/seek-heavy work or very large inputs.</li><li>You can chain two processes stdout to stdin without ever hitting disk.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — child_process.spawn</span><span class="lc-sub">nodejs.org/api/child_process.html#child_processspawncommand-args-options — stdio config and the error/close event pair.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — pipe protocol</span><span class="lc-sub">ffmpeg.org/ffmpeg-protocols.html#pipe — pipe:0 / pipe:1 and the seekability caveat.</span></span></div>
@@ -428,6 +445,23 @@ Bản chảy dòng không bao giờ giữ PCM đã giải mã — nó đi qua
 <div class="callout">
 <p><strong>Một câu.</strong> Pipe qua <code>pipe:0</code>/<code>pipe:1</code> loại bỏ phụ thuộc vào đĩa, vấn đề tên-duy-nhất, và nghĩa vụ dọn dẹp mà pattern ghi-chạy-đọc-unlink áp lên mọi nhánh lỗi — nhưng nó đòi bạn phải hút stderr (không thì một tiến trình con ghi quá bộ đệm ~64 KB sẽ deadlock), phải giải quyết promise đúng một lần (<code>'error'</code> và <code>'close'</code> đều có thể phát), phải SIGKILL chứ không SIGTERM khi hết giờ, và phải lùi về file tạm với những format như MP4 vốn cần input hoặc output tua được.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy hình dạng file tạm (ghi input, chạy ffmpeg trên đường dẫn, đọc output, unlink) và liệt kê mọi đường lỗi phải dọn.</li><li>Viết lại thành pipe thuần: đưa input qua stdin, đọc output qua stdout, không đụng đĩa.</li><li>Xử kênh lỗi: gom stderr, và từ chối nếu tiến trình thoát khác 0.</li></ol>
+<pre><code class="language-bash">node -e "const{spawn}=require('child_process');const p=spawn('ffmpeg',['-i','pipe:0','-f','wav','pipe:1']);require('fs').createReadStream('in.mp3').pipe(p.stdin);let n=0;p.stdout.on('data',d=&gt;n+=d.length);p.on('close',c=&gt;console.log('exit',c,'bytes',n))"</code></pre>
+<p><strong>Đạt khi:</strong> giải mã audio của bạn không dùng file tạm mà vẫn báo lỗi to khi input hỏng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">pipe:0 / pipe:1</span><span class="v">stdin và stdout của FFmpeg dùng làm đích input và output.</span></div>
+  <div class="kv"><span class="k">Chảy stdin/stdout</span><span class="v">Đưa và đọc byte mà không đụng đĩa.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">Dòng tạm dừng bên sản xuất nhanh để bên tiêu thụ chậm theo kịp.</span></div>
+  <div class="kv"><span class="k">stderr</span><span class="v">Nơi FFmpeg ghi log và lỗi — gom lại để chẩn đoán.</span></div>
+  <div class="kv"><span class="k">Nghĩa vụ file tạm</span><span class="v">Việc dọn dẹp bạn nợ trên mọi đường lỗi khi dùng đĩa.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Với audio nhỏ, pipe thắng file tạm: không phụ thuộc đĩa, không nghĩa vụ dọn.</li><li>Đưa input qua stdin (pipe:0), đọc output qua stdout (pipe:1).</li><li>Luôn tiêu thụ stderr và kiểm mã thoát — im lặng che giấu lỗi.</li><li>File tạm vẫn thắng cho việc truy cập ngẫu nhiên/nặng seek hoặc input rất lớn.</li><li>Bạn nối được hai tiến trình stdout sang stdin mà không hề đụng đĩa.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — child_process.spawn</span><span class="lc-sub">nodejs.org/api/child_process.html#child_processspawncommand-args-options — cấu hình stdio và cặp sự kiện error/close.</span></span></div>
@@ -661,6 +695,23 @@ After the fix:   Input Integrated:  -14.1 LUFS   ← normalized</code></pre>
 <p><strong>One sentence.</strong> Peak normalization does not equalize perceived volume — EBU R128 loudness normalization does, by measuring LUFS over the whole programme in pass 1 and applying one linear gain in pass 2 (single-pass falls back to a dynamic mode that audibly pumps); this repo's implementation was correct except that <code>.join(' ')</code> inserted a space inside the filter string, so ffmpeg saw the measured values as a stray output URL, pass 2 always failed, and every track silently took a fallback re-encode with no normalization at all — a class of bug that argv arrays make unrepresentable, and that only an output-property check (re-measure the result, expect ≈ -14 LUFS) would ever catch.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Build the loudnorm filter as ONE argv entry. Then reproduce the bug: split it so a stray space creates two array entries — FFmpeg silently ignores the second half.</li><li>Measure integrated loudness before with the pass-1 analysis below.</li><li>Apply two-pass loudnorm with the measured values and confirm the output lands near the target LUFS.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp3 -af loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json -f null -</code></pre>
+<p><strong>Done when:</strong> you can show the integrated LUFS moved toward target, and explain why one misplaced space made the filter a no-op.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EBU R128 / LUFS</span><span class="v">The loudness standard and its unit; -14 LUFS is a common target.</span></div>
+  <div class="kv"><span class="k">Integrated loudness</span><span class="v">Average loudness over the whole track.</span></div>
+  <div class="kv"><span class="k">True peak (TP)</span><span class="v">The real peak after reconstruction; keep below about -1 dBTP.</span></div>
+  <div class="kv"><span class="k">Two-pass loudnorm</span><span class="v">Pass 1 measures, pass 2 corrects with those numbers.</span></div>
+  <div class="kv"><span class="k">argv array</span><span class="v">One flag equals one array entry; splitting on a space breaks the filter silently.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Peak normalization does not fix perceived loudness; EBU R128 (LUFS) does.</li><li>The repo bug: a stray space split one filter argument into two, so it did nothing.</li><li>Build each FFmpeg flag as exactly one argv entry — arrays are self-documenting.</li><li>Two-pass loudnorm measures first, then corrects to the target LUFS.</li><li>Verify by measuring integrated loudness before and after — do not assume.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">EBU R128 — Loudness normalisation</span><span class="lc-sub">tech.ebu.ch/docs/r/r128.pdf — the standard, LUFS/LU definitions, and gating.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — loudnorm filter</span><span class="lc-sub">ffmpeg.org/ffmpeg-filters.html#loudnorm — every parameter, and the two-pass procedure.</span></span></div>
@@ -883,6 +934,23 @@ Sau khi vá:    Input Integrated:  -14.1 LUFS   ← đã chuẩn hoá</code></pr
 <p><strong>Một câu.</strong> Chuẩn hoá theo đỉnh không cân bằng được âm lượng cảm nhận — chuẩn hoá độ to EBU R128 thì có, bằng cách đo LUFS trên toàn chương trình ở lượt 1 và áp một mức gain tuyến tính ở lượt 2 (một lượt sẽ rơi về chế độ động vốn bơm lên bơm xuống nghe thấy được); cài đặt của kho này vốn đúng, ngoại trừ việc <code>.join(' ')</code> chèn một khoảng trắng vào giữa chuỗi bộ lọc, khiến ffmpeg thấy các giá trị đo được như một output URL lạc lõng, lượt 2 luôn thất bại, và mọi bài hát âm thầm đi theo một lần re-encode dự phòng không hề chuẩn hoá — một lớp bug mà mảng argv làm cho không biểu diễn được, và chỉ một phép kiểm thuộc tính output (đo lại kết quả, kỳ vọng ≈ -14 LUFS) mới có thể bắt được.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Dựng bộ lọc loudnorm thành MỘT phần tử argv. Rồi tái hiện bug: tách nó để một khoảng trắng thừa tạo hai phần tử — FFmpeg âm thầm bỏ nửa sau.</li><li>Đo độ to tích hợp trước bằng phân tích pass-1 dưới đây.</li><li>Áp loudnorm hai lượt với giá trị đã đo và xác nhận output về gần LUFS mục tiêu.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp3 -af loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json -f null -</code></pre>
+<p><strong>Đạt khi:</strong> bạn cho thấy LUFS tích hợp đã dịch về mục tiêu, và giải thích vì sao một khoảng trắng đặt sai khiến bộ lọc thành vô tác dụng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EBU R128 / LUFS</span><span class="v">Chuẩn độ to và đơn vị của nó; -14 LUFS là mục tiêu phổ biến.</span></div>
+  <div class="kv"><span class="k">Độ to tích hợp</span><span class="v">Độ to trung bình trên toàn bản.</span></div>
+  <div class="kv"><span class="k">True peak (TP)</span><span class="v">Đỉnh thật sau tái dựng; giữ dưới khoảng -1 dBTP.</span></div>
+  <div class="kv"><span class="k">Loudnorm hai lượt</span><span class="v">Lượt 1 đo, lượt 2 sửa bằng các con số đó.</span></div>
+  <div class="kv"><span class="k">Mảng argv</span><span class="v">Một cờ bằng một phần tử mảng; tách theo khoảng trắng làm vỡ bộ lọc âm thầm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chuẩn hoá theo đỉnh không sửa độ to cảm nhận; EBU R128 (LUFS) thì có.</li><li>Bug của kho: một khoảng trắng thừa tách một tham số lọc thành hai, nên nó không làm gì.</li><li>Dựng mỗi cờ FFmpeg thành đúng một phần tử argv — mảng tự mô tả chính nó.</li><li>Loudnorm hai lượt đo trước, rồi sửa về LUFS mục tiêu.</li><li>Kiểm bằng cách đo độ to tích hợp trước và sau — đừng giả định.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">EBU R128 — Loudness normalisation</span><span class="lc-sub">tech.ebu.ch/docs/r/r128.pdf — chuẩn, định nghĩa LUFS/LU, và cơ chế gating.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — loudnorm filter</span><span class="lc-sub">ffmpeg.org/ffmpeg-filters.html#loudnorm — mọi tham số, và quy trình hai lượt.</span></span></div>
@@ -1081,6 +1149,23 @@ with the upgrade path left open.
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bitrate is the budget you actually set</span><span class="lz-d">The codec fits the signal into it. Past the point where the artefacts stop being audible, more bitrate buys file size and nothing else.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">So pick from the content</span><span class="lz-d">Speech mono at 16 kHz and 32 kbps is transparent; music stereo at 44.1 kHz needs 128 kbps or more. The wrong pairing wastes bytes or audibly degrades.</span></div>
 </div>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Compute the expected size of a 60s clip at three settings: 320 kbps stereo 44.1 kHz, 96 kbps mono 44.1 kHz, 64 kbps mono 16 kHz. Use size approximately bitrate times duration divided by 8.</li><li>Encode a speech clip at each and compare actual sizes and whether speech still sounds fine.</li><li>Pick the smallest setting that keeps speech intelligible (usually mono, low kbps).</li></ol>
+<pre><code class="language-bash">ffmpeg -i speech.wav -c:a libmp3lame -b:a 64k -ac 1 -ar 16000 out.mp3</code></pre>
+<p><strong>Done when:</strong> you can turn a voice note from megabytes to tens of kilobytes and justify each of the three numbers.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bitrate</span><span class="v">Bits per second — the dominant size factor.</span></div>
+  <div class="kv"><span class="k">Sample rate (Hz)</span><span class="v">Samples per second; it caps the representable frequency (Nyquist).</span></div>
+  <div class="kv"><span class="k">Channels</span><span class="v">mono (1) vs stereo (2); mono halves size and is fine for speech.</span></div>
+  <div class="kv"><span class="k">PCM</span><span class="v">Uncompressed samples — no decoder needed, large but simple.</span></div>
+  <div class="kv"><span class="k">Nyquist</span><span class="v">Maximum representable frequency equals half the sample rate.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Audio size is about bitrate times duration times channels; three numbers decide almost everything.</li><li>Speech: mono, low bitrate, 16 kHz is plenty; music needs stereo and higher rates.</li><li>Over-speccing a voice note (stereo/44.1k/320k) wastes an order of magnitude.</li><li>Sample rate caps frequency content; 16 kHz covers speech, not music.</li><li>The robot path chose raw PCM to avoid a decoder on the microcontroller — simplicity over bytes.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Opus — codec comparison</span><span class="lc-sub">opus-codec.org/comparison — bitrate vs quality against MP3/AAC/Vorbis.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Xiph — 24/192 Music Downloads are Silly</span><span class="lc-sub">people.xiph.org/~xiphmont/demo/neil-young.html — why higher sample rates buy nothing audible.</span></span></div>
@@ -1270,6 +1355,23 @@ một lớp — cả hai phía đều đã hỗ trợ sẵn qua trường &#96;a
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Bitrate mới là ngân sách bạn thật sự đặt ra</span><span class="lz-d">Bộ mã hoá nhét tín hiệu vừa vào đó. Vượt qua ngưỡng mà tai không còn nghe thấy nhiễu nữa thì thêm bitrate chỉ mua thêm dung lượng và không mua gì khác.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Nên hãy chọn theo nội dung</span><span class="lz-d">Giọng nói mono ở 16 kHz và 32 kbps là trong suốt; nhạc stereo ở 44,1 kHz cần 128 kbps trở lên. Ghép sai cặp là hoặc phí byte hoặc nghe rõ là kém đi.</span></div>
 </div>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tính kích thước dự kiến của một clip 60s ở ba cấu hình: 320 kbps stereo 44.1 kHz, 96 kbps mono 44.1 kHz, 64 kbps mono 16 kHz. Dùng kích thước xấp xỉ bitrate nhân thời lượng chia 8.</li><li>Encode một clip tiếng nói ở mỗi cấu hình và so kích thước thật cùng với việc tiếng nói còn ổn không.</li><li>Chọn cấu hình nhỏ nhất mà tiếng nói còn nghe rõ (thường là mono, kbps thấp).</li></ol>
+<pre><code class="language-bash">ffmpeg -i speech.wav -c:a libmp3lame -b:a 64k -ac 1 -ar 16000 out.mp3</code></pre>
+<p><strong>Đạt khi:</strong> bạn biến một tin nhắn thoại từ megabyte xuống hàng chục kilobyte và biện minh được từng con số trong ba con số.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bitrate</span><span class="v">Bit mỗi giây — yếu tố kích thước chủ đạo.</span></div>
+  <div class="kv"><span class="k">Sample rate (Hz)</span><span class="v">Số mẫu mỗi giây; nó chặn tần số biểu diễn được (Nyquist).</span></div>
+  <div class="kv"><span class="k">Channels</span><span class="v">mono (1) vs stereo (2); mono giảm nửa kích thước và ổn cho tiếng nói.</span></div>
+  <div class="kv"><span class="k">PCM</span><span class="v">Mẫu không nén — không cần decoder, to nhưng đơn giản.</span></div>
+  <div class="kv"><span class="k">Nyquist</span><span class="v">Tần số biểu diễn tối đa bằng nửa sample rate.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Kích thước audio xấp xỉ bitrate nhân thời lượng nhân số kênh; ba con số quyết gần như mọi thứ.</li><li>Tiếng nói: mono, bitrate thấp, 16 kHz là dư; nhạc cần stereo và tần số cao hơn.</li><li>Cấu hình dư cho một tin thoại (stereo/44.1k/320k) phí cả một bậc độ lớn.</li><li>Sample rate chặn nội dung tần số; 16 kHz đủ cho tiếng nói, không đủ cho nhạc.</li><li>Đường robot chọn PCM thô để tránh một decoder trên vi điều khiển — đơn giản hơn byte.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Opus — codec comparison</span><span class="lc-sub">opus-codec.org/comparison — bitrate so với chất lượng, đối chiếu MP3/AAC/Vorbis.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Xiph — 24/192 Music Downloads are Silly</span><span class="lc-sub">people.xiph.org/~xiphmont/demo/neil-young.html — vì sao tần số lấy mẫu cao hơn không mua được gì nghe thấy.</span></span></div>

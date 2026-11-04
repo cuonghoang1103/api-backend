@@ -207,6 +207,23 @@ need to think about it again.
 <p><strong>One sentence.</strong> Building an FFmpeg command as a string and running it through <code>exec()</code> hands <code>/bin/sh</code> whatever the user put in the filename — in this repo a slash-free <code>clip.mp4&quot;;touch INJECTION_PROOF;#</code> survived <code>path.extname()</code>, closed the quoted argument, and executed arbitrary commands past two upload-validation gates that were never designed to sanitize for a shell; the fix is <code>execFile</code>/<code>spawn</code> with an argv array so no shell exists at all, and the durable habit is to never derive a filesystem path from a user-supplied name in the first place.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Open <code>src/services/video.service.ts</code> and find where a filename was interpolated into a shell string for <code>exec()</code>.</li><li>In a throwaway directory ONLY, reproduce the shape: run a Node <code>exec()</code> whose string contains a crafted segment and watch the extra command run. Never do this outside a sandbox.</li><li>Rewrite it with <code>execFile('ffmpeg', [args])</code> — confirm the injection no longer runs.</li></ol>
+<pre><code class="language-bash">node -e "const{execFile}=require('child_process');execFile('ffprobe',['-v','quiet','-show_format','in.mp4'],(e,o)=&gt;console.log(e?e.message:o))"</code></pre>
+<p><strong>Done when:</strong> you can explain why execFile with an argv array is immune to the shell metacharacter injection that exec() allows.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">exec()</span><span class="v">Runs a command through a shell — it interprets ; | $ and more in the string.</span></div>
+  <div class="kv"><span class="k">execFile() / spawn()</span><span class="v">Runs a binary with an argv array — no shell, no metacharacter parsing.</span></div>
+  <div class="kv"><span class="k">RCE</span><span class="v">Remote code execution — running attacker commands on your server.</span></div>
+  <div class="kv"><span class="k">Shell metacharacters</span><span class="v">Characters like ; | and $ that make exec() dangerous.</span></div>
+  <div class="kv"><span class="k">path.extname</span><span class="v">Validates the extension only; it does not stop injection in the name.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Building a shell string from user data and calling exec() is an RCE waiting to happen.</li><li>The real repo bug: an uploaded video name reached a shell command.</li><li>The fix is structural: execFile/spawn with an argv array, never a shell string.</li><li>Extension checks and timeouts do not stop injection; they are not security controls.</li><li>Audit the codebase for exec( with any interpolation and replace it with execFile.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — child_process</span><span class="lc-sub">nodejs.org/api/child_process.html — exec vs execFile vs spawn, and the maxBuffer note.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Command Injection</span><span class="lc-sub">owasp.org/www-community/attacks/Command_Injection — the class, and why allowlists beat escaping.</span></span></div>
@@ -407,6 +424,23 @@ lần nữa.
 <div class="callout">
 <p><strong>Một câu.</strong> Dựng lệnh FFmpeg thành chuỗi rồi chạy qua <code>exec()</code> là trao cho <code>/bin/sh</code> bất cứ thứ gì người dùng đặt trong tên file — trong kho này một tên không có dấu gạch chéo <code>clip.mp4&quot;;touch INJECTION_PROOF;#</code> sống sót qua <code>path.extname()</code>, đóng tham số có nháy, và thực thi lệnh tuỳ ý, vượt qua hai cổng validation upload vốn chưa bao giờ được thiết kế để sanitize cho shell; cách vá là <code>execFile</code>/<code>spawn</code> với mảng argv để không tồn tại shell nào cả, và thói quen bền vững là ngay từ đầu đừng suy ra đường dẫn hệ thống tệp từ tên do người dùng cung cấp.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Mở <code>src/services/video.service.ts</code> và tìm chỗ một tên file bị nội suy vào chuỗi shell cho <code>exec()</code>.</li><li>CHỈ trong một thư mục vứt đi, tái hiện hình dạng đó: chạy một <code>exec()</code> Node với chuỗi chứa một đoạn dàn dựng và xem lệnh phụ chạy. Đừng bao giờ làm ngoài sandbox.</li><li>Viết lại bằng <code>execFile('ffmpeg', [args])</code> — xác nhận injection không còn chạy.</li></ol>
+<pre><code class="language-bash">node -e "const{execFile}=require('child_process');execFile('ffprobe',['-v','quiet','-show_format','in.mp4'],(e,o)=&gt;console.log(e?e.message:o))"</code></pre>
+<p><strong>Đạt khi:</strong> bạn giải thích được vì sao execFile với mảng argv miễn nhiễm với injection ký tự shell mà exec() cho phép.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">exec()</span><span class="v">Chạy lệnh qua một shell — nó diễn giải ; | $ và hơn nữa trong chuỗi.</span></div>
+  <div class="kv"><span class="k">execFile() / spawn()</span><span class="v">Chạy một binary với mảng argv — không shell, không phân tích ký tự đặc biệt.</span></div>
+  <div class="kv"><span class="k">RCE</span><span class="v">Thực thi mã từ xa — chạy lệnh của kẻ tấn công trên server bạn.</span></div>
+  <div class="kv"><span class="k">Ký tự đặc biệt của shell</span><span class="v">Các ký tự như ; | và $ khiến exec() nguy hiểm.</span></div>
+  <div class="kv"><span class="k">path.extname</span><span class="v">Chỉ kiểm phần đuôi; nó không chặn injection trong tên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Dựng chuỗi shell từ dữ liệu người dùng rồi gọi exec() là một RCE chờ sẵn.</li><li>Bug thật của kho: tên một video upload lọt vào một lệnh shell.</li><li>Cách vá mang tính cấu trúc: execFile/spawn với mảng argv, không bao giờ chuỗi shell.</li><li>Kiểm đuôi và timeout không chặn injection; chúng không phải biện pháp bảo mật.</li><li>Rà soát codebase tìm exec( có nội suy và thay bằng execFile.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Node.js — child_process</span><span class="lc-sub">nodejs.org/api/child_process.html — exec vs execFile vs spawn, và ghi chú maxBuffer.</span></span></div>
@@ -615,6 +649,23 @@ export async function isVideoThumbnailingAvailable() {
 <p><strong>One sentence.</strong> Put <code>-ss</code> before <code>-i</code> so FFmpeg seeks the container index instead of decoding forward from zero (measured 318× faster at an 11-minute offset, at the cost of landing on the nearest keyframe); pass a presigned <code>https://</code> URL as the input rather than downloading the file, since Range requests fetch under 1% of it; run <code>-movflags +faststart</code> on anything browsers will play; and treat thumbnail failure as non-fatal with temp-file cleanup in <code>finally</code>, because a missing thumbnail should never cost the user their upload.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Extract a frame at 3 seconds with <code>-ss</code> AFTER <code>-i</code>; time it. Then with <code>-ss</code> BEFORE <code>-i</code>; time it. See the gap.</li><li>Point <code>-i</code> at an http(s) URL (a public MP4 on R2) instead of a local file — FFmpeg fetches only the bytes it needs.</li><li>Make failure non-fatal: wrap so a missing thumbnail does not fail the upload.</li></ol>
+<pre><code class="language-bash">ffmpeg -ss 3 -i in.mp4 -frames:v 1 -q:v 3 out.jpg</code></pre>
+<p><strong>Done when:</strong> you can state why <code>-ss</code> before <code>-i</code> is roughly 100x faster (a keyframe seek), and that you need not download the whole file.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">-ss before -i</span><span class="v">Input seek — jumps via keyframes, fast.</span></div>
+  <div class="kv"><span class="k">-ss after -i</span><span class="v">Output seek — decodes from the start, slow.</span></div>
+  <div class="kv"><span class="k">-frames:v 1</span><span class="v">Emit exactly one video frame.</span></div>
+  <div class="kv"><span class="k">faststart / moov atom</span><span class="v">Metadata placement that lets seeking or playback start early.</span></div>
+  <div class="kv"><span class="k">HTTP input</span><span class="v">FFmpeg reading a URL with range requests — no full download.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Thumbnailing is the most common FFmpeg job and has two performance cliffs.</li><li>Put -ss before -i for a fast keyframe seek; output seek decodes everything.</li><li>FFmpeg speaks HTTP; read straight from R2 and fetch only the needed bytes.</li><li>A non-faststart MP4 forces more reading before a frame is available.</li><li>Treat thumbnail failure as non-fatal — the upload should still succeed.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — Seeking</span><span class="lc-sub">trac.ffmpeg.org/wiki/Seeking — input vs output seeking, and the accuracy trade.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — Protocols</span><span class="lc-sub">ffmpeg.org/ffmpeg-protocols.html — http, Range support, and <code>-protocol_whitelist</code>.</span></span></div>
@@ -810,6 +861,23 @@ export async function isVideoThumbnailingAvailable() {
 <div class="callout">
 <p><strong>Một câu.</strong> Đặt <code>-ss</code> trước <code>-i</code> để FFmpeg tua theo chỉ mục container thay vì decode xuôi từ số không (đo được nhanh hơn 318× ở độ lệch 11 phút, đổi lại là rơi vào keyframe gần nhất); truyền một presigned URL <code>https://</code> làm input thay vì tải file, vì Range request lấy chưa tới 1% của nó; chạy <code>-movflags +faststart</code> trên mọi thứ browser sẽ phát; và coi thất bại thumbnail là non-fatal với dọn file tạm trong <code>finally</code>, vì thiếu một thumbnail không bao giờ nên khiến người dùng mất bản upload.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trích một frame ở giây thứ 3 với <code>-ss</code> SAU <code>-i</code>; bấm giờ. Rồi với <code>-ss</code> TRƯỚC <code>-i</code>; bấm giờ. Thấy khoảng cách.</li><li>Trỏ <code>-i</code> vào một URL http(s) (một MP4 công khai trên R2) thay vì file cục bộ — FFmpeg chỉ lấy byte nó cần.</li><li>Làm cho thất bại là non-fatal: bọc sao cho thiếu thumbnail không làm hỏng upload.</li></ol>
+<pre><code class="language-bash">ffmpeg -ss 3 -i in.mp4 -frames:v 1 -q:v 3 out.jpg</code></pre>
+<p><strong>Đạt khi:</strong> bạn nói được vì sao <code>-ss</code> trước <code>-i</code> nhanh cỡ 100x (seek theo keyframe), và rằng bạn không cần tải cả file về.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">-ss trước -i</span><span class="v">Seek input — nhảy theo keyframe, nhanh.</span></div>
+  <div class="kv"><span class="k">-ss sau -i</span><span class="v">Seek output — decode từ đầu, chậm.</span></div>
+  <div class="kv"><span class="k">-frames:v 1</span><span class="v">Phát đúng một frame video.</span></div>
+  <div class="kv"><span class="k">faststart / moov atom</span><span class="v">Vị trí metadata cho phép seek hoặc phát bắt đầu sớm.</span></div>
+  <div class="kv"><span class="k">Input HTTP</span><span class="v">FFmpeg đọc một URL bằng range request — không tải toàn bộ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Trích thumbnail là việc FFmpeg phổ biến nhất và có hai vách hiệu năng.</li><li>Đặt -ss trước -i để seek keyframe nhanh; seek output decode mọi thứ.</li><li>FFmpeg nói HTTP; đọc thẳng từ R2 và chỉ lấy byte cần.</li><li>Một MP4 không faststart buộc đọc nhiều hơn trước khi có một frame.</li><li>Coi thất bại thumbnail là non-fatal — upload vẫn phải thành công.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — Seeking</span><span class="lc-sub">trac.ffmpeg.org/wiki/Seeking — input vs output seeking, và đánh đổi độ chính xác.</span></span></div>
@@ -1056,6 +1124,23 @@ await new Promise((resolve, reject) =&gt; {
 <p><strong>One sentence.</strong> Use <code>-crf</code> (not a fixed bitrate) to pin quality — 23 is a good web default, 18 is visually lossless and triples the file, 28 is where artifacts show; use <code>-preset</code> to trade CPU for bytes at that fixed quality, with the knee at <code>fast</code>/<code>medium</code> and <code>veryfast</code> the right pick for user-facing queues; always include <code>-pix_fmt yuv420p</code> (or it black-screens on Safari) and <code>-movflags +faststart</code> (or browsers buffer the whole file before playing); scale with <code>-2</code> rather than <code>-1</code> to keep dimensions even; and probe with <code>ffprobe</code> first, because a source that is already H.264+AAC needs only a 2-second lossless stream copy instead of a 400-second re-encode.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Transcode one clip at CRF 18, 23, 28 (preset medium). Record output size and eyeball quality.</li><li>Fix CRF 23 and sweep preset ultrafast, medium, slow. Record encode time and size.</li><li>Add <code>-movflags +faststart</code> and confirm the browser can start playback before the download finishes.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset medium -movflags +faststart -c:a aac -b:a 128k out.mp4</code></pre>
+<p><strong>Done when:</strong> you can set CRF and preset for a target and explain what faststart fixes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CRF</span><span class="v">Constant Rate Factor — the quality target (lower is better and bigger); ~18-28 for H.264.</span></div>
+  <div class="kv"><span class="k">preset</span><span class="v">How much CPU to spend reaching the CRF (ultrafast...slow); same quality, different size and time.</span></div>
+  <div class="kv"><span class="k">+faststart</span><span class="v">Moves the moov atom to the front so playback can start before full download.</span></div>
+  <div class="kv"><span class="k">pix_fmt yuv420p</span><span class="v">The pixel format widest-compatible with browsers and players.</span></div>
+  <div class="kv"><span class="k">Even dimensions</span><span class="v">H.264 needs even width and height; odd sizes error.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>You need three knobs: -crf (quality), -preset (CPU), -movflags +faststart (playback start).</li><li>CRF sets quality independent of resolution; 23 is a sane H.264 default.</li><li>preset trades encode time for a smaller file at the same CRF.</li><li>Without faststart a web MP4 may not start until fully downloaded.</li><li>Watch the odd-dimension trap when scaling; force even dimensions in the scale filter.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — H.264 encoding guide</span><span class="lc-sub">trac.ffmpeg.org/wiki/Encode/H.264 — CRF, presets, tune, and profile explained.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — scale filter</span><span class="lc-sub">ffmpeg.org/ffmpeg-filters.html#scale — the -1 vs -2 rounding behaviour.</span></span></div>
@@ -1290,6 +1375,23 @@ await new Promise((resolve, reject) =&gt; {
 <div class="callout">
 <p><strong>Một câu.</strong> Dùng <code>-crf</code> (không phải bitrate cố định) để ghim chất lượng — 23 là mặc định web tốt, 18 là lossless thị giác và làm file gấp ba, 28 là chỗ artifact lộ ra; dùng <code>-preset</code> để đổi CPU lấy byte ở chất lượng cố định đó, với điểm gãy ở <code>fast</code>/<code>medium</code> và <code>veryfast</code> là lựa chọn đúng cho hàng đợi hướng người dùng; luôn kèm <code>-pix_fmt yuv420p</code> (không thì màn hình đen trên Safari) và <code>-movflags +faststart</code> (không thì browser đệm cả file trước khi phát); scale bằng <code>-2</code> chứ không phải <code>-1</code> để giữ kích thước chẵn; và dò bằng <code>ffprobe</code> trước, vì một nguồn đã là H.264+AAC chỉ cần một lần stream copy 2 giây không mất chất lượng thay vì một lần re-encode 400 giây.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Transcode một clip ở CRF 18, 23, 28 (preset medium). Ghi kích thước output và nhìn mắt.</li><li>Cố định CRF 23 và quét preset ultrafast, medium, slow. Ghi thời gian encode và kích thước.</li><li>Thêm <code>-movflags +faststart</code> và xác nhận trình duyệt bắt đầu phát được trước khi tải xong.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset medium -movflags +faststart -c:a aac -b:a 128k out.mp4</code></pre>
+<p><strong>Đạt khi:</strong> bạn đặt được CRF và preset cho một mục tiêu và giải thích faststart vá gì.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">CRF</span><span class="v">Constant Rate Factor — mục tiêu chất lượng (thấp hơn là tốt hơn và to hơn); ~18-28 cho H.264.</span></div>
+  <div class="kv"><span class="k">preset</span><span class="v">Tiêu bao nhiêu CPU để đạt CRF (ultrafast...slow); cùng chất lượng, khác kích thước và thời gian.</span></div>
+  <div class="kv"><span class="k">+faststart</span><span class="v">Dời moov atom lên đầu để phát bắt đầu trước khi tải xong.</span></div>
+  <div class="kv"><span class="k">pix_fmt yuv420p</span><span class="v">Định dạng pixel tương thích rộng nhất với trình duyệt và trình phát.</span></div>
+  <div class="kv"><span class="k">Kích thước chẵn</span><span class="v">H.264 cần width và height chẵn; số lẻ gây lỗi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bạn cần ba núm: -crf (chất lượng), -preset (CPU), -movflags +faststart (bắt đầu phát).</li><li>CRF đặt chất lượng độc lập với độ phân giải; 23 là mặc định H.264 hợp lý.</li><li>preset đổi thời gian encode lấy file nhỏ hơn ở cùng CRF.</li><li>Không faststart, một MP4 web có thể không phát tới khi tải xong.</li><li>Coi chừng bẫy số lẻ khi scale; ép kích thước chẵn trong bộ lọc scale.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — H.264 encoding guide</span><span class="lc-sub">trac.ffmpeg.org/wiki/Encode/H.264 — giải thích CRF, preset, tune, và profile.</span></span></div>

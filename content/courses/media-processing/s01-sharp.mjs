@@ -152,6 +152,23 @@ sharp.concurrency(2)   // cap libvips to 2 threads per operation
 <p><strong>One sentence.</strong> Sharp's transform methods return the same mutable instance and queue instructions without doing work, so nothing decodes until <code>toBuffer()</code>/<code>toFile()</code> — which means errors surface at the await (wrap that, not the chain), one pipeline cannot safely produce two output formats (use <code>clone()</code>), <code>metadata()</code> is the cheap header-only exception you should always call first, and the real memory cost is <code>width × height × channels</code> at output time, which is what your concurrency limit must be sized against.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li><code>npm i sharp</code>. Build <code>const p = sharp(buf).resize(800).webp()</code> but do NOT await it — nothing has decoded yet.</li><li>Call <code>await p.toBuffer()</code> twice; the second call throws because the pipeline is used up. Fix it with <code>clone()</code>.</li><li>Wrap the await (not the chain) in try/catch and feed a truncated buffer — the error surfaces at <code>toBuffer()</code>, not at <code>resize()</code>.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp');const p=sharp(Buffer.alloc(10)).resize(800).png();p.toBuffer().catch(e=&gt;console.log('error at output:',e.message))"</code></pre>
+<p><strong>Done when:</strong> you can explain why try/catch belongs around <code>toBuffer()</code>, and why two output formats from one source need <code>clone()</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lazy pipeline</span><span class="v">Transform calls only queue instructions; no pixels move until toBuffer() or toFile().</span></div>
+  <div class="kv"><span class="k">toBuffer() / toFile()</span><span class="v">The terminal calls that trigger libvips to actually decode and encode.</span></div>
+  <div class="kv"><span class="k">clone()</span><span class="v">Makes a reusable snapshot so one source can feed two outputs.</span></div>
+  <div class="kv"><span class="k">metadata()</span><span class="v">The one call that runs immediately — it reads the header only.</span></div>
+  <div class="kv"><span class="k">Output memory</span><span class="v">Roughly width x height x channels held at encode time; what your concurrency limit must respect.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every transform method returns the same mutable instance and does no work.</li><li>Decode and encode happen only at toBuffer()/toFile(); that is where errors surface.</li><li>A pipeline is single-use for output; use clone() for a second format.</li><li>metadata() is the cheap exception — call it first.</li><li>Peak memory is set by output pixels, not by input file size.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — API documentation</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — the constructor, clone(), and chaining contract.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">libvips — How it works</span><span class="lc-sub">libvips.github.io/libvips/API/current/How-it-opens-files.html — the demand-driven streaming model.</span></span></div>
@@ -297,6 +314,23 @@ sharp.concurrency(2)   // chặn libvips ở 2 thread mỗi operation
 <div class="callout">
 <p><strong>Một câu.</strong> Method transform của Sharp trả về chính instance mutable đó và xếp hàng chỉ thị mà không làm việc, nên không gì decode tới <code>toBuffer()</code>/<code>toFile()</code> — nghĩa là lỗi hiện ở cái await (bọc cái đó, không phải chuỗi), một pipeline không an toàn để sinh hai format output (dùng <code>clone()</code>), <code>metadata()</code> là ngoại lệ chỉ-header rẻ mà bạn luôn nên gọi đầu, và cost memory thật là <code>width × height × channel</code> ở thời điểm output, đó là cái mà giới hạn concurrency của bạn phải cân theo.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li><code>npm i sharp</code>. Dựng <code>const p = sharp(buf).resize(800).webp()</code> nhưng KHÔNG await — chưa có gì decode.</li><li>Gọi <code>await p.toBuffer()</code> hai lần; lần thứ hai ném lỗi vì pipeline đã dùng hết. Vá bằng <code>clone()</code>.</li><li>Bọc phần await (không bọc chuỗi) trong try/catch và đưa một buffer bị cắt cụt — lỗi hiện ở <code>toBuffer()</code>, không ở <code>resize()</code>.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp');const p=sharp(Buffer.alloc(10)).resize(800).png();p.toBuffer().catch(e=&gt;console.log('error at output:',e.message))"</code></pre>
+<p><strong>Đạt khi:</strong> bạn giải thích được vì sao try/catch phải bọc <code>toBuffer()</code>, và vì sao hai format output từ một nguồn cần <code>clone()</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pipeline lười</span><span class="v">Lời gọi transform chỉ xếp hàng chỉ thị; không pixel nào chạy tới khi toBuffer() hoặc toFile().</span></div>
+  <div class="kv"><span class="k">toBuffer() / toFile()</span><span class="v">Lời gọi cuối kích libvips thực sự decode và encode.</span></div>
+  <div class="kv"><span class="k">clone()</span><span class="v">Tạo một bản sao dùng lại được để một nguồn nuôi hai output.</span></div>
+  <div class="kv"><span class="k">metadata()</span><span class="v">Lời gọi duy nhất chạy ngay — chỉ đọc header.</span></div>
+  <div class="kv"><span class="k">Memory output</span><span class="v">Xấp xỉ width x height x channels giữ lúc encode; thứ mà giới hạn concurrency phải tôn trọng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi method transform trả về cùng một instance mutable và không làm gì.</li><li>Decode và encode chỉ xảy ở toBuffer()/toFile(); đó là nơi lỗi hiện ra.</li><li>Pipeline dùng một lần cho output; dùng clone() cho format thứ hai.</li><li>metadata() là ngoại lệ rẻ — gọi nó trước.</li><li>Memory đỉnh do pixel output quyết, không do kích thước file input.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — API documentation</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — constructor, clone(), và hợp đồng chaining.</span></span></div>
@@ -507,6 +541,23 @@ exif            header only     Timestamps, GPS, camera model
 <p><strong>One sentence.</strong> Call <code>metadata()</code> first because it parses only the header (microseconds, negligible RAM) and gives you everything needed to reject bad input before committing to a decode — most importantly <code>width × height</code>, which is the only check that catches a decompression bomb (a 758 KB PNG describing 256 megapixels sails past every size, MIME, and magic-byte check and costs ~99 MB RSS per request), and the correct defence is two layers: <code>limitInputPixels</code> on the constructor plus an explicit header check, backed by a concurrency gate so burst traffic cannot stack those costs.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take a modest JPEG (<code>in.jpg</code>). Call <code>sharp(buf).metadata()</code> and read <code>width</code>, <code>height</code>, <code>format</code>, <code>pages</code>.</li><li>Compute <code>width*height</code> in megapixels and compare it to a 100 MP guard.</li><li>Add the guard: if <code>width*height &gt; 100e6</code>, reject with a 400 BEFORE any resize or toBuffer — so a decompression bomb never decodes.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const m=await sharp(fs.readFileSync('in.jpg')).metadata();console.log(m.width,m.height,m.format,'=&gt;',(m.width*m.height/1e6).toFixed(1),'MP')})()"</code></pre>
+<p><strong>Done when:</strong> your pipeline rejects an over-100MP image from metadata alone, without ever decoding it.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">metadata()</span><span class="v">Reads only the file header — width, height, format, pages, orientation.</span></div>
+  <div class="kv"><span class="k">Decompression bomb</span><span class="v">A tiny compressed file that decodes to enormous dimensions and exhausts RAM.</span></div>
+  <div class="kv"><span class="k">100 MP guard</span><span class="v">The repo pixel-count ceiling; reject before decoding.</span></div>
+  <div class="kv"><span class="k">Megapixel (MP)</span><span class="v">width x height divided by 1,000,000 — the number the guard checks.</span></div>
+  <div class="kv"><span class="k">RSS</span><span class="v">Resident set size; the real memory a decode occupies.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A header read costs microseconds; a full decode costs tens of MB and hundreds of ms.</li><li>Always call metadata() first and reject on dimensions, format, or pages before decoding.</li><li>The decompression bomb is real and measured: a tiny input can cost ~99 MB of RSS.</li><li>100 MP is large enough for real photos, small enough to bound RAM.</li><li>The guard pairs with bounded concurrency — both are needed, neither alone suffices.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — metadata()</span><span class="lc-sub">sharp.pixelplumbing.com/api-input#metadata — every returned field.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — limitInputPixels</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — the option and its default of 0x3FFF².</span></span></div>
@@ -716,6 +767,23 @@ exif            chỉ header      Timestamp, GPS, model camera
 <p><strong>Một câu.</strong> Gọi <code>metadata()</code> trước vì nó chỉ parse header (micro giây, RAM không đáng kể) và cho bạn mọi thứ cần để loại input xấu trước khi cam kết decode — quan trọng nhất là <code>width × height</code>, phép kiểm duy nhất bắt được decompression bomb (một PNG 758 KB mô tả 256 megapixel lướt qua mọi phép kiểm size, MIME, và magic-byte và tốn ~99 MB RSS mỗi request), và phòng thủ đúng là hai lớp: <code>limitInputPixels</code> trên constructor plus một phép kiểm header explicit, có cổng concurrency đỡ lưng để traffic burst không chồng những cost đó.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy một JPEG vừa phải (<code>in.jpg</code>). Gọi <code>sharp(buf).metadata()</code> và đọc <code>width</code>, <code>height</code>, <code>format</code>, <code>pages</code>.</li><li>Tính <code>width*height</code> ra megapixel và so với chốt 100 MP.</li><li>Thêm chốt: nếu <code>width*height &gt; 100e6</code> thì trả 400 TRƯỚC mọi resize hay toBuffer — để một quả bom giải nén không bao giờ được decode.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const m=await sharp(fs.readFileSync('in.jpg')).metadata();console.log(m.width,m.height,m.format,'=&gt;',(m.width*m.height/1e6).toFixed(1),'MP')})()"</code></pre>
+<p><strong>Đạt khi:</strong> pipeline của bạn loại một ảnh trên 100MP chỉ từ metadata, không bao giờ decode nó.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">metadata()</span><span class="v">Chỉ đọc header file — width, height, format, pages, orientation.</span></div>
+  <div class="kv"><span class="k">Bom giải nén</span><span class="v">Một file nén nhỏ xíu giải ra kích thước khổng lồ, vét sạch RAM.</span></div>
+  <div class="kv"><span class="k">Chốt 100 MP</span><span class="v">Trần số pixel của kho; loại trước khi decode.</span></div>
+  <div class="kv"><span class="k">Megapixel (MP)</span><span class="v">width x height chia 1.000.000 — con số mà chốt kiểm.</span></div>
+  <div class="kv"><span class="k">RSS</span><span class="v">Resident set size; bộ nhớ thật mà một lần decode chiếm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Đọc header tốn micro giây; decode đủ tốn hàng chục MB và hàng trăm ms.</li><li>Luôn gọi metadata() trước và loại theo kích thước, format, pages trước khi decode.</li><li>Bom giải nén có thật và đã đo: một input nhỏ có thể tốn ~99 MB RSS.</li><li>100 MP đủ lớn cho ảnh thật, đủ nhỏ để chặn RAM.</li><li>Chốt này đi cặp với giới hạn concurrency — cần cả hai, một mình không đủ.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — metadata()</span><span class="lc-sub">sharp.pixelplumbing.com/api-input#metadata — mọi field trả về.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — limitInputPixels</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — option và mặc định 0x3FFF².</span></span></div>
@@ -922,6 +990,23 @@ Input: 600×450 web-sourced JPEG (81 KB)
   <div class="lz-node"><span class="lz-k">fill</span><span class="lz-t">Stretches to the box</span><span class="lz-d">Aspect ratio ignored. Almost never what you want, and it is the one that makes people look wide.</span></div>
   <div class="lz-node"><span class="lz-k">inside / outside</span><span class="lz-t">Bounds, without a fixed output size</span><span class="lz-d"><code>inside</code> never exceeds either dimension; <code>outside</code> covers both. Neither pads and neither crops — the output size varies.</span></div>
 </div>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take a wide landscape photo. Produce a 300x300 output with each fit mode: <code>cover</code>, <code>contain</code>, <code>fill</code>, <code>inside</code>, <code>outside</code>. Open all five.</li><li>Note what each one discards or adds: cover crops, contain letterboxes, fill distorts.</li><li>Resize a 200x200 source to 1200x1200 without <code>withoutEnlargement</code>, then with it. Confirm the second stays 200x200.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');for(const fit of['cover','contain','fill','inside','outside'])sharp(b).resize(300,300,{fit}).toFile('out-'+fit+'.jpg')"</code></pre>
+<p><strong>Done when:</strong> you can predict which fit mode a product UI needs, and you never ship an upscaled blurry thumbnail.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Fit mode</span><span class="v">How Sharp reconciles the source aspect ratio with the target box (cover/contain/fill/inside/outside).</span></div>
+  <div class="kv"><span class="k">withoutEnlargement</span><span class="v">A flag that forbids upscaling past the source dimensions.</span></div>
+  <div class="kv"><span class="k">Position / gravity</span><span class="v">Where cover crops from (center, top, attention...).</span></div>
+  <div class="kv"><span class="k">Kernel</span><span class="v">The resampling filter (lanczos3 default) trading quality for speed.</span></div>
+  <div class="kv"><span class="k">Upscaling</span><span class="v">Enlarging past native size — always lossy and blurry.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Five fit modes decide crop vs letterbox vs distort; pick per UI need.</li><li>cover is the usual choice for fixed-size thumbnails: it crops, it never distorts.</li><li>withoutEnlargement stops a small source becoming a blurry large output.</li><li>position controls where cover crops; attention can keep the subject in frame.</li><li>Downscale quality is the kernel job; the default lanczos3 is almost always right.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — resize()</span><span class="lc-sub">sharp.pixelplumbing.com/api-resize — every fit, position, and kernel option.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">libvips — Smart crop</span><span class="lc-sub">libvips.github.io/libvips/API/current/libvips-conversion.html — how attention/entropy strategies score regions.</span></span></div>
@@ -1117,6 +1202,23 @@ Input: JPEG lấy từ web 600×450 (81 KB)
   <div class="lz-node"><span class="lz-k">fill</span><span class="lz-t">Kéo giãn cho vừa khung</span><span class="lz-d">Bỏ qua tỷ lệ. Gần như chẳng bao giờ là thứ bạn muốn, và là cái làm người ta trông bè ra.</span></div>
   <div class="lz-node"><span class="lz-k">inside / outside</span><span class="lz-t">Giới hạn, mà không cố định cỡ đầu ra</span><span class="lz-d"><code>inside</code> không bao giờ vượt quá chiều nào; <code>outside</code> phủ được cả hai. Cả hai đều không chèn nền và không cắt — cỡ đầu ra thay đổi.</span></div>
 </div>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy một ảnh ngang rộng. Tạo output 300x300 với mỗi fit mode: <code>cover</code>, <code>contain</code>, <code>fill</code>, <code>inside</code>, <code>outside</code>. Mở cả năm.</li><li>Ghi lại mỗi cái vứt đi hay thêm gì: cover cắt, contain viền đen, fill bóp méo.</li><li>Resize một nguồn 200x200 lên 1200x1200 không có <code>withoutEnlargement</code>, rồi có. Xác nhận bản thứ hai vẫn 200x200.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');for(const fit of['cover','contain','fill','inside','outside'])sharp(b).resize(300,300,{fit}).toFile('out-'+fit+'.jpg')"</code></pre>
+<p><strong>Đạt khi:</strong> bạn đoán được UI sản phẩm cần fit mode nào, và không bao giờ ship một thumbnail phóng to mờ nhoè.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Fit mode</span><span class="v">Cách Sharp dung hoà tỷ lệ nguồn với khung đích (cover/contain/fill/inside/outside).</span></div>
+  <div class="kv"><span class="k">withoutEnlargement</span><span class="v">Cờ cấm phóng to quá kích thước nguồn.</span></div>
+  <div class="kv"><span class="k">Position / gravity</span><span class="v">Chỗ cover cắt từ đó (giữa, trên, attention...).</span></div>
+  <div class="kv"><span class="k">Kernel</span><span class="v">Bộ lọc lấy mẫu lại (mặc định lanczos3) đổi chất lượng lấy tốc độ.</span></div>
+  <div class="kv"><span class="k">Phóng to (upscale)</span><span class="v">Làm lớn quá kích thước gốc — luôn mất mát và mờ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Năm fit mode quyết cắt vs viền đen vs méo; chọn theo nhu cầu UI.</li><li>cover là lựa chọn thường cho thumbnail cỡ cố định: nó cắt, không bao giờ bóp méo.</li><li>withoutEnlargement chặn một nguồn nhỏ biến thành output lớn mờ.</li><li>position điều khiển chỗ cover cắt; attention giữ được chủ thể trong khung.</li><li>Chất lượng thu nhỏ là việc của kernel; mặc định lanczos3 gần như luôn đúng.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — resize()</span><span class="lc-sub">sharp.pixelplumbing.com/api-resize — mọi option fit, position, và kernel.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">libvips — Smart crop</span><span class="lc-sub">libvips.github.io/libvips/API/current/libvips-conversion.html — cách chiến lược attention/entropy chấm điểm vùng.</span></span></div>
@@ -1284,6 +1386,23 @@ Assert on OUTPUT dimensions, not on the absence of an error:
 <p><strong>One sentence.</strong> About 40% of phone photos store their pixels sideways with an EXIF orientation tag telling viewers to rotate, and re-encoding drops that tag — so call <code>.rotate()</code> with no arguments (which reads and applies each file's own orientation, and is a no-op for the 55% that need nothing) before the encode, store <code>info.width</code>/<code>info.height</code> from the output rather than the pre-rotation <code>metadata</code> dimensions, and test with real phone-captured fixtures at orientations 1, 3, 6, and 8.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Find a portrait phone photo that displays upright. Read its orientation: <code>sharp(buf).metadata()</code> then <code>.orientation</code> (often 6).</li><li>Re-encode it WITHOUT <code>.rotate()</code> — the output lands sideways because the tag was dropped and the pixels never moved.</li><li>Add <code>.rotate()</code> with no argument before <code>resize()</code>; confirm the output is upright and orientation is cleared.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('portrait.jpg');(async()=&gt;{console.log('before',(await sharp(b).metadata()).orientation);await sharp(b).rotate().resize(600).toFile('fixed.jpg');console.log('after',(await sharp('fixed.jpg').metadata()).orientation)})()"</code></pre>
+<p><strong>Done when:</strong> a portrait phone upload comes out upright, and you know why <code>.rotate()</code> must come before resize.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EXIF orientation</span><span class="v">A 1-8 tag telling viewers how to rotate the stored pixels for display.</span></div>
+  <div class="kv"><span class="k">.rotate() (no arg)</span><span class="v">Bakes the EXIF orientation into the pixels and clears the tag.</span></div>
+  <div class="kv"><span class="k">Auto-orient</span><span class="v">Honoring that tag; re-encoding without it loses the tag and leaves sideways pixels.</span></div>
+  <div class="kv"><span class="k">Display dimensions</span><span class="v">Width/height after orientation is applied — may swap from the raw metadata.</span></div>
+  <div class="kv"><span class="k">Orientation 6 / 8</span><span class="v">The common 90-degree phone cases that bite most often.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Phones store pixels sideways plus an orientation tag; viewers rotate on display.</li><li>Re-encoding drops the tag, so you must bake rotation in with .rotate().</li><li>.rotate() with no argument honors EXIF; call it before resize.</li><li>metadata width/height are pre-rotation and can be swapped from the display size.</li><li>Test with real orientation-6 and orientation-8 photos, not just a landscape image.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — rotate()</span><span class="lc-sub">sharp.pixelplumbing.com/api-operation#rotate — the no-argument EXIF form vs explicit angles.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">CIPA — Exif 2.32 specification</span><span class="lc-sub">cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf — tag 0x0112 and all eight values.</span></span></div>
@@ -1441,6 +1560,23 @@ Khẳng định trên kích thước OUTPUT, không phải trên việc không c
 <div class="callout">
 <p><strong>Một câu.</strong> Khoảng 40% ảnh điện thoại lưu pixel nằm ngang với một thẻ EXIF orientation bảo trình xem xoay, và re-encode làm rơi thẻ đó — nên hãy gọi <code>.rotate()</code> không tham số (nó đọc và áp dụng orientation riêng của từng file, và là no-op cho 55% không cần gì) trước khi encode, lưu <code>info.width</code>/<code>info.height</code> từ output chứ không phải kích thước <code>metadata</code> trước-xoay, và test bằng fixture chụp từ điện thoại thật ở orientation 1, 3, 6, và 8.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tìm một ảnh dọc chụp bằng điện thoại hiển thị đúng chiều. Đọc orientation: <code>sharp(buf).metadata()</code> rồi <code>.orientation</code> (thường là 6).</li><li>Re-encode KHÔNG có <code>.rotate()</code> — output nằm nghiêng vì thẻ bị bỏ còn pixel không hề di chuyển.</li><li>Thêm <code>.rotate()</code> không tham số trước <code>resize()</code>; xác nhận output đúng chiều và orientation đã xoá.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('portrait.jpg');(async()=&gt;{console.log('before',(await sharp(b).metadata()).orientation);await sharp(b).rotate().resize(600).toFile('fixed.jpg');console.log('after',(await sharp('fixed.jpg').metadata()).orientation)})()"</code></pre>
+<p><strong>Đạt khi:</strong> một ảnh dọc điện thoại ra đúng chiều, và bạn hiểu vì sao <code>.rotate()</code> phải đứng trước resize.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">EXIF orientation</span><span class="v">Thẻ 1-8 báo cho trình xem biết xoay pixel lưu thế nào khi hiển thị.</span></div>
+  <div class="kv"><span class="k">.rotate() (không tham số)</span><span class="v">Nướng orientation EXIF vào pixel và xoá thẻ.</span></div>
+  <div class="kv"><span class="k">Auto-orient</span><span class="v">Tôn trọng thẻ đó; re-encode không có nó làm mất thẻ và để lại pixel nằm nghiêng.</span></div>
+  <div class="kv"><span class="k">Kích thước hiển thị</span><span class="v">Width/height sau khi áp orientation — có thể hoán đổi so với metadata thô.</span></div>
+  <div class="kv"><span class="k">Orientation 6 / 8</span><span class="v">Hai ca xoay 90 độ phổ biến của điện thoại hay cắn nhất.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Điện thoại lưu pixel nằm nghiêng kèm một thẻ orientation; trình xem xoay khi hiển thị.</li><li>Re-encode làm rơi thẻ, nên bạn phải nướng phần xoay vào bằng .rotate().</li><li>.rotate() không tham số tôn trọng EXIF; gọi nó trước resize.</li><li>width/height trong metadata là trước-xoay và có thể hoán đổi so với kích thước hiển thị.</li><li>Kiểm bằng ảnh orientation-6 và orientation-8 thật, không chỉ một ảnh ngang.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — rotate()</span><span class="lc-sub">sharp.pixelplumbing.com/api-operation#rotate — dạng EXIF không tham số vs góc explicit.</span></span></div>

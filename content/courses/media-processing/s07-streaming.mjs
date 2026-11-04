@@ -175,6 +175,23 @@ feed of instant thumbnails feels fast even though nothing has loaded.
 <p><strong>One sentence.</strong> A plain MP4 with <code>+faststart</code> already streams — the browser Range-fetches as playback advances and seeks without downloading the prefix — so HLS buys you exactly one thing, mid-playback bitrate adaptation, at a measured cost of 1.8× storage, 2.7× CPU, ~60× the object count, and a JavaScript player; use progressive for clips under about two minutes and reach for HLS when content runs past ten, and in either case spend your attention on <code>poster</code> plus <code>preload="metadata"</code>, which do more for perceived speed than any codec decision.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take a 15-second clip. Produce a faststart progressive MP4 and confirm it starts playing quickly with a plain &lt;video&gt; tag.</li><li>Estimate what HLS would add: an extra encode pass, segments, a manifest, a JavaScript player, and roughly 3-5x storage.</li><li>Decide a threshold (duration or adaptive need) above which HLS earns its complexity.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset medium -movflags +faststart -c:a aac out.mp4</code></pre>
+<p><strong>Done when:</strong> you can name when a plain faststart MP4 is enough and when HLS is worth it.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Progressive MP4</span><span class="v">A single file played top to bottom; faststart lets it begin early.</span></div>
+  <div class="kv"><span class="k">HLS</span><span class="v">Adaptive streaming via a manifest plus short segments over HTTP.</span></div>
+  <div class="kv"><span class="k">Adaptive bitrate (ABR)</span><span class="v">Switching quality to match the viewer bandwidth.</span></div>
+  <div class="kv"><span class="k">Manifest / playlist</span><span class="v">The .m3u8 text file listing the segments.</span></div>
+  <div class="kv"><span class="k">Startup latency</span><span class="v">Time from pressing play to the first frame.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>HLS is not free: an extra encode, segments, a manifest, a JS player, more storage.</li><li>For short feed clips, a faststart progressive MP4 is usually enough.</li><li>HLS earns its cost with long video and a real need for adaptive bitrate.</li><li>Choose by duration and bandwidth variance, not by article defaults.</li><li>You can always start progressive and add HLS when the numbers demand it.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — HTTP Range requests</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests — 206, Content-Range, Accept-Ranges.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — video element attributes</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTML/Element/video — preload, poster, playsinline.</span></span></div>
@@ -344,6 +361,23 @@ hỏng; một feed hiện thumbnail tức thì cho cảm giác nhanh dù chưa c
 <div class="callout">
 <p><strong>Một câu.</strong> Một MP4 thường có <code>+faststart</code> vốn đã streaming rồi — trình duyệt lấy theo Range khi việc phát tiến tới và tua được mà không cần tải phần đầu — nên HLS chỉ mua cho bạn đúng một thứ, là thích ứng bitrate giữa lúc phát, với cái giá đo được là 1,8 lần dung lượng, 2,7 lần CPU, ~60 lần số object, và một trình phát JavaScript; hãy dùng progressive cho clip dưới khoảng hai phút và với tới HLS khi nội dung vượt quá mười phút, và trong cả hai trường hợp hãy dồn sự chú ý vào <code>poster</code> cộng <code>preload=&quot;metadata&quot;</code>, vốn làm cho tốc độ cảm nhận nhiều hơn bất kỳ quyết định codec nào.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy một clip 15 giây. Tạo một MP4 progressive có faststart và xác nhận nó bắt đầu phát nhanh với một thẻ &lt;video&gt; thường.</li><li>Ước lượng HLS sẽ thêm gì: một lượt encode nữa, các segment, một manifest, một trình phát JavaScript, và khoảng 3-5x lưu trữ.</li><li>Quyết một ngưỡng (thời lượng hoặc nhu cầu thích ứng) mà trên đó HLS xứng với độ phức tạp.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset medium -movflags +faststart -c:a aac out.mp4</code></pre>
+<p><strong>Đạt khi:</strong> bạn nêu được khi nào một MP4 faststart thường là đủ và khi nào HLS đáng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">MP4 progressive</span><span class="v">Một file phát từ trên xuống; faststart cho nó bắt đầu sớm.</span></div>
+  <div class="kv"><span class="k">HLS</span><span class="v">Streaming thích ứng qua một manifest cộng các segment ngắn trên HTTP.</span></div>
+  <div class="kv"><span class="k">Adaptive bitrate (ABR)</span><span class="v">Đổi chất lượng khớp băng thông người xem.</span></div>
+  <div class="kv"><span class="k">Manifest / playlist</span><span class="v">File văn bản .m3u8 liệt kê các segment.</span></div>
+  <div class="kv"><span class="k">Độ trễ khởi đầu</span><span class="v">Thời gian từ bấm phát tới frame đầu tiên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>HLS không miễn phí: một lượt encode nữa, các segment, một manifest, một trình phát JS, nhiều lưu trữ hơn.</li><li>Với clip feed ngắn, một MP4 progressive có faststart thường là đủ.</li><li>HLS xứng chi phí với video dài và nhu cầu thực sự về bitrate thích ứng.</li><li>Chọn theo thời lượng và độ dao động băng thông, không theo mặc định của bài viết.</li><li>Bạn luôn có thể bắt đầu progressive và thêm HLS khi con số đòi hỏi.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — HTTP Range requests</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Range_requests — 206, Content-Range, Accept-Ranges.</span></span></div>
@@ -552,6 +586,23 @@ and 369 of 370 segments returned 200.
 <p><strong>One sentence.</strong> HLS is a text master playlist listing renditions by <code>BANDWIDTH</code> and <code>CODECS</code>, plus one playlist per rendition listing six-second chunks — fetched over ordinary HTTP — so the format is simple and the operational cost is elsewhere: pin keyframes with <code>-g</code>/<code>-keyint_min</code>/<code>-sc_threshold 0</code> so renditions can switch cleanly, always pass <code>-hls_playlist_type vod</code> or players treat a finished file as live and hide the seek bar, cache segments and VOD manifests immutably but live manifests for one segment only, and accept that a single missing segment out of hundreds fails silently for only the viewers who reach that timestamp.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Segment a clip into HLS: produce <code>index.m3u8</code> plus .ts segments. Open the .m3u8 in a text editor and read it top to bottom.</li><li>Identify <code>EXT-X-TARGETDURATION</code> and the segment list; map each line to a file on disk.</li><li>Serve the folder and play with an HLS player; break one segment URL and watch where it fails.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset veryfast -c:a aac -f hls -hls_time 6 -hls_playlist_type vod index.m3u8</code></pre>
+<p><strong>Done when:</strong> you can read an .m3u8 end to end and point at exactly which files a player will fetch.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">.m3u8 manifest</span><span class="v">A plain-text playlist listing segment URLs and durations.</span></div>
+  <div class="kv"><span class="k">Segment (.ts/.m4s)</span><span class="v">A few seconds of video fetched by a normal HTTP GET.</span></div>
+  <div class="kv"><span class="k">EXT-X-TARGETDURATION</span><span class="v">The maximum segment length declared in the manifest.</span></div>
+  <div class="kv"><span class="k">VOD vs live playlist</span><span class="v">A fixed list vs a sliding window updated over time.</span></div>
+  <div class="kv"><span class="k">hls_time</span><span class="v">The target segment duration when encoding.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>HLS is just a text playlist pointing at short segments fetched over plain HTTP.</li><li>No special server or protocol — ordinary GETs, cacheable on a CDN.</li><li>Reading one manifest removes the mystique and shows where ops problems live.</li><li>Segment length trades startup latency against request overhead.</li><li>Correct cache headers on the manifest vs the segments are where live HLS usually breaks.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8216 — HTTP Live Streaming</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc8216 — mọi thẻ EXT-X, viết dễ đọc bất ngờ.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — HLS muxer</span><span class="lc-sub">ffmpeg.org/ffmpeg-formats.html#hls-2 — hls_time, hls_flags, var_stream_map.</span></span></div>
@@ -748,6 +799,23 @@ không có gì trong hệ giám sát trông sai cả, vì manifest và 369 trong
 <div class="callout">
 <p><strong>Một câu.</strong> HLS là một master playlist dạng văn bản liệt kê các bản theo <code>BANDWIDTH</code> và <code>CODECS</code>, cộng một playlist cho mỗi bản liệt kê những mẩu sáu giây — lấy về bằng HTTP thường — nên format thì đơn giản còn chi phí vận hành nằm ở chỗ khác: hãy ghim keyframe bằng <code>-g</code>/<code>-keyint_min</code>/<code>-sc_threshold 0</code> để các bản chuyển đổi sạch sẽ, luôn truyền <code>-hls_playlist_type vod</code> nếu không trình phát sẽ coi một file đã xong là trực tiếp và giấu thanh tua đi, cache segment và manifest VOD dạng bất biến nhưng manifest trực tiếp chỉ trong đúng một segment, và chấp nhận rằng một segment thiếu trong hàng trăm cái sẽ hỏng trong im lặng chỉ với những người xem tới đúng mốc thời gian đó.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Cắt một clip thành HLS: tạo <code>index.m3u8</code> cộng các segment .ts. Mở .m3u8 trong trình soạn thảo và đọc từ trên xuống.</li><li>Xác định <code>EXT-X-TARGETDURATION</code> và danh sách segment; ánh xạ mỗi dòng tới một file trên đĩa.</li><li>Phục vụ thư mục và phát bằng một trình HLS; làm hỏng một URL segment và xem nó hỏng ở đâu.</li></ol>
+<pre><code class="language-bash">ffmpeg -i in.mp4 -c:v libx264 -crf 23 -preset veryfast -c:a aac -f hls -hls_time 6 -hls_playlist_type vod index.m3u8</code></pre>
+<p><strong>Đạt khi:</strong> bạn đọc hết một .m3u8 và chỉ đúng những file mà trình phát sẽ lấy.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Manifest .m3u8</span><span class="v">Một playlist văn bản thuần liệt kê URL segment và thời lượng.</span></div>
+  <div class="kv"><span class="k">Segment (.ts/.m4s)</span><span class="v">Vài giây video lấy bằng một GET HTTP bình thường.</span></div>
+  <div class="kv"><span class="k">EXT-X-TARGETDURATION</span><span class="v">Độ dài segment tối đa khai trong manifest.</span></div>
+  <div class="kv"><span class="k">Playlist VOD vs live</span><span class="v">Một danh sách cố định vs một cửa sổ trượt cập nhật theo thời gian.</span></div>
+  <div class="kv"><span class="k">hls_time</span><span class="v">Thời lượng segment mục tiêu khi encode.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>HLS chỉ là một playlist văn bản trỏ tới các segment ngắn lấy qua HTTP thường.</li><li>Không server đặc biệt hay giao thức nào — GET bình thường, cache được trên CDN.</li><li>Đọc một manifest là gỡ bỏ vẻ huyền bí và chỉ ra chỗ vấn đề vận hành nằm.</li><li>Độ dài segment đổi độ trễ khởi đầu lấy chi phí số request.</li><li>Header cache đúng cho manifest vs segment là chỗ HLS live hay vỡ nhất.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">RFC 8216 — HTTP Live Streaming</span><span class="lc-sub">datatracker.ietf.org/doc/html/rfc8216 — mọi thẻ EXT-X, viết dễ đọc bất ngờ.</span></span></div>

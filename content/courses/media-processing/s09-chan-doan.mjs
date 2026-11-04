@@ -137,6 +137,23 @@ curl -sI "https://media.cuongthai.com/path/to/file.webp" \\
 <p><strong>One sentence.</strong> Media failures are almost never located where they present — a sideways photo is a missing <code>.rotate()</code>, a silent GIF is a constructor option, a frozen live stream is a cache header — so work the table by symptom rather than by intuition, and follow a fixed order: ask the file what it is with <code>ffprobe</code>/<code>metadata()</code>, then check the served headers with <code>curl -I</code>, then reproduce on a single file by hand, then diff against a known-good example.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take three symptoms — a sideways photo, a silent GIF, a frozen live stream — and for each write the one confirming command to run before any code change.</li><li>Run the confirmations on a real file: metadata orientation, metadata pages, and <code>curl -I</code> for cache headers.</li><li>Build your own reverse-index row for a fourth symptom you have hit.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const m=await sharp(fs.readFileSync('in.jpg')).metadata();console.log('orientation',m.orientation,'pages',m.pages)})()"</code></pre>
+<p><strong>Done when:</strong> for each symptom you confirm the cause with one command before touching any code.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reverse index</span><span class="v">A mapping from user-visible symptom to actual cause to confirming command.</span></div>
+  <div class="kv"><span class="k">Confirming command</span><span class="v">The cheap check that proves the cause before you change anything.</span></div>
+  <div class="kv"><span class="k">Distal cause</span><span class="v">The real fault, often several modules from where it shows.</span></div>
+  <div class="kv"><span class="k">Cache header check</span><span class="v">curl -I to see Cache-Control and Content-Type.</span></div>
+  <div class="kv"><span class="k">Reproduce-first</span><span class="v">Confirm, then fix — never fix on a guess.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Media failures rarely occur where they show — the cause is often modules away.</li><li>Keep a reverse index: symptom to likely cause to one confirming command.</li><li>Confirm before changing code; the confirming command is usually cheap (metadata, curl -I).</li><li>Sideways photo is a missing rotate; silent GIF is the animated option; frozen stream is a cache header.</li><li>Growing your own index turns repeat incidents into one-minute diagnoses.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — ffprobe</span><span class="lc-sub">ffmpeg.org/ffprobe.html — mọi trường show_entries dùng ở trên.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — metadata()</span><span class="lc-sub">sharp.pixelplumbing.com/api-input#metadata — orientation, pages, format.</span></span></div>
@@ -260,6 +277,23 @@ curl -sI "https://media.cuongthai.com/path/to/file.webp" \\
 <div class="callout">
 <p><strong>Một câu.</strong> Sự cố media gần như không bao giờ nằm ở chỗ nó biểu hiện — một tấm ảnh nghiêng là thiếu <code>.rotate()</code>, một GIF câm là một option của constructor, một luồng trực tiếp đóng băng là một header cache — nên hãy tra bảng theo triệu chứng thay vì theo trực giác, và theo một thứ tự cố định: hỏi file nó là gì bằng <code>ffprobe</code>/<code>metadata()</code>, rồi kiểm header được phục vụ bằng <code>curl -I</code>, rồi tái hiện trên một file bằng tay, rồi so với một ví dụ biết chắc là tốt.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy ba triệu chứng — ảnh nằm nghiêng, GIF câm, luồng live đóng băng — và với mỗi cái viết một lệnh xác nhận để chạy trước mọi thay đổi code.</li><li>Chạy các lệnh xác nhận trên một file thật: orientation của metadata, pages của metadata, và <code>curl -I</code> cho header cache.</li><li>Dựng dòng chỉ-mục-ngược của riêng bạn cho một triệu chứng thứ tư bạn từng gặp.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const m=await sharp(fs.readFileSync('in.jpg')).metadata();console.log('orientation',m.orientation,'pages',m.pages)})()"</code></pre>
+<p><strong>Đạt khi:</strong> với mỗi triệu chứng bạn xác nhận nguyên nhân bằng một lệnh trước khi đụng vào code.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Chỉ mục ngược</span><span class="v">Ánh xạ từ triệu chứng người dùng thấy tới nguyên nhân thật tới lệnh xác nhận.</span></div>
+  <div class="kv"><span class="k">Lệnh xác nhận</span><span class="v">Phép kiểm rẻ chứng minh nguyên nhân trước khi bạn đổi bất cứ thứ gì.</span></div>
+  <div class="kv"><span class="k">Nguyên nhân xa</span><span class="v">Lỗi thật, thường cách chỗ biểu hiện vài module.</span></div>
+  <div class="kv"><span class="k">Kiểm header cache</span><span class="v">curl -I để xem Cache-Control và Content-Type.</span></div>
+  <div class="kv"><span class="k">Tái hiện trước</span><span class="v">Xác nhận, rồi sửa — không bao giờ sửa theo phỏng đoán.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Lỗi media hiếm khi xảy ra ở chỗ biểu hiện — nguyên nhân thường cách đó mấy module.</li><li>Giữ một chỉ mục ngược: triệu chứng tới nguyên nhân khả dĩ tới một lệnh xác nhận.</li><li>Xác nhận trước khi đổi code; lệnh xác nhận thường rẻ (metadata, curl -I).</li><li>Ảnh nghiêng là thiếu rotate; GIF câm là option animated; luồng đóng băng là header cache.</li><li>Nuôi chỉ mục của riêng bạn biến sự cố lặp lại thành chẩn đoán một phút.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg — ffprobe</span><span class="lc-sub">ffmpeg.org/ffprobe.html — mọi trường show_entries dùng ở trên.</span></span></div>
@@ -397,6 +431,23 @@ expect(outMeta.pages).toBe(48)                    // frames survived
 <p><strong>One sentence.</strong> The hardest media bugs return HTTP 200, write a structurally valid file, and log at most one <code>warn</code> — both real defects found in this repo were of that kind — and they require three ingredients (valid-looking output, nothing comparing output to intent, and a fallback that converts wrong into merely different), so the defence is to assert a property that only success produces, measure it on the <em>output</em> rather than the input, and put a counter on every fallback so a path that was supposed to be rare firing 100% of the time shows up as a signal instead of hiding as a log line.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>List the returns-success bugs from this course (first-frame GIF, no-op loudnorm). For each, which dashboard would stay green?</li><li>Add an assertion that would have caught one: after an animated encode, assert output pages is greater than 1 for an animated input.</li><li>Add one log or metric that makes the silent failure visible (a frame count, a measured LUFS).</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const g=fs.readFileSync('in.gif');const inp=await sharp(g,{animated:true}).metadata();const out=await sharp(await sharp(g,{animated:true}).webp().toBuffer()).metadata();console.log('in',inp.pages,'out',out.pages,inp.pages===out.pages?'OK':'LOST FRAMES')})()"</code></pre>
+<p><strong>Done when:</strong> you add at least one assertion or metric that turns a silent success into a loud failure.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Silent failure</span><span class="v">HTTP 200 plus plausible output plus at most a warn — it survives indefinitely.</span></div>
+  <div class="kv"><span class="k">Green dashboard trap</span><span class="v">Metrics look fine because nothing errored.</span></div>
+  <div class="kv"><span class="k">Invariant assertion</span><span class="v">A post-condition check (e.g. output pages greater than 1) that catches no-ops.</span></div>
+  <div class="kv"><span class="k">Observability</span><span class="v">Logging the one number that would reveal the bug.</span></div>
+  <div class="kv"><span class="k">Post-condition</span><span class="v">What must be true after the operation, verified in code.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Crashes get fixed fast; HTTP-200 bugs can live in production forever.</li><li>Both real repo defects found here were of the silent-success kind.</li><li>Dashboards stay green because nothing threw — add invariant assertions.</li><li>Log or measure the one number (frame count, LUFS) that exposes the no-op.</li><li>Post-conditions turn silent successes into loud, fixable failures.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/services/ffmpeg.service.ts</span><span class="lc-sub">Đường dự phòng loudnorm — đúng về ý định, nhưng không được đếm.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/services/video.service.ts</span><span class="lc-sub">Ngữ nghĩa non-fatal của thumbnail, và vì sao nó khiến việc khai thác trở nên vô hình.</span></span></div>
@@ -521,6 +572,23 @@ expect(outMeta.pages).toBe(48)                    // các frame còn sống sót
 <div class="callout">
 <p><strong>Một câu.</strong> Những bug media khó nhất đều trả về HTTP 200, ghi ra một file hợp lệ về cấu trúc, và ghi log nhiều nhất một dòng <code>warn</code> — cả hai khiếm khuyết thật tìm thấy trong kho này đều thuộc loại đó — và chúng cần ba nguyên liệu (output trông hợp lệ, không gì so output với ý định, và một đường dự phòng biến sai thành chỉ-là-khác), nên cách phòng thủ là khẳng định một thuộc tính mà chỉ thành công mới sinh ra, đo nó trên <em>output</em> chứ không phải input, và đặt một counter lên mọi đường dự phòng để một đường lẽ ra hiếm mà phát tác 100% thời gian hiện lên thành một tín hiệu thay vì ẩn mình thành một dòng log.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Liệt kê các bug trả-về-thành-công trong khoá này (GIF frame-đầu, loudnorm vô tác dụng). Với mỗi cái, dashboard nào vẫn xanh?</li><li>Thêm một assertion lẽ ra đã bắt được một cái: sau encode động, khẳng định pages output lớn hơn 1 với input động.</li><li>Thêm một log hoặc metric làm lỗi câm thành thấy được (số frame, LUFS đã đo).</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');(async()=&gt;{const g=fs.readFileSync('in.gif');const inp=await sharp(g,{animated:true}).metadata();const out=await sharp(await sharp(g,{animated:true}).webp().toBuffer()).metadata();console.log('in',inp.pages,'out',out.pages,inp.pages===out.pages?'OK':'LOST FRAMES')})()"</code></pre>
+<p><strong>Đạt khi:</strong> bạn thêm ít nhất một assertion hoặc metric biến một thành-công-câm thành một thất-bại-to.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lỗi câm</span><span class="v">HTTP 200 cộng output trông hợp lý cộng nhiều nhất một warn — sống vô thời hạn.</span></div>
+  <div class="kv"><span class="k">Bẫy dashboard xanh</span><span class="v">Metric trông ổn vì không có gì lỗi.</span></div>
+  <div class="kv"><span class="k">Assertion bất biến</span><span class="v">Một kiểm hậu-điều-kiện (ví dụ pages output lớn hơn 1) bắt được việc vô tác dụng.</span></div>
+  <div class="kv"><span class="k">Observability</span><span class="v">Ghi log một con số sẽ lộ ra bug.</span></div>
+  <div class="kv"><span class="k">Hậu điều kiện</span><span class="v">Điều phải đúng sau thao tác, kiểm trong code.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Crash được vá nhanh; bug HTTP-200 có thể sống trên production mãi mãi.</li><li>Cả hai khiếm khuyết thật tìm thấy ở đây đều thuộc loại thành-công-câm.</li><li>Dashboard vẫn xanh vì không có gì ném lỗi — hãy thêm assertion bất biến.</li><li>Log hoặc đo một con số (số frame, LUFS) để lộ ra việc vô tác dụng.</li><li>Hậu điều kiện biến thành-công-câm thành thất-bại-to, vá được.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Kho: src/services/ffmpeg.service.ts</span><span class="lc-sub">Đường dự phòng loudnorm — đúng về ý định, nhưng không được đếm.</span></span></div>

@@ -179,6 +179,23 @@ raw                                           Content-Disposition:
 <p><strong>One sentence.</strong> SVG is XML that can contain <code>&lt;script&gt;</code>, and a victim navigating directly to an uploaded <code>.svg</code> on your media domain executes that script with your origin — so unless your product genuinely needs user-supplied vector graphics, reject SVG outright at two independent gates (MIME set and filename extension, rejecting if <em>either</em> matches, because the client controls both), and if you must accept it, sanitize with DOMPurify, serve from a cookie-less origin with <code>default-src 'none'</code>, and never treat <code>&lt;img&gt;</code>-context safety as a defence.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Create <code>evil.svg</code> with an <code>onload</code> script (an alert). Serve it from a static dir and open the file URL directly — the script runs with that origin.</li><li>Apply the repo gate: reject <code>image/svg+xml</code> at the upload type check, so it never reaches storage.</li><li>If SVG must be allowed, sanitize it with DOMPurify (svg profile) and re-open — the script is gone.</li></ol>
+<pre><code class="language-bash">node -e "const D=require('isomorphic-dompurify');console.log(D.sanitize('&lt;svg onload=alert(1)&gt;&lt;script&gt;alert(2)&lt;/script&gt;&lt;/svg&gt;',{USE_PROFILES:{svg:true}}))"</code></pre>
+<p><strong>Done when:</strong> you can state why SVG is the one image format that is an XSS vector, and name the two gates — reject by MIME, or sanitize.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SVG</span><span class="v">An XML vector image that can embed script and executes on direct navigation.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">An attacker payload persisted on your server, run later in a victim browser.</span></div>
+  <div class="kv"><span class="k">Content-Disposition: attachment</span><span class="v">Forces download instead of inline execution.</span></div>
+  <div class="kv"><span class="k">DOMPurify</span><span class="v">A sanitizer that strips script and event handlers from markup.</span></div>
+  <div class="kv"><span class="k">MIME sniffing</span><span class="v">A browser guessing a type; why the unknown-MIME hole must be closed.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every other format is pixels; SVG is markup, and markup can run scripts.</li><li>An SVG opened by URL runs its script with the serving origin privileges.</li><li>Strongest defense: reject image/svg+xml at the upload gate (what this repo does).</li><li>If SVG is required: sanitize with DOMPurify and/or serve as an attachment on a separate origin.</li><li>Close the unknown-MIME hole — do not let an un-typed file slip past the check.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Unrestricted File Upload</span><span class="lc-sub">owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload — the SVG/stored-XSS class.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">DOMPurify — SVG profile</span><span class="lc-sub">github.com/cure53/DOMPurify — <code>USE_PROFILES: { svg: true }</code> and its bypass history.</span></span></div>
@@ -356,6 +373,23 @@ hiển thị thô                                  Content-Disposition:
 <div class="callout">
 <p><strong>Một câu.</strong> SVG là XML chứa được <code>&lt;script&gt;</code>, và một nạn nhân điều hướng thẳng tới một <code>.svg</code> đã upload trên domain media của bạn sẽ chạy script đó với origin của bạn — nên trừ khi sản phẩm của bạn thực sự cần đồ hoạ vector do người dùng cung cấp, hãy từ chối SVG dứt khoát ở hai cổng độc lập (tập MIME và đuôi tên file, từ chối nếu <em>một trong hai</em> khớp, vì client điều khiển cả hai), và nếu buộc phải nhận, hãy làm sạch bằng DOMPurify, phục vụ từ origin không cookie với <code>default-src 'none'</code>, và đừng bao giờ coi an toàn trong ngữ cảnh <code>&lt;img&gt;</code> là một phòng thủ.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tạo <code>evil.svg</code> có script <code>onload</code> (một alert). Phục vụ từ thư mục tĩnh và mở thẳng URL file — script chạy với origin đó.</li><li>Áp cổng của kho: từ chối <code>image/svg+xml</code> ở bước kiểm kiểu upload, để nó không bao giờ tới storage.</li><li>Nếu buộc phải cho SVG, làm sạch bằng DOMPurify (profile svg) rồi mở lại — script biến mất.</li></ol>
+<pre><code class="language-bash">node -e "const D=require('isomorphic-dompurify');console.log(D.sanitize('&lt;svg onload=alert(1)&gt;&lt;script&gt;alert(2)&lt;/script&gt;&lt;/svg&gt;',{USE_PROFILES:{svg:true}}))"</code></pre>
+<p><strong>Đạt khi:</strong> bạn nói được vì sao SVG là format ảnh duy nhất là vector XSS, và nêu hai cổng — từ chối theo MIME, hoặc làm sạch.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SVG</span><span class="v">Ảnh vector XML nhúng được script và chạy khi điều hướng thẳng tới nó.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">Payload của kẻ tấn công lưu trên server, chạy sau trong trình duyệt nạn nhân.</span></div>
+  <div class="kv"><span class="k">Content-Disposition: attachment</span><span class="v">Ép tải về thay vì chạy inline.</span></div>
+  <div class="kv"><span class="k">DOMPurify</span><span class="v">Bộ làm sạch loại bỏ script và trình xử lý sự kiện khỏi markup.</span></div>
+  <div class="kv"><span class="k">MIME sniffing</span><span class="v">Trình duyệt đoán kiểu; vì sao phải bịt lỗ MIME-không-rõ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi format khác là pixel; SVG là markup, và markup chạy được script.</li><li>Một SVG mở bằng URL chạy script của nó với quyền của origin phục vụ.</li><li>Phòng thủ mạnh nhất: từ chối image/svg+xml ở cổng upload (điều kho này làm).</li><li>Nếu cần SVG: làm sạch bằng DOMPurify và/hoặc phục vụ dạng attachment trên origin riêng.</li><li>Bịt lỗ MIME-không-rõ — đừng để một file không kiểu lọt qua.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">OWASP — Unrestricted File Upload</span><span class="lc-sub">owasp.org/www-community/vulnerabilities/Unrestricted_File_Upload — lớp SVG/stored-XSS.</span></span></div>
@@ -561,6 +595,23 @@ The GIF is under ~50 KB                      The conversion saves bytes
 <p><strong>One sentence.</strong> Sharp reads only frame 1 of an animated image unless you pass <code>{ animated: true }</code> to the <em>constructor</em>, and it fails silently — so check <code>metadata().pages</code> before encoding; converting animated GIF to animated WebP measured 9.5× smaller across real files, but costs seconds of CPU (belongs in a background job), needs a pixel budget of <code>width × height × pages</code> because libvips loads frames as one tall strip, must be resized by width only for the same reason, and should preserve <code>loop</code> and <code>delay</code> from the source metadata.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Convert a multi-frame GIF with plain <code>sharp(gif).webp()</code>. Open the output — one frame only.</li><li>Re-run with <code>sharp(gif, {animated:true}).webp()</code>. Now every frame survives.</li><li>Read <code>pages</code> from metadata and multiply <code>width*height*pages</code> to see the real pixel budget.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.gif');(async()=&gt;{const m=await sharp(b,{animated:true}).metadata();console.log('frames',m.pages,'budget',(m.width*m.height*m.pages/1e6).toFixed(1),'MP');await sharp(b,{animated:true}).webp().toFile('out.webp')})()"</code></pre>
+<p><strong>Done when:</strong> your animated upload keeps every frame, and your pixel-budget guard multiplies by pages.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">animated: true</span><span class="v">Constructor option telling Sharp to read all frames, not just the first.</span></div>
+  <div class="kv"><span class="k">pages</span><span class="v">Metadata field equal to the frame count of a multi-frame image.</span></div>
+  <div class="kv"><span class="k">Animated WebP</span><span class="v">Multi-frame WebP, usually far smaller than the equivalent GIF.</span></div>
+  <div class="kv"><span class="k">pageHeight</span><span class="v">Per-frame height; resizing animated images uses it, not total stacked height.</span></div>
+  <div class="kv"><span class="k">loop</span><span class="v">Playback repeat count — preserve it or the animation plays once.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>By default Sharp reads only frame 1 and silently drops the rest.</li><li>animated: true on the constructor is the one-line fix.</li><li>The pixel budget for animated images must multiply by pages, or you under-count RAM.</li><li>Resize by pageHeight, not stacked total height, or frames squash.</li><li>Preserve the loop count; animated WebP usually beats GIF by a wide margin.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — animated images</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — the <code>animated</code> and <code>pages</code> options.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google — Animated WebP</span><span class="lc-sub">developers.google.com/speed/webp/docs/riff_container#animation — container format and inter-frame prediction.</span></span></div>
@@ -750,6 +801,23 @@ GIF dưới ~50 KB                              Chuyển đổi tiết kiệm by
 <p><strong>Một câu.</strong> Sharp chỉ đọc frame 1 của ảnh động trừ khi bạn truyền <code>{ animated: true }</code> vào <em>constructor</em>, và nó thất bại trong im lặng — nên hãy kiểm <code>metadata().pages</code> trước khi encode; chuyển GIF động sang WebP động đo được nhỏ hơn 9.5× trên file thật, nhưng tốn hàng giây CPU (thuộc về job nền), cần ngân sách pixel <code>width × height × pages</code> vì libvips nạp frame thành một dải cao, phải resize chỉ theo width vì cùng lý do đó, và nên giữ <code>loop</code> cùng <code>delay</code> từ metadata nguồn.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Chuyển một GIF nhiều frame bằng <code>sharp(gif).webp()</code> thường. Mở output — chỉ một frame.</li><li>Chạy lại với <code>sharp(gif, {animated:true}).webp()</code>. Giờ mọi frame còn nguyên.</li><li>Đọc <code>pages</code> từ metadata và nhân <code>width*height*pages</code> để thấy ngân sách pixel thật.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.gif');(async()=&gt;{const m=await sharp(b,{animated:true}).metadata();console.log('frames',m.pages,'budget',(m.width*m.height*m.pages/1e6).toFixed(1),'MP');await sharp(b,{animated:true}).webp().toFile('out.webp')})()"</code></pre>
+<p><strong>Đạt khi:</strong> upload động của bạn giữ mọi frame, và chốt ngân sách pixel nhân với pages.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">animated: true</span><span class="v">Option constructor bảo Sharp đọc mọi frame, không chỉ frame đầu.</span></div>
+  <div class="kv"><span class="k">pages</span><span class="v">Trường metadata bằng số frame của ảnh nhiều frame.</span></div>
+  <div class="kv"><span class="k">WebP động</span><span class="v">WebP nhiều frame, thường nhỏ hơn hẳn GIF tương đương.</span></div>
+  <div class="kv"><span class="k">pageHeight</span><span class="v">Chiều cao mỗi frame; resize ảnh động dùng nó, không dùng tổng chiều cao xếp chồng.</span></div>
+  <div class="kv"><span class="k">loop</span><span class="v">Số lần lặp phát — giữ nó hoặc animation chỉ chạy một lần.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mặc định Sharp chỉ đọc frame 1 và âm thầm bỏ phần còn lại.</li><li>animated: true trên constructor là cách vá một dòng.</li><li>Ngân sách pixel cho ảnh động phải nhân với pages, nếu không bạn đếm thiếu RAM.</li><li>Resize theo pageHeight, không theo tổng chiều cao xếp chồng, nếu không frame bị bẹp.</li><li>Giữ số loop; WebP động thường thắng GIF một khoảng xa.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — animated images</span><span class="lc-sub">sharp.pixelplumbing.com/api-constructor — option <code>animated</code> và <code>pages</code>.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google — Animated WebP</span><span class="lc-sub">developers.google.com/speed/webp/docs/riff_container#animation — format container và dự đoán liên-frame.</span></span></div>
@@ -928,6 +996,23 @@ export function formatSavings(originalSize, optimizedSize) {
 <p><strong>One sentence.</strong> Quality and effort are independent dials — quality changes how the image looks and its curve knees around 80 for WebP (below that artifacts become describable, above it size grows exponentially for invisible gains), while effort changes only CPU-for-bytes at fixed quality and knees at 4 (going to 6 costs 3.5× the CPU for 2.7% fewer bytes, worth it only for assets served millions of times); AVIF's quality scale is <em>not</em> WebP's (q=50 ≈ WebP q=80, and copying 80 across makes files 65% larger), and you should measure the knee on your own representative images rather than trusting anyone's published default.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Encode one photo at WebP quality 60, 70, 80, 90 (effort fixed). Record bytes and eyeball quality; find where added bytes stop buying visible quality.</li><li>Fix quality at 80 and sweep effort 0, 2, 4, 6. Record bytes and encode ms; find where the curve flattens.</li><li>Pick the (quality, effort) pair that is smallest-for-acceptable at the fastest acceptable time.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{for(const q of[60,70,80,90]){const t=Date.now();const o=await sharp(b).webp({quality:q,effort:4}).toBuffer();console.log('q',q,o.length,'bytes',Date.now()-t,'ms')}})()"</code></pre>
+<p><strong>Done when:</strong> you can point at YOUR knee on both curves and justify the quality and effort you ship.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Quality</span><span class="v">The visual-fidelity vs bytes dial (lower means smaller, more artifacts).</span></div>
+  <div class="kv"><span class="k">Effort</span><span class="v">The CPU vs bytes dial at the same quality (higher means slower, slightly smaller).</span></div>
+  <div class="kv"><span class="k">Knee / flattening</span><span class="v">The point where more quality or effort stops paying off.</span></div>
+  <div class="kv"><span class="k">AVIF quality scale</span><span class="v">AVIF quality numbers do not map one-to-one to JPEG or WebP.</span></div>
+  <div class="kv"><span class="k">Visual check</span><span class="v">Judging acceptable beyond raw byte count (eye, or an SSIM metric).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Quality and effort are independent dials; tune both, not just quality.</li><li>Both curves flatten — spending past the knee wastes CPU or bytes for no gain.</li><li>Measure on your own image class; product shots and night photos differ.</li><li>AVIF quality scale is not JPEG scale; re-measure when you switch format.</li><li>Ship the smallest acceptable quality at the fastest acceptable effort.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — output options</span><span class="lc-sub">sharp.pixelplumbing.com/api-output — every quality/effort parameter per format.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Google — WebP compression study</span><span class="lc-sub">developers.google.com/speed/webp/docs/webp_study — the original size-vs-quality measurements.</span></span></div>
@@ -1095,6 +1180,23 @@ export function formatSavings(originalSize, optimizedSize) {
 <div class="callout">
 <p><strong>Một câu.</strong> Quality và effort là hai núm độc lập — quality thay đổi ảnh trông thế nào và đường cong của nó gãy quanh 80 với WebP (dưới đó artifact trở nên mô tả được, trên đó kích thước tăng theo cấp số nhân cho những lợi ích vô hình), trong khi effort chỉ đổi CPU-lấy-byte ở quality cố định và gãy ở 4 (lên 6 tốn 3.5× CPU cho 2.7% byte ít hơn, chỉ đáng cho tài sản phục vụ hàng triệu lần); thang quality của AVIF <em>không phải</em> của WebP (q=50 ≈ WebP q=80, và chép 80 qua làm file lớn hơn 65%), và bạn nên đo điểm gãy trên ảnh đại diện của chính mình thay vì tin mặc định của bất kỳ ai công bố.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Encode một ảnh ở WebP quality 60, 70, 80, 90 (effort cố định). Ghi byte và nhìn mắt; tìm chỗ thêm byte không mua thêm chất lượng thấy được.</li><li>Cố định quality 80 và quét effort 0, 2, 4, 6. Ghi byte và ms encode; tìm chỗ đường cong phẳng.</li><li>Chọn cặp (quality, effort) nhỏ-nhất-mà-chấp-nhận-được ở thời gian nhanh-nhất-mà-chấp-nhận-được.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=&gt;{for(const q of[60,70,80,90]){const t=Date.now();const o=await sharp(b).webp({quality:q,effort:4}).toBuffer();console.log('q',q,o.length,'bytes',Date.now()-t,'ms')}})()"</code></pre>
+<p><strong>Đạt khi:</strong> bạn chỉ được điểm gãy của CHÍNH BẠN trên cả hai đường cong và biện minh được quality và effort đã ship.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Quality</span><span class="v">Núm độ trung thực thị giác đổi lấy byte (thấp hơn = nhỏ hơn, nhiều artifact hơn).</span></div>
+  <div class="kv"><span class="k">Effort</span><span class="v">Núm CPU đổi lấy byte ở cùng quality (cao hơn = chậm hơn, nhỏ hơn chút).</span></div>
+  <div class="kv"><span class="k">Điểm gãy / phẳng</span><span class="v">Chỗ mà thêm quality hay effort không còn trả công.</span></div>
+  <div class="kv"><span class="k">Thang quality AVIF</span><span class="v">Số quality của AVIF không ánh xạ một-một với JPEG hay WebP.</span></div>
+  <div class="kv"><span class="k">Kiểm thị giác</span><span class="v">Đánh giá chấp nhận được ngoài con số byte (mắt, hoặc chỉ số SSIM).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Quality và effort là hai núm độc lập; chỉnh cả hai, không chỉ quality.</li><li>Cả hai đường cong đều phẳng — tiêu quá điểm gãy là phí CPU hoặc byte vô ích.</li><li>Đo trên lớp ảnh của bạn; ảnh sản phẩm và ảnh đêm khác nhau.</li><li>Thang quality AVIF không phải thang JPEG; đo lại khi đổi format.</li><li>Ship quality nhỏ nhất chấp nhận được ở effort nhanh nhất chấp nhận được.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp — output options</span><span class="lc-sub">sharp.pixelplumbing.com/api-output — mọi tham số quality/effort theo từng format.</span></span></div>

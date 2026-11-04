@@ -183,6 +183,23 @@ that compared the OUTPUT to the intent.
 <div class="pitfall">
 <p><strong>Trap — carrying a measured ratio to a different input and expecting it to hold.</strong> &quot;WebP is 30% smaller&quot; was measured on specific images at a specific size with specific quality settings. On a photo it may be 35%, on a flat graphic it may be 70%, and on an image that was already recompressed it can be larger — recompression of a lossy source adds artefacts and bytes at the same time. The measurements in this course are labelled with their inputs precisely so they can be checked rather than quoted. Before relying on a ratio, run it on ten files from your own bucket; it takes a minute and it is the difference between a number and a belief.</p>
 </div>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Reproduce one measured number from any chapter on your own machine — an encode time, a byte size, or an RSS figure. Compare it to the course value.</li><li>Note any gap and its likely reason (CPU, Sharp/libvips version, input class).</li><li>Write your own one-page pipeline checklist from the course rules, in your own words.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp');console.log('sharp',require('sharp/package.json').version,'libvips',sharp.versions.vips)"</code></pre>
+<p><strong>Done when:</strong> you have reproduced at least one figure and written a checklist you would actually use.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Reproducible figure</span><span class="v">A number you can regenerate, not just cite.</span></div>
+  <div class="kv"><span class="k">Pipeline checklist</span><span class="v">The condensed rules you apply when building a media path.</span></div>
+  <div class="kv"><span class="k">Measured vs reasoned</span><span class="v">Separating numbers you ran from numbers you inferred.</span></div>
+  <div class="kv"><span class="k">Version drift</span><span class="v">Why a figure moves across Sharp, libvips, and FFmpeg versions.</span></div>
+  <div class="kv"><span class="k">Baseline</span><span class="v">Your own machine numbers to compare future changes against.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Ten chapters reduce to a handful of numbers and rules that survived checking.</li><li>Keep the wrap-up page open while building a real pipeline.</li><li>Distinguish measured figures from reasoned ones — the course is honest about which.</li><li>Reproduce at least one number yourself to trust the rest.</li><li>Your own baseline matters more than any copied table.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp</span><span class="lc-sub">sharp.pixelplumbing.com — API, performance, và mọi option encoder.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg documentation</span><span class="lc-sub">ffmpeg.org/documentation.html — filter, muxer, protocol, ffprobe.</span></span></div>
@@ -361,6 +378,23 @@ nào có một bài test so OUTPUT với ý định.
 <div class="pitfall">
 <p><strong>Bẫy — mang một tỷ lệ đã đo sang một đầu vào khác rồi mong nó vẫn đúng.</strong> &quot;WebP nhỏ hơn 30%&quot; là đo trên những tấm ảnh cụ thể, ở một cỡ cụ thể, với thiết lập chất lượng cụ thể. Trên một tấm ảnh chụp nó có thể là 35%, trên một hình đồ hoạ phẳng nó có thể là 70%, còn trên một tấm ảnh vốn đã bị nén lại thì nó có thể LỚN HƠN — nén lại một nguồn có mất mát vừa thêm nhiễu vừa thêm byte cùng lúc. Các phép đo trong khoá này đều ghi rõ đầu vào chính là để chúng được kiểm lại chứ không phải để được trích dẫn. Trước khi dựa vào một tỷ lệ, hãy chạy nó trên mười file trong bucket của chính bạn; mất một phút, và đó là khác biệt giữa một con số và một niềm tin.</p>
 </div>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tái hiện một con số đã đo từ bất kỳ chương nào trên máy của bạn — một thời gian encode, một kích thước byte, hoặc một chỉ số RSS. So với giá trị trong khoá.</li><li>Ghi mọi chênh lệch và lý do khả dĩ (CPU, phiên bản Sharp/libvips, lớp input).</li><li>Viết checklist pipeline một trang của riêng bạn từ các luật của khoá, bằng lời của bạn.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp');console.log('sharp',require('sharp/package.json').version,'libvips',sharp.versions.vips)"</code></pre>
+<p><strong>Đạt khi:</strong> bạn đã tái hiện ít nhất một con số và viết một checklist bạn thật sự sẽ dùng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Con số tái hiện được</span><span class="v">Một số bạn sinh lại được, không chỉ trích dẫn.</span></div>
+  <div class="kv"><span class="k">Checklist pipeline</span><span class="v">Các luật cô đọng bạn áp khi dựng một đường media.</span></div>
+  <div class="kv"><span class="k">Đo vs suy luận</span><span class="v">Tách con số bạn chạy thật khỏi con số bạn suy ra.</span></div>
+  <div class="kv"><span class="k">Trôi phiên bản</span><span class="v">Vì sao một con số dịch chuyển qua các phiên bản Sharp, libvips, FFmpeg.</span></div>
+  <div class="kv"><span class="k">Baseline</span><span class="v">Con số máy của bạn để so với các thay đổi tương lai.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mười chương rút gọn thành một nắm con số và luật đã sống sót qua kiểm chứng.</li><li>Giữ trang tổng kết mở khi dựng một pipeline thật.</li><li>Phân biệt con số đã đo với con số suy luận — khoá học trung thực về việc nào là việc nào.</li><li>Tự tái hiện ít nhất một con số để tin phần còn lại.</li><li>Baseline của chính bạn quan trọng hơn bất kỳ bảng chép nào.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Sharp</span><span class="lc-sub">sharp.pixelplumbing.com — API, performance, và mọi option encoder.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">FFmpeg documentation</span><span class="lc-sub">ffmpeg.org/documentation.html — filter, muxer, protocol, ffprobe.</span></span></div>

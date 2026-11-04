@@ -5,6 +5,151 @@ export default {
   description: 'Ba bài mở đầu về format ảnh/video/audio, tại sao cần tối ưu, và điều gì đo được về chất lượng.',
   sortOrder: 1,
   lessons: [
+    {
+      title: 'Start here (1/2) — What media processing is, and why the server does it|||Bắt đầu tại đây (1/2) — Xử lý media là gì, và vì sao server làm nó',
+      slug: 'mp-0-0-start-here-1',
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người chưa từng xử lý media trên backend: xử lý media là gì (resize, transcode, chuẩn hoá), vì sao việc này thuộc về server chứ không phải trình duyệt, hai công cụ chính (Sharp cho ảnh, FFmpeg cho video và âm thanh), và một rủi ro phải tôn trọng: byte người dùng gửi lên là dữ liệu không tin được.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>What media processing is, and why the server does it</h2>
+<p class="lead">If you have only ever stored an uploaded file and served it back, this is the course that fills the gap in between. Media processing is everything that happens to an image, video, or audio file after it arrives and before a user sees it: shrinking a 4 MB phone photo to a 60 KB thumbnail, turning a .mov into an .mp4 that plays in every browser, making ten songs play at the same volume. You do not need any of it to make a file appear on a page — you need all of it to make an app that is fast, cheap, and safe.</p>
+<h3>The three verbs</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Resize / re-encode</span><span class="v">Make a smaller or more compatible copy — a 4032-pixel photo becomes an 800-pixel WebP a feed can load instantly.</span></div>
+  <div class="kv"><span class="k">Transcode</span><span class="v">Change a video or audio file from one codec/container to another so it plays everywhere and streams well.</span></div>
+  <div class="kv"><span class="k">Normalize / clean</span><span class="v">Fix what humans notice: rotate a sideways photo, even out loudness, strip a dangerous SVG script.</span></div>
+</div>
+<h3>Why the server, not the browser</h3>
+<p>A browser can resize an image, but you cannot trust it to. The user controls the client, so a client-side check is a suggestion, not a guarantee — a hostile upload simply skips it. The server is the one place every file must pass through, so it is the only place a size limit, a format whitelist, or a security check actually holds. The server also has the CPU and the libraries (Sharp, FFmpeg) that a phone on a slow network does not.</p>
+<h3>The one risk that shapes everything</h3>
+<p>Every byte a user uploads is attacker-controlled until proven otherwise. A tiny file can decode into gigabytes of pixels (a decompression bomb, Chapter 1). An image can carry a script (SVG, Chapter 2). A filename can carry a shell command (Chapter 3). The recurring theme of this course is: validate from the header first, bound the work, and never hand raw bytes to a shell.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Open any app you use that takes photo or video uploads. Upload one file and watch the result: is the image smaller than what you sent? Did a video take a moment before it was playable?</li><li>Write down, for that app, which of the three verbs you think ran (resize, transcode, normalize) and why.</li><li>List one thing that would go wrong if the app did NO processing — storage cost, a format that will not play, or a rotated photo.</li></ol>
+<p><strong>Done when:</strong> you can name, for a real app, at least two media operations it must be doing on the server and one concrete failure it avoids by doing them.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Media processing</span><span class="v">Everything done to an image/video/audio file between upload and display.</span></div>
+  <div class="kv"><span class="k">Transcode</span><span class="v">Convert media from one codec or container to another.</span></div>
+  <div class="kv"><span class="k">Variant</span><span class="v">A derived output (a size or format) made from the original upload.</span></div>
+  <div class="kv"><span class="k">Untrusted input</span><span class="v">Any uploaded byte, treated as hostile until validated.</span></div>
+  <div class="kv"><span class="k">Sharp / FFmpeg</span><span class="v">The image library and the video/audio tool this course uses.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Media processing is the work between "file arrives" and "user sees it".</li><li>Three verbs cover most of it: resize/re-encode, transcode, normalize/clean.</li><li>It belongs on the server because only the server can enforce limits and security.</li><li>Every uploaded byte is untrusted — validate from the header, bound the work.</li><li>Sharp handles images; FFmpeg handles video and audio.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Xử lý media là gì, và vì sao server làm nó</h2>
+<p class="lead">Nếu bạn mới chỉ từng lưu một file được upload rồi phục vụ lại, đây là khoá học lấp đúng khoảng giữa. Xử lý media là mọi thứ xảy ra với một file ảnh, video hay âm thanh sau khi nó tới và trước khi người dùng thấy nó: thu một ảnh điện thoại 4 MB thành thumbnail 60 KB, biến một .mov thành .mp4 phát được trên mọi trình duyệt, làm mười bài hát phát cùng một mức âm lượng. Bạn không cần phần nào trong đó để một file hiện lên trang — bạn cần tất cả để có một app nhanh, rẻ, và an toàn.</p>
+<h3>Ba động từ</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Resize / re-encode</span><span class="v">Tạo một bản nhỏ hơn hoặc tương thích hơn — ảnh 4032 pixel thành WebP 800 pixel mà feed tải tức thì.</span></div>
+  <div class="kv"><span class="k">Transcode</span><span class="v">Đổi video hoặc âm thanh từ codec/container này sang khác để phát được khắp nơi và stream tốt.</span></div>
+  <div class="kv"><span class="k">Normalize / dọn sạch</span><span class="v">Sửa thứ con người để ý: xoay ảnh nằm nghiêng, cân độ to, loại một script SVG nguy hiểm.</span></div>
+</div>
+<h3>Vì sao là server, không phải trình duyệt</h3>
+<p>Trình duyệt resize được một ảnh, nhưng bạn không tin nó được. Người dùng kiểm soát client, nên một phép kiểm phía client là một gợi ý, không phải một bảo đảm — một upload thù địch chỉ việc bỏ qua nó. Server là chỗ duy nhất mọi file buộc phải đi qua, nên là nơi duy nhất một giới hạn kích thước, một danh sách format cho phép, hay một phép kiểm an toàn thật sự có hiệu lực. Server cũng có CPU và thư viện (Sharp, FFmpeg) mà một điện thoại trên mạng chậm không có.</p>
+<h3>Rủi ro định hình mọi thứ</h3>
+<p>Mỗi byte người dùng upload là do kẻ tấn công kiểm soát cho tới khi chứng minh được ngược lại. Một file nhỏ xíu có thể giải nén thành hàng gigabyte pixel (bom giải nén, Chương 1). Một ảnh có thể mang script (SVG, Chương 2). Một tên file có thể mang một lệnh shell (Chương 3). Chủ đề xuyên suốt khoá này là: kiểm từ header trước, chặn khối lượng việc, và không bao giờ đưa byte thô cho một shell.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Mở một app bạn dùng có nhận upload ảnh hoặc video. Upload một file và quan sát kết quả: ảnh có nhỏ hơn cái bạn gửi không? Video có mất một lúc trước khi phát được không?</li><li>Ghi lại, với app đó, bạn nghĩ động từ nào đã chạy (resize, transcode, normalize) và vì sao.</li><li>Liệt kê một thứ sẽ hỏng nếu app KHÔNG xử lý gì — chi phí lưu trữ, một format không phát được, hay một ảnh bị xoay.</li></ol>
+<p><strong>Đạt khi:</strong> với một app thật, bạn nêu được ít nhất hai thao tác media mà nó phải làm trên server và một kiểu hỏng cụ thể mà nó tránh được nhờ làm vậy.</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Xử lý media</span><span class="v">Mọi việc làm với một file ảnh/video/âm thanh giữa lúc upload và lúc hiển thị.</span></div>
+  <div class="kv"><span class="k">Transcode</span><span class="v">Chuyển media từ một codec hoặc container sang cái khác.</span></div>
+  <div class="kv"><span class="k">Variant</span><span class="v">Một output dẫn xuất (một cỡ hoặc format) tạo từ ảnh gốc.</span></div>
+  <div class="kv"><span class="k">Input không tin được</span><span class="v">Bất kỳ byte nào được upload, coi là thù địch tới khi được kiểm.</span></div>
+  <div class="kv"><span class="k">Sharp / FFmpeg</span><span class="v">Thư viện ảnh và công cụ video/âm thanh mà khoá này dùng.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Xử lý media là phần việc giữa "file tới" và "người dùng thấy nó".</li><li>Ba động từ bao gần hết: resize/re-encode, transcode, normalize/dọn sạch.</li><li>Nó thuộc về server vì chỉ server mới ép được giới hạn và an toàn.</li><li>Mọi byte upload là không tin được — kiểm từ header, chặn khối lượng việc.</li><li>Sharp lo ảnh; FFmpeg lo video và âm thanh.</li></ul>
+</div>
+`,
+    },
+    {
+      title: 'Start here (2/2) — The pipeline mental model and how to study this course|||Bắt đầu tại đây (2/2) — Mô hình pipeline và cách học khoá này',
+      slug: 'mp-0-0-start-here-2',
+      type: 'VIDEO',
+      isFreePreview: true,
+      description: 'Bài thứ hai của cặp mở đầu: mô hình tư duy dùng suốt khoá (upload, kiểm, biến đổi, lưu, phục vụ), ba luật lặp lại (đo, chốt chặn, một cửa), bản đồ các chương, và cách học hiệu quả là chạy code chứ không phải đọc code.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>The pipeline mental model, and how to study this course</h2>
+<p class="lead">Lesson 1 said what media processing is. This one gives you the shape every chapter plugs into, the three rules that repeat under different names, and an honest way to study a course whose whole point is measured numbers: run the code. Reading it is not the same as running it, and this course was written by running it.</p>
+<h3>The pipeline — five stages every upload passes through</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1 · Receive</div><div class="lz-t">Upload</div><div class="lz-d">The file arrives as untrusted bytes.</div></div>
+  <div class="lz-step"><div class="lz-k">2 · Validate</div><div class="lz-t">Header gate</div><div class="lz-d">Read metadata, reject on size/format/pixels before decoding.</div></div>
+  <div class="lz-step"><div class="lz-k">3 · Transform</div><div class="lz-t">Sharp / FFmpeg</div><div class="lz-d">Resize, transcode, normalize — bounded by a concurrency limit.</div></div>
+  <div class="lz-step"><div class="lz-k">4 · Store</div><div class="lz-t">Object storage</div><div class="lz-d">Write variants under a well-designed key.</div></div>
+  <div class="lz-step"><div class="lz-k">5 · Serve</div><div class="lz-t">CDN</div><div class="lz-d">Deliver with the right cache headers.</div></div>
+</div>
+<h3>Three rules that repeat</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Measure, do not guess</span><span class="v">Every table here is a number someone ran. Encoders and inputs vary; your own measurement wins over any default.</span></div>
+  <div class="kv"><span class="k">Guard before you work</span><span class="v">Check the cheap header first; bound how much CPU and RAM one request can spend.</span></div>
+  <div class="kv"><span class="k">One door in</span><span class="v">Every upload goes through one module, so a guard added once protects every route.</span></div>
+</div>
+<h3>The map</h3>
+<p>Chapters 1-2 are Sharp (images). Chapters 3-4 are FFmpeg (video, then audio). Chapter 5 assembles the pipeline. Chapter 6 is cost. Chapters 7-8 are streaming and live. Chapter 9 is diagnosis, and Chapter 10 is the wrap-up plus a final exam. Two real bugs in this codebase — a shell-injection RCE and a loudness filter that did nothing — were found while writing it; they are in Chapters 3 and 4.</p>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Install the tools you will use all course: <code>npm i sharp</code> in a scratch folder, and check FFmpeg with <code>ffmpeg -version</code> (install it if missing).</li><li>Run a one-liner that proves both work: print the Sharp and libvips versions, then print the FFmpeg version.</li><li>Draw the five-stage pipeline from memory and label, for a photo upload, what happens at each stage.</li></ol>
+<pre><code class="language-bash">node -e "const s=require('sharp');console.log('sharp',require('sharp/package.json').version,'libvips',s.versions.vips)"</code></pre>
+<p><strong>Done when:</strong> both tools run on your machine and you can redraw the five stages and say which rule (measure, guard, one door) each later chapter is really about.</p></div>
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pipeline</span><span class="v">The fixed five-stage path every upload takes: receive, validate, transform, store, serve.</span></div>
+  <div class="kv"><span class="k">Header gate</span><span class="v">The validate stage — reject from metadata before any expensive decode.</span></div>
+  <div class="kv"><span class="k">Concurrency limit</span><span class="v">The cap on how many transforms run at once, keeping CPU and RAM bounded.</span></div>
+  <div class="kv"><span class="k">One door</span><span class="v">The single upload module every route must use.</span></div>
+  <div class="kv"><span class="k">Measured vs reasoned</span><span class="v">A number you ran versus a number you inferred — the course labels which.</span></div>
+</div>
+<h3>📌 Summary</h3>
+<ul><li>Every upload follows five stages: receive, validate, transform, store, serve.</li><li>Three rules repeat all course: measure not guess, guard before you work, one door in.</li><li>Chapters 1-2 Sharp, 3-4 FFmpeg, 5 pipeline, 6 cost, 7-8 streaming/live, 9-10 diagnosis and exam.</li><li>Two real repo bugs (an RCE and a no-op filter) were found while writing the course.</li><li>Study by running the code; reading is not the same as running.</li></ul>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Mô hình pipeline, và cách học khoá này</h2>
+<p class="lead">Bài 1 nói xử lý media là gì. Bài này cho bạn cái khung mà mọi chương cắm vào, ba luật lặp lại dưới những cái tên khác nhau, và một cách học trung thực cho một khoá mà cốt lõi là những con số đo được: hãy chạy code. Đọc nó không giống chạy nó, và khoá này được viết bằng cách chạy nó.</p>
+<h3>Pipeline — năm chặng mọi upload đi qua</h3>
+<div class="lz-flow">
+  <div class="lz-step"><div class="lz-k">1 · Nhận</div><div class="lz-t">Upload</div><div class="lz-d">File tới dưới dạng byte không tin được.</div></div>
+  <div class="lz-step"><div class="lz-k">2 · Kiểm</div><div class="lz-t">Cổng header</div><div class="lz-d">Đọc metadata, loại theo kích thước/format/pixel trước khi decode.</div></div>
+  <div class="lz-step"><div class="lz-k">3 · Biến đổi</div><div class="lz-t">Sharp / FFmpeg</div><div class="lz-d">Resize, transcode, chuẩn hoá — bị chặn bởi giới hạn concurrency.</div></div>
+  <div class="lz-step"><div class="lz-k">4 · Lưu</div><div class="lz-t">Object storage</div><div class="lz-d">Ghi các variant dưới một key thiết kế tốt.</div></div>
+  <div class="lz-step"><div class="lz-k">5 · Phục vụ</div><div class="lz-t">CDN</div><div class="lz-d">Giao với header cache đúng.</div></div>
+</div>
+<h3>Ba luật lặp lại</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Đo, đừng đoán</span><span class="v">Mọi bảng ở đây là một con số có người chạy. Encoder và input dao động; phép đo của chính bạn thắng mọi mặc định.</span></div>
+  <div class="kv"><span class="k">Chốt trước khi làm</span><span class="v">Kiểm header rẻ trước; chặn lượng CPU và RAM một request tiêu được.</span></div>
+  <div class="kv"><span class="k">Một cửa vào</span><span class="v">Mọi upload đi qua một module, nên một chốt thêm một lần bảo vệ mọi route.</span></div>
+</div>
+<h3>Bản đồ</h3>
+<p>Chương 1-2 là Sharp (ảnh). Chương 3-4 là FFmpeg (video, rồi âm thanh). Chương 5 lắp ráp pipeline. Chương 6 là chi phí. Chương 7-8 là streaming và live. Chương 9 là chẩn đoán, và Chương 10 là tổng kết cộng một bài thi cuối. Hai bug thật trong codebase này — một RCE do injection shell và một bộ lọc độ to không làm gì — được tìm ra khi đang viết khoá; chúng nằm ở Chương 3 và 4.</p>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Cài các công cụ bạn dùng suốt khoá: <code>npm i sharp</code> trong một thư mục nháp, và kiểm FFmpeg bằng <code>ffmpeg -version</code> (cài nếu thiếu).</li><li>Chạy một dòng chứng minh cả hai chạy được: in phiên bản Sharp và libvips, rồi in phiên bản FFmpeg.</li><li>Vẽ lại pipeline năm chặng từ trí nhớ và gán nhãn, với một upload ảnh, mỗi chặng xảy ra gì.</li></ol>
+<pre><code class="language-bash">node -e "const s=require('sharp');console.log('sharp',require('sharp/package.json').version,'libvips',s.versions.vips)"</code></pre>
+<p><strong>Đạt khi:</strong> cả hai công cụ chạy trên máy bạn và bạn vẽ lại được năm chặng cùng việc nói chương sau nào thật ra nói về luật nào (đo, chốt, một cửa).</p></div>
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Pipeline</span><span class="v">Đường năm chặng cố định mọi upload đi: nhận, kiểm, biến đổi, lưu, phục vụ.</span></div>
+  <div class="kv"><span class="k">Cổng header</span><span class="v">Chặng kiểm — loại từ metadata trước mọi decode đắt.</span></div>
+  <div class="kv"><span class="k">Giới hạn concurrency</span><span class="v">Trần số transform chạy cùng lúc, giữ CPU và RAM bị chặn.</span></div>
+  <div class="kv"><span class="k">Một cửa</span><span class="v">Module upload duy nhất mà mọi route phải dùng.</span></div>
+  <div class="kv"><span class="k">Đo vs suy luận</span><span class="v">Con số bạn chạy so với con số bạn suy ra — khoá học ghi rõ cái nào là cái nào.</span></div>
+</div>
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi upload theo năm chặng: nhận, kiểm, biến đổi, lưu, phục vụ.</li><li>Ba luật lặp suốt khoá: đo đừng đoán, chốt trước khi làm, một cửa vào.</li><li>Chương 1-2 Sharp, 3-4 FFmpeg, 5 pipeline, 6 chi phí, 7-8 streaming/live, 9-10 chẩn đoán và thi.</li><li>Hai bug thật của kho (một RCE và một bộ lọc vô tác dụng) được tìm ra khi viết khoá.</li><li>Học bằng cách chạy code; đọc không giống chạy.</li></ul>
+</div>
+`,
+    },
+
 
     {
       title: '0.1 — The formats, and what each is good at|||0.1 — Các format, và mỗi cái làm gì tốt',
@@ -117,6 +262,24 @@ serverside via <code>heif-convert</code>
 <div class="callout">
 <p><strong>One sentence.</strong> Twelve formats cover 99% of web media (JPEG/PNG/WebP/AVIF/SVG/GIF/HEIC for images; MP4/WebM containers + H.264/H.265/VP9/AV1 codecs + HLS/DASH streaming for video; MP3/Opus/AAC/WAV/PCM for audio), and picking the right one is 90% of the job — WebP at q=80 is the pragmatic default for photos, animated WebP replaces GIF, MP4+H.264+direct HTTP works for clips, HLS chunks for long video, and Opus wins on voice.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Grab one large JPEG (an iPhone photo, ~3-4 MB), name it <code>in.jpg</code>, and <code>npm i sharp</code>.</li><li>Write a short script that re-encodes it as WebP q=80, AVIF q=50, and a resized 800px WebP. Print each output size in bytes and the milliseconds it took.</li><li>Compare: AVIF should be the smallest but by far the slowest to encode; the 800px WebP should be a small fraction of the original.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=>{for(const[n,p]of[['webp',sharp(b).webp({quality:80})],['avif',sharp(b).avif({quality:50})]]){const t=Date.now();const o=await p.toBuffer();console.log(n,o.length,'bytes',Date.now()-t,'ms')}})()"</code></pre>
+<p><strong>Done when:</strong> you can state, from your own numbers, how much smaller WebP is than the source JPEG and roughly how many times slower AVIF encodes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Container vs codec</span><span class="v">The container (.mp4, .webm) is the box; the codec (H.264, VP9) is how the pixels inside are compressed.</span></div>
+  <div class="kv"><span class="k">Lossy / lossless</span><span class="v">Lossy (JPEG, MP3) drops detail for size; lossless (PNG, FLAC) keeps every bit.</span></div>
+  <div class="kv"><span class="k">WebP</span><span class="v">Google image format, ~25-35% smaller than JPEG, fast to encode, universal since 2020.</span></div>
+  <div class="kv"><span class="k">AVIF</span><span class="v">AV1-based image format — smallest bytes, but ~10x slower to encode than WebP.</span></div>
+  <div class="kv"><span class="k">Bitrate</span><span class="v">Bits per second of audio/video; the main size dial for both.</span></div>
+  <div class="kv"><span class="k">HLS</span><span class="v">A streaming format: a playlist that points at many short segments fetched over HTTP.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Media work is mostly choosing the right output format per job; a wrong pick costs storage, compatibility, or startup time.</li><li>Images: WebP is the safe default; AVIF when bytes matter more than encode time; PNG only for transparency or sharp lines.</li><li>Video: keep container, codec, and delivery (progressive MP4 vs HLS) as separate decisions.</li><li>Audio: size tracks bitrate and duration; speech needs far less than music.</li><li>Every "best format" claim is workload-dependent — measure on your own files.</li></ul>
 
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Image file type and format guide</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types — every image format, browser support matrix.</span></span></div>
@@ -234,6 +397,24 @@ serverside qua <code>heif-convert</code>
 <div class="callout">
 <p><strong>Một câu.</strong> Mười hai format bao 99% web media (JPEG/PNG/WebP/AVIF/SVG/GIF/HEIC cho ảnh; container MP4/WebM + codec H.264/H.265/VP9/AV1 + streaming HLS/DASH cho video; MP3/Opus/AAC/WAV/PCM cho audio), và chọn đúng là 90% việc — WebP q=80 mặc định thực dụng cho ảnh, WebP animated thay GIF, MP4+H.264+HTTP trực tiếp work cho clip, chunk HLS cho video dài, và Opus win trên voice.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy một ảnh JPEG lớn (ảnh iPhone, ~3-4 MB), đặt tên <code>in.jpg</code>, rồi <code>npm i sharp</code>.</li><li>Viết một đoạn script re-encode nó thành WebP q=80, AVIF q=50, và một bản WebP resize 800px. In kích thước mỗi output (byte) và số mili giây tốn.</li><li>So sánh: AVIF nhỏ nhất nhưng encode chậm nhất; bản WebP 800px chỉ bằng một phần nhỏ ảnh gốc.</li></ol>
+<pre><code class="language-bash">node -e "const sharp=require('sharp'),fs=require('fs');const b=fs.readFileSync('in.jpg');(async()=>{for(const[n,p]of[['webp',sharp(b).webp({quality:80})],['avif',sharp(b).avif({quality:50})]]){const t=Date.now();const o=await p.toBuffer();console.log(n,o.length,'bytes',Date.now()-t,'ms')}})()"</code></pre>
+<p><strong>Đạt khi:</strong> từ số đo của chính bạn, bạn nói được WebP nhỏ hơn JPEG gốc bao nhiêu và AVIF encode chậm cỡ mấy lần.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Container vs codec</span><span class="v">Container (.mp4, .webm) là cái hộp; codec (H.264, VP9) là cách nén pixel bên trong.</span></div>
+  <div class="kv"><span class="k">Lossy / lossless</span><span class="v">Lossy (JPEG, MP3) bỏ bớt chi tiết lấy kích thước; lossless (PNG, FLAC) giữ từng bit.</span></div>
+  <div class="kv"><span class="k">WebP</span><span class="v">Format ảnh của Google, nhỏ hơn JPEG ~25-35%, encode nhanh, phổ cập từ 2020.</span></div>
+  <div class="kv"><span class="k">AVIF</span><span class="v">Format ảnh nền AV1 — byte nhỏ nhất, nhưng encode chậm hơn WebP ~10 lần.</span></div>
+  <div class="kv"><span class="k">Bitrate</span><span class="v">Số bit mỗi giây của audio/video; núm kích thước chính của cả hai.</span></div>
+  <div class="kv"><span class="k">HLS</span><span class="v">Một format streaming: danh sách phát trỏ tới nhiều segment ngắn lấy qua HTTP.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Xử lý media phần lớn là chọn đúng format output cho việc; chọn sai tốn lưu trữ, tính tương thích, hoặc thời gian khởi đầu.</li><li>Ảnh: WebP là mặc định an toàn; AVIF khi byte quan trọng hơn thời gian encode; PNG chỉ cho trong suốt hoặc nét sắc.</li><li>Video: giữ container, codec và cách phát (MP4 progressive vs HLS) là ba quyết định riêng.</li><li>Audio: kích thước bám theo bitrate và thời lượng; tiếng nói cần ít hơn nhạc nhiều.</li><li>Mọi khẳng định "format tốt nhất" đều phụ thuộc workload — hãy đo trên file của bạn.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Image file type and format guide</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/Media/Formats/Image_types — mọi format ảnh, ma trận support browser.</span></span></div>
@@ -409,6 +590,25 @@ On-demand+cache:
 <p><strong>One sentence.</strong> Three architectures — upload-time (fast simple, wastes CPU on never-viewed variants), background-job (decoupled but requires queue infra), and on-demand+cache (only encodes what is viewed, but first view is slower) — and the pragmatic winner for most apps is a hybrid: one variant on upload-time for immediate URL, the rest on-demand or via background job, and video ALWAYS background because transcoding blocks the request handler for tens of seconds.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Take two workloads: (A) a profile picture that must appear right after upload, and (B) a 60-second user video.</li><li>For each, write which of the three models you would use — upload-time, background job, or on-demand — and one sentence of why.</li><li>For each, write the concrete failure of the <em>wrong</em> choice (a blocked request handler, a cold-start wait, or wasted pre-compute).</li></ol>
+<pre><code class="language-text">avatar upload   -&gt; upload-time   (small image, ~180ms WebP, user waits once)
+60s user video  -&gt; background job (15-30s transcode cannot block the request)
+many thumb sizes-&gt; on-demand      (make each size on first request, then cache)</code></pre>
+<p><strong>Done when:</strong> for each workload you named the model AND the concrete failure mode of the wrong one.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Upload-time</span><span class="v">Process inside the request that received the file; the user waits for the result.</span></div>
+  <div class="kv"><span class="k">Background job</span><span class="v">Store the raw bytes, enqueue the work, return a placeholder; a worker finishes it.</span></div>
+  <div class="kv"><span class="k">On-demand</span><span class="v">Generate the variant the first time it is requested, then cache it.</span></div>
+  <div class="kv"><span class="k">Variant</span><span class="v">One derived output (a size or format) of an original upload.</span></div>
+  <div class="kv"><span class="k">Cold start</span><span class="v">The slow first on-demand request, before the cache is warm.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Decide WHERE processing happens before writing any Sharp or FFmpeg code.</li><li>Upload-time fits small, fast image work the user waits for.</li><li>Background jobs are mandatory for video and any multi-second transform.</li><li>On-demand trades pre-compute for per-request latency plus a cache.</li><li>Most real apps are a hybrid: upload-time for small images, background for video.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare Images</span><span class="lc-sub">developers.cloudflare.com/images — the on-demand Worker pattern productized.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Vercel — Image Optimization</span><span class="lc-sub">vercel.com/docs/image-optimization — on-demand with edge caching.</span></span></div>
@@ -566,6 +766,25 @@ On-demand+cache:
 <div class="callout">
 <p><strong>Một câu.</strong> Ba kiến trúc — upload-time (nhanh đơn, lãng phí CPU trên variant không bao giờ view), background-job (tách nhưng cần infra queue), và on-demand+cache (chỉ encode cái được view, nhưng view đầu chậm hơn) — và winner thực dụng cho hầu hết app là hybrid: một variant on upload-time cho URL ngay, còn lại on-demand hoặc qua background job, và video LUÔN background vì transcode block request handler trong chục giây.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Lấy hai workload: (A) ảnh đại diện phải hiện ngay sau khi upload, và (B) một video người dùng dài 60 giây.</li><li>Với mỗi cái, viết bạn chọn model nào trong ba — upload-time, job nền, hay on-demand — và một câu vì sao.</li><li>Với mỗi cái, viết kiểu hỏng cụ thể của lựa chọn <em>sai</em> (chặn request handler, chờ cold-start, hoặc pre-compute phí phạm).</li></ol>
+<pre><code class="language-text">upload avatar    -&gt; upload-time (ảnh nhỏ, WebP ~180ms, user chờ một lần)
+video 60s        -&gt; job nền      (transcode 15-30s không được chặn request)
+nhiều cỡ thumb   -&gt; on-demand    (tạo mỗi cỡ ở lần gọi đầu, rồi cache)</code></pre>
+<p><strong>Đạt khi:</strong> với mỗi workload bạn nêu được model VÀ kiểu hỏng cụ thể của lựa chọn sai.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Upload-time</span><span class="v">Xử lý ngay trong request nhận file; người dùng chờ kết quả.</span></div>
+  <div class="kv"><span class="k">Job nền</span><span class="v">Lưu byte thô, đẩy việc vào hàng đợi, trả placeholder; một worker làm nốt.</span></div>
+  <div class="kv"><span class="k">On-demand</span><span class="v">Tạo variant ở lần đầu được yêu cầu, rồi cache lại.</span></div>
+  <div class="kv"><span class="k">Variant</span><span class="v">Một output dẫn xuất (một cỡ hoặc format) của ảnh gốc.</span></div>
+  <div class="kv"><span class="k">Cold start</span><span class="v">Lần gọi on-demand đầu tiên chậm, khi cache chưa ấm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Quyết chỗ xử lý xảy ra TRƯỚC khi viết code Sharp hay FFmpeg.</li><li>Upload-time hợp với việc ảnh nhỏ, nhanh mà người dùng chờ.</li><li>Job nền là bắt buộc cho video và mọi transform kéo dài nhiều giây.</li><li>On-demand đổi pre-compute lấy độ trễ mỗi request cộng một cache.</li><li>Phần lớn app thật là hybrid: upload-time cho ảnh nhỏ, job nền cho video.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare Images</span><span class="lc-sub">developers.cloudflare.com/images — pattern on-demand Worker productized.</span></span></div>

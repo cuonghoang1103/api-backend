@@ -203,6 +203,23 @@ watching rather than talking, Tier 1 or 2 is dramatically cheaper.
 <p><strong>One sentence.</strong> Live video is three unrelated architectures selected by target latency — 15-45 s of HLS on a CDN with no server at all, 2-6 s of LL-HLS with an origin that serves partial segments, or 100-500 ms of WebRTC through a stateful SFU that costs per participant and cannot ride a CDN — and the choice is made by asking whether participants converse, whether a synchronous side channel like chat would spoil a delayed stream, and how spiky the audience is; within Tier 1, latency is dominated by segment length times the player's buffer depth, and the classic outage is copying VOD cache headers onto a live manifest, which freezes the stream while the origin looks healthy.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>For three products — a sports broadcast, a webinar, and a one-to-one call — write the acceptable glass-to-glass latency.</li><li>Map each latency band to a technology: HLS (tens of seconds), LL-HLS or low-latency DASH (a few seconds), WebRTC (sub-second).</li><li>Note the cost and complexity each implies; pick latency first, technology second.</li></ol>
+<pre><code class="language-bash">node -e "console.log('broadcast ~30s HLS | webinar ~5s LL-HLS | call &lt;0.5s WebRTC')"</code></pre>
+<p><strong>Done when:</strong> you choose a technology FROM a required latency, not the other way round.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Glass-to-glass latency</span><span class="v">Capture-to-display delay — the number that picks the technology.</span></div>
+  <div class="kv"><span class="k">HLS latency</span><span class="v">Tens of seconds typical; great scale, poor interactivity.</span></div>
+  <div class="kv"><span class="k">LL-HLS / low-latency DASH</span><span class="v">A few seconds of latency via partial segments.</span></div>
+  <div class="kv"><span class="k">WebRTC</span><span class="v">Sub-second, for real conversations; a different infrastructure.</span></div>
+  <div class="kv"><span class="k">SFU</span><span class="v">Selective Forwarding Unit — a server that routes WebRTC media at scale.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Live is three unrelated systems separated by their latency budget.</li><li>Pick the latency the product needs first; the technology is then nearly fixed.</li><li>HLS scales cheaply but is tens of seconds behind.</li><li>Sub-second interaction means WebRTC and a different server and cost model.</li><li>Choosing a technology before latency is the classic, expensive mistake.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Apple — Low-Latency HLS</span><span class="lc-sub">developer.apple.com/documentation/http-live-streaming — partial segment và blocking playlist reload.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">WebRTC for the Curious</span><span class="lc-sub">webrtcforthecurious.com — sách mở, giải thích SFU và ICE rõ hơn mọi tài liệu chính thức.</span></span></div>
@@ -399,6 +416,23 @@ phải đang nói, Bậc 1 hoặc 2 rẻ hơn rất nhiều.
 <div class="callout">
 <p><strong>Một câu.</strong> Video trực tiếp là ba kiến trúc không liên quan, được chọn bởi độ trễ mục tiêu — 15-45 s của HLS trên CDN không cần server nào, 2-6 s của LL-HLS với một origin phục vụ partial segment, hoặc 100-500 ms của WebRTC qua một SFU có trạng thái vốn tính tiền theo từng người tham gia và không đi được trên CDN — và lựa chọn được đưa ra bằng cách hỏi người tham gia có đối thoại không, một kênh phụ đồng bộ như chat có làm hỏng một luồng bị trễ không, và khán giả biến động tới đâu; trong Bậc 1, độ trễ bị chi phối bởi độ dài segment nhân với độ sâu bộ đệm của trình phát, và sự cố kinh điển là chép header cache của VOD lên một manifest trực tiếp, thứ đóng băng luồng trong khi origin trông vẫn khoẻ.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Với ba sản phẩm — một buổi phát thể thao, một webinar, và một cuộc gọi một-một — viết độ trễ glass-to-glass chấp nhận được.</li><li>Ánh xạ mỗi dải độ trễ tới một công nghệ: HLS (hàng chục giây), LL-HLS hoặc DASH độ trễ thấp (vài giây), WebRTC (dưới một giây).</li><li>Ghi chi phí và độ phức tạp mỗi cái kéo theo; chọn độ trễ trước, công nghệ sau.</li></ol>
+<pre><code class="language-bash">node -e "console.log('broadcast ~30s HLS | webinar ~5s LL-HLS | call &lt;0.5s WebRTC')"</code></pre>
+<p><strong>Đạt khi:</strong> bạn chọn công nghệ TỪ một độ trễ yêu cầu, không phải ngược lại.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Độ trễ glass-to-glass</span><span class="v">Trễ từ thu tới hiển thị — con số chọn công nghệ.</span></div>
+  <div class="kv"><span class="k">Độ trễ HLS</span><span class="v">Hàng chục giây là điển hình; quy mô tốt, tương tác kém.</span></div>
+  <div class="kv"><span class="k">LL-HLS / DASH độ trễ thấp</span><span class="v">Vài giây độ trễ nhờ segment từng phần.</span></div>
+  <div class="kv"><span class="k">WebRTC</span><span class="v">Dưới một giây, cho hội thoại thật; một hạ tầng khác.</span></div>
+  <div class="kv"><span class="k">SFU</span><span class="v">Selective Forwarding Unit — server định tuyến media WebRTC ở quy mô.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Live là ba hệ thống không liên quan, phân cách bởi ngân sách độ trễ.</li><li>Chọn độ trễ sản phẩm cần trước; công nghệ khi đó gần như đã cố định.</li><li>HLS mở rộng rẻ nhưng chậm hàng chục giây.</li><li>Tương tác dưới một giây nghĩa là WebRTC và một mô hình server, chi phí khác.</li><li>Chọn công nghệ trước độ trễ là sai lầm kinh điển và tốn kém.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Apple — Low-Latency HLS</span><span class="lc-sub">developer.apple.com/documentation/http-live-streaming — partial segment và blocking playlist reload.</span></span></div>

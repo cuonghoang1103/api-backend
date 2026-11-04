@@ -122,6 +122,23 @@ DO report:
 <p><strong>Trap — <code>catch (err) { logger.error(...) }</code> and then continuing is how bugs become permanent.</strong> The pattern looks responsible: nothing crashes, something is written down. But the error never reaches your error tracker, so it has no first-seen date, no user count, and no owner — and the log line it produces is one of thousands nobody greps for. <strong>The specific harm is that the bug now has no way of ever being noticed: the system appears healthy, the metric shows no 5xx because you swallowed it, and the only evidence is a line in a file that expires in fourteen days.</strong> If you genuinely can continue, the catch block should say so and count it: <code>metrics.recoverableErrors.inc({ kind: 'thumbnail_failed' })</code>, plus a log line, plus a comment explaining why proceeding is correct. If you cannot articulate why continuing is safe, you are not recovering — you are hiding.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>In a tiny Express app, call <code>Sentry.init({ dsn })</code> (use a free Sentry project or leave DSN empty to no-op). Add a route that throws an <code>Error</code>.</li><li>Catch it and call <code>Sentry.captureException(err)</code>; also <code>console.error(err)</code> for comparison.</li><li>Trigger it 3 times. In Sentry, confirm the three throws collapse into ONE issue with a stack trace, occurrence count and first/last seen.</li><li>Compare: what does the Sentry issue give you that three identical <code>console.error</code> lines in a log file do not?</li></ol>
+<p><strong>Done when:</strong> you can list three things the error issue has (grouping, count, stack with locals) that a raw log line lacks, and explain why errors deserve their own pillar.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exception</span><span class="v">A thrown error with a stack trace — a structured event, not a text line.</span></div>
+  <div class="kv"><span class="k">Stack trace</span><span class="v">The call chain at the moment of the throw, down to file and line.</span></div>
+  <div class="kv"><span class="k">Issue</span><span class="v">A group of identical exceptions, counted and tracked over time.</span></div>
+  <div class="kv"><span class="k">Event</span><span class="v">One captured occurrence of an exception, with its context.</span></div>
+  <div class="kv"><span class="k"><code>captureException</code></span><span class="v">The Sentry call that sends a thrown error as an event.</span></div>
+  <div class="kv"><span class="k">Breadcrumb</span><span class="v">A recorded step leading up to the error (a log, a request, a click).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>An error is a structured event with a stack and context — not just another log line.</li><li>Error monitoring groups identical exceptions into one counted issue over time.</li><li>A captured exception carries the stack, locals and breadcrumbs a log line cannot.</li><li>Errors deserve their own pillar because &quot;how many users hit this bug&quot; is a first-class question.</li><li><code>captureException</code> sends the event; breadcrumbs give it the story around the throw.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.sentry.io/product/issues/grouping-and-fingerprints/" target="_blank" rel="noopener">
@@ -239,6 +256,23 @@ HÃY báo:
 <div class="pitfall">
 <p><strong>Bẫy — <code>catch (err) { logger.error(...) }</code> rồi chạy tiếp là cách một lỗi trở thành vĩnh viễn.</strong> Cái mẫu ấy trông có trách nhiệm: không có gì sập, có cái gì đó được ghi lại. Nhưng cái lỗi ấy không bao giờ tới được trình theo dõi lỗi của bạn, nên nó không có ngày thấy-lần-đầu, không có số người dùng, và không có người chịu trách nhiệm — còn cái dòng log nó tạo ra là một trong hàng nghìn dòng chẳng ai grep tới. <strong>Cái hại cụ thể là cái lỗi ấy giờ không còn cách nào để từng được ai nhận ra: hệ thống trông có vẻ khoẻ, chỉ số không hiện 5xx nào vì bạn đã nuốt nó, và bằng chứng duy nhất là một dòng trong một file hết hạn sau mười bốn ngày.</strong> Nếu bạn thật sự chạy tiếp được thì khối catch nên nói ra điều đó và ĐẾM nó: <code>metrics.recoverableErrors.inc({ kind: 'thumbnail_failed' })</code>, cộng một dòng log, cộng một chú thích giải thích vì sao chạy tiếp là đúng. Nếu bạn không diễn đạt được vì sao chạy tiếp là an toàn thì bạn không đang phục hồi — bạn đang giấu.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trong một ứng dụng Express nhỏ, gọi <code>Sentry.init({ dsn })</code> (dùng một dự án Sentry miễn phí hoặc để DSN rỗng cho no-op). Thêm một route ném một <code>Error</code>.</li><li>Bắt nó và gọi <code>Sentry.captureException(err)</code>; đồng thời <code>console.error(err)</code> để so.</li><li>Kích nó 3 lần. Trong Sentry, xác nhận ba lần ném gom vào MỘT vấn đề với stack trace, số lần xảy ra và lần đầu/cuối thấy.</li><li>So sánh: vấn đề trong Sentry cho bạn gì mà ba dòng <code>console.error</code> giống hệt trong file log thì không?</li></ol>
+<p><strong>Đạt khi:</strong> bạn liệt kê được ba thứ mà một vấn đề lỗi có (gom nhóm, đếm số lần, stack kèm biến cục bộ) mà một dòng log thô thiếu, và giải thích được vì sao lỗi xứng đáng có trụ cột riêng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ngoại lệ (exception)</span><span class="v">Một lỗi được ném kèm stack trace — một sự kiện có cấu trúc, không phải một dòng chữ.</span></div>
+  <div class="kv"><span class="k">Stack trace</span><span class="v">Chuỗi lời gọi tại thời điểm ném, xuống tới file và dòng.</span></div>
+  <div class="kv"><span class="k">Vấn đề (issue)</span><span class="v">Một nhóm các ngoại lệ giống nhau, được đếm và theo dõi theo thời gian.</span></div>
+  <div class="kv"><span class="k">Sự kiện (event)</span><span class="v">Một lần ngoại lệ xảy ra được bắt lại, kèm ngữ cảnh của nó.</span></div>
+  <div class="kv"><span class="k"><code>captureException</code></span><span class="v">Lời gọi Sentry gửi một lỗi được ném đi như một sự kiện.</span></div>
+  <div class="kv"><span class="k">Breadcrumb (vụn đường)</span><span class="v">Một bước được ghi dẫn tới lỗi (một log, một request, một cú bấm).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một lỗi là một sự kiện có cấu trúc với stack và ngữ cảnh — không chỉ là thêm một dòng log.</li><li>Giám sát lỗi gom các ngoại lệ giống nhau vào một vấn đề được đếm theo thời gian.</li><li>Một ngoại lệ được bắt mang theo stack, biến cục bộ và breadcrumb mà một dòng log không có.</li><li>Lỗi xứng có trụ cột riêng vì &quot;bao nhiêu người dùng dính lỗi này&quot; là một câu hỏi hạng nhất.</li><li><code>captureException</code> gửi sự kiện; breadcrumb cho nó câu chuyện quanh lúc ném.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -384,6 +418,23 @@ megabyte of JSON per event).</code></pre>
 <p><strong>Trap — a refactor that moves code creates &quot;new&quot; issues for bugs that are years old, and the alert that fires reads as a fresh regression.</strong> Because the fingerprint includes stack frames, renaming a function, extracting a helper, or shifting a file by a few lines can change it — so a long-standing error you had triaged and ignored reappears as first-seen-today, at the top of the issue list, with a &quot;new issue&quot; alert attached. The specific harm is misdirected effort: <strong>the alert arrives just after a deploy, so it looks like the deploy caused it, and the natural response is to investigate a diff that has nothing to do with the bug.</strong> Before treating any post-deploy &quot;new&quot; issue as a regression, search the resolved and ignored issues for the same message and file — and for errors you intend to track across refactors, pin the fingerprint explicitly.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Throw an error whose message embeds a variable, e.g. <code>new Error('user ' + id + ' not found')</code>, with a different id each time.</li><li>Capture 10 of them and watch Sentry create up to 10 separate issues — grouping keyed partly on the message.</li><li>Fix it: keep the message constant (<code>'user not found'</code>) and put the id in <code>setContext</code>/<code>setTag</code> instead, or set an explicit <code>fingerprint</code>.</li><li>Capture 10 more and confirm they collapse into ONE issue with the ids visible as context.</li></ol>
+<p><strong>Done when:</strong> you have demonstrated both the explosion (variable in message) and the fix (constant message + context or fingerprint), and can explain how grouping decides sameness.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Grouping</span><span class="v">How Sentry decides two events are the same bug and merges them into one issue.</span></div>
+  <div class="kv"><span class="k">Fingerprint</span><span class="v">The key that controls grouping; set it explicitly to override the default.</span></div>
+  <div class="kv"><span class="k">Stack-trace grouping</span><span class="v">The default: events with the same top frames become one issue.</span></div>
+  <div class="kv"><span class="k">Message template</span><span class="v">A constant message with variables moved out to tags/context.</span></div>
+  <div class="kv"><span class="k">Event volume</span><span class="v">The number of captured events — exploded by variables baked into messages.</span></div>
+  <div class="kv"><span class="k">Tag / context</span><span class="v">Structured fields for the variable parts (ids), kept out of the group key.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Grouping merges same-bug events into one issue, mostly by stack trace and message.</li><li>A variable baked into the message explodes one bug into thousands of issues.</li><li>Keep the message constant and move ids into tags/context, or set an explicit fingerprint.</li><li>Correct grouping is what makes &quot;which bug is worst&quot; answerable by occurrence count.</li><li>Tune grouping deliberately; do not let dynamic strings decide it for you.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.sentry.io/platforms/javascript/guides/node/usage/sdk-fingerprinting/" target="_blank" rel="noopener">
@@ -522,6 +573,23 @@ megabyte JSON cho mỗi sự kiện).</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một lần tái cấu trúc dời mã đi sẽ tạo ra những vấn đề &quot;MỚI&quot; cho những lỗi đã nhiều năm tuổi, và cái cảnh báo nổ ra đọc lên như một cú tái phát tươi mới.</strong> Vì dấu vân tay bao gồm các khung stack, việc đổi tên một hàm, tách ra một hàm trợ giúp, hay dịch một file đi vài dòng đều có thể làm nó đổi — nên một lỗi cũ kỹ mà bạn đã phân loại và lờ đi lại xuất hiện với ngày thấy-lần-đầu là hôm nay, ở đầu danh sách vấn đề, kèm một cảnh báo &quot;vấn đề mới&quot;. Cái hại cụ thể là công sức bị chỉ sai hướng: <strong>cảnh báo tới ngay sau một lần deploy, nên nó trông như lần deploy gây ra, và phản ứng tự nhiên là đi điều tra một cái diff chẳng liên quan gì tới cái lỗi ấy.</strong> Trước khi coi bất cứ vấn đề &quot;mới&quot; nào sau deploy là một cú tái phát, hãy tìm trong danh sách đã-giải-quyết và đã-bỏ-qua xem có cùng thông điệp và cùng file không — và với những lỗi bạn muốn theo dõi xuyên các lần tái cấu trúc, hãy ghim vân tay một cách tường minh.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Ném một lỗi có biến nhúng trong thông điệp, ví dụ <code>new Error('user ' + id + ' not found')</code>, mỗi lần một id khác.</li><li>Bắt 10 cái và quan sát Sentry tạo tới 10 vấn đề riêng — việc gom nhóm có phần dựa vào thông điệp.</li><li>Sửa: giữ thông điệp cố định (<code>'user not found'</code>) và đưa id vào <code>setContext</code>/<code>setTag</code>, hoặc đặt một <code>fingerprint</code> tường minh.</li><li>Bắt thêm 10 cái và xác nhận chúng gom vào MỘT vấn đề với các id hiện ra dưới dạng ngữ cảnh.</li></ol>
+<p><strong>Đạt khi:</strong> bạn đã minh hoạ cả cú bùng nổ (biến trong thông điệp) lẫn cách chữa (thông điệp cố định + ngữ cảnh hoặc fingerprint), và giải thích được cách gom nhóm quyết định hai lỗi là một.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Gom nhóm (grouping)</span><span class="v">Cách Sentry quyết định hai sự kiện là cùng một lỗi và gộp vào một vấn đề.</span></div>
+  <div class="kv"><span class="k">Fingerprint</span><span class="v">Khoá điều khiển gom nhóm; đặt tường minh để ghi đè mặc định.</span></div>
+  <div class="kv"><span class="k">Gom theo stack</span><span class="v">Mặc định: sự kiện có cùng các khung trên đỉnh thành một vấn đề.</span></div>
+  <div class="kv"><span class="k">Thông điệp khuôn</span><span class="v">Một thông điệp cố định, biến được đưa ra tag/ngữ cảnh.</span></div>
+  <div class="kv"><span class="k">Khối lượng sự kiện</span><span class="v">Số sự kiện bắt được — bùng nổ bởi biến nhét vào thông điệp.</span></div>
+  <div class="kv"><span class="k">Tag / ngữ cảnh</span><span class="v">Trường có cấu trúc cho phần biến (id), giữ ngoài khoá gom nhóm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Gom nhóm gộp các sự kiện cùng lỗi vào một vấn đề, chủ yếu theo stack trace và thông điệp.</li><li>Một biến nhét vào thông điệp làm một lỗi bùng thành hàng nghìn vấn đề.</li><li>Giữ thông điệp cố định và đưa id vào tag/ngữ cảnh, hoặc đặt một fingerprint tường minh.</li><li>Gom nhóm đúng là thứ làm cho &quot;lỗi nào tệ nhất&quot; trả lời được bằng số lần xảy ra.</li><li>Chỉnh gom nhóm có chủ đích; đừng để chuỗi động quyết định thay bạn.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -671,6 +739,23 @@ if the identity is smeared across free-text messages.</code></pre>
 <p><strong>Trap — breadcrumbs are collected automatically and are not covered by the <code>beforeSend</code> hooks above.</strong> Sentry records the last ~100 things that happened before an error — HTTP requests, console output, database queries — and attaches them to the event. The redaction in this repo operates on <code>event.request</code>, which is the request that failed; the breadcrumb trail is a separate array carrying the URLs, methods and often the response bodies of everything <em>leading up to</em> it. <strong>So an error on a harmless endpoint can ship the query string of the authenticated call three steps earlier, including a token that <code>event.request</code> would have had stripped.</strong> Console breadcrumbs are worse still: they capture <code>console.log</code> output verbatim, so any debugging line anyone ever left in becomes part of your error payloads. Set <code>beforeBreadcrumb</code> to filter them, or disable the console and HTTP breadcrumb integrations entirely.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Set <code>sendDefaultPii: false</code> in <code>Sentry.init</code>. Add a <code>beforeSend(event)</code> hook that deletes <code>event.request.headers.authorization</code> and <code>cookie</code>, and redacts any <code>password</code>/<code>email</code> fields.</li><li>Capture an event from a request carrying a fake <code>Authorization: Bearer secret123</code> header and an email in the body.</li><li>Inspect the stored event and confirm the token, cookie and email are gone or masked.</li><li>Note which fields Sentry would have attached by default had <code>sendDefaultPii</code> been true.</li></ol>
+<p><strong>Done when:</strong> a captured event shows no raw token, cookie or email, and you can explain why scrubbing must happen in <code>beforeSend</code> (client-side) and not be trusted to the server.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PII</span><span class="v">Personally identifiable information: emails, tokens, cookies, names, IPs.</span></div>
+  <div class="kv"><span class="k"><code>beforeSend</code></span><span class="v">A hook that edits or drops each event just before it leaves the process.</span></div>
+  <div class="kv"><span class="k">Data scrubbing</span><span class="v">Removing or masking sensitive fields from an event payload.</span></div>
+  <div class="kv"><span class="k"><code>sendDefaultPii</code></span><span class="v">A flag that, when true, auto-attaches headers, cookies and IP.</span></div>
+  <div class="kv"><span class="k">Request headers</span><span class="v">Where tokens and cookies hide; the most common accidental leak.</span></div>
+  <div class="kv"><span class="k">Redaction</span><span class="v">Replacing a value with a placeholder (e.g. <code>[redacted]</code>) rather than deleting the key.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Error reports leak PII by default — headers, cookies and bodies ride along with the exception.</li><li>Scrub in <code>beforeSend</code> on the client so secrets never leave the process.</li><li>Keep <code>sendDefaultPii: false</code> and attach only the fields you chose on purpose.</li><li>Authorization headers and cookies are the most common accidental token leak.</li><li>Redact rather than delete when the field's presence itself is useful to see.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.sentry.io/platforms/javascript/guides/node/data-management/sensitive-data/" target="_blank" rel="noopener">
@@ -813,6 +898,23 @@ khắp các thông điệp văn bản tự do.</code></pre>
 <p><strong>Bẫy — breadcrumb được thu thập tự động và KHÔNG nằm trong phạm vi của các móc <code>beforeSend</code> ở trên.</strong> Sentry ghi lại khoảng 100 việc gần nhất đã xảy ra trước một lỗi — các request HTTP, đầu ra console, truy vấn cơ sở dữ liệu — rồi đính chúng vào sự kiện. Phép che trong kho này thao tác trên <code>event.request</code>, tức là cái request đã hỏng; còn cái vệt breadcrumb là một mảng riêng mang theo URL, method và thường cả phần thân phản hồi của mọi thứ <em>DẪN TỚI</em> nó. <strong>Nên một lỗi trên một endpoint vô hại vẫn có thể chuyển đi chuỗi truy vấn của lời gọi đã xác thực ba bước trước đó, kể cả một token mà <code>event.request</code> lẽ ra đã cắt bỏ.</strong> Breadcrumb của console còn tệ hơn: nó chộp đầu ra <code>console.log</code> nguyên văn, nên bất cứ dòng gỡ lỗi nào ai đó từng để quên lại cũng thành một phần trong gói dữ liệu lỗi của bạn. Hãy đặt <code>beforeBreadcrumb</code> để lọc chúng, hoặc tắt hẳn bộ tích hợp breadcrumb cho console và HTTP.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Đặt <code>sendDefaultPii: false</code> trong <code>Sentry.init</code>. Thêm một hook <code>beforeSend(event)</code> xoá <code>event.request.headers.authorization</code> và <code>cookie</code>, và che mọi trường <code>password</code>/<code>email</code>.</li><li>Bắt một sự kiện từ một request mang header giả <code>Authorization: Bearer secret123</code> và một email trong thân.</li><li>Soi sự kiện đã lưu và xác nhận token, cookie và email đã biến mất hoặc bị che.</li><li>Ghi lại những trường mà Sentry sẽ tự đính kèm theo mặc định nếu <code>sendDefaultPii</code> bật.</li></ol>
+<p><strong>Đạt khi:</strong> một sự kiện bắt được không hiện token, cookie hay email thô, và bạn giải thích được vì sao việc tẩy phải xảy ra trong <code>beforeSend</code> (phía client) chứ không giao phó cho máy chủ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PII</span><span class="v">Dữ liệu định danh cá nhân: email, token, cookie, tên, IP.</span></div>
+  <div class="kv"><span class="k"><code>beforeSend</code></span><span class="v">Hook sửa hoặc bỏ mỗi sự kiện ngay trước khi nó rời tiến trình.</span></div>
+  <div class="kv"><span class="k">Tẩy dữ liệu</span><span class="v">Gỡ hoặc che các trường nhạy cảm khỏi payload sự kiện.</span></div>
+  <div class="kv"><span class="k"><code>sendDefaultPii</code></span><span class="v">Cờ mà khi bật sẽ tự đính kèm header, cookie và IP.</span></div>
+  <div class="kv"><span class="k">Header request</span><span class="v">Nơi token và cookie ẩn; chỗ rò rỉ vô ý phổ biến nhất.</span></div>
+  <div class="kv"><span class="k">Che (redaction)</span><span class="v">Thay giá trị bằng một chỗ giữ (ví dụ <code>[redacted]</code>) thay vì xoá khoá.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Báo cáo lỗi rò rỉ PII theo mặc định — header, cookie và thân đi kèm ngoại lệ.</li><li>Tẩy trong <code>beforeSend</code> phía client để bí mật không bao giờ rời tiến trình.</li><li>Giữ <code>sendDefaultPii: false</code> và chỉ đính kèm những trường bạn chọn có chủ đích.</li><li>Header authorization và cookie là chỗ rò rỉ token vô ý phổ biến nhất.</li><li>Che thay vì xoá khi bản thân sự có mặt của trường là thứ đáng thấy.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.sentry.io/platforms/javascript/guides/node/data-management/sensitive-data/" target="_blank" rel="noopener">
@@ -949,6 +1051,23 @@ into your fastest ones.</code></pre>
 <p><strong>Trap — a release string that is not unique per build makes every field above lie, quietly.</strong> Using <code>package.json</code>'s version, or a branch name, or <code>latest</code>, means several different builds share one release identifier — so &quot;first seen in v1.4.0&quot; covers a fortnight of deploys, regression detection cannot fire because the version never changed, and source maps uploaded for a later build overwrite the earlier ones so old stack traces resolve to the <em>wrong lines</em>. That last one is the worst, because it does not fail: it produces a file and line number that look perfectly plausible and point somewhere unrelated, and you will read that code carefully before doubting it. <strong>Use the git SHA. It is unique by construction, it maps to a diff, and <code>git rev-parse --short HEAD</code> is already available at build time in <code>deploy-nha.sh</code>.</strong></p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Set <code>release</code> in <code>Sentry.init</code> to your git commit SHA (<code>git rev-parse --short HEAD</code>).</li><li>Build with source maps and upload them for that release so a minified stack resolves back to your source lines.</li><li>On each captured event, set a tag with the request id (the same id in your structured logs and traces) so you can jump error → log → trace.</li><li>Trigger an error, then in Sentry filter issues by that release and open the resolved stack.</li></ol>
+<p><strong>Done when:</strong> a minified stack resolves to real source, issues are filterable by release, and an event carries a request id that also appears in your logs.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Release</span><span class="v">A version marker (git SHA) on every event, so regressions pin to a deploy.</span></div>
+  <div class="kv"><span class="k">Source map</span><span class="v">A file mapping minified code back to original source lines.</span></div>
+  <div class="kv"><span class="k">Release health</span><span class="v">Crash-free sessions/users tracked per release.</span></div>
+  <div class="kv"><span class="k">Tag</span><span class="v">An indexed key/value on an event you can filter and group by.</span></div>
+  <div class="kv"><span class="k">Request id correlation</span><span class="v">The shared id that joins an error to its logs and trace.</span></div>
+  <div class="kv"><span class="k">Regression</span><span class="v">A bug that reappears in a later release — visible when events carry a release.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Tag every event with the release (git SHA) so a spike pins to the deploy that caused it.</li><li>Upload source maps so minified production stacks resolve to real source lines.</li><li>A request id on the event joins the four pillars: error → log → trace → metric.</li><li>Filtering issues by release turns &quot;did my fix work&quot; into a direct lookup.</li><li>Release health shows crash-free rates per version, catching regressions early.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.sentry.io/product/releases/" target="_blank" rel="noopener">
@@ -1077,6 +1196,23 @@ phiếu nhanh nhất.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một chuỗi bản phát hành không duy nhất cho mỗi bản dựng làm mọi trường ở trên nói dối, một cách lặng lẽ.</strong> Dùng phiên bản trong <code>package.json</code>, hay một tên nhánh, hay <code>latest</code>, nghĩa là nhiều bản dựng khác nhau dùng chung một định danh phát hành — nên &quot;thấy lần đầu ở v1.4.0&quot; phủ trọn hai tuần deploy, việc phát hiện tái phát không nổ được vì phiên bản chưa bao giờ đổi, và source map tải lên cho một bản dựng sau sẽ ghi đè lên bản trước nên các stack trace cũ giải mã ra <em>SAI DÒNG</em>. Cái cuối cùng là tệ nhất, vì nó không hỏng: nó sinh ra một tên file và một số dòng trông hoàn toàn hợp lý mà trỏ vào một chỗ chẳng liên quan, và bạn sẽ đọc đoạn mã đó rất kỹ trước khi nghi ngờ nó. <strong>Hãy dùng git SHA. Nó duy nhất theo đúng thiết kế, nó ánh xạ tới một cái diff, và <code>git rev-parse --short HEAD</code> vốn đã có sẵn lúc dựng trong <code>deploy-nha.sh</code>.</strong></p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Đặt <code>release</code> trong <code>Sentry.init</code> thành SHA commit git (<code>git rev-parse --short HEAD</code>).</li><li>Build kèm source map và tải chúng lên cho bản phát hành đó để một stack đã rút gọn phân giải về lại dòng mã nguồn của bạn.</li><li>Trên mỗi sự kiện bắt được, đặt một tag với request id (cùng id trong log có cấu trúc và trace) để bạn nhảy lỗi → log → trace.</li><li>Kích một lỗi, rồi trong Sentry lọc vấn đề theo bản phát hành đó và mở cái stack đã phân giải.</li></ol>
+<p><strong>Đạt khi:</strong> một stack rút gọn phân giải về mã nguồn thật, vấn đề lọc được theo bản phát hành, và một sự kiện mang request id cũng xuất hiện trong log của bạn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bản phát hành (release)</span><span class="v">Dấu phiên bản (SHA git) trên mọi sự kiện, để lỗi hồi quy ghim vào một lần deploy.</span></div>
+  <div class="kv"><span class="k">Source map</span><span class="v">File ánh xạ mã đã rút gọn về lại dòng mã nguồn gốc.</span></div>
+  <div class="kv"><span class="k">Sức khoẻ bản phát hành</span><span class="v">Tỉ lệ phiên/người dùng không sập, theo dõi theo từng bản phát hành.</span></div>
+  <div class="kv"><span class="k">Tag</span><span class="v">Khoá/giá trị có lập chỉ mục trên sự kiện để lọc và gom nhóm.</span></div>
+  <div class="kv"><span class="k">Nối theo request id</span><span class="v">Id chung nối một lỗi với log và trace của nó.</span></div>
+  <div class="kv"><span class="k">Hồi quy (regression)</span><span class="v">Lỗi tái xuất ở một bản phát hành sau — thấy được khi sự kiện mang theo bản phát hành.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Gắn mọi sự kiện bằng bản phát hành (SHA git) để một cú tăng vọt ghim vào lần deploy gây ra nó.</li><li>Tải source map lên để stack production rút gọn phân giải về dòng mã nguồn thật.</li><li>Một request id trên sự kiện nối bốn trụ cột: lỗi → log → trace → chỉ số.</li><li>Lọc vấn đề theo bản phát hành biến &quot;bản sửa của tôi có chạy không&quot; thành một tra cứu thẳng.</li><li>Sức khoẻ bản phát hành cho tỉ lệ không sập theo phiên bản, bắt hồi quy sớm.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1226,6 +1362,23 @@ RE-ARM:   the exact steps, and the condition that should
 <p><strong>Trap — the most dangerous state for an error tracker is &quot;configured, running, and unread&quot;.</strong> A project with no DSN is a known gap: everyone understands that errors are not being tracked. A project with 40,000 unresolved issues, an inbox nobody has opened since March, and alerts routed to a Slack channel that was archived — that is worse, because it produces a <em>false belief</em>. People stop adding logging because &quot;Sentry will catch it&quot;, incident reviews record &quot;we should have seen this in Sentry&quot; without asking whether anyone would have, and the tool's existence actively displaces the habits that would have covered for it. <strong>An error tracker with a triage habit is worth more than one with better configuration.</strong> If nobody has resolved an issue in a month, the honest move is to declare it dormant in writing — using the template above — rather than leaving it running as decoration.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Treat the DSN as config: read it from env. When <code>SENTRY_DSN</code> is unset (as in tests/CI), confirm <code>Sentry.init</code> no-ops and <code>captureException</code> does nothing — no network call.</li><li>Point the same DSN at a self-hosted, Sentry-compatible backend (e.g. GlitchTip) to prove the app code is unchanged — only the endpoint moves.</li><li>Write a test that asserts an error is captured, but have it SKIP cleanly when the DSN/AI key is absent (the pattern this repo uses for its deliberately-dormant CV fabrication test).</li><li>Verify the suite stays green with the secret absent.</li></ol>
+<p><strong>Done when:</strong> your app captures errors with a real DSN, no-ops with none, runs against a self-hosted backend unchanged, and the related test SKIPs (not fails) when its secret is missing.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">DSN</span><span class="v">The endpoint+key string that tells the SDK where to send events.</span></div>
+  <div class="kv"><span class="k">Self-hosted</span><span class="v">Running a Sentry-compatible backend yourself (e.g. GlitchTip) — no vendor lock-in.</span></div>
+  <div class="kv"><span class="k">Vendor-neutral</span><span class="v">App code depends on the SDK and DSN, not on one company.</span></div>
+  <div class="kv"><span class="k">No-op transport</span><span class="v">With no DSN, the SDK silently discards events — safe in tests and CI.</span></div>
+  <div class="kv"><span class="k">CI secret</span><span class="v">A key stored in CI; its absence should SKIP a test, not fail the build.</span></div>
+  <div class="kv"><span class="k">SKIP</span><span class="v">A test that cleanly opts out when a required secret is missing, keeping CI green.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The DSN is config: present → send, absent → no-op, so tests and CI stay offline and green.</li><li>A Sentry-compatible self-hosted backend (GlitchTip) runs the same app code — only the endpoint moves.</li><li>Error monitoring is a pattern, not a vendor; depend on the SDK and DSN, nothing more.</li><li>Tests that need a secret should SKIP when it is absent, never fail the build.</li><li>This repo's dormant fabrication test is exactly this pattern: no key → SKIP → CI green.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://glitchtip.com/documentation/install" target="_blank" rel="noopener">
@@ -1364,6 +1517,23 @@ BẬT LẠI:   các bước chính xác, và điều kiện gì nên khiến ai 
 <div class="pitfall">
 <p><strong>Bẫy — trạng thái nguy hiểm nhất của một trình theo dõi lỗi là &quot;đã cấu hình, đang chạy, và không ai đọc&quot;.</strong> Một dự án không có DSN là một khoảng trống ĐÃ BIẾT: ai cũng hiểu rằng lỗi đang không được theo dõi. Một dự án với 40.000 vấn đề chưa giải quyết, một hộp thư chưa ai mở từ tháng Ba, và các cảnh báo định tuyến tới một kênh Slack đã lưu trữ — cái đó tệ hơn, vì nó tạo ra một <em>NIỀM TIN SAI</em>. Người ta thôi thêm log vì &quot;Sentry sẽ bắt được thôi&quot;, các cuộc rà soát sự cố ghi lại &quot;lẽ ra ta phải thấy cái này trong Sentry&quot; mà không hỏi xem có ai thật sự sẽ thấy không, và chính sự tồn tại của cái công cụ ấy chủ động đẩy lùi những thói quen lẽ ra đã bù đắp được cho nó. <strong>Một trình theo dõi lỗi có thói quen phân loại thì giá trị hơn một cái có cấu hình tốt hơn.</strong> Nếu một tháng nay chưa ai giải quyết một vấn đề nào, nước đi trung thực là tuyên bố nó đang ngủ, bằng văn bản — theo đúng cái mẫu ở trên — thay vì để nó chạy như một món trang trí.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Coi DSN là cấu hình: đọc nó từ env. Khi <code>SENTRY_DSN</code> không đặt (như trong test/CI), xác nhận <code>Sentry.init</code> no-op và <code>captureException</code> không làm gì — không có lời gọi mạng.</li><li>Trỏ cùng DSN đó tới một backend tự dựng tương thích Sentry (ví dụ GlitchTip) để chứng minh mã ứng dụng không đổi — chỉ điểm cuối dời đi.</li><li>Viết một test khẳng định một lỗi được bắt, nhưng cho nó BỎ QUA sạch sẽ khi thiếu DSN/khoá AI (đúng khuôn mà kho này dùng cho bài kiểm bịa CV cố ý ngủ đông).</li><li>Xác nhận bộ test vẫn xanh khi thiếu bí mật.</li></ol>
+<p><strong>Đạt khi:</strong> ứng dụng bắt lỗi với một DSN thật, no-op khi không có, chạy với backend tự dựng mà không đổi mã, và test liên quan BỎ QUA (không phải thất bại) khi thiếu bí mật.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">DSN</span><span class="v">Chuỗi điểm cuối+khoá báo cho SDK biết gửi sự kiện đi đâu.</span></div>
+  <div class="kv"><span class="k">Tự dựng (self-hosted)</span><span class="v">Tự chạy một backend tương thích Sentry (ví dụ GlitchTip) — không khoá vào nhà cung cấp.</span></div>
+  <div class="kv"><span class="k">Trung lập nhà cung cấp</span><span class="v">Mã ứng dụng phụ thuộc SDK và DSN, không phụ thuộc một công ty.</span></div>
+  <div class="kv"><span class="k">Transport no-op</span><span class="v">Không có DSN thì SDK lặng lẽ bỏ sự kiện — an toàn trong test và CI.</span></div>
+  <div class="kv"><span class="k">Bí mật CI</span><span class="v">Một khoá lưu ở CI; thiếu nó thì nên BỎ QUA một test, không làm hỏng build.</span></div>
+  <div class="kv"><span class="k">SKIP (bỏ qua)</span><span class="v">Một test tự rút lui sạch sẽ khi thiếu bí mật, giữ CI xanh.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>DSN là cấu hình: có → gửi, không → no-op, nên test và CI vẫn ngoại tuyến và xanh.</li><li>Một backend tự dựng tương thích Sentry (GlitchTip) chạy cùng mã ứng dụng — chỉ điểm cuối dời đi.</li><li>Giám sát lỗi là một khuôn mẫu, không phải một nhà cung cấp; phụ thuộc SDK và DSN, không gì hơn.</li><li>Test cần bí mật nên BỎ QUA khi thiếu, không bao giờ làm hỏng build.</li><li>Bài kiểm bịa ngủ đông của kho này đúng là khuôn này: không khoá → SKIP → CI xanh.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

@@ -68,6 +68,38 @@ $ grep -rn "requestId\\|x-request-id\\|correlationId\\|traceId" src/ --include=*
 <h3>What this course is not</h3>
 <p>It is not a tour of vendors. Every mechanism here — a log line, a counter, a span, an alert rule — is explained by what it costs and what it can prove, and the tool that implements it is secondary and replaceable. It is also not a performance course: Node.js chapter 16 covers making things fast, and this one covers <em>knowing</em> that they are not.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Measure the observability gap on a real repo, exactly the way this lesson did.</p>
+<ol>
+  <li>Pick any Node or TypeScript backend with a <code>src/</code> folder — this repository, or one of your own — and <code>cd</code> into it.</li>
+  <li>Count the route files, and how many of them import a logger:</li>
+</ol>
+<pre><code class="language-bash">ls src/routes/*.ts | wc -l
+grep -rl "logger" src/routes/*.ts | wc -l</code></pre>
+<ol start="3">
+  <li>Divide the second number by the first. That fraction is your logging coverage — write it down.</li>
+  <li>Open one route file with zero logger imports, pick its riskiest handler, and finish this sentence: &quot;If this failed at 2am, the question I could not answer from logs is ___.&quot;</li>
+</ol>
+<p><strong>Done when:</strong> you have a single coverage ratio and one named blind spot — a concrete question about a real failure that your current logs cannot answer.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Monitoring</span><span class="v">Watching for failures you predicted in advance — &quot;is CPU above 80%?&quot;, &quot;is the process up?&quot;.</span></div>
+  <div class="kv"><span class="k">Observability</span><span class="v">Being able to ask new questions about a failure after it happened, from detail you recorded.</span></div>
+  <div class="kv"><span class="k">Health check</span><span class="v">An endpoint that reports only the specific things it tests, and nothing beyond them.</span></div>
+  <div class="kv"><span class="k">Blind spot</span><span class="v">Code that emits no telemetry, so a failure there is invisible until a user hits it.</span></div>
+  <div class="kv"><span class="k">Detection mechanism</span><span class="v">Whatever actually notices a failure; in these four incidents it was always a human.</span></div>
+  <div class="kv"><span class="k">requestId / correlationId</span><span class="v">An id attached to every log line of one request so the lines can be tied back together.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Every incident in this repo&#39;s history was found by a person, not the server — the gap from &quot;broken&quot; to &quot;noticed&quot; ran from seven minutes to weeks.</li>
+  <li>Logging was added only where someone once debugged something: 16 of 73 route files and 22 of 101 service files import the logger.</li>
+  <li>Monitoring answers questions you wrote down in advance; observability answers the ones you did not.</li>
+  <li>A green health check proves only what it checks — and the failures that reach users are usually not what anyone thought to check.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">
   <span class="lc-ico">📕</span>
@@ -128,6 +160,38 @@ $ grep -rn "requestId\\|x-request-id\\|correlationId\\|traceId" src/ --include=*
 <h3>Khoá này KHÔNG phải cái gì</h3>
 <p>Nó không phải một chuyến tham quan các nhà cung cấp. Mọi cơ chế ở đây — một dòng log, một bộ đếm, một span, một luật cảnh báo — đều được giải thích bằng cái nó tốn và cái nó chứng minh được, còn công cụ hiện thực nó chỉ là thứ yếu và thay thế được. Nó cũng không phải một khoá hiệu năng: chương 16 của khoá Node.js lo việc làm cho mọi thứ nhanh, còn khoá này lo việc <em>biết</em> rằng chúng không nhanh.</p>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Đo khoảng cách quan sát trên một kho mã thật, đúng cách bài này đã làm.</p>
+<ol>
+  <li>Chọn một backend Node hay TypeScript bất kỳ có thư mục <code>src/</code> — chính kho này, hoặc một kho của bạn — rồi <code>cd</code> vào đó.</li>
+  <li>Đếm số file routes, và bao nhiêu file trong đó có import logger:</li>
+</ol>
+<pre><code class="language-bash">ls src/routes/*.ts | wc -l
+grep -rl "logger" src/routes/*.ts | wc -l</code></pre>
+<ol start="3">
+  <li>Chia con số thứ hai cho con số thứ nhất. Phân số đó là độ phủ log của bạn — ghi nó lại.</li>
+  <li>Mở một file route không có import logger nào, chọn handler nguy hiểm nhất của nó, rồi hoàn thành câu này: &quot;Nếu cái này hỏng lúc 2 giờ sáng, câu hỏi tôi không trả lời được từ log là ___.&quot;</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một tỷ lệ độ phủ duy nhất và một điểm mù được gọi tên — một câu hỏi cụ thể về một cú hỏng thật mà log hiện tại của bạn không trả lời nổi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Monitoring (giám sát)</span><span class="v">Canh chừng những cú hỏng bạn đã tiên đoán trước — &quot;CPU có trên 80% không?&quot;, &quot;tiến trình còn sống không?&quot;.</span></div>
+  <div class="kv"><span class="k">Observability (quan sát được)</span><span class="v">Khả năng hỏi những câu MỚI về một cú hỏng sau khi nó đã xảy ra, từ chi tiết bạn đã ghi lại.</span></div>
+  <div class="kv"><span class="k">Health check</span><span class="v">Một endpoint chỉ báo cáo đúng những thứ nó kiểm, và không gì ngoài chúng.</span></div>
+  <div class="kv"><span class="k">Điểm mù (blind spot)</span><span class="v">Mã không phát ra tín hiệu nào, nên một cú hỏng ở đó vô hình cho tới khi một người dùng chạm phải.</span></div>
+  <div class="kv"><span class="k">Cơ chế phát hiện</span><span class="v">Thứ thật sự nhận ra một cú hỏng; trong bốn sự cố này nó luôn là một con người.</span></div>
+  <div class="kv"><span class="k">requestId / correlationId</span><span class="v">Một id gắn vào mọi dòng log của cùng một request để nối các dòng ấy lại với nhau.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Mọi sự cố trong lịch sử kho này đều do một người tìm ra, không phải máy chủ — khoảng cách từ &quot;đã hỏng&quot; tới &quot;được nhận ra&quot; trải từ bảy phút tới vài tuần.</li>
+  <li>Log chỉ được thêm vào đúng chỗ từng có người gỡ lỗi: 16/73 file routes và 22/101 file services có import logger.</li>
+  <li>Giám sát trả lời những câu bạn viết ra từ trước; quan sát được trả lời những câu bạn chưa hỏi.</li>
+  <li>Một health check xanh chỉ chứng minh đúng thứ nó kiểm — và những cú hỏng chạm tới người dùng thường không phải thứ ai đó nghĩ tới việc đi kiểm.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">
   <span class="lc-ico">📕</span>
@@ -185,6 +249,38 @@ $ grep -rn "requestId\\|x-request-id\\|correlationId\\|traceId" src/ --include=*
   <div class="lz-layer"><span class="lz-lname">Logs: cost per event, uncapped</span><span class="lz-lnote">Linear in traffic and in verbosity, and the two multiply. Adding one debug line per request to a service doing 500 rps adds 43 million lines a day.</span></div>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Match questions to pillars, then price the cheapest pillar&#39;s opposite.</p>
+<ol>
+  <li>Write down four questions you would actually ask during an incident on a service you know.</li>
+  <li>Tag each with the cheapest pillar that answers it: <strong>metric</strong>, <strong>log</strong>, <strong>trace</strong> or <strong>change event</strong>.</li>
+  <li>Now price the log option for a &quot;how many 500s?&quot; question. One debug line per request on a service doing 500 rps:</li>
+</ol>
+<pre><code class="language-bash">node -e "console.log(500*60*60*24, 'log lines/day for one line per request at 500 rps')"</code></pre>
+<ol start="4">
+  <li>Compare that to a counter: one number, read in constant time regardless of traffic. Decide which of your four questions a counter answers for free.</li>
+</ol>
+<p><strong>Done when:</strong> every question has a pillar, and you can state that one debug line per request at 500 rps is about 43.2 million lines a day while the equivalent counter stays a single series.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Logs</span><span class="v">One event in full detail; high cost per event, grows with traffic. The only pillar that carries an arbitrary payload.</span></div>
+  <div class="kv"><span class="k">Metrics</span><span class="v">Many events summarised into numbers; cost is per series, not per request, so nearly free at any traffic.</span></div>
+  <div class="kv"><span class="k">Traces</span><span class="v">One request across services, showing ordering and causality; expensive enough that sampling is mandatory.</span></div>
+  <div class="kv"><span class="k">Change events</span><span class="v">Deploys, config edits, flags, migrations — the fourth signal, and the first thing you want on a graph.</span></div>
+  <div class="kv"><span class="k">Time series</span><span class="v">A named metric plus its labels tracked over time; the unit metrics are billed and stored in.</span></div>
+  <div class="kv"><span class="k">Sampling</span><span class="v">Keeping only a fraction of traces to bound cost — and losing the ones you did not keep.</span></div>
+  <div class="kv"><span class="k">p99 latency</span><span class="v">The duration 99% of requests come in under; cheap from a histogram, ruinous to compute from logs.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>The three pillars are a cost model, not a taxonomy: logs, metrics and traces each answer a different question at a different price.</li>
+  <li>The forgotten fourth signal is change events — most incidents are caused by a change, and a deploy marker ends an investigation before it starts.</li>
+  <li>Choose the pillar by the question: counters for &quot;how many&quot;, logs for &quot;why this one&quot;, traces for &quot;where did the time go&quot;.</li>
+  <li>Metric cost is flat in traffic; trace cost is linear ÷ sample rate; log cost is linear and uncapped, and verbosity multiplies it.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://opentelemetry.io/docs/concepts/signals/" target="_blank" rel="noopener">
   <span class="lc-ico">🔭</span>
@@ -233,6 +329,38 @@ $ grep -rn "requestId\\|x-request-id\\|correlationId\\|traceId" src/ --include=*
   <div class="lz-layer"><span class="lz-lname">Trace: giá theo mỗi request được lấy mẫu</span><span class="lz-lnote">Tuyến tính theo lưu lượng, chia cho tỷ lệ lấy mẫu. Ở mức 1% bạn trả tiền cho một trên trăm và mất chín mươi chín cái còn lại — chuyện đó ổn cho tới khi cái bạn cần nằm trong số đó.</span></div>
   <div class="lz-layer"><span class="lz-lname">Log: giá theo mỗi sự kiện, không có trần</span><span class="lz-lnote">Tuyến tính theo lưu lượng VÀ theo độ chi tiết, mà hai thứ đó nhân với nhau. Thêm một dòng debug mỗi request vào một dịch vụ chạy 500 rps là thêm 43 triệu dòng mỗi ngày.</span></div>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Ghép câu hỏi với trụ cột, rồi tính giá của phương án đắt.</p>
+<ol>
+  <li>Viết ra bốn câu hỏi bạn thật sự sẽ hỏi trong một sự cố trên một dịch vụ bạn biết.</li>
+  <li>Gắn cho mỗi câu trụ cột RẺ NHẤT trả lời được nó: <strong>chỉ số</strong>, <strong>log</strong>, <strong>trace</strong> hay <strong>sự kiện thay đổi</strong>.</li>
+  <li>Giờ tính giá phương án log cho câu &quot;có bao nhiêu cú 500?&quot;. Một dòng debug mỗi request trên dịch vụ chạy 500 rps:</li>
+</ol>
+<pre><code class="language-bash">node -e "console.log(500*60*60*24, 'dòng log/ngày cho một dòng mỗi request ở 500 rps')"</code></pre>
+<ol start="4">
+  <li>So nó với một bộ đếm: một con số, đọc trong thời gian hằng bất kể lưu lượng. Quyết định câu nào trong bốn câu được một bộ đếm trả lời miễn phí.</li>
+</ol>
+<p><strong>Đạt khi:</strong> mỗi câu hỏi đều có một trụ cột, và bạn phát biểu được rằng một dòng debug mỗi request ở 500 rps là khoảng 43,2 triệu dòng mỗi ngày trong khi bộ đếm tương đương vẫn là một chuỗi duy nhất.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Log</span><span class="v">Một sự kiện đầy đủ chi tiết; giá mỗi sự kiện cao, lớn theo lưu lượng. Trụ cột duy nhất mang được dữ liệu tuỳ ý.</span></div>
+  <div class="kv"><span class="k">Chỉ số (metrics)</span><span class="v">Nhiều sự kiện tóm thành con số; giá theo chuỗi thời gian, không theo request, nên gần như miễn phí ở mọi lưu lượng.</span></div>
+  <div class="kv"><span class="k">Trace</span><span class="v">Một request xuyên qua nhiều dịch vụ, cho thấy thứ tự và nhân quả; đắt tới mức lấy mẫu là bắt buộc.</span></div>
+  <div class="kv"><span class="k">Sự kiện thay đổi</span><span class="v">Deploy, sửa cấu hình, cờ tính năng, migration — tín hiệu thứ tư, và thứ đầu tiên bạn muốn thấy trên biểu đồ.</span></div>
+  <div class="kv"><span class="k">Chuỗi thời gian (time series)</span><span class="v">Một chỉ số có tên cùng các nhãn của nó theo dõi qua thời gian; đơn vị mà chỉ số được tính giá và lưu.</span></div>
+  <div class="kv"><span class="k">Lấy mẫu (sampling)</span><span class="v">Chỉ giữ một phần trace để chặn chi phí — và mất đi những cái không giữ.</span></div>
+  <div class="kv"><span class="k">p99 độ trễ</span><span class="v">Thời lượng mà 99% request nằm dưới; rẻ nếu lấy từ histogram, cực đắt nếu tính từ log.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Ba trụ cột là một mô hình CHI PHÍ, không phải cách phân loại: log, chỉ số và trace mỗi cái trả lời một câu hỏi khác nhau với một cái giá khác nhau.</li>
+  <li>Tín hiệu thứ tư bị quên là sự kiện thay đổi — phần lớn sự cố do một thay đổi gây ra, và một dấu deploy kết thúc cuộc điều tra trước khi nó bắt đầu.</li>
+  <li>Chọn trụ cột theo câu hỏi: bộ đếm cho &quot;bao nhiêu&quot;, log cho &quot;vì sao cái này&quot;, trace cho &quot;thời gian đi đâu mất&quot;.</li>
+  <li>Giá chỉ số phẳng theo lưu lượng; giá trace tuyến tính ÷ tỷ lệ lấy mẫu; giá log tuyến tính và không trần, còn độ chi tiết thì nhân lên.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://opentelemetry.io/docs/concepts/signals/" target="_blank" rel="noopener">
@@ -297,6 +425,37 @@ $ node -e "const t=process.hrtime.bigint(); for(let i=0;i&lt;1e7;i++); console.l
 <h3>What you do not need yet</h3>
 <p>No Prometheus, no Grafana, no OpenTelemetry collector, no Sentry account. Those arrive in the chapters that need them, and each one is introduced by first measuring the thing by hand so you can check its output. The rig above is enough for chapters 1 through 5.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Build the rig and prove it measures real work, not loop overhead.</p>
+<ol>
+  <li>Save the <code>bench()</code> harness from this lesson into <code>bench.mjs</code> and run it: <code>node bench.mjs</code>. Note the ns/op for <code>JSON.stringify</code>.</li>
+  <li>Run the sanity check — an empty ten-million-iteration loop should take only a few milliseconds:</li>
+</ol>
+<pre><code class="language-bash">node -e "const t=process.hrtime.bigint(); for(let i=0;i&lt;1e7;i++); console.log(Number(process.hrtime.bigint()-t)/1e6+' ms')"</code></pre>
+<ol start="3">
+  <li>Delete the warm-up <code>fn()</code> call and re-run <code>bench.mjs</code>. Watch the ns/op jump — you just measured the interpreter instead of the compiled function.</li>
+  <li>Add a line that prints <code>process.memoryUsage().heapUsed</code> and <code>process.stdout.writableLength</code>, and read what each reports at rest.</li>
+</ol>
+<p><strong>Done when:</strong> your empty loop is under ~10 ms (JIT on, clock monotonic), and you have seen the ns/op figure rise with the warm-up removed.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">process.hrtime.bigint()</span><span class="v">A monotonic nanosecond clock that cannot run backwards; use it for anything you subtract.</span></div>
+  <div class="kv"><span class="k">Monotonic clock</span><span class="v">A clock that only moves forward, unaffected by NTP steps or VM snapshots — unlike the wall clock.</span></div>
+  <div class="kv"><span class="k">Warm-up (JIT)</span><span class="v">A call made before timing so V8 compiles the function; without it you measure the interpreter.</span></div>
+  <div class="kv"><span class="k">monitorEventLoopDelay()</span><span class="v">A perf_hooks histogram of how late the event loop runs — the most useful self-report a Node process has.</span></div>
+  <div class="kv"><span class="k">process.memoryUsage()</span><span class="v">Five numbers (RSS, heapUsed, heapTotal, external, arrayBuffers) separating a code leak from runtime buffers.</span></div>
+  <div class="kv"><span class="k">writableLength</span><span class="v">Bytes queued on a stream but not yet written — the signal that proves log backpressure in lesson 1.5.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Every number in this course comes from four built-in Node tools — no agent, no account — so you can always check a vendor&#39;s dashboard against your own measurement.</li>
+  <li>A trustworthy benchmark needs three things: a warm-up call, a monotonic clock, and dividing by N after the loop rather than timing each iteration.</li>
+  <li>Use <code>hrtime.bigint()</code> for durations and keep <code>Date.now()</code> only for displayed timestamps — the wall clock can step backwards mid-measurement.</li>
+  <li>The empty-loop sanity check confirms the JIT is on and the clock works before you trust any figure above it.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html" target="_blank" rel="noopener">
   <span class="lc-ico">🟢</span>
@@ -352,6 +511,37 @@ $ node -e "const t=process.hrtime.bigint(); for(let i=0;i&lt;1e7;i++); console.l
 <h3>Thứ bạn CHƯA cần</h3>
 <p>Không Prometheus, không Grafana, không collector OpenTelemetry, không tài khoản Sentry. Những thứ đó tới ở đúng chương cần tới chúng, và mỗi cái đều được giới thiệu bằng cách đo thứ đó bằng tay trước, để bạn kiểm chứng được đầu ra của nó. Bộ đồ nghề ở trên là đủ cho chương 1 tới chương 5.</p>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Dựng bộ đồ nghề và chứng minh nó đo việc thật, không phải chi phí vòng lặp.</p>
+<ol>
+  <li>Lưu khung <code>bench()</code> trong bài này vào <code>bench.mjs</code> rồi chạy: <code>node bench.mjs</code>. Ghi lại ns/thao tác của <code>JSON.stringify</code>.</li>
+  <li>Chạy phép kiểm tỉnh táo — một vòng lặp rỗng mười triệu lần chỉ nên mất vài mili giây:</li>
+</ol>
+<pre><code class="language-bash">node -e "const t=process.hrtime.bigint(); for(let i=0;i&lt;1e7;i++); console.log(Number(process.hrtime.bigint()-t)/1e6+' ms')"</code></pre>
+<ol start="3">
+  <li>Xoá lời gọi làm nóng <code>fn()</code> rồi chạy lại <code>bench.mjs</code>. Nhìn ns/thao tác nhảy lên — bạn vừa đo trình thông dịch thay vì hàm đã biên dịch.</li>
+  <li>Thêm một dòng in <code>process.memoryUsage().heapUsed</code> và <code>process.stdout.writableLength</code>, rồi đọc xem mỗi cái báo gì lúc rảnh.</li>
+</ol>
+<p><strong>Đạt khi:</strong> vòng lặp rỗng của bạn dưới ~10 ms (JIT bật, đồng hồ đơn điệu), và bạn đã thấy con số ns/thao tác tăng lên khi bỏ lời gọi làm nóng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">process.hrtime.bigint()</span><span class="v">Đồng hồ nano giây đơn điệu không thể chạy lùi; dùng cho mọi thứ bạn đem trừ.</span></div>
+  <div class="kv"><span class="k">Đồng hồ đơn điệu</span><span class="v">Đồng hồ chỉ tiến, không bị NTP đẩy hay máy ảo chụp ảnh — khác đồng hồ tường.</span></div>
+  <div class="kv"><span class="k">Làm nóng (JIT)</span><span class="v">Một lời gọi trước khi bấm giờ để V8 biên dịch hàm; thiếu nó là bạn đo trình thông dịch.</span></div>
+  <div class="kv"><span class="k">monitorEventLoopDelay()</span><span class="v">Histogram của perf_hooks về độ trễ vòng lặp sự kiện — thứ tự báo cáo hữu ích nhất của một tiến trình Node.</span></div>
+  <div class="kv"><span class="k">process.memoryUsage()</span><span class="v">Năm con số (RSS, heapUsed, heapTotal, external, arrayBuffers) tách rò rỉ trong mã với vùng đệm của runtime.</span></div>
+  <div class="kv"><span class="k">writableLength</span><span class="v">Số byte xếp hàng trên một luồng mà chưa ghi ra — tín hiệu chứng minh nghẽn log ở bài 1.5.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Mọi con số trong khoá này đến từ bốn công cụ có sẵn của Node — không tác nhân, không tài khoản — nên bạn luôn kiểm được bảng theo dõi của nhà cung cấp bằng phép đo của chính mình.</li>
+  <li>Một benchmark đáng tin cần ba thứ: một lời gọi làm nóng, một đồng hồ đơn điệu, và chia cho N SAU vòng lặp thay vì bấm giờ từng vòng.</li>
+  <li>Dùng <code>hrtime.bigint()</code> cho thời lượng và chỉ giữ <code>Date.now()</code> cho dấu thời gian hiển thị — đồng hồ tường có thể lùi giữa chừng phép đo.</li>
+  <li>Phép kiểm vòng lặp rỗng xác nhận JIT đang bật và đồng hồ chạy được trước khi bạn tin bất cứ con số nào trên nó.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html" target="_blank" rel="noopener">
   <span class="lc-ico">🟢</span>
@@ -401,6 +591,34 @@ JSON.stringify faster than 400ns  no       Check you are not measuring a cached 
 <h3>What you should be able to do at the end</h3>
 <p>Take a Node service you did not write, and within an hour: know its p99 latency and error rate, follow a single request through every log line it produced, see the last deploy on the same graph as the errors, and state which of its failures would page a human and which would not. That is the whole objective, and everything in the thirteen sections is aimed at it.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Run the loop once, now, so the habit is in place before chapter 1.</p>
+<ol>
+  <li>Take the <code>bench.mjs</code> from lesson 0.3 and run it twice. Record both ns/op figures and note how much they differ run to run.</li>
+  <li>Run it once on an idle machine and once with a build or video playing. Watch the absolute numbers move.</li>
+  <li>Now change one variable: benchmark <code>JSON.stringify</code> of a 2-field object versus a 20-field object. <strong>Predict the direction first</strong>, out loud, then run it.</li>
+  <li>Compute the ratio (big ÷ small). Compare that ratio — not the absolute numbers — to what the later chapters report.</li>
+</ol>
+<p><strong>Done when:</strong> you have reproduced a ratio from the course and watched the absolute figures swing by tens of percent while the ratio held — proving ratios travel and absolutes do not.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">out block</span><span class="v">A real captured run shown in this course — reproduce it, do not memorise it.</span></div>
+  <div class="kv"><span class="k">Reproduction</span><span class="v">Running a measurement yourself to confirm the mechanism, not just reading the result.</span></div>
+  <div class="kv"><span class="k">Ratio vs absolute</span><span class="v">Absolute ns/op is hardware; the ratio between two measurements is the portable lesson.</span></div>
+  <div class="kv"><span class="k">Conditions of a measurement</span><span class="v">The object shape, CPU and method a number was taken under; a figure without them becomes folklore.</span></div>
+  <div class="kv"><span class="k">Predict-then-run</span><span class="v">Stating your expectation before running, so being wrong actually teaches you.</span></div>
+  <div class="kv"><span class="k">Deliberate breakage</span><span class="v">Reproducing a failure on purpose here, where it is cheap, instead of meeting it at 2am.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Every <code>out</code> block is a real run on Node 22.22.2 — the goal is to reproduce the numbers and notice where yours differ.</li>
+  <li>Per lesson: read the mechanism, run it yourself, change one variable and predict first, then break it deliberately.</li>
+  <li>Absolute numbers are hardware and will swing ±30%; the ratios are the lesson and should reproduce anywhere.</li>
+  <li>The end objective: take a service you did not write and, within an hour, know its p99, follow one request, see the last deploy on the error graph, and say what would page a human.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://nodejs.org/en/learn/getting-started/profiling" target="_blank" rel="noopener">
   <span class="lc-ico">🟢</span>
@@ -441,6 +659,34 @@ JSON.stringify nhanh hơn 400ns  không      Kiểm xem bạn có đang đo mộ
 
 <h3>Học xong bạn phải làm được gì</h3>
 <p>Cầm lấy một dịch vụ Node bạn không viết, và trong vòng một tiếng: biết được p99 độ trễ và tỷ lệ lỗi của nó, lần theo một request duy nhất qua mọi dòng log nó sinh ra, thấy được lần deploy gần nhất trên cùng biểu đồ với các lỗi, và phát biểu được cú hỏng nào của nó đáng gọi người dậy còn cú nào thì không. Đó là toàn bộ mục tiêu, và mọi thứ trong mười ba mục đều nhắm vào nó.</p>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Chạy vòng lặp học một lần, ngay bây giờ, để thói quen có sẵn trước chương 1.</p>
+<ol>
+  <li>Lấy <code>bench.mjs</code> từ bài 0.3 và chạy hai lần. Ghi lại cả hai con số ns/thao tác và để ý chúng lệch nhau bao nhiêu giữa các lần.</li>
+  <li>Chạy một lần lúc máy rảnh và một lần khi có bản build hay video đang chạy. Nhìn con số tuyệt đối dịch đi.</li>
+  <li>Giờ đổi một biến: đo <code>JSON.stringify</code> của một object 2 trường so với một object 20 trường. <strong>Đoán hướng trước</strong>, nói to ra, rồi mới chạy.</li>
+  <li>Tính tỷ lệ (lớn ÷ nhỏ). So TỶ LỆ đó — không phải con số tuyệt đối — với thứ các chương sau báo cáo.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã tái hiện một tỷ lệ của khoá học và nhìn con số tuyệt đối dao động hàng chục phần trăm trong khi tỷ lệ vẫn giữ — chứng minh tỷ lệ đi được còn số tuyệt đối thì không.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">khối out</span><span class="v">Một lần chạy thật đã ghi lại trong khoá này — hãy tái hiện nó, đừng học thuộc.</span></div>
+  <div class="kv"><span class="k">Tái hiện</span><span class="v">Tự chạy một phép đo để xác nhận cơ chế, không chỉ đọc kết quả.</span></div>
+  <div class="kv"><span class="k">Tỷ lệ với tuyệt đối</span><span class="v">ns/thao tác tuyệt đối là phần cứng; tỷ lệ giữa hai phép đo mới là bài học mang đi được.</span></div>
+  <div class="kv"><span class="k">Điều kiện của phép đo</span><span class="v">Hình dạng object, CPU và cách đo mà một con số được lấy dưới đó; con số thiếu chúng thành lời đồn.</span></div>
+  <div class="kv"><span class="k">Đoán-rồi-chạy</span><span class="v">Phát biểu kỳ vọng trước khi chạy, để việc đoán sai thật sự dạy được bạn.</span></div>
+  <div class="kv"><span class="k">Cố ý phá</span><span class="v">Tái hiện một cú hỏng có chủ đích ở đây, nơi nó rẻ, thay vì gặp nó lúc 2 giờ sáng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Mọi khối <code>out</code> là một lần chạy thật trên Node 22.22.2 — mục tiêu là tái hiện các con số và để ý chỗ số bạn khác.</li>
+  <li>Mỗi bài: đọc cơ chế, tự chạy, đổi một biến và đoán trước, rồi cố ý phá nó.</li>
+  <li>Con số tuyệt đối là phần cứng và sẽ dao động ±30%; các tỷ lệ mới là bài học và phải tái hiện được ở bất cứ đâu.</li>
+  <li>Mục tiêu cuối: cầm một dịch vụ bạn không viết và trong một tiếng, biết p99 của nó, lần theo một request, thấy lần deploy gần nhất trên biểu đồ lỗi, và nói được cú hỏng nào đáng gọi người dậy.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://nodejs.org/en/learn/getting-started/profiling" target="_blank" rel="noopener">

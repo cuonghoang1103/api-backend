@@ -101,6 +101,38 @@ none        Discards. Reasonable for a chatty sidecar, and a
 <p><strong>Trap — stderr is not an error level.</strong> Docker's <code>stream</code> field records which file descriptor a line came from, and <code>src/utils/logger.ts</code> sends <code>warn</code> and <code>error</code> to fd 2 and everything else to fd 1. So <code>stream:"stderr"</code> correlates with severity here, by accident, and only here. Plenty of well-behaved programs write ordinary progress to stderr — <code>npm</code>, <code>ffmpeg</code> and <code>prisma migrate</code> all do. If you build alerting on <code>stream == "stderr"</code>, the first FFmpeg job in this repo's media pipeline will page you at 3am about a video that encoded perfectly. <strong>Alert on your own <code>level</code> field, which you control, never on the stream Docker happened to observe.</strong></p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Find the real json-file on disk and measure the envelope on your own line.</p>
+<ol>
+  <li>Pick any running container and print the path Docker writes its log to:</li>
+</ol>
+<pre><code class="language-bash">docker inspect --format '{{.LogPath}}' &lt;container&gt;
+sudo tail -n 1 "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
+<ol start="2">
+  <li>Read the last line: your object now sits inside <code>{&quot;log&quot;:&quot;...&quot;,&quot;stream&quot;:&quot;stdout&quot;,&quot;time&quot;:&quot;...&quot;}</code> with every quote escaped.</li>
+  <li>Run <code>m8.mjs</code> from this lesson against one of your own log lines and compute the bloat factor (wrapped ÷ raw).</li>
+  <li>Multiply a day of your traffic by both sizes and compare the two disk estimates.</li>
+</ol>
+<p><strong>Done when:</strong> you have seen your line inside Docker&#39;s envelope and can state your own bloat factor (around 1.6×) and what it does to a daily disk estimate.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">json-file driver</span><span class="v">Docker&#39;s default logging driver; wraps each line and writes it to a file on disk.</span></div>
+  <div class="kv"><span class="k">Log envelope</span><span class="v">The outer <code>{log, stream, time}</code> object Docker adds around your JSON, escaping every quote.</span></div>
+  <div class="kv"><span class="k">Bloat factor</span><span class="v">Wrapped size ÷ raw size — about 1.62× here, so every disk estimate from your own line is low.</span></div>
+  <div class="kv"><span class="k">LogPath</span><span class="v">The on-disk file Docker writes to, shown by <code>docker inspect --format &#39;{{.LogPath}}&#39;</code>.</span></div>
+  <div class="kv"><span class="k">docker logs</span><span class="v">Reads that file back (a filtered <code>cat</code>), not a live tap — recreating a container empties it.</span></div>
+  <div class="kv"><span class="k">stream field</span><span class="v">Which fd a line came from (stdout/stderr) — not a severity level; alert on your own <code>level</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>In a container fd 1 is a pipe to containerd; the json-file driver wraps your line and lands it in <code>&lt;id&gt;-json.log</code>.</li>
+  <li>The envelope escapes every quote, inflating a line ~1.62× — enough to fill a 6 GB VPS disk in about a day at 50 rps × 5 lines.</li>
+  <li><code>docker logs</code> is a filtered <code>cat</code> of that file, not a tap on your process, and a recreated container loses the old file.</li>
+  <li>Stay on <code>json-file</code> (every shipper reads it); its only real flaw is no default size limit — the subject of lesson 2.2.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.docker.com/engine/logging/drivers/json-file/" target="_blank" rel="noopener">
@@ -196,6 +228,38 @@ none        Vứt bỏ. Hợp lý cho một sidecar lắm mồm, và là cái b�
 <div class="pitfall">
 <p><strong>Bẫy — stderr không phải là một mức log.</strong> Trường <code>stream</code> của Docker ghi lại dòng log đến từ file descriptor nào, và <code>src/utils/logger.ts</code> gửi <code>warn</code> với <code>error</code> ra fd 2 còn mọi thứ khác ra fd 1. Vậy nên <code>stream:"stderr"</code> ở đây tương quan với mức nghiêm trọng, một cách tình cờ, và chỉ ở đây thôi. Đầy chương trình đàng hoàng vẫn ghi tiến độ bình thường ra stderr — <code>npm</code>, <code>ffmpeg</code> và <code>prisma migrate</code> đều thế. Nếu bạn dựng cảnh báo trên <code>stream == "stderr"</code>, việc FFmpeg đầu tiên trong đường ống media của kho này sẽ gọi bạn dậy lúc 3 giờ sáng vì một video mã hoá hoàn hảo. <strong>Hãy cảnh báo theo trường <code>level</code> của chính bạn, thứ bạn kiểm soát, đừng bao giờ theo cái luồng mà Docker tình cờ quan sát được.</strong></p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Tìm file json-file thật trên đĩa và đo phong bì trên chính dòng của bạn.</p>
+<ol>
+  <li>Chọn một container đang chạy và in đường dẫn Docker ghi log của nó:</li>
+</ol>
+<pre><code class="language-bash">docker inspect --format '{{.LogPath}}' &lt;container&gt;
+sudo tail -n 1 "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
+<ol start="2">
+  <li>Đọc dòng cuối: object của bạn giờ nằm trong <code>{&quot;log&quot;:&quot;...&quot;,&quot;stream&quot;:&quot;stdout&quot;,&quot;time&quot;:&quot;...&quot;}</code> với mọi dấu ngoặc kép bị escape.</li>
+  <li>Chạy <code>m8.mjs</code> của bài này trên một dòng log của chính bạn và tính hệ số phình (sau bọc ÷ thô).</li>
+  <li>Nhân một ngày lưu lượng của bạn với cả hai kích thước rồi so hai ước lượng đĩa.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy dòng của mình trong phong bì của Docker và nói được hệ số phình của chính bạn (khoảng 1,6×) cùng tác động của nó lên ước lượng đĩa một ngày.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">json-file driver</span><span class="v">Trình log mặc định của Docker; bọc mỗi dòng rồi ghi ra một file trên đĩa.</span></div>
+  <div class="kv"><span class="k">Phong bì log</span><span class="v">Object ngoài <code>{log, stream, time}</code> Docker thêm quanh JSON của bạn, escape mọi dấu ngoặc kép.</span></div>
+  <div class="kv"><span class="k">Hệ số phình</span><span class="v">Kích thước sau bọc ÷ thô — khoảng 1,62× ở đây, nên mọi ước lượng đĩa từ dòng của bạn đều thiếu.</span></div>
+  <div class="kv"><span class="k">LogPath</span><span class="v">File trên đĩa Docker ghi vào, hiện bằng <code>docker inspect --format &#39;{{.LogPath}}&#39;</code>.</span></div>
+  <div class="kv"><span class="k">docker logs</span><span class="v">Đọc lại file đó (một <code>cat</code> có lọc), không phải một vòi cắm vào tiến trình — dựng lại container là mất.</span></div>
+  <div class="kv"><span class="k">Trường stream</span><span class="v">Dòng đến từ fd nào (stdout/stderr) — không phải mức nghiêm trọng; hãy cảnh báo trên <code>level</code> của chính bạn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Trong container fd 1 là một ống tới containerd; json-file driver bọc dòng của bạn rồi đặt nó vào <code>&lt;id&gt;-json.log</code>.</li>
+  <li>Phong bì escape mọi dấu ngoặc kép, làm một dòng phình ~1,62× — đủ để lấp đầy đĩa 6 GB của VPS trong khoảng một ngày ở 50 rps × 5 dòng.</li>
+  <li><code>docker logs</code> là một <code>cat</code> có lọc của file đó, không phải vòi cắm vào tiến trình, và container dựng lại mất file cũ.</li>
+  <li>Hãy ở lại <code>json-file</code> (mọi shipper đọc được nó); khuyết điểm thật sự duy nhất là không có trần kích thước mặc định — chủ đề bài 2.2.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -316,6 +380,38 @@ services:
 <p><strong>Trap — never <code>rm</code> a container log file while the container is running.</strong> The daemon holds an open file descriptor to it. Deleting the directory entry does not free the space: the inode stays allocated until the last descriptor closes, so <code>df</code> still shows the disk full while <code>du</code> shows the file gone — the single most confusing state to debug under pressure, because the two tools flatly contradict each other. <code>truncate -s 0</code>, which the weekly job uses, is correct precisely because it keeps the descriptor valid and frees the blocks immediately. If you have already done the <code>rm</code>, the space comes back when the container is recreated (not restarted — recreated), or you can confirm the diagnosis first with <code>lsof +L1 | grep deleted</code>, which lists exactly the files in this state.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Check whether a container&#39;s logs are bounded, then put a ceiling on them.</p>
+<ol>
+  <li>Inspect the log config and current size of a running container:</li>
+</ol>
+<pre><code class="language-bash">docker inspect -f '{{.HostConfig.LogConfig}}' &lt;container&gt;
+du -m "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
+<ol start="2">
+  <li>An empty options map means no limit. Add <code>max-size: 50m</code>, <code>max-file: 3</code>, <code>compress: true</code> to that service in compose (or to <code>/etc/docker/daemon.json</code>).</li>
+  <li>Recreate the container (<code>docker compose up -d &lt;svc&gt;</code>) — a restart alone does not pick up new log options.</li>
+  <li>Re-run the inspect and confirm the options now appear; compute your worst case as <code>max-size × max-file × services</code>.</li>
+</ol>
+<p><strong>Done when:</strong> at least one container reports a bounded <code>LogConfig</code>, and you have a single worst-case ceiling number for the whole host instead of &quot;unbounded, checked on Sundays&quot;.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Log rotation</span><span class="v">The daemon capping a log by renaming to <code>.1</code>, <code>.2</code> at a size and keeping only the last N.</span></div>
+  <div class="kv"><span class="k">max-size</span><span class="v">The size at which the current log file is rotated — e.g. <code>50m</code>.</span></div>
+  <div class="kv"><span class="k">max-file</span><span class="v">How many rotated files to keep; <code>max-size × max-file</code> is the hard per-container ceiling.</span></div>
+  <div class="kv"><span class="k">compress</span><span class="v">gzip the rotated files — about 12.8× smaller here (lesson 2.5).</span></div>
+  <div class="kv"><span class="k">daemon.json</span><span class="v">Host-wide Docker config; sets defaults every newly created container inherits.</span></div>
+  <div class="kv"><span class="k">truncate vs rotate</span><span class="v"><code>truncate -s 0</code> destroys the whole file; rotation keeps the last N as a ceiling.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>The <code>json-file</code> driver has no size limit unless you give it one — the default everywhere, and this repo gives it none.</li>
+  <li>The weekly truncate cron is the wrong shape: it runs weekly while logs fill hourly, allows 1.4 GB across 7 containers, and deletes the very log that explains a failure.</li>
+  <li>Rotation is a ceiling the daemon enforces at write time, not a cleanup job — set <code>max-size</code>/<code>max-file</code>/<code>compress</code>.</li>
+  <li>A daemon-wide setting is not retroactive and does not shrink an existing file; recreate the container to apply it.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.docker.com/engine/daemon/#configure-the-docker-daemon" target="_blank" rel="noopener">
@@ -426,6 +522,38 @@ trước khi trình thu log tiếp quản?
 <div class="pitfall">
 <p><strong>Bẫy — đừng bao giờ <code>rm</code> file log của một container đang chạy.</strong> Daemon đang giữ một file descriptor mở tới nó. Xoá mục trong thư mục KHÔNG giải phóng chỗ: inode vẫn được cấp phát cho tới khi descriptor cuối cùng đóng lại, nên <code>df</code> vẫn báo đĩa đầy trong khi <code>du</code> báo file đã biến mất — trạng thái khó hiểu bậc nhất khi phải gỡ dưới áp lực, vì hai công cụ nói ngược hẳn nhau. <code>truncate -s 0</code>, thứ job hằng tuần đang dùng, đúng chính vì nó giữ descriptor còn hợp lệ và giải phóng các khối ngay lập tức. Nếu bạn đã lỡ <code>rm</code> rồi, chỗ trống quay lại khi container được tạo lại (không phải khởi động lại — tạo lại), hoặc bạn có thể xác nhận chẩn đoán trước bằng <code>lsof +L1 | grep deleted</code>, lệnh liệt kê đúng những file đang ở trạng thái này.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Kiểm xem log một container có bị giới hạn không, rồi đặt trần cho nó.</p>
+<ol>
+  <li>Soi cấu hình log và kích thước hiện tại của một container đang chạy:</li>
+</ol>
+<pre><code class="language-bash">docker inspect -f '{{.HostConfig.LogConfig}}' &lt;container&gt;
+du -m "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
+<ol start="2">
+  <li>Map tuỳ chọn rỗng nghĩa là không có trần. Thêm <code>max-size: 50m</code>, <code>max-file: 3</code>, <code>compress: true</code> cho dịch vụ đó trong compose (hoặc vào <code>/etc/docker/daemon.json</code>).</li>
+  <li>Dựng lại container (<code>docker compose up -d &lt;svc&gt;</code>) — chỉ restart thì không nhận tuỳ chọn log mới.</li>
+  <li>Chạy lại lệnh inspect và xác nhận tuỳ chọn đã hiện; tính trường hợp xấu nhất là <code>max-size × max-file × số dịch vụ</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> ít nhất một container báo <code>LogConfig</code> có giới hạn, và bạn có một con số trần xấu nhất duy nhất cho cả máy thay vì &quot;không trần, kiểm vào Chủ nhật&quot;.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Xoay vòng log</span><span class="v">Daemon chặn trần một log bằng cách đổi tên sang <code>.1</code>, <code>.2</code> ở một kích thước và chỉ giữ N file cuối.</span></div>
+  <div class="kv"><span class="k">max-size</span><span class="v">Kích thước mà file log hiện tại bị xoay vòng — ví dụ <code>50m</code>.</span></div>
+  <div class="kv"><span class="k">max-file</span><span class="v">Giữ bao nhiêu file đã xoay; <code>max-size × max-file</code> là trần cứng mỗi container.</span></div>
+  <div class="kv"><span class="k">compress</span><span class="v">gzip các file đã xoay — nhỏ hơn khoảng 12,8× ở đây (bài 2.5).</span></div>
+  <div class="kv"><span class="k">daemon.json</span><span class="v">Cấu hình Docker toàn máy; đặt mặc định mà mọi container mới tạo kế thừa.</span></div>
+  <div class="kv"><span class="k">truncate với rotate</span><span class="v"><code>truncate -s 0</code> xoá sạch cả file; xoay vòng giữ N file cuối như một trần.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Trình <code>json-file</code> không có trần kích thước trừ khi bạn đặt — mặc định ở khắp nơi, và kho này không đặt.</li>
+  <li>Cron truncate hằng tuần sai hình dạng: chạy mỗi tuần trong khi log đầy mỗi giờ, cho phép 1,4 GB qua 7 container, và xoá đúng cái log giải thích cú hỏng.</li>
+  <li>Xoay vòng là một trần daemon ép lúc ghi, không phải một việc dọn dẹp — hãy đặt <code>max-size</code>/<code>max-file</code>/<code>compress</code>.</li>
+  <li>Cấu hình toàn daemon không áp hồi tố và không thu nhỏ file đã có; dựng lại container để áp dụng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -548,6 +676,38 @@ exactly-once     not on offer for logs, at any price, from
 <p><strong>Trap — <code>include_images</code> means you are shipping one container's logs, not your system's.</strong> The config above filters to <code>cuonghoangdev_backend</code>. That reads like a sensible scope until the incident where nginx is returning 502 and the backend log is clean — because the backend never received the request, and the only evidence lives in the nginx container that Vector was told to ignore. The same gap hides Postgres's slow-query log and the OOM message from the TTS container. <strong>The blind spot is invisible by construction: a filtered pipeline looks perfectly healthy, because everything it collects arrives fine.</strong> Ship every container and filter at query time, where a wrong filter costs you one re-run instead of the evidence itself.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Run a tail-the-file shipper and prove it does not lose lines across its own restart.</p>
+<ol>
+  <li>Start Vector as a container with a <code>docker_logs</code> source and a <code>console</code> sink (a few lines of <code>vector.yaml</code>), so it prints every container&#39;s lines.</li>
+  <li>Generate traffic against one of your containers and watch the lines flow through Vector:</li>
+</ol>
+<pre><code class="language-bash">docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+  -v "$PWD/vector.yaml:/etc/vector/vector.yaml" timberio/vector:latest-alpine</code></pre>
+<ol start="3">
+  <li>Stop Vector for ten seconds while the app keeps logging, then start it again.</li>
+  <li>Confirm the lines logged during the downtime still arrive — they waited on disk, not in your heap.</li>
+</ol>
+<p><strong>Done when:</strong> lines flow through the shipper and survive a shipper restart, so you can explain why architecture A (tail the file) puts backpressure on the disk, not the process.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Shipper</span><span class="v">A process that reads the rotating log file and copies lines to a store with room to keep them.</span></div>
+  <div class="kv"><span class="k">Tail-the-file (arch A)</span><span class="v">The app writes to stdout as usual; the shipper tails the file — no code change, buffer is the disk.</span></div>
+  <div class="kv"><span class="k">Push-from-app (arch B)</span><span class="v">The app HTTP-POSTs its own logs — fewer parts, but a log outage becomes an app outage.</span></div>
+  <div class="kv"><span class="k">Vector</span><span class="v">A single-binary shipper whose <code>docker_logs</code> source reads straight from the daemon.</span></div>
+  <div class="kv"><span class="k">Checkpoint</span><span class="v">The byte offset the shipper remembers, so a restart resumes where it stopped.</span></div>
+  <div class="kv"><span class="k">At-least-once delivery</span><span class="v">The shipper may resend a line after a crash but never drops one — so expect occasional duplicates.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A shipper resolves the bounded-disk vs week-of-history trade-off by copying lines somewhere with room.</li>
+  <li>Four reasons, only one is disk: survival past a container recreate, indexed search instead of a scan, and a join across every service.</li>
+  <li>Prefer architecture A (tail the file): the disk is a huge OS-managed buffer, your heap is a few hundred MB with an OOM killer.</li>
+  <li>A file-tailing shipper is at-least-once — a crash resumes from a checkpoint, losing nothing but occasionally duplicating.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://vector.dev/docs/reference/configuration/sources/docker_logs/" target="_blank" rel="noopener">
@@ -661,6 +821,38 @@ encoding.codec = "json"</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>include_images</code> nghĩa là bạn đang thu log của MỘT container, không phải của hệ thống.</strong> Cấu hình ở trên lọc còn <code>cuonghoangdev_backend</code>. Nghe như một phạm vi hợp lý, cho tới cái sự cố mà nginx trả 502 còn log backend thì sạch bong — vì backend chưa từng nhận được request, và bằng chứng duy nhất nằm trong container nginx mà Vector được bảo là hãy lờ đi. Đúng khoảng trống ấy giấu luôn log truy vấn chậm của Postgres và thông báo OOM từ container TTS. <strong>Điểm mù này vô hình theo đúng thiết kế: một đường ống bị lọc trông khoẻ mạnh hoàn hảo, vì mọi thứ nó thu về đều tới nơi tử tế.</strong> Hãy thu mọi container rồi lọc lúc truy vấn, nơi mà một bộ lọc sai chỉ tốn của bạn một lần chạy lại thay vì tốn chính cái bằng chứng.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Chạy một trình thu log kiểu tail-file và chứng minh nó không mất dòng qua chính lần khởi động lại của nó.</p>
+<ol>
+  <li>Khởi động Vector dạng container với source <code>docker_logs</code> và sink <code>console</code> (vài dòng <code>vector.yaml</code>), để nó in mọi dòng của các container.</li>
+  <li>Tạo lưu lượng cho một container của bạn và nhìn các dòng chảy qua Vector:</li>
+</ol>
+<pre><code class="language-bash">docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \\
+  -v "$PWD/vector.yaml:/etc/vector/vector.yaml" timberio/vector:latest-alpine</code></pre>
+<ol start="3">
+  <li>Dừng Vector mười giây trong khi app vẫn log, rồi khởi động lại.</li>
+  <li>Xác nhận các dòng log trong lúc nó tắt vẫn đến — chúng chờ trên đĩa, không phải trong heap của bạn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> các dòng chảy qua trình thu log và sống qua lần khởi động lại của nó, để bạn giải thích được vì sao kiến trúc A (tail file) đặt nghẽn lên đĩa, không lên tiến trình.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trình thu log (shipper)</span><span class="v">Một tiến trình đọc file log đang xoay vòng và chép các dòng sang một kho có chỗ giữ chúng.</span></div>
+  <div class="kv"><span class="k">Tail-file (kiến trúc A)</span><span class="v">App ghi stdout như thường; shipper tail file — không sửa mã, đệm là đĩa.</span></div>
+  <div class="kv"><span class="k">Push-from-app (kiến trúc B)</span><span class="v">App tự HTTP-POST log của nó — ít bộ phận hơn, nhưng một sự cố log thành sự cố app.</span></div>
+  <div class="kv"><span class="k">Vector</span><span class="v">Một shipper một-binary mà source <code>docker_logs</code> đọc thẳng từ daemon.</span></div>
+  <div class="kv"><span class="k">Checkpoint</span><span class="v">Vị trí byte mà shipper nhớ, để một lần khởi động lại tiếp từ chỗ đã dừng.</span></div>
+  <div class="kv"><span class="k">Giao ít-nhất-một-lần</span><span class="v">Shipper có thể gửi lại một dòng sau khi sập nhưng không bao giờ mất — nên chờ đôi lần trùng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Một trình thu log giải bài toán đánh đổi đĩa-có-trần với tuần-lịch-sử bằng cách chép dòng sang nơi có chỗ.</li>
+  <li>Bốn lý do, chỉ một là đĩa: sống sót qua lần dựng lại container, tìm kiếm bằng chỉ mục thay vì quét, và nối qua mọi dịch vụ.</li>
+  <li>Hãy chọn kiến trúc A (tail file): đĩa là một bộ đệm khổng lồ do OS quản, heap của bạn chỉ vài trăm MB với một OOM killer.</li>
+  <li>Một shipper tail-file là giao ít-nhất-một-lần — sập rồi tiếp từ checkpoint, không mất gì nhưng đôi khi trùng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -784,6 +976,34 @@ container or job. Everything else narrows from there.</code></pre>
 <p><strong>Trap — a label you add today applies only from today.</strong> Labels are attached at ingest, by the shipper, so changing the Promtail or Vector config does not relabel the chunks already stored. The consequence appears at the worst moment: you add a <code>service</code> label, and a week later you query <code>{service="backend"}</code> over &quot;the last 30 days&quot; to compare against the previous incident — and get results for seven days, silently, with no warning that the other twenty-three are simply not selectable by that label. <strong>The graph looks like the incident began the day you changed the config.</strong> When you change labels, write the date in the runbook, and query historical ranges with the label set that existed then.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Write four LogQL queries, then prove why <code>msg</code> must never be a label.</p>
+<ol>
+  <li>In Grafana Explore (or <code>logcli</code>) against Loki, select a stream pinned to container and level: <code>{container=&quot;backend&quot;, level=&quot;error&quot;}</code>.</li>
+  <li>Narrow it two ways: a line filter <code>|= &quot;notes&quot;</code>, then a field filter <code>| json | route=&quot;/api/v1/notes&quot;</code> and a numeric one <code>| json | ms &gt; 1000</code>.</li>
+  <li>Graph the error rate per minute: <code>sum(rate({container=&quot;backend&quot;, level=&quot;error&quot;}[1m]))</code>.</li>
+  <li>Run the unique-message grep from this lesson, then multiply by containers × levels. Compare the result to Loki&#39;s ~10,000 active-stream limit.</li>
+</ol>
+<p><strong>Done when:</strong> you have a label-pinned query, a numeric field filter and a <code>rate()</code> graph, and a stream-count number that shows why <code>msg</code> belongs in the line, not in a label.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Stream</span><span class="v">A unique set of label values; the unit Loki indexes and selects cheaply.</span></div>
+  <div class="kv"><span class="k">Label (indexed)</span><span class="v">A bounded, small, stable key like <code>container</code> or <code>level</code> — every value is a new stream.</span></div>
+  <div class="kv"><span class="k">Line filter (<code>|=</code>)</span><span class="v">A grep over the raw bytes of the already-selected streams; not indexed.</span></div>
+  <div class="kv"><span class="k">Cardinality</span><span class="v">How many distinct values a label takes; high cardinality (msg, route, id) explodes the stream count.</span></div>
+  <div class="kv"><span class="k">| json</span><span class="v">Extracts fields at query time so you can filter on <code>route</code> or <code>ms</code> without indexing them.</span></div>
+  <div class="kv"><span class="k">rate / count_over_time</span><span class="v">Aggregations that turn selected log lines into a graphable number per interval.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Loki indexes labels, not content: every query picks streams by label, then greps inside them.</li>
+  <li>Labelling on <code>msg</code> turns 28 streams into 9,100 — 325× — landing near Loki&#39;s active-stream limit; adding <code>route</code> passes eight million.</li>
+  <li>A good label is bounded, small and stable; high-cardinality fields go in the line and are extracted with <code>| json</code> at query time.</li>
+  <li>Pin the container or job in the first selector, and remember labels apply only from the day you add them.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/loki/latest/query/" target="_blank" rel="noopener">
@@ -898,6 +1118,34 @@ Mọi thứ khác thu hẹp dần từ đó.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một cái nhãn bạn thêm hôm nay chỉ áp dụng từ hôm nay.</strong> Nhãn được gắn lúc nạp, bởi trình thu log, nên đổi cấu hình Promtail hay Vector KHÔNG gắn lại nhãn cho những chunk đã lưu. Hệ quả hiện ra vào đúng lúc tệ nhất: bạn thêm một nhãn <code>service</code>, và một tuần sau bạn truy vấn <code>{service="backend"}</code> trên &quot;30 ngày qua&quot; để so với sự cố lần trước — rồi nhận kết quả của bảy ngày, trong im lặng, không một lời cảnh báo rằng hai mươi ba ngày kia đơn giản là không chọn được bằng cái nhãn đó. <strong>Đồ thị trông y như thể sự cố bắt đầu đúng cái ngày bạn đổi cấu hình.</strong> Khi đổi nhãn, hãy ghi ngày vào sổ tay, và truy vấn các khoảng lịch sử bằng bộ nhãn đã tồn tại ở thời điểm đó.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Viết bốn truy vấn LogQL, rồi chứng minh vì sao <code>msg</code> không bao giờ được làm nhãn.</p>
+<ol>
+  <li>Trong Grafana Explore (hoặc <code>logcli</code>) trên Loki, chọn một luồng ghim theo container và level: <code>{container=&quot;backend&quot;, level=&quot;error&quot;}</code>.</li>
+  <li>Thu hẹp hai cách: một line filter <code>|= &quot;notes&quot;</code>, rồi một field filter <code>| json | route=&quot;/api/v1/notes&quot;</code> và một cái số <code>| json | ms &gt; 1000</code>.</li>
+  <li>Vẽ tỷ lệ lỗi mỗi phút: <code>sum(rate({container=&quot;backend&quot;, level=&quot;error&quot;}[1m]))</code>.</li>
+  <li>Chạy lệnh grep đếm message duy nhất của bài này, rồi nhân với số container × số level. So kết quả với trần ~10.000 luồng hoạt động của Loki.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một truy vấn ghim nhãn, một bộ lọc trường số và một đồ thị <code>rate()</code>, cùng một con số đếm luồng cho thấy vì sao <code>msg</code> thuộc về dòng, không phải một nhãn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Luồng (stream)</span><span class="v">Một tập giá trị nhãn duy nhất; đơn vị Loki lập chỉ mục và chọn rẻ.</span></div>
+  <div class="kv"><span class="k">Nhãn (được chỉ mục)</span><span class="v">Một khoá có giới hạn, nhỏ, ổn định như <code>container</code> hay <code>level</code> — mỗi giá trị là một luồng mới.</span></div>
+  <div class="kv"><span class="k">Line filter (<code>|=</code>)</span><span class="v">Một phép grep trên byte thô của các luồng đã chọn; không được chỉ mục.</span></div>
+  <div class="kv"><span class="k">Cardinality (lực lượng)</span><span class="v">Số giá trị khác nhau một nhãn nhận; cao (msg, route, id) làm nổ số luồng.</span></div>
+  <div class="kv"><span class="k">| json</span><span class="v">Trích các trường lúc truy vấn để lọc theo <code>route</code> hay <code>ms</code> mà không chỉ mục chúng.</span></div>
+  <div class="kv"><span class="k">rate / count_over_time</span><span class="v">Các phép tổng hợp biến dòng log đã chọn thành một con số vẽ được mỗi khoảng.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Loki chỉ mục nhãn, không chỉ mục nội dung: mọi truy vấn chọn luồng theo nhãn, rồi grep bên trong.</li>
+  <li>Gắn nhãn vào <code>msg</code> biến 28 luồng thành 9.100 — 325× — chạm gần trần luồng hoạt động của Loki; thêm <code>route</code> thì vượt tám triệu.</li>
+  <li>Một nhãn tốt là có giới hạn, nhỏ và ổn định; trường cardinality cao nằm trong dòng và trích bằng <code>| json</code> lúc truy vấn.</li>
+  <li>Ghim container hoặc job ở selector đầu, và nhớ nhãn chỉ áp dụng từ ngày bạn thêm nó.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1015,6 +1263,34 @@ So the lever is not retention. It is VOLUME:
 <p><strong>Trap — retention is not deletion, and only one of the two satisfies a takedown request.</strong> Setting Loki's retention to 30 days means chunks become eligible for compaction and removal — it does not mean a specific user's data is gone on day 31, and it says nothing at all about your R2 archive, which has its own lifecycle rules, or about Sentry, which has its own. When someone exercises a right to erasure, &quot;we keep logs for 30 days&quot; is not an answer: the personal data is in three stores with three independent clocks, plus whatever a colleague exported to a spreadsheet during an incident. <strong>The only defensible position is the one from lesson 1.2 — do not put personal data in logs in the first place</strong> — because deleting it afterwards, from every tier, on request, is a project rather than a setting.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Measure how well logs compress, then size a tiered retention plan from it.</p>
+<ol>
+  <li>Run <code>m9.mjs</code> from this lesson and record raw, gzip and zstd sizes plus the ratio (~12.8×).</li>
+  <li>Scale it to your own traffic for 30 days: multiply bytes/line × lines/day × 30, then apply the ratio.</li>
+  <li>Estimate the waste: a container healthcheck hitting <code>/health</code> every 30s is 2,880 lines/day — compute what fraction of your volume is probe noise nobody reads.</li>
+  <li>Write a three-tier plan (Docker hours, Loki days, object-store weeks) with a retention number and a one-line reason for each.</li>
+</ol>
+<p><strong>Done when:</strong> you have a measured compression ratio, a 30-day storage figure for both raw and compressed, and a tiered plan whose last tier is a deliberate &quot;delete, because X&quot; rather than &quot;forever by default&quot;.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Retention</span><span class="v">How long each tier keeps logs before they become eligible for removal.</span></div>
+  <div class="kv"><span class="k">Compression ratio</span><span class="v">Raw ÷ compressed — ~12.8× for structured logs because field names and values repeat.</span></div>
+  <div class="kv"><span class="k">Tiering</span><span class="v">Matching retention to use: hot (Docker, an hour), warm (Loki, days), cold (object store, weeks).</span></div>
+  <div class="kv"><span class="k">Ingest vs storage cost</span><span class="v">Loki bills per GB ingested, not stored — so volume, not retention, is the real lever.</span></div>
+  <div class="kv"><span class="k">Sampling</span><span class="v">Keep 100% of errors and ~1% of 200s — ten times less data, no lost failures.</span></div>
+  <div class="kv"><span class="k">Health-check noise</span><span class="v">Successful <code>/health</code> probes every 30s — often a third of volume and never read.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Structured logs compress ~12.8×, turning 94.7 GB of raw month into 7.4 GB — a difference decided by where the logs live.</li>
+  <li>The right question is not &quot;how long&quot; but &quot;what for&quot;: 95% of reads are the last hour, almost all cost is the oldest tier.</li>
+  <li>Tier it: Docker (hours, uncompressed fallback), Loki (days, indexed), R2 (weeks, gzipped NDJSON), then deliberate deletion.</li>
+  <li>The bill is volume, not retention — drop debug and health-check noise, log one line per request, and sample successes.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/loki/latest/operations/storage/retention/" target="_blank" rel="noopener">
@@ -1122,6 +1398,34 @@ Nên cái cần bẩy không phải thời hạn lưu. Là LƯỢNG:
 <div class="pitfall">
 <p><strong>Bẫy — thời hạn lưu không phải là xoá, và chỉ một trong hai đáp ứng được yêu cầu gỡ bỏ dữ liệu.</strong> Đặt thời hạn lưu của Loki là 30 ngày nghĩa là các chunk trở nên đủ điều kiện để được gom nén và loại bỏ — nó KHÔNG nghĩa là dữ liệu của một người dùng cụ thể biến mất vào ngày thứ 31, và nó chẳng nói gì về kho lưu trữ R2 của bạn, thứ có quy tắc vòng đời riêng, hay về Sentry, thứ cũng có riêng. Khi ai đó thực thi quyền được xoá, &quot;chúng tôi giữ log 30 ngày&quot; không phải một câu trả lời: dữ liệu cá nhân nằm trong ba kho với ba cái đồng hồ độc lập, cộng thêm bất cứ thứ gì một đồng nghiệp đã xuất ra bảng tính trong lúc sự cố. <strong>Vị thế duy nhất bảo vệ được là vị thế của bài 1.2 — đừng đưa dữ liệu cá nhân vào log ngay từ đầu</strong> — vì xoá nó về sau, khỏi mọi bậc, theo yêu cầu, là một dự án chứ không phải một thiết lập.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Đo log nén tốt cỡ nào, rồi dựng một kế hoạch giữ log phân tầng từ đó.</p>
+<ol>
+  <li>Chạy <code>m9.mjs</code> của bài này và ghi lại kích thước thô, gzip, zstd cùng tỷ lệ (~12,8×).</li>
+  <li>Quy ra lưu lượng của bạn trong 30 ngày: nhân byte/dòng × dòng/ngày × 30, rồi áp tỷ lệ.</li>
+  <li>Ước lượng phần lãng phí: một healthcheck gõ <code>/health</code> mỗi 30 giây là 2.880 dòng/ngày — tính xem bao nhiêu phần trăm khối lượng là tiếng ồn probe không ai đọc.</li>
+  <li>Viết một kế hoạch ba tầng (Docker theo giờ, Loki theo ngày, kho object theo tuần) với một con số giữ log và một dòng lý do cho mỗi tầng.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một tỷ lệ nén đo được, một con số lưu trữ 30 ngày cho cả thô lẫn nén, và một kế hoạch phân tầng mà tầng cuối là một quyết định &quot;xoá, vì X&quot; chứ không phải &quot;giữ mãi theo mặc định&quot;.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Giữ log (retention)</span><span class="v">Mỗi tầng giữ log bao lâu trước khi nó đủ điều kiện bị xoá.</span></div>
+  <div class="kv"><span class="k">Tỷ lệ nén</span><span class="v">Thô ÷ đã nén — ~12,8× với log có cấu trúc vì tên trường và giá trị lặp lại.</span></div>
+  <div class="kv"><span class="k">Phân tầng</span><span class="v">Khớp thời gian giữ với mục đích: nóng (Docker, một giờ), ấm (Loki, ngày), lạnh (kho object, tuần).</span></div>
+  <div class="kv"><span class="k">Chi phí ingest với lưu trữ</span><span class="v">Loki tính tiền theo GB nạp vào, không theo lưu — nên khối lượng, không phải thời gian giữ, mới là đòn bẩy.</span></div>
+  <div class="kv"><span class="k">Lấy mẫu</span><span class="v">Giữ 100% lỗi và ~1% số 200 — ít hơn mười lần dữ liệu, không mất cú hỏng nào.</span></div>
+  <div class="kv"><span class="k">Tiếng ồn health-check</span><span class="v">Các probe <code>/health</code> thành công mỗi 30 giây — thường chiếm một phần ba khối lượng và không ai đọc.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Log có cấu trúc nén ~12,8×, biến 94,7 GB một tháng thô thành 7,4 GB — khác biệt do nơi log nằm quyết định.</li>
+  <li>Câu hỏi đúng không phải &quot;giữ bao lâu&quot; mà &quot;để làm gì&quot;: 95% lượt đọc là một giờ gần nhất, gần như toàn bộ chi phí nằm ở tầng cũ nhất.</li>
+  <li>Phân tầng: Docker (giờ, fallback không nén), Loki (ngày, có chỉ mục), R2 (tuần, NDJSON gzip), rồi xoá có chủ đích.</li>
+  <li>Hoá đơn là khối lượng, không phải thời gian giữ — bỏ debug và tiếng ồn health-check, log một dòng mỗi request, và lấy mẫu các lần thành công.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

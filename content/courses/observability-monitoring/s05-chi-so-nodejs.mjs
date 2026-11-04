@@ -159,6 +159,23 @@ shows up as latency without any lag at all.</code></pre>
 <p><strong>Trap — a blocked event loop makes your health check lie, in the direction that keeps traffic flowing.</strong> While the thread is stuck, the HTTP server accepts connections at the kernel level but runs no handler, so a probe sent during the stall does not get a fast failure — it simply waits. If your orchestrator's timeout is longer than the stall, the probe eventually succeeds and reports the container healthy; if the stall is long enough to trip the timeout, the container is killed and restarted mid-request, which is worse. <strong>Either way the health check is describing the TCP layer, not your application, so a fully wedged process can pass a check that was written to detect exactly this.</strong> Chapter 8 covers what a probe must actually measure; the short version is that a readiness check should read the event-loop lag gauge and fail on it, because that is the number that knows.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Create <code>lag.mjs</code>. Use <code>monitorEventLoopDelay()</code> from <code>perf_hooks</code>, <code>enable()</code> it, and print <code>h.percentile(99)/1e6</code> ms every second.</li><li>In parallel, every 3 seconds run a synchronous busy loop (<code>while</code> counting to a few hundred million) to block the loop on purpose.</li><li>Watch the p99 lag jump during each block and fall back after.</li><li>Then call <code>collectDefaultMetrics()</code> from prom-client and find <code>nodejs_eventloop_lag_p99_seconds</code> on <code>/metrics</code>.</li></ol>
+<p><strong>Done when:</strong> you have caused a visible lag spike, and you can explain why high event-loop lag means &quot;requests are queued and waiting&quot; even while CPU and memory look fine.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Event loop</span><span class="v">The single thread that runs your JavaScript and dispatches I/O callbacks.</span></div>
+  <div class="kv"><span class="k">Event loop lag</span><span class="v">How late a scheduled callback actually fires — the delay the loop is behind by.</span></div>
+  <div class="kv"><span class="k"><code>monitorEventLoopDelay</code></span><span class="v">perf_hooks histogram that samples the loop delay with high resolution.</span></div>
+  <div class="kv"><span class="k">Blocking</span><span class="v">Synchronous work that holds the thread so no other callback can run.</span></div>
+  <div class="kv"><span class="k"><code>collectDefaultMetrics</code></span><span class="v">prom-client call that exposes Node runtime metrics, lag included.</span></div>
+  <div class="kv"><span class="k">p99 lag</span><span class="v">The tail of loop delay; the number that correlates with user-visible stalls.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Node runs your code on one thread; while it is busy, every other request waits.</li><li>Event-loop lag is the one metric that means &quot;stuck&quot; — CPU and memory can look fine.</li><li><code>monitorEventLoopDelay</code> gives a real histogram; read its p99, not the mean.</li><li>Any synchronous CPU work (JSON of a huge object, sync crypto) shows up as lag.</li><li>prom-client's default metrics expose lag as <code>nodejs_eventloop_lag_p99_seconds</code>.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html#perf_hooksmonitoreventloopdelayoptions" target="_blank" rel="noopener">
@@ -311,6 +328,23 @@ hiện ra dưới dạng độ trễ mà không kèm chút trễ vòng lặp nà
 <p><strong>Bẫy — một vòng lặp bị chặn làm phép kiểm sức khoẻ của bạn nói dối, theo hướng giữ cho lưu lượng vẫn chảy vào.</strong> Trong lúc luồng bị kẹt, máy chủ HTTP vẫn nhận kết nối ở mức nhân nhưng không chạy handler nào, nên một lượt thăm dò gửi trong lúc đơ không bị hỏng nhanh — nó chỉ đơn giản là chờ. Nếu ngưỡng thời gian của bộ điều phối dài hơn cú đơ, lượt thăm dò rốt cuộc thành công và báo container khoẻ mạnh; nếu cú đơ đủ dài để chạm ngưỡng, container bị giết và khởi động lại giữa chừng một request, và thế còn tệ hơn. <strong>Kiểu nào thì phép kiểm sức khoẻ cũng đang mô tả tầng TCP chứ không phải ứng dụng của bạn, nên một tiến trình kẹt cứng hoàn toàn vẫn qua được một phép kiểm viết ra để phát hiện đúng chuyện đó.</strong> Chương 8 nói về việc một lượt thăm dò thật sự phải đo gì; bản ngắn gọn là một phép kiểm sẵn-sàng nên đọc chính cái gauge độ trễ vòng lặp và trượt theo nó, vì đó là con số biết chuyện.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Tạo <code>lag.mjs</code>. Dùng <code>monitorEventLoopDelay()</code> từ <code>perf_hooks</code>, <code>enable()</code> nó, và in <code>h.percentile(99)/1e6</code> ms mỗi giây.</li><li>Song song, mỗi 3 giây chạy một vòng lặp đồng bộ bận rộn (<code>while</code> đếm tới vài trăm triệu) để cố tình chẹn vòng lặp.</li><li>Quan sát p99 lag nhảy vọt trong mỗi lần chẹn rồi tụt lại sau đó.</li><li>Rồi gọi <code>collectDefaultMetrics()</code> của prom-client và tìm <code>nodejs_eventloop_lag_p99_seconds</code> trên <code>/metrics</code>.</li></ol>
+<p><strong>Đạt khi:</strong> bạn đã tạo ra một cú tăng lag thấy rõ, và giải thích được vì sao lag vòng lặp cao nghĩa là &quot;request đang xếp hàng chờ&quot; dù CPU và bộ nhớ trông vẫn ổn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Vòng lặp sự kiện</span><span class="v">Luồng đơn chạy JavaScript của bạn và điều phối callback I/O.</span></div>
+  <div class="kv"><span class="k">Độ trễ vòng lặp</span><span class="v">Một callback đã hẹn thật sự nổ muộn bao nhiêu — mức vòng lặp đang trễ.</span></div>
+  <div class="kv"><span class="k"><code>monitorEventLoopDelay</code></span><span class="v">Histogram của perf_hooks lấy mẫu độ trễ vòng lặp với độ phân giải cao.</span></div>
+  <div class="kv"><span class="k">Chẹn (blocking)</span><span class="v">Việc đồng bộ giữ luồng khiến không callback nào khác chạy được.</span></div>
+  <div class="kv"><span class="k"><code>collectDefaultMetrics</code></span><span class="v">Lời gọi prom-client phát ra chỉ số runtime Node, kể cả lag.</span></div>
+  <div class="kv"><span class="k">p99 lag</span><span class="v">Cái đuôi của độ trễ vòng lặp; con số tương quan với các cú đơ người dùng thấy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Node chạy mã của bạn trên một luồng; khi nó bận, mọi request khác phải chờ.</li><li>Độ trễ vòng lặp là chỉ số duy nhất nghĩa là &quot;đang đơ&quot; — CPU và bộ nhớ có thể vẫn ổn.</li><li><code>monitorEventLoopDelay</code> cho histogram thật; đọc p99 của nó, không đọc trung bình.</li><li>Mọi việc CPU đồng bộ (JSON một object khổng lồ, crypto đồng bộ) đều hiện ra thành lag.</li><li>Chỉ số mặc định của prom-client phát lag thành <code>nodejs_eventloop_lag_p99_seconds</code>.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html#perf_hooksmonitoreventloopdelayoptions" target="_blank" rel="noopener">
@@ -441,6 +475,23 @@ throughput for a process that survives.</code></pre>
 <p><strong>Trap — the most common Node memory leak in a codebase this size is an unbounded <code>Map</code> used as a cache.</strong> It reads as obviously correct: <code>const cache = new Map()</code> at module scope, <code>cache.set(userId, data)</code> on each request, and a check before doing expensive work. There is no eviction, so it grows with distinct users forever — and it grows <em>fastest under load</em>, which is when you can least afford it. The reason it survives review is that it looks nothing like a leak: nobody forgot to free anything, the code is doing exactly what it says. In this repository, <code>src/services/</code> is where these live, and the symptom is finding 3's signature — a rising sawtooth bottom in <code>heapUsed</code> over hours. <strong>Every module-level <code>Map</code>, <code>Set</code> or array that a request writes to needs a stated eviction policy at the point of declaration</strong>, whether that is an LRU with a size cap, a TTL, or a comment explaining why the key space is bounded.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Write <code>mem.mjs</code> printing <code>process.memoryUsage()</code> every second: <code>rss</code>, <code>heapTotal</code>, <code>heapUsed</code>, <code>external</code>, <code>arrayBuffers</code>.</li><li>Create a leak: push a 1 MB <code>Buffer</code> into a module-level array on a timer. Watch which number climbs.</li><li>Change the leak to a plain JS object/array instead of a Buffer and note whether <code>heapUsed</code> or <code>external</code> grows.</li><li>Expose the same numbers as gauges via <code>collectDefaultMetrics</code> (<code>nodejs_heap_size_used_bytes</code>, <code>process_resident_memory_bytes</code>).</li></ol>
+<p><strong>Done when:</strong> you can say which of RSS / heapUsed / external grows for a Buffer leak versus an object leak, and therefore which number to alert on for each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RSS</span><span class="v">Resident Set Size: total physical memory the process holds, heap + native + code.</span></div>
+  <div class="kv"><span class="k"><code>heapUsed</code></span><span class="v">Live JavaScript objects V8 is currently using on its heap.</span></div>
+  <div class="kv"><span class="k"><code>heapTotal</code></span><span class="v">Heap V8 has reserved from the OS; grows in steps, rarely shrinks.</span></div>
+  <div class="kv"><span class="k"><code>external</code></span><span class="v">Memory of C++ objects bound to JS (e.g. Buffers), counted outside the heap.</span></div>
+  <div class="kv"><span class="k"><code>arrayBuffers</code></span><span class="v">The slice of <code>external</code> that is <code>ArrayBuffer</code>/<code>Buffer</code> backing stores.</span></div>
+  <div class="kv"><span class="k">Leak</span><span class="v">Memory that keeps growing because references are never released.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li><code>process.memoryUsage()</code> splits memory into rss, heapTotal, heapUsed, external, arrayBuffers.</li><li>A JS-object leak grows <code>heapUsed</code>; a Buffer leak grows <code>external</code>/<code>arrayBuffers</code>, not the heap.</li><li>RSS is the whole picture but the least specific; watch the sub-numbers to locate a leak.</li><li>heapTotal grows in steps and rarely returns memory to the OS — do not read a plateau as a leak.</li><li>Alert on a sustained upward slope over hours, not on any single sample.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/process.html#processmemoryusage" target="_blank" rel="noopener">
@@ -563,6 +614,23 @@ lượng lấy một tiến trình sống sót.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — chỗ rò rỉ bộ nhớ Node phổ biến nhất trong một kho mã cỡ này là một <code>Map</code> không có chặn dùng làm bộ nhớ đệm.</strong> Nó đọc lên thì hiển nhiên là đúng: <code>const cache = new Map()</code> ở phạm vi module, <code>cache.set(userId, data)</code> ở mỗi request, và một phép kiểm trước khi làm việc nặng. Không có cơ chế loại bỏ, nên nó phình theo số người dùng khác nhau, mãi mãi — và nó phình <em>nhanh nhất khi tải cao</em>, tức là đúng lúc bạn ít chịu nổi nhất. Lý do nó sống sót qua vòng review là vì nó chẳng giống một chỗ rò rỉ chút nào: không ai quên giải phóng gì cả, mã đang làm đúng cái nó nói. Trong kho này, <code>src/services/</code> là chỗ những cái đó sống, và triệu chứng là chữ ký của phát hiện 3 — đáy răng cưa của <code>heapUsed</code> dâng lên qua nhiều giờ. <strong>Mọi <code>Map</code>, <code>Set</code> hay mảng ở cấp module mà một request ghi vào đều cần một chính sách loại bỏ được nêu rõ ngay tại chỗ khai báo</strong>, dù đó là một LRU có trần kích thước, một TTL, hay một dòng chú thích giải thích vì sao không gian khoá là có chặn.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Viết <code>mem.mjs</code> in <code>process.memoryUsage()</code> mỗi giây: <code>rss</code>, <code>heapTotal</code>, <code>heapUsed</code>, <code>external</code>, <code>arrayBuffers</code>.</li><li>Tạo rò rỉ: đẩy một <code>Buffer</code> 1 MB vào một mảng cấp module theo nhịp hẹn giờ. Quan sát con số nào leo.</li><li>Đổi rò rỉ thành object/mảng JS thường thay vì Buffer và ghi xem <code>heapUsed</code> hay <code>external</code> tăng.</li><li>Phát cùng các số đó dưới dạng gauge qua <code>collectDefaultMetrics</code> (<code>nodejs_heap_size_used_bytes</code>, <code>process_resident_memory_bytes</code>).</li></ol>
+<p><strong>Đạt khi:</strong> bạn nói được trong RSS / heapUsed / external cái nào tăng với rò rỉ Buffer so với rò rỉ object, và do đó nên cảnh báo trên con số nào cho mỗi loại.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">RSS</span><span class="v">Resident Set Size: tổng bộ nhớ vật lý tiến trình giữ, heap + native + mã.</span></div>
+  <div class="kv"><span class="k"><code>heapUsed</code></span><span class="v">Các object JavaScript sống mà V8 đang dùng trên heap.</span></div>
+  <div class="kv"><span class="k"><code>heapTotal</code></span><span class="v">Heap V8 đã xin từ OS; tăng theo bậc, hiếm khi co lại.</span></div>
+  <div class="kv"><span class="k"><code>external</code></span><span class="v">Bộ nhớ của object C++ gắn với JS (ví dụ Buffer), đếm ngoài heap.</span></div>
+  <div class="kv"><span class="k"><code>arrayBuffers</code></span><span class="v">Phần của <code>external</code> là vùng nền của <code>ArrayBuffer</code>/<code>Buffer</code>.</span></div>
+  <div class="kv"><span class="k">Rò rỉ (leak)</span><span class="v">Bộ nhớ cứ tăng vì tham chiếu không bao giờ được thả.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li><code>process.memoryUsage()</code> chia bộ nhớ thành rss, heapTotal, heapUsed, external, arrayBuffers.</li><li>Rò rỉ object JS làm tăng <code>heapUsed</code>; rò rỉ Buffer làm tăng <code>external</code>/<code>arrayBuffers</code>, không phải heap.</li><li>RSS là bức tranh tổng nhưng ít cụ thể nhất; nhìn các số con để định vị rò rỉ.</li><li>heapTotal tăng theo bậc và hiếm khi trả bộ nhớ về OS — đừng đọc một mặt bằng phẳng là rò rỉ.</li><li>Cảnh báo trên độ dốc đi lên bền bỉ qua nhiều giờ, không trên một mẫu đơn lẻ.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -706,6 +774,23 @@ histogram_quantile(0.99,
 <p><strong>Trap — GC time rising is a symptom whose cause is somewhere else entirely, and treating it directly makes things worse.</strong> The instinct on seeing high GC time is to tune the collector: raise <code>--max-old-space-size</code>, try a different GC flag, reduce allocation. But a healthy service with a stable live set has stable GC time no matter how much it allocates — scavenge cost scales with survivors, not garbage. So rising major-GC time almost always means <strong>the live set is growing</strong>, which is lesson 5.2's leak wearing a different costume. Raising the heap limit is the specifically harmful response: it delays the OOM kill while making each major GC walk a larger heap, so pauses get longer and the eventual failure arrives later and hurts more. <strong>Read GC time as a pointer to <code>heapUsed</code>, and go find what is being retained.</strong></p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Write <code>gc.mjs</code> that registers a <code>PerformanceObserver</code> for entryTypes <code>['gc']</code> and logs each GC entry's <code>kind</code> and <code>duration</code>.</li><li>Allocate aggressively in a loop (create and drop large arrays) to force minor and major collections.</li><li>Note which GC kind produces short frequent pauses (scavenge) versus rarer longer ones (mark-sweep).</li><li>Run the same program with <code>node --trace-gc gc.mjs</code> and match the two views; then find <code>nodejs_gc_duration_seconds</code> on <code>/metrics</code>.</li></ol>
+<p><strong>Done when:</strong> you have observed both a minor and a major GC pause, and you can explain why a long mark-sweep pause shows up as event-loop lag (lesson 5.1).</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Garbage collection</span><span class="v">V8 reclaiming memory held by objects no longer reachable.</span></div>
+  <div class="kv"><span class="k">Scavenge (minor GC)</span><span class="v">Fast, frequent collection of the young generation; short pauses.</span></div>
+  <div class="kv"><span class="k">Mark-sweep (major GC)</span><span class="v">Full collection of the old generation; rarer but longer pauses.</span></div>
+  <div class="kv"><span class="k">GC pause</span><span class="v">Time the JS thread is stopped for collection — directly adds to loop lag.</span></div>
+  <div class="kv"><span class="k"><code>PerformanceObserver</code></span><span class="v">perf_hooks API that delivers <code>gc</code> entries with kind and duration.</span></div>
+  <div class="kv"><span class="k"><code>--trace-gc</code></span><span class="v">Node flag that prints each collection to stderr for quick inspection.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>GC pauses are time the JS thread is frozen — they are latency you did not write.</li><li>Minor (scavenge) GC is short and frequent; major (mark-sweep) is rare and long.</li><li>A long major pause surfaces as an event-loop lag spike, tying 5.3 back to 5.1.</li><li>Observe GC with <code>PerformanceObserver('gc')</code> or the <code>--trace-gc</code> flag.</li><li>Alert on GC pause time as a fraction of wall time, not on GC frequency alone.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://v8.dev/blog/trash-talk" target="_blank" rel="noopener">
@@ -841,6 +926,23 @@ histogram_quantile(0.99,
 <div class="pitfall">
 <p><strong>Bẫy — thời gian GC tăng lên là một TRIỆU CHỨNG mà nguyên nhân nằm ở chỗ hoàn toàn khác, và chữa thẳng vào nó thì làm mọi thứ tệ hơn.</strong> Bản năng khi thấy thời gian GC cao là đi chỉnh bộ thu gom: nâng <code>--max-old-space-size</code>, thử một cờ GC khác, giảm cấp phát. Nhưng một dịch vụ khoẻ mạnh với phần sống ổn định thì có thời gian GC ổn định bất kể nó cấp phát bao nhiêu — chi phí scavenge tỉ lệ với kẻ sống sót, không tỉ lệ với rác. Nên thời gian major GC tăng lên gần như luôn nghĩa là <strong>phần sống đang phình ra</strong>, mà đó là cú rò rỉ của bài 5.2 khoác một bộ đồ khác. Nâng trần heap là phản ứng gây hại một cách cụ thể: nó trì hoãn cú OOM giết trong khi làm mỗi lần major GC phải đi qua một cái heap lớn hơn, nên các lần dừng dài ra và cú hỏng cuối cùng tới muộn hơn và đau hơn. <strong>Hãy đọc thời gian GC như một cái mũi tên trỏ về <code>heapUsed</code>, rồi đi tìm xem cái gì đang bị giữ lại.</strong></p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Viết <code>gc.mjs</code> đăng ký một <code>PerformanceObserver</code> cho entryTypes <code>['gc']</code> và log <code>kind</code> cùng <code>duration</code> của mỗi lần GC.</li><li>Cấp phát mạnh trong vòng lặp (tạo rồi bỏ các mảng lớn) để ép cả GC nhỏ lẫn lớn.</li><li>Ghi xem loại GC nào cho các cú dừng ngắn mà thường xuyên (scavenge) so với loại hiếm hơn nhưng dài hơn (mark-sweep).</li><li>Chạy lại bằng <code>node --trace-gc gc.mjs</code> và khớp hai góc nhìn; rồi tìm <code>nodejs_gc_duration_seconds</code> trên <code>/metrics</code>.</li></ol>
+<p><strong>Đạt khi:</strong> bạn đã quan sát được cả một cú dừng GC nhỏ lẫn một cú lớn, và giải thích được vì sao một cú mark-sweep dài hiện ra thành độ trễ vòng lặp (bài 5.1).</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thu gom rác</span><span class="v">V8 thu hồi bộ nhớ của những object không còn với tới được.</span></div>
+  <div class="kv"><span class="k">Scavenge (GC nhỏ)</span><span class="v">Thu gom thế hệ trẻ nhanh và thường xuyên; dừng ngắn.</span></div>
+  <div class="kv"><span class="k">Mark-sweep (GC lớn)</span><span class="v">Thu gom toàn thế hệ già; hiếm hơn nhưng dừng lâu hơn.</span></div>
+  <div class="kv"><span class="k">Cú dừng GC</span><span class="v">Thời gian luồng JS bị dừng để thu gom — cộng thẳng vào lag vòng lặp.</span></div>
+  <div class="kv"><span class="k"><code>PerformanceObserver</code></span><span class="v">API perf_hooks giao các entry <code>gc</code> kèm kind và duration.</span></div>
+  <div class="kv"><span class="k"><code>--trace-gc</code></span><span class="v">Cờ Node in mỗi lần thu gom ra stderr để xem nhanh.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Cú dừng GC là thời gian luồng JS bị đóng băng — độ trễ mà bạn không hề viết ra.</li><li>GC nhỏ (scavenge) ngắn và thường xuyên; GC lớn (mark-sweep) hiếm và dài.</li><li>Một cú dừng lớn dài hiện ra thành cú tăng lag vòng lặp, nối 5.3 về lại 5.1.</li><li>Quan sát GC bằng <code>PerformanceObserver('gc')</code> hoặc cờ <code>--trace-gc</code>.</li><li>Cảnh báo trên thời gian dừng GC tính theo tỉ lệ thời gian thực, không chỉ theo tần suất GC.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1010,6 +1112,23 @@ nodejs_active_requests_total    // in-flight libuv operations (fs, dns)
 <p><strong>Trap — pool exhaustion has a signature that points exactly the wrong way, and it deepens under load.</strong> When the pool is the bottleneck, every symptom you can see says &quot;the database is slow&quot;: request latency is high, the event loop is idle, CPU is low. The database itself is nearly idle, but you have no reason to check that, so the natural response is to optimise queries or add an index — which changes nothing, because the queries were never the problem. Worse, the feedback is inverted: <strong>a slower query holds its connection longer, so one genuinely slow query makes the pool wait spike for every <em>other</em> route</strong>, and the pattern on your dashboard is a whole service degrading at once with no single cause visible. The only way out is to measure the wait time itself. Without <code>waiting</code>, this incident is unsolvable by inspection; with it, it is a five-second diagnosis.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>On <code>/metrics</code> (default metrics on), find <code>nodejs_active_handles</code> and <code>nodejs_active_requests</code>, and note their starting values.</li><li>Open many things that keep handles alive — e.g. several <code>setInterval</code>s and open sockets — and watch <code>active_handles</code> climb.</li><li>Add a gauge for your DB pool: <code>db_pool_connections_in_use</code>. Fire concurrent queries beyond the pool size and watch in-use pin at the max while requests wait.</li><li>Reason out what is &quot;waiting on what&quot;: lag high + pool at max = requests queued on connections.</li></ol>
+<p><strong>Done when:</strong> you can distinguish a saturation problem (pool pinned at max, requests waiting) from a slowness problem (pool has spare capacity), using two gauges.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Active handles</span><span class="v">libuv resources keeping the loop alive: sockets, timers, file watchers.</span></div>
+  <div class="kv"><span class="k">Active requests</span><span class="v">In-flight async operations libuv is currently servicing.</span></div>
+  <div class="kv"><span class="k">Resource pool</span><span class="v">A fixed set of reusable connections (DB, HTTP) shared by requests.</span></div>
+  <div class="kv"><span class="k">Pool saturation</span><span class="v">Every connection in use; new requests queue and wait for one to free.</span></div>
+  <div class="kv"><span class="k">Gauge</span><span class="v">The right metric kind for &quot;how many in use right now&quot;.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">The C library providing Node's event loop and async I/O.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Active handles/requests show what is keeping the loop busy and what is in flight.</li><li>A resource pool pinned at max with requests waiting is saturation, not slowness.</li><li>Two gauges — pool in-use and queue depth — distinguish &quot;no capacity&quot; from &quot;slow backend&quot;.</li><li>Leaking handles (timers/sockets never closed) looks like a slow memory and fd climb.</li><li>Pair these gauges with event-loop lag to see whether waiting is CPU-bound or I/O-bound.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool" target="_blank" rel="noopener">
@@ -1173,6 +1292,23 @@ nodejs_active_requests_total    // thao tác libuv đang bay (fs, dns)
 <p><strong>Bẫy — cạn bể kết nối có một chữ ký chỉ đúng vào hướng ngược lại, và nó sâu thêm khi tải tăng.</strong> Khi cái bể là nút thắt cổ chai, mọi triệu chứng bạn nhìn thấy đều nói &quot;cơ sở dữ liệu chậm&quot;: độ trễ request cao, vòng lặp sự kiện nhàn rỗi, CPU thấp. Bản thân cơ sở dữ liệu thì gần như rảnh rang, nhưng bạn chẳng có lý do gì để đi kiểm cái đó, nên phản ứng tự nhiên là đi tối ưu truy vấn hoặc thêm chỉ mục — và điều đó chẳng thay đổi gì, vì truy vấn chưa từng là vấn đề. Tệ hơn, phản hồi bị đảo ngược: <strong>một truy vấn chậm giữ kết nối của nó lâu hơn, nên MỘT truy vấn chậm thật sự làm thời gian chờ bể vọt lên cho MỌI route <em>khác</em></strong>, và cái hình dạng trên bảng theo dõi của bạn là cả một dịch vụ cùng lúc xuống cấp mà không thấy một nguyên nhân đơn lẻ nào. Lối thoát duy nhất là đo chính cái thời gian chờ ấy. Không có <code>waiting</code>, sự cố này không giải được bằng cách ngồi nhìn; có nó thì đây là một chẩn đoán năm giây.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trên <code>/metrics</code> (đã bật chỉ số mặc định), tìm <code>nodejs_active_handles</code> và <code>nodejs_active_requests</code>, ghi lại giá trị ban đầu.</li><li>Mở nhiều thứ giữ handle sống — ví dụ vài <code>setInterval</code> và socket mở — và quan sát <code>active_handles</code> leo lên.</li><li>Thêm một gauge cho pool CSDL: <code>db_pool_connections_in_use</code>. Bắn nhiều truy vấn song song vượt kích thước pool và quan sát số đang dùng ghim ở mức tối đa trong khi request chờ.</li><li>Luận ra &quot;cái gì chờ cái gì&quot;: lag cao + pool đầy = request xếp hàng chờ kết nối.</li></ol>
+<p><strong>Đạt khi:</strong> bạn phân biệt được vấn đề bão hoà (pool ghim ở tối đa, request chờ) với vấn đề chậm (pool còn dư chỗ), chỉ bằng hai gauge.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Active handles</span><span class="v">Tài nguyên libuv giữ vòng lặp sống: socket, timer, bộ theo dõi file.</span></div>
+  <div class="kv"><span class="k">Active requests</span><span class="v">Các thao tác bất đồng bộ đang bay mà libuv đang phục vụ.</span></div>
+  <div class="kv"><span class="k">Bể tài nguyên (pool)</span><span class="v">Tập cố định các kết nối tái dùng (CSDL, HTTP) được các request chia nhau.</span></div>
+  <div class="kv"><span class="k">Bão hoà pool</span><span class="v">Mọi kết nối đang dùng; request mới xếp hàng chờ một cái rảnh.</span></div>
+  <div class="kv"><span class="k">Gauge</span><span class="v">Loại chỉ số đúng cho &quot;ngay lúc này có bao nhiêu cái đang dùng&quot;.</span></div>
+  <div class="kv"><span class="k">libuv</span><span class="v">Thư viện C cung cấp vòng lặp sự kiện và I/O bất đồng bộ cho Node.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Active handles/requests cho thấy cái gì đang giữ vòng lặp bận và cái gì đang bay.</li><li>Một pool ghim ở tối đa mà request vẫn chờ là bão hoà, không phải chậm.</li><li>Hai gauge — pool đang dùng và độ sâu hàng đợi — phân biệt &quot;hết chỗ&quot; với &quot;backend chậm&quot;.</li><li>Rò rỉ handle (timer/socket không đóng) trông như bộ nhớ và fd leo chậm.</li><li>Ghép các gauge này với lag vòng lặp để biết việc chờ là do CPU hay do I/O.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://www.prisma.io/docs/orm/prisma-client/setup-and-configuration/databases-connections/connection-pool" target="_blank" rel="noopener">
@@ -1306,6 +1442,23 @@ that you need chapter 6.</code></pre>
 <p><strong>Trap — <code>collectDefaultMetrics</code> called twice throws, and the way people fix it makes the metrics wrong.</strong> Calling it a second time raises a duplicate-registration error, which happens easily: the module is imported by both the app and a test, or a hot-reloader re-evaluates it. The obvious fix — <code>register.clear()</code> before calling — compiles, runs, and silently resets <strong>every counter in the process to zero</strong>. Since <code>rate()</code> reads a decrease as a restart (lesson 4.1), your request-rate graph now has a gap and your error-rate alert has a blind spot, at a moment nothing else looks wrong. <strong>Guard the call instead of clearing the registry:</strong> put <code>collectDefaultMetrics</code> in a module that is imported exactly once from your entry point, and if you must be defensive, check <code>register.getSingleMetric('process_cpu_user_seconds_total')</code> and skip rather than clear.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Call <code>collectDefaultMetrics({ register, prefix: 'app_' })</code> once at startup, then expose <code>GET /metrics</code>.</li><li><code>curl</code> it and list the families you now get: <code>process_cpu_seconds_total</code>, <code>process_resident_memory_bytes</code>, <code>nodejs_eventloop_lag_*</code>, <code>nodejs_heap_*</code>, <code>nodejs_gc_duration_seconds</code>.</li><li>Add a minimal Prometheus <code>scrape_config</code> pointing at your app, run it, and confirm targets are UP.</li><li>For each default metric family, write one sentence: what question it answers.</li></ol>
+<p><strong>Done when:</strong> Prometheus scrapes your app successfully and you can map at least five default metric families to the earlier lessons (lag→5.1, heap→5.2, gc→5.3, handles→5.4).</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>collectDefaultMetrics</code></span><span class="v">One call that registers all Node/process runtime metrics.</span></div>
+  <div class="kv"><span class="k">Default metrics</span><span class="v">The built-in set: CPU, memory, heap, GC, lag, handles.</span></div>
+  <div class="kv"><span class="k">Prefix</span><span class="v">An optional string prepended to every default metric name.</span></div>
+  <div class="kv"><span class="k"><code>process_cpu_seconds_total</code></span><span class="v">Counter of CPU seconds consumed; <code>rate()</code> gives CPU usage.</span></div>
+  <div class="kv"><span class="k">Scrape</span><span class="v">Prometheus pulling <code>/metrics</code> from your app on an interval.</span></div>
+  <div class="kv"><span class="k">Target UP</span><span class="v">Prometheus's own metric that the last scrape succeeded.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>One call, <code>collectDefaultMetrics</code>, turns on CPU, memory, heap, GC, lag and handle metrics.</li><li>Expose them at <code>/metrics</code> and point a Prometheus <code>scrape_config</code> at it.</li><li>Each default family maps to an earlier lesson: lag, heap, gc, handles.</li><li>A prefix keeps your app's metrics namespaced when several services share one Prometheus.</li><li>Confirm the target is UP before trusting any dashboard built on these metrics.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://github.com/siimon/prom-client#default-metrics" target="_blank" rel="noopener">
@@ -1433,6 +1586,23 @@ Cho cái đó thì bạn cần chương 6.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — gọi <code>collectDefaultMetrics</code> hai lần thì nó ném lỗi, và cách người ta chữa lỗi đó làm cho các chỉ số bị sai.</strong> Gọi nó lần thứ hai sinh ra lỗi đăng ký trùng, chuyện đó xảy ra rất dễ: module bị import bởi cả app lẫn một bài kiểm thử, hoặc một trình nạp nóng đánh giá lại nó. Cách chữa hiển nhiên — gọi <code>register.clear()</code> trước — thì biên dịch được, chạy được, và âm thầm đưa <strong>mọi counter trong tiến trình về không</strong>. Vì <code>rate()</code> đọc một phép giảm thành một lần khởi động lại (bài 4.1), đồ thị tốc độ request của bạn giờ có một lỗ hổng và cảnh báo tỉ lệ lỗi của bạn có một điểm mù, vào đúng cái lúc mà chẳng có gì khác trông có vẻ sai. <strong>Hãy CHẶN lời gọi thay vì xoá sổ đăng ký:</strong> đặt <code>collectDefaultMetrics</code> vào một module được import đúng một lần từ điểm vào của bạn, và nếu buộc phải phòng thủ thì hãy kiểm <code>register.getSingleMetric('process_cpu_user_seconds_total')</code> rồi bỏ qua chứ đừng xoá.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Gọi <code>collectDefaultMetrics({ register, prefix: 'app_' })</code> một lần lúc khởi động, rồi mở <code>GET /metrics</code>.</li><li><code>curl</code> nó và liệt kê các họ chỉ số bạn giờ có: <code>process_cpu_seconds_total</code>, <code>process_resident_memory_bytes</code>, <code>nodejs_eventloop_lag_*</code>, <code>nodejs_heap_*</code>, <code>nodejs_gc_duration_seconds</code>.</li><li>Thêm một <code>scrape_config</code> Prometheus tối giản trỏ tới ứng dụng, chạy nó, và xác nhận target UP.</li><li>Với mỗi họ chỉ số mặc định, viết một câu: nó trả lời câu hỏi gì.</li></ol>
+<p><strong>Đạt khi:</strong> Prometheus quét ứng dụng thành công và bạn ánh xạ được ít nhất năm họ chỉ số mặc định về các bài trước (lag→5.1, heap→5.2, gc→5.3, handles→5.4).</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k"><code>collectDefaultMetrics</code></span><span class="v">Một lời gọi đăng ký toàn bộ chỉ số runtime Node/process.</span></div>
+  <div class="kv"><span class="k">Chỉ số mặc định</span><span class="v">Bộ có sẵn: CPU, bộ nhớ, heap, GC, lag, handle.</span></div>
+  <div class="kv"><span class="k">Prefix (tiền tố)</span><span class="v">Chuỗi tuỳ chọn ghép trước mọi tên chỉ số mặc định.</span></div>
+  <div class="kv"><span class="k"><code>process_cpu_seconds_total</code></span><span class="v">Counter số giây CPU đã dùng; <code>rate()</code> cho mức dùng CPU.</span></div>
+  <div class="kv"><span class="k">Scrape (quét)</span><span class="v">Prometheus kéo <code>/metrics</code> từ ứng dụng theo chu kỳ.</span></div>
+  <div class="kv"><span class="k">Target UP</span><span class="v">Chỉ số của chính Prometheus cho biết lần quét gần nhất thành công.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một lời gọi <code>collectDefaultMetrics</code> bật chỉ số CPU, bộ nhớ, heap, GC, lag và handle.</li><li>Phát chúng ở <code>/metrics</code> và trỏ một <code>scrape_config</code> Prometheus vào đó.</li><li>Mỗi họ mặc định ánh xạ về một bài trước: lag, heap, gc, handle.</li><li>Một tiền tố giữ chỉ số của ứng dụng có không gian tên riêng khi nhiều dịch vụ dùng chung một Prometheus.</li><li>Xác nhận target UP trước khi tin bất kỳ bảng theo dõi nào dựng trên các chỉ số này.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

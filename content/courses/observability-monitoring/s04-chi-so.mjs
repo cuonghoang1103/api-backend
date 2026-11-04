@@ -124,6 +124,23 @@ app.use((req, res, next) =&gt; {
 <p><strong>Trap — a Summary's quantiles cannot be averaged, added, or combined in any way.</strong> This is the one metric mistake that survives review, because the resulting graph looks entirely plausible. A Summary computes p99 <em>inside each process</em>, so with two backend containers you have two p99 values — and there is no arithmetic that turns them into the p99 of the combined traffic. Averaging them is meaningless: the mean of two 99th percentiles is not the 99th percentile of anything. Taking the max is a different wrong answer. <strong>The graph will show a number, it will move when load moves, and it will be wrong in a way no dashboard can reveal.</strong> Histograms do not have this problem — their buckets are counters, counters add, and the percentile is computed after summing. Use a Histogram unless you can state out loud why aggregation will never be needed.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>In a scratch Node project: <code>npm i prom-client express</code>. Create <code>metrics.ts</code> with one <code>Counter</code> named <code>http_requests_total</code> (labels <code>method, route, code</code>) and one <code>Histogram</code> named <code>http_request_duration_seconds</code>.</li><li>Add a middleware that calls <code>histogram.startTimer()</code> and, on <code>res.on('finish')</code>, ends the timer and calls <code>counter.inc()</code> with the status code.</li><li>Expose <code>GET /metrics</code> returning <code>await register.metrics()</code>. Hit your app 5 times, then <code>curl -s localhost:3000/metrics | grep http_requests</code>.</li><li>Find the <code>_bucket</code>, <code>_sum</code> and <code>_count</code> lines the histogram emits, and the <code>http_requests_total</code> value.</li></ol>
+<p><strong>Done when:</strong> <code>http_requests_total</code> equals the number of requests you made, and you can point to the three lines (<code>_bucket</code>, <code>_sum</code>, <code>_count</code>) that together let a query compute p99 without storing a single request.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Counter</span><span class="v">A metric that only increases; you read its <code>rate()</code>, never its raw value.</span></div>
+  <div class="kv"><span class="k">Gauge</span><span class="v">A metric that goes up and down — the only kind whose raw value is meaningful.</span></div>
+  <div class="kv"><span class="k">Histogram</span><span class="v">Observations counted into pre-chosen buckets; percentiles are computed at query time.</span></div>
+  <div class="kv"><span class="k">Summary</span><span class="v">Percentiles computed inside the process — cannot be aggregated across instances.</span></div>
+  <div class="kv"><span class="k">Series</span><span class="v">One unique (name + label set); the unit metrics storage is billed in.</span></div>
+  <div class="kv"><span class="k">prom-client</span><span class="v">The standard Node.js library that declares and exposes Prometheus metrics.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A metric is aggregated <em>before</em> storage, so it costs per-series not per-event.</li><li>Four kinds: Counter (up only), Gauge (up/down), Histogram (buckets), Summary (in-process percentiles).</li><li>You read a counter through <code>rate()</code>; its reset on restart is handled for you.</li><li>Conventions that every dashboard assumes: durations in seconds, counters end in <code>_total</code>.</li><li>Prefer Histogram over Summary unless you can state why aggregation will never be needed.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://prometheus.io/docs/concepts/metric_types/" target="_blank" rel="noopener">
@@ -242,6 +259,23 @@ app.use((req, res, next) =&gt; {
 <div class="pitfall">
 <p><strong>Bẫy — phân vị của một Summary không lấy trung bình được, không cộng được, không kết hợp được bằng bất cứ cách nào.</strong> Đây là sai lầm về chỉ số sống sót qua được vòng review, vì cái đồ thị nó tạo ra trông hoàn toàn hợp lý. Một Summary tính p99 <em>bên trong từng tiến trình</em>, nên với hai container backend bạn có hai giá trị p99 — và không có phép tính nào biến chúng thành p99 của lưu lượng gộp lại. Lấy trung bình chúng là vô nghĩa: trung bình của hai phân vị 99 không phải phân vị 99 của bất cứ thứ gì. Lấy max là một câu trả lời sai kiểu khác. <strong>Đồ thị sẽ hiện ra một con số, nó sẽ nhúc nhích khi tải nhúc nhích, và nó sai theo một cách mà không bảng theo dõi nào lộ ra được.</strong> Histogram không dính vấn đề này — các ô của nó là counter, counter thì cộng được, và phân vị được tính sau khi cộng. Hãy dùng Histogram, trừ khi bạn nói thành lời được vì sao sẽ không bao giờ cần gộp.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Trong một dự án Node nháp: <code>npm i prom-client express</code>. Tạo <code>metrics.ts</code> với một <code>Counter</code> tên <code>http_requests_total</code> (nhãn <code>method, route, code</code>) và một <code>Histogram</code> tên <code>http_request_duration_seconds</code>.</li><li>Thêm một middleware gọi <code>histogram.startTimer()</code> và khi <code>res.on('finish')</code> thì kết thúc bộ đếm giờ và gọi <code>counter.inc()</code> kèm mã trạng thái.</li><li>Mở <code>GET /metrics</code> trả về <code>await register.metrics()</code>. Gọi ứng dụng 5 lần, rồi <code>curl -s localhost:3000/metrics | grep http_requests</code>.</li><li>Tìm các dòng <code>_bucket</code>, <code>_sum</code>, <code>_count</code> mà histogram phát ra, và giá trị <code>http_requests_total</code>.</li></ol>
+<p><strong>Đạt khi:</strong> <code>http_requests_total</code> bằng đúng số request bạn đã gọi, và bạn chỉ ra được ba dòng (<code>_bucket</code>, <code>_sum</code>, <code>_count</code>) mà cùng nhau cho phép truy vấn tính p99 mà không lưu một request nào.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Counter</span><span class="v">Chỉ số chỉ tăng; bạn đọc <code>rate()</code> của nó, không bao giờ đọc giá trị thô.</span></div>
+  <div class="kv"><span class="k">Gauge</span><span class="v">Chỉ số lên xuống được — loại duy nhất mà giá trị thô tự nó có nghĩa.</span></div>
+  <div class="kv"><span class="k">Histogram</span><span class="v">Quan sát được đếm vào các ô chọn sẵn; phân vị tính lúc truy vấn.</span></div>
+  <div class="kv"><span class="k">Summary</span><span class="v">Phân vị tính bên trong tiến trình — không gộp được giữa các thực thể.</span></div>
+  <div class="kv"><span class="k">Series (chuỗi)</span><span class="v">Một (tên + bộ nhãn) duy nhất; đơn vị mà kho chỉ số tính chi phí.</span></div>
+  <div class="kv"><span class="k">prom-client</span><span class="v">Thư viện Node.js chuẩn để khai báo và phát chỉ số Prometheus.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Chỉ số được gộp <em>trước khi</em> lưu, nên tốn theo chuỗi chứ không theo sự kiện.</li><li>Bốn loại: Counter (chỉ tăng), Gauge (lên/xuống), Histogram (ô), Summary (phân vị trong tiến trình).</li><li>Bạn đọc counter qua <code>rate()</code>; việc nó reset khi khởi động lại đã được xử lý giúp.</li><li>Quy ước mọi bảng theo dõi giả định: thời lượng tính bằng giây, counter kết thúc bằng <code>_total</code>.</li><li>Ưu tiên Histogram hơn Summary, trừ khi nói được vì sao sẽ không bao giờ cần gộp.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -371,6 +405,23 @@ Neither number means anything without the other.</code></pre>
 <p><strong>Trap — you cannot average percentiles across time buckets, and every dashboard invites you to.</strong> Grafana shows a p99 line at one point per pixel; when you zoom out from one hour to seven days, it must combine buckets, and the naive combination is a mean of p99 values. That number is not the p99 of the week — it is the average of hourly p99s, which is systematically lower and gets lower the further you zoom out. <strong>The practical symptom is that an incident visibly shrinks as you widen the time range, so a week-long view of a bad week looks calm.</strong> With Prometheus histograms this is avoidable and the fix is mechanical: aggregate the <em>buckets</em> over the wider range and compute the quantile last — <code>histogram_quantile(0.99, sum by (le) (rate(..._bucket[$__rate_interval])))</code> — never take a quantile and then average it.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Write <code>lat.mjs</code>: push 100,000 samples where 97% are <code>8 + random*20</code> ms and 3% are <code>700 + random*600</code> ms, then sort.</li><li>Print the mean, <code>p50</code>, <code>p95</code>, <code>p99</code> and the count over 200 ms. Confirm the mean describes nobody (it sits in the empty gap).</li><li>Write the two PromQL lines for p50 and p99 from one histogram using <code>histogram_quantile(0.5, sum by (le) (rate(..._bucket[5m])))</code> and the 0.99 version.</li><li>Write a third query: the p99/p50 ratio, and say why it is scale-free.</li></ol>
+<p><strong>Done when:</strong> your run shows mean ≈ 39 ms while p99 ≈ 990 ms, and you can explain why p95 (≈22 ms) would make the service look perfectly healthy.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">p50 (median)</span><span class="v">The typical experience; half of requests are faster.</span></div>
+  <div class="kv"><span class="k">p95 / p99</span><span class="v">The unlucky tail; where SLOs are written and real problems live.</span></div>
+  <div class="kv"><span class="k">Tail latency</span><span class="v">The slow minority that the average dilutes and hides.</span></div>
+  <div class="kv"><span class="k"><code>histogram_quantile</code></span><span class="v">PromQL function that computes a percentile from histogram buckets.</span></div>
+  <div class="kv"><span class="k"><code>le</code></span><span class="v">The bucket label (&quot;less-or-equal&quot;); you must <code>sum by (le)</code> before the quantile.</span></div>
+  <div class="kv"><span class="k">Error rate</span><span class="v">Must sit on the same panel as latency — p99 improves when slow requests fail fast.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The mean describes no real request; it sits in the gap between fast and slow clusters.</li><li>Put p50, p95 and p99 on the dashboard; the <em>gap</em> between p50 and p99 is the signal.</li><li>More traffic makes the average hide the tail more thoroughly, not less.</li><li>Compute the quantile last: aggregate buckets over the range, then <code>histogram_quantile</code>.</li><li>Always graph error rate beside latency — neither number means anything alone.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://www.brendangregg.com/blog/2018-02-09/kpti-kaiser-meltdown-performance.html" target="_blank" rel="noopener">
@@ -490,6 +541,23 @@ Không con số nào có nghĩa nếu thiếu con số kia.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — bạn không lấy trung bình các phân vị theo khoảng thời gian được, mà mọi bảng theo dõi đều mời bạn làm thế.</strong> Grafana vẽ đường p99 mỗi điểm ảnh một điểm dữ liệu; khi bạn thu tầm nhìn từ một giờ ra bảy ngày, nó buộc phải gộp các khoảng, và phép gộp ngây thơ là lấy trung bình các giá trị p99. Con số ấy không phải p99 của tuần — nó là trung bình của các p99 theo giờ, thứ luôn thấp hơn một cách có hệ thống và càng thu tầm nhìn ra càng thấp. <strong>Triệu chứng thực tế là một sự cố TEO NHỎ LẠI thấy rõ khi bạn nới khoảng thời gian, nên một tuần tồi tệ nhìn ở tầm một tuần lại trông êm ả.</strong> Với histogram của Prometheus thì chuyện này tránh được và cách chữa là máy móc: hãy gộp các <em>ô</em> trên khoảng rộng hơn rồi tính phân vị sau cùng — <code>histogram_quantile(0.99, sum by (le) (rate(..._bucket[$__rate_interval])))</code> — đừng bao giờ lấy phân vị trước rồi mới lấy trung bình.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Viết <code>lat.mjs</code>: đẩy 100.000 mẫu, 97% là <code>8 + random*20</code> ms và 3% là <code>700 + random*600</code> ms, rồi sắp xếp.</li><li>In trung bình, <code>p50</code>, <code>p95</code>, <code>p99</code> và số mẫu vượt 200 ms. Xác nhận trung bình không mô tả ai (nó nằm ở khoảng trống).</li><li>Viết hai dòng PromQL cho p50 và p99 từ một histogram: <code>histogram_quantile(0.5, sum by (le) (rate(..._bucket[5m])))</code> và bản 0.99.</li><li>Viết dòng thứ ba: tỉ số p99/p50, và nói vì sao nó không phụ thuộc quy mô.</li></ol>
+<p><strong>Đạt khi:</strong> lượt chạy của bạn cho trung bình ≈ 39 ms trong khi p99 ≈ 990 ms, và bạn giải thích được vì sao p95 (≈22 ms) sẽ làm dịch vụ trông khoẻ mạnh hoàn hảo.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">p50 (trung vị)</span><span class="v">Trải nghiệm điển hình; một nửa request nhanh hơn mức này.</span></div>
+  <div class="kv"><span class="k">p95 / p99</span><span class="v">Cái đuôi xui; nơi SLO được viết và các vấn đề thật sống.</span></div>
+  <div class="kv"><span class="k">Độ trễ đuôi</span><span class="v">Thiểu số chậm mà trung bình pha loãng và che đi.</span></div>
+  <div class="kv"><span class="k"><code>histogram_quantile</code></span><span class="v">Hàm PromQL tính phân vị từ các ô histogram.</span></div>
+  <div class="kv"><span class="k"><code>le</code></span><span class="v">Nhãn ô (&quot;nhỏ hơn hoặc bằng&quot;); phải <code>sum by (le)</code> trước khi tính phân vị.</span></div>
+  <div class="kv"><span class="k">Tỉ lệ lỗi</span><span class="v">Phải cùng panel với độ trễ — p99 tốt lên khi request chậm hỏng nhanh.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Trung bình không mô tả request thật nào; nó nằm trong khoảng giữa nhóm nhanh và nhóm chậm.</li><li>Để p50, p95, p99 lên bảng theo dõi; <em>khoảng cách</em> p50↔p99 mới là tín hiệu.</li><li>Càng nhiều lưu lượng, trung bình càng che kỹ cái đuôi chứ không hề bớt.</li><li>Tính phân vị sau cùng: gộp các ô trên khoảng rồi mới <code>histogram_quantile</code>.</li><li>Luôn vẽ tỉ lệ lỗi cạnh độ trễ — không con số nào có nghĩa khi đứng một mình.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -632,6 +700,23 @@ export const httpDuration = new Histogram({
 <p><strong>Trap — changing a histogram's buckets breaks every historical comparison, silently.</strong> The bucket boundaries are part of the metric's identity: <code>le="0.025"</code> is a different time series from <code>le="0.03"</code>. When you deploy new buckets, the old series stop receiving data and the new ones start from zero, so <code>histogram_quantile</code> over a range that spans the deploy computes from whichever boundaries exist in each part of the window — and returns a number for both. <strong>The graph does not break; it bends, and the bend looks exactly like a real latency change at exactly the moment you deployed.</strong> That is how a bucket change gets misdiagnosed as a performance regression caused by whatever else shipped that day. Change buckets deliberately, note the date where your alert thresholds are defined, and do not trust a percentile graph across that boundary.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>From a day of request-duration logs, compute the real <code>p50</code>, <code>p95</code>, <code>p99</code>, <code>p99.9</code> (one expensive query, once).</li><li>Choose histogram buckets <em>dense around</em> each of those percentiles, with headroom to ~5s at the top. Declare them on <code>http_request_duration_seconds</code>.</li><li>In a sim, observe the same samples into (a) prom-client default buckets and (b) your chosen buckets, then compare each <code>histogram_quantile</code> result to the true sorted percentile.</li><li>Record the max error for both bucket sets.</li></ol>
+<p><strong>Done when:</strong> your chosen buckets bring p95 error from tens of percent (defaults) down to single digits, and you can explain why wide buckets over a clustered distribution give a <em>silent</em> wrong answer.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bucket</span><span class="v">A counter for all observations <code>&lt;= le</code>; buckets are cumulative.</span></div>
+  <div class="kv"><span class="k"><code>le</code> boundary</span><span class="v">The upper edge of a bucket; part of the series identity.</span></div>
+  <div class="kv"><span class="k">Linear interpolation</span><span class="v">How <code>histogram_quantile</code> guesses inside a bucket — assumes even spread.</span></div>
+  <div class="kv"><span class="k"><code>+Inf</code></span><span class="v">The catch-all top bucket; a percentile landing here tells you only &quot;bigger than the last edge&quot;.</span></div>
+  <div class="kv"><span class="k"><code>_sum</code> / <code>_count</code></span><span class="v">The total and number of observations; together they give the true mean.</span></div>
+  <div class="kv"><span class="k">Native histogram</span><span class="v">Newer format that picks resolution automatically, removing bucket choice.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A histogram answers every percentile for a constant ~100 bytes, regardless of traffic.</li><li>Default buckets over a clustered distribution can be tens of percent wrong, silently.</li><li>Interpolation assumes even spread inside a bucket; clustered data breaks that assumption.</li><li>Measure first, then place buckets dense where the data actually sits, with headroom on top.</li><li>Changing buckets later breaks historical comparison — note the date beside your alert thresholds.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://prometheus.io/docs/practices/histograms/#errors-of-quantile-estimation" target="_blank" rel="noopener">
@@ -763,6 +848,23 @@ export const httpDuration = new Histogram({
 <div class="pitfall">
 <p><strong>Bẫy — đổi bộ ô của một histogram làm hỏng mọi phép so sánh với quá khứ, trong im lặng.</strong> Biên của ô là một phần danh tính của chỉ số: <code>le="0.025"</code> là một chuỗi thời gian khác với <code>le="0.03"</code>. Khi bạn deploy bộ ô mới, những chuỗi cũ ngừng nhận dữ liệu còn những chuỗi mới bắt đầu từ không, nên <code>histogram_quantile</code> trên một khoảng vắt qua lần deploy sẽ tính từ bất cứ bộ biên nào tồn tại ở từng phần của cửa sổ — và trả về một con số cho cả hai. <strong>Đồ thị không gãy; nó CONG, và cái chỗ cong ấy trông y hệt một thay đổi độ trễ thật vào đúng cái lúc bạn deploy.</strong> Đó là cách một lần đổi ô bị chẩn đoán nhầm thành một cú tụt hiệu năng do bất cứ thứ gì khác lên cùng ngày hôm đó. Hãy đổi ô một cách có chủ ý, ghi ngày lại ở chỗ định nghĩa ngưỡng cảnh báo, và đừng tin một đồ thị phân vị vắt qua cái ranh giới ấy.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Từ log thời lượng một ngày, tính <code>p50</code>, <code>p95</code>, <code>p99</code>, <code>p99.9</code> thật (một truy vấn đắt, chạy một lần).</li><li>Chọn các ô histogram <em>dày quanh</em> từng phân vị đó, chừa khoảng trống lên tới ~5s ở trên cùng. Khai chúng trên <code>http_request_duration_seconds</code>.</li><li>Trong một bản mô phỏng, quan sát cùng bộ mẫu vào (a) ô mặc định prom-client và (b) ô bạn chọn, rồi so mỗi kết quả <code>histogram_quantile</code> với phân vị thật đã sắp xếp.</li><li>Ghi lại sai số tối đa của cả hai bộ ô.</li></ol>
+<p><strong>Đạt khi:</strong> bộ ô bạn chọn kéo sai số p95 từ hàng chục phần trăm (mặc định) xuống một chữ số, và bạn giải thích được vì sao ô rộng trên một phân bố bị dồn cục cho ra câu trả lời sai một cách <em>lặng lẽ</em>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ô (bucket)</span><span class="v">Một counter cho mọi quan sát <code>&lt;= le</code>; các ô là tích luỹ.</span></div>
+  <div class="kv"><span class="k">Biên <code>le</code></span><span class="v">Cạnh trên của một ô; là một phần danh tính của chuỗi.</span></div>
+  <div class="kv"><span class="k">Nội suy tuyến tính</span><span class="v">Cách <code>histogram_quantile</code> đoán bên trong ô — giả định dàn đều.</span></div>
+  <div class="kv"><span class="k"><code>+Inf</code></span><span class="v">Ô tràn trên cùng; phân vị rơi vào đây chỉ cho biết &quot;lớn hơn cạnh cuối&quot;.</span></div>
+  <div class="kv"><span class="k"><code>_sum</code> / <code>_count</code></span><span class="v">Tổng và số quan sát; cùng nhau cho ra trung bình thật.</span></div>
+  <div class="kv"><span class="k">Native histogram</span><span class="v">Định dạng mới tự chọn độ phân giải, bỏ luôn việc chọn ô.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một histogram trả lời mọi phân vị với ~100 byte cố định, bất kể lưu lượng.</li><li>Ô mặc định trên phân bố dồn cục có thể sai hàng chục phần trăm một cách lặng lẽ.</li><li>Nội suy giả định dàn đều trong ô; dữ liệu dồn cục phá vỡ giả định đó.</li><li>Đo trước, rồi đặt ô dày đúng chỗ dữ liệu nằm, chừa khoảng trống phía trên.</li><li>Đổi ô về sau phá vỡ so sánh lịch sử — ghi ngày đổi cạnh ngưỡng cảnh báo.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -898,6 +1000,23 @@ users we have", it is not a label. It is a log field.</code></pre>
 <p><strong>Trap — an error message is the highest-cardinality label there is, and it looks like the most useful one.</strong> <code>errors_total{message="..."}</code> is a natural thing to write and it detonates immediately, because real error messages carry interpolated data: <code>connect ETIMEDOUT 10.0.0.5:5432</code>, <code>Cannot read property 'x' of undefined at line 42</code>, <code>Invalid note id abc123</code>. Every distinct id, IP, port and filename becomes a permanent series, so the metric grows fastest exactly when the system is failing most — the moment you most need Prometheus alive is the moment your error metric is killing it. <strong>Label with a bounded error <em>class</em> you assign yourself</strong> — <code>errors_total{kind="db_timeout"}</code>, <code>kind="validation"</code>, <code>kind="upstream_5xx"</code> — and keep the message in the log line, where lesson 3.2's requestId will let you find it.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Pick your HTTP metric. List every label and, for each, estimate how many distinct values it can take (method ~7, status ~10, route — count them).</li><li>Multiply them: that product is the number of series this one metric creates. Now imagine adding <code>userId</code> or raw <code>req.path</code> (with ids in it) as a label.</li><li>Fix it: replace <code>req.path</code> with <code>req.route?.path</code> (the template, e.g. <code>/notes/:id</code>) so ids collapse to one value.</li><li>In Prometheus, run <code>count(count by (__name__)({__name__=~&quot;http_.*&quot;}))</code> to see series count before and after.</li></ol>
+<p><strong>Done when:</strong> you can state your metric's series count as a product, and you removed at least one unbounded label by using the route template instead of the raw path.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cardinality</span><span class="v">The number of distinct series a metric produces — the product of its label value counts.</span></div>
+  <div class="kv"><span class="k">Label</span><span class="v">A key/value pair attached to a metric; each distinct combination is a new series.</span></div>
+  <div class="kv"><span class="k">Unbounded label</span><span class="v">A label whose values grow without limit (user id, raw path, request id) — the killer.</span></div>
+  <div class="kv"><span class="k">Route template</span><span class="v">The matched pattern <code>/notes/:id</code>, not the concrete <code>/notes/42</code>.</span></div>
+  <div class="kv"><span class="k"><code>req.route?.path</code></span><span class="v">Express field holding the template; use it, never <code>req.path</code>, as a label.</span></div>
+  <div class="kv"><span class="k">Series explosion</span><span class="v">When cardinality multiplies past what the store can hold and monitoring falls over.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Series count is the product of every label's distinct-value count — multiply before you add a label.</li><li>Unbounded labels (user id, raw path, request id) are the classic way to take down your own monitoring.</li><li>Use the route template <code>/notes/:id</code>, never the concrete path with ids baked in.</li><li>High-cardinality detail belongs in logs or traces, not in metric labels.</li><li>Audit cardinality with <code>count</code> over the series, and alert on your own series count.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://prometheus.io/docs/practices/naming/#labels" target="_blank" rel="noopener">
@@ -1025,6 +1144,23 @@ trường trong log.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — thông điệp lỗi là cái nhãn có lực lượng cao nhất từng tồn tại, và nó trông như cái nhãn hữu ích nhất.</strong> <code>errors_total{message="..."}</code> là thứ tự nhiên người ta viết ra và nó nổ ngay lập tức, vì thông điệp lỗi thật mang theo dữ liệu nội suy: <code>connect ETIMEDOUT 10.0.0.5:5432</code>, <code>Cannot read property 'x' of undefined at line 42</code>, <code>Invalid note id abc123</code>. Mỗi id, IP, cổng và tên file khác nhau đều thành một chuỗi vĩnh viễn, nên cái chỉ số ấy phình nhanh nhất đúng vào lúc hệ thống hỏng nặng nhất — cái khoảnh khắc bạn cần Prometheus còn sống nhất chính là khoảnh khắc chỉ số lỗi của bạn đang giết nó. <strong>Hãy gắn nhãn bằng một LOẠI lỗi có chặn do chính bạn gán</strong> — <code>errors_total{kind="db_timeout"}</code>, <code>kind="validation"</code>, <code>kind="upstream_5xx"</code> — và giữ thông điệp trong dòng log, nơi cái requestId của bài 3.2 sẽ giúp bạn tìm ra nó.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Chọn chỉ số HTTP của bạn. Liệt kê mọi nhãn và với mỗi nhãn ước lượng số giá trị phân biệt nó nhận (method ~7, status ~10, route — đếm đi).</li><li>Nhân chúng lại: tích đó là số chuỗi mà riêng chỉ số này tạo ra. Giờ tưởng tượng thêm <code>userId</code> hay <code>req.path</code> thô (có id trong đó) làm nhãn.</li><li>Sửa: thay <code>req.path</code> bằng <code>req.route?.path</code> (khuôn mẫu, ví dụ <code>/notes/:id</code>) để các id gom về một giá trị.</li><li>Trong Prometheus, chạy <code>count(count by (__name__)({__name__=~&quot;http_.*&quot;}))</code> để xem số chuỗi trước và sau.</li></ol>
+<p><strong>Đạt khi:</strong> bạn nói được số chuỗi của chỉ số dưới dạng một tích, và đã bỏ ít nhất một nhãn vô hạn bằng cách dùng khuôn route thay cho path thô.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lực lượng (cardinality)</span><span class="v">Số chuỗi phân biệt một chỉ số tạo ra — tích số giá trị của các nhãn.</span></div>
+  <div class="kv"><span class="k">Nhãn (label)</span><span class="v">Cặp khoá/giá trị gắn vào chỉ số; mỗi tổ hợp phân biệt là một chuỗi mới.</span></div>
+  <div class="kv"><span class="k">Nhãn vô hạn</span><span class="v">Nhãn có giá trị tăng không giới hạn (user id, path thô, request id) — kẻ giết người.</span></div>
+  <div class="kv"><span class="k">Khuôn route</span><span class="v">Mẫu khớp <code>/notes/:id</code>, không phải <code>/notes/42</code> cụ thể.</span></div>
+  <div class="kv"><span class="k"><code>req.route?.path</code></span><span class="v">Trường Express giữ khuôn mẫu; dùng nó làm nhãn, không bao giờ dùng <code>req.path</code>.</span></div>
+  <div class="kv"><span class="k">Bùng nổ chuỗi</span><span class="v">Khi lực lượng nhân vượt sức chứa và hệ theo dõi sập.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Số chuỗi là tích số giá trị phân biệt của mọi nhãn — hãy nhân trước khi thêm một nhãn.</li><li>Nhãn vô hạn (user id, path thô, request id) là cách kinh điển tự làm sập hệ theo dõi.</li><li>Dùng khuôn route <code>/notes/:id</code>, không bao giờ dùng path cụ thể có id.</li><li>Chi tiết lực lượng cao thuộc về log hoặc trace, không phải nhãn chỉ số.</li><li>Soát lực lượng bằng <code>count</code> trên các chuỗi, và cảnh báo trên chính số chuỗi của bạn.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1167,6 +1303,23 @@ location = /metrics {
 <p><strong>Trap — <code>/metrics</code> is an inventory of your system, and the default is to serve it to the internet.</strong> A single unauthenticated GET returns every route name you have, every dependency host you call, your process's memory and uptime, and often your app version and Node version — a reconnaissance package that saves an attacker the entire enumeration step. Custom business metrics make it worse: <code>notes_created_total</code> and <code>logins_total</code> are your growth figures, readable by anyone, updated every fifteen seconds. Worst of all, the endpoint is genuinely expensive to serve at scale, so it is a cheap denial-of-service target — one request, thousands of series serialised. <strong>Bind it to the internal network or require auth, and verify it from outside:</strong> <code>curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/metrics</code> must not return 200.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>For one important route, write the four golden signals as concrete PromQL: traffic (<code>rate(http_requests_total[5m])</code>), errors (<code>rate(http_requests_total{code=~&quot;5..&quot;}[5m])</code>), latency (p99 via <code>histogram_quantile</code>), and saturation (a resource gauge, e.g. pool in-use).</li><li>Express the error ratio as a single query: 5xx rate divided by total rate.</li><li>Decide, per signal, whether it belongs in an alert, a dashboard, or both.</li><li>Write down which signal you currently do NOT collect and what it would take to add it.</li></ol>
+<p><strong>Done when:</strong> you have four runnable queries for one route and can name the one golden signal your service is currently blind to.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Four golden signals</span><span class="v">Latency, traffic, errors, saturation — the Google SRE starting set.</span></div>
+  <div class="kv"><span class="k">RED method</span><span class="v">Rate, Errors, Duration — the request-centric view for services.</span></div>
+  <div class="kv"><span class="k">USE method</span><span class="v">Utilization, Saturation, Errors — the resource-centric view for machines.</span></div>
+  <div class="kv"><span class="k">Saturation</span><span class="v">How full the most constrained resource is (queue depth, pool in-use).</span></div>
+  <div class="kv"><span class="k">SLI</span><span class="v">Service Level Indicator: the measured number an SLO is written against.</span></div>
+  <div class="kv"><span class="k">Error ratio</span><span class="v">5xx rate divided by total rate — scale-free and alert-friendly.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Collect the four golden signals first: latency, traffic, errors, saturation.</li><li>RED (rate/errors/duration) frames services; USE (utilization/saturation/errors) frames resources.</li><li>Alert on symptoms users feel (error ratio, p99), dashboard the causes.</li><li>Saturation is the signal teams most often forget to collect.</li><li>Every metric you add should answer a question you can name; otherwise drop it.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/monitoring-distributed-systems/#xref_monitoring_golden-signals" target="_blank" rel="noopener">
@@ -1302,6 +1455,23 @@ location = /metrics {
 <div class="pitfall">
 <p><strong>Bẫy — <code>/metrics</code> là một bản kê khai hệ thống của bạn, và mặc định là phục vụ nó ra Internet.</strong> Một lời gọi GET không xác thực trả về mọi tên route bạn có, mọi máy chủ phụ thuộc bạn gọi tới, bộ nhớ và thời gian chạy của tiến trình, và thường là cả phiên bản app lẫn phiên bản Node — một gói do thám tiết kiệm cho kẻ tấn công trọn cả bước liệt kê. Chỉ số nghiệp vụ tự thêm còn làm nó tệ hơn: <code>notes_created_total</code> và <code>logins_total</code> là các con số tăng trưởng của bạn, ai đọc cũng được, cập nhật mười lăm giây một lần. Tệ nhất là cái endpoint đó thật sự đắt khi phải phục vụ ở quy mô lớn, nên nó là một mục tiêu từ chối dịch vụ giá rẻ — một request, hàng nghìn chuỗi phải tuần tự hoá. <strong>Hãy trói nó vào mạng nội bộ hoặc bắt buộc xác thực, rồi kiểm từ bên ngoài:</strong> <code>curl -s -o /dev/null -w "%{http_code}" https://cuongthai.com/metrics</code> không được trả về 200.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Với một route quan trọng, viết bốn tín hiệu vàng thành PromQL cụ thể: lưu lượng (<code>rate(http_requests_total[5m])</code>), lỗi (<code>rate(http_requests_total{code=~&quot;5..&quot;}[5m])</code>), độ trễ (p99 qua <code>histogram_quantile</code>), và độ bão hoà (một gauge tài nguyên, ví dụ pool đang dùng).</li><li>Viết tỉ lệ lỗi thành một truy vấn: tốc độ 5xx chia tốc độ tổng.</li><li>Quyết định mỗi tín hiệu thuộc về cảnh báo, bảng theo dõi, hay cả hai.</li><li>Ghi ra tín hiệu nào bạn hiện KHÔNG thu thập và cần gì để thêm.</li></ol>
+<p><strong>Đạt khi:</strong> bạn có bốn truy vấn chạy được cho một route và gọi tên được tín hiệu vàng mà dịch vụ bạn hiện đang mù.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bốn tín hiệu vàng</span><span class="v">Độ trễ, lưu lượng, lỗi, bão hoà — bộ khởi đầu của Google SRE.</span></div>
+  <div class="kv"><span class="k">Phương pháp RED</span><span class="v">Rate, Errors, Duration — góc nhìn theo request cho dịch vụ.</span></div>
+  <div class="kv"><span class="k">Phương pháp USE</span><span class="v">Utilization, Saturation, Errors — góc nhìn theo tài nguyên cho máy.</span></div>
+  <div class="kv"><span class="k">Bão hoà (saturation)</span><span class="v">Tài nguyên bị ép nhất đầy tới đâu (độ sâu hàng đợi, pool đang dùng).</span></div>
+  <div class="kv"><span class="k">SLI</span><span class="v">Chỉ báo mức dịch vụ: con số đo được mà SLO viết dựa vào.</span></div>
+  <div class="kv"><span class="k">Tỉ lệ lỗi</span><span class="v">Tốc độ 5xx chia tốc độ tổng — không phụ thuộc quy mô, hợp để cảnh báo.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Thu thập bốn tín hiệu vàng trước: độ trễ, lưu lượng, lỗi, bão hoà.</li><li>RED (rate/errors/duration) khung cho dịch vụ; USE (utilization/saturation/errors) khung cho tài nguyên.</li><li>Cảnh báo theo triệu chứng người dùng cảm thấy (tỉ lệ lỗi, p99), để nguyên nhân lên bảng theo dõi.</li><li>Bão hoà là tín hiệu các nhóm hay quên thu thập nhất.</li><li>Mỗi chỉ số thêm vào phải trả lời một câu hỏi bạn gọi tên được; không thì bỏ.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

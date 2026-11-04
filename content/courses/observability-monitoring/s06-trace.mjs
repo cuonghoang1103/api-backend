@@ -137,6 +137,24 @@ This is why span and trace ids belong in your log lines:
 <p><strong>Trap — a span's duration includes time it spent waiting for its own children, so the parent is always the slowest span and that is meaningless.</strong> Read a waterfall naively and the root span is 3912 ms, so the root looks like the problem — but a parent's duration is by definition at least the sum of the critical path beneath it. The number you actually want is <em>self time</em>: duration minus the time covered by children. Most tools show it, and most people read the raw duration instead, which is why investigations so often start by staring at the HTTP handler and concluding &quot;the request is slow&quot;. <strong>Sort by self time, not duration, and the answer is usually the first row.</strong> The same trap has a sharper edge with parallel children: five 1-second queries running concurrently under a 1.1-second parent sum to 5 seconds of child time inside 1.1 seconds of wall clock, so a naive &quot;sum the children&quot; check reports a negative self time and some tools display that as zero rather than as the parallelism it is.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Install <code>@opentelemetry/api</code> and a tracer. In <code>span.mjs</code>, get a tracer and call <code>tracer.startActiveSpan('parent', parent =&gt; { ... })</code>.</li><li>Inside it, start a child span around a fake &quot;db call&quot; (a <code>setTimeout</code> of 50 ms), set an attribute like <code>db.rows=3</code>, then <code>end()</code> it before ending the parent.</li><li>Print the parent's and child's <code>traceId</code> and <code>spanId</code> (from <code>span.spanContext()</code>).</li><li>Confirm both spans share one <code>traceId</code> and the child's <code>parentSpanId</code> equals the parent's <code>spanId</code>.</li></ol>
+<p><strong>Done when:</strong> you can show two spans with the same trace id and a parent-child link, and explain why the child must <code>end()</code> before the parent for the durations to nest correctly.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Span</span><span class="v">One timed operation: a name, start/end time, attributes, and a parent.</span></div>
+  <div class="kv"><span class="k">Trace</span><span class="v">The tree of spans for one request; identified by a single trace id.</span></div>
+  <div class="kv"><span class="k">Trace id</span><span class="v">The id shared by every span of one request — the correlation key across services.</span></div>
+  <div class="kv"><span class="k">Span id</span><span class="v">The unique id of a single span; a child records its parent's span id.</span></div>
+  <div class="kv"><span class="k">Root span</span><span class="v">The first span with no parent; its duration is the whole request.</span></div>
+  <div class="kv"><span class="k">Attributes</span><span class="v">Key/value tags on a span (route, status, db.rows) you filter and group by.</span></div>
+  <div class="kv"><span class="k">Context propagation</span><span class="v">Carrying the trace/span ids across function and service boundaries.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A span is an interval with a name, attributes, and a parent — spans form a tree per request.</li><li>Every span of one request shares the same trace id; that is what joins them.</li><li>A child records its parent's span id, which is how the waterfall is reconstructed.</li><li>Attributes make spans queryable the way labels make metrics queryable.</li><li>Durations only nest correctly if children end before their parent.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://opentelemetry.io/docs/concepts/signals/traces/" target="_blank" rel="noopener">
@@ -270,6 +288,24 @@ nó lồng nhau ra sao.
 <div class="pitfall">
 <p><strong>Bẫy — thời lượng của một span BAO GỒM cả thời gian nó chờ chính các con của nó, nên span cha luôn là span chậm nhất và điều đó vô nghĩa.</strong> Đọc một biểu đồ thác một cách ngây thơ thì span gốc là 3912 ms, nên cái gốc trông như là vấn đề — nhưng thời lượng của một span cha theo định nghĩa ít nhất bằng tổng đường găng bên dưới nó. Con số bạn thật sự cần là <em>thời gian tự thân</em>: thời lượng trừ đi phần thời gian mà các con che phủ. Phần lớn công cụ có hiện nó, và phần lớn người ta lại đọc thời lượng thô, và đó là lý do các cuộc điều tra hay bắt đầu bằng việc ngồi nhìn cái handler HTTP rồi kết luận &quot;request chậm&quot;. <strong>Hãy sắp xếp theo thời gian tự thân chứ không theo thời lượng, và câu trả lời thường là dòng đầu tiên.</strong> Cái bẫy đó còn sắc hơn với các con chạy song song: năm truy vấn mỗi cái 1 giây chạy đồng thời dưới một span cha 1,1 giây cộng lại thành 5 giây thời gian con bên trong 1,1 giây thời gian tường, nên một phép kiểm ngây thơ kiểu &quot;cộng các con lại&quot; báo ra thời gian tự thân ÂM và vài công cụ hiển thị nó thành số không thay vì thành cái sự song song mà nó thật sự là.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Cài <code>@opentelemetry/api</code> và một tracer. Trong <code>span.mjs</code>, lấy tracer và gọi <code>tracer.startActiveSpan('parent', parent =&gt; { ... })</code>.</li><li>Bên trong, mở một span con bao quanh một &quot;lời gọi db&quot; giả (một <code>setTimeout</code> 50 ms), đặt một thuộc tính như <code>db.rows=3</code>, rồi <code>end()</code> nó trước khi kết thúc span cha.</li><li>In <code>traceId</code> và <code>spanId</code> của cha và con (từ <code>span.spanContext()</code>).</li><li>Xác nhận cả hai span chung một <code>traceId</code> và <code>parentSpanId</code> của con bằng <code>spanId</code> của cha.</li></ol>
+<p><strong>Đạt khi:</strong> bạn trình ra được hai span cùng trace id và có liên kết cha-con, và giải thích được vì sao con phải <code>end()</code> trước cha thì thời lượng mới lồng nhau đúng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Span</span><span class="v">Một thao tác có đo giờ: tên, thời điểm bắt đầu/kết thúc, thuộc tính, và một cha.</span></div>
+  <div class="kv"><span class="k">Trace</span><span class="v">Cây các span của một request; định danh bằng một trace id duy nhất.</span></div>
+  <div class="kv"><span class="k">Trace id</span><span class="v">Id mà mọi span của một request chia chung — khoá nối giữa các dịch vụ.</span></div>
+  <div class="kv"><span class="k">Span id</span><span class="v">Id duy nhất của một span; con ghi lại span id của cha.</span></div>
+  <div class="kv"><span class="k">Root span</span><span class="v">Span đầu tiên không có cha; thời lượng của nó là cả request.</span></div>
+  <div class="kv"><span class="k">Thuộc tính</span><span class="v">Cặp khoá/giá trị trên span (route, status, db.rows) để bạn lọc và gom nhóm.</span></div>
+  <div class="kv"><span class="k">Lan truyền ngữ cảnh</span><span class="v">Mang trace/span id qua ranh giới hàm và dịch vụ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một span là một khoảng thời gian có tên, thuộc tính, và một cha — các span tạo thành cây theo request.</li><li>Mọi span của một request chung một trace id; đó là thứ nối chúng lại.</li><li>Con ghi lại span id của cha, nhờ đó dựng lại được biểu đồ thác.</li><li>Thuộc tính làm span truy vấn được giống như nhãn làm chỉ số truy vấn được.</li><li>Thời lượng chỉ lồng đúng nếu con kết thúc trước cha.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -434,6 +470,24 @@ sampling "10% minus whatever got dropped".</code></pre>
 <p><strong>Trap — <code>db.statement</code> can contain the parameter values, and then your trace store holds the data you spent lesson 1.2 keeping out of logs.</strong> Whether it does depends on the driver and the instrumentation version: Prisma's spans normally carry the parameterised statement with <code>$1</code> placeholders, but raw <code>pg</code> queries, some ORMs, and any code path that interpolates into SQL will put the literal values in the span — email addresses in a <code>WHERE</code> clause, a note's full text in an <code>INSERT</code>. The failure is quiet in a specific way: <strong>the span is not a log line, so it does not go through your logger's redaction, and it lands in a trace backend whose access controls are usually looser than your log store's.</strong> Verify it rather than assuming — send one request, open the trace, and read the actual <code>db.statement</code> value — and set <code>enhancedDatabaseReporting: false</code> plus a span processor that strips the attribute if there is any doubt.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Install <code>@opentelemetry/sdk-node</code> and <code>@opentelemetry/auto-instrumentations-node</code>.</li><li>Create <code>tracing.mjs</code> that builds a <code>NodeSDK</code> with <code>getNodeAutoInstrumentations()</code> and a <code>ConsoleSpanExporter</code>, then <code>sdk.start()</code>. Require it with <code>node --import ./tracing.mjs app.mjs</code>.</li><li>Make one HTTP request that also runs a DB query. Watch the console print spans you never wrote — for <code>http</code> and <code>pg</code>.</li><li>Identify which library produced each auto span and how they nest under the incoming request span.</li></ol>
+<p><strong>Done when:</strong> a single request prints a nested set of auto-instrumented spans, and you can name which instrumentation library created each one.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">OpenTelemetry</span><span class="v">Vendor-neutral standard and SDK for traces, metrics and logs.</span></div>
+  <div class="kv"><span class="k">NodeSDK</span><span class="v">The bootstrap object that wires instrumentations, processors and exporters.</span></div>
+  <div class="kv"><span class="k">Auto-instrumentation</span><span class="v">Libraries that patch http, pg, express etc. to emit spans with no code change.</span></div>
+  <div class="kv"><span class="k">Exporter</span><span class="v">Where finished spans are sent (console, OTLP collector, a backend).</span></div>
+  <div class="kv"><span class="k">OTLP</span><span class="v">The OpenTelemetry wire protocol most backends accept.</span></div>
+  <div class="kv"><span class="k">Span processor</span><span class="v">Batches/forwards spans from the SDK to the exporter.</span></div>
+  <div class="kv"><span class="k">Instrumentation library</span><span class="v">One patch targeting one library (e.g. the <code>pg</code> instrumentation).</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>The NodeSDK plus auto-instrumentations emit spans for http, pg, express with no app changes.</li><li>Load tracing before your app (<code>--import</code>) so the patches apply to required modules.</li><li>An exporter decides where spans go; <code>ConsoleSpanExporter</code> is the fastest way to see them.</li><li>OTLP is the common protocol, so you can switch backends without touching app code.</li><li>Auto spans nest under the incoming request span, reconstructing the request's shape for free.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://opentelemetry.io/docs/languages/js/getting-started/nodejs/" target="_blank" rel="noopener">
@@ -590,6 +644,24 @@ ra là "10% trừ đi bao nhiêu cái đã bị vứt".</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>db.statement</code> có thể chứa cả GIÁ TRỊ tham số, và khi đó kho trace của bạn giữ đúng cái dữ liệu mà bài 1.2 bắt bạn giữ ra khỏi log.</strong> Có hay không thì tuỳ vào driver và phiên bản bộ đo đạc: span của Prisma bình thường mang câu lệnh đã tham số hoá với chỗ giữ <code>$1</code>, nhưng truy vấn <code>pg</code> thô, vài ORM khác, và bất cứ nhánh mã nào nội suy thẳng vào SQL sẽ đặt giá trị nguyên văn vào span — địa chỉ email trong một mệnh đề <code>WHERE</code>, toàn văn một ghi chú trong một câu <code>INSERT</code>. Cú hỏng này lặng lẽ theo một cách rất cụ thể: <strong>span không phải một dòng log, nên nó không đi qua bộ che của logger, và nó rơi vào một backend trace mà quyền truy cập thường lỏng hơn kho log của bạn.</strong> Hãy đi kiểm thay vì giả định — gửi một request, mở trace ra, và đọc chính cái giá trị <code>db.statement</code> — rồi đặt <code>enhancedDatabaseReporting: false</code> cộng một span processor xoá thuộc tính đó nếu còn chút nghi ngờ nào.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Cài <code>@opentelemetry/sdk-node</code> và <code>@opentelemetry/auto-instrumentations-node</code>.</li><li>Tạo <code>tracing.mjs</code> dựng một <code>NodeSDK</code> với <code>getNodeAutoInstrumentations()</code> và một <code>ConsoleSpanExporter</code>, rồi <code>sdk.start()</code>. Nạp nó bằng <code>node --import ./tracing.mjs app.mjs</code>.</li><li>Gọi một request HTTP có kèm một truy vấn CSDL. Quan sát console in ra các span bạn chưa hề viết — cho <code>http</code> và <code>pg</code>.</li><li>Xác định thư viện nào tạo ra mỗi auto span và chúng lồng dưới span request đến như thế nào.</li></ol>
+<p><strong>Đạt khi:</strong> một request đơn in ra một tập span tự-đo-đạc lồng nhau, và bạn gọi tên được thư viện instrumentation tạo ra mỗi cái.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">OpenTelemetry</span><span class="v">Chuẩn và SDK trung lập nhà cung cấp cho trace, chỉ số và log.</span></div>
+  <div class="kv"><span class="k">NodeSDK</span><span class="v">Đối tượng khởi động nối instrumentation, processor và exporter.</span></div>
+  <div class="kv"><span class="k">Tự-đo-đạc</span><span class="v">Các thư viện vá http, pg, express... để phát span mà không đổi mã.</span></div>
+  <div class="kv"><span class="k">Exporter</span><span class="v">Nơi span đã xong được gửi tới (console, bộ thu OTLP, một backend).</span></div>
+  <div class="kv"><span class="k">OTLP</span><span class="v">Giao thức đường truyền OpenTelemetry mà hầu hết backend nhận.</span></div>
+  <div class="kv"><span class="k">Span processor</span><span class="v">Gom/chuyển span từ SDK tới exporter.</span></div>
+  <div class="kv"><span class="k">Thư viện instrumentation</span><span class="v">Một bản vá nhắm một thư viện (ví dụ instrumentation cho <code>pg</code>).</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>NodeSDK cùng auto-instrumentation phát span cho http, pg, express mà không đổi mã ứng dụng.</li><li>Nạp phần trace trước ứng dụng (<code>--import</code>) để các bản vá áp vào module được require.</li><li>Exporter quyết định span đi đâu; <code>ConsoleSpanExporter</code> là cách nhanh nhất để thấy chúng.</li><li>OTLP là giao thức chung, nên đổi backend mà không đụng mã ứng dụng.</li><li>Auto span lồng dưới span request đến, dựng lại bộ dạng của request miễn phí.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -756,6 +828,23 @@ you actually have to think.</code></pre>
 <p><strong>Trap — sampled traces make terrible metrics, and the arithmetic that seems to fix it hides the failures.</strong> Counting spans to get a request rate or an error rate is tempting because the data is right there, but at 1% sampling every count is 1% of the truth, so people scale it back up by 100×. That works for high-volume totals and breaks precisely where it matters: <strong>one error trace becomes &quot;100 errors&quot;, and zero error traces becomes &quot;0 errors&quot; for a bug that is failing every minute.</strong> The error-rate graph built this way is quantised into jumps of 100 and reads zero most of the time. Metrics are counted on every request, before sampling, which is why chapter 4 exists as a separate pillar — use spans to explain a number, never to produce one.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Estimate your trace volume: requests/second × spans/trace × bytes/span × retention days. Write the number down in GB.</li><li>Apply head sampling with <code>TraceIdRatioBased(0.01)</code> (keep 1%) and recompute the stored volume.</li><li>Wrap it in <code>ParentBased</code> so a sampled parent keeps its children (and a dropped parent drops them) — explain why mixing decisions mid-trace produces broken traces.</li><li>State one question tail sampling could answer that head sampling cannot (e.g. &quot;keep every trace that errored or exceeded 1s&quot;).</li></ol>
+<p><strong>Done when:</strong> you have a before/after storage number and can justify a sampling ratio, and you can state the one thing head sampling can never do that tail sampling can.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Head sampling</span><span class="v">Decide to keep/drop a trace at its start, before you know the outcome.</span></div>
+  <div class="kv"><span class="k">Tail sampling</span><span class="v">Decide after the trace finishes — so you can keep only slow or errored traces.</span></div>
+  <div class="kv"><span class="k"><code>TraceIdRatioBased</code></span><span class="v">A head sampler that keeps a fixed fraction, chosen by trace id hash.</span></div>
+  <div class="kv"><span class="k"><code>ParentBased</code></span><span class="v">Wrapper that makes children follow the root's keep/drop decision.</span></div>
+  <div class="kv"><span class="k">Sampling ratio</span><span class="v">The fraction of traces retained (e.g. 0.01 = 1%).</span></div>
+  <div class="kv"><span class="k">Retention</span><span class="v">How long sampled traces are stored before deletion — a direct cost lever.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Trace storage is rps × spans/trace × bytes/span × retention; sampling is not optional at scale.</li><li>Head sampling is cheap but blind to outcome; tail sampling keeps the interesting traces.</li><li>Wrap head samplers in <code>ParentBased</code> so a whole trace is kept or dropped together.</li><li>A consistent trace-id-based decision keeps the same fraction across services.</li><li>Pick the ratio from the volume arithmetic, not from a default someone copied.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://opentelemetry.io/docs/concepts/sampling/" target="_blank" rel="noopener">
@@ -912,6 +1001,23 @@ bạn thật sự phải suy nghĩ.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — trace đã lấy mẫu làm chỉ số cực tệ, và cái phép tính có vẻ chữa được điều đó lại giấu đi chính những cú hỏng.</strong> Đếm span để lấy tốc độ request hay tỉ lệ lỗi rất hấp dẫn vì dữ liệu nằm ngay đó, nhưng ở mức lấy mẫu 1% thì mọi con số đếm đều là 1% sự thật, nên người ta nhân ngược lên 100 lần. Cách đó chạy được với những con số tổng lưu lượng lớn và vỡ đúng ở chỗ quan trọng: <strong>một cái trace lỗi thành &quot;100 lỗi&quot;, và không cái trace lỗi nào thành &quot;0 lỗi&quot; cho một cú hỏng đang nổ mỗi phút.</strong> Đồ thị tỉ lệ lỗi dựng theo kiểu đó bị lượng tử hoá thành những bước nhảy 100 và phần lớn thời gian đọc ra số không. Chỉ số được đếm ở MỌI request, trước khi lấy mẫu, và đó là lý do chương 4 tồn tại như một trụ cột riêng — hãy dùng span để GIẢI THÍCH một con số, đừng bao giờ dùng nó để SINH RA một con số.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Ước lượng khối lượng trace: request/giây × span/trace × byte/span × số ngày lưu. Ghi con số ra theo GB.</li><li>Áp lấy mẫu đầu bằng <code>TraceIdRatioBased(0.01)</code> (giữ 1%) và tính lại khối lượng lưu.</li><li>Bọc nó trong <code>ParentBased</code> để một cha được chọn thì giữ luôn các con (và cha bị bỏ thì bỏ luôn con) — giải thích vì sao trộn quyết định giữa chừng tạo ra trace gãy.</li><li>Nêu một câu hỏi mà lấy mẫu đuôi trả lời được còn lấy mẫu đầu thì không (ví dụ &quot;giữ mọi trace lỗi hoặc vượt 1 giây&quot;).</li></ol>
+<p><strong>Đạt khi:</strong> bạn có con số lưu trữ trước/sau và biện minh được một tỉ lệ lấy mẫu, và nói được điều mà lấy mẫu đầu không bao giờ làm được còn lấy mẫu đuôi thì có.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Lấy mẫu đầu</span><span class="v">Quyết định giữ/bỏ một trace ngay lúc bắt đầu, trước khi biết kết cục.</span></div>
+  <div class="kv"><span class="k">Lấy mẫu đuôi</span><span class="v">Quyết định sau khi trace xong — nên giữ được riêng trace chậm hoặc lỗi.</span></div>
+  <div class="kv"><span class="k"><code>TraceIdRatioBased</code></span><span class="v">Bộ lấy mẫu đầu giữ một phần cố định, chọn theo băm trace id.</span></div>
+  <div class="kv"><span class="k"><code>ParentBased</code></span><span class="v">Lớp bọc khiến con theo quyết định giữ/bỏ của gốc.</span></div>
+  <div class="kv"><span class="k">Tỉ lệ lấy mẫu</span><span class="v">Phần trace được giữ (ví dụ 0.01 = 1%).</span></div>
+  <div class="kv"><span class="k">Thời gian lưu</span><span class="v">Trace đã lấy mẫu được lưu bao lâu trước khi xoá — một cần gạt chi phí trực tiếp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Lưu trữ trace là rps × span/trace × byte/span × thời gian lưu; ở quy mô lớn, lấy mẫu là bắt buộc.</li><li>Lấy mẫu đầu rẻ nhưng mù kết cục; lấy mẫu đuôi giữ lại những trace đáng quan tâm.</li><li>Bọc bộ lấy mẫu đầu trong <code>ParentBased</code> để cả một trace được giữ hoặc bỏ cùng nhau.</li><li>Quyết định nhất quán theo trace id giữ cùng một phần qua các dịch vụ.</li><li>Chọn tỉ lệ từ phép tính khối lượng, không từ một giá trị mặc định ai đó chép về.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1071,6 +1177,23 @@ which is a question the trace put in front of you.</code></pre>
 <p><strong>Trap — a slow trace and a slow service are different problems, and one trace cannot tell them apart.</strong> Opening the slowest trace and finding a 4-second gateway call feels like a diagnosis, but a single trace is one sample: it cannot say whether that call is 4 seconds always, or 4 seconds for one unlucky request out of ten thousand. Fixing the second one is wasted work, and worse, the trace <em>looks</em> like proof, so the wasted work feels justified. The discipline is to move between pillars in both directions: <strong>a metric tells you a problem is real and how often; a trace tells you where it is; then a metric again confirms the fix moved the distribution rather than one sample.</strong> A trace-driven &quot;fix&quot; with no before-and-after percentile is an anecdote, and the p99 you were chasing will still be there.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>Open any trace waterfall (from lesson 6.2's console spans or a Jaeger demo). For each span, note its start offset and duration.</li><li>Classify the shape: one dominant long span, a staircase of sequential calls, a fan of identical repeated calls (N+1), a visible gap (uninstrumented wait), or flat parallel bars.</li><li>Trace the critical path — the chain of spans that actually determines total time — and mark where it is spent.</li><li>Propose one fix for the shape you found (batch the N+1, parallelize the staircase, instrument the gap).</li></ol>
+<p><strong>Done when:</strong> you can name the shape of a real trace and point to the single span (or repeated spans) that owns most of the latency.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Waterfall</span><span class="v">The timeline view of a trace: one horizontal bar per span, nested by parent.</span></div>
+  <div class="kv"><span class="k">Critical path</span><span class="v">The chain of spans whose durations add up to the total request time.</span></div>
+  <div class="kv"><span class="k">N+1</span><span class="v">One query followed by N near-identical queries — a fan of repeated spans.</span></div>
+  <div class="kv"><span class="k">Sequential vs parallel</span><span class="v">Staircased bars run one after another; stacked bars overlap in time.</span></div>
+  <div class="kv"><span class="k">Gap</span><span class="v">Time inside a span not covered by any child — uninstrumented or waiting work.</span></div>
+  <div class="kv"><span class="k">Span duration</span><span class="v">The width of a bar; long does not mean guilty unless it is on the critical path.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A waterfall is a timeline of nested spans; width is duration, nesting is parent/child.</li><li>Five shapes recur: one long span, a sequential staircase, an N+1 fan, a gap, flat parallel.</li><li>Fix what is on the critical path; a long span off the critical path costs nothing.</li><li>An N+1 fan of identical spans is the most common and most fixable shape.</li><li>A gap with no child span is uninstrumented time — add a span before you guess.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/tempo/latest/getting-started/traces/" target="_blank" rel="noopener">
@@ -1221,6 +1344,23 @@ nhất", một câu hỏi mà cái trace đặt sẵn trước mặt bạn.</cod
 <p><strong>Bẫy — một trace chậm và một dịch vụ chậm là hai vấn đề khác nhau, và một cái trace không phân biệt được chúng.</strong> Mở cái trace chậm nhất ra rồi thấy một lời gọi cổng 4 giây thì có cảm giác như một chẩn đoán, nhưng một cái trace đơn lẻ là MỘT mẫu: nó không nói được lời gọi ấy luôn mất 4 giây, hay 4 giây cho một request xui xẻo trong mười nghìn cái. Chữa cái thứ hai là công cốc, mà tệ hơn là cái trace <em>trông như</em> bằng chứng, nên cái công cốc ấy lại có vẻ chính đáng. Kỷ luật ở đây là đi lại giữa các trụ cột theo cả hai chiều: <strong>một chỉ số nói cho bạn biết vấn đề là có thật và xảy ra bao nhiêu lần; một trace nói cho bạn nó ở đâu; rồi một chỉ số nữa xác nhận cách chữa đã dịch chuyển được cả PHÂN BỐ chứ không phải một cái mẫu.</strong> Một cách &quot;chữa&quot; dẫn dắt bởi trace mà không có phân vị trước-và-sau chỉ là một giai thoại, và cái p99 bạn đang đuổi theo vẫn sẽ còn nguyên đó.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Mở một biểu đồ thác bất kỳ (từ span console ở bài 6.2 hoặc một demo Jaeger). Với mỗi span, ghi độ lệch bắt đầu và thời lượng.</li><li>Phân loại hình dạng: một span dài trội, một bậc thang các lời gọi tuần tự, một chùm các lời gọi giống hệt lặp lại (N+1), một khoảng trống thấy rõ (chờ chưa đo), hay các thanh song song phẳng.</li><li>Truy vết đường tới hạn — chuỗi span thật sự quyết định tổng thời gian — và đánh dấu thời gian tiêu ở đâu.</li><li>Đề xuất một cách chữa cho hình dạng bạn thấy (gộp N+1, song song hoá bậc thang, đo cái khoảng trống).</li></ol>
+<p><strong>Đạt khi:</strong> bạn gọi tên được hình dạng của một trace thật và chỉ ra span đơn (hoặc chùm span lặp) chiếm phần lớn độ trễ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Biểu đồ thác</span><span class="v">Góc nhìn dòng thời gian của trace: mỗi span một thanh ngang, lồng theo cha.</span></div>
+  <div class="kv"><span class="k">Đường tới hạn</span><span class="v">Chuỗi span mà thời lượng cộng lại thành tổng thời gian request.</span></div>
+  <div class="kv"><span class="k">N+1</span><span class="v">Một truy vấn kéo theo N truy vấn gần giống hệt — một chùm span lặp.</span></div>
+  <div class="kv"><span class="k">Tuần tự vs song song</span><span class="v">Thanh bậc thang chạy nối đuôi; thanh chồng lên nhau thì trùng thời gian.</span></div>
+  <div class="kv"><span class="k">Khoảng trống</span><span class="v">Thời gian trong một span không có span con nào phủ — việc chưa đo hoặc đang chờ.</span></div>
+  <div class="kv"><span class="k">Thời lượng span</span><span class="v">Bề rộng một thanh; dài không có nghĩa là thủ phạm trừ khi nằm trên đường tới hạn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Biểu đồ thác là dòng thời gian các span lồng nhau; bề rộng là thời lượng, lồng là cha/con.</li><li>Năm hình dạng hay gặp: một span dài, một bậc thang tuần tự, một chùm N+1, một khoảng trống, song song phẳng.</li><li>Chữa cái nằm trên đường tới hạn; một span dài ngoài đường tới hạn chẳng tốn gì.</li><li>Chùm N+1 các span giống hệt là hình dạng phổ biến nhất và dễ chữa nhất.</li><li>Một khoảng trống không có span con là thời gian chưa đo — thêm span trước khi đoán.</li></ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/tempo/latest/getting-started/traces/" target="_blank" rel="noopener">
@@ -1370,6 +1510,23 @@ scales with the number of hops, and this repo has one.</code></pre>
 <p><strong>Trap — the failure mode of tracing is not cost, it is a half-instrumented system that lies by omission.</strong> A trace that covers HTTP and Postgres but not sharp, ffmpeg or your own CPU-heavy code shows a request as 200 ms of database inside 2 seconds of wall clock — and the 1.8-second gap looks like the framework being slow rather than like missing instrumentation. That is bad enough, and it gets worse over time: an instrumentation patch silently stops matching after a dependency upgrade, so a span that used to appear simply does not, and <strong>nothing alerts on the absence of data you never explicitly asked for.</strong> The trace still renders, still looks complete, and now attributes that library's time to its parent. Either instrument the whole request path — including the manual spans from lesson 6.2 — or use the poor man's version, where the arithmetic makes every gap visible by construction.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol><li>List three scenarios: a single-service CRUD app, a background cron job, and a fan-out across several microservices.</li><li>For each, decide whether to trace. Estimate the cost (propagation overhead, span volume, sampling) against what a trace would reveal that logs+metrics would not.</li><li>For the case where you decide NOT to trace, write the cheaper alternative (a request id in structured logs + a duration histogram).</li><li>State the one property — calls crossing a process boundary — that makes tracing clearly worth it.</li></ol>
+<p><strong>Done when:</strong> you can defend a yes/no tracing decision for each of the three scenarios with a cost and a benefit, not a reflex.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Single-service</span><span class="v">One process end to end; logs + a duration histogram often answer the question.</span></div>
+  <div class="kv"><span class="k">Context propagation cost</span><span class="v">The work and discipline of carrying ids across every boundary.</span></div>
+  <div class="kv"><span class="k">Fan-out</span><span class="v">One request spawning calls to several services — the strongest case for tracing.</span></div>
+  <div class="kv"><span class="k">Sampling overhead</span><span class="v">The CPU and complexity of deciding and carrying sample decisions.</span></div>
+  <div class="kv"><span class="k">Log correlation</span><span class="v">Using a request id in structured logs as a cheaper stand-in for a trace.</span></div>
+  <div class="kv"><span class="k">Boundary crossing</span><span class="v">A call leaving the process; the property that makes a trace pay off.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Tracing earns its cost when requests cross process boundaries; inside one service it often does not.</li><li>For a single service, a request id in logs plus a duration histogram answers most questions cheaper.</li><li>Background jobs rarely need traces unless they call out to other services.</li><li>Weigh propagation and storage cost against what logs+metrics cannot already show.</li><li>Decide with a cost and a benefit, not by turning tracing on everywhere by reflex.</li></ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://opentelemetry.io/docs/collector/deployment/" target="_blank" rel="noopener">
@@ -1508,6 +1665,23 @@ lệ với số chặng, và kho này có một chặng.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — kiểu hỏng của việc trace không phải là chi phí, mà là một hệ thống đo đạc dở dang nói dối bằng cách BỎ SÓT.</strong> Một trace phủ được HTTP và Postgres nhưng không phủ sharp, ffmpeg hay chính đoạn mã nặng CPU của bạn sẽ hiện một request thành 200 ms cơ sở dữ liệu nằm trong 2 giây thời gian tường — và cái khoảng trống 1,8 giây kia trông như framework chậm chứ không trông như bộ đo đạc bị khuyết. Thế đã đủ tệ, và nó còn tệ thêm theo thời gian: một bản vá đo đạc âm thầm thôi khớp sau một lần nâng cấp phụ thuộc, nên một cái span vốn hay xuất hiện thì đơn giản là không xuất hiện nữa, và <strong>chẳng có cảnh báo nào cho sự VẮNG MẶT của thứ dữ liệu mà bạn chưa từng yêu cầu một cách tường minh.</strong> Cái trace vẫn vẽ ra, vẫn trông đầy đủ, và giờ gán thời gian của thư viện kia cho cái cha của nó. Hoặc là đo đạc trọn đường request — kể cả các span viết tay ở bài 6.2 — hoặc là dùng bản của người nghèo, nơi phép tính số học làm mọi khoảng trống hiện ra theo đúng thiết kế.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol><li>Liệt kê ba kịch bản: một ứng dụng CRUD một-dịch-vụ, một việc cron chạy nền, và một cú toả ra nhiều microservice.</li><li>Với mỗi cái, quyết định có trace hay không. Ước lượng chi phí (phí lan truyền, khối lượng span, lấy mẫu) so với điều mà trace sẽ lộ ra mà log+chỉ số thì không.</li><li>Với trường hợp bạn quyết định KHÔNG trace, viết phương án rẻ hơn (một request id trong log có cấu trúc + một histogram thời lượng).</li><li>Nêu một tính chất — lời gọi vượt ranh giới tiến trình — khiến trace rõ ràng đáng làm.</li></ol>
+<p><strong>Đạt khi:</strong> bạn bảo vệ được quyết định có/không trace cho cả ba kịch bản bằng một chi phí và một lợi ích, không phải bằng phản xạ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Một-dịch-vụ</span><span class="v">Một tiến trình từ đầu tới cuối; log + một histogram thời lượng thường đủ trả lời.</span></div>
+  <div class="kv"><span class="k">Phí lan truyền ngữ cảnh</span><span class="v">Công sức và kỷ luật mang id qua mọi ranh giới.</span></div>
+  <div class="kv"><span class="k">Toả ra (fan-out)</span><span class="v">Một request sinh lời gọi tới nhiều dịch vụ — lý do mạnh nhất để trace.</span></div>
+  <div class="kv"><span class="k">Phí lấy mẫu</span><span class="v">CPU và độ phức tạp của việc quyết định và mang theo quyết định lấy mẫu.</span></div>
+  <div class="kv"><span class="k">Nối log</span><span class="v">Dùng một request id trong log có cấu trúc thay cho trace, rẻ hơn.</span></div>
+  <div class="kv"><span class="k">Vượt ranh giới</span><span class="v">Một lời gọi rời khỏi tiến trình; tính chất khiến trace đáng đồng tiền.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Trace đáng chi phí khi request vượt ranh giới tiến trình; bên trong một dịch vụ thì thường không.</li><li>Với một dịch vụ, một request id trong log cộng một histogram thời lượng trả lời phần lớn câu hỏi rẻ hơn.</li><li>Việc chạy nền hiếm khi cần trace trừ khi nó gọi ra các dịch vụ khác.</li><li>Cân phí lan truyền và lưu trữ với điều mà log+chỉ số chưa thể cho thấy.</li><li>Quyết định bằng một chi phí và một lợi ích, đừng bật trace khắp nơi theo phản xạ.</li></ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

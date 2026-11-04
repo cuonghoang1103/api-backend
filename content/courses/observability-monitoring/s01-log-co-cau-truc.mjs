@@ -91,6 +91,38 @@ const line = config.nodeEnv === 'production'
 <h3>The cost of the change</h3>
 <p>Structured logging is not free, and this course will not pretend otherwise: lesson 1.4 measures a JSON line at 571 ns against 19 ns for string concatenation, roughly thirty times more. Whether that matters depends entirely on how many lines per request you emit, which is the subject of lesson 1.2 — and on where stdout is pointing, which is lesson 1.5 and is the part that actually takes services down.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Emit a structured line, then query a field no regex could survive.</p>
+<ol>
+  <li>Write <code>log.mjs</code> that prints one JSON object: <code>console.log(JSON.stringify({ts:new Date().toISOString(),level:'error',msg:'upload failed',userId:'u_8f3a',ms:8412}))</code>.</li>
+  <li>Run it a few times with different <code>userId</code> and <code>ms</code> values, appending each to a file:</li>
+</ol>
+<pre><code class="language-bash">node log.mjs &gt;&gt; app.log
+cat app.log | jq 'select(.ms &gt; 5000)'</code></pre>
+<ol start="3">
+  <li>Confirm the <code>jq</code> filter returns only the slow lines — a query on the <code>ms</code> field, not on the wording.</li>
+  <li>Now rewrite <code>msg</code> to interpolate the user id (<code>&#96;upload failed for \${userId}&#96;</code>) and try to count events by <code>msg</code>. Watch the grouping shatter into one-off strings.</li>
+</ol>
+<p><strong>Done when:</strong> a <code>jq</code> filter on <code>.ms</code> isolates the slow uploads, and you can explain why a constant <code>msg</code> plus a <code>userId</code> field beats interpolating the id into the message.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Structured logging</span><span class="v">Emitting each event as fields (a JSON object) instead of prose, so a query engine can read it.</span></div>
+  <div class="kv"><span class="k">JSON Lines / NDJSON</span><span class="v">One JSON object per line; stays streamable and greppable even in a huge file.</span></div>
+  <div class="kv"><span class="k">ts</span><span class="v">The timestamp field — ISO 8601 in UTC, always, so lines from different machines sort correctly.</span></div>
+  <div class="kv"><span class="k">level</span><span class="v">How much you care, from a small fixed set; the subject of lesson 1.3.</span></div>
+  <div class="kv"><span class="k">msg</span><span class="v">A stable event name that identifies the kind of event — never interpolate variables into it.</span></div>
+  <div class="kv"><span class="k">context fields</span><span class="v">Everything else, spread in from the caller; the part that makes a line queryable.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A log line serves two audiences: structured fields serve the query engine, and a formatter renders prose for humans.</li>
+  <li>A regex over prose breaks silently the day someone rewords the sentence; a named field cannot be reworded by accident.</li>
+  <li>This repo&#39;s <code>logger.ts</code> keeps identical fields in dev and prod and only changes the rendering.</li>
+  <li>Three fields never move — <code>ts</code>, <code>level</code>, <code>msg</code> — and everything variable belongs in context, not in <code>msg</code>.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://getpino.io/#/docs/api" target="_blank" rel="noopener">
   <span class="lc-ico">🌲</span>
@@ -173,6 +205,38 @@ const line = config.nodeEnv === 'production'
 
 <h3>Cái giá của việc đổi sang</h3>
 <p>Log có cấu trúc không miễn phí, và khoá này sẽ không giả vờ ngược lại: bài 1.4 đo một dòng JSON ở 571 ns so với 19 ns cho phép nối chuỗi, gấp khoảng ba mươi lần. Chuyện đó có đáng kể hay không phụ thuộc hoàn toàn vào việc bạn phát ra bao nhiêu dòng mỗi request, thứ mà bài 1.2 nói tới — và vào chỗ stdout đang trỏ vào, thứ là bài 1.5 và là phần thật sự hạ được dịch vụ.</p>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Phát ra một dòng có cấu trúc, rồi truy vấn một trường mà không regex nào sống nổi.</p>
+<ol>
+  <li>Viết <code>log.mjs</code> in ra một object JSON: <code>console.log(JSON.stringify({ts:new Date().toISOString(),level:'error',msg:'upload failed',userId:'u_8f3a',ms:8412}))</code>.</li>
+  <li>Chạy vài lần với các giá trị <code>userId</code> và <code>ms</code> khác nhau, nối mỗi lần vào một file:</li>
+</ol>
+<pre><code class="language-bash">node log.mjs &gt;&gt; app.log
+cat app.log | jq 'select(.ms &gt; 5000)'</code></pre>
+<ol start="3">
+  <li>Xác nhận bộ lọc <code>jq</code> chỉ trả về các dòng chậm — một truy vấn trên trường <code>ms</code>, không phải trên câu chữ.</li>
+  <li>Giờ viết lại <code>msg</code> để nội suy id người dùng (<code>&#96;upload failed for \${userId}&#96;</code>) rồi thử đếm sự kiện theo <code>msg</code>. Nhìn việc gom nhóm vỡ vụn thành các chuỗi dùng một lần.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một bộ lọc <code>jq</code> trên <code>.ms</code> tách được các lần upload chậm, và bạn giải thích được vì sao <code>msg</code> cố định cộng một trường <code>userId</code> hơn hẳn việc nội suy id vào thông điệp.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Log có cấu trúc</span><span class="v">Phát mỗi sự kiện thành các trường (một object JSON) thay vì văn xuôi, để máy truy vấn đọc được.</span></div>
+  <div class="kv"><span class="k">JSON Lines / NDJSON</span><span class="v">Mỗi dòng một object JSON; vẫn truyền theo luồng và grep được kể cả trong file khổng lồ.</span></div>
+  <div class="kv"><span class="k">ts</span><span class="v">Trường dấu thời gian — ISO 8601 theo UTC, luôn luôn, để các dòng từ máy khác nhau sắp đúng.</span></div>
+  <div class="kv"><span class="k">level</span><span class="v">Bạn quan tâm tới mức nào, từ một tập cố định nhỏ; chủ đề của bài 1.3.</span></div>
+  <div class="kv"><span class="k">msg</span><span class="v">Một tên sự kiện ổn định định danh loại sự kiện — không bao giờ nội suy biến vào nó.</span></div>
+  <div class="kv"><span class="k">trường ngữ cảnh</span><span class="v">Mọi thứ còn lại, trải vào từ chỗ gọi; phần làm một dòng log truy vấn được.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Một dòng log phục vụ hai độc giả: các trường có cấu trúc phục vụ máy truy vấn, còn một bộ định dạng dựng văn xuôi cho con người.</li>
+  <li>Một regex trên văn xuôi hỏng lặng lẽ ngay ngày có người đổi cách diễn đạt; một trường có tên thì không thể bị vô tình đổi.</li>
+  <li><code>logger.ts</code> của kho này giữ y nguyên các trường ở dev và prod, chỉ đổi cách hiển thị.</li>
+  <li>Ba trường không bao giờ xê dịch — <code>ts</code>, <code>level</code>, <code>msg</code> — và mọi thứ biến thiên thuộc về ngữ cảnh, không phải <code>msg</code>.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://getpino.io/#/docs/api" target="_blank" rel="noopener">
@@ -259,6 +323,37 @@ logger.info('note created', {
 </code></pre>
 <p>The &quot;before&quot; version cannot answer a single operational question and can leak the user&#39;s email. The &quot;after&quot; version answers &quot;how big are the notes people actually write&quot;, &quot;which users are slowest&quot; and &quot;did creation get slower after the deploy&quot;, and contains nothing that would matter if the log store were read by someone who should not have it.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Audit one real log call for a leak and an unbounded field, then rewrite it.</p>
+<ol>
+  <li>Find a log call that spreads a whole object in a repo you have:</li>
+</ol>
+<pre><code class="language-bash">grep -rn "{ body\\|{ user\\|{ items\\|err.config" src/ --include=*.ts</code></pre>
+<ol start="2">
+  <li>For each field it would emit, run the three questions: will you filter on it, will you aggregate on it (then make it numeric), is it identical on every line (then move it to the stream)? And ask: could it identify a person?</li>
+  <li>Rewrite the call to list explicit fields only — replace any array with a <code>count</code>, any secret with an id, any person&#39;s data with a <code>userId</code>.</li>
+  <li>Confirm nothing spreads <code>req.body</code>, <code>err.config</code> or an ORM model.</li>
+</ol>
+<p><strong>Done when:</strong> one spread-object log is now an explicit, bounded field list with at least one numeric field, no secret, and no PII.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Field vs stream</span><span class="v">Per-event data goes on the line; data identical on every line (service, host, version) belongs to the stream.</span></div>
+  <div class="kv"><span class="k">Numeric field</span><span class="v">A raw number like <code>ms</code> or <code>bytes</code> you can average — never a pre-formatted string like &quot;8.4s&quot;.</span></div>
+  <div class="kv"><span class="k">PII</span><span class="v">Personal data (email, phone, IP, name) — log an id that joins to the record instead.</span></div>
+  <div class="kv"><span class="k">Secret rotation</span><span class="v">The correct response to logging a token: rotate it, because the log store must be assumed compromised.</span></div>
+  <div class="kv"><span class="k">Unbounded field</span><span class="v">A field whose size grows with data (an array, a body) — it quietly dominates the log bill.</span></div>
+  <div class="kv"><span class="k">Scrubbing</span><span class="v">Stripping secrets and PII before emitting; this repo&#39;s Sentry path does it, the logger does not.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A field earns its place if you will filter or aggregate on it; if it is numeric, store the number, not a formatted string.</li>
+  <li>Data that is the same on every line belongs on the stream, not multiplied onto each line.</li>
+  <li>Never log passwords, tokens, keys, full bodies or auth headers — the middle column (why) makes each rule absolute.</li>
+  <li>Leaks come from spreading an object you did not build; list the fields you want instead, and bound anything array-sized.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html" target="_blank" rel="noopener">
   <span class="lc-ico">🛡️</span>
@@ -336,6 +431,37 @@ logger.info('note created', {
 </code></pre>
 <p>Bản &quot;trước&quot; không trả lời nổi một câu hỏi vận hành nào và có thể làm rò email của người dùng. Bản &quot;sau&quot; trả lời được &quot;ghi chú người ta thật sự viết dài cỡ nào&quot;, &quot;người dùng nào chậm nhất&quot; và &quot;việc tạo ghi chú có chậm đi sau lần deploy không&quot;, mà chẳng chứa gì đáng ngại nếu kho log bị một người lẽ ra không được phép đọc.</p>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Soát một lời gọi log thật tìm chỗ rò rỉ và trường không giới hạn, rồi viết lại.</p>
+<ol>
+  <li>Tìm một lời gọi log trải cả một object trong một kho bạn có:</li>
+</ol>
+<pre><code class="language-bash">grep -rn "{ body\\|{ user\\|{ items\\|err.config" src/ --include=*.ts</code></pre>
+<ol start="2">
+  <li>Với mỗi trường nó sẽ phát ra, chạy ba câu hỏi: có lọc theo nó không, có tổng hợp theo nó không (thì làm nó thành số), nó có giống hệt ở mọi dòng không (thì dời sang luồng)? Và hỏi: nó có định danh được một con người không?</li>
+  <li>Viết lại lời gọi để chỉ liệt kê các trường tường minh — đổi mọi mảng thành một <code>count</code>, mọi bí mật thành một id, mọi dữ liệu cá nhân thành một <code>userId</code>.</li>
+  <li>Xác nhận không còn chỗ nào trải <code>req.body</code>, <code>err.config</code> hay một model ORM.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một lời gọi log trải-object giờ là một danh sách trường tường minh, có giới hạn, với ít nhất một trường số, không bí mật, không PII.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trường với luồng</span><span class="v">Dữ liệu theo từng sự kiện nằm trên dòng; dữ liệu giống hệt mọi dòng (dịch vụ, máy, phiên bản) thuộc về luồng.</span></div>
+  <div class="kv"><span class="k">Trường số</span><span class="v">Một con số thô như <code>ms</code> hay <code>bytes</code> lấy trung bình được — không phải chuỗi định dạng sẵn như &quot;8.4s&quot;.</span></div>
+  <div class="kv"><span class="k">PII</span><span class="v">Dữ liệu cá nhân (email, điện thoại, IP, tên) — hãy log một id nối sang bản ghi thay vì chính dữ liệu đó.</span></div>
+  <div class="kv"><span class="k">Xoay bí mật</span><span class="v">Phản ứng đúng khi lỡ log một token: xoay nó, vì kho log phải được coi là đã bị lộ.</span></div>
+  <div class="kv"><span class="k">Trường không giới hạn</span><span class="v">Trường mà kích thước lớn theo dữ liệu (một mảng, một body) — nó lặng lẽ chiếm trọn hoá đơn log.</span></div>
+  <div class="kv"><span class="k">Tẩy dữ liệu (scrubbing)</span><span class="v">Bóc bí mật và PII trước khi phát; đường Sentry của kho này có làm, logger thì không.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Một trường xứng chỗ nếu bạn sẽ lọc hoặc tổng hợp theo nó; nếu là số thì lưu con số, không phải chuỗi định dạng.</li>
+  <li>Dữ liệu giống nhau ở mọi dòng thuộc về luồng, không nhân lên trên từng dòng.</li>
+  <li>Không bao giờ log mật khẩu, token, khoá, toàn bộ body hay header xác thực — cột giữa (vì sao) làm mỗi luật thành tuyệt đối.</li>
+  <li>Rò rỉ đến từ việc trải một object bạn không tự dựng; hãy liệt kê các trường bạn muốn, và chặn giới hạn mọi thứ cỡ mảng.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html" target="_blank" rel="noopener">
   <span class="lc-ico">🛡️</span>
@@ -402,6 +528,37 @@ if (statusCode &gt;= 500) {
 <h3>What the level is not for</h3>
 <p>It is not a subject tag. &quot;This is about payments&quot; is a field (<code>module: 'payments'</code>), not a level. It is also not a verbosity dial for a subsystem — that is what per-module filtering is for, and conflating the two produces the codebase where the payment team logs everything at <code>warn</code> so their lines survive the production filter.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Re-classify real log lines with the one test that settles every argument.</p>
+<ol>
+  <li>List every error-level call in a repo you have:</li>
+</ol>
+<pre><code class="language-bash">grep -rn "logger.error\\|console.error" src/ --include=*.ts | head -30</code></pre>
+<ol start="2">
+  <li>For each, answer honestly: <strong>would you page someone at 3am for this?</strong> If no, it is not an <code>error</code>.</li>
+  <li>Find any handled 4xx case logged at <code>error</code> (&quot;user not found&quot;, &quot;validation failed&quot;) and downgrade it to <code>info</code> or delete it.</li>
+  <li>Count what fraction of all lines are <code>info</code>; if it is over 90%, separate real business events from function-entry noise.</li>
+</ol>
+<p><strong>Done when:</strong> every remaining <code>error</code> line would genuinely page a human, no handled 4xx sits at <code>error</code>, and you can state why that makes the error-rate graph usable.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">error</span><span class="v">Something failed and a human may need to act — if nobody would ever act, it is not an error.</span></div>
+  <div class="kv"><span class="k">warn</span><span class="v">It worked but something is off (fallback used, quota near); nobody acts now, someone should notice a trend.</span></div>
+  <div class="kv"><span class="k">info</span><span class="v">A business event happened — one line per meaningful thing, not one per function call.</span></div>
+  <div class="kv"><span class="k">debug</span><span class="v">Detail only useful while investigating; off in production by default.</span></div>
+  <div class="kv"><span class="k">Level as a promise</span><span class="v">A level says what the reader should do, not how interesting the line is.</span></div>
+  <div class="kv"><span class="k">The 3am test</span><span class="v">&quot;Would you page someone for this?&quot; decides <code>error</code> vs <code>warn</code>; &quot;would a product person care?&quot; decides <code>info</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A level is a promise about what to do, not a measure of interest — four honest levels beat eight approximate ones.</li>
+  <li>Logging handled 4xx cases at <code>error</code> drowns real errors in noise; client errors are the system working correctly.</li>
+  <li>This repo&#39;s error handler reports only 5xx to Sentry for exactly that reason.</li>
+  <li>A <code>debug</code> line disabled by an early return still pays to build its context — guard expensive context at the call site.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://sre.google/workbook/alerting-on-slos/" target="_blank" rel="noopener">
   <span class="lc-ico">📕</span>
@@ -459,6 +616,37 @@ if (statusCode &gt;= 500) {
 
 <h3>Mức log KHÔNG dùng để làm gì</h3>
 <p>Nó không phải một cái nhãn chủ đề. &quot;Cái này về thanh toán&quot; là một trường (<code>module: 'payments'</code>), không phải một mức. Nó cũng không phải một núm vặn độ chi tiết cho một phân hệ — việc đó là của phép lọc theo module, và lẫn lộn hai thứ sẽ sinh ra cái kho mã mà đội thanh toán log mọi thứ ở mức <code>warn</code> để các dòng của họ sống sót qua bộ lọc production.</p>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Phân loại lại các dòng log thật bằng phép thử dập tắt mọi tranh cãi.</p>
+<ol>
+  <li>Liệt kê mọi lời gọi mức error trong một kho bạn có:</li>
+</ol>
+<pre><code class="language-bash">grep -rn "logger.error\\|console.error" src/ --include=*.ts | head -30</code></pre>
+<ol start="2">
+  <li>Với mỗi dòng, trả lời thật lòng: <strong>bạn có gọi người dậy lúc 3 giờ sáng vì nó không?</strong> Nếu không thì nó không phải <code>error</code>.</li>
+  <li>Tìm mọi ca 4xx đã xử lý mà bị log ở mức <code>error</code> (&quot;user not found&quot;, &quot;validation failed&quot;) rồi hạ xuống <code>info</code> hoặc xoá.</li>
+  <li>Đếm tỷ lệ các dòng là <code>info</code>; nếu trên 90%, tách sự kiện nghiệp vụ thật khỏi tiếng ồn vào-hàm.</li>
+</ol>
+<p><strong>Đạt khi:</strong> mọi dòng <code>error</code> còn lại đều thật sự đáng gọi người dậy, không còn 4xx đã xử lý nằm ở <code>error</code>, và bạn nói được vì sao điều đó làm biểu đồ tỷ lệ lỗi dùng được.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">error</span><span class="v">Có thứ gì đó hỏng và một người có thể cần hành động — nếu chẳng ai từng hành động thì nó không phải error.</span></div>
+  <div class="kv"><span class="k">warn</span><span class="v">Chạy được nhưng có gì đó lệch (dùng phương án lùi, sắp chạm trần); không ai hành động ngay, có người nên thấy xu hướng.</span></div>
+  <div class="kv"><span class="k">info</span><span class="v">Một sự kiện nghiệp vụ đã xảy ra — một dòng cho mỗi việc có ý nghĩa, không phải mỗi lời gọi hàm.</span></div>
+  <div class="kv"><span class="k">debug</span><span class="v">Chi tiết chỉ hữu ích khi đang điều tra; tắt ở production theo mặc định.</span></div>
+  <div class="kv"><span class="k">Mức là một lời hứa</span><span class="v">Mức nói người đọc nên làm gì, không phải dòng đó thú vị cỡ nào.</span></div>
+  <div class="kv"><span class="k">Phép thử 3 giờ sáng</span><span class="v">&quot;Bạn có gọi người dậy vì nó không?&quot; quyết định <code>error</code> hay <code>warn</code>; &quot;người làm sản phẩm có quan tâm không?&quot; quyết định <code>info</code>.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Mức là một lời hứa về việc phải làm gì, không phải thước đo độ thú vị — bốn mức dùng thật thắng tám mức dùng đại khái.</li>
+  <li>Log các ca 4xx đã xử lý ở <code>error</code> làm chìm lỗi thật trong tiếng ồn; lỗi client là hệ thống đang chạy đúng.</li>
+  <li>Error handler của kho này chỉ báo 5xx lên Sentry đúng vì lý do đó.</li>
+  <li>Một dòng <code>debug</code> bị chặn bằng return sớm vẫn tốn tiền dựng ngữ cảnh — hãy chắn ngữ cảnh đắt ngay tại chỗ gọi.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://sre.google/workbook/alerting-on-slos/" target="_blank" rel="noopener">
@@ -551,6 +739,34 @@ function fastTs() {
 <h3>What this does not measure</h3>
 <p>Nothing here touches the disk, the network or the log shipper. It is the cost of turning an object into a string inside your process, and it is the floor. The next lesson measures the part that can actually stall a service.</p>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Reproduce the cost, and prove the timestamp is the expensive part.</p>
+<ol>
+  <li>Save <code>m1.mjs</code> from this lesson and run it: <code>node m1.mjs</code>. Record all four ns/line figures.</li>
+  <li>Check the ratio that matters: the <code>+ new Date().toISOString()</code> line should be far more than the plain <code>JSON.stringify</code> line — the timestamp, not the JSON, dominates.</li>
+  <li>Add the <code>fastTs()</code> version as a fifth benchmark and compare it against the <code>toISOString</code> one.</li>
+  <li>Compute your own CPU cost: <code>ns_per_line × lines_per_request × 500 ÷ 1e9</code> gives the fraction of one core at 500 rps.</li>
+</ol>
+<p><strong>Done when:</strong> you have reproduced that the timestamp is the biggest single cost, and computed the CPU fraction your own log volume would spend before anything is written anywhere.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ns per line</span><span class="v">Nanoseconds to turn one event into a string — the per-line cost you multiply by volume.</span></div>
+  <div class="kv"><span class="k">Serialisation cost</span><span class="v">The ~571 ns of <code>JSON.stringify</code> — the price of being queryable, 30× a plain string.</span></div>
+  <div class="kv"><span class="k">Timestamp cost</span><span class="v"><code>new Date().toISOString()</code> at ~740 ns — the largest part of a structured line here.</span></div>
+  <div class="kv"><span class="k">Timestamp caching</span><span class="v">The <code>fastTs()</code> trick: build one <code>Date</code> per second and append milliseconds, removing most of that cost.</span></div>
+  <div class="kv"><span class="k">CPU budget</span><span class="v">Lines per request × rps × ns/line — turns a nanosecond figure into a percent of a core.</span></div>
+  <div class="kv"><span class="k">Floor cost</span><span class="v">This benchmark is in-process only; the disk/pipe write in lesson 1.5 sits on top of it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Measured on Node 22: bare string 15 ns, concat+context 19 ns, JSON 571 ns, JSON+timestamp 1310 ns per line.</li>
+  <li>The surprise: the timestamp (~740 ns) is the single most expensive part, not the JSON.</li>
+  <li>Caching the ISO second (<code>fastTs()</code>) removes most of that cost with no downside for a display timestamp.</li>
+  <li>Cut line count first, then make the remaining lines cheaper — and never cut the one line per request carrying the request id.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <a class="link-card dl" href="https://github.com/pinojs/pino/blob/main/docs/benchmarks.md" target="_blank" rel="noopener">
   <span class="lc-ico">🌲</span>
@@ -633,6 +849,34 @@ function fastTs() {
 
 <h3>Phép đo này KHÔNG đo cái gì</h3>
 <p>Chẳng có gì ở đây chạm tới đĩa, tới mạng hay tới trình gửi log. Đây là chi phí biến một object thành một chuỗi bên trong tiến trình của bạn, và nó là cái SÀN. Bài kế tiếp đo cái phần thật sự làm nghẽn được một dịch vụ.</p>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Tái hiện chi phí, và chứng minh dấu thời gian là phần đắt nhất.</p>
+<ol>
+  <li>Lưu <code>m1.mjs</code> từ bài này rồi chạy: <code>node m1.mjs</code>. Ghi lại cả bốn con số ns/dòng.</li>
+  <li>Kiểm tỷ lệ đáng kể: dòng <code>+ new Date().toISOString()</code> phải lớn hơn hẳn dòng <code>JSON.stringify</code> trần — dấu thời gian, không phải JSON, mới chiếm chủ đạo.</li>
+  <li>Thêm phiên bản <code>fastTs()</code> làm phép đo thứ năm và so nó với dòng <code>toISOString</code>.</li>
+  <li>Tính chi phí CPU của bạn: <code>ns_mỗi_dòng × dòng_mỗi_request × 500 ÷ 1e9</code> cho ra phần của một nhân ở 500 rps.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã tái hiện rằng dấu thời gian là chi phí đơn lẻ lớn nhất, và tính được phần CPU mà khối lượng log của chính bạn tiêu trước khi ghi ra bất cứ đâu.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ns mỗi dòng</span><span class="v">Số nano giây để biến một sự kiện thành chuỗi — chi phí theo dòng bạn nhân với khối lượng.</span></div>
+  <div class="kv"><span class="k">Chi phí tuần tự hoá</span><span class="v">~571 ns của <code>JSON.stringify</code> — cái giá của việc truy vấn được, gấp 30× một chuỗi trần.</span></div>
+  <div class="kv"><span class="k">Chi phí dấu thời gian</span><span class="v"><code>new Date().toISOString()</code> ~740 ns — phần lớn nhất của một dòng có cấu trúc ở đây.</span></div>
+  <div class="kv"><span class="k">Đệm dấu thời gian</span><span class="v">Mẹo <code>fastTs()</code>: dựng một <code>Date</code> mỗi giây rồi nối mili giây, bỏ đi phần lớn chi phí đó.</span></div>
+  <div class="kv"><span class="k">Ngân sách CPU</span><span class="v">Dòng mỗi request × rps × ns/dòng — biến một con số nano giây thành phần trăm của một nhân.</span></div>
+  <div class="kv"><span class="k">Chi phí sàn</span><span class="v">Phép đo này chỉ trong tiến trình; phần ghi ra đĩa/ống ở bài 1.5 nằm thêm lên trên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Đo trên Node 22: chuỗi trần 15 ns, nối+ngữ cảnh 19 ns, JSON 571 ns, JSON+dấu thời gian 1310 ns mỗi dòng.</li>
+  <li>Điều bất ngờ: dấu thời gian (~740 ns) là phần đắt nhất, không phải JSON.</li>
+  <li>Đệm giây ISO (<code>fastTs()</code>) bỏ đi phần lớn chi phí đó mà không mất gì với một dấu thời gian để hiển thị.</li>
+  <li>Cắt số dòng trước, rồi mới làm các dòng còn lại rẻ hơn — và đừng bao giờ cắt dòng mỗi request mang id của request.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <a class="link-card dl" href="https://github.com/pinojs/pino/blob/main/docs/benchmarks.md" target="_blank" rel="noopener">
@@ -766,6 +1010,38 @@ if (dropped &amp;&amp; process.stdout.writableLength &lt; MAX_BUFFERED / 2) {
 <p><strong>Trap — the log lines from your crash are the ones you lose.</strong> Because pipe writes are asynchronous, lines sitting in <code>process.stdout</code>'s buffer are gone if the process ends before they drain. <code>process.exit()</code> does not wait. Neither does an uncaught exception's default handler, nor <code>SIGKILL</code> from the OOM killer, nor <code>docker kill</code>. The practical consequence is precise and nasty: <strong>during an incident, when logging spikes and the buffer is deepest, the final seconds of log — the ones that explain the crash — are exactly the ones that never reach disk.</strong> This is why an incident's log so often stops several seconds before the timestamp on the crash. If you take one operational habit from this chapter, take this: in your <code>SIGTERM</code> handler, stop accepting requests, then let the event loop drain naturally rather than calling <code>process.exit()</code> — an empty loop exits on its own, and only then are the buffers actually flushed.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Reproduce a backpressure memory leak and read the flag that warns you.</p>
+<ol>
+  <li>Save <code>slowreader.py</code> and <code>m5.mjs</code> from this lesson.</li>
+  <li>Run with a fast reader and note RSS growth and the buffer size:</li>
+</ol>
+<pre><code class="language-bash">node m5.mjs | cat &gt; /dev/null
+node m5.mjs | python3 slowreader.py</code></pre>
+<ol start="3">
+  <li>Compare the two: the slow reader should leave tens of MB in <code>writableLength</code>, push RSS far higher, and set <code>writableNeedDrain = true</code>.</li>
+  <li>Confirm the loop finished and nothing threw in both runs — the process had no idea anything was wrong.</li>
+</ol>
+<p><strong>Done when:</strong> you have watched RSS climb and the stdout buffer fill under a slow reader, and can state why a slow log shipper is a memory leak in your application, not in the shipper.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">File descriptor 1</span><span class="v">Where <code>console.log</code> writes; the launcher decides whether it is a file, TTY or pipe.</span></div>
+  <div class="kv"><span class="k">Synchronous vs async write</span><span class="v">fd 1 to a file/TTY blocks until the kernel takes the bytes; fd 1 to a pipe buffers in your heap.</span></div>
+  <div class="kv"><span class="k">Backpressure</span><span class="v">The reader falling behind the writer; unhandled, the writer&#39;s buffer grows without a ceiling.</span></div>
+  <div class="kv"><span class="k">writableLength</span><span class="v">Bytes queued in <code>process.stdout</code> but not yet written — read it to detect backpressure.</span></div>
+  <div class="kv"><span class="k">writableNeedDrain</span><span class="v">Node&#39;s own flag saying &quot;I am buffering for you, please stop&quot; — almost no app reads it.</span></div>
+  <div class="kv"><span class="k">json-file driver</span><span class="v">Docker&#39;s default: every container&#39;s stdout is a pipe to the daemon, so the pipe case is production.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Writing a line costs 2,300–4,985 ns depending on the destination — the pipe (production) is the most expensive, so a real line is ~6,300 ns, not 1,310.</li>
+  <li>When the reader stalls, the undrained text piles up in your heap; RSS grew 43→122 MB with no ceiling and no error.</li>
+  <li>In Docker fd 1 is always a pipe to the daemon, so this is the default case, invisible until the disk fills.</li>
+  <li>Three defences in order: log less, write to a file for a sidecar to tail, and bound the buffer (drop, count, report) — and drain on <code>SIGTERM</code> instead of <code>process.exit()</code>.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/process.html#a-note-on-process-io" target="_blank" rel="noopener">
@@ -890,6 +1166,38 @@ if (dropped &amp;&amp; process.stdout.writableLength &lt; MAX_BUFFERED / 2) {
 <div class="pitfall">
 <p><strong>Bẫy — mấy dòng log của cú sập chính là mấy dòng bạn mất.</strong> Vì ghi qua ống là không đồng bộ, những dòng đang nằm trong bộ đệm của <code>process.stdout</code> sẽ mất nếu tiến trình kết thúc trước khi chúng thoát hết. <code>process.exit()</code> không chờ. Trình xử lý mặc định của một ngoại lệ không bắt cũng không, <code>SIGKILL</code> từ OOM killer cũng không, <code>docker kill</code> cũng không. Hệ quả thực tế thì chính xác và khó chịu: <strong>trong lúc sự cố, khi log dồn lên và bộ đệm sâu nhất, mấy giây log cuối cùng — đúng mấy giây giải thích cú sập — lại là mấy giây không bao giờ xuống tới đĩa.</strong> Đây là lý do log của một sự cố hay dừng lại trước dấu thời gian của cú sập vài giây. Nếu chỉ lấy một thói quen vận hành từ chương này, hãy lấy cái này: trong trình xử lý <code>SIGTERM</code>, ngừng nhận request rồi để vòng lặp sự kiện tự cạn thay vì gọi <code>process.exit()</code> — một vòng lặp rỗng tự thoát, và chỉ tới lúc đó các bộ đệm mới thật sự được xả.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Tái hiện một rò rỉ bộ nhớ do nghẽn và đọc cái cờ cảnh báo bạn.</p>
+<ol>
+  <li>Lưu <code>slowreader.py</code> và <code>m5.mjs</code> từ bài này.</li>
+  <li>Chạy với bên đọc nhanh và ghi lại mức tăng RSS cùng kích thước đệm:</li>
+</ol>
+<pre><code class="language-bash">node m5.mjs | cat &gt; /dev/null
+node m5.mjs | python3 slowreader.py</code></pre>
+<ol start="3">
+  <li>So hai lần: bên đọc chậm sẽ để lại hàng chục MB trong <code>writableLength</code>, đẩy RSS cao hơn nhiều, và đặt <code>writableNeedDrain = true</code>.</li>
+  <li>Xác nhận vòng lặp vẫn xong và không ném lỗi ở cả hai lần — tiến trình không hề biết có gì sai.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã nhìn RSS leo lên và đệm stdout đầy dần dưới một bên đọc chậm, và nói được vì sao một trình gửi log chậm là một rò rỉ bộ nhớ trong ứng dụng của bạn, không phải trong trình gửi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">File descriptor 1</span><span class="v">Nơi <code>console.log</code> ghi vào; người khởi động chương trình quyết định nó là file, TTY hay ống.</span></div>
+  <div class="kv"><span class="k">Ghi đồng bộ với không đồng bộ</span><span class="v">fd 1 tới file/TTY chặn tới khi nhân nhận byte; fd 1 tới ống thì đệm trong heap của bạn.</span></div>
+  <div class="kv"><span class="k">Nghẽn (backpressure)</span><span class="v">Bên đọc tụt sau bên ghi; không xử lý thì đệm của bên ghi phình không trần.</span></div>
+  <div class="kv"><span class="k">writableLength</span><span class="v">Số byte xếp hàng trong <code>process.stdout</code> mà chưa ghi — đọc nó để phát hiện nghẽn.</span></div>
+  <div class="kv"><span class="k">writableNeedDrain</span><span class="v">Cờ của chính Node nói &quot;tôi đang đệm hộ bạn, dừng lại đi&quot; — gần như không app nào đọc.</span></div>
+  <div class="kv"><span class="k">json-file driver</span><span class="v">Mặc định của Docker: stdout mỗi container là một ống tới daemon, nên trường hợp ống chính là production.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Ghi một dòng tốn 2.300–4.985 ns tuỳ đích — ống (production) đắt nhất, nên một dòng thật ~6.300 ns, không phải 1.310.</li>
+  <li>Khi bên đọc khựng, phần chữ chưa thoát chất đống trong heap; RSS tăng 43→122 MB không trần và không lỗi.</li>
+  <li>Trong Docker fd 1 luôn là ống tới daemon, nên đây là trường hợp mặc định, vô hình cho tới khi đĩa đầy.</li>
+  <li>Ba tuyến phòng theo thứ tự: log ít đi, ghi ra file cho một sidecar tail, và chặn giới hạn đệm (drop, đếm, báo) — và drain lúc <code>SIGTERM</code> thay vì gọi <code>process.exit()</code>.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

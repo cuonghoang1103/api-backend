@@ -111,6 +111,37 @@ user id        Not a correlation id. It is personal data with
 <p><strong>Trap — trusting an inbound <code>X-Request-ID</code> that came from the internet.</strong> The middleware above accepts a client-supplied id, which is correct behind a proxy you control and dangerous when the request reaches Express directly. Two consequences, both quiet. First, an id is a <em>join key</em>: a client that sends the same id on every request merges its traffic with someone else's in your queries, and one that copies an id from another user's response header can pollute that user's timeline. Second, the id lands in log storage, so its character set matters — a newline in it forges a log entry, and unescaped control characters break the tools that read it. The 64-character cap is necessary but not sufficient. <strong>Accept an inbound id only when the request arrived through your proxy, and validate its shape, not just its length:</strong> <code>/^[A-Za-z0-9_-]{8,64}$/</code>, else generate your own.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Close the gap: make the generated id reach a log line, then harden the inbound path.</p>
+<ol>
+  <li>Confirm the gap in a repo you have — the id is set but never logged:</li>
+</ol>
+<pre><code class="language-bash">grep -rnE "X-Request-ID|req.id" src/ --include=*.ts</code></pre>
+<ol start="2">
+  <li>Add <code>requestId: (req as any).id</code> to one log call (the error handler), hit the route, and confirm the id in the JSON line equals the <code>X-Request-ID</code> response header.</li>
+  <li>Send your own header and check it is honoured and echoed: <code>curl -i -H &quot;X-Request-ID: test-abc12345&quot; localhost:3001/health</code>.</li>
+  <li>Send a malformed one (a 2 KB string, or one containing a newline) and confirm you validate its shape — <code>/^[A-Za-z0-9_-]{8,64}$/</code> — and generate your own when it fails.</li>
+</ol>
+<p><strong>Done when:</strong> one log line carries a <code>requestId</code> that matches the response header, and a malformed inbound id is replaced rather than written verbatim into your logs.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Request id</span><span class="v">One id per HTTP request, generated at the edge — the join key for &quot;everything about this request&quot;.</span></div>
+  <div class="kv"><span class="k">Ambient context</span><span class="v">Data any code can read without it being passed as an argument.</span></div>
+  <div class="kv"><span class="k">Per-request isolation</span><span class="v">Each request&#39;s context survives its own awaits while other requests run concurrently.</span></div>
+  <div class="kv"><span class="k">X-Request-ID</span><span class="v">The header this repo sets on the response so a user can quote the exact id of a failed request.</span></div>
+  <div class="kv"><span class="k">Join key</span><span class="v">An id used to group lines — why an attacker-controlled inbound id must be validated, not trusted.</span></div>
+  <div class="kv"><span class="k">Module-level variable</span><span class="v">The broken &quot;current request&quot; approach: concurrent requests overwrite it and logs go confidently wrong.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>This repo generates a request id, caps it at 64 chars, and echoes it — then no log call ever includes it, so it cannot be found.</li>
+  <li>Threading <code>req</code> through 101 services is invasive and fails silently; a module-level &quot;current id&quot; corrupts data under concurrency.</li>
+  <li>The right primitive is ambient, per-request isolated, and applied once in the logger&#39;s <code>emit()</code> — that is <code>AsyncLocalStorage</code>.</li>
+  <li>Accept an inbound id only from behind your proxy, and validate its shape (not just length) to stop log forgery.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/async_context.html" target="_blank" rel="noopener">
@@ -215,6 +246,37 @@ user id        Không phải id để ghép. Nó là dữ liệu cá nhân kèm
 <div class="pitfall">
 <p><strong>Bẫy — tin một <code>X-Request-ID</code> đến từ Internet.</strong> Middleware ở trên chấp nhận một id do client cung cấp, điều đó đúng khi đứng sau một proxy bạn kiểm soát và nguy hiểm khi request tới thẳng Express. Hai hệ quả, đều lặng lẽ. Thứ nhất, một id là một <em>khoá ghép</em>: một client gửi cùng một id ở mọi request sẽ trộn lưu lượng của nó vào của người khác trong truy vấn của bạn, còn một client chép id từ header phản hồi của người dùng khác thì làm bẩn dòng thời gian của người đó. Thứ hai, cái id rơi vào kho log, nên tập ký tự của nó quan trọng — một ký tự xuống dòng trong đó là giả mạo được một mục log, và các ký tự điều khiển không được thoát sẽ làm hỏng công cụ đọc nó. Cái trần 64 ký tự là cần nhưng chưa đủ. <strong>Chỉ chấp nhận id từ ngoài khi request đã đi qua proxy của bạn, và hãy kiểm hình dạng của nó chứ không chỉ độ dài:</strong> <code>/^[A-Za-z0-9_-]{8,64}$/</code>, không khớp thì tự sinh cái của mình.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Đóng cái khoảng trống: cho id đã sinh đến được một dòng log, rồi làm chắc đường vào.</p>
+<ol>
+  <li>Xác nhận khoảng trống trong một kho bạn có — id được đặt mà không bao giờ được log:</li>
+</ol>
+<pre><code class="language-bash">grep -rnE "X-Request-ID|req.id" src/ --include=*.ts</code></pre>
+<ol start="2">
+  <li>Thêm <code>requestId: (req as any).id</code> vào một lời gọi log (error handler), gọi route, và xác nhận id trong dòng JSON bằng với header phản hồi <code>X-Request-ID</code>.</li>
+  <li>Gửi header của chính bạn và kiểm nó được tôn trọng và dội lại: <code>curl -i -H &quot;X-Request-ID: test-abc12345&quot; localhost:3001/health</code>.</li>
+  <li>Gửi một id méo (chuỗi 2 KB, hoặc chứa ký tự xuống dòng) và xác nhận bạn kiểm hình dạng — <code>/^[A-Za-z0-9_-]{8,64}$/</code> — và tự sinh id khi nó không đạt.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một dòng log mang một <code>requestId</code> khớp với header phản hồi, và một id vào méo bị thay thế thay vì ghi nguyên văn vào log của bạn.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Request id</span><span class="v">Một id mỗi request HTTP, sinh ở biên — khoá nối cho &quot;mọi thứ về request này&quot;.</span></div>
+  <div class="kv"><span class="k">Ngữ cảnh ambient</span><span class="v">Dữ liệu mọi đoạn mã đọc được mà không cần truyền làm tham số.</span></div>
+  <div class="kv"><span class="k">Cô lập theo request</span><span class="v">Ngữ cảnh mỗi request sống qua các await của chính nó trong khi request khác chạy đồng thời.</span></div>
+  <div class="kv"><span class="k">X-Request-ID</span><span class="v">Header kho này đặt trên phản hồi để người dùng đọc lại đúng id của một request hỏng.</span></div>
+  <div class="kv"><span class="k">Khoá nối (join key)</span><span class="v">Một id dùng để gom dòng — vì sao một id vào do client kiểm soát phải được kiểm, không tin.</span></div>
+  <div class="kv"><span class="k">Biến mức module</span><span class="v">Cách &quot;request hiện tại&quot; hỏng: request đồng thời ghi đè nó và log sai một cách tự tin.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Kho này sinh một request id, chặn ở 64 ký tự, và dội lại — rồi không lời gọi log nào chứa nó, nên không tìm được.</li>
+  <li>Truyền <code>req</code> qua 101 service thì xâm lấn và hỏng lặng lẽ; một biến &quot;id hiện tại&quot; mức module làm hỏng dữ liệu dưới concurrency.</li>
+  <li>Primitive đúng là ambient, cô lập theo request, và áp một lần trong <code>emit()</code> của logger — đó là <code>AsyncLocalStorage</code>.</li>
+  <li>Chỉ nhận id vào từ sau proxy của bạn, và kiểm hình dạng (không chỉ độ dài) để chặn giả mạo log.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -360,6 +422,34 @@ Compare the version that does NOT work:
 <p><strong>Trap — the context is captured when the callback is created, not when it runs.</strong> This is the one failure mode that produces wrong ids rather than missing ones, which makes it far worse. If you register a listener inside a request — <code>emitter.on('done', () =&gt; logger.info('finished'))</code> — that listener keeps request A's context forever, and every later firing logs A's id no matter which request actually triggered it. The same applies to a callback you put in a module-level array, a debounce timer stored outside the request, and any promise you cache and reuse. <strong>Missing context is visible in your logs; borrowed context is not — the line looks perfectly normal and points at the wrong request.</strong> The rule: anything whose lifetime outlives the request must not close over the context. Read the id out into a plain string at registration time if you need it later.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Measure the cost, then prove two concurrent requests keep separate ids across an await.</p>
+<ol>
+  <li>Run <code>m10.mjs</code> from this lesson and record the per-request ALS overhead (~677 ns) and that <code>getStore()</code> is unmeasurably cheap.</li>
+  <li>Write a tiny demo: <code>als.run({id}, async () =&gt; { await new Promise(r =&gt; setTimeout(r, 20)); console.log(als.getStore().id); })</code>.</li>
+  <li>Fire it twice in the same tick with ids <code>A</code> and <code>B</code>. Confirm each logs its own id after the await — neither sees the other&#39;s.</li>
+  <li>Break it on purpose: inside the <code>A</code> run, register <code>setTimeout(() =&gt; console.log(als.getStore()?.id), 50)</code>, and watch it later print <code>A</code> no matter what — borrowed context.</li>
+</ol>
+<p><strong>Done when:</strong> two overlapping <code>run()</code> chains keep separate ids across their awaits, and you have reproduced a callback that logs the wrong id because it closed over an old context.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AsyncLocalStorage</span><span class="v">Node&#39;s primitive for ambient, per-request-isolated context that follows the async chain.</span></div>
+  <div class="kv"><span class="k">als.run(store, cb)</span><span class="v">Runs <code>cb</code> and everything it awaits inside a store — the ~677 ns cost, so call it once per request.</span></div>
+  <div class="kv"><span class="k">getStore()</span><span class="v">Reads the current store; a pointer read, effectively free, call it as often as you like.</span></div>
+  <div class="kv"><span class="k">async_hooks</span><span class="v">The runtime tracking of how one async operation leads to another, which ALS is built on.</span></div>
+  <div class="kv"><span class="k">Context capture</span><span class="v">The store is bound when a callback is created, not when it runs — the source of borrowed-id bugs.</span></div>
+  <div class="kv"><span class="k">Borrowed context</span><span class="v">A long-lived callback keeps one request&#39;s id and logs it for every later firing — wrong, not missing.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Measured on Node 22: ALS adds ~677 ns per request (half a log line) and 0.034% of a core at 500 rps — the &quot;slow&quot; reputation predates Node 16.</li>
+  <li><code>getStore()</code> is free; the cost is <code>run()</code>, so call it once per request in middleware.</li>
+  <li>The whole fix is one 12-line file, passing <code>next</code> to <code>run()</code> in middleware, and one line in <code>emit()</code> — all 370 log calls gain a <code>requestId</code> untouched.</li>
+  <li>Context does not reach background jobs, module-level listeners, worker threads, or cached promises — and a callback that outlives the request must read the id into a string instead of closing over the store.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/async_context.html#class-asynclocalstorage" target="_blank" rel="noopener">
@@ -496,6 +586,34 @@ So với phiên bản KHÔNG chạy:
 <p><strong>Bẫy — ngữ cảnh được chộp lại lúc callback được TẠO RA, không phải lúc nó chạy.</strong> Đây là kiểu hỏng duy nhất sinh ra id SAI thay vì id THIẾU, và điều đó làm nó tệ hơn nhiều. Nếu bạn đăng ký một listener bên trong một request — <code>emitter.on('done', () =&gt; logger.info('finished'))</code> — cái listener ấy giữ ngữ cảnh của request A mãi mãi, và mọi lần kích hoạt sau này đều log id của A bất kể request nào thật sự đã kích hoạt nó. Điều tương tự đúng với một callback bạn nhét vào một mảng cấp module, một bộ hẹn giờ debounce cất ngoài request, và bất cứ promise nào bạn đệm lại rồi dùng lại. <strong>Ngữ cảnh THIẾU thì nhìn thấy được trong log; ngữ cảnh MƯỢN thì không — dòng log trông hoàn toàn bình thường và trỏ vào sai request.</strong> Quy tắc: bất cứ thứ gì sống lâu hơn request thì không được bao lấy ngữ cảnh. Cần dùng về sau thì hãy đọc cái id ra thành một chuỗi thường ngay lúc đăng ký.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Đo chi phí, rồi chứng minh hai request đồng thời giữ id riêng qua một await.</p>
+<ol>
+  <li>Chạy <code>m10.mjs</code> của bài này và ghi lại chi phí ALS mỗi request (~677 ns) cùng việc <code>getStore()</code> rẻ tới mức không đo nổi.</li>
+  <li>Viết một demo nhỏ: <code>als.run({id}, async () =&gt; { await new Promise(r =&gt; setTimeout(r, 20)); console.log(als.getStore().id); })</code>.</li>
+  <li>Gọi nó hai lần trong cùng một tick với id <code>A</code> và <code>B</code>. Xác nhận mỗi cái log id của chính nó sau await — không cái nào thấy cái kia.</li>
+  <li>Cố ý phá: bên trong run <code>A</code>, đăng ký <code>setTimeout(() =&gt; console.log(als.getStore()?.id), 50)</code>, và nhìn nó in <code>A</code> dù thế nào — ngữ cảnh mượn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> hai chuỗi <code>run()</code> chồng nhau giữ id riêng qua các await, và bạn đã tái hiện một callback log sai id vì nó đóng bao quanh một ngữ cảnh cũ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AsyncLocalStorage</span><span class="v">Primitive của Node cho ngữ cảnh ambient, cô lập theo request, bám theo chuỗi async.</span></div>
+  <div class="kv"><span class="k">als.run(store, cb)</span><span class="v">Chạy <code>cb</code> và mọi thứ nó await bên trong một store — chi phí ~677 ns, nên gọi một lần mỗi request.</span></div>
+  <div class="kv"><span class="k">getStore()</span><span class="v">Đọc store hiện tại; một phép đọc con trỏ, gần như miễn phí, gọi bao nhiêu tuỳ ý.</span></div>
+  <div class="kv"><span class="k">async_hooks</span><span class="v">Cơ chế runtime theo dõi một thao tác async dẫn tới thao tác khác, nền của ALS.</span></div>
+  <div class="kv"><span class="k">Bắt ngữ cảnh</span><span class="v">Store được gắn khi callback được tạo, không phải khi nó chạy — nguồn của lỗi id mượn.</span></div>
+  <div class="kv"><span class="k">Ngữ cảnh mượn</span><span class="v">Một callback sống lâu giữ id của một request và log nó cho mọi lần bắn sau — sai, không phải thiếu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Đo trên Node 22: ALS thêm ~677 ns mỗi request (nửa một dòng log) và 0,034% một nhân ở 500 rps — tiếng &quot;chậm&quot; có từ trước Node 16.</li>
+  <li><code>getStore()</code> miễn phí; chi phí nằm ở <code>run()</code>, nên gọi một lần mỗi request trong middleware.</li>
+  <li>Cả bản vá là một file 12 dòng, truyền <code>next</code> vào <code>run()</code> trong middleware, và một dòng trong <code>emit()</code> — cả 370 lời gọi log có <code>requestId</code> mà không bị đụng.</li>
+  <li>Ngữ cảnh không tới được job nền, listener mức module, worker thread, hay promise đã đệm — và một callback sống lâu hơn request phải đọc id ra thành chuỗi thay vì đóng bao quanh store.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/async_context.html#class-asynclocalstorage" target="_blank" rel="noopener">
@@ -613,6 +731,37 @@ logger.info('outbound call finished', {
 <p><strong>Trap — <code>X-Forwarded-For</code> is a list, and the entry you want is not the first one.</strong> The header is appended to at every hop, so behind Cloudflare and then nginx it reads <code>&lt;client&gt;, &lt;cloudflare&gt;, &lt;nginx&gt;</code> — and any client can pre-populate it, so the leftmost value is attacker-controlled, not the true client. Reading it naively gives you a spoofable string in your logs and, worse, in your rate limiter. Express has the correct machinery: set <code>app.set('trust proxy', &lt;number of proxies you actually run&gt;)</code> and read <code>req.ip</code>, which then counts from the right and skips exactly that many hops. <strong>Setting <code>trust proxy</code> to <code>true</code> rather than a number is the same bug with extra steps — it trusts the whole chain, including whatever the client injected.</strong></p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Carry one id across the nginx boundary and prove the two logs join.</p>
+<ol>
+  <li>Check whether your proxy forwards the id — in this repo it does not:</li>
+</ol>
+<pre><code class="language-bash">grep -nE "proxy_set_header|request_id" nginx/nginx.conf</code></pre>
+<ol start="2">
+  <li>Add <code>proxy_set_header X-Request-ID $request_id;</code> to the API location and append <code>$request_id</code> to <code>log_format main</code>.</li>
+  <li>Validate and reload: <code>nginx -t</code> then <code>nginx -s reload</code>. Make one request through nginx.</li>
+  <li>Confirm the same id appears in the nginx access log and in the backend&#39;s JSON line — the proxy mints it, logs it, and Express&#39;s inbound branch finally fires.</li>
+</ol>
+<p><strong>Done when:</strong> one id joins an nginx access-log entry to its backend log line for the same request, and you can name how the other three boundaries (DB, queue, external) carry it.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Boundary</span><span class="v">A point where context does not cross for free — proxy, database, queue, external API.</span></div>
+  <div class="kv"><span class="k">proxy_set_header</span><span class="v">The nginx directive that forwards a header (here <code>X-Request-ID</code>) to the upstream.</span></div>
+  <div class="kv"><span class="k">$request_id</span><span class="v">nginx&#39;s own per-request id, minted at the true edge — log it and forward it.</span></div>
+  <div class="kv"><span class="k">sqlcommenter</span><span class="v">Smuggling the id into an SQL comment so a slow query is traceable to its request.</span></div>
+  <div class="kv"><span class="k">Job payload propagation</span><span class="v">A queued job outlives the request, so the id must be stored in the payload, not in ALS.</span></div>
+  <div class="kv"><span class="k">Dead-code branch</span><span class="v">The &quot;honour inbound id&quot; path that never ran because nothing upstream sent one.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A context that stops at one process&#39;s edge is worth little — a request here crosses four boundaries, each dropping the id differently.</li>
+  <li>nginx already mints <code>$request_id</code> but this config neither logs nor forwards it, so Express&#39;s inbound branch is dead code; two lines fix both.</li>
+  <li>Postgres has no header — carry the id in an SQL comment (sqlcommenter); a queued job carries it in its payload because ALS cannot follow it.</li>
+  <li>Send the id on outbound calls too (LLM gateway, R2, VNPay): you do not control their logs, but their support team might use it.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nginx.org/en/docs/http/ngx_http_core_module.html#var_request_id" target="_blank" rel="noopener">
@@ -722,6 +871,37 @@ logger.info('outbound call finished', {
 <div class="pitfall">
 <p><strong>Bẫy — <code>X-Forwarded-For</code> là một DANH SÁCH, và phần tử bạn cần không phải phần tử đầu.</strong> Header này được nối thêm ở mỗi chặng, nên đứng sau Cloudflare rồi tới nginx thì nó đọc ra <code>&lt;client&gt;, &lt;cloudflare&gt;, &lt;nginx&gt;</code> — mà client nào cũng điền sẵn được nó, nên giá trị ngoài cùng bên trái là do phía tấn công điều khiển, không phải client thật. Đọc nó một cách ngây thơ cho bạn một chuỗi giả mạo được trong log, và tệ hơn là trong bộ giới hạn tốc độ. Express có sẵn cơ chế đúng: đặt <code>app.set('trust proxy', &lt;số proxy bạn thật sự chạy&gt;)</code> rồi đọc <code>req.ip</code>, khi ấy nó đếm từ bên phải và bỏ qua đúng bấy nhiêu chặng. <strong>Đặt <code>trust proxy</code> thành <code>true</code> thay vì một con số là đúng cái lỗi đó với thêm vài bước — nó tin cả chuỗi, kể cả phần client tự nhét vào.</strong></p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Mang một id qua ranh giới nginx và chứng minh hai log nối được với nhau.</p>
+<ol>
+  <li>Kiểm xem proxy của bạn có chuyển tiếp id không — ở kho này thì không:</li>
+</ol>
+<pre><code class="language-bash">grep -nE "proxy_set_header|request_id" nginx/nginx.conf</code></pre>
+<ol start="2">
+  <li>Thêm <code>proxy_set_header X-Request-ID $request_id;</code> vào location API và nối <code>$request_id</code> vào <code>log_format main</code>.</li>
+  <li>Kiểm và nạp lại: <code>nginx -t</code> rồi <code>nginx -s reload</code>. Gọi một request qua nginx.</li>
+  <li>Xác nhận cùng một id xuất hiện trong access log của nginx và dòng JSON của backend — proxy sinh nó, log nó, và nhánh inbound của Express cuối cùng cũng chạy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một id nối một dòng access-log nginx với dòng log backend của cùng request, và bạn nêu được ba ranh giới còn lại (DB, hàng đợi, bên ngoài) mang nó như thế nào.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ranh giới</span><span class="v">Một điểm mà ngữ cảnh không tự đi qua — proxy, cơ sở dữ liệu, hàng đợi, API bên ngoài.</span></div>
+  <div class="kv"><span class="k">proxy_set_header</span><span class="v">Directive của nginx chuyển tiếp một header (ở đây <code>X-Request-ID</code>) lên upstream.</span></div>
+  <div class="kv"><span class="k">$request_id</span><span class="v">Id mỗi request của chính nginx, sinh ở biên thật — hãy log và chuyển tiếp nó.</span></div>
+  <div class="kv"><span class="k">sqlcommenter</span><span class="v">Giấu id vào một comment SQL để một truy vấn chậm truy ngược được về request của nó.</span></div>
+  <div class="kv"><span class="k">Truyền qua payload job</span><span class="v">Một job trong hàng đợi sống lâu hơn request, nên id phải nằm trong payload, không phải ALS.</span></div>
+  <div class="kv"><span class="k">Nhánh mã chết</span><span class="v">Đường &quot;tôn trọng id đến từ ngoài&quot; chưa từng chạy vì không gì ở upstream gửi nó.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Một ngữ cảnh dừng ở biên một tiến trình thì giá trị ít — một request ở đây đi qua bốn ranh giới, mỗi cái làm rơi id một kiểu.</li>
+  <li>nginx đã sinh <code>$request_id</code> nhưng cấu hình này không log cũng không chuyển tiếp nó, nên nhánh inbound của Express là mã chết; hai dòng vá cả hai.</li>
+  <li>Postgres không có header — mang id trong một comment SQL (sqlcommenter); một job hàng đợi mang nó trong payload vì ALS không theo được.</li>
+  <li>Gửi id cả trên lời gọi ra ngoài (cổng LLM, R2, VNPay): bạn không kiểm soát log của họ, nhưng đội hỗ trợ của họ có thể dùng được.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -840,6 +1020,39 @@ You plan to add tracing (chapter 6)?
 <p><strong>Trap — a trace id is 128 bits of entropy, and it is not a secret.</strong> Two mistakes follow from forgetting that. The first: putting one in a URL, a filename, or an <code>ETag</code>, where it leaks into referrer headers and third-party analytics and quietly becomes a cross-site correlation key for whoever collects those. The second, and more common: deriving it from something meaningful — a user id, a hash of the session, a timestamp plus a counter — which makes it enumerable and, if you derived it from personal data, makes the id itself personal data with the retention obligations of lesson 2.5 attached. <strong>Generate it from a CSPRNG, treat it as a join key and nothing else, and never let it appear anywhere a URL can be shared.</strong></p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Parse, generate and validate a <code>traceparent</code>, then watch the trace-id survive a hop.</p>
+<ol>
+  <li>In Node, generate a valid header from random bytes:</li>
+</ol>
+<pre><code class="language-javascript">import { randomBytes } from 'node:crypto';
+const tp = &#96;00-\${randomBytes(16).toString('hex')}-\${randomBytes(8).toString('hex')}-01&#96;;
+console.log(tp, /^00-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/.test(tp));</code></pre>
+<ol start="2">
+  <li>Send it to your service and confirm the backend keeps the 32-char trace-id, mints a new 16-char span-id, and logs <code>traceId</code> next to <code>requestId</code>.</li>
+  <li>Read the flags byte: <code>01</code> means sampled, <code>00</code> not — confirm the decision made at the edge is the one your service honours.</li>
+  <li>Send a malformed header (wrong length) and confirm it is treated as absent: a fresh trace, not a half-valid id.</li>
+</ol>
+<p><strong>Done when:</strong> a valid inbound <code>traceparent</code>&#39;s trace-id survives into your logs with a new span-id, and a malformed one yields a fresh trace rather than ids that look right and join nothing.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">traceparent</span><span class="v">The W3C header <code>version-traceid-parentid-flags</code>, fixed widths, dash-separated.</span></div>
+  <div class="kv"><span class="k">trace-id</span><span class="v">16 bytes / 32 hex — one per logical operation, never changes across hops.</span></div>
+  <div class="kv"><span class="k">parent-id / span-id</span><span class="v">8 bytes / 16 hex — identifies this hop and changes at every service.</span></div>
+  <div class="kv"><span class="k">flags byte</span><span class="v">The sampling bit; <code>01</code> = keep this trace, decided once at the edge and honoured downstream.</span></div>
+  <div class="kv"><span class="k">W3C Trace Context</span><span class="v">The standard everyone parses identically, so a trace survives Cloudflare, SDKs and vendor APIs.</span></div>
+  <div class="kv"><span class="k">request id vs trace id</span><span class="v">The request id is human-quotable per request; the trace id is machine-scale across requests/services.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>A custom id works only inside systems you wrote; <code>traceparent</code> is the standard everything else already propagates.</li>
+  <li>Its four fixed fields encode a tree (trace-id + parent-id), not just a line — which call caused which.</li>
+  <li>The sampling decision rides in the flags byte, made once at the edge, so downstream services do not sample independently and leave holes.</li>
+  <li>Keep both ids, and treat a malformed <code>traceparent</code> as absent — the spec requires it, and a fresh trace is the correct recovery.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://www.w3.org/TR/trace-context/" target="_blank" rel="noopener">
@@ -950,6 +1163,39 @@ Bạn định thêm trace (chương 6)?
 <div class="pitfall">
 <p><strong>Bẫy — một trace id là 128 bit ngẫu nhiên, và nó KHÔNG phải bí mật.</strong> Hai sai lầm nảy ra từ việc quên điều đó. Thứ nhất: nhét một cái vào URL, vào tên file, hay vào một <code>ETag</code>, nơi nó rò ra header referrer và các dịch vụ phân tích của bên thứ ba rồi lặng lẽ trở thành một khoá tương quan xuyên trang cho bất cứ ai thu thập những thứ đó. Thứ hai, và phổ biến hơn: suy nó ra từ một thứ có ý nghĩa — id người dùng, một băm của phiên, một dấu thời gian cộng bộ đếm — điều đó làm nó liệt kê được và, nếu bạn suy nó từ dữ liệu cá nhân, làm cho chính cái id trở thành dữ liệu cá nhân với đủ nghĩa vụ lưu trữ của bài 2.5 đi kèm. <strong>Hãy sinh nó từ một CSPRNG, coi nó là khoá ghép chứ không là gì khác, và đừng bao giờ để nó xuất hiện ở nơi nào mà một URL có thể được chia sẻ đi.</strong></p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Phân tích, sinh và kiểm một <code>traceparent</code>, rồi nhìn trace-id sống qua một chặng.</p>
+<ol>
+  <li>Trong Node, sinh một header hợp lệ từ byte ngẫu nhiên:</li>
+</ol>
+<pre><code class="language-javascript">import { randomBytes } from 'node:crypto';
+const tp = &#96;00-\${randomBytes(16).toString('hex')}-\${randomBytes(8).toString('hex')}-01&#96;;
+console.log(tp, /^00-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$/.test(tp));</code></pre>
+<ol start="2">
+  <li>Gửi nó tới dịch vụ của bạn và xác nhận backend giữ trace-id 32 ký tự, sinh span-id 16 ký tự mới, và log <code>traceId</code> cạnh <code>requestId</code>.</li>
+  <li>Đọc byte cờ: <code>01</code> là được lấy mẫu, <code>00</code> là không — xác nhận quyết định làm ở biên là cái dịch vụ của bạn tôn trọng.</li>
+  <li>Gửi một header méo (sai độ dài) và xác nhận nó bị coi như vắng: một trace mới, không phải một id nửa hợp lệ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> trace-id của một <code>traceparent</code> vào hợp lệ sống vào log của bạn với một span-id mới, và một cái méo cho ra một trace mới thay vì những id trông đúng mà nối không được gì.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">traceparent</span><span class="v">Header W3C <code>version-traceid-parentid-flags</code>, độ rộng cố định, ngăn bằng gạch nối.</span></div>
+  <div class="kv"><span class="k">trace-id</span><span class="v">16 byte / 32 hex — một cái mỗi thao tác logic, không đổi qua các chặng.</span></div>
+  <div class="kv"><span class="k">parent-id / span-id</span><span class="v">8 byte / 16 hex — định danh chặng này và đổi ở mỗi dịch vụ.</span></div>
+  <div class="kv"><span class="k">byte cờ</span><span class="v">Bit lấy mẫu; <code>01</code> = giữ trace này, quyết một lần ở biên và được tôn trọng xuôi dòng.</span></div>
+  <div class="kv"><span class="k">W3C Trace Context</span><span class="v">Chuẩn mọi nơi phân tích giống hệt, để một trace sống qua Cloudflare, SDK và API nhà cung cấp.</span></div>
+  <div class="kv"><span class="k">request id với trace id</span><span class="v">request id người đọc được theo từng request; trace id ở quy mô máy, xuyên nhiều request/dịch vụ.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Một id tự chế chỉ chạy trong hệ thống bạn viết; <code>traceparent</code> là chuẩn mà mọi thứ khác đã tự chuyển tiếp.</li>
+  <li>Bốn trường cố định của nó mã hoá một cây (trace-id + parent-id), không chỉ một đường — cuộc gọi nào gây ra cuộc gọi nào.</li>
+  <li>Quyết định lấy mẫu đi trong byte cờ, làm một lần ở biên, nên các dịch vụ xuôi dòng không lấy mẫu riêng rẽ để lại lỗ hổng.</li>
+  <li>Giữ cả hai id, và coi một <code>traceparent</code> méo là vắng — spec yêu cầu thế, và một trace mới là cách phục hồi đúng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1086,6 +1332,37 @@ the same 20 bytes that made the diagnosis possible.</code></pre>
 <p><strong>Trap — correlation makes it trivially easy to reconstruct one person's entire session, and that is a capability, not a feature.</strong> Once every line carries a joinable id, a single query returns everything a user did: what they opened, what they typed into a search box, which notes they read and how long they lingered. That is enormously useful for debugging and it is exactly the shape of a privacy incident — an engineer idly querying an ex-partner's activity, a support agent pulling a public figure's history, a scraped log export that is now a behavioural profile rather than a pile of error messages. <strong>The technical control from lesson 1.2 (do not log personal data) is what keeps this proportionate</strong>, and the organisational one is that access to correlated logs is an audited privilege, not a default for everyone with a Grafana account.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><p>Debug by id: turn a response header into one query that tells the whole story.</p>
+<ol>
+  <li>Take a request id from an <code>X-Request-ID</code> response header and query every container at once:</li>
+</ol>
+<pre><code class="language-bash">logcli query '{container=~"cuonghoangdev.*"} |= "V1StGXR8_Z5j"'</code></pre>
+<ol start="2">
+  <li>Sort the results by time and read across the boundaries — nginx, Express, the service layer, the outbound call.</li>
+  <li>Find the causal line: compare a downstream duration against a timeout (here <code>30.002s</code> of an outbound call against nginx&#39;s 30s <code>proxy_read_timeout</code>).</li>
+  <li>Write the fix the evidence implies — an app timeout below the proxy&#39;s, a warn over 20s — not a speculative retry.</li>
+</ol>
+<p><strong>Done when:</strong> one id query returns the full ordered timeline across containers, and you can point to the single line that names the cause instead of guessing from a timestamp.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exact-match query</span><span class="v">Selecting lines by a shared id — what turns a user&#39;s screenshot into an instant lookup.</span></div>
+  <div class="kv"><span class="k">Timeline / ordering</span><span class="v">The joined lines sorted by time, so cause precedes effect visibly.</span></div>
+  <div class="kv"><span class="k">proxy_read_timeout</span><span class="v">How long nginx waits for the upstream before returning 502 — 30s here.</span></div>
+  <div class="kv"><span class="k">502 (upstream timeout)</span><span class="v">nginx gave up on the backend; the cause is usually downstream, not in your handler.</span></div>
+  <div class="kv"><span class="k">socket hang up</span><span class="v">Writing to a connection the proxy already closed — a symptom, not the root cause.</span></div>
+  <div class="kv"><span class="k">Evidence-driven fix</span><span class="v">A fix that follows from a measured line (30.002s vs 30s), not from a hunch like &quot;add a retry&quot;.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+  <li>Without correlation the incident took six steps and 25 minutes of guessing, and the <code>X-Request-ID</code> in the screenshot was never searchable.</li>
+  <li>With the three changes applied, one id query returned 14 ordered lines across every container in about 40 seconds.</li>
+  <li>The cause was visible only because nginx and the backend shared the id and the outbound call was logged with a duration: 30.002s against a 30s timeout.</li>
+  <li>The fix followed from the evidence — a sub-proxy timeout and async embedding — rather than the retry that step six would have shipped, which would have tripled the failure.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_read_timeout" target="_blank" rel="noopener">
@@ -1213,6 +1490,37 @@ là 20 byte đã làm cho chẩn đoán kia khả thi.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — correlation làm cho việc dựng lại trọn vẹn một phiên của một con người trở nên dễ đến mức tầm thường, và đó là một NĂNG LỰC, không phải một tính năng.</strong> Một khi mọi dòng đều mang một id ghép được, một truy vấn duy nhất trả về mọi thứ người dùng đã làm: họ mở gì, họ gõ gì vào ô tìm kiếm, họ đọc ghi chú nào và nán lại bao lâu. Điều đó cực kỳ hữu ích cho việc gỡ lỗi và nó cũng đúng hình dạng của một sự cố quyền riêng tư — một kỹ sư rảnh tay tra hoạt động của người yêu cũ, một nhân viên hỗ trợ kéo lịch sử của một người nổi tiếng, một bản xuất log bị lấy cắp mà giờ là một hồ sơ hành vi chứ không còn là một đống thông điệp lỗi. <strong>Biện pháp kỹ thuật của bài 1.2 (đừng log dữ liệu cá nhân) là thứ giữ cho chuyện này ở mức tương xứng</strong>, còn biện pháp tổ chức là: quyền xem log đã ghép phải là một đặc quyền có ghi vết truy cập, không phải mặc định cho mọi người có tài khoản Grafana.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><p>Gỡ lỗi bằng id: biến một header phản hồi thành một truy vấn kể trọn câu chuyện.</p>
+<ol>
+  <li>Lấy một request id từ header phản hồi <code>X-Request-ID</code> và truy vấn mọi container cùng lúc:</li>
+</ol>
+<pre><code class="language-bash">logcli query '{container=~"cuonghoangdev.*"} |= "V1StGXR8_Z5j"'</code></pre>
+<ol start="2">
+  <li>Sắp kết quả theo thời gian và đọc qua các ranh giới — nginx, Express, tầng service, lời gọi ra ngoài.</li>
+  <li>Tìm dòng nhân quả: so một thời lượng xuôi dòng với một timeout (ở đây <code>30.002s</code> của lời gọi ra ngoài với <code>proxy_read_timeout</code> 30s của nginx).</li>
+  <li>Viết bản vá mà bằng chứng ngụ ý — một timeout của app dưới của proxy, một warn khi quá 20s — không phải một retry phỏng đoán.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một truy vấn theo id trả về trọn dòng thời gian có thứ tự qua các container, và bạn chỉ được đúng dòng gọi tên nguyên nhân thay vì đoán từ một dấu thời gian.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Truy vấn khớp chính xác</span><span class="v">Chọn các dòng theo một id chung — thứ biến ảnh chụp của người dùng thành một lượt tra tức thì.</span></div>
+  <div class="kv"><span class="k">Dòng thời gian / thứ tự</span><span class="v">Các dòng đã nối, sắp theo thời gian, để nhân đi trước quả một cách thấy được.</span></div>
+  <div class="kv"><span class="k">proxy_read_timeout</span><span class="v">nginx chờ upstream bao lâu trước khi trả 502 — 30s ở đây.</span></div>
+  <div class="kv"><span class="k">502 (upstream timeout)</span><span class="v">nginx bỏ cuộc với backend; nguyên nhân thường ở xuôi dòng, không ở handler của bạn.</span></div>
+  <div class="kv"><span class="k">socket hang up</span><span class="v">Ghi vào một kết nối mà proxy đã đóng — một triệu chứng, không phải nguyên nhân gốc.</span></div>
+  <div class="kv"><span class="k">Vá theo bằng chứng</span><span class="v">Một bản vá đi từ một dòng đo được (30.002s với 30s), không từ linh cảm như &quot;thêm retry&quot;.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+  <li>Không có correlation, sự cố tốn sáu bước và 25 phút đoán mò, và <code>X-Request-ID</code> trong ảnh chụp chưa từng tìm được.</li>
+  <li>Với ba thay đổi đã áp, một truy vấn theo id trả về 14 dòng có thứ tự qua mọi container trong khoảng 40 giây.</li>
+  <li>Nguyên nhân chỉ thấy được vì nginx và backend chia sẻ id và lời gọi ra ngoài được log kèm thời lượng: 30.002s với một timeout 30s.</li>
+  <li>Bản vá đi từ bằng chứng — một timeout dưới của proxy và embedding bất đồng bộ — chứ không phải cái retry mà bước sáu đã ship, thứ sẽ nhân ba cú hỏng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

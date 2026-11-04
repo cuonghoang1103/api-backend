@@ -8,6 +8,306 @@ export default {
   lessons: [
 
     {
+      title: 'Start here (1/2) — What object storage is, and why every app you use needs it|||Bắt đầu tại đây (1/2) — Object storage là gì, và vì sao mọi app bạn dùng đều cần nó',
+      slug: 'os-0-0-bat-dau-tai-day',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Bài mở cửa cho người chưa từng nghe &quot;object storage&quot;: nó là gì (bằng hình ảnh đời thường trước), vì sao app không nhét ảnh của người dùng vào database hay ổ đĩa máy chủ, chuẩn S3 và Cloudflare R2, bạn gặp nó ở đâu (ngay trên site này — media.cuongthai.com), và khoá này sẽ cho bạn làm được gì.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>Hello. Before any API call, know what object storage is — and why</h2>
+<p class="lead">Welcome. If you have never heard the words &quot;object storage&quot;, or you have uploaded an avatar in an app without ever wondering where that file actually went, this lesson is for you. No commands to memorise yet. In fifteen minutes you will know what object storage is, why apps do not keep user files in their database or on the web server, what the &quot;S3 API&quot; and &quot;Cloudflare R2&quot; are, and where you have been using object storage all along — including on this very website.</p>
+<p>This lesson and the next are the front door of the course. Lesson 2 of the pair shows why it matters in money and in safety, and gives you a study plan. After that, lesson 0.1 compares object storage with the filesystem you already know, and 0.2 teaches the three concepts every API call rests on.</p>
+
+<h3>What object storage is — an everyday picture first</h3>
+<p>Forget the textbook definition for a moment. Picture a <strong>left-luggage counter</strong> at a train station. You hand over a bag, they give you a numbered ticket, and they put the bag on a shelf. You cannot reach into the bag later and swap one shirt — you take the whole bag out and hand in a new one. You cannot browse the shelves; you just present your ticket and get your bag back. And the counter does not care what is in the bag.</p>
+<p>Object storage is exactly that, for files: you hand it a file, you choose the <strong>ticket</strong> (called a <em>key</em>, such as <code>users/42/avatars/me.jpg</code>), and it stores the <strong>whole file</strong> (called an <em>object</em>) on a huge distributed shelf (called a <em>bucket</em>). You get the file back by its key. You replace a file by uploading a whole new one — you never edit part of it.</p>
+<div class="callout ok"><strong>One sentence to keep:</strong> object storage is an internet service that stores whole files as immutable &quot;objects&quot;, each addressed by a text &quot;key&quot;, inside a container called a &quot;bucket&quot; — reachable over HTTP from anywhere.</div>
+
+<h3>Why not just use the database, or the server's disk?</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Not the database</span><span class="v">Databases are built for small, structured, queryable rows. A 50 MB video turns a database slow and huge, and backups become painful. Keep the <em>metadata</em> in the DB, the <em>bytes</em> in object storage.</span></div>
+  <div class="kv"><span class="k">Not the web server's disk</span><span class="v">If files live on one server's disk, a second server cannot see them, the disk fills up, and a redeploy or crash can wipe them. Object storage is shared, effectively unlimited, and durable (11 nines).</span></div>
+  <div class="kv"><span class="k">Served fast, globally</span><span class="v">A bucket plus a CDN serves the same image from an edge near each user, so your app server never spends bandwidth on it.</span></div>
+</div>
+
+<h3>The S3 API and Cloudflare R2</h3>
+<p>In 2006 Amazon launched <strong>S3</strong> (Simple Storage Service). Its HTTP API became so common that almost every other provider copied it: today &quot;S3-compatible&quot; is a standard, like USB. <strong>Cloudflare R2</strong> is one such S3-compatible service — the one this course and this repo use. The big reason to pick R2: it charges <strong>nothing for egress</strong> (bytes served out), where AWS S3 charges about $0.09 per GB. Lesson 2.1 does that math; for now just know R2 speaks the S3 API, so everything you learn transfers.</p>
+
+<h3>Where you have already met it — on this site</h3>
+<p>Open any avatar or post image on this website and look at its address: the host is <code>media.cuongthai.com</code>, not the app domain. That is a Cloudflare R2 bucket (<code>cuonghoangdev-media</code>) served through Cloudflare's CDN. Every avatar, every post photo and video, every course attachment and music track you see here is an object with a key like <code>posts/1234/media/clip.mp4</code>. This course teaches the exact system running under your feet.</p>
+
+<h3>What you will be able to do by the end</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Upload and serve files correctly</span><span class="lz-lnote">PUT with the right Content-Type and Cache-Control; serve through a CDN; never list the bucket</span></div>
+<div class="lz-layer"><span class="lz-lname">Let the browser upload directly</span><span class="lz-lnote">Presigned URLs + CORS, so big files never pass through your server</span></div>
+<div class="lz-layer"><span class="lz-lname">Keep it cheap and safe</span><span class="lz-lnote">Egress math, private buckets, signed URLs, key rotation, lifecycle rules</span></div>
+<div class="lz-layer"><span class="lz-lname">Diagnose the classic failures</span><span class="lz-lnote">403 SignatureDoesNotMatch, CORS preflight errors, stale CDN cache</span></div>
+</div>
+
+<div class="pitfall co-tieu-de"><strong>How beginners start in the wrong place.</strong> A new developer saves uploaded files with <code>fs.writeFile</code> into a folder next to the code, and it works on their laptop. Then they deploy to two servers behind a load balancer: half the image requests 404, because each server only has the files it personally received. Or the disk fills and the container restarts empty. Object storage exists precisely so that &quot;where did my upload go?&quot; has one answer for every server, forever.</div>
+
+<h3>🧪 Practice (10–15 min — guaranteed to work)</h3>
+<div class="callout ok"><ol>
+<li>Open any app you use (a social network, a shop). Right-click a photo and choose &quot;Open image in new tab&quot;. Look at the <strong>host</strong> in the address bar — it is usually a storage or CDN domain, not the app's main domain.</li>
+<li>On this website, open an avatar or a post image the same way and confirm the host is <code>media.cuongthai.com</code> — an R2 bucket served through a CDN.</li>
+<li>Get ready for the hands-on lessons: install the AWS CLI (<code>aws --version</code> should print a version), or install Docker so you can run a local MinIO in lesson 0.1. Either is fine — both speak the S3 API.</li>
+<li>Write one sentence in your own words: why would an app serve its images from <code>media.cuongthai.com</code> instead of from its own application server?</li>
+</ol>
+<p><strong>Done when:</strong> you have found at least one real image served from a storage/CDN host, you have a working <code>aws</code> CLI or Docker, and your one sentence does not say &quot;to save the database&quot; alone — it mentions shared access, bandwidth, or durability.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object storage</span><span class="v">An internet service that stores whole files as immutable objects, each addressed by a key.</span></div>
+  <div class="kv"><span class="k">Object</span><span class="v">One stored file plus its metadata — the &quot;bag&quot; in the left-luggage picture.</span></div>
+  <div class="kv"><span class="k">Key</span><span class="v">The text name that addresses an object, e.g. <code>users/42/avatars/me.jpg</code> — the &quot;ticket&quot;.</span></div>
+  <div class="kv"><span class="k">Bucket</span><span class="v">The container that holds objects — the &quot;shelf&quot;.</span></div>
+  <div class="kv"><span class="k">S3 API</span><span class="v">Amazon's storage API, now a de-facto standard many providers implement.</span></div>
+  <div class="kv"><span class="k">Cloudflare R2</span><span class="v">An S3-compatible service with zero egress fees; what this course and repo use.</span></div>
+  <div class="kv"><span class="k">CDN</span><span class="v">A network of edge caches that serves a bucket's files from near each user.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Bytes served out of storage — the line AWS charges for and R2 does not.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Object storage keeps whole files as immutable objects, each named by a key, inside a bucket — like a left-luggage counter for files, reachable over HTTP.</li><li>Apps use it instead of the database (too big/slow for blobs) or the server disk (not shared, not durable); metadata goes in the DB, bytes go in storage.</li><li>The S3 API is the de-facto standard; Cloudflare R2 is an S3-compatible service with zero egress cost, which is why this repo uses it.</li><li>You have already used it here — every image on this site is an R2 object served as <code>media.cuongthai.com/...</code> through a CDN.</li><li>By the end you will upload/serve correctly, let browsers upload directly, keep it cheap and safe, and debug the classic failures.</li></ul>
+
+<a class="link-card" href="https://aws.amazon.com/what-is/object-storage/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">AWS — What is object storage?</span><span class="lc-sub">Amazon's own plain introduction; matches the everyday picture above.</span></span>
+</a>
+<a class="link-card" href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Cloudflare R2 documentation</span><span class="lc-sub">The S3-compatible, zero-egress service this course uses.</span></span>
+</a>
+<p class="note-ct"><strong>Next:</strong> &quot;Start here&quot; part 2 — why object storage matters in money and in safety (a surprise egress bill, a leaked public bucket, the SigV4 bug this repo caught in production), and a study plan.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Chào bạn. Trước khi gọi API nào, hãy biết object storage là gì — và vì sao</h2>
+<p class="lead">Chào mừng bạn. Nếu bạn chưa từng nghe cụm &quot;object storage&quot;, hoặc đã từng upload ảnh đại diện trong một app mà chưa bao giờ tự hỏi file đó đi đâu, thì bài này viết cho bạn. Chưa có lệnh nào phải học thuộc. Trong mười lăm phút, bạn sẽ biết object storage là gì, vì sao app không giữ file người dùng trong database hay trên ổ đĩa máy chủ, &quot;S3 API&quot; và &quot;Cloudflare R2&quot; là gì, và bạn đã dùng object storage từ bao giờ — kể cả ngay trên trang web này.</p>
+<p>Bài này và bài kế tiếp là cửa vào của cả khoá. Bài thứ hai cho thấy vì sao nó quan trọng về tiền và về an toàn, kèm một kế hoạch học. Sau đó bài 0.1 so object storage với filesystem bạn đã quen, và 0.2 dạy ba concept mà mọi API call dựa trên.</p>
+
+<h3>Object storage là gì — nói bằng hình ảnh đời thường trước</h3>
+<p>Tạm quên định nghĩa trong sách. Hãy hình dung một <strong>quầy giữ hành lý</strong> ở nhà ga. Bạn đưa một cái túi, họ đưa lại cho bạn một cái vé có số, rồi đặt túi lên kệ. Sau đó bạn không thò tay vào túi để thay mỗi một cái áo — bạn lấy cả túi ra rồi gửi vào một túi mới. Bạn cũng không lục kệ được; bạn chỉ chìa vé ra và nhận lại túi. Và quầy không quan tâm trong túi có gì.</p>
+<p>Object storage đúng là như vậy, nhưng cho file: bạn đưa cho nó một file, bạn chọn cái <strong>vé</strong> (gọi là <em>key</em>, ví dụ <code>users/42/avatars/me.jpg</code>), và nó lưu <strong>cả file</strong> (gọi là <em>object</em>) lên một cái kệ phân tán khổng lồ (gọi là <em>bucket</em>). Bạn lấy lại file bằng key của nó. Bạn thay file bằng cách upload hẳn một file mới — không bao giờ sửa một phần.</p>
+<div class="callout ok"><strong>Một câu để nhớ:</strong> object storage là một dịch vụ internet lưu nguyên các file dưới dạng &quot;object&quot; bất biến, mỗi object định danh bằng một &quot;key&quot; dạng chữ, nằm trong một container gọi là &quot;bucket&quot; — truy cập qua HTTP từ bất cứ đâu.</div>
+
+<h3>Vì sao không dùng luôn database, hay ổ đĩa máy chủ?</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Không dùng database</span><span class="v">Database sinh ra cho dòng nhỏ, có cấu trúc, query được. Một video 50 MB làm database chậm và phình to, sao lưu thành cực hình. Hãy giữ <em>metadata</em> trong DB, <em>byte</em> trong object storage.</span></div>
+  <div class="kv"><span class="k">Không dùng ổ đĩa máy chủ</span><span class="v">File nằm trên ổ của một server thì server thứ hai không thấy, ổ đầy, và một lần redeploy hay crash có thể xoá sạch. Object storage dùng chung, gần như vô hạn, và bền (11 số chín).</span></div>
+  <div class="kv"><span class="k">Phục vụ nhanh, toàn cầu</span><span class="v">Bucket cộng CDN phục vụ cùng một ảnh từ một edge gần mỗi người dùng, nên server app không tốn băng thông cho nó.</span></div>
+</div>
+
+<h3>S3 API và Cloudflare R2</h3>
+<p>Năm 2006 Amazon ra mắt <strong>S3</strong> (Simple Storage Service). API HTTP của nó phổ biến tới mức gần như mọi nhà cung cấp khác đều chép lại: ngày nay &quot;S3-compatible&quot; là một chuẩn, như cổng USB. <strong>Cloudflare R2</strong> là một dịch vụ S3-compatible như vậy — chính là cái khoá này và kho này dùng. Lý do lớn nhất chọn R2: nó <strong>không tính phí egress</strong> (byte phục vụ ra ngoài), trong khi AWS S3 tính khoảng $0,09 mỗi GB. Bài 2.1 sẽ tính con số đó; giờ chỉ cần biết R2 nói tiếng S3 API, nên mọi thứ bạn học đều chuyển được.</p>
+
+<h3>Bạn đã gặp nó rồi — ngay trên site này</h3>
+<p>Mở một ảnh đại diện hay ảnh bài viết bất kỳ trên trang web này và nhìn địa chỉ của nó: host là <code>media.cuongthai.com</code>, không phải tên miền của app. Đó là một bucket Cloudflare R2 (<code>cuonghoangdev-media</code>) phục vụ qua CDN của Cloudflare. Mọi ảnh đại diện, mọi ảnh/video bài viết, mọi tệp đính kèm khoá học và bản nhạc bạn thấy ở đây đều là một object với key kiểu <code>posts/1234/media/clip.mp4</code>. Khoá này dạy đúng cái hệ thống đang chạy dưới chân bạn.</p>
+
+<h3>Cuối khoá bạn sẽ làm được gì</h3>
+<div class="lz-stack">
+<div class="lz-layer"><span class="lz-lname">Upload và phục vụ file đúng cách</span><span class="lz-lnote">PUT với đúng Content-Type và Cache-Control; phục vụ qua CDN; không list bucket</span></div>
+<div class="lz-layer"><span class="lz-lname">Cho trình duyệt upload thẳng</span><span class="lz-lnote">Presigned URL + CORS, để file lớn không đi qua server của bạn</span></div>
+<div class="lz-layer"><span class="lz-lname">Giữ rẻ và an toàn</span><span class="lz-lnote">Tính egress, bucket private, signed URL, xoay key, lifecycle rule</span></div>
+<div class="lz-layer"><span class="lz-lname">Chẩn đoán các lỗi kinh điển</span><span class="lz-lnote">403 SignatureDoesNotMatch, lỗi CORS preflight, cache CDN cũ</span></div>
+</div>
+
+<div class="pitfall co-tieu-de"><strong>Người mới hay bắt đầu sai chỗ thế này.</strong> Một bạn lập trình lưu file upload bằng <code>fs.writeFile</code> vào một thư mục cạnh mã nguồn, và trên laptop thì chạy ngon. Rồi deploy lên hai server sau một load balancer: một nửa số request ảnh trả 404, vì mỗi server chỉ có những file nó tự nhận. Hoặc ổ đầy và container khởi động lại thì rỗng trơn. Object storage sinh ra chính là để câu hỏi &quot;file mình upload đâu rồi?&quot; chỉ có một câu trả lời cho mọi server, mãi mãi.</div>
+
+<h3>🧪 Thực hành (10–15 phút — chắc chắn làm được)</h3>
+<div class="callout ok"><ol>
+<li>Mở một app bạn hay dùng (mạng xã hội, trang bán hàng). Chuột phải vào một ảnh rồi chọn &quot;Mở ảnh trong tab mới&quot;. Nhìn <strong>host</strong> trên thanh địa chỉ — thường là một tên miền storage hoặc CDN, không phải tên miền chính của app.</li>
+<li>Trên trang web này, mở một ảnh đại diện hoặc ảnh bài viết theo cách đó và xác nhận host là <code>media.cuongthai.com</code> — một bucket R2 phục vụ qua CDN.</li>
+<li>Chuẩn bị cho các bài thực hành: cài AWS CLI (<code>aws --version</code> phải in ra số phiên bản), hoặc cài Docker để chạy MinIO cục bộ ở bài 0.1. Cái nào cũng được — cả hai đều nói tiếng S3 API.</li>
+<li>Tự viết một câu bằng lời của bạn: vì sao một app lại phục vụ ảnh từ <code>media.cuongthai.com</code> thay vì từ chính server ứng dụng của nó?</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tìm được ít nhất một ảnh thật phục vụ từ host storage/CDN, có <code>aws</code> CLI hoặc Docker chạy được, và câu của bạn KHÔNG chỉ nói &quot;để nhẹ database&quot; — mà có nhắc tới dùng chung, băng thông, hoặc độ bền.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Object storage</span><span class="v">Dịch vụ internet lưu nguyên các file dưới dạng object bất biến, mỗi object định danh bằng key.</span></div>
+  <div class="kv"><span class="k">Object</span><span class="v">Một file đã lưu cộng metadata — cái &quot;túi&quot; trong hình ảnh quầy giữ đồ.</span></div>
+  <div class="kv"><span class="k">Key</span><span class="v">Tên dạng chữ định danh object, ví dụ <code>users/42/avatars/me.jpg</code> — cái &quot;vé&quot;.</span></div>
+  <div class="kv"><span class="k">Bucket</span><span class="v">Container chứa object — cái &quot;kệ&quot;.</span></div>
+  <div class="kv"><span class="k">S3 API</span><span class="v">API lưu trữ của Amazon, nay là chuẩn de-facto nhiều nhà cung cấp làm theo.</span></div>
+  <div class="kv"><span class="k">Cloudflare R2</span><span class="v">Dịch vụ S3-compatible, không tính phí egress; thứ khoá này và kho này dùng.</span></div>
+  <div class="kv"><span class="k">CDN</span><span class="v">Mạng các edge cache phục vụ file của bucket từ nơi gần mỗi người dùng.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Byte phục vụ ra khỏi storage — khoản AWS tính tiền còn R2 thì không.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Object storage giữ nguyên các file dưới dạng object bất biến, mỗi cái đặt tên bằng key, trong một bucket — như quầy giữ hành lý dành cho file, truy cập qua HTTP.</li><li>App dùng nó thay cho database (quá to/chậm cho blob) hay ổ đĩa server (không dùng chung, không bền); metadata vào DB, byte vào storage.</li><li>S3 API là chuẩn de-facto; Cloudflare R2 là dịch vụ S3-compatible không tốn phí egress, đó là lý do kho này dùng nó.</li><li>Bạn đã dùng nó ngay ở đây — mọi ảnh trên site này là một object R2 phục vụ dưới dạng <code>media.cuongthai.com/...</code> qua CDN.</li><li>Cuối khoá bạn sẽ upload/phục vụ đúng cách, cho trình duyệt upload thẳng, giữ rẻ và an toàn, và gỡ được các lỗi kinh điển.</li></ul>
+
+<a class="link-card" href="https://aws.amazon.com/what-is/object-storage/" target="_blank" rel="noopener">
+  <span class="lc-ico">📄</span>
+  <span class="lc-body"><span class="lc-title">AWS — What is object storage?</span><span class="lc-sub">Phần giới thiệu mộc mạc của chính Amazon; khớp với hình ảnh đời thường ở trên.</span></span>
+</a>
+<a class="link-card" href="https://developers.cloudflare.com/r2/" target="_blank" rel="noopener">
+  <span class="lc-ico">📘</span>
+  <span class="lc-body"><span class="lc-title">Tài liệu Cloudflare R2</span><span class="lc-sub">Dịch vụ S3-compatible, không phí egress mà khoá này dùng.</span></span>
+</a>
+<p class="note-ct"><strong>Bài kế tiếp:</strong> &quot;Bắt đầu tại đây&quot; phần 2 — vì sao object storage quan trọng về tiền và an toàn (một hoá đơn egress bất ngờ, một bucket public bị lộ, cái bug SigV4 kho này bắt được ở production), và kế hoạch học.</p>
+</div>
+`,
+    },
+
+    {
+      title: 'Start here (2/2) — Why it matters: cost, safety, and how to study this course|||Bắt đầu tại đây (2/2) — Vì sao nó quan trọng: tiền, an toàn, và cách học khoá này',
+      slug: 'os-0-0b-vi-sao-quan-trong',
+      type: 'LESSON',
+      isFreePreview: true,
+      description: 'Vì sao object storage đáng học cho nghiêm túc: một hoá đơn egress bất ngờ (R2 zero egress vs S3 $0,09/GB), những vụ lộ bucket public, cái bug SigV4 kho này bắt được ở production, cộng bản đồ 11 mục của khoá và một lộ trình tối thiểu để bạn ship được tính năng upload.',
+      content: `
+<div class="ml-en">
+<span class="eyebrow">Section 0 · Start here</span>
+<h2>Why object storage is worth learning well</h2>
+<p class="lead">In the previous lesson you met object storage. This one answers &quot;does getting it wrong actually hurt?&quot; — yes, in two currencies: <strong>money</strong> and <strong>safety</strong>. Then a map of the course and a minimum route so you can ship an upload feature without reading all eleven chapters first.</p>
+
+<h3>It hurts your wallet: egress</h3>
+<p>Storing files is cheap everywhere (cents per GB per month). The surprise is <strong>egress</strong> — every byte served out. AWS S3 charges about $0.09/GB of egress; Cloudflare R2 charges $0. For an app that serves 5 TB of images a month (5,120 GB), that is roughly <strong>$460 a month on S3 just to serve them</strong>, versus $0 on R2 — before you have stored a single new byte. This one line is the main reason this repo runs on R2, and Chapter 2 and Chapter 7 turn it into exact formulas.</p>
+<div class="callout warn"><strong>The classic surprise bill</strong> is not storage — it is a popular file (or a hotlinked one) served millions of times. If you only watch the storage number, the egress line is the one that arrives at the end of the month.</div>
+
+<h3>It hurts your users: safety</h3>
+<p>Object storage is reachable over the public internet, so a wrong setting leaks data to the whole world. Two failure modes you will learn to prevent:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">A public bucket that should be private</span><span class="v">Leaked S3 buckets have exposed millions of records — backups, IDs, private media — simply because &quot;public&quot; was left on. Chapters 3 and 5 teach private buckets + signed URLs.</span></div>
+  <div class="kv"><span class="k">A broken signature</span><span class="v">Presigned URLs are signed with SigV4. Get the signed headers wrong and you either lock out real users or, worse, sign something you did not mean to. This repo caught a real SigV4 <code>signableHeaders</code> bug in production — Chapter 4 walks through it.</span></div>
+</div>
+
+<h3>What this course does differently</h3>
+<p>Every number here is measured against this repo's own <code>src/config/r2.ts</code> and <code>upload.service.ts</code> running on real Cloudflare R2 — not copied from marketing pages. You will see the actual key conventions, the actual Cache-Control values, the actual migration, and the actual bug that got fixed. When a claim is a measurement, the lesson says so and links its source.</p>
+
+<h3>The map — eleven sections</h3>
+<table>
+  <tr><th>Section</th><th>What you get</th></tr>
+  <tr><td>0 · Concepts</td><td>Object storage vs filesystem; bucket/key/object</td></tr>
+  <tr><td>1 · S3 API</td><td>SDK v3 client; Put/Get/Head/Delete; multipart upload</td></tr>
+  <tr><td>2 · R2 specifics</td><td>Zero egress; R2 quirks; access keys &amp; rotation</td></tr>
+  <tr><td>3 · URLs &amp; access</td><td>Three URL types; Cache-Control; signed URLs</td></tr>
+  <tr><td>4 · Presigned uploads</td><td>Browser-direct PUT; the SigV4 signature bug</td></tr>
+  <tr><td>5 · CORS</td><td>Letting the browser talk to the bucket safely</td></tr>
+  <tr><td>6 · Lifecycle</td><td>Expiry rules; aborting dead multipart uploads</td></tr>
+  <tr><td>7 · Cost</td><td>Turning storage + operations + egress into a bill</td></tr>
+  <tr><td>8 · Migration</td><td>Moving from S3 to R2 without losing objects</td></tr>
+  <tr><td>9 · Diagnostics</td><td>403, CORS, stale cache — reading the real cause</td></tr>
+  <tr><td>10 · Exam review</td><td>A self-test over the whole course</td></tr>
+</table>
+
+<h3>A one-week minimum route</h3>
+<p>If all you need right now is &quot;let users upload an avatar and show it back&quot;, you do not need all eleven sections. Do this: Section 0 (concepts) → 1.1 and 1.2 (client + Put/Get/Head/Delete) → 3.1 and 3.2 (URL types + Cache-Control) → 4 (presigned upload) → 5 (CORS). That is enough to ship safely. Come back for multipart, lifecycle, cost and migration when you hit them.</p>
+
+<div class="pitfall co-tieu-de"><strong>Do not learn the wrong lesson from the cost story.</strong> &quot;R2 is free so I can ignore cost&quot; is the trap. R2 has zero <em>egress</em>, but it still bills storage and operations (Class A writes, Class B reads), and a runaway script that does millions of HEAD requests still costs money. Zero egress removes the scariest line, not your responsibility to measure — which is exactly why Chapter 7 exists.</div>
+
+<h3>🧪 Practice (15 min)</h3>
+<div class="callout ok"><ol>
+<li><strong>Do the egress math.</strong> An app serves 5 TB/month of images. Compute S3 egress at $0.09/GB (remember 1 TB = 1,024 GB) and R2 egress at $0. Write both numbers down — the gap is the whole pitch of this course.</li>
+<li><strong>Find a real leak.</strong> Search the web for &quot;S3 bucket leak&quot; or &quot;exposed S3 bucket&quot; and read one incident: note what was exposed and the root cause (almost always &quot;public access left on&quot;).</li>
+<li><strong>Plan your route.</strong> Decide what you need to build first (e.g. avatar upload) and write your own minimum chapter list from the map above.</li>
+<li><strong>Set a guardrail habit.</strong> Write one sentence you will check before every bucket goes live: &quot;Is this bucket public on purpose, and is every secret key out of Git?&quot;</li>
+</ol>
+<p><strong>Done when:</strong> you have a dollar figure for the 5 TB egress gap, one real leak example with its cause, a personal minimum route, and your one-sentence guardrail.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Egress</span><span class="v">Bytes served out of storage; the line AWS charges ~$0.09/GB and R2 charges $0.</span></div>
+  <div class="kv"><span class="k">Public vs private bucket</span><span class="v">Whether anyone with the URL can read objects, or only signed/authenticated requests can.</span></div>
+  <div class="kv"><span class="k">Signed URL</span><span class="v">A time-limited URL carrying a signature, giving temporary access to a private object.</span></div>
+  <div class="kv"><span class="k">SigV4</span><span class="v">AWS Signature Version 4 — the signing scheme behind presigned URLs and every API call.</span></div>
+  <div class="kv"><span class="k">Class A / Class B operations</span><span class="v">Billed write-type vs read-type requests (R2 still charges for these even with free egress).</span></div>
+  <div class="kv"><span class="k">Minimum route</span><span class="v">The shortest set of chapters needed to ship one upload feature safely.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Getting object storage wrong costs money (egress) and safety (leaks) — both are avoidable, and this course targets both.</li><li>Egress is the surprise bill: ~$0.09/GB on S3 vs $0 on R2, so serving 5 TB/month is ~$460 vs $0 — the main reason this repo uses R2.</li><li>Public-by-accident buckets and broken SigV4 signatures are the classic safety failures; private buckets, signed URLs and correct signing prevent them.</li><li>Every number in this course is measured against this repo's real R2 code, including a genuine SigV4 bug that reached production and was fixed.</li><li>You need not read all eleven sections to ship: Section 0 → 1.1/1.2 → 3.1/3.2 → 4 → 5 is a safe one-week route; but zero egress is not zero cost, so Chapter 7 still matters.</li></ul>
+
+<a class="link-card" href="https://developers.cloudflare.com/r2/pricing/" target="_blank" rel="noopener">
+  <span class="lc-ico">💲</span>
+  <span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">Zero egress, plus Class A/B operation and storage rates — the numbers behind the math.</span></span>
+</a>
+<a class="link-card" href="https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔏</span>
+  <span class="lc-body"><span class="lc-title">AWS Signature Version 4</span><span class="lc-sub">The signing protocol behind presigned URLs; the subject of the Chapter 4 bug.</span></span>
+</a>
+<p class="note-ct"><strong>Next:</strong> lesson 0.1 — object storage vs the filesystem you already know, the three differences that flip most of your intuitions.</p>
+</div>
+<div class="ml-vi">
+<span class="eyebrow">Mục 0 · Bắt đầu tại đây</span>
+<h2>Vì sao object storage đáng học cho tới nơi tới chốn</h2>
+<p class="lead">Bài trước bạn đã làm quen object storage. Bài này trả lời &quot;làm sai thì có đau thật không?&quot; — có, bằng hai loại tiền tệ: <strong>tiền</strong> và <strong>an toàn</strong>. Rồi một bản đồ của cả khoá và một lộ trình tối thiểu để bạn ship được tính năng upload mà không phải đọc hết mười một mục trước.</p>
+
+<h3>Đau ví tiền: egress</h3>
+<p>Lưu file thì ở đâu cũng rẻ (vài cent mỗi GB mỗi tháng). Bất ngờ nằm ở <strong>egress</strong> — mỗi byte phục vụ ra ngoài. AWS S3 tính khoảng $0,09/GB egress; Cloudflare R2 tính $0. Với một app phục vụ 5 TB ảnh mỗi tháng (5.120 GB), con số đó là khoảng <strong>$460 một tháng trên S3 chỉ để phục vụ chúng</strong>, so với $0 trên R2 — trước khi bạn lưu thêm một byte mới nào. Đúng một dòng này là lý do chính kho này chạy trên R2, và Chương 2 với Chương 7 biến nó thành công thức chính xác.</p>
+<div class="callout warn"><strong>Hoá đơn gây sốc kinh điển</strong> không phải tiền lưu trữ — mà là một file nổi tiếng (hoặc bị hotlink) phục vụ hàng triệu lần. Nếu bạn chỉ canh con số lưu trữ, dòng egress mới là dòng ập tới cuối tháng.</div>
+
+<h3>Đau người dùng: an toàn</h3>
+<p>Object storage truy cập được qua internet công cộng, nên một cài đặt sai là lộ dữ liệu ra cả thế giới. Hai kiểu hỏng bạn sẽ học cách phòng:</p>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Bucket public mà lẽ ra phải private</span><span class="v">Các bucket S3 bị lộ từng phơi ra hàng triệu bản ghi — bản sao lưu, giấy tờ, media riêng tư — chỉ vì để nguyên &quot;public&quot;. Chương 3 và 5 dạy bucket private + signed URL.</span></div>
+  <div class="kv"><span class="k">Chữ ký hỏng</span><span class="v">Presigned URL ký bằng SigV4. Sai phần header được ký thì hoặc bạn chặn nhầm người dùng thật, hoặc tệ hơn, ký một thứ bạn không định ký. Kho này đã bắt được một bug SigV4 <code>signableHeaders</code> thật ở production — Chương 4 mổ xẻ nó.</span></div>
+</div>
+
+<h3>Khoá này khác ở chỗ nào</h3>
+<p>Mọi con số ở đây đo từ chính <code>src/config/r2.ts</code> và <code>upload.service.ts</code> của kho này chạy trên Cloudflare R2 thật — không chép từ trang quảng cáo. Bạn sẽ thấy convention key thật, giá trị Cache-Control thật, cuộc migration thật, và cái bug thật đã được vá. Khi một khẳng định là số đo, bài nói rõ và dẫn nguồn.</p>
+
+<h3>Bản đồ — mười một mục</h3>
+<table>
+  <tr><th>Mục</th><th>Bạn nhận được gì</th></tr>
+  <tr><td>0 · Concept</td><td>Object storage vs filesystem; bucket/key/object</td></tr>
+  <tr><td>1 · S3 API</td><td>Client SDK v3; Put/Get/Head/Delete; multipart upload</td></tr>
+  <tr><td>2 · R2 specifics</td><td>Zero egress; R2 quirks; access key &amp; rotation</td></tr>
+  <tr><td>3 · URL &amp; access</td><td>Ba loại URL; Cache-Control; signed URL</td></tr>
+  <tr><td>4 · Presigned upload</td><td>PUT thẳng từ browser; cái bug chữ ký SigV4</td></tr>
+  <tr><td>5 · CORS</td><td>Cho trình duyệt nói chuyện với bucket một cách an toàn</td></tr>
+  <tr><td>6 · Lifecycle</td><td>Quy tắc hết hạn; huỷ multipart upload chết</td></tr>
+  <tr><td>7 · Cost</td><td>Biến lưu trữ + operation + egress thành hoá đơn</td></tr>
+  <tr><td>8 · Migration</td><td>Chuyển từ S3 sang R2 mà không mất object</td></tr>
+  <tr><td>9 · Chẩn đoán</td><td>403, CORS, cache cũ — đọc đúng nguyên nhân</td></tr>
+  <tr><td>10 · Ôn thi</td><td>Tự kiểm tra trên cả khoá</td></tr>
+</table>
+
+<h3>Lộ trình tối thiểu một tuần</h3>
+<p>Nếu việc bạn cần ngay lúc này chỉ là &quot;cho người dùng upload ảnh đại diện rồi hiện lại&quot;, bạn không cần cả mười một mục. Hãy làm thế này: Mục 0 (concept) → 1.1 và 1.2 (client + Put/Get/Head/Delete) → 3.1 và 3.2 (loại URL + Cache-Control) → 4 (presigned upload) → 5 (CORS). Thế là đủ ship an toàn. Quay lại học multipart, lifecycle, cost và migration khi bạn gặp chúng.</p>
+
+<div class="pitfall co-tieu-de"><strong>Đừng rút ra bài học sai từ chuyện chi phí.</strong> &quot;R2 miễn phí nên khỏi quan tâm cost&quot; là cái bẫy. R2 không tốn <em>egress</em>, nhưng vẫn tính tiền lưu trữ và operation (Class A ghi, Class B đọc), và một script chạy loạn làm hàng triệu request HEAD vẫn tốn tiền. Zero egress bỏ đi dòng đáng sợ nhất, không bỏ đi trách nhiệm đo đạc của bạn — đó đúng là lý do Chương 7 tồn tại.</div>
+
+<h3>🧪 Thực hành (15 phút)</h3>
+<div class="callout ok"><ol>
+<li><strong>Tính egress.</strong> Một app phục vụ 5 TB/tháng ảnh. Tính egress S3 ở $0,09/GB (nhớ 1 TB = 1.024 GB) và egress R2 ở $0. Ghi cả hai con số — khoảng cách đó chính là toàn bộ lý lẽ của khoá này.</li>
+<li><strong>Tìm một vụ lộ thật.</strong> Tìm trên web &quot;S3 bucket leak&quot; hoặc &quot;exposed S3 bucket&quot; và đọc một vụ: ghi lại cái gì bị lộ và nguyên nhân gốc (gần như luôn là &quot;để nguyên public&quot;).</li>
+<li><strong>Vẽ lộ trình của bạn.</strong> Quyết định bạn cần dựng gì trước (ví dụ upload ảnh đại diện) và tự viết danh sách chương tối thiểu từ bản đồ ở trên.</li>
+<li><strong>Tạo một thói quen chắn.</strong> Viết một câu bạn sẽ kiểm trước khi mỗi bucket lên sóng: &quot;Bucket này public có chủ đích không, và mọi khoá bí mật đã nằm ngoài Git chưa?&quot;</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một con số đô la cho khoảng cách egress 5 TB, một ví dụ lộ dữ liệu thật kèm nguyên nhân, một lộ trình tối thiểu của riêng bạn, và câu chắn một dòng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Egress</span><span class="v">Byte phục vụ ra khỏi storage; dòng AWS tính ~$0,09/GB còn R2 tính $0.</span></div>
+  <div class="kv"><span class="k">Bucket public vs private</span><span class="v">Ai có URL cũng đọc được object, hay chỉ request đã ký/xác thực mới đọc được.</span></div>
+  <div class="kv"><span class="k">Signed URL</span><span class="v">URL có hạn giờ, mang một chữ ký, cho quyền truy cập tạm thời vào object private.</span></div>
+  <div class="kv"><span class="k">SigV4</span><span class="v">AWS Signature Version 4 — scheme ký đứng sau presigned URL và mọi API call.</span></div>
+  <div class="kv"><span class="k">Operation Class A / Class B</span><span class="v">Request kiểu ghi vs kiểu đọc bị tính tiền (R2 vẫn tính dù egress miễn phí).</span></div>
+  <div class="kv"><span class="k">Lộ trình tối thiểu</span><span class="v">Bộ chương ngắn nhất cần để ship an toàn một tính năng upload.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Làm sai object storage tốn tiền (egress) và an toàn (lộ dữ liệu) — cả hai đều tránh được, và khoá này nhắm vào cả hai.</li><li>Egress là hoá đơn gây sốc: ~$0,09/GB trên S3 vs $0 trên R2, nên phục vụ 5 TB/tháng là ~$460 vs $0 — lý do chính kho này dùng R2.</li><li>Bucket vô tình public và chữ ký SigV4 hỏng là các lỗi an toàn kinh điển; bucket private, signed URL và ký đúng giúp phòng chúng.</li><li>Mọi con số trong khoá đo từ mã R2 thật của kho này, kể cả một bug SigV4 có thật đã lên tới production và đã được vá.</li><li>Không cần đọc hết mười một mục mới ship được: Mục 0 → 1.1/1.2 → 3.1/3.2 → 4 → 5 là lộ trình một tuần an toàn; nhưng zero egress không phải zero cost, nên Chương 7 vẫn quan trọng.</li></ul>
+
+<a class="link-card" href="https://developers.cloudflare.com/r2/pricing/" target="_blank" rel="noopener">
+  <span class="lc-ico">💲</span>
+  <span class="lc-body"><span class="lc-title">Giá Cloudflare R2</span><span class="lc-sub">Zero egress, cộng giá operation Class A/B và lưu trữ — các con số đứng sau phép tính.</span></span>
+</a>
+<a class="link-card" href="https://docs.aws.amazon.com/general/latest/gr/sigv4_signing.html" target="_blank" rel="noopener">
+  <span class="lc-ico">🔏</span>
+  <span class="lc-body"><span class="lc-title">AWS Signature Version 4</span><span class="lc-sub">Giao thức ký đứng sau presigned URL; chủ đề của cái bug ở Chương 4.</span></span>
+</a>
+<p class="note-ct"><strong>Bài kế tiếp:</strong> bài 0.1 — object storage so với filesystem bạn đã quen, ba khác biệt lật hầu hết trực giác của bạn.</p>
+</div>
+`,
+    },
+
+    {
       title: '0.1 — Object storage vs file system: three differences|||0.1 — Object storage vs file system: ba khác biệt',
       slug: 'os-0-1-vs-fs',
       type: 'VIDEO',

@@ -1,0 +1,1294 @@
+{
+  "trackSlug": "fer202-practice",
+  "moduleSlug": "fer202-13-pe-5-recipes-forum",
+  "lesson": {
+    "course": "front-end-web-development-with-react",
+    "slug": "fer202-pe18-sp26-chua-tron-de"
+  },
+  "exercises": [
+    {
+      "title": "PE Mock Exam 4/11 — Recipes Forum (lecturer’s paper)",
+      "language": "javascript",
+      "difficulty": "HARD",
+      "estimatedMinutes": 85,
+      "points": 100,
+      "concepts": [
+        "React Router v6",
+        "Navigate redirect",
+        "axios + json-server",
+        "Set (unique values)",
+        "derived state",
+        "combined filters",
+        "startsWith search",
+        "descending sort",
+        "react-bootstrap Accordion",
+        "controlled form",
+        "required-field validation",
+        "POST then redirect"
+      ],
+      "prerequisites": [
+        "useState / useEffect",
+        "axios",
+        "React-Bootstrap Accordion / Form",
+        "React Router v6"
+      ],
+      "tags": [
+        "fer202",
+        "pe",
+        "mock-exam",
+        "router",
+        "json-server",
+        "react-bootstrap"
+      ],
+      "problemHtml": "<h1>PRACTICAL EXAMINATION</h1>\n<p class=\"bi-phu\">FER202 · Mock Practical Exam (\"đề cô cho\") scheduled for 4/11/2026 — a Recipes Forum, reproduced from the paper (wording, layout, points).</p>\n<p><b>Technical Requirement:</b> Launch a mock API server using json-server to read/write data from/to the <code>database.json</code> file on an appropriate port (e.g. <code>http://localhost:9999</code>). <b>You score 0 for a feature if json-server is not running.</b></p>\n\n<h2>PROBLEM DESCRIPTION</h2>\n<p>Build an internal <b>Recipes Forum</b> for a small cooking community. The application has two pages: the <b>Recipes Forum</b> page (list, search and filters at <code>http://localhost:3000</code>) and the <b>Create A New Recipe</b> page (<code>http://localhost:3000/recipe/create</code>).</p>\n\n<h2>SETUP</h2>\n<ul>\n<li>Copy <code>database.json</code> into your mock API project.</li>\n<li>Copy the <code>images/</code> folder (<code>1.webp</code> … <code>10.webp</code> and <code>thumbnail.png</code>) into <code>public/</code>.</li>\n<li>Run two terminals: <code>json-server --watch database.json --port 9999</code> and <code>npm start</code>.</li>\n<li>Stack (do NOT install new libraries — the exam forbids downloading packages): Create React App + React 18, react-bootstrap + bootstrap, axios, react-router-dom v6, json-server. Node 22.11.0.</li>\n</ul>\n<p>The recipe model stored by the API:</p>\n<pre>{\n  id, name, ingredients: [], instructions: [],\n  prepTimeMinutes, cookTimeMinutes, cuisine, difficulty,\n  tags: [], mealType: [], rating, image\n}</pre>\n\n<h2>PART 1: INPUT DATA (database.json)</h2>\n<p>Create <code>database.json</code> at the root of your mock API project (the API endpoint is <code>GET http://localhost:9999/recipes</code>):</p>\n<pre>{\n  \"recipes\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"Mango Salsa Chicken\",\n      \"rating\": 5.2,\n      \"prepTimeMinutes\": 10,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Mexican\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Chicken\",\n        \"Salsa\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"1.webp\",\n      \"ingredients\": [\n        \"Chicken thighs\",\n        \"Mango, diced\",\n        \"Red onion, finely chopped\",\n        \"Cilantro, chopped\",\n        \"Lime juice\",\n        \"Jalapeño, minced\",\n        \"Salt and pepper to taste\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Season chicken thighs with salt and pepper\",\n        \"Grill or bake chicken until fully cooked\",\n        \"In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice\",\n        \"Dice the cooked chicken and mix it with the mango salsa\",\n        \"Serve over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"2\",\n      \"name\": \"Chocolate Chip Cookies\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"American\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Cookies\",\n        \"Dessert\",\n        \"Baking\"\n      ],\n      \"mealType\": [\n        \"Dessert\",\n        \"Snack\"\n      ],\n      \"image\": \"2.webp\",\n      \"ingredients\": [\n        \"All-purpose flour\",\n        \"Baking soda\",\n        \"Salt\",\n        \"Butter, softened\",\n        \"Granulated sugar\",\n        \"Brown sugar\",\n        \"Vanilla extract\",\n        \"Eggs\",\n        \"Chocolate chips\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven to 180°C (350°F)\",\n        \"Whisk together the flour, baking soda and salt\",\n        \"Cream the butter with both sugars until light and fluffy\",\n        \"Beat in the vanilla and eggs one at a time\",\n        \"Fold in the flour mixture, then the chocolate chips\",\n        \"Drop spoonfuls onto a baking tray and bake for 10-12 minutes\"\n      ]\n    },\n    {\n      \"id\": \"3\",\n      \"name\": \"Chicken Alfredo Pasta\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 25,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Chicken\",\n        \"Pasta\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"3.webp\",\n      \"ingredients\": [\n        \"Fettuccine pasta\",\n        \"Chicken breast\",\n        \"Butter\",\n        \"Garlic, minced\",\n        \"Heavy cream\",\n        \"Parmesan cheese, grated\",\n        \"Salt and pepper to taste\",\n        \"Fresh parsley, chopped\"\n      ],\n      \"instructions\": [\n        \"Cook the fettuccine until al dente, then drain\",\n        \"Season and pan-sear the chicken, then slice it\",\n        \"Melt the butter and sauté the garlic until fragrant\",\n        \"Pour in the heavy cream and simmer gently\",\n        \"Stir in the Parmesan until the sauce is smooth\",\n        \"Toss the pasta and chicken in the sauce and garnish with parsley\"\n      ]\n    },\n    {\n      \"id\": \"4\",\n      \"name\": \"Vegetarian Stir-Fry\",\n      \"rating\": 4.7,\n      \"prepTimeMinutes\": 20,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Asian\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Vegetarian\",\n        \"Stir-fry\",\n        \"Asian\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"4.webp\",\n      \"ingredients\": [\n        \"Broccoli florets\",\n        \"Carrot, sliced\",\n        \"Bell pepper, sliced\",\n        \"Snap peas\",\n        \"Garlic, minced\",\n        \"Ginger, grated\",\n        \"Soy sauce\",\n        \"Sesame oil\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Heat the sesame oil in a wok over high heat\",\n        \"Stir-fry the garlic and ginger for 30 seconds\",\n        \"Add the hardest vegetables first, then the softer ones\",\n        \"Pour in the soy sauce and toss to coat\",\n        \"Stir-fry until crisp-tender\",\n        \"Serve hot over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"5\",\n      \"name\": \"Classic Margherita Pizza\",\n      \"rating\": 4.6,\n      \"prepTimeMinutes\": 90,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Pizza\",\n        \"Italian\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"5.webp\",\n      \"ingredients\": [\n        \"Pizza dough\",\n        \"Tomato sauce\",\n        \"Fresh mozzarella\",\n        \"Fresh basil leaves\",\n        \"Olive oil\",\n        \"Salt\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven as hot as it will go with a pizza stone inside\",\n        \"Stretch the dough into a thin round\",\n        \"Spread a thin layer of tomato sauce\",\n        \"Tear the mozzarella over the top\",\n        \"Bake until the crust is blistered and the cheese melts\",\n        \"Finish with fresh basil and a drizzle of olive oil\"\n      ]\n    }\n  ]\n}</pre>\n\n<h2>QUESTION 1 (6 points) — Fetch and display Recipes</h2>\n<p>Render this at <code>http://localhost:3000</code> (<b>0 points if the route/URL is wrong</b>). The page title is <b>RECIPES FORUM</b>.</p>\n<p><b>Layout.</b> A LEFT column titled <b>Tags</b> (a checkbox list); a MIDDLE column with the search box (placeholder <code>Enter Recipe Name to search ...</code>), a <b>Create Recipe</b> button at the top-right, and the Accordion list; a RIGHT column with <b>Cuisine</b> (checkboxes) and <b>Meal Type</b> (checkboxes).</p>\n<ul>\n<li>The <b>Tags</b>, <b>Cuisine</b> and <b>Meal Type</b> filter lists are built from the data, <b>with duplicates removed</b>.</li>\n<li>Each recipe is a react-bootstrap <b>Accordion</b> item whose header reads <code>&lt;name&gt; - Rating: &lt;rating&gt;</code>. The body shows: the image (on the right), Preparation Time Minutes, Cook Time Minutes, Difficulty, Cuisine, Tags (joined with <code>\"; \"</code>), Meal Types (joined with <code>\"; \"</code>), the Ingredients (bulleted list) and the Instructions (bulleted list).</li>\n<li>The list is <b>sorted by rating in descending order</b>.</li>\n<li><b>Search</b> keeps recipes whose name <b>starts with</b> the typed text (case-insensitive, trimmed). Search and the checkbox filters must work <b>together</b> (AND): a recipe is shown only if it matches the search AND at least one ticked value in each non-empty facet.</li>\n</ul>\n\n<h2>QUESTION 2 (4 points) — Create a New Recipe</h2>\n<p>The <b>Create Recipe</b> button navigates to <code>http://localhost:3000/recipe/create</code>, which shows a form titled <b>Create A New Recipe</b>.</p>\n<ul>\n<li>Fields: <b>Recipe Name</b> (required, marked <code>*</code>); <b>Ingredients</b> (placeholder <code>Separate ingredients with ;</code>); <b>Instructions</b> (<code>Separate instructions with ;</code>); <b>Preparation Time Minutes</b> (default 0); <b>Cook Time Minutes</b> (default 0); <b>Cuisine</b>; <b>Difficulty</b>; <b>Tags</b> (<code>Separate tags with ;</code>); <b>Meal Types</b> (<code>Separate meal types with ;</code>); and a <b>Save</b> button.</li>\n<li><b>Validation:</b> if Recipe Name is empty when Save is clicked, show the red error <code>Recipe Name is required</code> and do <b>not</b> submit.</li>\n<li><b>On a valid Save:</b> <code>POST http://localhost:9999/recipes</code> a new object where ingredients / instructions / tags / mealType are the text split by <code>\";\"</code> (each trimmed), the two times are numbers, <code>image</code> is <code>\"thumbnail.png\"</code>, and there is <b>no</b> rating. Then <code>alert(\"Create new Recipe success!\")</code>, navigate back to <code>http://localhost:3000</code> and reload the list (the new recipe appears in the accordion).</li>\n</ul>\n<p>Example of a saved recipe (from the paper):</p>\n<pre>{\n  \"id\": \"df8c\",\n  \"name\": \"Bánh mì Pate\",\n  \"ingredients\": [\"Bánh mì\", \"Pate\", \"Dưa chuột\"],\n  \"instructions\": [\"Cắt Bánh\", \"Phết Pate\", \"Cho dưa chuột\"],\n  \"prepTimeMinutes\": 5,\n  \"cookTimeMinutes\": 0,\n  \"cuisine\": \"Vietnamese\",\n  \"difficulty\": \"Easy\",\n  \"tags\": [\"Breakfast\", \"StreetFood\"],\n  \"mealType\": [\"Snack\", \"Breakfast\"],\n  \"image\": \"thumbnail.png\"\n}</pre>\n\n<h2>MARKING (10 → 100 points)</h2>\n<p><b>Question 1 — 6 points:</b> correct route/URL; fetch + display from json-server; filter lists with duplicates removed; accordion with every field + joined with <code>\"; \"</code> + sorted by rating descending; search \"starts with\" + combined with the filters; the three-column layout.</p>\n<p><b>Question 2 — 4 points:</b> the <code>/recipe/create</code> route; the form; the required-name validation; the <code>POST</code> to the server; the alert + redirect + reload.</p>",
+      "problemHtmlVi": "<h1>BÀI THI THỰC HÀNH</h1>\n<p class=\"bi-phu\">FER202 · Đề thi thử PE (\"đề của cô\") dự kiến thi 4/11/2026 — Diễn đàn Công thức nấu ăn (Recipes Forum), soạn lại sát theo tờ đề (câu chữ, bố cục, thang điểm). Bản gốc tiếng Anh ở nút English.</p>\n<p><b>Yêu cầu kỹ thuật:</b> Chạy máy chủ API giả bằng json-server để đọc/ghi dữ liệu từ/vào tệp <code>database.json</code> trên một cổng phù hợp (ví dụ <code>http://localhost:9999</code>). <b>Không chạy json-server ⇒ 0 điểm phần đó.</b></p>\n\n<h2>MÔ TẢ BÀI TOÁN</h2>\n<p>Xây dựng một <b>Diễn đàn Công thức nấu ăn</b> nội bộ. Ứng dụng có hai trang: trang <b>Recipes Forum</b> (danh sách, tìm kiếm, bộ lọc ở <code>http://localhost:3000</code>) và trang <b>Create A New Recipe</b> (tạo công thức mới, ở <code>http://localhost:3000/recipe/create</code>).</p>\n\n<h2>CÀI ĐẶT</h2>\n<ul>\n<li>Chép <code>database.json</code> vào dự án API giả.</li>\n<li>Chép thư mục <code>images/</code> (<code>1.webp</code> … <code>10.webp</code> và <code>thumbnail.png</code>) vào <code>public/</code>.</li>\n<li>Chạy 2 terminal: <code>json-server --watch database.json --port 9999</code> và <code>npm start</code>.</li>\n<li>Công nghệ (KHÔNG cài thư viện mới — đề cấm tải gói): Create React App + React 18, react-bootstrap + bootstrap, axios, react-router-dom v6, json-server. Node 22.11.0.</li>\n</ul>\n<p>Mô hình một công thức (recipe) mà API lưu:</p>\n<pre>{\n  id, name, ingredients: [], instructions: [],\n  prepTimeMinutes, cookTimeMinutes, cuisine, difficulty,\n  tags: [], mealType: [], rating, image\n}</pre>\n\n<h2>PHẦN 1: DỮ LIỆU ĐẦU VÀO (database.json)</h2>\n<p>Tạo <code>database.json</code> ở thư mục gốc của dự án API giả (điểm cuối API là <code>GET http://localhost:9999/recipes</code>):</p>\n<pre>{\n  \"recipes\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"Mango Salsa Chicken\",\n      \"rating\": 5.2,\n      \"prepTimeMinutes\": 10,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Mexican\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Chicken\",\n        \"Salsa\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"1.webp\",\n      \"ingredients\": [\n        \"Chicken thighs\",\n        \"Mango, diced\",\n        \"Red onion, finely chopped\",\n        \"Cilantro, chopped\",\n        \"Lime juice\",\n        \"Jalapeño, minced\",\n        \"Salt and pepper to taste\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Season chicken thighs with salt and pepper\",\n        \"Grill or bake chicken until fully cooked\",\n        \"In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice\",\n        \"Dice the cooked chicken and mix it with the mango salsa\",\n        \"Serve over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"2\",\n      \"name\": \"Chocolate Chip Cookies\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"American\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Cookies\",\n        \"Dessert\",\n        \"Baking\"\n      ],\n      \"mealType\": [\n        \"Dessert\",\n        \"Snack\"\n      ],\n      \"image\": \"2.webp\",\n      \"ingredients\": [\n        \"All-purpose flour\",\n        \"Baking soda\",\n        \"Salt\",\n        \"Butter, softened\",\n        \"Granulated sugar\",\n        \"Brown sugar\",\n        \"Vanilla extract\",\n        \"Eggs\",\n        \"Chocolate chips\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven to 180°C (350°F)\",\n        \"Whisk together the flour, baking soda and salt\",\n        \"Cream the butter with both sugars until light and fluffy\",\n        \"Beat in the vanilla and eggs one at a time\",\n        \"Fold in the flour mixture, then the chocolate chips\",\n        \"Drop spoonfuls onto a baking tray and bake for 10-12 minutes\"\n      ]\n    },\n    {\n      \"id\": \"3\",\n      \"name\": \"Chicken Alfredo Pasta\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 25,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Chicken\",\n        \"Pasta\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"3.webp\",\n      \"ingredients\": [\n        \"Fettuccine pasta\",\n        \"Chicken breast\",\n        \"Butter\",\n        \"Garlic, minced\",\n        \"Heavy cream\",\n        \"Parmesan cheese, grated\",\n        \"Salt and pepper to taste\",\n        \"Fresh parsley, chopped\"\n      ],\n      \"instructions\": [\n        \"Cook the fettuccine until al dente, then drain\",\n        \"Season and pan-sear the chicken, then slice it\",\n        \"Melt the butter and sauté the garlic until fragrant\",\n        \"Pour in the heavy cream and simmer gently\",\n        \"Stir in the Parmesan until the sauce is smooth\",\n        \"Toss the pasta and chicken in the sauce and garnish with parsley\"\n      ]\n    },\n    {\n      \"id\": \"4\",\n      \"name\": \"Vegetarian Stir-Fry\",\n      \"rating\": 4.7,\n      \"prepTimeMinutes\": 20,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Asian\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Vegetarian\",\n        \"Stir-fry\",\n        \"Asian\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"4.webp\",\n      \"ingredients\": [\n        \"Broccoli florets\",\n        \"Carrot, sliced\",\n        \"Bell pepper, sliced\",\n        \"Snap peas\",\n        \"Garlic, minced\",\n        \"Ginger, grated\",\n        \"Soy sauce\",\n        \"Sesame oil\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Heat the sesame oil in a wok over high heat\",\n        \"Stir-fry the garlic and ginger for 30 seconds\",\n        \"Add the hardest vegetables first, then the softer ones\",\n        \"Pour in the soy sauce and toss to coat\",\n        \"Stir-fry until crisp-tender\",\n        \"Serve hot over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"5\",\n      \"name\": \"Classic Margherita Pizza\",\n      \"rating\": 4.6,\n      \"prepTimeMinutes\": 90,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Pizza\",\n        \"Italian\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"5.webp\",\n      \"ingredients\": [\n        \"Pizza dough\",\n        \"Tomato sauce\",\n        \"Fresh mozzarella\",\n        \"Fresh basil leaves\",\n        \"Olive oil\",\n        \"Salt\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven as hot as it will go with a pizza stone inside\",\n        \"Stretch the dough into a thin round\",\n        \"Spread a thin layer of tomato sauce\",\n        \"Tear the mozzarella over the top\",\n        \"Bake until the crust is blistered and the cheese melts\",\n        \"Finish with fresh basil and a drizzle of olive oil\"\n      ]\n    }\n  ]\n}</pre>\n\n<h2>CÂU 1 (6 điểm) — Lấy và hiển thị công thức</h2>\n<p>Hiển thị ở <code>http://localhost:3000</code> (<b>sai URL ⇒ 0 điểm</b>). Tiêu đề trang là <b>RECIPES FORUM</b>.</p>\n<p><b>Bố cục.</b> CỘT TRÁI tên <b>Tags</b> (danh sách checkbox); CỘT GIỮA gồm ô tìm kiếm (gợi ý <code>Enter Recipe Name to search ...</code>), nút <b>Create Recipe</b> ở góc phải trên, và danh sách Accordion; CỘT PHẢI gồm <b>Cuisine</b> (checkbox) và <b>Meal Type</b> (checkbox).</p>\n<ul>\n<li>Ba bộ lọc <b>Tags</b>, <b>Cuisine</b>, <b>Meal Type</b> lấy từ dữ liệu và <b>bỏ trùng</b>.</li>\n<li>Mỗi công thức là một mục <b>Accordion</b> (react-bootstrap) có tiêu đề <code>&lt;name&gt; - Rating: &lt;rating&gt;</code>. Thân mục hiển thị: ảnh (bên phải), Preparation Time Minutes, Cook Time Minutes, Difficulty, Cuisine, Tags (nối bằng <code>\"; \"</code>), Meal Types (nối bằng <code>\"; \"</code>), danh sách Ingredients (dạng chấm) và Instructions (dạng chấm).</li>\n<li>Danh sách <b>sắp xếp theo rating giảm dần</b>.</li>\n<li><b>Tìm kiếm</b> giữ lại công thức có tên <b>bắt đầu bằng</b> chuỗi đã gõ (không phân biệt hoa thường, đã <code>trim</code>). Tìm kiếm và các bộ lọc checkbox phải hoạt động <b>cùng nhau</b> (AND): một công thức chỉ hiện khi khớp tìm kiếm VÀ khớp ít nhất một giá trị đã tick ở mỗi bộ lọc có tick.</li>\n</ul>\n\n<h2>CÂU 2 (4 điểm) — Tạo công thức mới</h2>\n<p>Nút <b>Create Recipe</b> điều hướng tới <code>http://localhost:3000/recipe/create</code>, hiện form tiêu đề <b>Create A New Recipe</b>.</p>\n<ul>\n<li>Các ô: <b>Recipe Name</b> (bắt buộc, có dấu <code>*</code>); <b>Ingredients</b> (gợi ý <code>Separate ingredients with ;</code>); <b>Instructions</b> (<code>Separate instructions with ;</code>); <b>Preparation Time Minutes</b> (mặc định 0); <b>Cook Time Minutes</b> (mặc định 0); <b>Cuisine</b>; <b>Difficulty</b>; <b>Tags</b> (<code>Separate tags with ;</code>); <b>Meal Types</b> (<code>Separate meal types with ;</code>); và nút <b>Save</b>.</li>\n<li><b>Kiểm hợp lệ:</b> nếu Recipe Name rỗng khi bấm Save ⇒ hiện lỗi đỏ <code>Recipe Name is required</code> và <b>không</b> submit.</li>\n<li><b>Khi Save hợp lệ:</b> <code>POST http://localhost:9999/recipes</code> một object mới trong đó ingredients / instructions / tags / mealType là chuỗi tách theo <code>\";\"</code> (mỗi phần đã <code>trim</code>), hai ô thời gian là số, <code>image</code> là <code>\"thumbnail.png\"</code>, và <b>không</b> có rating. Sau đó <code>alert(\"Create new Recipe success!\")</code>, điều hướng về <code>http://localhost:3000</code> và tải lại danh sách (công thức mới hiện trong accordion).</li>\n</ul>\n<p>Ví dụ một công thức đã lưu (trong đề):</p>\n<pre>{\n  \"id\": \"df8c\",\n  \"name\": \"Bánh mì Pate\",\n  \"ingredients\": [\"Bánh mì\", \"Pate\", \"Dưa chuột\"],\n  \"instructions\": [\"Cắt Bánh\", \"Phết Pate\", \"Cho dưa chuột\"],\n  \"prepTimeMinutes\": 5,\n  \"cookTimeMinutes\": 0,\n  \"cuisine\": \"Vietnamese\",\n  \"difficulty\": \"Easy\",\n  \"tags\": [\"Breakfast\", \"StreetFood\"],\n  \"mealType\": [\"Snack\", \"Breakfast\"],\n  \"image\": \"thumbnail.png\"\n}</pre>\n\n<h2>THANG ĐIỂM (10 → 100)</h2>\n<p><b>Câu 1 — 6 điểm:</b> đúng route/URL; lấy + hiển thị từ json-server; bộ lọc bỏ trùng; accordion đủ trường + nối bằng <code>\"; \"</code> + sắp giảm dần theo rating; tìm \"bắt đầu bằng\" + kết hợp bộ lọc; bố cục ba cột.</p>\n<p><b>Câu 2 — 4 điểm:</b> route <code>/recipe/create</code>; form; kiểm bắt buộc tên; <code>POST</code> lên máy chủ; alert + điều hướng + tải lại.</p>",
+      "inputSpec": "The given CRA project (React 18, react-router-dom 6, react-bootstrap 2, axios, json-server) + database.json (5 recipes) — see the paper.|||Dự án CRA cô cho (React 18, react-router-dom 6, react-bootstrap 2, axios, json-server) + database.json (5 công thức) — xem đề.",
+      "outputSpec": "A working app passing every rubric line: \"/\" (Recipes Forum) and \"/recipe/create\" as described.|||Ứng dụng chạy đúng mọi dòng điểm: \"/\" (Recipes Forum) và \"/recipe/create\" như đề mô tả.",
+      "constraints": "react-router-dom v6 (<code>Routes</code>, <code>Navigate</code>, <code>useNavigate</code>); UI with react-bootstrap.|||react-router-dom v6 (<code>Routes</code>, <code>Navigate</code>, <code>useNavigate</code>); giao diện bằng react-bootstrap.\nData only through json-server at <code>http://localhost:9999</code> (axios); no extra libraries (the exam forbids downloading packages).|||Dữ liệu chỉ qua json-server ở <code>http://localhost:9999</code> (axios); không thêm thư viện (đề cấm tải gói khi thi).\nFilter lists are de-duplicated; the shown list is derived (search startsWith + facets AND) and sorted by rating descending; one <code>POST /recipes</code> on save.|||Bộ lọc bỏ trùng; danh sách hiện ra là giá trị suy ra (tìm startsWith + lọc AND) và sắp theo rating giảm dần; lưu là một <code>POST /recipes</code>.",
+      "examplesJson": [
+        {
+          "input": "Search \"c\" on the forum",
+          "output": "Chocolate Chip Cookies · Chicken Alfredo Pasta · Classic Margherita Pizza (names starting with C, rating-sorted)",
+          "explanation": "startsWith is case-insensitive and trimmed; the list stays sorted by rating descending.|||startsWith không phân biệt hoa thường và đã trim; danh sách vẫn sắp theo rating giảm dần."
+        },
+        {
+          "input": "Tick cuisine \"Italian\" and search \"c\"",
+          "output": "Chicken Alfredo Pasta · Classic Margherita Pizza",
+          "explanation": "Search AND filter combine; both are Italian and start with C.|||Tìm kiếm VÀ bộ lọc kết hợp; cả hai là Italian và bắt đầu bằng C."
+        },
+        {
+          "input": "Create: name \"Test Dish\", tags \"Quick; Easy\", Save",
+          "output": "POST /recipes { name:\"Test Dish\", tags:[\"Quick\",\"Easy\"], image:\"thumbnail.png\" } ⇒ alert ⇒ back to \"/\" with 6 recipes",
+          "explanation": "Arrays are split by \";\" and trimmed; image is \"thumbnail.png\"; no rating; then redirect + reload.|||Mảng tách theo \";\" và trim; image là \"thumbnail.png\"; không rating; rồi điều hướng + tải lại."
+        }
+      ],
+      "hintsJson": [
+        "Câu 1 làm trước: index.js bọc App trong BrowserRouter + import \"bootstrap/dist/css/bootstrap.min.css\"; App.js có Routes với \"/\" ⇒ RecipesForum, \"/recipe/create\" ⇒ CreateRecipe, và path=\"*\" ⇒ Navigate to=\"/\" replace.",
+        "Dựng api.js: const api = axios.create({ baseURL: process.env.REACT_APP_API_URL || \"http://localhost:9999\" }). Mọi lời gọi dùng api.get(\"/recipes\"), api.post(\"/recipes\", obj).",
+        "Ba bộ lọc lấy từ TẤT CẢ công thức và bỏ trùng: const allTags = [...new Set(recipes.flatMap(r => r.tags))]; tương tự cho cuisine (map) và mealType (flatMap).",
+        "Danh sách hiện ra là giá trị suy ra: recipes.filter(r => r.name.toLowerCase().startsWith(search.trim().toLowerCase())).filter(lọc theo tags/cuisine/mealType bằng some + includes).sort((a,b) => b.rating - a.rating). Nhớ .slice() trước khi sort để không sửa mảng gốc.",
+        "Câu 2: form điều khiển. Khi Save, preventDefault; nếu name.trim() rỗng ⇒ setError(\"Recipe Name is required\") rồi return. Hợp lệ ⇒ tách \";\" + trim cho mảng, Number() cho thời gian, image \"thumbnail.png\", POST /recipes, alert(\"Create new Recipe success!\"), navigate(\"/\")."
+      ],
+      "starterCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\nimport ReactDOM from \"react-dom/client\";\nimport \"bootstrap/dist/css/bootstrap.min.css\";\nimport App from \"./App\";\n\n// TODO (Q1): wrap <App /> in <BrowserRouter> and import it from react-router-dom.\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\nroot.render(<App />);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\n\n// TODO (Q1 + Q2): add <Routes> with:\n//   \"/\"               -> <RecipesForum />\n//   \"/recipe/create\"  -> <CreateRecipe />\n//   \"*\"               -> <Navigate to=\"/\" replace />\nexport default function App() {\n  return <div>TODO: set up the routes</div>;\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "import axios from \"axios\";\n\n// TODO: create an axios instance whose baseURL points at the json-server\n// (http://localhost:9999). Read it from process.env.REACT_APP_API_URL.\nconst api = axios.create({ baseURL: \"\" });\n\nexport default api;\n"
+        },
+        {
+          "name": "src/pages/RecipesForum.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\n\n// TODO (Q1): Recipes Forum page.\n//  - Title \"RECIPES FORUM\".\n//  - GET /recipes from the json-server and show each in a react-bootstrap Accordion\n//    with header \"<name> - Rating: <rating>\" and a body (image, times, difficulty,\n//    cuisine, tags joined with \"; \", meal types joined with \"; \", ingredients,\n//    instructions). Sort the list by rating DESCENDING.\n//  - Left column \"Tags\", right column \"Cuisine\" and \"Meal Type\": checkbox lists built\n//    from the data with duplicates removed.\n//  - A search box (placeholder \"Enter Recipe Name to search ...\") that keeps recipes\n//    whose name STARTS WITH the text; search and the checkbox filters combine (AND).\n//  - A \"Create Recipe\" button that navigates to /recipe/create.\nexport default function RecipesForum() {\n  return <div>TODO: build the Recipes Forum</div>;\n}\n"
+        },
+        {
+          "name": "src/pages/CreateRecipe.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\n\n// TODO (Q2): Create A New Recipe form.\n//  - Fields: Recipe Name (required), Ingredients, Instructions, Preparation Time\n//    Minutes (default 0), Cook Time Minutes (default 0), Cuisine, Difficulty, Tags,\n//    Meal Types, and a Save button.\n//  - If Recipe Name is empty on Save: show \"Recipe Name is required\" and do NOT submit.\n//  - Otherwise POST /recipes a new recipe (ingredients/instructions/tags/mealType split\n//    by \";\", times as numbers, image \"thumbnail.png\", no rating), alert\n//    \"Create new Recipe success!\", then navigate back to \"/\".\nexport default function CreateRecipe() {\n  return <div>TODO: build the Create Recipe form</div>;\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "bash",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"recipes\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"Mango Salsa Chicken\",\n      \"rating\": 5.2,\n      \"prepTimeMinutes\": 10,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Mexican\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Chicken\",\n        \"Salsa\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"1.webp\",\n      \"ingredients\": [\n        \"Chicken thighs\",\n        \"Mango, diced\",\n        \"Red onion, finely chopped\",\n        \"Cilantro, chopped\",\n        \"Lime juice\",\n        \"Jalapeño, minced\",\n        \"Salt and pepper to taste\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Season chicken thighs with salt and pepper\",\n        \"Grill or bake chicken until fully cooked\",\n        \"In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice\",\n        \"Dice the cooked chicken and mix it with the mango salsa\",\n        \"Serve over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"2\",\n      \"name\": \"Chocolate Chip Cookies\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"American\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Cookies\",\n        \"Dessert\",\n        \"Baking\"\n      ],\n      \"mealType\": [\n        \"Dessert\",\n        \"Snack\"\n      ],\n      \"image\": \"2.webp\",\n      \"ingredients\": [\n        \"All-purpose flour\",\n        \"Baking soda\",\n        \"Salt\",\n        \"Butter, softened\",\n        \"Granulated sugar\",\n        \"Brown sugar\",\n        \"Vanilla extract\",\n        \"Eggs\",\n        \"Chocolate chips\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven to 180°C (350°F)\",\n        \"Whisk together the flour, baking soda and salt\",\n        \"Cream the butter with both sugars until light and fluffy\",\n        \"Beat in the vanilla and eggs one at a time\",\n        \"Fold in the flour mixture, then the chocolate chips\",\n        \"Drop spoonfuls onto a baking tray and bake for 10-12 minutes\"\n      ]\n    },\n    {\n      \"id\": \"3\",\n      \"name\": \"Chicken Alfredo Pasta\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 25,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Chicken\",\n        \"Pasta\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"3.webp\",\n      \"ingredients\": [\n        \"Fettuccine pasta\",\n        \"Chicken breast\",\n        \"Butter\",\n        \"Garlic, minced\",\n        \"Heavy cream\",\n        \"Parmesan cheese, grated\",\n        \"Salt and pepper to taste\",\n        \"Fresh parsley, chopped\"\n      ],\n      \"instructions\": [\n        \"Cook the fettuccine until al dente, then drain\",\n        \"Season and pan-sear the chicken, then slice it\",\n        \"Melt the butter and sauté the garlic until fragrant\",\n        \"Pour in the heavy cream and simmer gently\",\n        \"Stir in the Parmesan until the sauce is smooth\",\n        \"Toss the pasta and chicken in the sauce and garnish with parsley\"\n      ]\n    },\n    {\n      \"id\": \"4\",\n      \"name\": \"Vegetarian Stir-Fry\",\n      \"rating\": 4.7,\n      \"prepTimeMinutes\": 20,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Asian\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Vegetarian\",\n        \"Stir-fry\",\n        \"Asian\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"4.webp\",\n      \"ingredients\": [\n        \"Broccoli florets\",\n        \"Carrot, sliced\",\n        \"Bell pepper, sliced\",\n        \"Snap peas\",\n        \"Garlic, minced\",\n        \"Ginger, grated\",\n        \"Soy sauce\",\n        \"Sesame oil\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Heat the sesame oil in a wok over high heat\",\n        \"Stir-fry the garlic and ginger for 30 seconds\",\n        \"Add the hardest vegetables first, then the softer ones\",\n        \"Pour in the soy sauce and toss to coat\",\n        \"Stir-fry until crisp-tender\",\n        \"Serve hot over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"5\",\n      \"name\": \"Classic Margherita Pizza\",\n      \"rating\": 4.6,\n      \"prepTimeMinutes\": 90,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Pizza\",\n        \"Italian\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"5.webp\",\n      \"ingredients\": [\n        \"Pizza dough\",\n        \"Tomato sauce\",\n        \"Fresh mozzarella\",\n        \"Fresh basil leaves\",\n        \"Olive oil\",\n        \"Salt\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven as hot as it will go with a pizza stone inside\",\n        \"Stretch the dough into a thin round\",\n        \"Spread a thin layer of tomato sauce\",\n        \"Tear the mozzarella over the top\",\n        \"Bake until the crust is blistered and the cheese melts\",\n        \"Finish with fresh basil and a drizzle of olive oil\"\n      ]\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionCodeJson": [
+        {
+          "name": "src/index.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\nimport ReactDOM from \"react-dom/client\";\nimport { BrowserRouter } from \"react-router-dom\";\nimport \"bootstrap/dist/css/bootstrap.min.css\";\nimport App from \"./App\";\n\nconst root = ReactDOM.createRoot(document.getElementById(\"root\"));\nroot.render(\n  <BrowserRouter>\n    <App />\n  </BrowserRouter>\n);\n"
+        },
+        {
+          "name": "src/App.js",
+          "language": "javascript",
+          "code": "import React from \"react\";\nimport { Routes, Route, Navigate } from \"react-router-dom\";\nimport RecipesForum from \"./pages/RecipesForum\";\nimport CreateRecipe from \"./pages/CreateRecipe\";\n\nexport default function App() {\n  return (\n    <Routes>\n      <Route path=\"/\" element={<RecipesForum />} />\n      <Route path=\"/recipe/create\" element={<CreateRecipe />} />\n      <Route path=\"*\" element={<Navigate to=\"/\" replace />} />\n    </Routes>\n  );\n}\n"
+        },
+        {
+          "name": "src/api.js",
+          "language": "javascript",
+          "code": "import axios from \"axios\";\n\n// Base URL of the json-server mock API. CRA reads REACT_APP_* from .env at build time.\nconst api = axios.create({\n  baseURL: process.env.REACT_APP_API_URL || \"http://localhost:9999\",\n});\n\nexport default api;\n"
+        },
+        {
+          "name": "src/pages/RecipesForum.js",
+          "language": "javascript",
+          "code": "import React, { useEffect, useState } from \"react\";\nimport { useNavigate } from \"react-router-dom\";\nimport { Accordion, Form, Button, Container, Row, Col } from \"react-bootstrap\";\nimport api from \"../api\";\n\n// Unique values, keeping first-seen order (so the filter lists are de-duplicated).\nconst uniq = (arr) => [...new Set(arr)];\n\nexport default function RecipesForum() {\n  const navigate = useNavigate();\n  const [recipes, setRecipes] = useState([]);\n  const [search, setSearch] = useState(\"\");\n  const [selTags, setSelTags] = useState([]);\n  const [selCuisines, setSelCuisines] = useState([]);\n  const [selMeals, setSelMeals] = useState([]);\n\n  // Load the whole list once; re-used to build the filter lists AND the accordion.\n  useEffect(() => {\n    api.get(\"/recipes\").then((res) => setRecipes(res.data));\n  }, []);\n\n  // Filter lists come from ALL recipes (not the filtered view) and are de-duplicated.\n  const allTags = uniq(recipes.flatMap((r) => r.tags || []));\n  const allCuisines = uniq(recipes.map((r) => r.cuisine).filter(Boolean));\n  const allMeals = uniq(recipes.flatMap((r) => r.mealType || []));\n\n  const toggle = (value, list, setList) => {\n    setList(list.includes(value) ? list.filter((x) => x !== value) : [...list, value]);\n  };\n\n  // What is shown is DERIVED from state — search (startsWith), the three facets (AND\n  // between facets, \"at least one\" inside a facet), then sorted by rating descending.\n  const shown = recipes\n    .filter((r) => r.name.toLowerCase().startsWith(search.trim().toLowerCase()))\n    .filter((r) => selTags.length === 0 || (r.tags || []).some((t) => selTags.includes(t)))\n    .filter((r) => selCuisines.length === 0 || selCuisines.includes(r.cuisine))\n    .filter((r) => selMeals.length === 0 || (r.mealType || []).some((m) => selMeals.includes(m)))\n    .slice()\n    .sort((a, b) => b.rating - a.rating);\n\n  return (\n    <Container className=\"py-4\">\n      <h1 id=\"app-title\" className=\"text-center mb-4\">RECIPES FORUM</h1>\n      <Row>\n        {/* LEFT: Tags */}\n        <Col md={3} className=\"filter-tags\">\n          <h5>Tags</h5>\n          {allTags.map((t) => (\n            <Form.Check\n              key={t}\n              type=\"checkbox\"\n              id={\"tag-\" + t}\n              value={t}\n              label={t}\n              checked={selTags.includes(t)}\n              onChange={() => toggle(t, selTags, setSelTags)}\n            />\n          ))}\n        </Col>\n\n        {/* MIDDLE: search + Create Recipe + accordion */}\n        <Col md={6}>\n          <div className=\"d-flex justify-content-between align-items-start mb-3\">\n            <Form.Control\n              id=\"search\"\n              type=\"text\"\n              placeholder=\"Enter Recipe Name to search ...\"\n              value={search}\n              onChange={(e) => setSearch(e.target.value)}\n            />\n            <Button\n              id=\"btn-create-recipe\"\n              variant=\"primary\"\n              className=\"ms-2 text-nowrap\"\n              onClick={() => navigate(\"/recipe/create\")}\n            >\n              Create Recipe\n            </Button>\n          </div>\n\n          <Accordion>\n            {shown.map((r) => (\n              <Accordion.Item eventKey={String(r.id)} key={r.id}>\n                <Accordion.Header>{r.name} - Rating: {r.rating}</Accordion.Header>\n                <Accordion.Body>\n                  <img\n                    src={(process.env.PUBLIC_URL || \"\") + \"/images/\" + r.image}\n                    alt={r.name}\n                    style={{ width: 160, float: \"right\", marginLeft: 12 }}\n                  />\n                  <p>Preparation Time Minutes: {r.prepTimeMinutes}</p>\n                  <p>Cook Time Minutes: {r.cookTimeMinutes}</p>\n                  <p>Difficulty: {r.difficulty}</p>\n                  <p>Cuisine: {r.cuisine}</p>\n                  <p>Tags: {(r.tags || []).join(\"; \")}</p>\n                  <p>Meal Types: {(r.mealType || []).join(\"; \")}</p>\n                  <div>\n                    <b>Ingredients</b>\n                    <ul>\n                      {(r.ingredients || []).map((x, i) => (\n                        <li key={i}>{x}</li>\n                      ))}\n                    </ul>\n                  </div>\n                  <div>\n                    <b>Instructions</b>\n                    <ul>\n                      {(r.instructions || []).map((x, i) => (\n                        <li key={i}>{x}</li>\n                      ))}\n                    </ul>\n                  </div>\n                </Accordion.Body>\n              </Accordion.Item>\n            ))}\n          </Accordion>\n        </Col>\n\n        {/* RIGHT: Cuisine + Meal Type */}\n        <Col md={3}>\n          <div className=\"filter-cuisine\">\n            <h5>Cuisine</h5>\n            {allCuisines.map((c) => (\n              <Form.Check\n                key={c}\n                type=\"checkbox\"\n                id={\"cuisine-\" + c}\n                value={c}\n                label={c}\n                checked={selCuisines.includes(c)}\n                onChange={() => toggle(c, selCuisines, setSelCuisines)}\n              />\n            ))}\n          </div>\n          <div className=\"filter-mealtype mt-3\">\n            <h5>Meal Type</h5>\n            {allMeals.map((m) => (\n              <Form.Check\n                key={m}\n                type=\"checkbox\"\n                id={\"meal-\" + m}\n                value={m}\n                label={m}\n                checked={selMeals.includes(m)}\n                onChange={() => toggle(m, selMeals, setSelMeals)}\n              />\n            ))}\n          </div>\n        </Col>\n      </Row>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": "src/pages/CreateRecipe.js",
+          "language": "javascript",
+          "code": "import React, { useState } from \"react\";\nimport { useNavigate } from \"react-router-dom\";\nimport { Form, Button, Container } from \"react-bootstrap\";\nimport api from \"../api\";\n\n// \"a; b; c\" -> [\"a\",\"b\",\"c\"] (trimmed, empties dropped)\nconst splitList = (s) => s.split(\";\").map((x) => x.trim()).filter(Boolean);\n\nexport default function CreateRecipe() {\n  const navigate = useNavigate();\n  const [name, setName] = useState(\"\");\n  const [ingredients, setIngredients] = useState(\"\");\n  const [instructions, setInstructions] = useState(\"\");\n  const [prep, setPrep] = useState(0);\n  const [cook, setCook] = useState(0);\n  const [cuisine, setCuisine] = useState(\"\");\n  const [difficulty, setDifficulty] = useState(\"\");\n  const [tags, setTags] = useState(\"\");\n  const [meals, setMeals] = useState(\"\");\n  const [error, setError] = useState(\"\");\n\n  const onSave = async (e) => {\n    e.preventDefault();\n    if (!name.trim()) {\n      setError(\"Recipe Name is required\");\n      return; // do NOT submit\n    }\n    setError(\"\");\n    const newRecipe = {\n      name: name.trim(),\n      ingredients: splitList(ingredients),\n      instructions: splitList(instructions),\n      prepTimeMinutes: Number(prep) || 0,\n      cookTimeMinutes: Number(cook) || 0,\n      cuisine: cuisine.trim(),\n      difficulty: difficulty.trim(),\n      tags: splitList(tags),\n      mealType: splitList(meals),\n      image: \"thumbnail.png\", // no rating on a brand-new recipe\n    };\n    await api.post(\"/recipes\", newRecipe);\n    alert(\"Create new Recipe success!\");\n    navigate(\"/\"); // back to the list, which reloads from the server\n  };\n\n  return (\n    <Container className=\"py-4\" style={{ maxWidth: 640 }}>\n      <h1 id=\"form-title\" className=\"mb-4\">Create A New Recipe</h1>\n      <Form onSubmit={onSave}>\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Recipe Name <span className=\"text-danger\">*</span></Form.Label>\n          <Form.Control id=\"name\" value={name} onChange={(e) => setName(e.target.value)} />\n          {error && <div id=\"name-error\" className=\"text-danger mt-1\">{error}</div>}\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Ingredients</Form.Label>\n          <Form.Control id=\"ingredients\" value={ingredients} onChange={(e) => setIngredients(e.target.value)} placeholder=\"Separate ingredients with ;\" />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Instructions</Form.Label>\n          <Form.Control id=\"instructions\" value={instructions} onChange={(e) => setInstructions(e.target.value)} placeholder=\"Separate instructions with ;\" />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Preparation Time Minutes</Form.Label>\n          <Form.Control id=\"prep\" type=\"number\" value={prep} onChange={(e) => setPrep(e.target.value)} />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Cook Time Minutes</Form.Label>\n          <Form.Control id=\"cook\" type=\"number\" value={cook} onChange={(e) => setCook(e.target.value)} />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Cuisine</Form.Label>\n          <Form.Control id=\"cuisine\" value={cuisine} onChange={(e) => setCuisine(e.target.value)} />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Difficulty</Form.Label>\n          <Form.Control id=\"difficulty\" value={difficulty} onChange={(e) => setDifficulty(e.target.value)} />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Tags</Form.Label>\n          <Form.Control id=\"tags\" value={tags} onChange={(e) => setTags(e.target.value)} placeholder=\"Separate tags with ;\" />\n        </Form.Group>\n\n        <Form.Group className=\"mb-3\">\n          <Form.Label>Meal Types</Form.Label>\n          <Form.Control id=\"mealTypes\" value={meals} onChange={(e) => setMeals(e.target.value)} placeholder=\"Separate meal types with ;\" />\n        </Form.Group>\n\n        <Button id=\"btn-save\" type=\"submit\" variant=\"success\">Save</Button>\n      </Form>\n    </Container>\n  );\n}\n"
+        },
+        {
+          "name": ".env",
+          "language": "bash",
+          "code": "REACT_APP_API_URL=http://localhost:9999\n"
+        },
+        {
+          "name": "database.json",
+          "language": "json",
+          "code": "{\n  \"recipes\": [\n    {\n      \"id\": \"1\",\n      \"name\": \"Mango Salsa Chicken\",\n      \"rating\": 5.2,\n      \"prepTimeMinutes\": 10,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Mexican\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Chicken\",\n        \"Salsa\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"1.webp\",\n      \"ingredients\": [\n        \"Chicken thighs\",\n        \"Mango, diced\",\n        \"Red onion, finely chopped\",\n        \"Cilantro, chopped\",\n        \"Lime juice\",\n        \"Jalapeño, minced\",\n        \"Salt and pepper to taste\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Season chicken thighs with salt and pepper\",\n        \"Grill or bake chicken until fully cooked\",\n        \"In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice\",\n        \"Dice the cooked chicken and mix it with the mango salsa\",\n        \"Serve over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"2\",\n      \"name\": \"Chocolate Chip Cookies\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"American\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Cookies\",\n        \"Dessert\",\n        \"Baking\"\n      ],\n      \"mealType\": [\n        \"Dessert\",\n        \"Snack\"\n      ],\n      \"image\": \"2.webp\",\n      \"ingredients\": [\n        \"All-purpose flour\",\n        \"Baking soda\",\n        \"Salt\",\n        \"Butter, softened\",\n        \"Granulated sugar\",\n        \"Brown sugar\",\n        \"Vanilla extract\",\n        \"Eggs\",\n        \"Chocolate chips\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven to 180°C (350°F)\",\n        \"Whisk together the flour, baking soda and salt\",\n        \"Cream the butter with both sugars until light and fluffy\",\n        \"Beat in the vanilla and eggs one at a time\",\n        \"Fold in the flour mixture, then the chocolate chips\",\n        \"Drop spoonfuls onto a baking tray and bake for 10-12 minutes\"\n      ]\n    },\n    {\n      \"id\": \"3\",\n      \"name\": \"Chicken Alfredo Pasta\",\n      \"rating\": 4.9,\n      \"prepTimeMinutes\": 15,\n      \"cookTimeMinutes\": 25,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Chicken\",\n        \"Pasta\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"3.webp\",\n      \"ingredients\": [\n        \"Fettuccine pasta\",\n        \"Chicken breast\",\n        \"Butter\",\n        \"Garlic, minced\",\n        \"Heavy cream\",\n        \"Parmesan cheese, grated\",\n        \"Salt and pepper to taste\",\n        \"Fresh parsley, chopped\"\n      ],\n      \"instructions\": [\n        \"Cook the fettuccine until al dente, then drain\",\n        \"Season and pan-sear the chicken, then slice it\",\n        \"Melt the butter and sauté the garlic until fragrant\",\n        \"Pour in the heavy cream and simmer gently\",\n        \"Stir in the Parmesan until the sauce is smooth\",\n        \"Toss the pasta and chicken in the sauce and garnish with parsley\"\n      ]\n    },\n    {\n      \"id\": \"4\",\n      \"name\": \"Vegetarian Stir-Fry\",\n      \"rating\": 4.7,\n      \"prepTimeMinutes\": 20,\n      \"cookTimeMinutes\": 10,\n      \"cuisine\": \"Asian\",\n      \"difficulty\": \"Easy\",\n      \"tags\": [\n        \"Vegetarian\",\n        \"Stir-fry\",\n        \"Asian\"\n      ],\n      \"mealType\": [\n        \"Dinner\",\n        \"Lunch\"\n      ],\n      \"image\": \"4.webp\",\n      \"ingredients\": [\n        \"Broccoli florets\",\n        \"Carrot, sliced\",\n        \"Bell pepper, sliced\",\n        \"Snap peas\",\n        \"Garlic, minced\",\n        \"Ginger, grated\",\n        \"Soy sauce\",\n        \"Sesame oil\",\n        \"Cooked rice for serving\"\n      ],\n      \"instructions\": [\n        \"Heat the sesame oil in a wok over high heat\",\n        \"Stir-fry the garlic and ginger for 30 seconds\",\n        \"Add the hardest vegetables first, then the softer ones\",\n        \"Pour in the soy sauce and toss to coat\",\n        \"Stir-fry until crisp-tender\",\n        \"Serve hot over cooked rice\"\n      ]\n    },\n    {\n      \"id\": \"5\",\n      \"name\": \"Classic Margherita Pizza\",\n      \"rating\": 4.6,\n      \"prepTimeMinutes\": 90,\n      \"cookTimeMinutes\": 12,\n      \"cuisine\": \"Italian\",\n      \"difficulty\": \"Medium\",\n      \"tags\": [\n        \"Pizza\",\n        \"Italian\"\n      ],\n      \"mealType\": [\n        \"Dinner\"\n      ],\n      \"image\": \"5.webp\",\n      \"ingredients\": [\n        \"Pizza dough\",\n        \"Tomato sauce\",\n        \"Fresh mozzarella\",\n        \"Fresh basil leaves\",\n        \"Olive oil\",\n        \"Salt\"\n      ],\n      \"instructions\": [\n        \"Preheat the oven as hot as it will go with a pizza stone inside\",\n        \"Stretch the dough into a thin round\",\n        \"Spread a thin layer of tomato sauce\",\n        \"Tear the mozzarella over the top\",\n        \"Bake until the crust is blistered and the cheese melts\",\n        \"Finish with fresh basil and a drizzle of olive oil\"\n      ]\n    }\n  ]\n}\n"
+        }
+      ],
+      "solutionExplanationHtml": "<p><b>Routing.</b> <code>index.js</code> wraps <code>&lt;App/&gt;</code> in <code>&lt;BrowserRouter&gt;</code> and imports <code>bootstrap/dist/css/bootstrap.min.css</code>. <code>App.js</code> has three routes: <code>/</code> ⇒ <code>RecipesForum</code>, <code>/recipe/create</code> ⇒ <code>CreateRecipe</code>, and <code>path=\"*\"</code> ⇒ <code>&lt;Navigate to=\"/\" replace/&gt;</code>.</p>\n<p><b>Forum (Q1).</b> One <code>useEffect</code> does <code>GET /recipes</code> through an axios instance (<code>api.js</code>, baseURL from <code>.env</code>). The three filter lists are built from ALL recipes with <code>[...new Set(...)]</code> so duplicates drop out. What is shown is <i>derived</i>, never stored: filter by <code>name.toLowerCase().startsWith(search.trim().toLowerCase())</code>, then by each facet (<code>some</code> = \"at least one\" inside a facet, AND between facets), then <code>sort((a,b) =&gt; b.rating - a.rating)</code> on a copy. Each accordion header is <code>{r.name} - Rating: {r.rating}</code>; arrays are shown with <code>.join(\"; \")</code>.</p>\n<p><b>Create (Q2).</b> A controlled form. On submit, <code>preventDefault</code>, and if the trimmed name is empty set the error and return (no POST). Otherwise build the object — <code>split(\";\")</code> + <code>trim</code> for the four array fields, <code>Number()</code> for the two times, <code>image: \"thumbnail.png\"</code>, no rating — <code>POST /recipes</code>, <code>alert</code>, then <code>navigate(\"/\")</code> so the list remounts and re-fetches, showing the new recipe.</p>",
+      "solutionExplanationHtmlVi": "<p><b>Định tuyến.</b> <code>index.js</code> bọc <code>&lt;App/&gt;</code> trong <code>&lt;BrowserRouter&gt;</code> và import <code>bootstrap/dist/css/bootstrap.min.css</code>. <code>App.js</code> có ba route: <code>/</code> ⇒ <code>RecipesForum</code>, <code>/recipe/create</code> ⇒ <code>CreateRecipe</code>, và <code>path=\"*\"</code> ⇒ <code>&lt;Navigate to=\"/\" replace/&gt;</code>.</p>\n<p><b>Diễn đàn (Câu 1).</b> Một <code>useEffect</code> gọi <code>GET /recipes</code> qua axios instance (<code>api.js</code>, baseURL từ <code>.env</code>). Ba bộ lọc dựng từ TẤT CẢ công thức bằng <code>[...new Set(...)]</code> nên tự bỏ trùng. Thứ hiển thị là giá trị <i>suy ra</i>, không lưu thêm state: lọc theo <code>name.toLowerCase().startsWith(search.trim().toLowerCase())</code>, rồi theo từng bộ lọc (<code>some</code> = \"ít nhất một\" trong một bộ lọc, AND giữa các bộ lọc), rồi <code>sort((a,b) =&gt; b.rating - a.rating)</code> trên một bản sao. Tiêu đề accordion là <code>{r.name} - Rating: {r.rating}</code>; các mảng nối bằng <code>.join(\"; \")</code>.</p>\n<p><b>Tạo mới (Câu 2).</b> Form điều khiển. Khi submit: <code>preventDefault</code>, nếu tên (đã trim) rỗng thì đặt lỗi và return (không POST). Ngược lại dựng object — <code>split(\";\")</code> + <code>trim</code> cho bốn trường mảng, <code>Number()</code> cho hai ô thời gian, <code>image: \"thumbnail.png\"</code>, không rating — <code>POST /recipes</code>, <code>alert</code>, rồi <code>navigate(\"/\")</code> để danh sách mount lại và tải lại, hiện công thức mới.</p>",
+      "diagramMermaid": null,
+      "referenceUrl": "https://react-bootstrap.netlify.app/docs/components/accordion",
+      "testsJson": {
+        "loai": "react",
+        "phienBan": 1,
+        "tepChinh": "src/index.js",
+        "thuVien": [
+          "react-router-dom",
+          "react-bootstrap",
+          "bootstrap"
+        ],
+        "url": "/",
+        "jsonServer": {
+          "base": "http://localhost:9999",
+          "db": {
+            "recipes": [
+              {
+                "id": "1",
+                "name": "Mango Salsa Chicken",
+                "rating": 5.2,
+                "prepTimeMinutes": 10,
+                "cookTimeMinutes": 10,
+                "cuisine": "Mexican",
+                "difficulty": "Easy",
+                "tags": [
+                  "Chicken",
+                  "Salsa"
+                ],
+                "mealType": [
+                  "Dinner"
+                ],
+                "image": "1.webp",
+                "ingredients": [
+                  "Chicken thighs",
+                  "Mango, diced",
+                  "Red onion, finely chopped",
+                  "Cilantro, chopped",
+                  "Lime juice",
+                  "Jalapeño, minced",
+                  "Salt and pepper to taste",
+                  "Cooked rice for serving"
+                ],
+                "instructions": [
+                  "Season chicken thighs with salt and pepper",
+                  "Grill or bake chicken until fully cooked",
+                  "In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice",
+                  "Dice the cooked chicken and mix it with the mango salsa",
+                  "Serve over cooked rice"
+                ]
+              },
+              {
+                "id": "2",
+                "name": "Chocolate Chip Cookies",
+                "rating": 4.9,
+                "prepTimeMinutes": 15,
+                "cookTimeMinutes": 12,
+                "cuisine": "American",
+                "difficulty": "Easy",
+                "tags": [
+                  "Cookies",
+                  "Dessert",
+                  "Baking"
+                ],
+                "mealType": [
+                  "Dessert",
+                  "Snack"
+                ],
+                "image": "2.webp",
+                "ingredients": [
+                  "All-purpose flour",
+                  "Baking soda",
+                  "Salt",
+                  "Butter, softened",
+                  "Granulated sugar",
+                  "Brown sugar",
+                  "Vanilla extract",
+                  "Eggs",
+                  "Chocolate chips"
+                ],
+                "instructions": [
+                  "Preheat the oven to 180°C (350°F)",
+                  "Whisk together the flour, baking soda and salt",
+                  "Cream the butter with both sugars until light and fluffy",
+                  "Beat in the vanilla and eggs one at a time",
+                  "Fold in the flour mixture, then the chocolate chips",
+                  "Drop spoonfuls onto a baking tray and bake for 10-12 minutes"
+                ]
+              },
+              {
+                "id": "3",
+                "name": "Chicken Alfredo Pasta",
+                "rating": 4.9,
+                "prepTimeMinutes": 15,
+                "cookTimeMinutes": 25,
+                "cuisine": "Italian",
+                "difficulty": "Medium",
+                "tags": [
+                  "Chicken",
+                  "Pasta"
+                ],
+                "mealType": [
+                  "Dinner",
+                  "Lunch"
+                ],
+                "image": "3.webp",
+                "ingredients": [
+                  "Fettuccine pasta",
+                  "Chicken breast",
+                  "Butter",
+                  "Garlic, minced",
+                  "Heavy cream",
+                  "Parmesan cheese, grated",
+                  "Salt and pepper to taste",
+                  "Fresh parsley, chopped"
+                ],
+                "instructions": [
+                  "Cook the fettuccine until al dente, then drain",
+                  "Season and pan-sear the chicken, then slice it",
+                  "Melt the butter and sauté the garlic until fragrant",
+                  "Pour in the heavy cream and simmer gently",
+                  "Stir in the Parmesan until the sauce is smooth",
+                  "Toss the pasta and chicken in the sauce and garnish with parsley"
+                ]
+              },
+              {
+                "id": "4",
+                "name": "Vegetarian Stir-Fry",
+                "rating": 4.7,
+                "prepTimeMinutes": 20,
+                "cookTimeMinutes": 10,
+                "cuisine": "Asian",
+                "difficulty": "Easy",
+                "tags": [
+                  "Vegetarian",
+                  "Stir-fry",
+                  "Asian"
+                ],
+                "mealType": [
+                  "Dinner",
+                  "Lunch"
+                ],
+                "image": "4.webp",
+                "ingredients": [
+                  "Broccoli florets",
+                  "Carrot, sliced",
+                  "Bell pepper, sliced",
+                  "Snap peas",
+                  "Garlic, minced",
+                  "Ginger, grated",
+                  "Soy sauce",
+                  "Sesame oil",
+                  "Cooked rice for serving"
+                ],
+                "instructions": [
+                  "Heat the sesame oil in a wok over high heat",
+                  "Stir-fry the garlic and ginger for 30 seconds",
+                  "Add the hardest vegetables first, then the softer ones",
+                  "Pour in the soy sauce and toss to coat",
+                  "Stir-fry until crisp-tender",
+                  "Serve hot over cooked rice"
+                ]
+              },
+              {
+                "id": "5",
+                "name": "Classic Margherita Pizza",
+                "rating": 4.6,
+                "prepTimeMinutes": 90,
+                "cookTimeMinutes": 12,
+                "cuisine": "Italian",
+                "difficulty": "Medium",
+                "tags": [
+                  "Pizza",
+                  "Italian"
+                ],
+                "mealType": [
+                  "Dinner"
+                ],
+                "image": "5.webp",
+                "ingredients": [
+                  "Pizza dough",
+                  "Tomato sauce",
+                  "Fresh mozzarella",
+                  "Fresh basil leaves",
+                  "Olive oil",
+                  "Salt"
+                ],
+                "instructions": [
+                  "Preheat the oven as hot as it will go with a pizza stone inside",
+                  "Stretch the dough into a thin round",
+                  "Spread a thin layer of tomato sauce",
+                  "Tear the mozzarella over the top",
+                  "Bake until the crust is blistered and the cheese melts",
+                  "Finish with fresh basil and a drizzle of olive oil"
+                ]
+              }
+            ],
+            "$schema": "./node_modules/json-server/schema.json"
+          }
+        },
+        "thangDiem": [
+          {
+            "ma": "f1",
+            "ten": "1. Q1 · Fetch & display recipes (routing + json-server)",
+            "diem": 1.5
+          },
+          {
+            "ma": "f2",
+            "ten": "2. Q1 · Filter lists built from data (de-duplicated)",
+            "diem": 1
+          },
+          {
+            "ma": "f3",
+            "ten": "3. Q1 · Accordion body content + joined with \"; \"",
+            "diem": 1
+          },
+          {
+            "ma": "f4",
+            "ten": "4. Q1 · Sort descending by rating",
+            "diem": 0.5
+          },
+          {
+            "ma": "f5",
+            "ten": "5. Q1 · Search (starts with) + combined filters",
+            "diem": 1.5
+          },
+          {
+            "ma": "f6",
+            "ten": "6. Q1 · Layout + Create Recipe navigation",
+            "diem": 0.5
+          },
+          {
+            "ma": "f7",
+            "ten": "7. Q2 · Create route & form fields",
+            "diem": 1.5
+          },
+          {
+            "ma": "f8",
+            "ten": "8. Q2 · Validation (Recipe Name required)",
+            "diem": 1
+          },
+          {
+            "ma": "f9",
+            "ten": "9. Q2 · Save: POST + alert + redirect + reload",
+            "diem": 1.5
+          }
+        ],
+        "kiem": [
+          {
+            "nhom": "f1",
+            "moTa": "The home page renders the \"RECIPES FORUM\" title",
+            "url": "/",
+            "kiem": "text",
+            "selector": "#app-title",
+            "giaTri": "RECIPES FORUM",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f1",
+            "moTa": "All 5 recipes are shown as accordion items",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".accordion-item",
+            "giaTri": 5,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f1",
+            "an": true,
+            "moTa": "Recipes are fetched from json-server (GET /recipes)",
+            "url": "/",
+            "kiem": "goi-fetch",
+            "khop": "^GET http://localhost:9999/recipes",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f1",
+            "moTa": "A search box is rendered",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": "#search",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f1",
+            "moTa": "A \"Create Recipe\" button is rendered",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": "#btn-create-recipe",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f2",
+            "moTa": "11 unique tags as checkboxes (left column)",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".filter-tags input[type=\"checkbox\"]",
+            "giaTri": 11,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f2",
+            "moTa": "4 unique cuisines as checkboxes (right column)",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".filter-cuisine input[type=\"checkbox\"]",
+            "giaTri": 4,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f2",
+            "moTa": "4 unique meal types as checkboxes (right column)",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".filter-mealtype input[type=\"checkbox\"]",
+            "giaTri": 4,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Tags are de-duplicated: \"Chicken\" appears once even though two recipes use it",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".filter-tags input[type=\"checkbox\"][value=\"Chicken\"]",
+            "giaTri": 1,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f2",
+            "an": true,
+            "moTa": "Every tag of the data has a checkbox (value = tag)",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".filter-tags input[value=\"Chicken\"], .filter-tags input[value=\"Salsa\"], .filter-tags input[value=\"Cookies\"], .filter-tags input[value=\"Dessert\"], .filter-tags input[value=\"Baking\"], .filter-tags input[value=\"Pasta\"], .filter-tags input[value=\"Vegetarian\"], .filter-tags input[value=\"Stir-fry\"], .filter-tags input[value=\"Asian\"], .filter-tags input[value=\"Pizza\"], .filter-tags input[value=\"Italian\"]",
+            "giaTri": 11,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Each accordion body has a recipe image",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".accordion-body img",
+            "giaTri": 5,
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Tags are joined with \"; \" in the body (Chicken; Salsa)",
+            "url": "/",
+            "kiem": "text",
+            "selector": ".accordion-body",
+            "tatCa": false,
+            "khop": "Chicken; Salsa",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "moTa": "Meal types are joined with \"; \" in the body (Dessert; Snack)",
+            "url": "/",
+            "kiem": "text",
+            "selector": ".accordion-body",
+            "tatCa": false,
+            "khop": "Dessert; Snack",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "The body shows the difficulty",
+            "url": "/",
+            "kiem": "text",
+            "selector": ".accordion-body",
+            "tatCa": false,
+            "khop": "Difficulty: Easy",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "The body shows the cuisine",
+            "url": "/",
+            "kiem": "text",
+            "selector": ".accordion-body",
+            "tatCa": false,
+            "khop": "Cuisine: Mexican",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f3",
+            "an": true,
+            "moTa": "The body lists the preparation time",
+            "url": "/",
+            "kiem": "text",
+            "selector": ".accordion-body",
+            "tatCa": false,
+            "khop": "Preparation Time Minutes: 10",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f4",
+            "moTa": "Accordion headers are \"<name> - Rating: <rating>\" sorted by rating DESC",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Mango Salsa Chicken - Rating: 5.2",
+              "Chocolate Chip Cookies - Rating: 4.9",
+              "Chicken Alfredo Pasta - Rating: 4.9",
+              "Vegetarian Stir-Fry - Rating: 4.7",
+              "Classic Margherita Pizza - Rating: 4.6"
+            ],
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Search \"c\" ⇒ names starting with C, still rating-sorted",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Chocolate Chip Cookies - Rating: 4.9",
+              "Chicken Alfredo Pasta - Rating: 4.9",
+              "Classic Margherita Pizza - Rating: 4.6"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "c"
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Search \"  CHIC  \" (spaces, upper case) ⇒ Chicken Alfredo Pasta",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Chicken Alfredo Pasta - Rating: 4.9"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "  CHIC  "
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "\"Starts with\", not \"contains\": \"alfredo\" ⇒ no recipe",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".accordion-item",
+            "giaTri": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "alfredo"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Tick tag \"Chicken\" ⇒ recipes tagged Chicken (rating-sorted)",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Mango Salsa Chicken - Rating: 5.2",
+              "Chicken Alfredo Pasta - Rating: 4.9"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-tags input[type=\"checkbox\"][value=\"Chicken\"]"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Tick meal type \"Lunch\" ⇒ recipes for Lunch (rating-sorted)",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Chicken Alfredo Pasta - Rating: 4.9",
+              "Vegetarian Stir-Fry - Rating: 4.7"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-mealtype input[type=\"checkbox\"][value=\"Lunch\"]"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Two tags combine as \"at least one\" (Pizza OR Pasta)",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Chicken Alfredo Pasta - Rating: 4.9",
+              "Classic Margherita Pizza - Rating: 4.6"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-tags input[type=\"checkbox\"][value=\"Pizza\"]"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-tags input[type=\"checkbox\"][value=\"Pasta\"]"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "moTa": "Search and filter combine (AND): \"c\" + cuisine Italian ⇒ 2 recipes",
+            "url": "/",
+            "kiem": "danh-sach-text",
+            "selector": ".accordion-header",
+            "mongDoi": [
+              "Chicken Alfredo Pasta - Rating: 4.9",
+              "Classic Margherita Pizza - Rating: 4.6"
+            ],
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#search",
+                "giaTri": "c"
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-cuisine input[type=\"checkbox\"][value=\"Italian\"]"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f5",
+            "an": true,
+            "moTa": "Unticking the last filter shows every recipe again",
+            "url": "/",
+            "kiem": "so-luong",
+            "selector": ".accordion-item",
+            "giaTri": 5,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-cuisine input[type=\"checkbox\"][value=\"Italian\"]"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 80
+              },
+              {
+                "hanhDong": "chon-o",
+                "selector": ".filter-cuisine input[type=\"checkbox\"][value=\"Italian\"]",
+                "giaTri": false
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Left column \"Tags\" exists",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": ".filter-tags",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Right column \"Cuisine\" exists",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": ".filter-cuisine",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f6",
+            "moTa": "Right column \"Meal Type\" exists",
+            "url": "/",
+            "kiem": "ton-tai",
+            "selector": ".filter-mealtype",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f6",
+            "moTa": "The search box has the exact placeholder from the paper",
+            "url": "/",
+            "kiem": "thuoc-tinh",
+            "selector": "#search",
+            "thuocTinh": "placeholder",
+            "giaTri": "Enter Recipe Name to search ...",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f6",
+            "moTa": "The button reads \"Create Recipe\"",
+            "url": "/",
+            "kiem": "text",
+            "selector": "#btn-create-recipe",
+            "giaTri": "Create Recipe",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f6",
+            "moTa": "\"Create Recipe\" navigates to /recipe/create",
+            "url": "/",
+            "kiem": "duong-dan",
+            "giaTri": "/recipe/create",
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-create-recipe"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 120
+              }
+            ]
+          },
+          {
+            "nhom": "f7",
+            "moTa": "/recipe/create renders the \"Create A New Recipe\" form",
+            "url": "/recipe/create",
+            "kiem": "text",
+            "selector": "#form-title",
+            "giaTri": "Create A New Recipe",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Recipe Name field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#name",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Ingredients field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#ingredients",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Instructions field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#instructions",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Preparation Time field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#prep",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Cook Time field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#cook",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Cuisine field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#cuisine",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Difficulty field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#difficulty",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Tags field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#tags",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Meal Types field",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#mealTypes",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "moTa": "Save button",
+            "url": "/recipe/create",
+            "kiem": "ton-tai",
+            "selector": "#btn-save",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Ingredients has the hint placeholder",
+            "url": "/recipe/create",
+            "kiem": "thuoc-tinh",
+            "selector": "#ingredients",
+            "thuocTinh": "placeholder",
+            "giaTri": "Separate ingredients with ;",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f7",
+            "an": true,
+            "moTa": "Preparation Time defaults to 0",
+            "url": "/recipe/create",
+            "kiem": "thuoc-tinh-js",
+            "selector": "#prep",
+            "thuocTinh": "value",
+            "giaTri": "0",
+            "choToiDa": 1500
+          },
+          {
+            "nhom": "f8",
+            "moTa": "Saving an empty name shows \"Recipe Name is required\"",
+            "url": "/recipe/create",
+            "kiem": "text",
+            "selector": "#name-error",
+            "giaTri": "Recipe Name is required",
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 150
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "moTa": "An invalid form sends no POST",
+            "url": "/recipe/create",
+            "kiem": "goi-fetch",
+            "khop": "^POST",
+            "min": 0,
+            "max": 0,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f8",
+            "an": true,
+            "moTa": "An invalid form stays on /recipe/create",
+            "url": "/recipe/create",
+            "kiem": "duong-dan",
+            "giaTri": "/recipe/create",
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 200
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "A valid Save sends POST /recipes",
+            "url": "/recipe/create",
+            "kiem": "goi-fetch",
+            "khop": "^POST http://localhost:9999/recipes$",
+            "min": 1,
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Test Dish"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#ingredients",
+                "giaTri": "Flour; Water"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#instructions",
+                "giaTri": "Mix; Bake"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#cuisine",
+                "giaTri": "Fusion"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#difficulty",
+                "giaTri": "Easy"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#tags",
+                "giaTri": "Quick; Easy"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#mealTypes",
+                "giaTri": "Snack"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "The new recipe is saved correctly (split lists, numbers, image thumbnail.png)",
+            "url": "/recipe/create",
+            "kiem": "du-lieu-server",
+            "bang": "recipes",
+            "chua": {
+              "name": "Test Dish",
+              "ingredients": [
+                "Flour",
+                "Water"
+              ],
+              "instructions": [
+                "Mix",
+                "Bake"
+              ],
+              "tags": [
+                "Quick",
+                "Easy"
+              ],
+              "mealType": [
+                "Snack"
+              ],
+              "prepTimeMinutes": 0,
+              "cookTimeMinutes": 0,
+              "image": "thumbnail.png"
+            },
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Test Dish"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#ingredients",
+                "giaTri": "Flour; Water"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#instructions",
+                "giaTri": "Mix; Bake"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#tags",
+                "giaTri": "Quick; Easy"
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#mealTypes",
+                "giaTri": "Snack"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "moTa": "After a successful save the app redirects to the list (\"/\")",
+            "url": "/recipe/create",
+            "kiem": "duong-dan",
+            "giaTri": "/",
+            "choToiDa": 1500,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Test Dish"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 500
+              }
+            ]
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "The alert \"Create new Recipe success!\" is shown",
+            "url": "/recipe/create",
+            "kiem": "ma-nguon",
+            "khop": "Create new Recipe success!"
+          },
+          {
+            "nhom": "f9",
+            "an": true,
+            "moTa": "The reloaded list now shows the new recipe (6 items)",
+            "url": "/recipe/create",
+            "kiem": "so-luong",
+            "selector": ".accordion-item",
+            "giaTri": 6,
+            "choToiDa": 2000,
+            "truoc": [
+              {
+                "hanhDong": "cho",
+                "ms": 250
+              },
+              {
+                "hanhDong": "nhap",
+                "selector": "#name",
+                "giaTri": "Test Dish"
+              },
+              {
+                "hanhDong": "click",
+                "selector": "#btn-save"
+              },
+              {
+                "hanhDong": "cho",
+                "ms": 600
+              }
+            ]
+          }
+        ],
+        "loiGiaiSauKhiDat": true
+      },
+      "gradeKind": "react",
+      "kind": "pe",
+      "mistakesJson": [
+        {
+          "loi": "Rút bộ lọc từ danh sách ĐÃ lọc/tìm thay vì từ TẤT CẢ công thức ⇒ số checkbox nhảy loạn khi gõ tìm kiếm; đề yêu cầu lấy từ toàn bộ dữ liệu."
+        },
+        {
+          "loi": "Quên <code>[...new Set(...)]</code> ⇒ tag \"Chicken\" (dùng ở 2 công thức) hiện hai lần, cuisine \"Italian\" hiện hai lần."
+        },
+        {
+          "loi": "Dùng <code>includes</code> thay vì <code>startsWith</code>, hoặc quên <code>trim()</code>/<code>toLowerCase()</code> ⇒ gõ \"  CHIC  \" không ra \"Chicken Alfredo Pasta\"."
+        },
+        {
+          "loi": "Lọc trong một bộ lọc kiểu \"đủ mọi giá trị đã tick\" (<code>every</code>) thay vì \"ít nhất một\" (<code>some</code>); hoặc để tìm kiếm GHI ĐÈ bộ lọc thay vì kết hợp AND."
+        },
+        {
+          "loi": "Sắp xếp nhầm tăng dần (<code>a.rating - b.rating</code>) hoặc sort trực tiếp trên mảng state (thiếu <code>.slice()</code>) gây cảnh báo và render sai."
+        },
+        {
+          "loi": "Nối mảng bằng dấu phẩy mặc định (<code>{r.tags}</code>) thay vì <code>r.tags.join(\"; \")</code> ⇒ hiện \"Chicken,Salsa\"."
+        },
+        {
+          "loi": "Dùng <code>&lt;Route path=\"/recipe/create/:id\"&gt;</code> hoặc không có route \"*\"; đề chỉ cần đúng <code>/recipe/create</code> và một catch-all điều hướng về \"/\"."
+        },
+        {
+          "loi": "Không <code>preventDefault</code> trong onSubmit ⇒ trình duyệt tải lại trang khi bấm Save; hoặc submit cả khi Recipe Name rỗng."
+        },
+        {
+          "loi": "POST gửi thời gian dạng chuỗi (\"10\") thay vì số, hoặc không <code>trim()</code> từng phần sau khi <code>split(\";\")</code> ⇒ dữ liệu có khoảng trắng thừa; hoặc thêm nhầm trường rating."
+        },
+        {
+          "loi": "Sau khi POST không <code>navigate(\"/\")</code> hoặc không tải lại danh sách ⇒ công thức mới không xuất hiện dù đã lưu trên server."
+        }
+      ],
+      "glossaryJson": [
+        {
+          "en": "recipe",
+          "vi": "công thức nấu ăn (một bản ghi trong database.json)"
+        },
+        {
+          "en": "accordion",
+          "vi": "khối xếp gập mở/đóng từng mục (react-bootstrap Accordion)"
+        },
+        {
+          "en": "facet / filter",
+          "vi": "bộ lọc theo một chiều: Tags, Cuisine, Meal Type"
+        },
+        {
+          "en": "de-duplicate",
+          "vi": "bỏ trùng (dùng Set)"
+        },
+        {
+          "en": "starts with",
+          "vi": "bắt đầu bằng (String.prototype.startsWith) — khác với \"chứa\" (includes)"
+        },
+        {
+          "en": "controlled component",
+          "vi": "ô nhập mà giá trị do React state nắm (value + onChange)"
+        },
+        {
+          "en": "json-server",
+          "vi": "máy chủ REST giả đọc/ghi từ một tệp JSON"
+        },
+        {
+          "en": "POST",
+          "vi": "phương thức HTTP tạo bản ghi mới"
+        },
+        {
+          "en": "navigate",
+          "vi": "điều hướng bằng mã (useNavigate của react-router-dom)"
+        },
+        {
+          "en": "required field",
+          "vi": "ô bắt buộc nhập (ở đây: Recipe Name)"
+        }
+      ],
+      "demoHtml": "<!doctype html><html lang=\"en\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><title>FER202 PE — Recipes Forum — Live demo</title>\n<meta name=\"color-scheme\" content=\"light only\">\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css\">\n<style>:root{color-scheme:only light}body{background:#f4f6fb;color:#212529;margin:0}.rc-img{width:150px;height:110px;border-radius:12px;float:right;margin:0 0 8px 12px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;background:linear-gradient(135deg,#6366f1,#ec4899)}h1{letter-spacing:.06em}</style>\n<script src=\"https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js\" crossorigin></script>\n<script src=\"https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js\" crossorigin></script>\n<script src=\"https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js\" crossorigin></script>\n</head><body><div id=\"root\" class=\"container py-4\"></div>\n<script type=\"text/babel\" data-presets=\"react\">\nconst { useState } = React;\nconst DATA = [{\"id\":\"1\",\"name\":\"Mango Salsa Chicken\",\"rating\":5.2,\"prepTimeMinutes\":10,\"cookTimeMinutes\":10,\"cuisine\":\"Mexican\",\"difficulty\":\"Easy\",\"tags\":[\"Chicken\",\"Salsa\"],\"mealType\":[\"Dinner\"],\"image\":\"1.webp\",\"ingredients\":[\"Chicken thighs\",\"Mango, diced\",\"Red onion, finely chopped\",\"Cilantro, chopped\",\"Lime juice\",\"Jalapeño, minced\",\"Salt and pepper to taste\",\"Cooked rice for serving\"],\"instructions\":[\"Season chicken thighs with salt and pepper\",\"Grill or bake chicken until fully cooked\",\"In a bowl, combine diced mango, chopped red onion, cilantro, minced jalapeño, and lime juice\",\"Dice the cooked chicken and mix it with the mango salsa\",\"Serve over cooked rice\"]},{\"id\":\"2\",\"name\":\"Chocolate Chip Cookies\",\"rating\":4.9,\"prepTimeMinutes\":15,\"cookTimeMinutes\":12,\"cuisine\":\"American\",\"difficulty\":\"Easy\",\"tags\":[\"Cookies\",\"Dessert\",\"Baking\"],\"mealType\":[\"Dessert\",\"Snack\"],\"image\":\"2.webp\",\"ingredients\":[\"All-purpose flour\",\"Baking soda\",\"Salt\",\"Butter, softened\",\"Granulated sugar\",\"Brown sugar\",\"Vanilla extract\",\"Eggs\",\"Chocolate chips\"],\"instructions\":[\"Preheat the oven to 180°C (350°F)\",\"Whisk together the flour, baking soda and salt\",\"Cream the butter with both sugars until light and fluffy\",\"Beat in the vanilla and eggs one at a time\",\"Fold in the flour mixture, then the chocolate chips\",\"Drop spoonfuls onto a baking tray and bake for 10-12 minutes\"]},{\"id\":\"3\",\"name\":\"Chicken Alfredo Pasta\",\"rating\":4.9,\"prepTimeMinutes\":15,\"cookTimeMinutes\":25,\"cuisine\":\"Italian\",\"difficulty\":\"Medium\",\"tags\":[\"Chicken\",\"Pasta\"],\"mealType\":[\"Dinner\",\"Lunch\"],\"image\":\"3.webp\",\"ingredients\":[\"Fettuccine pasta\",\"Chicken breast\",\"Butter\",\"Garlic, minced\",\"Heavy cream\",\"Parmesan cheese, grated\",\"Salt and pepper to taste\",\"Fresh parsley, chopped\"],\"instructions\":[\"Cook the fettuccine until al dente, then drain\",\"Season and pan-sear the chicken, then slice it\",\"Melt the butter and sauté the garlic until fragrant\",\"Pour in the heavy cream and simmer gently\",\"Stir in the Parmesan until the sauce is smooth\",\"Toss the pasta and chicken in the sauce and garnish with parsley\"]},{\"id\":\"4\",\"name\":\"Vegetarian Stir-Fry\",\"rating\":4.7,\"prepTimeMinutes\":20,\"cookTimeMinutes\":10,\"cuisine\":\"Asian\",\"difficulty\":\"Easy\",\"tags\":[\"Vegetarian\",\"Stir-fry\",\"Asian\"],\"mealType\":[\"Dinner\",\"Lunch\"],\"image\":\"4.webp\",\"ingredients\":[\"Broccoli florets\",\"Carrot, sliced\",\"Bell pepper, sliced\",\"Snap peas\",\"Garlic, minced\",\"Ginger, grated\",\"Soy sauce\",\"Sesame oil\",\"Cooked rice for serving\"],\"instructions\":[\"Heat the sesame oil in a wok over high heat\",\"Stir-fry the garlic and ginger for 30 seconds\",\"Add the hardest vegetables first, then the softer ones\",\"Pour in the soy sauce and toss to coat\",\"Stir-fry until crisp-tender\",\"Serve hot over cooked rice\"]},{\"id\":\"5\",\"name\":\"Classic Margherita Pizza\",\"rating\":4.6,\"prepTimeMinutes\":90,\"cookTimeMinutes\":12,\"cuisine\":\"Italian\",\"difficulty\":\"Medium\",\"tags\":[\"Pizza\",\"Italian\"],\"mealType\":[\"Dinner\"],\"image\":\"5.webp\",\"ingredients\":[\"Pizza dough\",\"Tomato sauce\",\"Fresh mozzarella\",\"Fresh basil leaves\",\"Olive oil\",\"Salt\"],\"instructions\":[\"Preheat the oven as hot as it will go with a pizza stone inside\",\"Stretch the dough into a thin round\",\"Spread a thin layer of tomato sauce\",\"Tear the mozzarella over the top\",\"Bake until the crust is blistered and the cheese melts\",\"Finish with fresh basil and a drizzle of olive oil\"]}];\nconst uniq = (a) => [...new Set(a)];\nlet store = DATA.slice();\nlet nextId = 100;\n\nfunction Chip({label, on, onToggle}){\n  return (<div className=\"form-check\"><input className=\"form-check-input\" type=\"checkbox\" id={\"c-\"+label} checked={on} onChange={onToggle}/><label className=\"form-check-label\" htmlFor={\"c-\"+label}>{label}</label></div>);\n}\n\nfunction Forum({go}){\n  const [, force] = useState(0);\n  const [search,setSearch]=useState(\"\");\n  const [st,setSt]=useState([]); const [sc,setSc]=useState([]); const [sm,setSm]=useState([]);\n  const recipes = store;\n  const allTags=uniq(recipes.flatMap(r=>r.tags)); const allCu=uniq(recipes.map(r=>r.cuisine)); const allMe=uniq(recipes.flatMap(r=>r.mealType));\n  const tog=(v,l,s)=>s(l.includes(v)?l.filter(x=>x!==v):[...l,v]);\n  const shown=recipes\n    .filter(r=>r.name.toLowerCase().startsWith(search.trim().toLowerCase()))\n    .filter(r=>st.length===0||r.tags.some(t=>st.includes(t)))\n    .filter(r=>sc.length===0||sc.includes(r.cuisine))\n    .filter(r=>sm.length===0||r.mealType.some(m=>sm.includes(m)))\n    .slice().sort((a,b)=>b.rating-a.rating);\n  const [open,setOpen]=useState(null);\n  return (<div>\n    <h1 className=\"text-center mb-4\">RECIPES FORUM</h1>\n    <div className=\"row\">\n      <div className=\"col-md-3\"><h5>Tags</h5>{allTags.map(t=><Chip key={t} label={t} on={st.includes(t)} onToggle={()=>tog(t,st,setSt)}/>)}</div>\n      <div className=\"col-md-6\">\n        <div className=\"d-flex mb-3\"><input className=\"form-control\" placeholder=\"Enter Recipe Name to search ...\" value={search} onChange={e=>setSearch(e.target.value)}/><button className=\"btn btn-primary ms-2 text-nowrap\" onClick={()=>go(\"create\")}>Create Recipe</button></div>\n        <div className=\"accordion\">\n          {shown.map(r=>(<div className=\"accordion-item\" key={r.id}>\n            <h2 className=\"accordion-header\"><button className={\"accordion-button\"+(open===r.id?\"\":\" collapsed\")} onClick={()=>setOpen(open===r.id?null:r.id)}>{r.name} - Rating: {r.rating}</button></h2>\n            <div className={\"accordion-collapse collapse\"+(open===r.id?\" show\":\"\")}><div className=\"accordion-body\">\n              <div className=\"rc-img\">{r.name[0]}</div>\n              <p>Preparation Time Minutes: {r.prepTimeMinutes}</p><p>Cook Time Minutes: {r.cookTimeMinutes}</p>\n              <p>Difficulty: {r.difficulty}</p><p>Cuisine: {r.cuisine}</p>\n              <p>Tags: {r.tags.join(\"; \")}</p><p>Meal Types: {r.mealType.join(\"; \")}</p>\n              <b>Ingredients</b><ul>{r.ingredients.map((x,i)=><li key={i}>{x}</li>)}</ul>\n              <b>Instructions</b><ul>{r.instructions.map((x,i)=><li key={i}>{x}</li>)}</ul>\n            </div></div>\n          </div>))}\n        </div>\n      </div>\n      <div className=\"col-md-3\">\n        <h5>Cuisine</h5>{allCu.map(c=><Chip key={c} label={c} on={sc.includes(c)} onToggle={()=>tog(c,sc,setSc)}/>)}\n        <h5 className=\"mt-3\">Meal Type</h5>{allMe.map(m=><Chip key={m} label={m} on={sm.includes(m)} onToggle={()=>tog(m,sm,setSm)}/>)}\n      </div>\n    </div>\n  </div>);\n}\n\nfunction Create({go}){\n  const [f,setF]=useState({name:\"\",ingredients:\"\",instructions:\"\",prep:0,cook:0,cuisine:\"\",difficulty:\"\",tags:\"\",meals:\"\"});\n  const [err,setErr]=useState(\"\");\n  const up=(k)=>(e)=>setF({...f,[k]:e.target.value});\n  const sl=(s)=>s.split(\";\").map(x=>x.trim()).filter(Boolean);\n  const save=(e)=>{e.preventDefault(); if(!f.name.trim()){setErr(\"Recipe Name is required\");return;} setErr(\"\");\n    store=[...store,{id:String(nextId++),name:f.name.trim(),ingredients:sl(f.ingredients),instructions:sl(f.instructions),prepTimeMinutes:Number(f.prep)||0,cookTimeMinutes:Number(f.cook)||0,cuisine:f.cuisine.trim(),difficulty:f.difficulty.trim(),tags:sl(f.tags),mealType:sl(f.meals),image:\"thumbnail.png\"}];\n    alert(\"Create new Recipe success!\"); go(\"forum\");};\n  const Fld=(label,k,extra)=>(<div className=\"mb-3\"><label className=\"form-label\">{label}</label><input className=\"form-control\" value={f[k]} onChange={up(k)} {...extra}/></div>);\n  return (<div style={{maxWidth:640,margin:\"0 auto\"}}>\n    <h1 className=\"mb-4\">Create A New Recipe</h1>\n    <form onSubmit={save}>\n      <div className=\"mb-3\"><label className=\"form-label\">Recipe Name <span className=\"text-danger\">*</span></label><input className=\"form-control\" value={f.name} onChange={up(\"name\")}/>{err&&<div className=\"text-danger mt-1\">{err}</div>}</div>\n      {Fld(\"Ingredients\",\"ingredients\",{placeholder:\"Separate ingredients with ;\"})}\n      {Fld(\"Instructions\",\"instructions\",{placeholder:\"Separate instructions with ;\"})}\n      {Fld(\"Preparation Time Minutes\",\"prep\",{type:\"number\"})}\n      {Fld(\"Cook Time Minutes\",\"cook\",{type:\"number\"})}\n      {Fld(\"Cuisine\",\"cuisine\",{})}\n      {Fld(\"Difficulty\",\"difficulty\",{})}\n      {Fld(\"Tags\",\"tags\",{placeholder:\"Separate tags with ;\"})}\n      {Fld(\"Meal Types\",\"meals\",{placeholder:\"Separate meal types with ;\"})}\n      <button className=\"btn btn-success\" type=\"submit\">Save</button>\n      <button className=\"btn btn-link\" type=\"button\" onClick={()=>go(\"forum\")}>Cancel</button>\n    </form>\n  </div>);\n}\n\nfunction App(){const [page,setPage]=useState(\"forum\"); return page===\"forum\"?<Forum go={setPage}/>:<Create go={setPage}/>;}\nReactDOM.createRoot(document.getElementById(\"root\")).render(<App/>);\n</script>\n</body></html>"
+    }
+  ]
+}

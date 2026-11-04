@@ -1,0 +1,4 @@
+# Ch4 · 4.1 — gói khi cổng đóng: SYN đi ra, R (reset) quay về ngay — không có bắt tay, nên không có TIME-WAIT
+$ tcpdump -nr /tmp/c41rst.pcap -tt 'tcp' 2>/dev/null
+1793770211.285636 IP 10.10.1.10.38900 > 10.10.2.20.4999: Flags [S], seq 4171142743, win 64240, options [mss 1460,sackOK,TS val 2355314289 ecr 0,nop,wscale 10], length 0
+1793770211.311933 IP 10.10.2.20.4999 > 10.10.1.10.38900: Flags [R.], seq 0, ack 4171142744, win 0, length 0

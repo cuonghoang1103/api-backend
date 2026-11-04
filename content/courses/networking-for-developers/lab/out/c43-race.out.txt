@@ -1,0 +1,13 @@
+# Ch4 · 4.3 — reno và cubic trên cùng một đường có mất gói: cubic lấp lại băng thông nhanh hơn
+# (chạy trong máy phụ có quyền đặt thuật toán; đường qua router: 20 Mbit, trễ 80 ms, mất 0.3%)
+$ ip route add 10.10.2.0/24 via 10.10.1.254 2>/dev/null
+$ sysctl -w net.ipv4.tcp_congestion_control=reno >/dev/null; echo "== $(sysctl -n net.ipv4.tcp_congestion_control) =="
+== reno ==
+$ iperf3 -c 10.10.2.10 -t 10 2>&1 | grep -E 'sender|receiver'
+[  5]   0.00-10.01  sec   415 MBytes   348 Mbits/sec    0            sender
+[  5]   0.00-10.09  sec   414 MBytes   345 Mbits/sec                  receiver
+$ sysctl -w net.ipv4.tcp_congestion_control=cubic >/dev/null; echo "== $(sysctl -n net.ipv4.tcp_congestion_control) =="
+== cubic ==
+$ iperf3 -c 10.10.2.10 -t 10 2>&1 | grep -E 'sender|receiver'
+[  5]   0.00-10.01  sec   423 MBytes   354 Mbits/sec   10            sender
+[  5]   0.00-10.09  sec   423 MBytes   351 Mbits/sec                  receiver

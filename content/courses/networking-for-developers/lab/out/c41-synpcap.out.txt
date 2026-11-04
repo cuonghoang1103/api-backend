@@ -1,0 +1,11 @@
+# Ch4 · 4.1 — các gói SYN gửi vào hư không: thời điểm từng lần, khoảng cách giãn gấp đôi (truyền lại theo hàm mũ)
+$ tcpdump -nr /tmp/c41syn.pcap -tt 'tcp' 2>/dev/null
+1793769997.987085 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059665022 ecr 0,nop,wscale 10], length 0
+1793769999.029629 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059666065 ecr 0,nop,wscale 10], length 0
+1793770000.054034 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059667089 ecr 0,nop,wscale 10], length 0
+1793770001.077504 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059668113 ecr 0,nop,wscale 10], length 0
+1793770002.102237 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059669137 ecr 0,nop,wscale 10], length 0
+1793770003.125474 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059670161 ecr 0,nop,wscale 10], length 0
+1793770005.174493 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059672210 ecr 0,nop,wscale 10], length 0
+1793770009.205395 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059676241 ecr 0,nop,wscale 10], length 0
+1793770017.654039 IP 10.10.1.10.45122 > 10.10.2.99.80: Flags [S], seq 1862744380, win 64240, options [mss 1460,sackOK,TS val 2059684689 ecr 0,nop,wscale 10], length 0

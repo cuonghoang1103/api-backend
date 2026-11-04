@@ -1,0 +1,23 @@
+# Ch4 · 4.4 — các trạng thái của một kết nối TCP; đếm nhanh bằng ss -s
+# giữ 2 kết nối mở (orchestrator mở sẵn bằng bash /dev/tcp) + vài kết nối vừa đóng
+$ ss -tan '( dport = :80 or sport = :80 )'
+State     Recv-Q Send-Q Local Address:Port  Peer Address:Port
+ESTAB     0      0         10.10.1.10:55806   10.10.2.10:80  
+ESTAB     0      0         10.10.1.10:55820   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:55822   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:55828   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:55832   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:57404   10.10.2.10:80  
+$ echo ---
+---
+$ ss -s
+Total: 6
+TCP:   104 (estab 2, closed 101, orphaned 4, timewait 7)
+
+Transport Total     IP        IPv6
+RAW	  0         0         0        
+UDP	  1         1         0        
+TCP	  3         3         0        
+INET	  4         4         0        
+FRAG	  0         0         0        
+

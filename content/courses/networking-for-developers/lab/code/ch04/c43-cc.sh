@@ -1,0 +1,5 @@
+# Ch4 · 4.3 — thuật toán kiểm soát tắc nghẽn: cái nào đang chạy, cổng có những cái nào
+sysctl net.ipv4.tcp_congestion_control
+sysctl net.ipv4.tcp_available_congestion_control
+# BBR không nạp trong nhân của lab (cần modprobe tcp_bbr trên máy chủ Linux thật)
+cat /proc/sys/net/ipv4/tcp_congestion_control

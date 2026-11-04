@@ -1,0 +1,4 @@
+# Ch4 · 4.5 — pool kết nối trong code: http.Agent({keepAlive}) dùng lại socket thay vì bắt tay lại
+$ node agent.mjs
+keepAlive=false: 4 yêu cầu ⇒ 4 kết nối TCP
+keepAlive=true: 4 yêu cầu ⇒ 1 kết nối TCP

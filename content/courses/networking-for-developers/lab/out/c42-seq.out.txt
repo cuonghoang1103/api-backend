@@ -1,0 +1,14 @@
+# Ch4 · 4.2 — số thứ tự (seq) và báo nhận (ack): đọc một lần tải /big (vài segment dữ liệu)
+$ tcpdump -nr /tmp/c42.pcap -S 'tcp' 2>/dev/null | head -20
+12:27:12.445034 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [S], seq 1260074835, win 64240, options [mss 1460,sackOK,TS val 3051311689 ecr 0,nop,wscale 10], length 0
+12:27:12.470841 IP 10.10.2.10.80 > 10.10.1.10.57404: Flags [S.], seq 803330389, ack 1260074836, win 65160, options [mss 1460,sackOK,TS val 3615456647 ecr 3051311689,nop,wscale 10], length 0
+12:27:12.470868 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [.], ack 803330390, win 63, options [nop,nop,TS val 3051311715 ecr 3615456647], length 0
+12:27:12.470969 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [P.], seq 1260074836:1260074913, ack 803330390, win 63, options [nop,nop,TS val 3051311715 ecr 3615456647], length 77: HTTP: GET /big HTTP/1.1
+12:27:12.496725 IP 10.10.2.10.80 > 10.10.1.10.57404: Flags [.], ack 1260074913, win 64, options [nop,nop,TS val 3615456673 ecr 3051311715], length 0
+12:27:12.496746 IP 10.10.2.10.80 > 10.10.1.10.57404: Flags [P.], seq 803330390:803333286, ack 1260074913, win 64, options [nop,nop,TS val 3615456673 ecr 3051311715], length 2896: HTTP: HTTP/1.1 200 OK
+12:27:12.496760 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [.], ack 803333286, win 69, options [nop,nop,TS val 3051311741 ecr 3615456673], length 0
+12:27:12.496761 IP 10.10.2.10.80 > 10.10.1.10.57404: Flags [P.], seq 803333286:803334381, ack 1260074913, win 64, options [nop,nop,TS val 3615456673 ecr 3051311715], length 1095: HTTP
+12:27:12.496762 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [.], ack 803334381, win 72, options [nop,nop,TS val 3051311741 ecr 3615456673], length 0
+12:27:12.496901 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [F.], seq 1260074913, ack 803334381, win 72, options [nop,nop,TS val 3051311741 ecr 3615456673], length 0
+12:27:12.522745 IP 10.10.2.10.80 > 10.10.1.10.57404: Flags [F.], seq 803334381, ack 1260074914, win 64, options [nop,nop,TS val 3615456699 ecr 3051311741], length 0
+12:27:12.522770 IP 10.10.1.10.57404 > 10.10.2.10.80: Flags [.], ack 803334382, win 72, options [nop,nop,TS val 3051311767 ecr 3615456699], length 0

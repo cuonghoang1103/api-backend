@@ -1,0 +1,5 @@
+# Lab 4 · R4 — sự cố A: một phụ thuộc "treo". KHÔNG timeout thì bao lâu, CÓ timeout thì bao lâu?
+echo "== không đặt timeout (nhân tự bỏ cuộc) =="
+t0=$(date +%s); curl -s -o /dev/null -w "  exit=%{exitcode}\n" http://10.10.2.99/ ; echo "  mất $(( $(date +%s) - t0 )) giây"
+echo "== đặt --connect-timeout 2 =="
+t0=$(date +%s); curl -s -o /dev/null -w "  exit=%{exitcode}\n" --connect-timeout 2 http://10.10.2.99/ ; echo "  mất $(( $(date +%s) - t0 )) giây"

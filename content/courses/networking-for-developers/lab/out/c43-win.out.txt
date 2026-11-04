@@ -1,0 +1,25 @@
+# Ch4 · 4.3 — slow start: cửa sổ tắc nghẽn (cwnd) lớn dần; nút cổ chai 20 Mbit + trễ 40 ms
+# iperf3 chạy nền; ta chụp ss -ti vài lần để thấy cwnd và nhịp tăng
+$ iperf3 -c 10.10.2.10 -t 6 -i 1 &
+$ sleep 0.2; ss -tin dst 10.10.2.10 | grep -A1 ESTAB | tail -1
+	 cubic wscale:10,10 rto:241 rtt:40.242/15.114 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:10 bytes_sent:14517 bytes_acked:38 segs_out:13 segs_in:2 data_segs_out:11 send 2878585bps lastsnd:3 lastrcv:45 lastack:5 pacing_rate 5757144bps delivery_rate 288352bps delivered:2 app_limited busy:43ms unacked:10 rcv_space:14480 rcv_ssthresh:64088 notsent:31856 minrtt:40.173 snd_wnd:65536 rcv_wnd:64512            
+$ sleep 1.3; ss -tin dst 10.10.2.10 | grep -A1 ESTAB | tail -1
+	 cubic wscale:10,10 rto:242 rtt:41.245/0.05 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:133 ssthresh:36 bytes_sent:3058213 bytes_acked:2865630 segs_out:2115 segs_in:346 data_segs_out:2113 send 37354152bps lastsnd:33 lastrcv:1365 lastack:33 pacing_rate 44824840bps delivery_rate 35067048bps delivered:1981 busy:1363ms unacked:133 reordering:9 reord_seen:2 rcv_space:14480 rcv_ssthresh:64088 notsent:208512 minrtt:40.111 snd_wnd:497664 rcv_wnd:64512
+$ sleep 2.0; ss -tin dst 10.10.2.10 | grep -A1 ESTAB | tail -1
+	 cubic wscale:10,10 rto:248 rtt:47.832/2.614 mss:1448 pmtu:1500 rcvmss:536 advmss:1448 cwnd:1086 ssthresh:36 bytes_sent:32019661 bytes_acked:30447134 segs_out:22116 segs_in:901 data_segs_out:22114 send 263008530bps lastsnd:24 lastrcv:3385 lastack:24 pacing_rate 315609408bps delivery_rate 241718072bps delivered:21029 busy:3383ms unacked:1086 reordering:181 reord_seen:13 rcv_space:14480 rcv_ssthresh:64088 notsent:2599160 minrtt:40.111 snd_wnd:2822144 rcv_wnd:64512
+$ wait
+Connecting to host 10.10.2.10, port 5201
+[  5] local 10.10.1.10 port 56168 connected to 10.10.2.10 port 5201
+[ ID] Interval           Transfer     Bitrate         Retr  Cwnd
+[  5]   0.00-1.00   sec  2.00 MBytes  16.7 Mbits/sec    0    134 KBytes       
+[  5]   1.00-2.00   sec  5.88 MBytes  49.5 Mbits/sec    0    392 KBytes       
+[  5]   2.00-3.00   sec  15.8 MBytes   132 Mbits/sec    0   1.06 MBytes       
+[  5]   3.00-4.00   sec  38.8 MBytes   326 Mbits/sec    0   2.97 MBytes       
+[  5]   4.00-5.00   sec  79.1 MBytes   663 Mbits/sec    0   4.08 MBytes       
+[  5]   5.00-6.00   sec  83.5 MBytes   701 Mbits/sec    0   4.08 MBytes       
+- - - - - - - - - - - - - - - - - - - - - - - - -
+[ ID] Interval           Transfer     Bitrate         Retr
+[  5]   0.00-6.00   sec   225 MBytes   314 Mbits/sec    0            sender
+[  5]   0.00-6.04   sec   225 MBytes   312 Mbits/sec                  receiver
+
+iperf Done.

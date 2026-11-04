@@ -20,9 +20,10 @@ import s00 from './networking-for-developers/s00-gioi-thieu.mjs';
 import s01 from './networking-for-developers/s01-tang-goi-tin.mjs';
 import s02 from './networking-for-developers/s02-dia-chi-dinh-tuyen.mjs';
 import s03 from './networking-for-developers/s03-dns.mjs';
+import s04 from './networking-for-developers/s04-tcp.mjs';
 
-/** Mục 0 + Chương 1 (31/10/2026), Chương 2 và Chương 3 (01/11/2026) đã soạn trọn ghi đè section khung — giữ nguyên title chương + slug bài cũ. */
-const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; secs[3] = s03; return secs; };
+/** Mục 0 + Chương 1 (31/10/2026), Chương 2 và Chương 3 (01/11/2026), Chương 4 (04/11/2026) đã soạn trọn ghi đè section khung — giữ nguyên title chương + slug bài cũ. */
+const ghiDe = (secs) => { secs[0] = s00; secs[1] = s01; secs[2] = s02; secs[3] = s03; secs[4] = s04; return secs; };
 
 export default {
   category: { slug: 'cs-fundamentals', name: 'Nền tảng khoa học máy tính', icon: 'Cpu', sortOrder: 9 },

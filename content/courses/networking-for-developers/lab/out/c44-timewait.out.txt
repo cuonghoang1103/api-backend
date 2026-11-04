@@ -1,0 +1,15 @@
+# Ch4 · 4.4 — ai ĐÓNG TRƯỚC thì ôm TIME-WAIT; client đóng trước nên TIME-WAIT dồn ở client
+$ for i in $(seq 1 20); do curl -so /dev/null http://10.10.2.10/; done
+$ ss -tan '( dport = :80 )' | awk 'NR==1 || /TIME-WAIT/' | head -6
+State     Recv-Q Send-Q Local Address:Port  Peer Address:Port
+TIME-WAIT 0      0         10.10.1.10:42164   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:42172   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:42180   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:42190   10.10.2.10:80  
+TIME-WAIT 0      0         10.10.1.10:42198   10.10.2.10:80  
+$ echo "TIME-WAIT đang có: $(ss -tan '( dport = :80 )' | grep -c TIME-WAIT)"
+TIME-WAIT đang có: 29
+$ sysctl net.ipv4.tcp_fin_timeout
+net.ipv4.tcp_fin_timeout = 60
+$ cat /proc/sys/net/ipv4/tcp_max_tw_buckets
+32768

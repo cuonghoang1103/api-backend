@@ -1,0 +1,9 @@
+# Ch4 · 4.4 — máy chủ: hàng đợi lắng nghe. Recv-Q = số kết nối đã bắt tay xong đang chờ accept(); Send-Q = sức chứa (backlog)
+$ ss -ltn
+State  Recv-Q Send-Q Local Address:Port  Peer Address:Port
+LISTEN 0      4096      127.0.0.11:45963      0.0.0.0:*   
+LISTEN 0      511          0.0.0.0:80         0.0.0.0:*   
+LISTEN 0      4096               *:5201             *:*   
+$ sysctl net.core.somaxconn net.ipv4.tcp_max_syn_backlog
+net.core.somaxconn = 4096
+net.ipv4.tcp_max_syn_backlog = 512

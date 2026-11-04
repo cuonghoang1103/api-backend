@@ -1,0 +1,9 @@
+# Ch4 · 4.4 — cạn cổng tạm: ép dùng đúng 3 cổng nguồn, không keep-alive ⇒ TIME-WAIT khoá cổng
+$ for i in 1 2 3 4; do
+>   curl -so /dev/null -w "lần $i: cổng-nguồn %{local_port}  exit=%{exitcode}\n" --local-port 50010-50012 http://10.10.2.10/ || echo "lần $i: KHÔNG bind được cổng nguồn (exit $?)"
+> done
+lần 1: cổng-nguồn 50010  exit=0
+lần 2: cổng-nguồn 50011  exit=0
+lần 3: cổng-nguồn 50012  exit=0
+lần 4: cổng-nguồn -1  exit=45
+lần 4: KHÔNG bind được cổng nguồn (exit 45)

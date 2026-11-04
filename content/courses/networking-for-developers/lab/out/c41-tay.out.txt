@@ -1,0 +1,13 @@
+# Ch4 · 4.1 — đọc lại bản bắt gói của MỘT lần `curl http://10.10.2.10/`: bắt tay, dữ liệu, rồi đóng
+# router thêm 25 ms vào chiều hồi đáp (netem trên cổng LAN) ⇒ thấy được khoảng nghỉ một vòng
+$ tcpdump -nr /tmp/c41.pcap -tt 'tcp' 2>/dev/null
+1793769988.336105 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [S], seq 3749331381, win 64240, options [mss 1460,sackOK,TS val 1930912787 ecr 0,nop,wscale 10], length 0
+1793769988.361565 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [S.], seq 4216899339, ack 3749331382, win 65160, options [mss 1460,sackOK,TS val 3646496169 ecr 1930912787,nop,wscale 10], length 0
+1793769988.361587 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 0
+1793769988.361664 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [P.], seq 1:75, ack 1, win 63, options [nop,nop,TS val 1930912813 ecr 3646496169], length 74: HTTP: GET / HTTP/1.1
+1793769988.386933 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [.], ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 0
+1793769988.386947 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [P.], seq 1:169, ack 75, win 64, options [nop,nop,TS val 3646496195 ecr 1930912813], length 168: HTTP: HTTP/1.1 200 OK
+1793769988.386961 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0
+1793769988.387088 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [F.], seq 75, ack 169, win 63, options [nop,nop,TS val 1930912838 ecr 3646496195], length 0
+1793769988.412485 IP 10.10.2.10.80 > 10.10.1.10.59942: Flags [F.], seq 169, ack 76, win 64, options [nop,nop,TS val 3646496220 ecr 1930912838], length 0
+1793769988.412512 IP 10.10.1.10.59942 > 10.10.2.10.80: Flags [.], ack 170, win 63, options [nop,nop,TS val 1930912864 ecr 3646496220], length 0

@@ -1,0 +1,7 @@
+# Ch9 · 9.4 — WebRTC bước 1: một yêu cầu STUN lấy ÁNH XẠ NAT (IP:cổng công cộng) của bạn. Cần Internet thật (máy "internet").
+# IP công cộng được CHE; cái cần thấy: STUN trả về một ánh xạ, cổng công cộng do NAT cấp. TURN (chuyển tiếp) cần máy chủ riêng — xem bài.
+$ python3 /lab/k/code/ch09/stun.py stun.l.google.com
+STUN server : stun.l.google.com:19302
+response    : type=0x0101 (0x0101 = Binding Success), 12 bytes of attributes
+XOR-MAPPED-ADDRESS (0x0020): family=IPv4  public mapping = xxx.xxx.xxx.115:58122  (public IP redacted)
+local socket: 0.0.0.0:38708  (public port differs from local port = the NAT mapping)

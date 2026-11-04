@@ -148,6 +148,31 @@ ERROR BUDGET (lesson 9.3, 30-day window)
 <p><strong>Trap — these numbers are from one sandbox, on one Node version, on hardware that is not yours.</strong> The ratios are the durable part: the timestamp dominating the log line, RSS not returning, CPU% failing to see a blocked loop, sampling arithmetic. The absolute values are not — a faster CPU changes 1,310 ns, a different kernel changes the pipe throughput, and a 16-core machine makes the CPU% lie four times worse rather than better. <strong>The specific danger is quoting an absolute from here in a design document, where it becomes a fact with no provenance and outlives the hardware it came from.</strong> Every script is in its lesson; run them on your machine, and when you write the result down, write the date, the Node version and the core count next to it — which is exactly what this repository's own documentation does for its measured LLM prices, and why those entries are still trustworthy.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min) — capstone</h3>
+<div class="callout ok"><ol>
+<li>Run this course's opening measurements on a repo you own: count route declarations, route files, and how many import a logger (<code>grep -rl "logger" src/routes</code>).</li>
+<li>Count occurrences of <code>requestId</code> / <code>correlationId</code> / <code>traceId</code> — your correlation coverage.</li>
+<li>Tabulate your observability gap the way lesson 0.1 did: files that log vs files that should, and one number for each pillar (logs, metrics, traces).</li>
+<li>Circle the one measurement that most contradicts what you assumed before the course.</li>
+</ol>
+<p><strong>Done when:</strong> you have a one-page table of real counts from your own system, and you found at least one number that surprised you.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Measured, not assumed</span><span class="v">Every claim in this course is a count or a timing, not a guess — repeat that on your own repo.</span></div>
+  <div class="kv"><span class="k">Observability gap</span><span class="v">The distance between what your system could tell you and what it currently does.</span></div>
+  <div class="kv"><span class="k">Correlation coverage</span><span class="v">How many of your log lines carry an id that ties them to one request.</span></div>
+  <div class="kv"><span class="k">Contradiction list</span><span class="v">The results that disprove common advice — the ones worth remembering.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>The course's authority comes from measuring, not asserting; apply the same grep-and-count to your own code.</li>
+<li>Eight of the measured results contradict common belief — those are the ones to keep.</li>
+<li>Your observability gap is a number you can compute today, per pillar.</li>
+<li>Correlation coverage (ids per log line) is usually the cheapest gap to close first.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://nodejs.org/docs/latest/api/perf_hooks.html" target="_blank" rel="noopener">
@@ -290,6 +315,31 @@ NGÂN SÁCH LỖI (bài 9.3, cửa sổ 30 ngày)
 <div class="pitfall">
 <p><strong>Bẫy — những con số này đến từ MỘT hộp cát, trên MỘT phiên bản Node, trên phần cứng không phải của bạn.</strong> Phần bền vững là các TỈ LỆ: dấu thời gian lấn át dòng log, RSS không trả lại, CPU% không nhìn thấy một vòng lặp bị chặn, số học của việc lấy mẫu. Các giá trị TUYỆT ĐỐI thì không — một CPU nhanh hơn làm đổi con số 1.310 ns, một nhân hệ điều hành khác làm đổi thông lượng ống, và một cái máy 16 nhân làm cho CPU% nói dối tệ hơn bốn lần chứ không tốt hơn. <strong>Cái nguy hiểm cụ thể là trích một con số tuyệt đối từ đây vào một tài liệu thiết kế, nơi nó trở thành một sự thật không có nguồn gốc và sống lâu hơn cả cái phần cứng nó đến từ đó.</strong> Mọi script đều nằm trong bài của nó; hãy chạy chúng trên máy của bạn, và khi bạn viết kết quả xuống, hãy viết cả ngày tháng, phiên bản Node và số nhân bên cạnh — mà đó chính xác là điều tài liệu của chính kho này làm với các mức giá LLM đã đo, và là lý do những mục ấy tới nay vẫn đáng tin.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút) — tổng hợp</h3>
+<div class="callout ok"><ol>
+<li>Chạy các phép đo mở đầu của khoá này trên một kho bạn sở hữu: đếm số khai báo route, số file routes, và bao nhiêu file import logger (<code>grep -rl "logger" src/routes</code>).</li>
+<li>Đếm số lần xuất hiện <code>requestId</code> / <code>correlationId</code> / <code>traceId</code> — độ phủ correlation của bạn.</li>
+<li>Lập bảng khoảng-trống-quan-sát theo cách bài 0.1 đã làm: file có log so với file lẽ ra phải có, và một con số cho mỗi trụ cột (log, chỉ số, trace).</li>
+<li>Khoanh tròn con số mâu thuẫn nhất với điều bạn đã giả định trước khoá học.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một bảng một trang gồm các con số thật từ chính hệ của bạn, và bạn tìm được ít nhất một con số làm mình bất ngờ.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Đo, không giả định</span><span class="v">Mọi khẳng định trong khoá là một con số đếm hoặc một phép bấm giờ, không phải phỏng đoán — hãy lặp lại trên kho của bạn.</span></div>
+  <div class="kv"><span class="k">Khoảng trống quan sát</span><span class="v">Khoảng cách giữa cái hệ của bạn có thể cho biết và cái nó đang cho biết.</span></div>
+  <div class="kv"><span class="k">Độ phủ correlation</span><span class="v">Bao nhiêu dòng log của bạn mang một id gắn chúng vào một request.</span></div>
+  <div class="kv"><span class="k">Danh sách mâu thuẫn</span><span class="v">Những kết quả bác lại lời khuyên phổ biến — những cái đáng nhớ nhất.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Sức nặng của khoá đến từ việc đo, không phải việc khẳng định; hãy áp đúng cách grep-và-đếm đó lên mã của bạn.</li>
+<li>Tám trong số kết quả đo được mâu thuẫn với niềm tin phổ biến — đó là những cái cần giữ lại.</li>
+<li>Khoảng trống quan sát của bạn là một con số bạn có thể tính hôm nay, theo từng trụ cột.</li>
+<li>Độ phủ correlation (id trên mỗi dòng log) thường là khoảng trống rẻ nhất để bịt trước.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -450,6 +500,31 @@ correlation" leaves you with infrastructure and no answers.</code></pre>
 <p><strong>Trap — every item above competes with shipping features, and the honest framing is not &quot;quality versus speed&quot;.</strong> The four hour-one fixes take under two hours together and each one removes a specific failure that has already happened to this repository or is one Postgres hiccup away. Framing that as an investment in quality invites it to lose to the next feature, permanently — and it loses in a specific way: the work only gets prioritised <em>after</em> an incident, when it is done under pressure, badly, and only for the thing that just broke. <strong>The accurate framing is that lesson 3.5 measured the difference at six steps and twenty-five minutes versus one query and forty seconds, on one incident.</strong> Two hours of work pays back on the third incident, and there will be a third incident.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min) — capstone</h3>
+<div class="callout ok"><ol>
+<li>For your own service, write the hour 1–2 task: fix the equivalent of this repo's four found defects (e.g. an honest health check, one logger import where there is none).</li>
+<li>Write the day-1 goal (see one request end to end with a correlation id) and the week-1 goal (metrics + the one alert that matters — user-facing error rate).</li>
+<li>List two things NOT to build yet, and why (e.g. distributed tracing before you have a single correlated log line).</li>
+<li>Put the whole plan in priority order, one line each, so it fits on a sticky note.</li>
+</ol>
+<p><strong>Done when:</strong> you have an ordered, one-line-each plan — hour, day, week, month — and an explicit "not yet" list.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Build order</span><span class="v">The sequence that pays back fastest: fix defects → one correlated request → metrics + one alert → pipeline.</span></div>
+  <div class="kv"><span class="k">The one alert that matters</span><span class="v">User-facing error rate — the single alert worth having before any other.</span></div>
+  <div class="kv"><span class="k">Not-yet list</span><span class="v">Things deliberately deferred because their prerequisites are not in place.</span></div>
+  <div class="kv"><span class="k">Gaps appear in order</span><span class="v">Depth is added where the next gap shows itself, not everywhere at once.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Order beats completeness: fix the found defects first, then one correlated request, then metrics and one alert.</li>
+<li>The first alert worth having is user-facing error rate; everything else can wait.</li>
+<li>Keep a "not yet" list — tracing and fancy dashboards before correlation is wasted effort.</li>
+<li>Add depth in the order the gaps appear, and keep the plan short enough to fit on a sticky note.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/workbook/implementing-slos/" target="_blank" rel="noopener">
@@ -600,6 +675,31 @@ không câu trả lời nào.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — mọi hạng mục ở trên đều cạnh tranh với việc ship tính năng, và cách đặt vấn đề trung thực KHÔNG phải là &quot;chất lượng đấu với tốc độ&quot;.</strong> Bốn cái sửa ở giờ đầu tiên cộng lại tốn dưới hai tiếng và mỗi cái đều gỡ bỏ một cú hỏng CỤ THỂ đã từng xảy ra với kho này hoặc chỉ cách một cú nấc của Postgres. Đặt vấn đề đó thành một khoản đầu tư vào chất lượng là mời gọi nó thua cái tính năng kế tiếp, vĩnh viễn — và nó thua theo một cách rất cụ thể: cái việc ấy chỉ được ưu tiên <em>SAU</em> một sự cố, khi nó được làm dưới áp lực, làm ẩu, và chỉ làm cho đúng cái thứ vừa hỏng. <strong>Cách đặt vấn đề chính xác là: bài 3.5 đã đo được khác biệt là sáu bước và hai mươi lăm phút so với một truy vấn và bốn mươi giây, chỉ trên MỘT sự cố.</strong> Hai tiếng làm việc hoàn vốn ở sự cố thứ ba, và sẽ có một sự cố thứ ba.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút) — tổng hợp</h3>
+<div class="callout ok"><ol>
+<li>Với dịch vụ của chính bạn, viết việc giờ 1–2: sửa thứ tương đương bốn khiếm khuyết kho này tìm ra (ví dụ một health check trung thực, một chỗ import logger nơi đang không có).</li>
+<li>Viết mục tiêu ngày-1 (nhìn một request từ đầu tới cuối với một correlation id) và mục tiêu tuần-1 (chỉ số + một cảnh báo đáng có — tỷ lệ lỗi người dùng thấy).</li>
+<li>Liệt kê hai thứ CHƯA nên dựng, và vì sao (ví dụ tracing phân tán trước khi có nổi một dòng log tương quan).</li>
+<li>Đặt cả kế hoạch theo thứ tự ưu tiên, mỗi bước một dòng, để nó vừa một tờ giấy nhớ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một kế hoạch theo thứ tự, mỗi bước một dòng — giờ, ngày, tuần, tháng — và một danh sách "chưa vội" rõ ràng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thứ tự dựng</span><span class="v">Chuỗi trả công nhanh nhất: sửa khiếm khuyết → một request tương quan → chỉ số + một cảnh báo → đường ống.</span></div>
+  <div class="kv"><span class="k">Cảnh báo duy nhất đáng có</span><span class="v">Tỷ lệ lỗi người dùng thấy — cảnh báo đáng có trước mọi cái khác.</span></div>
+  <div class="kv"><span class="k">Danh sách chưa-vội</span><span class="v">Những thứ cố ý hoãn vì tiền đề của chúng chưa sẵn.</span></div>
+  <div class="kv"><span class="k">Khoảng trống hiện theo thứ tự</span><span class="v">Chiều sâu được thêm ở nơi khoảng trống kế tiếp lộ ra, không phải khắp nơi cùng lúc.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Thứ tự thắng sự đầy đủ: sửa các khiếm khuyết đã tìm ra trước, rồi một request tương quan, rồi chỉ số và một cảnh báo.</li>
+<li>Cảnh báo đầu tiên đáng có là tỷ lệ lỗi người dùng thấy; mọi thứ khác có thể chờ.</li>
+<li>Giữ một danh sách "chưa vội" — tracing và bảng điệu đà trước khi có correlation là công cốc.</li>
+<li>Thêm chiều sâu theo thứ tự các khoảng trống hiện ra, và giữ kế hoạch ngắn đủ để vừa một tờ giấy nhớ.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

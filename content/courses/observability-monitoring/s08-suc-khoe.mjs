@@ -127,6 +127,32 @@ app.get('/health/ready', async (_req, res) =&gt; {
 <p><strong>Trap — a health check that returns 200 with <code>{"status": "error"}</code> in the body is invisible to every tool that reads it.</strong> Orchestrators, load balancers and uptime monitors branch on the HTTP <em>status code</em>; almost none of them parse the JSON. So a probe that carefully reports <code>database: 'disconnected'</code> while returning 200 is telling a human something true and telling the machine that everything is fine — traffic keeps arriving at an instance that cannot serve it. This repository gets it right, returning 503 on the failure path, and it is worth checking rather than assuming, because the mistake is easy to make in a refactor and produces no error anywhere. <strong>The status code is the interface; the body is documentation.</strong> Verify with <code>curl -o /dev/null -w "%{http_code}"</code>, not by reading the JSON.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Open this repo's <code>/health</code> handler in <code>src/index.ts</code> and read what it actually does (a <code>SELECT 1</code> against Postgres).</li>
+<li>On paper, label it with exactly ONE of the four questions: is the process alive, is it ready for traffic, has it finished starting, or is a dependency reachable? Justify why it is not the other three.</li>
+<li>Write four one-line endpoint stubs — <code>/livez</code>, <code>/readyz</code>, <code>/startupz</code>, <code>/health</code> — and next to each write the single question it answers.</li>
+<li>For each, write down what it must <strong>never</strong> touch (e.g. liveness must not call the database).</li>
+</ol>
+<p><strong>Done when:</strong> you can say in one sentence why a green <code>/health</code> did not prevent the stale-build outage, and your <code>/livez</code> stub does not depend on Postgres.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Liveness</span><span class="v">Is the process alive enough to keep? If not, restart it.</span></div>
+  <div class="kv"><span class="k">Readiness</span><span class="v">Can this instance serve traffic right now? If not, pull it from the load balancer.</span></div>
+  <div class="kv"><span class="k">Startup probe</span><span class="v">Has a slow-starting process finished booting? Guards liveness during startup.</span></div>
+  <div class="kv"><span class="k">Dependency / health check</span><span class="v">Is a thing I depend on (DB, cache) reachable? A diagnostic, not a restart trigger.</span></div>
+  <div class="kv"><span class="k">Shared blast radius</span><span class="v">When one probe checks a dependency, that dependency's outage takes every instance down at once.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>A probe is only useful if it answers exactly one question; a check that mixes questions cannot be acted on safely.</li>
+<li>Liveness → restart, readiness → remove from rotation, startup → protect boot. The actions are different, so the checks must be too.</li>
+<li>This repo's single <code>/health</code> answers "is Postgres reachable" and nothing else — it was green through an outage no user could use.</li>
+<li>No probe should check a shared dependency if the action on failure is restart: you turn one dependency blip into a fleet-wide restart storm.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/" target="_blank" rel="noopener">
@@ -253,6 +279,32 @@ app.get('/health/ready', async (_req, res) =&gt; {
 <div class="pitfall">
 <p><strong>Bẫy — một phép kiểm sức khoẻ trả về 200 kèm <code>{"status": "error"}</code> trong phần thân là VÔ HÌNH với mọi công cụ đọc nó.</strong> Bộ điều phối, bộ cân bằng tải và trình theo dõi thời gian sống đều rẽ nhánh theo <em>MÃ TRẠNG THÁI</em> HTTP; gần như không cái nào bóc cái JSON ra. Nên một lượt thăm dò cẩn thận báo <code>database: 'disconnected'</code> trong khi trả về 200 là đang nói cho một CON NGƯỜI một điều đúng và nói cho cái MÁY rằng mọi thứ vẫn ổn — lưu lượng cứ tiếp tục đổ vào một thực thể không phục vụ nổi. Kho này làm đúng, trả 503 ở nhánh hỏng, và điều đó đáng đi kiểm chứ đừng giả định, vì sai lầm này rất dễ mắc trong một lần tái cấu trúc và nó chẳng sinh ra lỗi ở đâu cả. <strong>Mã trạng thái là giao diện; phần thân là tài liệu.</strong> Hãy kiểm bằng <code>curl -o /dev/null -w "%{http_code}"</code>, đừng kiểm bằng cách đọc cái JSON.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Mở handler <code>/health</code> của kho này trong <code>src/index.ts</code> và đọc xem nó thật sự làm gì (một <code>SELECT 1</code> lên Postgres).</li>
+<li>Trên giấy, gán cho nó ĐÚNG MỘT trong bốn câu hỏi: tiến trình còn sống không, đã sẵn sàng nhận traffic chưa, đã khởi động xong chưa, hay một phụ thuộc có với tới được không? Giải thích vì sao không phải ba cái kia.</li>
+<li>Viết bốn endpoint rút gọn mỗi cái một dòng — <code>/livez</code>, <code>/readyz</code>, <code>/startupz</code>, <code>/health</code> — và cạnh mỗi cái ghi câu hỏi duy nhất nó trả lời.</li>
+<li>Với mỗi cái, ghi ra thứ nó <strong>tuyệt đối không</strong> được đụng tới (ví dụ liveness không được gọi cơ sở dữ liệu).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn nói được trong một câu vì sao một <code>/health</code> màu xanh vẫn không ngăn được sự cố build cũ, và <code>/livez</code> của bạn không phụ thuộc vào Postgres.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Liveness</span><span class="v">Tiến trình còn sống đủ để giữ lại không? Nếu không thì khởi động lại.</span></div>
+  <div class="kv"><span class="k">Readiness</span><span class="v">Instance này phục vụ traffic được ngay bây giờ không? Nếu không thì rút nó khỏi bộ cân bằng tải.</span></div>
+  <div class="kv"><span class="k">Startup probe</span><span class="v">Một tiến trình khởi động chậm đã boot xong chưa? Che chắn cho liveness trong lúc khởi động.</span></div>
+  <div class="kv"><span class="k">Kiểm phụ thuộc / health</span><span class="v">Thứ tôi phụ thuộc (DB, cache) có với tới được không? Là chẩn đoán, không phải cớ để restart.</span></div>
+  <div class="kv"><span class="k">Bán kính sát thương chung</span><span class="v">Khi một probe đi kiểm phụ thuộc, cú sập của phụ thuộc đó kéo mọi instance xuống cùng lúc.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một probe chỉ hữu ích khi trả lời đúng một câu hỏi; phép kiểm trộn lẫn các câu hỏi thì không thể hành động an toàn.</li>
+<li>Liveness → restart, readiness → rút khỏi rotation, startup → bảo vệ lúc boot. Hành động khác nhau nên phép kiểm phải khác nhau.</li>
+<li><code>/health</code> duy nhất của kho này trả lời "Postgres có với tới không" và không gì khác — nó xanh suốt một sự cố mà không người dùng nào dùng được.</li>
+<li>Đừng để probe kiểm một phụ thuộc chung nếu hành động khi hỏng là restart: bạn biến một cú chớp của phụ thuộc thành cơn bão restart toàn cụm.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -410,6 +462,31 @@ predict what any of them does during one.</code></pre>
 <p><strong>Trap — <code>restart: unless-stopped</code> plus a dependency-checking liveness probe is a machine for turning brief outages into long ones, and every part of it looks like good practice.</strong> The restart policy is standard, the health check is standard, and each is correct alone. Together they form a loop with positive feedback: the dependency struggles, containers restart, restarting containers hammer the dependency, it struggles more. <strong>The signature in your metrics is unmistakable once you know it — <code>time() - process_start_time_seconds</code> (lesson 5.5) sawtoothing every 30 to 45 seconds while error rate stays flat at 100%</strong> — and it is invisible if you are only watching request latency, because there are no successful requests to have latency. Before adding any restart automation, ask what the restart is supposed to fix, and confirm the probe can only fail for that reason.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write a deliberately bad liveness handler that runs a DB query and returns 500 if the DB is slow. Point an orchestrator liveness probe at it with <code>failureThreshold: 3</code> and <code>periodSeconds: 10</code>.</li>
+<li>Do the arithmetic: if the DB is briefly slow across all 3 instances, how many of them get restarted, and does restarting help?</li>
+<li>Rewrite liveness to check only that the event loop responds (return <code>200</code> immediately, no I/O). Move the DB check to <code>/readyz</code>.</li>
+<li>Re-run the thought experiment: with the new split, what happens to the fleet during the same DB blip?</li>
+</ol>
+<p><strong>Done when:</strong> your liveness endpoint does zero I/O, and you can explain why a DB-dependent liveness probe turns a 10-second blip into a restart cascade.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">failureThreshold</span><span class="v">How many consecutive failing probes before the orchestrator acts (restarts).</span></div>
+  <div class="kv"><span class="k">periodSeconds</span><span class="v">How often the probe runs; with failureThreshold it sets the time-to-restart.</span></div>
+  <div class="kv"><span class="k">Restart cascade</span><span class="v">A shared-dependency blip failing every instance's liveness → all restart at once → the dependency is hit harder.</span></div>
+  <div class="kv"><span class="k">Event-loop liveness</span><span class="v">A liveness check that only proves the Node event loop can still answer — the correct depth.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Liveness failure means "restart"; so a liveness check must only fail when restarting would actually help.</li>
+<li>A DB query inside liveness restarts healthy processes when the DB hiccups — the fix is a one-word move: put it in readiness.</li>
+<li>The correct liveness check does no I/O; it proves the event loop still responds.</li>
+<li>Readiness and startup probes exist precisely so liveness can stay shallow.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.docker.com/compose/compose-file/05-services/#healthcheck" target="_blank" rel="noopener">
@@ -553,6 +630,31 @@ TRONG một sự cố.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — <code>restart: unless-stopped</code> cộng một lượt thăm dò liveness có kiểm phụ thuộc là một cỗ máy biến những sự cố ngắn thành những sự cố dài, mà mọi bộ phận của nó đều trông như thông lệ tốt.</strong> Chính sách khởi động lại là chuẩn mực, phép kiểm sức khoẻ là chuẩn mực, và mỗi cái tách riêng đều đúng. Ghép lại, chúng tạo thành một vòng lặp có phản hồi dương: phụ thuộc khó thở, container khởi động lại, container khởi động lại nện vào phụ thuộc, nó khó thở thêm. <strong>Chữ ký của nó trong chỉ số thì không lẫn đi đâu được một khi bạn đã biết — <code>time() - process_start_time_seconds</code> (bài 5.5) răng cưa mỗi 30 tới 45 giây trong khi tỉ lệ lỗi nằm phẳng ở 100%</strong> — và nó vô hình nếu bạn chỉ đang nhìn độ trễ request, vì làm gì có request nào thành công để mà có độ trễ. Trước khi thêm bất cứ cơ chế tự khởi động lại nào, hãy hỏi cái việc khởi động lại ấy được cho là chữa cái gì, rồi xác nhận rằng lượt thăm dò chỉ có thể trượt vì đúng lý do đó.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết một handler liveness cố ý tồi: chạy một truy vấn DB và trả 500 nếu DB chậm. Trỏ một liveness probe của orchestrator vào nó với <code>failureThreshold: 3</code> và <code>periodSeconds: 10</code>.</li>
+<li>Làm phép tính: nếu DB chậm một nhịp ngắn trên cả 3 instance, bao nhiêu cái bị khởi động lại, và restart có giúp gì không?</li>
+<li>Viết lại liveness để chỉ kiểm rằng event loop còn đáp (trả <code>200</code> ngay, không I/O). Dời phép kiểm DB sang <code>/readyz</code>.</li>
+<li>Chạy lại thí nghiệm trong đầu: với cách tách mới, cả cụm ra sao trong cùng cú chớp DB đó?</li>
+</ol>
+<p><strong>Đạt khi:</strong> endpoint liveness của bạn không làm I/O nào, và bạn giải thích được vì sao liveness phụ thuộc DB biến một cú chớp 10 giây thành cơn restart dây chuyền.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">failureThreshold</span><span class="v">Bao nhiêu lần probe hỏng liên tiếp thì orchestrator ra tay (restart).</span></div>
+  <div class="kv"><span class="k">periodSeconds</span><span class="v">Probe chạy cách nhau bao lâu; cùng failureThreshold nó quyết định thời gian-tới-restart.</span></div>
+  <div class="kv"><span class="k">Restart dây chuyền</span><span class="v">Cú chớp của phụ thuộc chung làm hỏng liveness của mọi instance → tất cả restart cùng lúc → phụ thuộc bị đập mạnh hơn.</span></div>
+  <div class="kv"><span class="k">Liveness mức event-loop</span><span class="v">Phép kiểm liveness chỉ chứng minh event loop của Node còn đáp — đúng độ sâu cần có.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Liveness hỏng nghĩa là "restart"; nên phép kiểm liveness chỉ được hỏng khi restart thật sự giúp ích.</li>
+<li>Một truy vấn DB trong liveness khiến tiến trình khoẻ bị restart mỗi khi DB nấc — cách chữa là một cú dời một từ: đưa nó vào readiness.</li>
+<li>Phép kiểm liveness đúng thì không làm I/O; nó chứng minh event loop còn đáp.</li>
+<li>Readiness và startup probe tồn tại chính là để liveness được phép ở lại nông.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -714,6 +816,31 @@ of readiness, and it costs one boolean and one sleep.</code></pre>
 <p><strong>Trap — <code>SIGKILL</code> arrives ten seconds after <code>SIGTERM</code>, and your graceful shutdown does not get a vote.</strong> Docker's default <code>stop_grace_period</code> is 10 seconds: after that the process is killed outright, in-flight requests are severed, and buffered stdout is discarded — lesson 1.5's missing final log lines, arriving on every single deploy. The arithmetic is unforgiving, because the drain sleep comes out of the same budget: a 10-second drain plus any request still finishing exceeds the grace period, so the very mechanism meant to make deploys clean is what runs you into the hard kill. <strong>Set <code>stop_grace_period</code> explicitly to comfortably exceed drain plus your slowest request</strong> — for this repo, with a 25-second LLM timeout, 40 seconds is the honest number — and add the <code>setTimeout(process.exit)</code> backstop above so a hung shutdown ends on your terms rather than the daemon's.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Draw the two windows during a rolling deploy where requests can die: (a) the old instance exits while still in rotation, (b) the new instance gets traffic before it is ready.</li>
+<li>Add a <code>SIGTERM</code> handler that flips a module-level <code>ready = false</code>, so <code>/readyz</code> returns 503 immediately on shutdown.</li>
+<li>After flipping it, <code>setTimeout</code> for a few seconds (longer than the LB's readiness period) before calling <code>server.close()</code> — give the load balancer time to notice and drain.</li>
+<li>Confirm <code>/readyz</code> returns 503 while <code>/livez</code> still returns 200 during that drain window.</li>
+</ol>
+<p><strong>Done when:</strong> on SIGTERM your service fails readiness first, waits, then closes — and you can name which window each step closes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Replacing instances one at a time so the service stays up during a release.</span></div>
+  <div class="kv"><span class="k">Connection draining</span><span class="v">Letting in-flight requests finish while new ones stop arriving, before shutdown.</span></div>
+  <div class="kv"><span class="k">SIGTERM</span><span class="v">The signal an orchestrator sends to ask a process to shut down gracefully.</span></div>
+  <div class="kv"><span class="k">Fail-readiness-first</span><span class="v">Return 503 from readiness before closing the server, so the LB stops routing to you.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Requests die in two windows: an exiting instance still in rotation, and a new instance taking traffic before it is ready.</li>
+<li>Readiness closes both: fail it first on shutdown, and keep it failing on startup until dependencies are up.</li>
+<li>The shutdown order is: flip readiness to 503 → wait longer than the LB's check period → <code>server.close()</code>.</li>
+<li>Liveness must stay 200 during drain, or the orchestrator will kill the process mid-drain.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.docker.com/reference/compose-file/services/#stop_grace_period" target="_blank" rel="noopener">
@@ -866,6 +993,31 @@ readiness, và nó tốn một biến luận lý cộng một lệnh sleep.</cod
 <p><strong>Bẫy — <code>SIGKILL</code> tới mười giây sau <code>SIGTERM</code>, và cái đoạn tắt máy tử tế của bạn không có quyền bỏ phiếu.</strong> Mặc định <code>stop_grace_period</code> của Docker là 10 giây: sau đó tiến trình bị giết thẳng, các request đang bay bị cắt đứt, và phần stdout đang đệm bị vứt — chính mấy dòng log cuối bị mất ở bài 1.5, xuất hiện ở MỌI lần deploy. Phép tính thì không khoan nhượng, vì cái lệnh sleep rút cạn lấy ra từ cùng một ngân sách: một lần rút cạn 10 giây cộng bất cứ request nào còn đang chạy xong sẽ vượt quá thời gian ân hạn, nên chính cái cơ chế sinh ra để làm deploy sạch sẽ lại là thứ đẩy bạn vào cú giết cứng. <strong>Hãy đặt <code>stop_grace_period</code> một cách tường minh, vượt thoải mái quá thời gian rút cạn cộng request chậm nhất của bạn</strong> — với kho này, có ngưỡng LLM 25 giây, thì 40 giây là con số trung thực — và thêm cái chốt chặn <code>setTimeout(process.exit)</code> ở trên để một lần tắt máy bị treo kết thúc theo điều kiện của bạn chứ không theo điều kiện của daemon.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Vẽ ra hai cửa sổ trong một lần rolling deploy mà request có thể chết: (a) instance cũ thoát khi vẫn còn trong rotation, (b) instance mới nhận traffic trước khi sẵn sàng.</li>
+<li>Thêm một handler <code>SIGTERM</code> lật biến mức module <code>ready = false</code>, để <code>/readyz</code> trả 503 ngay khi bắt đầu tắt.</li>
+<li>Sau khi lật, <code>setTimeout</code> vài giây (dài hơn chu kỳ readiness của LB) rồi mới gọi <code>server.close()</code> — cho bộ cân bằng tải kịp nhận ra và rút kết nối.</li>
+<li>Xác nhận <code>/readyz</code> trả 503 trong khi <code>/livez</code> vẫn trả 200 suốt cửa sổ drain đó.</li>
+</ol>
+<p><strong>Đạt khi:</strong> khi nhận SIGTERM, dịch vụ của bạn cho readiness trượt trước, chờ, rồi mới đóng — và bạn gọi tên được mỗi bước bịt cửa sổ nào.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Rolling deploy</span><span class="v">Thay instance từng cái một để dịch vụ vẫn lên trong lúc phát hành.</span></div>
+  <div class="kv"><span class="k">Rút kết nối (draining)</span><span class="v">Cho request đang chạy dở hoàn tất trong khi chặn request mới, trước khi tắt.</span></div>
+  <div class="kv"><span class="k">SIGTERM</span><span class="v">Tín hiệu orchestrator gửi để yêu cầu tiến trình tắt một cách lịch sự.</span></div>
+  <div class="kv"><span class="k">Cho-readiness-trượt-trước</span><span class="v">Trả 503 từ readiness trước khi đóng server, để LB thôi định tuyến tới bạn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Request chết ở hai cửa sổ: instance đang thoát mà còn trong rotation, và instance mới nhận traffic trước khi sẵn sàng.</li>
+<li>Readiness bịt cả hai: cho nó trượt trước khi tắt, và giữ nó trượt lúc khởi động cho tới khi phụ thuộc đã lên.</li>
+<li>Thứ tự lúc tắt là: lật readiness sang 503 → chờ lâu hơn chu kỳ kiểm của LB → <code>server.close()</code>.</li>
+<li>Liveness phải giữ 200 trong lúc drain, nếu không orchestrator sẽ giết tiến trình giữa chừng.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://docs.docker.com/reference/compose-file/services/#stop_grace_period" target="_blank" rel="noopener">
@@ -1000,6 +1152,31 @@ not on the request path.</code></pre>
 <p><strong>Trap — a check that runs inside the container it is checking cannot see the two failures most likely to take you down.</strong> Both the Docker healthcheck (<code>curl localhost:3001</code>) and the deploy smoke test (<code>docker exec … curl localhost:3001</code>) reach the app by bypassing nginx, TLS and DNS entirely. So they stay green through an expired certificate, a bad nginx <code>location</code> block, a DNS record pointing at the old VPS, and a firewall rule that drops 443 — every one of which is a total outage for users and invisible from inside. <strong>The smoke test proving all 52 routes are mounted and the certificate having expired an hour ago are perfectly compatible states.</strong> That is not an argument against the internal check, which correctly isolates &quot;is the app built right&quot; from &quot;is the network right&quot;; it is the argument for lesson 8.5, and for making at least one check hit the public hostname over TLS from somewhere else entirely.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write the depth ladder on paper: level 1 (process up), level 2 (my own routes mounted), level 3 (dependencies answer). Note the cost and the false-positive risk of each.</li>
+<li>Open <code>deploy.sh</code> and find the smoke-test block. Pick one real, param-less, unauth GET route and predict its status code with <code>curl -s -o /dev/null -w "%{http_code}" &lt;url&gt;</code> — 401/200 = mounted, 404 = stale build.</li>
+<li>Write a level-2 check that GETs that route internally and <strong>fails the deploy on 404</strong> but accepts 200/401.</li>
+<li>Explain why a POST-only or param-required route would make this check false-fail on every deploy.</li>
+</ol>
+<p><strong>Done when:</strong> your check distinguishes "mounted" (200/401) from "stale build" (404), and you did not add a route that returns 404 on a bare unauth GET.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Depth ladder</span><span class="v">Levels of how far a check reaches: process → own routes → dependencies.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">A fast post-deploy check that a few core routes respond non-404, proving the build is not stale.</span></div>
+  <div class="kv"><span class="k">Stale / partial build</span><span class="v">The container runs an old image where a route is not mounted and returns 404.</span></div>
+  <div class="kv"><span class="k">Non-404 = mounted</span><span class="v">On a bare unauth GET, 200 (public) or 401 (needs auth) both prove the route exists.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>How deep to check is a cost/false-positive trade-off: deeper catches more but risks flapping on a dependency blip.</li>
+<li>Level 2 — "are my own routes actually mounted?" — is the sweet spot and is what this repo's smoke test already does.</li>
+<li>404 on a core GET route means stale build, not a bug in the route; 200/401 means mounted.</li>
+<li>Only add param-less, unauth GET routes to a smoke test, or it false-fails every deploy.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/monitoring-distributed-systems/" target="_blank" rel="noopener">
@@ -1127,6 +1304,31 @@ ngoài, không chạy trên đường request.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một phép kiểm chạy BÊN TRONG chính cái container nó đang kiểm thì không thấy được hai cú hỏng dễ hạ gục bạn nhất.</strong> Cả healthcheck của Docker (<code>curl localhost:3001</code>) lẫn bài kiểm khói lúc deploy (<code>docker exec … curl localhost:3001</code>) đều với tới ứng dụng bằng cách đi vòng qua nginx, TLS và DNS hoàn toàn. Nên chúng vẫn xanh qua một chứng chỉ hết hạn, một khối <code>location</code> sai của nginx, một bản ghi DNS trỏ vào cái VPS cũ, và một luật tường lửa chặn cổng 443 — mỗi cái trong số đó là một sự cố toàn phần với người dùng và vô hình khi nhìn từ bên trong. <strong>Việc bài kiểm khói chứng minh cả 52 route đã được gắn và việc chứng chỉ đã hết hạn một giờ trước là hai trạng thái hoàn toàn tương thích với nhau.</strong> Đó không phải một lý lẽ chống lại phép kiểm nội bộ, thứ đang cách ly rất đúng &quot;ứng dụng có dựng đúng không&quot; khỏi &quot;mạng có đúng không&quot;; nó là lý lẽ cho bài 8.5, và cho việc bắt buộc phải có ít nhất một phép kiểm đập vào tên miền công khai qua TLS từ một nơi hoàn toàn khác.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết cái thang độ sâu ra giấy: mức 1 (tiến trình lên), mức 2 (route của chính mình đã gắn), mức 3 (phụ thuộc có đáp). Ghi chi phí và rủi ro dương-tính-giả của mỗi mức.</li>
+<li>Mở <code>deploy.sh</code> và tìm khối smoke-test. Chọn một route GET thật, không tham số, không cần auth, rồi đoán mã trạng thái của nó bằng <code>curl -s -o /dev/null -w "%{http_code}" &lt;url&gt;</code> — 401/200 = đã gắn, 404 = build cũ.</li>
+<li>Viết một phép kiểm mức 2: GET route đó từ bên trong và <strong>làm deploy thất bại nếu gặp 404</strong> nhưng chấp nhận 200/401.</li>
+<li>Giải thích vì sao một route chỉ-POST hoặc bắt-buộc-tham-số sẽ làm phép kiểm này dương-tính-giả ở mọi lần deploy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> phép kiểm của bạn phân biệt được "đã gắn" (200/401) với "build cũ" (404), và bạn không thêm một route trả 404 trên GET trần không auth.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thang độ sâu</span><span class="v">Các mức xa tới đâu của phép kiểm: tiến trình → route của mình → phụ thuộc.</span></div>
+  <div class="kv"><span class="k">Smoke test</span><span class="v">Phép kiểm nhanh sau deploy rằng vài route lõi trả non-404, chứng minh build không cũ.</span></div>
+  <div class="kv"><span class="k">Build cũ / dở dang</span><span class="v">Container chạy ảnh cũ, một route chưa được gắn và trả 404.</span></div>
+  <div class="kv"><span class="k">Non-404 = đã gắn</span><span class="v">Trên GET trần không auth, 200 (công khai) hoặc 401 (cần auth) đều chứng minh route tồn tại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Kiểm sâu tới đâu là một đánh đổi chi phí/dương-tính-giả: sâu hơn bắt được nhiều hơn nhưng dễ chập chờn khi phụ thuộc chớp.</li>
+<li>Mức 2 — "route của chính mình đã thật sự gắn chưa?" — là điểm ngọt, và là đúng thứ smoke test của kho này đang làm.</li>
+<li>404 trên một route GET lõi nghĩa là build cũ, không phải lỗi trong route; 200/401 nghĩa là đã gắn.</li>
+<li>Chỉ thêm route GET không tham số, không auth vào smoke test, nếu không nó dương-tính-giả mọi lần deploy.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1280,6 +1482,31 @@ Rules that keep this from becoming its own incident:
 <p><strong>Trap — an external check that runs from one place tells you about that place, not about your service.</strong> A single checker in one region goes red when its own network path has a problem, and the alert says your site is down when it is serving everyone else perfectly — a false alarm that, repeated, is exactly how a team learns to ignore uptime alerts. The failure runs the other way too, and it is quieter: a check from one region stays green through a routing problem that makes you unreachable from an entire country, and nothing tells you. <strong>The rule is to alert on agreement, not on any single failure</strong> — two or more locations failing before it pages anyone. If you only have one checker, say so out loud when it fires: &quot;GitHub's runner cannot reach us&quot; is a different claim from &quot;we are down&quot;, and confusing the two costs more trust than the outage would.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>List the layers between a user and your code (DNS, TLS, nginx, the container, your route, the DB). For each, name one failure an internal probe would miss.</li>
+<li>Write the smallest useful external check: <code>curl -s -o /dev/null -w "%{http_code} %{time_total}" https://cuongthai.com/api/v1/&lt;a-public-route&gt;</code> and run it from a machine outside the VPS.</li>
+<li>Layer it into one diagnosis command that also prints the TLS expiry and the resolved IP, so one run tells you which layer broke.</li>
+<li>Sketch a safe synthetic check that exercises a real read path without writing data (a GET, never a POST that creates rows).</li>
+</ol>
+<p><strong>Done when:</strong> one command, run from outside, tells you status code and latency, and you can point at the layer a 200-from-inside-but-timeout-from-outside implicates.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">External / black-box check</span><span class="v">A probe from outside the box, through DNS/TLS/proxy — the same path a user takes.</span></div>
+  <div class="kv"><span class="k">Synthetic monitoring</span><span class="v">A scripted fake user that exercises a real path on a schedule to catch breakage before users do.</span></div>
+  <div class="kv"><span class="k">time_total</span><span class="v">curl's end-to-end latency, including DNS, connect and TLS — not just your handler.</span></div>
+  <div class="kv"><span class="k">Read-only synthetic</span><span class="v">A synthetic check that only reads (GET), so it never pollutes production data.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Internal probes are blind to every layer between the user and your process — DNS, TLS, the proxy, the network.</li>
+<li>The cheapest external check is a <code>curl</code> that records status code and total time from outside the host.</li>
+<li>Green inside + broken outside localises the fault to a layer no internal check can see.</li>
+<li>Synthetic checks must be read-only, or they quietly write junk to production (the repo once emailed a real address from a test).</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://letsencrypt.org/docs/expiration-emails/" target="_blank" rel="noopener">
@@ -1425,6 +1652,31 @@ Những luật giữ cho việc này khỏi trở thành sự cố của chính 
 <div class="pitfall">
 <p><strong>Bẫy — một phép kiểm bên ngoài chạy từ MỘT chỗ thì nói cho bạn về CHỖ ĐÓ, không nói về dịch vụ của bạn.</strong> Một bộ kiểm đơn lẻ ở một vùng sẽ đỏ khi chính đường mạng của nó có vấn đề, và cái cảnh báo nói rằng trang của bạn chết trong khi nó đang phục vụ mọi người khác một cách hoàn hảo — một báo động giả mà nếu lặp lại thì đó chính xác là cách một đội học được thói quen lờ đi các cảnh báo thời gian sống. Cú hỏng cũng chạy theo chiều ngược lại, và chiều đó lặng lẽ hơn: một phép kiểm từ một vùng vẫn xanh qua một sự cố định tuyến làm bạn không với tới được từ nguyên một quốc gia, và chẳng có gì báo cho bạn. <strong>Luật ở đây là cảnh báo theo SỰ ĐỒNG THUẬN, không theo một cú trượt đơn lẻ nào</strong> — hai vị trí trở lên cùng trượt thì mới gọi ai đó dậy. Nếu bạn chỉ có một bộ kiểm thì hãy nói thẳng điều đó ra khi nó nổ: &quot;runner của GitHub không với tới được chúng ta&quot; là một khẳng định khác với &quot;chúng ta đang chết&quot;, và lẫn lộn hai cái đó tốn nhiều lòng tin hơn cả cái sự cố.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Liệt kê các tầng giữa người dùng và mã của bạn (DNS, TLS, nginx, container, route, DB). Với mỗi tầng, nêu một cú hỏng mà probe nội bộ sẽ bỏ sót.</li>
+<li>Viết phép kiểm bên ngoài nhỏ nhất mà hữu ích: <code>curl -s -o /dev/null -w "%{http_code} %{time_total}" https://cuongthai.com/api/v1/&lt;một-route-công-khai&gt;</code> và chạy nó từ một máy ngoài VPS.</li>
+<li>Xếp nó thành một lệnh chẩn đoán in luôn hạn TLS và IP đã phân giải, để một lần chạy cho bạn biết tầng nào hỏng.</li>
+<li>Phác một synthetic check an toàn: đi qua một đường đọc thật mà không ghi dữ liệu (một GET, tuyệt đối không POST tạo bản ghi).</li>
+</ol>
+<p><strong>Đạt khi:</strong> một lệnh, chạy từ bên ngoài, cho bạn biết mã trạng thái và độ trễ, và bạn chỉ được ra tầng mà "200-từ-trong-nhưng-timeout-từ-ngoài" đang quy trách.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Kiểm bên ngoài / hộp đen</span><span class="v">Probe từ bên ngoài hộp, đi qua DNS/TLS/proxy — đúng con đường người dùng đi.</span></div>
+  <div class="kv"><span class="k">Theo dõi tổng hợp (synthetic)</span><span class="v">Một người dùng giả theo kịch bản, đi qua đường thật theo lịch, bắt lỗi trước người dùng.</span></div>
+  <div class="kv"><span class="k">time_total</span><span class="v">Độ trễ đầu-cuối của curl, gồm cả DNS, connect và TLS — không chỉ handler của bạn.</span></div>
+  <div class="kv"><span class="k">Synthetic chỉ-đọc</span><span class="v">Phép kiểm tổng hợp chỉ đọc (GET), nên không bao giờ làm bẩn dữ liệu production.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Probe nội bộ mù với mọi tầng giữa người dùng và tiến trình — DNS, TLS, proxy, mạng.</li>
+<li>Phép kiểm ngoài rẻ nhất là một <code>curl</code> ghi lại mã trạng thái và tổng thời gian, chạy từ ngoài host.</li>
+<li>Xanh từ trong + hỏng từ ngoài khoanh lỗi vào một tầng mà không phép kiểm nội bộ nào thấy.</li>
+<li>Synthetic check phải chỉ-đọc, nếu không nó âm thầm ghi rác lên production (kho này từng gửi email tới một địa chỉ thật từ một lần test).</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

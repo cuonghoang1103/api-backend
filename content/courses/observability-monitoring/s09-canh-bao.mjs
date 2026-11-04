@@ -136,6 +136,32 @@ description of the metric.</code></pre>
 <p><strong>Trap — the alert you silence &quot;just for tonight&quot; is the one that is still silenced during the next real incident.</strong> Muting is a two-second action with no expiry, no owner and no reminder, and the condition that made it noisy — a threshold set slightly too tight — never gets fixed because the noise stopped. Six months later nobody remembers the mute exists, the same alert has genuine cause to fire, and it does not. <strong>The specific harm is that the postmortem records &quot;we had no alerting for this&quot; when in fact you had excellent alerting that was turned off by someone being reasonable at 2am.</strong> Every silence needs an expiry time and a note saying what must change before it lapses — and if your tooling cannot express that, a recurring calendar entry listing every muted alert is a crude fix that works.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Take any alert you can find (or invent "CPU &gt; 80%"). Answer the four questions before it exists: who does it wake, what do they do about it, is it actionable right now, and what happens if it is ignored?</li>
+<li>Classify it into one of three tiers: page (wake a human), ticket (look tomorrow), or dashboard-only (no notification).</li>
+<li>If it is not page-worthy, demote it. Write down the one alert that SHOULD exist for this repo but does not (hint: user-facing error rate, not CPU).</li>
+<li>Give your page-worthy alert the fields it must carry: what broke, how bad, since when, and a link to the runbook.</li>
+</ol>
+<p><strong>Done when:</strong> every surviving page-level alert is something a human can act on at 3am, and "CPU &gt; 80%" is not one of them.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Page</span><span class="v">An alert that wakes a human now — reserved for "a user is in pain and I can fix it".</span></div>
+  <div class="kv"><span class="k">Ticket</span><span class="v">Something worth doing, but tomorrow — no notification outside working hours.</span></div>
+  <div class="kv"><span class="k">Actionability</span><span class="v">The test every page must pass: is there something a human can do right now?</span></div>
+  <div class="kv"><span class="k">Symptom vs cause</span><span class="v">Alert on the symptom users feel (errors, latency), not an internal cause (CPU) that may be harmless.</span></div>
+  <div class="kv"><span class="k">Runbook link</span><span class="v">The pointer in an alert to the steps for handling it — part of the promise.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>An alert is a promise to wake someone; if nobody can act on it, it is a broken promise and should not page.</li>
+<li>Three tiers — page, ticket, dashboard — and only the first should ever ring a phone.</li>
+<li>Alert on symptoms users feel, not internal causes that are often harmless.</li>
+<li>Every page must carry what broke, how bad, since when, and a link to what to do.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/workbook/alerting-on-slos/" target="_blank" rel="noopener">
@@ -265,6 +291,32 @@ chính xác về cái chỉ số.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — cái cảnh báo bạn tắt tiếng &quot;chỉ đêm nay thôi&quot; chính là cái vẫn còn bị tắt tiếng trong lần sự cố thật kế tiếp.</strong> Tắt tiếng là một thao tác hai giây, không hạn kết thúc, không người chịu trách nhiệm, không lời nhắc, và cái điều kiện làm nó ồn ào — một cái ngưỡng đặt hơi chặt quá — thì không bao giờ được chữa vì tiếng ồn đã tắt. Sáu tháng sau chẳng ai còn nhớ cái lệnh tắt tiếng ấy tồn tại, cùng cái cảnh báo đó có lý do thật để nổ, và nó không nổ. <strong>Cái hại cụ thể là bản kiểm điểm sự cố ghi lại &quot;chúng ta không có cảnh báo cho chuyện này&quot; trong khi thật ra bạn có một cảnh báo xuất sắc mà một người rất biết điều đã tắt nó đi lúc 2 giờ sáng.</strong> Mọi lần tắt tiếng đều cần một thời hạn và một ghi chú nói rõ cái gì phải thay đổi trước khi nó hết hạn — và nếu công cụ của bạn không diễn đạt được điều đó thì một sự kiện lịch lặp lại liệt kê mọi cảnh báo đang tắt là một cách chữa thô mà chạy được.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một cảnh báo bất kỳ bạn tìm được (hoặc tự bịa "CPU &gt; 80%"). Trả lời bốn câu hỏi trước khi nó tồn tại: nó gọi dậy ai, họ làm gì với nó, có hành động được ngay không, và nếu bỏ qua thì chuyện gì xảy ra?</li>
+<li>Xếp nó vào một trong ba bậc: page (gọi dậy một người), ticket (mai xem), hay chỉ-dashboard (không báo).</li>
+<li>Nếu nó không xứng để page, hạ bậc nó. Ghi ra cái cảnh báo mà kho này LẼ RA phải có nhưng không có (gợi ý: tỷ lệ lỗi người dùng thấy, không phải CPU).</li>
+<li>Gắn cho cảnh báo mức page của bạn các trường bắt buộc: cái gì hỏng, tệ tới đâu, từ lúc nào, và một liên kết tới runbook.</li>
+</ol>
+<p><strong>Đạt khi:</strong> mọi cảnh báo mức page còn sót lại đều là thứ một người có thể hành động lúc 3 giờ sáng, và "CPU &gt; 80%" không nằm trong số đó.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Page</span><span class="v">Cảnh báo gọi dậy một người ngay — dành riêng cho "người dùng đang đau mà tôi sửa được".</span></div>
+  <div class="kv"><span class="k">Ticket</span><span class="v">Việc đáng làm, nhưng để mai — không báo ngoài giờ.</span></div>
+  <div class="kv"><span class="k">Tính hành động được</span><span class="v">Phép thử mọi page phải qua: có thứ gì một người làm được ngay bây giờ không?</span></div>
+  <div class="kv"><span class="k">Triệu chứng vs nguyên nhân</span><span class="v">Cảnh báo theo triệu chứng người dùng cảm (lỗi, độ trễ), không theo nguyên nhân nội bộ (CPU) vốn có thể vô hại.</span></div>
+  <div class="kv"><span class="k">Liên kết runbook</span><span class="v">Con trỏ trong cảnh báo tới các bước xử lý — một phần của lời hứa.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cảnh báo là lời hứa sẽ đánh thức ai đó; nếu không ai hành động được thì đó là lời hứa bội, không nên page.</li>
+<li>Ba bậc — page, ticket, dashboard — và chỉ bậc đầu mới được làm reo điện thoại.</li>
+<li>Cảnh báo theo triệu chứng người dùng cảm, không theo nguyên nhân nội bộ vốn thường vô hại.</li>
+<li>Mọi page phải mang theo: cái gì hỏng, tệ tới đâu, từ lúc nào, và liên kết tới việc cần làm.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -424,6 +476,32 @@ fires are the same amount of information: none.</code></pre>
 <p><strong>Trap — a threshold derived from the last two weeks encodes whatever was broken during those two weeks.</strong> The method-1 query is honest about what the system <em>did</em>, not about what it <em>should</em> do — so if a slow query was live for that fortnight, the &quot;worst normal&quot; already includes it, the threshold is set above it, and the alert will now never fire for that class of problem again. The failure is self-sealing: <strong>the worse your service was during the sampling window, the more permissive the alert you derive, and the derivation looks equally rigorous either way.</strong> Before trusting a percentile you pulled from history, look at the graph over the same window and ask whether you would have been happy with it. If the answer is no, method 2 is the one to use — a number from a requirement is the only kind that does not inherit yesterday's bugs.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick one metric you have (request latency works). Over two weeks of data, compute its p95 and p99 with <code>histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))</code>.</li>
+<li>Derive a threshold from method 1 (your own baseline + headroom), not a number copied from a blog.</li>
+<li>Replace any percentage threshold with the two raw numbers behind it: a "5% error rate" alert at 20 req/day is one error; state the absolute count too.</li>
+<li>Write a calendar reminder for the threshold review nobody schedules — set it a month out.</li>
+</ol>
+<p><strong>Done when:</strong> your threshold is a number you derived from this system's own data, you alert on a percentile not an average, and you wrote down both the ratio and the raw count.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Derived threshold</span><span class="v">A limit computed from your own baseline, not copied from someone else's system.</span></div>
+  <div class="kv"><span class="k">histogram_quantile</span><span class="v">PromQL function that reads a percentile (p95/p99) out of a histogram's buckets.</span></div>
+  <div class="kv"><span class="k">Percentile vs average</span><span class="v">The average hides the slow tail; p95/p99 is what the unhappy users actually feel.</span></div>
+  <div class="kv"><span class="k">Rate-of-change threshold</span><span class="v">Alert on how fast a value moves when its absolute level is meaningless.</span></div>
+  <div class="kv"><span class="k">Denominator trap</span><span class="v">A percentage without its raw counts fires on noise at low traffic.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>A copied threshold is worse than none: it looks principled while being unrelated to your system.</li>
+<li>Derive thresholds three ways — from your own data, from user tolerance, or from rate of change.</li>
+<li>Alert on percentiles (p95/p99), never averages; the average hides exactly the users who are suffering.</li>
+<li>Carry both numbers behind every percentage, and schedule a threshold review nobody otherwise does.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://prometheus.io/docs/prometheus/latest/querying/functions/#predict_linear" target="_blank" rel="noopener">
@@ -570,6 +648,32 @@ cùng một lượng thông tin: không có gì.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — một cái ngưỡng suy ra từ hai tuần vừa rồi sẽ mã hoá luôn bất cứ thứ gì đã hỏng trong hai tuần ấy.</strong> Câu truy vấn ở cách 1 trung thực về việc hệ thống <em>ĐÃ LÀM</em> gì, không trung thực về việc nó <em>NÊN LÀM</em> gì — nên nếu một truy vấn chậm đã sống suốt hai tuần đó thì cái &quot;bình thường tệ nhất&quot; vốn đã bao gồm nó, ngưỡng được đặt cao hơn nó, và cái cảnh báo giờ sẽ không bao giờ nổ cho lớp vấn đề đó nữa. Cú hỏng này tự bịt kín lấy mình: <strong>dịch vụ của bạn càng tệ trong cửa sổ lấy mẫu thì cái cảnh báo bạn suy ra càng dễ dãi, và phép suy ra thì trông chặt chẽ y hệt nhau trong cả hai trường hợp.</strong> Trước khi tin một cái phân vị bạn kéo ra từ lịch sử, hãy nhìn đồ thị trên đúng cửa sổ đó và tự hỏi bạn có hài lòng với nó không. Nếu câu trả lời là không thì cách 2 mới là cách nên dùng — một con số đến từ một YÊU CẦU là loại duy nhất không thừa hưởng lỗi của ngày hôm qua.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một chỉ số bạn có (độ trễ request là được). Trên dữ liệu hai tuần, tính p95 và p99 bằng <code>histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))</code>.</li>
+<li>Suy ra một ngưỡng theo cách 1 (baseline của chính bạn + khoảng dư), không phải một con số chép từ blog.</li>
+<li>Thay mọi ngưỡng phần trăm bằng hai con số thô đứng sau nó: cảnh báo "5% tỷ lệ lỗi" ở 20 req/ngày chỉ là một lỗi; hãy nêu cả con số tuyệt đối.</li>
+<li>Đặt một lời nhắc lịch cho buổi rà soát ngưỡng chẳng ai đặt — hẹn một tháng sau.</li>
+</ol>
+<p><strong>Đạt khi:</strong> ngưỡng của bạn là một con số bạn suy ra từ dữ liệu của chính hệ này, bạn cảnh báo theo phân vị chứ không theo trung bình, và bạn ghi cả tỷ lệ lẫn con số thô.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Ngưỡng suy ra</span><span class="v">Giới hạn tính từ baseline của chính bạn, không chép từ hệ của người khác.</span></div>
+  <div class="kv"><span class="k">histogram_quantile</span><span class="v">Hàm PromQL đọc một phân vị (p95/p99) ra từ các bucket của histogram.</span></div>
+  <div class="kv"><span class="k">Phân vị vs trung bình</span><span class="v">Trung bình giấu cái đuôi chậm; p95/p99 mới là thứ người dùng khổ sở thật sự cảm thấy.</span></div>
+  <div class="kv"><span class="k">Ngưỡng theo tốc độ đổi</span><span class="v">Cảnh báo theo tốc độ một giá trị dịch chuyển khi mức tuyệt đối của nó vô nghĩa.</span></div>
+  <div class="kv"><span class="k">Bẫy mẫu số</span><span class="v">Một phần trăm không kèm con số thô sẽ reo vì nhiễu khi traffic thấp.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một ngưỡng đi chép còn tệ hơn không có: nó trông có cơ sở trong khi chẳng liên quan gì tới hệ của bạn.</li>
+<li>Suy ngưỡng theo ba cách — từ dữ liệu của chính bạn, từ mức người dùng chịu được, hoặc từ tốc độ đổi.</li>
+<li>Cảnh báo theo phân vị (p95/p99), đừng bao giờ theo trung bình; trung bình giấu đúng những người đang khổ.</li>
+<li>Mang theo cả hai con số sau mỗi phần trăm, và đặt lịch một buổi rà soát ngưỡng mà nếu không thì chẳng ai làm.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -734,6 +838,32 @@ real decision.</code></pre>
 <p><strong>Trap — a 30-day rolling window means a bad day keeps costing you for a month, and the day it stops is invisible.</strong> Burn 30 of your 43 minutes on the 3rd, and the budget stays depleted until the 3rd of the next month, when that incident silently rolls out of the window and 30 minutes reappear. Two things follow, both awkward. First, a deploy freeze declared on the 5th has no natural end date — it lifts because of arithmetic, not because anything improved, and if nobody notices, the freeze outlives its reason. Second, <strong>the graph recovers on a date with no event attached, so a month later someone reads the improvement as the fix having worked.</strong> Put the incident date on the budget dashboard as an annotation, and state the recovery date when you declare the freeze: &quot;frozen until the 3rd, when the incident of the 3rd leaves the window&quot; is a sentence that keeps everyone honest.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick an SLI for this repo: the fraction of <code>GET /api/v1/...</code> requests that return &lt; 500 within 500ms.</li>
+<li>Set an SLO of 99.9% over 30 days and compute the error budget in minutes: 0.1% of 30 days ≈ 43 minutes of "allowed" badness.</li>
+<li>Define burn rate = how fast you are spending that budget. Write a fast-burn alert (2% of budget in 1 hour) and a slow-burn alert (10% in 6 hours).</li>
+<li>State what the budget is FOR: when it is healthy, ship features; when it is spent, freeze and fix reliability.</li>
+</ol>
+<p><strong>Done when:</strong> you have one SLI, one SLO, a budget in minutes, and two multi-window burn-rate alerts that replace a dozen threshold alerts.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SLI</span><span class="v">Service Level Indicator — the measured fraction of good events (e.g. fast, non-error requests).</span></div>
+  <div class="kv"><span class="k">SLO</span><span class="v">Service Level Objective — the target for the SLI, e.g. 99.9% over 30 days.</span></div>
+  <div class="kv"><span class="k">Error budget</span><span class="v">The allowed badness: 100% minus the SLO, expressed as time or request count.</span></div>
+  <div class="kv"><span class="k">Burn rate</span><span class="v">How fast you are consuming the error budget; high burn over a short window = page.</span></div>
+  <div class="kv"><span class="k">Multi-window alert</span><span class="v">Pairing a short fast-burn and a long slow-burn window to catch both sharp and slow failures.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>SLI is what you measure, SLO is the target, error budget is 100% minus the SLO.</li>
+<li>99.9% over 30 days is about 43 minutes of allowed badness — a budget you can spend deliberately.</li>
+<li>Burn rate turns a dozen threshold alerts into two: fast-burn pages, slow-burn tickets.</li>
+<li>The budget is a decision tool: healthy → ship; spent → freeze and fix.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/workbook/implementing-slos/" target="_blank" rel="noopener">
@@ -888,6 +1018,32 @@ cái thứ ba cho tới khi hai cái đầu đã dẫn tới một quyết đị
 <div class="pitfall">
 <p><strong>Bẫy — cửa sổ trượt 30 ngày nghĩa là một ngày tồi tệ vẫn tính tiền bạn suốt một tháng, và cái ngày nó ngừng tính thì vô hình.</strong> Đốt 30 trong 43 phút vào ngày mùng 3, và ngân sách sẽ cạn cho tới mùng 3 tháng sau, khi cái sự cố ấy âm thầm trôi ra khỏi cửa sổ và 30 phút xuất hiện lại. Hai điều nảy ra từ đó, cả hai đều gượng gạo. Thứ nhất, một lệnh đóng băng deploy tuyên bố vào mùng 5 chẳng có ngày kết thúc tự nhiên nào — nó được gỡ vì số học, không phải vì có gì cải thiện, và nếu không ai để ý thì lệnh đóng băng sống lâu hơn cả lý do của nó. Thứ hai, <strong>cái đồ thị hồi phục vào một ngày chẳng có sự kiện nào gắn kèm, nên một tháng sau ai đó đọc cái sự cải thiện ấy thành &quot;cách chữa đã có tác dụng&quot;.</strong> Hãy đặt ngày xảy ra sự cố lên bảng theo dõi ngân sách dưới dạng một chú thích, và nêu rõ ngày hồi phục khi bạn tuyên bố đóng băng: &quot;đóng băng tới mùng 3, khi sự cố ngày mùng 3 rời khỏi cửa sổ&quot; là một câu giữ cho mọi người trung thực.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một SLI cho kho này: tỷ lệ request <code>GET /api/v1/...</code> trả về &lt; 500 trong vòng 500ms.</li>
+<li>Đặt SLO 99,9% trên 30 ngày và tính ngân sách lỗi theo phút: 0,1% của 30 ngày ≈ 43 phút "được phép" hỏng.</li>
+<li>Định nghĩa burn rate = bạn đang tiêu ngân sách đó nhanh tới đâu. Viết một cảnh báo đốt-nhanh (2% ngân sách trong 1 giờ) và một cảnh báo đốt-chậm (10% trong 6 giờ).</li>
+<li>Nêu ngân sách để LÀM GÌ: khi còn khoẻ, ship tính năng; khi đã tiêu hết, đóng băng và sửa độ tin cậy.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có một SLI, một SLO, một ngân sách tính bằng phút, và hai cảnh báo burn-rate đa cửa sổ thay thế cho cả tá cảnh báo ngưỡng.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SLI</span><span class="v">Chỉ báo mức dịch vụ — tỷ lệ sự kiện tốt đo được (ví dụ request nhanh, không lỗi).</span></div>
+  <div class="kv"><span class="k">SLO</span><span class="v">Mục tiêu mức dịch vụ — đích của SLI, ví dụ 99,9% trên 30 ngày.</span></div>
+  <div class="kv"><span class="k">Ngân sách lỗi</span><span class="v">Phần hỏng được phép: 100% trừ đi SLO, tính theo thời gian hoặc số request.</span></div>
+  <div class="kv"><span class="k">Burn rate (tốc độ đốt)</span><span class="v">Bạn đang tiêu ngân sách lỗi nhanh tới đâu; đốt mạnh trong cửa sổ ngắn = page.</span></div>
+  <div class="kv"><span class="k">Cảnh báo đa cửa sổ</span><span class="v">Ghép một cửa sổ ngắn đốt-nhanh và một cửa sổ dài đốt-chậm để bắt cả hỏng gắt lẫn hỏng chậm.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>SLI là thứ bạn đo, SLO là đích, ngân sách lỗi là 100% trừ SLO.</li>
+<li>99,9% trên 30 ngày là khoảng 43 phút hỏng được phép — một ngân sách bạn có thể tiêu một cách có chủ ý.</li>
+<li>Burn rate biến cả tá cảnh báo ngưỡng thành hai: đốt-nhanh thì page, đốt-chậm thì ticket.</li>
+<li>Ngân sách là công cụ ra quyết định: còn khoẻ → ship; tiêu hết → đóng băng và sửa.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1060,6 +1216,32 @@ the only ones with a proven reason to exist.</code></pre>
 <p><strong>Trap — routing alerts to Slack and calling it paging.</strong> Slack is where a message waits until someone opens the app, which at 3am is nobody and during focused work is twenty minutes later. Treating it as a pager produces a specific and expensive belief: the incident review says &quot;we were alerted at 02:14&quot; when what actually happened is that a message was written into a channel at 02:14 and read at 09:30. <strong>The gap between &quot;notified&quot; and &quot;noticed&quot; is invisible in every tool and is the entire difference between having paging and thinking you do.</strong> Either route your three page-level alerts to something that makes a phone ring against Do Not Disturb, or state plainly that your response time is &quot;next morning&quot; and set the SLO in lesson 9.3 accordingly — 99.9% is 43 minutes a month, which an eight-hour response time cannot meet.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Export (or list) every alert that paged in the last month and count how many were actionable vs noise.</li>
+<li>Find the single noisiest alert and apply one of the four cures: delete it, raise the threshold, add a "for" duration so it must persist, or group/inhibit it under a parent alert.</li>
+<li>Write one grouping rule (all instance-down alerts for one service collapse into one page) and one inhibition rule (if the whole region is down, suppress the per-service pages).</li>
+<li>For a one-person on-call, replace one page with an auto-remediation or a next-morning ticket.</li>
+</ol>
+<p><strong>Done when:</strong> you deleted or demoted at least one alert, wrote one grouping and one inhibition rule, and your monthly review took about ten minutes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Alert fatigue</span><span class="v">So many pages that humans start ignoring them — the real failure is the missed real one.</span></div>
+  <div class="kv"><span class="k">Grouping</span><span class="v">Collapsing many related alerts into one notification so you get one page, not fifty.</span></div>
+  <div class="kv"><span class="k">Inhibition</span><span class="v">Suppressing downstream alerts when a known parent cause is already firing.</span></div>
+  <div class="kv"><span class="k">"for" duration</span><span class="v">A condition must hold for N minutes before it pages, killing transient-blip noise.</span></div>
+  <div class="kv"><span class="k">Monthly alert review</span><span class="v">A ten-minute ritual that counts pages and deletes the noisiest — the only cure that lasts.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Alert fatigue decays in predictable steps and ends with a human ignoring the one page that mattered.</li>
+<li>The four cures: delete, raise the threshold, add a "for" duration, or group/inhibit.</li>
+<li>Grouping and inhibition turn a storm of related alerts into a single actionable page.</li>
+<li>For one-person on-call, auto-remediate or defer to a ticket instead of paging; review monthly in ten minutes.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://prometheus.io/docs/alerting/latest/configuration/" target="_blank" rel="noopener">
@@ -1224,6 +1406,32 @@ những cảnh báo duy nhất có một lý do tồn tại đã được chứn
 <div class="pitfall">
 <p><strong>Bẫy — định tuyến cảnh báo vào Slack rồi gọi đó là hệ thống gọi dậy.</strong> Slack là nơi một thông điệp nằm chờ cho tới khi có người mở ứng dụng ra, mà lúc 3 giờ sáng thì đó là không ai, còn trong lúc làm việc tập trung thì là hai mươi phút sau. Coi nó là một cái máy nhắn tin sinh ra một niềm tin rất cụ thể và rất đắt: bản kiểm điểm sự cố ghi &quot;chúng ta được cảnh báo lúc 02:14&quot; trong khi chuyện thật sự xảy ra là một thông điệp được viết vào một cái kênh lúc 02:14 và được đọc lúc 09:30. <strong>Cái khoảng cách giữa &quot;đã báo&quot; và &quot;đã thấy&quot; là vô hình trong mọi công cụ và nó là toàn bộ khác biệt giữa việc CÓ hệ thống gọi dậy và việc NGHĨ rằng mình có.</strong> Hoặc là định tuyến ba cảnh báo cấp gọi-dậy của bạn tới một thứ làm cho một cái điện thoại reo bất chấp chế độ Không làm phiền, hoặc là nói thẳng rằng thời gian phản hồi của bạn là &quot;sáng hôm sau&quot; rồi đặt cái SLO ở bài 9.3 cho tương xứng — 99,9% là 43 phút một tháng, mà một thời gian phản hồi tám tiếng thì không đáp ứng nổi.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Xuất (hoặc liệt kê) mọi cảnh báo đã page trong tháng qua và đếm xem bao nhiêu cái hành động được so với bao nhiêu là nhiễu.</li>
+<li>Tìm cái cảnh báo ồn nhất và áp một trong bốn cách chữa: xoá nó, nâng ngưỡng, thêm thời lượng "for" để nó phải kéo dài mới reo, hoặc gom/ức chế nó dưới một cảnh báo cha.</li>
+<li>Viết một luật gom nhóm (mọi cảnh báo instance-down của một dịch vụ dồn thành một page) và một luật ức chế (nếu cả vùng sập thì nén các page theo từng dịch vụ).</li>
+<li>Với trực ca một người, thay một page bằng tự-khắc-phục hoặc một ticket để sáng mai.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã xoá hoặc hạ bậc ít nhất một cảnh báo, viết được một luật gom nhóm và một luật ức chế, và buổi rà soát hằng tháng của bạn tốn khoảng mười phút.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Mệt mỏi vì cảnh báo</span><span class="v">Quá nhiều page tới mức người ta bắt đầu bỏ qua — cú hỏng thật là cái page thật bị bỏ lỡ.</span></div>
+  <div class="kv"><span class="k">Gom nhóm</span><span class="v">Dồn nhiều cảnh báo liên quan thành một thông báo, để bạn nhận một page chứ không phải năm mươi.</span></div>
+  <div class="kv"><span class="k">Ức chế</span><span class="v">Nén các cảnh báo ở hạ nguồn khi một nguyên nhân cha đã biết đang reo.</span></div>
+  <div class="kv"><span class="k">Thời lượng "for"</span><span class="v">Điều kiện phải giữ N phút mới page, giết nhiễu từ những cú chớp thoáng qua.</span></div>
+  <div class="kv"><span class="k">Rà soát cảnh báo hằng tháng</span><span class="v">Nghi thức mười phút đếm page và xoá cái ồn nhất — cách chữa duy nhất bền lâu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Mệt mỏi vì cảnh báo suy tàn theo các bước đoán trước được, và kết thúc bằng việc một người bỏ qua đúng cái page quan trọng.</li>
+<li>Bốn cách chữa: xoá, nâng ngưỡng, thêm thời lượng "for", hoặc gom/ức chế.</li>
+<li>Gom nhóm và ức chế biến một cơn bão cảnh báo liên quan thành một page hành động được.</li>
+<li>Với trực ca một người, tự-khắc-phục hoặc dời sang ticket thay vì page; rà soát hằng tháng trong mười phút.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

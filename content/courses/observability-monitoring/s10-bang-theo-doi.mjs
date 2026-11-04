@@ -136,6 +136,31 @@ attention during the ten seconds when attention is scarcest.</code></pre>
 <p><strong>Trap — the panel added after an incident is usually the one that would have told you nothing.</strong> The reflex after a bad night is &quot;we need a graph for that&quot;, and the graph that gets built shows the thing you eventually found — the memory number, the specific queue depth — rather than the thing that would have led you there. So the dashboard grows a panel that only makes sense to someone who already knows the answer, and during the <em>next</em> incident, which is different, it is one more thing to scroll past. <strong>The honest question in a review is not &quot;what graph do we want&quot; but &quot;at which minute did we go down the wrong path, and what would have redirected us <em>then</em>?&quot;</strong> That question usually produces a panel already on the dashboard, unread — which means the fix is layout or removal, not addition.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Name the one audience and one question for a dashboard you will build: the 3am responder asking "is it the app or the infra?"</li>
+<li>Build a 3am dashboard with at most six panels. Each panel must answer one named question — write the question above each.</li>
+<li>Order the panels top-to-bottom as the eye reads a diagnosis: user-facing symptom first (error rate, latency), causes below.</li>
+<li>Delete any panel you added out of habit that does not answer a question the 3am responder is asking.</li>
+</ol>
+<p><strong>Done when:</strong> your dashboard has ≤ 6 panels, each with a written question, and nothing on it is there just because it looked nice.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Audience-first design</span><span class="v">Deciding who reads the dashboard and what they ask before adding any panel.</span></div>
+  <div class="kv"><span class="k">3am dashboard</span><span class="v">The minimal view a half-awake responder uses to localise a fault fast.</span></div>
+  <div class="kv"><span class="k">Investigation dashboard</span><span class="v">A denser layout read in order, for digging into a known problem.</span></div>
+  <div class="kv"><span class="k">One-question panel</span><span class="v">Every panel earns its place by answering exactly one question.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>A dashboard fails when it is built for no one in particular; decide the audience and their question first.</li>
+<li>The 3am dashboard is small and symptom-first; the investigation dashboard is dense and ordered.</li>
+<li>Every panel must answer one named question or it is clutter.</li>
+<li>Order panels the way a human diagnoses: symptom at the top, candidate causes below.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/grafana/latest/dashboards/build-dashboards/best-practices/" target="_blank" rel="noopener">
@@ -261,6 +286,31 @@ người đọc, đúng vào mười giây mà sự chú ý khan hiếm nhất.<
 <div class="pitfall">
 <p><strong>Bẫy — cái ô được thêm vào sau một sự cố thường lại là cái lẽ ra chẳng nói cho bạn điều gì.</strong> Phản xạ sau một đêm tồi tệ là &quot;chúng ta cần một đồ thị cho cái đó&quot;, và cái đồ thị được dựng lên lại hiển thị THỨ BẠN RỐT CUỘC ĐÃ TÌM RA — con số bộ nhớ, cái độ sâu hàng đợi cụ thể — chứ không hiển thị thứ lẽ ra đã dẫn bạn tới đó. Nên cái bảng mọc ra một ô chỉ có nghĩa với người đã biết sẵn câu trả lời, và trong lần sự cố <em>KẾ TIẾP</em>, vốn khác đi, nó là thêm một thứ nữa để cuộn qua. <strong>Câu hỏi trung thực trong một buổi rà soát không phải &quot;chúng ta muốn đồ thị nào&quot; mà là &quot;ở phút thứ mấy chúng ta đi nhầm đường, và cái gì lẽ ra đã bẻ lái chúng ta <em>LÚC ĐÓ</em>?&quot;</strong> Câu hỏi ấy thường cho ra một cái ô vốn đã có sẵn trên bảng, chưa ai đọc — nghĩa là cách chữa là bố trí lại hoặc gỡ bỏ, không phải thêm vào.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Gọi tên một khán giả và một câu hỏi cho cái bảng bạn sắp dựng: người trực lúc 3 giờ sáng hỏi "lỗi ở app hay ở hạ tầng?"</li>
+<li>Dựng một bảng 3 giờ sáng với tối đa sáu ô. Mỗi ô phải trả lời một câu hỏi có tên — viết câu hỏi đó phía trên mỗi ô.</li>
+<li>Xếp các ô từ trên xuống theo cách mắt đọc một cuộc chẩn đoán: triệu chứng người dùng thấy trước (tỷ lệ lỗi, độ trễ), nguyên nhân ở dưới.</li>
+<li>Xoá bất kỳ ô nào bạn thêm theo thói quen mà không trả lời câu hỏi nào người trực 3 giờ sáng đang hỏi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bảng của bạn có ≤ 6 ô, mỗi ô kèm một câu hỏi viết ra, và không có gì trên đó chỉ vì nó trông đẹp.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Thiết kế lấy khán giả làm đầu</span><span class="v">Quyết định ai đọc bảng và họ hỏi gì trước khi thêm bất kỳ ô nào.</span></div>
+  <div class="kv"><span class="k">Bảng 3 giờ sáng</span><span class="v">Khung nhìn tối thiểu để người trực nửa tỉnh nửa mê khoanh lỗi thật nhanh.</span></div>
+  <div class="kv"><span class="k">Bảng điều tra</span><span class="v">Một bố cục dày hơn, đọc theo thứ tự, để đào sâu vào một vấn đề đã biết.</span></div>
+  <div class="kv"><span class="k">Ô một-câu-hỏi</span><span class="v">Mỗi ô kiếm được chỗ đứng bằng cách trả lời đúng một câu hỏi.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một cái bảng hỏng khi nó được dựng cho không-ai-cả; hãy quyết khán giả và câu hỏi của họ trước.</li>
+<li>Bảng 3 giờ sáng thì nhỏ và triệu-chứng-trước; bảng điều tra thì dày và có thứ tự.</li>
+<li>Mỗi ô phải trả lời một câu hỏi có tên, nếu không nó là rác.</li>
+<li>Xếp ô theo cách một người chẩn đoán: triệu chứng ở trên, các nguyên nhân khả dĩ ở dưới.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -405,6 +455,32 @@ number a reader will act on.</code></pre>
 <p><strong>Trap — two lines on one chart create a causal story your eye believes before you have checked it.</strong> Put memory and latency on the same panel and any shared upward drift reads as &quot;memory pressure is causing slowness&quot;, because human vision is extremely good at finding correlation and has no mechanism at all for direction or lag. The failure is not that the chart is wrong — both series are accurate — it is that the chart <em>proposes a hypothesis and simultaneously appears to confirm it</em>, which is the one thing a diagnostic tool must never do. Under incident pressure that reading gets acted on, and an hour disappears into a memory investigation while the real cause sits on the next row. <strong>Correlation on a dashboard is a prompt to go and check, never a finding</strong> — and the check is the trace or the log, per lesson 6.4's pitfall.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Take one of your own charts (or a screenshot) and hunt for the six lies: truncated y-axis, time-range averaging a percentile, a raw counter, a missing denominator, a misleading gap, and a hidden average.</li>
+<li>Fix the raw-counter lie: wrap a <code>_total</code> counter in <code>rate(... [5m])</code> so the chart shows per-second rate, not an ever-rising line.</li>
+<li>Fix the missing-denominator lie: turn "error count" into "error ratio" by dividing by total requests.</li>
+<li>Force the y-axis to start at zero (or label loudly that it does not) and note which conclusion changed.</li>
+</ol>
+<p><strong>Done when:</strong> you found at least three lies in a chart drawn from correct data, and fixing them changed the conclusion a reader would draw.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Truncated y-axis</span><span class="v">An axis not starting at zero, making a tiny change look like a cliff.</span></div>
+  <div class="kv"><span class="k">rate() on a counter</span><span class="v">Counters only rise; you must take <code>rate()</code> to see per-second change.</span></div>
+  <div class="kv"><span class="k">Missing denominator</span><span class="v">A raw count without "out of how many" that spikes with traffic, not with trouble.</span></div>
+  <div class="kv"><span class="k">Percentile averaging</span><span class="v">Averaging a p95 over a long range hides the worst moments inside it.</span></div>
+  <div class="kv"><span class="k">Misleading gap</span><span class="v">A gap that means "no data arrived", easily misread as "the value was zero".</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>A chart can lie while every number in it is correct; the deception is in axis, aggregation and denominator.</li>
+<li>Raw counters must be wrapped in <code>rate()</code>; counts need a denominator to become a ratio.</li>
+<li>Averaging percentiles over long ranges hides the exact moments you are looking for.</li>
+<li>Start axes at zero and read gaps as "no data", not "zero" — layout rules prevent most lies.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/grafana/latest/panels-visualizations/query-transform-data/calculation-types/" target="_blank" rel="noopener">
@@ -536,6 +612,32 @@ số mà người đọc sẽ hành động theo.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — hai đường trên một đồ thị tạo ra một câu chuyện NHÂN QUẢ mà mắt bạn tin trước khi bạn kịp đi kiểm.</strong> Đặt bộ nhớ và độ trễ lên cùng một cái ô thì bất cứ xu hướng đi lên chung nào cũng đọc ra thành &quot;áp lực bộ nhớ đang gây chậm&quot;, vì thị giác con người cực giỏi trong việc tìm ra tương quan và hoàn toàn không có cơ chế nào cho chiều hay cho độ trễ pha. Cú hỏng không nằm ở chỗ đồ thị sai — cả hai chuỗi đều chính xác — mà nằm ở chỗ cái đồ thị <em>ĐỀ XUẤT một giả thuyết rồi đồng thời có vẻ như xác nhận nó</em>, mà đó đúng là điều một công cụ chẩn đoán tuyệt đối không được làm. Dưới áp lực sự cố thì cách đọc ấy được đem ra hành động, và một tiếng đồng hồ biến mất vào một cuộc điều tra bộ nhớ trong khi nguyên nhân thật ngồi ở hàng bên dưới. <strong>Tương quan trên một bảng theo dõi là một lời NHẮC đi kiểm, không bao giờ là một PHÁT HIỆN</strong> — và cái phép kiểm ấy là trace hoặc log, theo đúng cái bẫy ở bài 6.4.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một đồ thị của chính bạn (hoặc một ảnh chụp) và đi săn sáu lời nói dối: trục y bị cắt, khoảng thời gian lấy trung bình một phân vị, một counter vẽ thô, thiếu mẫu số, một khoảng trống gây hiểu nhầm, và một trung bình ẩn.</li>
+<li>Sửa cái nói dối counter-thô: bọc một counter <code>_total</code> trong <code>rate(... [5m])</code> để đồ thị hiện tốc độ trên giây, không phải một đường cứ dâng mãi.</li>
+<li>Sửa cái nói dối thiếu-mẫu-số: biến "số lỗi" thành "tỷ lệ lỗi" bằng cách chia cho tổng request.</li>
+<li>Ép trục y bắt đầu từ 0 (hoặc ghi thật to rằng nó không) và ghi lại kết luận nào đã thay đổi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tìm ra ít nhất ba lời nói dối trong một đồ thị vẽ từ dữ liệu đúng, và việc sửa chúng đã thay đổi kết luận mà người đọc rút ra.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Trục y bị cắt cụt</span><span class="v">Trục không bắt đầu từ 0, làm một thay đổi tí xíu trông như một vách đá.</span></div>
+  <div class="kv"><span class="k">rate() trên counter</span><span class="v">Counter chỉ dâng; phải lấy <code>rate()</code> mới thấy được thay đổi trên giây.</span></div>
+  <div class="kv"><span class="k">Thiếu mẫu số</span><span class="v">Một số đếm thô không kèm "trên tổng bao nhiêu", vọt theo traffic chứ không theo sự cố.</span></div>
+  <div class="kv"><span class="k">Lấy trung bình phân vị</span><span class="v">Lấy trung bình một p95 trên khoảng dài sẽ giấu đi những khoảnh khắc tệ nhất bên trong.</span></div>
+  <div class="kv"><span class="k">Khoảng trống gây nhầm</span><span class="v">Một khoảng trống nghĩa là "không có dữ liệu về", rất dễ bị đọc nhầm thành "giá trị bằng 0".</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Một đồ thị có thể nói dối trong khi mọi con số trong nó đều đúng; sự đánh lừa nằm ở trục, cách gộp và mẫu số.</li>
+<li>Counter thô phải được bọc trong <code>rate()</code>; số đếm cần một mẫu số để thành tỷ lệ.</li>
+<li>Lấy trung bình phân vị trên khoảng dài giấu đi đúng những khoảnh khắc bạn đang tìm.</li>
+<li>Cho trục bắt đầu từ 0 và đọc khoảng trống là "không có dữ liệu", không phải "bằng 0" — luật bố trí ngăn được phần lớn lời nói dối.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -679,6 +781,31 @@ whose logs cannot be found.</code></pre>
 <p><strong>Trap — every link in this chain breaks silently, and it breaks in the direction of showing you plausible wrong data.</strong> Retention is the usual culprit: traces kept 24 hours (lesson 6.3) and metrics kept 30 days means every exemplar older than a day opens an empty trace view — not an error, just nothing, which reads as &quot;the trace was not sampled&quot; rather than &quot;this link has been dead for weeks&quot;. The worse case is the time-shift window: a ±5-minute log query around a span will happily return log lines from a <em>different</em> request if the traceId filter is misconfigured, and those lines look exactly like evidence. <strong>The whole chain is a system with no tests, used only during incidents, which is the worst possible combination.</strong> Once a month, take a random exemplar older than a day and walk all three clicks — it takes two minutes and it is the only way you will find out before an incident does.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick a spike on a latency chart. Click 1: use an exemplar to jump from that metric data point to one representative trace.</li>
+<li>Click 2: from the trace, follow its <code>trace_id</code> to the logs of the same request (this is why Chapter 3's correlation id mattered).</li>
+<li>Click 3: in the logs, read the error and the user it happened to — the end of the path the whole course built toward.</li>
+<li>Time yourself. If any click took digging instead of a link, note what was not wired (exemplars off, or logs not tagged with <code>trace_id</code>).</li>
+</ol>
+<p><strong>Done when:</strong> you went metric → trace → log → the specific error in three clicks, and you know which single link to wire first if you can only wire one.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exemplar</span><span class="v">A sample trace id attached to a metric data point, letting you jump from a chart to one real request.</span></div>
+  <div class="kv"><span class="k">trace_id correlation</span><span class="v">The shared id that links a metric spike, its trace, and its log lines into one story.</span></div>
+  <div class="kv"><span class="k">Metric → trace → log</span><span class="v">The three-click path from "something is wrong" to "this exact request, this user".</span></div>
+  <div class="kv"><span class="k">Wiring order</span><span class="v">If you can connect only one pair, connect trace → logs via <code>trace_id</code> first.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>The whole course builds toward one skill: getting from a dashboard spike to the exact failing request fast.</li>
+<li>Exemplars link a metric point to a trace; <code>trace_id</code> links a trace to its logs.</li>
+<li>Three clicks — metric → trace → log — turn an aggregate symptom into one concrete request and user.</li>
+<li>If you wire only one connection, wire trace → logs by <code>trace_id</code>; it pays off every incident.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://grafana.com/docs/grafana/latest/fundamentals/exemplars/" target="_blank" rel="noopener">
@@ -811,6 +938,31 @@ mà không tìm được log.</code></pre>
 <div class="pitfall">
 <p><strong>Bẫy — mọi mối nối trong chuỗi này đều đứt trong im lặng, và nó đứt theo hướng cho bạn xem dữ liệu SAI mà nghe hợp lý.</strong> Thủ phạm thường là thời hạn lưu: trace giữ 24 giờ (bài 6.3) còn chỉ số giữ 30 ngày nghĩa là mọi exemplar cũ hơn một ngày sẽ mở ra một khung trace rỗng — không phải lỗi, chỉ là chẳng có gì, và điều đó đọc ra thành &quot;cái trace ấy không được lấy mẫu&quot; chứ không thành &quot;mối nối này đã chết hàng tuần rồi&quot;. Ca tệ hơn là cái cửa sổ dịch thời gian: một truy vấn log ±5 phút quanh một span sẽ vui vẻ trả về những dòng log của một request <em>KHÁC</em> nếu bộ lọc traceId bị cấu hình sai, và những dòng đó trông y hệt bằng chứng. <strong>Cả cái chuỗi này là một hệ thống không có bài kiểm nào, chỉ được dùng trong lúc sự cố, mà đó là tổ hợp tệ nhất có thể.</strong> Mỗi tháng một lần, hãy lấy một exemplar ngẫu nhiên cũ hơn một ngày rồi đi hết cả ba cú bấm — nó tốn hai phút và là cách duy nhất để bạn phát hiện ra trước khi một sự cố phát hiện ra.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một cú vọt trên đồ thị độ trễ. Bấm 1: dùng một exemplar để nhảy từ điểm dữ liệu chỉ số đó sang một trace đại diện.</li>
+<li>Bấm 2: từ trace, lần theo <code>trace_id</code> của nó tới log của cùng request (đây chính là lý do correlation id ở Chương 3 quan trọng).</li>
+<li>Bấm 3: trong log, đọc cái lỗi và người dùng mà nó xảy ra với — điểm cuối của con đường mà cả khoá học tiến tới.</li>
+<li>Bấm giờ bản thân. Nếu cú bấm nào phải đào bới thay vì một liên kết, ghi lại cái gì chưa được nối (exemplar tắt, hoặc log chưa gắn <code>trace_id</code>).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đi từ chỉ số → trace → log → cái lỗi cụ thể trong ba cú bấm, và bạn biết phải nối liên kết nào trước nếu chỉ nối được một.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Exemplar</span><span class="v">Một trace id mẫu gắn vào một điểm dữ liệu chỉ số, cho bạn nhảy từ đồ thị tới một request thật.</span></div>
+  <div class="kv"><span class="k">Tương quan theo trace_id</span><span class="v">Cái id chung nối một cú vọt chỉ số, trace của nó, và các dòng log thành một câu chuyện.</span></div>
+  <div class="kv"><span class="k">Chỉ số → trace → log</span><span class="v">Con đường ba cú bấm từ "có gì đó sai" tới "đúng request này, người dùng này".</span></div>
+  <div class="kv"><span class="k">Thứ tự nối dây</span><span class="v">Nếu chỉ nối được một cặp, hãy nối trace → log qua <code>trace_id</code> trước.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cả khoá học tiến tới một kỹ năng: đi từ cú vọt trên bảng tới đúng request hỏng, thật nhanh.</li>
+<li>Exemplar nối một điểm chỉ số với một trace; <code>trace_id</code> nối một trace với log của nó.</li>
+<li>Ba cú bấm — chỉ số → trace → log — biến một triệu chứng tổng hợp thành một request và người dùng cụ thể.</li>
+<li>Nếu chỉ nối được một liên kết, hãy nối trace → log theo <code>trace_id</code>; nó trả công ở mọi sự cố.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

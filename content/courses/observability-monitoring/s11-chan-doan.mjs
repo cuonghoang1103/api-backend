@@ -140,6 +140,31 @@ Why this matters more than it sounds:
 <p><strong>Trap — the first thing you check is whatever you most recently touched, and that bias is strongest exactly when it is least reliable.</strong> You deployed two hours ago, so you open the diff — and a diff always contains something that <em>could</em> plausibly be the cause, which is enough to consume twenty minutes even when the real cause is a certificate that expired on its own schedule. The failure is self-reinforcing: the more carefully you read the diff, the more invested you become in it being the answer. <strong>The precise start time is the antidote, which is why it is step three and not step ten</strong> — if the failure began at 14:03 and the deploy landed at 09:12, the diff is eliminated in one second by arithmetic rather than by twenty minutes of reading. Get the timestamp before you form the hypothesis, not after.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write the first-five-minutes procedure as four pasteable commands that answer: is it up, did something just deploy, is it one route or all, is it one user or all?</li>
+<li>Run them against this repo's stack (adapt to <code>curl</code> on a health route, <code>git log</code> / deploy marker, logs filtered by route, logs filtered by user).</li>
+<li>Start an incident timeline NOW: a plain text file where each line is a timestamp + what you observed or did.</li>
+<li>Before investigating deeper, do the two must-do-first steps: acknowledge the alert and declare whether users are affected.</li>
+</ol>
+<p><strong>Done when:</strong> you have four commands you could paste half-asleep, a running timeline file, and you did the two first steps before touching anything else.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Fixed procedure</span><span class="v">A pre-written sequence that beats judgement under stress, when you are half-awake.</span></div>
+  <div class="kv"><span class="k">Incident timeline</span><span class="v">A timestamped log of observations and actions, written as it happens.</span></div>
+  <div class="kv"><span class="k">Scope questions</span><span class="v">One route or all? One user or all? Just deployed or not? Each answer eliminates causes.</span></div>
+  <div class="kv"><span class="k">Acknowledge</span><span class="v">Claiming the alert so others know it is being handled and it stops re-paging.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Under stress a fixed procedure beats judgement; write the first five minutes as commands, not as instinct.</li>
+<li>Four scope questions — up?, just deployed?, one route or all?, one user or all? — each eliminate whole classes of cause.</li>
+<li>Write the timeline while it happens; memory rewrites itself after the fact.</li>
+<li>Before digging, acknowledge the alert and declare user impact.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/managing-incidents/" target="_blank" rel="noopener">
@@ -270,6 +295,31 @@ Vì sao chuyện này quan trọng hơn vẻ ngoài của nó:
 <div class="pitfall">
 <p><strong>Bẫy — thứ đầu tiên bạn đi kiểm là bất cứ thứ gì bạn vừa đụng vào gần nhất, và cái thiên kiến ấy mạnh nhất đúng vào lúc nó kém đáng tin nhất.</strong> Bạn deploy hai tiếng trước, nên bạn mở cái diff ra — mà một cái diff thì LÚC NÀO cũng chứa thứ gì đó <em>CÓ THỂ</em> là nguyên nhân một cách hợp lý, và chừng đó đủ để ngốn hai mươi phút kể cả khi nguyên nhân thật là một chứng chỉ hết hạn theo đúng lịch của nó. Cú hỏng này tự củng cố: bạn càng đọc cái diff kỹ thì bạn càng đầu tư vào việc nó phải là câu trả lời. <strong>Cái mốc bắt đầu chính xác là thuốc giải, và đó là lý do nó là bước ba chứ không phải bước mười</strong> — nếu cú hỏng bắt đầu lúc 14:03 và lần deploy đáp xuống lúc 09:12 thì cái diff bị loại trong một giây bằng số học, chứ không phải bằng hai mươi phút đọc. Hãy lấy dấu thời gian TRƯỚC khi hình thành giả thuyết, đừng lấy sau.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết quy trình năm-phút-đầu thành bốn lệnh dán-vào-là-chạy trả lời: nó còn lên không, vừa có gì deploy không, một route hay tất cả, một người dùng hay tất cả?</li>
+<li>Chạy chúng với stack của kho này (đổi cho hợp: <code>curl</code> lên một route health, <code>git log</code> / mốc deploy, log lọc theo route, log lọc theo người dùng).</li>
+<li>Bắt đầu một dòng thời gian sự cố NGAY: một tệp văn bản thuần, mỗi dòng là một mốc giờ + điều bạn quan sát hoặc đã làm.</li>
+<li>Trước khi điều tra sâu, làm hai bước phải-làm-trước: nhận (acknowledge) cảnh báo và tuyên bố người dùng có bị ảnh hưởng không.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có bốn lệnh dán được cả lúc nửa tỉnh ngủ, một tệp dòng thời gian đang chạy, và bạn đã làm hai bước đầu trước khi đụng vào bất cứ thứ gì khác.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Quy trình cố định</span><span class="v">Một chuỗi viết sẵn, thắng sự phán đoán dưới áp lực khi bạn nửa tỉnh ngủ.</span></div>
+  <div class="kv"><span class="k">Dòng thời gian sự cố</span><span class="v">Một nhật ký có mốc giờ của quan sát và hành động, viết ngay trong lúc nó xảy ra.</span></div>
+  <div class="kv"><span class="k">Câu hỏi phạm vi</span><span class="v">Một route hay tất cả? Một người hay tất cả? Vừa deploy hay không? Mỗi câu loại bỏ bớt nguyên nhân.</span></div>
+  <div class="kv"><span class="k">Acknowledge (nhận)</span><span class="v">Nhận cảnh báo để người khác biết đã có người lo và nó thôi reo lại.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Dưới áp lực, quy trình cố định thắng sự phán đoán; viết năm phút đầu thành lệnh, không phải bản năng.</li>
+<li>Bốn câu hỏi phạm vi — còn lên?, vừa deploy?, một route hay tất cả?, một người hay tất cả? — mỗi câu loại bỏ cả một lớp nguyên nhân.</li>
+<li>Viết dòng thời gian ngay trong lúc nó xảy ra; trí nhớ tự viết lại sau khi chuyện đã qua.</li>
+<li>Trước khi đào sâu, nhận cảnh báo và tuyên bố mức ảnh hưởng tới người dùng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -453,6 +503,32 @@ made zero-traffic an alert.</code></pre>
 <p><strong>Trap — two shapes at once reads as one confusing shape, and the instinct is to look for a single cause that explains both.</strong> A deploy at 14:03 (cliff) that introduces a memory leak (ramp) produces a graph that is neither: a step followed by a slow climb, which matches no pattern cleanly and invites you to discard the pattern library entirely. The same happens when a real incident triggers an automatic response — an OOM loop layered on top of a load correlation gives you a sawtooth whose period tracks traffic, which looks like nothing at all. <strong>The move is to separate them by time rather than by cause: identify the shape of the FIRST five minutes, treat everything after as possibly a consequence.</strong> Most compound incidents are one trigger plus one automatic reaction, and the reaction is almost always the more visible half — which is exactly why it steals the investigation.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>List the seven shapes: cliff, ramp, sawtooth, spike train, correlation-with-load, partial, and silence. Sketch each as a tiny line.</li>
+<li>For three of them, write the most likely cause (e.g. cliff = a deploy or a dependency dying; ramp = a leak; sawtooth = GC or a restart loop).</li>
+<li>Take one real graph from your metrics and name its shape, then say which chapter you would open next.</li>
+<li>Explain the "silence" shape: why a metric going flat or disappearing is itself a signal, not the absence of one.</li>
+</ol>
+<p><strong>Done when:</strong> you matched at least three shapes to causes and, given one graph, named the shape and the chapter it points you to.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">The cliff</span><span class="v">A sudden drop/jump — usually a deploy, a config flip, or a dependency dying at once.</span></div>
+  <div class="kv"><span class="k">The ramp</span><span class="v">A slow steady climb — classically a memory or connection leak.</span></div>
+  <div class="kv"><span class="k">The sawtooth</span><span class="v">Repeated climb-and-reset — GC pauses or a restart loop.</span></div>
+  <div class="kv"><span class="k">Correlation with load</span><span class="v">The metric worsens only when traffic rises — a capacity or contention limit.</span></div>
+  <div class="kv"><span class="k">The silence</span><span class="v">A metric going flat or missing; the absence of data is itself the signal.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>Failures have recognisable shapes on a graph, and the shape narrows the cause before you read a single log.</li>
+<li>Cliff = step change, ramp = leak, sawtooth = GC/restart, load-correlated = capacity, partial = one slice, silence = no data.</li>
+<li>Silence is a signal: a flat or missing line often means the thing stopped reporting, not that all is well.</li>
+<li>The shape tells you which chapter to open next, turning a vague alert into a direction.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/addressing-cascading-failures/" target="_blank" rel="noopener">
@@ -625,6 +701,32 @@ không thành một cảnh báo.</code></pre>
 <p><strong>Bẫy — hai hình dạng cùng lúc đọc ra thành MỘT hình dạng khó hiểu, và bản năng là đi tìm một nguyên nhân duy nhất giải thích được cả hai.</strong> Một lần deploy lúc 14:03 (vách đá) đem vào một chỗ rò rỉ bộ nhớ (con dốc) sinh ra một đồ thị không phải cái nào cả: một cái bậc rồi tới một cái leo chậm, thứ không khớp gọn với mẫu nào và mời gọi bạn vứt luôn cả cái thư viện mẫu đi. Điều tương tự xảy ra khi một sự cố thật kích hoạt một phản ứng tự động — một vòng lặp OOM chồng lên một tương quan với tải cho bạn một cái răng cưa có chu kỳ bám theo lưu lượng, thứ trông chẳng giống gì cả. <strong>Nước đi ở đây là tách chúng theo THỜI GIAN chứ không theo nguyên nhân: hãy nhận diện hình dạng của NĂM PHÚT ĐẦU, rồi coi mọi thứ sau đó là có thể chỉ là hệ quả.</strong> Phần lớn sự cố phức hợp là một cú kích hoạt cộng một phản ứng tự động, và cái phản ứng gần như luôn là nửa dễ thấy hơn — mà đó chính xác là lý do nó cướp mất cuộc điều tra.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Liệt kê bảy hình dạng: vách đá, con dốc, răng cưa, đoàn tàu gai, tương-quan-với-tải, cục bộ, và sự im lặng. Vẽ mỗi cái thành một đường nhỏ.</li>
+<li>Với ba trong số đó, viết nguyên nhân khả dĩ nhất (ví dụ vách đá = một lần deploy hoặc một phụ thuộc chết; con dốc = rò rỉ; răng cưa = GC hoặc vòng restart).</li>
+<li>Lấy một đồ thị thật từ chỉ số của bạn và gọi tên hình dạng của nó, rồi nói bạn sẽ mở chương nào kế tiếp.</li>
+<li>Giải thích hình "im lặng": vì sao một chỉ số đi phẳng hoặc biến mất tự nó là một tín hiệu, không phải sự vắng mặt của tín hiệu.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn khớp được ít nhất ba hình dạng với nguyên nhân và, trước một đồ thị, gọi tên hình dạng cùng chương nó trỏ bạn tới.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Vách đá</span><span class="v">Một cú tụt/vọt đột ngột — thường là deploy, một cú lật cấu hình, hoặc một phụ thuộc chết cùng lúc.</span></div>
+  <div class="kv"><span class="k">Con dốc</span><span class="v">Một cú leo chậm đều — kinh điển là rò rỉ bộ nhớ hoặc kết nối.</span></div>
+  <div class="kv"><span class="k">Răng cưa</span><span class="v">Leo-rồi-reset lặp lại — các cú dừng GC hoặc một vòng restart.</span></div>
+  <div class="kv"><span class="k">Tương quan với tải</span><span class="v">Chỉ số chỉ tệ khi traffic tăng — một giới hạn dung lượng hoặc tranh chấp.</span></div>
+  <div class="kv"><span class="k">Sự im lặng</span><span class="v">Một chỉ số đi phẳng hoặc mất; sự vắng mặt của dữ liệu tự nó là tín hiệu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Các cú hỏng có hình dạng nhận ra được trên đồ thị, và hình dạng thu hẹp nguyên nhân trước khi bạn đọc một dòng log nào.</li>
+<li>Vách đá = đổi bậc, con dốc = rò rỉ, răng cưa = GC/restart, tương-quan-tải = dung lượng, cục bộ = một lát, im lặng = không dữ liệu.</li>
+<li>Im lặng là một tín hiệu: một đường phẳng hoặc mất thường nghĩa là thứ đó đã thôi báo cáo, không phải mọi thứ đều ổn.</li>
+<li>Hình dạng nói cho bạn mở chương nào kế tiếp, biến một cảnh báo mơ hồ thành một hướng đi.</li>
+</ul>
+
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/addressing-cascading-failures/" target="_blank" rel="noopener">
@@ -790,6 +892,31 @@ WHAT THEY BUILT: tsconfig.seed.json plus
 <p><strong>Trap — two symptoms reported together are usually two bugs, and treating them as one causes most of the wasted hours.</strong> Incident 1 is the clean example: &quot;GIF picker dead&quot; and &quot;chats disappearing&quot; arrived in the same message, so the search was for one deep cause that explained both — and there was none, because they were a stale build and a per-viewer delete flag with nothing in common. The bias is strong because a single explanation feels more elegant and because users genuinely do report everything they noticed at once. <strong>The discipline is to write the symptoms as a numbered list and diagnose them independently, and only look for a shared cause once each one has a start time that matches.</strong> If the two start times differ by more than a few minutes, they are two incidents and always were.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick one of the four real incidents (stale build, playground that never loaded, wrong-image deploy, enum-rename seed break). Read its entry in this repo's CLAUDE.md.</li>
+<li>For your chosen incident, write the detection gap: how was it found, and how long after it broke?</li>
+<li>Name one metric, log line, or check that would have caught it automatically (e.g. a smoke test that fails on 404; a seed step whose non-zero exit fails the deploy).</li>
+<li>Write the one-line lesson the project itself concluded, in your own words.</li>
+</ol>
+<p><strong>Done when:</strong> for one real incident you can state how it was found, the signal that would have caught it sooner, and the lesson the repo recorded.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Detection gap</span><span class="v">The time between "broke" and "noticed" — the thing observability is meant to shrink.</span></div>
+  <div class="kv"><span class="k">Stale build</span><span class="v">A container running an old image where a route 404s though the code exists on disk.</span></div>
+  <div class="kv"><span class="k">Green-but-broken</span><span class="v">Health checks passing while users cannot use the product — the course's recurring theme.</span></div>
+  <div class="kv"><span class="k">Build-green ≠ runs</span><span class="v">A clean build (right libc/engine, routes mounted) is not proof the image actually works.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>All four incidents share one shape: the process ran and the check was green while something users needed was broken.</li>
+<li>Each was found by a human, minutes to weeks late — the detection gap is the cost observability removes.</li>
+<li>Each had a cheap signal that would have caught it: a 404 smoke test, a failing seed exit, a libc/engine check.</li>
+<li>The repeating lesson: a successful build or a green check is not proof the system works for users.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://github.com/danluu/post-mortems" target="_blank" rel="noopener">
@@ -940,6 +1067,31 @@ HỌ ĐÃ DỰNG GÌ: tsconfig.seed.json cộng npm run typecheck:seed, và
 <div class="pitfall">
 <p><strong>Bẫy — hai triệu chứng được báo cùng nhau thường là HAI cái lỗi, và coi chúng là một chính là thứ gây ra phần lớn số giờ lãng phí.</strong> Sự cố 1 là ví dụ sạch sẽ: &quot;trình chọn GIF chết&quot; và &quot;trò chuyện biến mất&quot; tới trong cùng một tin nhắn, nên người ta đi tìm một nguyên nhân sâu duy nhất giải thích được cả hai — mà chẳng có cái nào cả, vì chúng là một bản dựng cũ và một cái cờ xoá-theo-người-xem, chẳng chung gì với nhau. Cái thiên kiến ấy rất mạnh vì một lời giải thích duy nhất thì có vẻ thanh lịch hơn, và vì người dùng thật sự có xu hướng báo mọi thứ họ nhận thấy cùng một lúc. <strong>Kỷ luật ở đây là viết các triệu chứng ra thành một danh sách đánh số rồi chẩn đoán chúng ĐỘC LẬP, và chỉ đi tìm nguyên nhân chung sau khi mỗi cái đã có một mốc bắt đầu khớp nhau.</strong> Nếu hai mốc bắt đầu lệch nhau quá vài phút thì chúng là hai sự cố, và vốn dĩ luôn là thế.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một trong bốn sự cố thật (build cũ, sân chơi không tải xong, deploy nhầm ảnh, đổi tên enum vỡ seed). Đọc mục của nó trong CLAUDE.md của kho này.</li>
+<li>Với sự cố bạn chọn, viết khoảng-trống-phát-hiện: nó được tìm ra bằng cách nào, và bao lâu sau khi hỏng?</li>
+<li>Gọi tên một chỉ số, dòng log, hay phép kiểm lẽ ra đã bắt được nó tự động (ví dụ một smoke test thất bại ở 404; một bước seed mà mã thoát khác 0 làm deploy thất bại).</li>
+<li>Viết bài học một dòng mà chính dự án đã kết luận, bằng lời của bạn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> với một sự cố thật, bạn nói được nó được tìm ra sao, tín hiệu lẽ ra đã bắt nó sớm hơn, và bài học mà kho đã ghi lại.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Khoảng trống phát hiện</span><span class="v">Thời gian giữa "hỏng" và "được nhận ra" — đúng thứ mà quan sát được sinh ra để thu hẹp.</span></div>
+  <div class="kv"><span class="k">Build cũ</span><span class="v">Container chạy ảnh cũ, một route trả 404 dù mã có trên đĩa.</span></div>
+  <div class="kv"><span class="k">Xanh-mà-hỏng</span><span class="v">Phép kiểm sức khoẻ qua trong khi người dùng không dùng được sản phẩm — chủ đề lặp lại của khoá.</span></div>
+  <div class="kv"><span class="k">Build-xanh ≠ chạy được</span><span class="v">Một bản dựng sạch (đúng libc/engine, route đã gắn) không chứng minh ảnh thật sự chạy được.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Cả bốn sự cố cùng một hình dạng: tiến trình vẫn chạy và phép kiểm vẫn xanh trong khi một thứ người dùng cần thì hỏng.</li>
+<li>Mỗi cái đều do một con người tìm ra, trễ từ vài phút tới vài tuần — khoảng trống phát hiện là cái giá mà quan sát được xoá đi.</li>
+<li>Mỗi cái đều có một tín hiệu rẻ lẽ ra đã bắt được: một smoke test 404, một mã thoát seed thất bại, một phép kiểm libc/engine.</li>
+<li>Bài học lặp lại: một bản dựng thành công hay một phép kiểm xanh không chứng minh hệ thống chạy được cho người dùng.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">
@@ -1093,6 +1245,32 @@ undocumented one is indistinguishable from working.</code></pre>
 <p><strong>Trap — hindsight makes every cause look obvious, and a write-up that reads as obvious teaches nothing.</strong> Once you know the deploy used the wrong Dockerfile, the whole incident collapses into &quot;we used the wrong Dockerfile&quot; and the seven minutes of 502 look like carelessness. But at 14:03 that hypothesis was one of forty, and the ones you actually tried are the interesting data — they are what the next person will also try. <strong>A write-up that omits the abandoned paths is a story with the difficulty edited out, and the reader concludes they would have solved it faster, which is the opposite of learning.</strong> Include the wrong turns, and specifically include what made each one plausible at the time: &quot;I checked the diff first because I had deployed an hour earlier&quot; is the sentence that makes lesson 11.1's checklist feel necessary rather than pedantic.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick a recent incident (or a bug you fixed this week) and write it up using the template: summary, impact, timeline, root cause, action items.</li>
+<li>Write the timeline from your notes with real timestamps — this is the part that pays, so be honest about the gaps.</li>
+<li>Keep it blameless: describe what the system allowed, not who typed the command. "The deploy let a partial build through", not "X forgot to rebuild".</li>
+<li>Write action items that survive next week: each one has an owner and is a concrete change, not "be more careful".</li>
+</ol>
+<p><strong>Done when:</strong> your write-up has a timestamped timeline, a blameless root cause, and at least two concrete, owned action items.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Postmortem / write-up</span><span class="v">The record of an incident — often worth more than the fix because it prevents the next one.</span></div>
+  <div class="kv"><span class="k">Blameless</span><span class="v">Describing what the system allowed rather than who erred — for accuracy, not politeness.</span></div>
+  <div class="kv"><span class="k">Timeline</span><span class="v">The timestamped sequence of events; the part that reveals the real detection gap.</span></div>
+  <div class="kv"><span class="k">Action item</span><span class="v">A concrete, owned change — not "be careful" — that outlives the meeting.</span></div>
+  <div class="kv"><span class="k">Decision not to fix</span><span class="v">A legitimate, documented choice to accept a risk rather than spend on it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul>
+<li>The write-up is often worth more than the fix: it is how the next person avoids the same gap.</li>
+<li>Use a template — summary, impact, timeline, root cause, action items — so nothing important is skipped.</li>
+<li>Blameless means naming what the system allowed, which is accuracy, not courtesy.</li>
+<li>Action items need an owner and must be concrete; "a decision not to fix" is a valid, documented outcome.</li>
+</ul>
+
 <h3>📚 Learn deeper</h3>
 <div class="link-cards">
 <a class="link-card dl" href="https://sre.google/sre-book/postmortem-culture/" target="_blank" rel="noopener">
@@ -1232,6 +1410,32 @@ quyết định; một cái không ghi lại thì không phân biệt được v
 <div class="pitfall">
 <p><strong>Bẫy — cái nhìn hồi cố làm mọi nguyên nhân trông hiển nhiên, và một bản ghi đọc lên thấy hiển nhiên thì chẳng dạy được gì.</strong> Một khi bạn đã biết lần deploy dùng nhầm Dockerfile, cả cái sự cố gộp lại thành &quot;chúng ta dùng nhầm Dockerfile&quot; và bảy phút 502 trông như sự bất cẩn. Nhưng vào lúc 14:03 thì cái giả thuyết ấy là một trong bốn mươi cái, và những cái bạn thật sự đã thử mới là dữ liệu thú vị — chúng là thứ mà người kế tiếp cũng sẽ thử. <strong>Một bản ghi bỏ qua những ngã rẽ sai là một câu chuyện đã bị cắt mất phần khó, và người đọc sẽ kết luận rằng họ đã giải nhanh hơn, mà đó là điều ngược lại với việc học.</strong> Hãy đưa những ngã rẽ sai vào, và đặc biệt là đưa vào cái đã làm cho mỗi ngã rẽ ấy trở nên hợp lý VÀO LÚC ĐÓ: &quot;tôi kiểm cái diff trước vì tôi vừa deploy một tiếng trước&quot; chính là cái câu làm cho danh sách kiểm ở bài 11.1 nghe cần thiết chứ không nghe câu nệ.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một sự cố gần đây (hoặc một lỗi bạn vừa sửa tuần này) và ghi lại theo mẫu: tóm tắt, ảnh hưởng, dòng thời gian, nguyên nhân gốc, hạng mục hành động.</li>
+<li>Viết dòng thời gian từ ghi chú của bạn với mốc giờ thật — đây là phần trả công, nên hãy thành thật về các khoảng trống.</li>
+<li>Giữ không-đổ-lỗi: mô tả cái mà hệ thống cho phép xảy ra, không phải ai đã gõ lệnh. "Lần deploy để lọt một build dở dang", không phải "X quên dựng lại".</li>
+<li>Viết hạng mục hành động sống sót qua tuần sau: mỗi cái có một người chịu trách nhiệm và là một thay đổi cụ thể, không phải "cẩn thận hơn".</li>
+</ol>
+<p><strong>Đạt khi:</strong> bản ghi của bạn có dòng thời gian kèm mốc giờ, một nguyên nhân gốc không-đổ-lỗi, và ít nhất hai hạng mục hành động cụ thể, có người chịu trách nhiệm.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Postmortem / bản ghi lại</span><span class="v">Bản ghi của một sự cố — thường giá trị hơn cả cách chữa vì nó ngăn cái kế tiếp.</span></div>
+  <div class="kv"><span class="k">Không đổ lỗi</span><span class="v">Mô tả cái hệ thống cho phép thay vì ai sai — vì sự chính xác, không vì lịch sự.</span></div>
+  <div class="kv"><span class="k">Dòng thời gian</span><span class="v">Chuỗi sự kiện kèm mốc giờ; phần hé lộ khoảng trống phát hiện thật sự.</span></div>
+  <div class="kv"><span class="k">Hạng mục hành động</span><span class="v">Một thay đổi cụ thể, có người chịu — không phải "cẩn thận" — sống qua được buổi họp.</span></div>
+  <div class="kv"><span class="k">Quyết định không chữa</span><span class="v">Một lựa chọn chính đáng, có ghi lại, chấp nhận một rủi ro thay vì tốn công cho nó.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul>
+<li>Bản ghi lại thường giá trị hơn cả cách chữa: nó là cách người kế tiếp tránh đúng cái khoảng trống đó.</li>
+<li>Dùng một mẫu — tóm tắt, ảnh hưởng, dòng thời gian, nguyên nhân gốc, hạng mục hành động — để không sót gì quan trọng.</li>
+<li>Không đổ lỗi nghĩa là gọi tên cái hệ thống cho phép, đó là sự chính xác, không phải phép xã giao.</li>
+<li>Hạng mục hành động cần người chịu và phải cụ thể; "một quyết định không chữa" là một kết cục hợp lệ, có ghi lại.</li>
+</ul>
 
 <h3>📚 Học sâu thêm</h3>
 <div class="link-cards">

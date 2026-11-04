@@ -1,0 +1,22 @@
+# Ch11 · 11.3 — đo đường đi: curl -w (DNS/connect/TTFB/total), ping (RTT), mtr (mỗi hop + mất gói), iperf3 (băng thông).
+$ echo "== curl -w: per-stage timing to web =="
+== curl -w: per-stage timing to web ==
+$ curl -s -o /dev/null -w "dns=%{time_namelookup}  connect=%{time_connect}  ttfb=%{time_starttransfer}  total=%{time_total}\n" http://10.10.2.10/
+dns=0.000011  connect=0.020503  ttfb=0.040733  total=0.040777
+$ echo "== ping: round-trip time to api (via router) =="
+== ping: round-trip time to api (via router) ==
+$ ping -c 3 10.10.2.20 | tail -2
+3 packets transmitted, 3 received, 0% packet loss, time 2002ms
+rtt min/avg/max/mdev = 21.284/22.836/24.950/1.548 ms
+$ echo "== mtr: per-hop latency and loss =="
+== mtr: per-hop latency and loss ==
+$ mtr --report --report-cycles 3 --no-dns 10.10.2.20 2>/dev/null
+Start: 2026-11-04T16:10:39+0700
+HOST: client                      Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.1.254                0.0%     3    0.2   0.5   0.2   0.8   0.3
+  2.|-- 10.10.2.20                 0.0%     3   23.2  22.0  20.7  23.2   1.2
+$ echo "== iperf3: throughput client -> api =="
+== iperf3: throughput client -> api ==
+$ iperf3 -c 10.10.2.20 -t 2 2>/dev/null | grep -E "sender|receiver"
+[  5]   0.00-2.01   sec  69.2 MBytes   289 Mbits/sec    0            sender
+[  5]   0.00-2.03   sec  68.6 MBytes   284 Mbits/sec                  receiver

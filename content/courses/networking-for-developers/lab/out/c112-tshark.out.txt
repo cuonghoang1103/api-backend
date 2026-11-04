@@ -1,0 +1,21 @@
+# Ch11 · 11.2 — tshark đọc .pcap: lọc HTTP (method/uri/status) rồi THEO luồng TCP để thấy request/response thật.
+$ echo "== http filter: method / uri / status =="
+== http filter: method / uri / status ==
+$ tshark -r /tmp/cap.pcap -Y http -T fields -e http.request.method -e http.request.uri -e http.response.code 2>/dev/null
+GET	/	
+	/	200
+$ echo "== follow tcp stream 0 =="
+== follow tcp stream 0 ==
+$ tshark -r /tmp/cap.pcap -q -z follow,tcp,ascii,0 2>/dev/null | sed -n '1,12p'
+
+===================================================================
+Follow: tcp,ascii
+Filter: tcp.stream eq 0
+Node 0: 10.10.1.10:37676
+Node 1: 10.10.2.10:80
+74
+GET / HTTP/1.1
+Host: 10.10.2.10
+User-Agent: curl/8.18.0
+Accept: */*
+

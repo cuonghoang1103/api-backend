@@ -1,0 +1,28 @@
+# Ch11 · 11.4 — bảng kiểm theo TẦNG, mỗi tầng một lệnh: DNS → routing → port → TLS → HTTP → app.
+$ echo "== DNS (name -> IP; use dig for public names) =="
+== DNS (name -> IP; use dig for public names) ==
+$ getent hosts router
+10.10.1.254     router
+$ echo "== Routing (which gateway) =="
+== Routing (which gateway) ==
+$ ip route get 10.10.2.10 | head -1
+10.10.2.10 via 10.10.1.254 dev eth0 src 10.10.1.10 uid 0 
+$ echo "== Port (open or refused) =="
+== Port (open or refused) ==
+$ nc -zv 10.10.2.10 80 2>&1; nc -zv -w1 10.10.2.10 81 2>&1
+Connection to 10.10.2.10 80 port [tcp/http] succeeded!
+nc: connect to 10.10.2.10 port 81 (tcp) failed: Connection refused
+$ echo "== TLS (certificate + validity) =="
+== TLS (certificate + validity) ==
+$ openssl s_client -connect 10.10.2.10:8443 -servername labflow.test </dev/null 2>/dev/null | openssl x509 -noout -subject -dates 2>/dev/null
+subject=CN=labflow.test
+notBefore=Nov  4 09:10:29 2026 GMT
+notAfter=Nov  6 09:10:29 2026 GMT
+$ echo "== HTTP (status line) =="
+== HTTP (status line) ==
+$ curl -sI http://10.10.2.10/ | head -1
+HTTP/1.1 200 OK
+$ echo "== App (does the API answer JSON?) =="
+== App (does the API answer JSON?) ==
+$ curl -s http://10.10.2.20:3000/api/health
+{"service":"labflow-api","path":"/api/health","seenFrom":"10.10.1.10:54740","seenOn":"10.10.2.20:3000","forwardedFor":null}

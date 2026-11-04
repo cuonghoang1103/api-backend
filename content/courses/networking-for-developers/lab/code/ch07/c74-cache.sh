@@ -1,0 +1,5 @@
+# Ch7 · 7.4 — cache: máy chủ gắn ETag; lần sau client gửi If-None-Match và nhận 304 (không tải lại thân)
+etag=$(curl -sk -D - -o /dev/null https://10.10.2.10:8443/index.txt 2>/dev/null | awk 'tolower($1)=="etag:"{print $2}' | tr -d '\r')
+echo "ETag máy chủ cấp: $etag"
+echo "== xin lại kèm If-None-Match: $etag =="
+curl -sk -o /dev/null -w "mã trả về: %{http_code} (304 = chưa đổi, dùng bản cache)\n" -H "If-None-Match: $etag" https://10.10.2.10:8443/index.txt

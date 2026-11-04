@@ -1,0 +1,10 @@
+# Ch7 · 7.5 — qua HAI proxy: mỗi proxy THÊM địa chỉ nó thấy vào X-Forwarded-For ⇒ một danh sách "client, proxy1"
+# client 10.10.1.10 → proxy1 (web:8090) → proxy2 (api:8091) → node api
+$ curl -s http://10.10.2.10:8090/api/who | python3 -m json.tool
+{
+    "service": "labflow-api",
+    "path": "/api/who",
+    "seenFrom": "127.0.0.1:51672",
+    "seenOn": "127.0.0.1:3000",
+    "forwardedFor": "10.10.1.10, 10.10.2.10"
+}

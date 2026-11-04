@@ -1,0 +1,9 @@
+# Ch7 · 7.5 — qua một proxy: máy chủ app thấy IP của PROXY (seenFrom), còn IP THẬT của client nằm ở X-Forwarded-For
+$ curl -s http://10.10.2.10/api/who | python3 -m json.tool
+{
+    "service": "labflow-api",
+    "path": "/api/who",
+    "seenFrom": "10.10.2.10:46256",
+    "seenOn": "10.10.2.20:3000",
+    "forwardedFor": "10.10.1.10"
+}

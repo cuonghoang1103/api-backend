@@ -1,0 +1,11 @@
+# Ch6 · 6.1 — trên dây: TLS 1.3 chỉ để LỘ ClientHello và ServerHello; từ đó trở đi (chứng chỉ, Finished, HTTP) đều MÃ HOÁ
+$ echo "== từng bản ghi TLS: frame · content_type (22=handshake,20=đổi khoá) · handshake_type · độ dài byte =="
+== từng bản ghi TLS: frame · content_type (22=handshake,20=đổi khoá) · handshake_type · độ dài byte ==
+$ tshark -r /tmp/c61.pcap -Y 'tls.record.content_type' -T fields -e frame.number -e tls.record.content_type -e tls.handshake.type -e tls.record.length 2>/dev/null | awk 'NF>1' | head -8
+4	22	1	1549
+6	22,20	2	1210,1,27,1790,281,69
+8	20		1,69
+$ echo "== chỉ SNI trong ClientHello là CHỮ: ai bắt gói cũng đọc được bạn vào tên miền nào (phần còn lại mã hoá) =="
+== chỉ SNI trong ClientHello là CHỮ: ai bắt gói cũng đọc được bạn vào tên miền nào (phần còn lại mã hoá) ==
+$ tshark -r /tmp/c61.pcap -Y 'tls.handshake.type==1' -T fields -e tls.handshake.extensions_server_name 2>/dev/null | head -1
+labflow.test

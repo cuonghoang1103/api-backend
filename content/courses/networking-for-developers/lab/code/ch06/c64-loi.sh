@@ -1,0 +1,2 @@
+# Ch6 · 6.4 — mỗi chứng chỉ hỏng cho một thông điệp lỗi riêng; đọc dòng "curl: (NN)" là biết bệnh
+curl -sS --resolve labflow.test:8443:10.10.2.10 --cacert /tmp/root.crt https://labflow.test:8443/ 2>&1 | head -1

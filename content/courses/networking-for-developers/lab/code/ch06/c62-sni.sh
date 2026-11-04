@@ -1,0 +1,3 @@
+# Ch6 · 6.2 — cái gì CHỮ, cái gì MÃ: ClientHello (có SNI) và ServerHello là chữ; từ "Application Data" trở đi là mã hoá
+tshark -r /tmp/c62.pcap -Y 'tls.record.content_type==22 || tls.record.content_type==23' \
+  -T fields -e frame.number -e tls.record.content_type -e tls.handshake.type -e tls.handshake.extensions_server_name 2>/dev/null | head -10

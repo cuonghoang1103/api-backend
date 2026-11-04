@@ -1,0 +1,11 @@
+# Ch6 · 6.3 — THIẾU CA TRUNG GIAN: máy chủ chỉ gửi lá ⇒ client không dựng được chuỗi tới gốc ⇒ lỗi
+$ echo "== máy chủ chỉ gửi $(echo | openssl s_client -connect 10.10.2.10:8443 -servername labflow.test -showcerts 2>/dev/null | grep -cE 'BEGIN CERT') chứng chỉ (thiếu trung gian) =="
+== máy chủ chỉ gửi 1 chứng chỉ (thiếu trung gian) ==
+$ echo "== curl KHÔNG có trung gian: hỏng =="
+== curl KHÔNG có trung gian: hỏng ==
+$ curl -sS --resolve labflow.test:8443:10.10.2.10 --cacert /tmp/root.crt https://labflow.test:8443/ 2>&1 | head -1
+curl: (60) SSL certificate OpenSSL verify result: unable to get local issuer certificate (20)
+$ echo "== curl được cấp cả trung gian (như trình duyệt tự đi lấy qua AIA): chạy =="
+== curl được cấp cả trung gian (như trình duyệt tự đi lấy qua AIA): chạy ==
+$ curl -sS --resolve labflow.test:8443:10.10.2.10 --cacert /tmp/bundle.crt -o /dev/null -w "   HTTP %{http_code}\n" https://labflow.test:8443/
+   HTTP 200

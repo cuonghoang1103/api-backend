@@ -1,0 +1,12 @@
+# Ch6 · 6.2 — có khoá phiên (SSLKEYLOGFILE từ curl) thì Wireshark/tshark GIẢI MÃ được: thấy GET và 200 bên trong TLS
+$ echo "== không khoá: chỉ thấy 'Application Data' mã hoá =="
+== không khoá: chỉ thấy 'Application Data' mã hoá ==
+$ tshark -r /tmp/c62.pcap -Y 'tls.app_data' -T fields -e frame.number -e tls.record.length 2>/dev/null | head -3
+6	1210,1,42,1790,281,69
+8	1,69
+9	98
+$ echo "== có khoá phiên: giải mã ra HTTP thật bên trong =="
+== có khoá phiên: giải mã ra HTTP thật bên trong ==
+$ tshark -r /tmp/c62.pcap -o tls.keylog_file:/tmp/keys.log -Y 'http.request || http.response' -T fields -e http.request.method -e http.request.uri -e http.response.code -e http.response.phrase 2>/dev/null | head
+GET	/		
+	/	200	OK

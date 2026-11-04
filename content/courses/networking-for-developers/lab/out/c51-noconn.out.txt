@@ -1,0 +1,13 @@
+# Ch5 · 5.1 — UDP không bắt tay nên không có kết nối để theo dõi: socket máy chủ ở UNCONN; không hề có TIME-WAIT (bài 4.4)
+$ echo "[UDP] máy chủ echo bind cổng 9999 — một socket UNCONN, sinh ra ngay khi bind, không qua cú bắt tay nào:"
+[UDP] máy chủ echo bind cổng 9999 — một socket UNCONN, sinh ra ngay khi bind, không qua cú bắt tay nào:
+$ ss -ulnp '( sport = :9999 )'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                         
+UNCONN 0      0            0.0.0.0:9999      0.0.0.0:*    users:(("node",pid=1096,fd=17))
+$ echo "[TCP] nginx cổng 80 — LISTEN; mỗi kết nối tới đi qua ESTAB rồi TIME-WAIT khi đóng (bài 4.4):"
+[TCP] nginx cổng 80 — LISTEN; mỗi kết nối tới đi qua ESTAB rồi TIME-WAIT khi đóng (bài 4.4):
+$ ss -tlnp '( sport = :80 )'
+State  Recv-Q Send-Q Local Address:Port Peer Address:PortProcess                      
+LISTEN 0      511          0.0.0.0:80        0.0.0.0:*    users:(("nginx",pid=7,fd=4))
+$ echo "[UDP] số bản ghi TIME-WAIT của UDP trên máy: $(ss -uan 2>/dev/null | grep -c TIME-WAIT)  (UDP không có trạng thái này)"
+[UDP] số bản ghi TIME-WAIT của UDP trên máy: 0  (UDP không có trạng thái này)

@@ -1,0 +1,8 @@
+# Ch8 · 8.1 — TTL hết hạn: MISS → HIT → (chờ TTL 30s) → EXPIRED (biên kiểm lại với origin rồi cache bản mới).
+$ curl -s -D - -o /dev/null http://10.10.2.10:8080/ | grep -i X-Cache
+X-Cache: MISS
+$ curl -s -D - -o /dev/null http://10.10.2.10:8080/ | grep -i X-Cache
+X-Cache: HIT
+$ sleep 31
+$ curl -s -D - -o /dev/null http://10.10.2.10:8080/ | grep -i X-Cache
+X-Cache: EXPIRED

@@ -1,0 +1,3 @@
+# Ch8 · 8.4 — giới hạn của biên: origin chậm 3s qua biên timeout 1s ⇒ 504; thân upload 2MB qua biên giới hạn 1MB ⇒ 413.
+curl -s -o /dev/null -w "slow origin via 1s timeout -> %{http_code}\n" http://10.10.2.10:8080/cham/api/slow
+head -c 2000000 /dev/zero | curl -s -o /dev/null -w "2MB upload via 1MB limit -> %{http_code}\n" --data-binary @- http://10.10.2.10:8080/img/

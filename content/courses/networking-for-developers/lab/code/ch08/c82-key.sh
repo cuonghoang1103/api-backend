@@ -1,0 +1,4 @@
+# Ch8 · 8.2 — khoá cache gồm cả query: ?v=1 và ?v=2 là HAI mục cache riêng (query thừa ⇒ phân mảnh cache, dù nội dung y hệt).
+curl -s -D - -o /dev/null "http://10.10.2.10:8080/img/logo.txt?v=1" | grep -i X-Cache
+curl -s -D - -o /dev/null "http://10.10.2.10:8080/img/logo.txt?v=1" | grep -i X-Cache
+curl -s -D - -o /dev/null "http://10.10.2.10:8080/img/logo.txt?v=2" | grep -i X-Cache

@@ -1,0 +1,2 @@
+# Ch13 · 13.2 — ĐO MỖI CHẶNG: curl -w tách thời gian (DNS/connect/TTFB/total) và kích thước qua cả stack.
+curl -s -o /dev/null -w "dns=%{time_namelookup}  connect=%{time_connect}  ttfb=%{time_starttransfer}  total=%{time_total}  size=%{size_download}\n" http://10.10.2.10:8080/big.html

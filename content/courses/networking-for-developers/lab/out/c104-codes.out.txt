@@ -1,0 +1,5 @@
+# Ch10 · 10.4 — mã lỗi cổng: 502 (không backend sống để nối), 504 (backend quá chậm qua timeout của proxy).
+$ curl -s -o /dev/null -w "dead upstream (:8082)        -> %{http_code}\n" http://10.10.2.10:8082/
+dead upstream (:8082)        -> 502
+$ curl -s -o /dev/null -w "slow backend 3s vs 1s timeout -> %{http_code}\n" http://10.10.2.10:8080/slow
+slow backend 3s vs 1s timeout -> 504

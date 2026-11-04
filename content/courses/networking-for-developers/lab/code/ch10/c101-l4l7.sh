@@ -1,0 +1,4 @@
+# Ch10 · 10.1 — L7 (nginx :8080) hiểu HTTP ⇒ thêm X-Forwarded-For (backend thấy IP client thật);
+# L4 (socat :9090) chỉ chuyển byte ⇒ không header, forwardedFor null.
+curl -s http://10.10.2.10:8080/ | grep -o '"forwardedFor":[^,}]*'
+curl -s http://10.10.2.10:9090/ | grep -o '"forwardedFor":[^,}]*'

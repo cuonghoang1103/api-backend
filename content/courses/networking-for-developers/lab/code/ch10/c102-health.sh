@@ -1,0 +1,2 @@
+# Ch10 · 10.2 — kiểm sức khoẻ: 6 yêu cầu qua nginx LB. (Orchestrator giết be2 GIỮA hai lần chạy ⇒ so before/after.)
+for i in 1 2 3 4 5 6; do curl -s http://10.10.2.10:8080/ | grep -o '"backend":"[^"]*"'; done

@@ -1,0 +1,5 @@
+# Ch10 · 10.3 — tunnel: socat mở cổng cục bộ 7000 trên client, chuyển tiếp tới web:80 qua router (như SSH/Cloudflare Tunnel).
+socat TCP-LISTEN:7000,fork,reuseaddr TCP:10.10.2.10:80 2>/dev/null &
+sleep 1
+curl -s -D - -o /dev/null http://127.0.0.1:7000/ | grep -iE "HTTP/|Server"
+kill %1 2>/dev/null

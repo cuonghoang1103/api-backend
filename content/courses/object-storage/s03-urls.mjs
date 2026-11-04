@@ -92,6 +92,28 @@ Signed URL:
 <p><strong>One sentence.</strong> Three URL types for the same object: the API endpoint (backend SDK, authenticated, uncached, for upload and delete), a custom domain through the CDN (browser, public, cached, for serving), and a signed URL (short-lived, signature-authenticated, uncached, for private access) — store the key in your database rather than a URL, and build the URL at runtime.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Take ONE key and build all three URLs for it: the API endpoint URL, the custom-domain CDN URL (<code>https://media.cuongthai.com/&lt;key&gt;</code>), and a signed URL.</li>
+<li><code>curl -I</code> each and compare: which returns a CDN cache header, which needs auth, which carries a signature query string.</li>
+<li>In your schema, confirm you store the KEY (not a full URL); write the one helper that turns a key into the public CDN URL at runtime.</li>
+<li>Explain in one line why storing the full URL in the DB breaks the day you change the custom domain.</li>
+</ol>
+<p><strong>Done when:</strong> you built all three URLs for one key, saw the header differences with <code>curl -I</code>, and your DB stores keys not URLs.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">API endpoint URL</span><span class="v">The S3 API host; authenticated, uncached — for upload/delete from the backend.</span></div>
+  <div class="kv"><span class="k">CDN / custom domain URL</span><span class="v">Public, cached at the edge — for serving to browsers.</span></div>
+  <div class="kv"><span class="k">Signed URL</span><span class="v">Short-lived, signature-authenticated, uncached — for private access.</span></div>
+  <div class="kv"><span class="k">Key</span><span class="v">The object's identifier stored in the DB; URLs are derived from it.</span></div>
+  <div class="kv"><span class="k">Build URL at runtime</span><span class="v">Compose the URL from key + base, so a domain change needs no data migration.</span></div>
+  <div class="kv"><span class="k">Cache header</span><span class="v">What tells the CDN URL apart from the uncached API/signed URLs.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>One object has three URL shapes: API endpoint (upload/delete), CDN custom domain (serving), signed URL (private access).</li><li>Store the key in the DB, never a full URL — build URLs at runtime.</li><li>Only the CDN URL is cached; the API and signed URLs are not.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Public buckets and custom domains</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/public-buckets — setup guide.</span></span></div>
 </div>
@@ -174,6 +196,28 @@ Signed URL:
 <div class="callout">
 <p><strong>Một câu.</strong> Ba URL type cho cùng object: API endpoint (backend SDK, auth, không cache, upload/delete), custom domain qua CDN (browser, public, cached, serving), signed URL (short-lived, sig auth, không cache, private access) — lưu key trong DB không URL, build URL runtime.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy MỘT key và dựng cả ba URL cho nó: URL API endpoint, URL CDN custom-domain (<code>https://media.cuongthai.com/&lt;key&gt;</code>), và một signed URL.</li>
+<li><code>curl -I</code> từng cái và so: cái nào trả header cache CDN, cái nào cần auth, cái nào mang query string chữ ký.</li>
+<li>Trong schema, xác nhận bạn lưu KEY (không phải URL đầy đủ); viết một helper biến key thành public CDN URL lúc runtime.</li>
+<li>Giải thích một dòng vì sao lưu URL đầy đủ trong DB sẽ hỏng vào ngày bạn đổi custom domain.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn dựng được cả ba URL cho một key, thấy khác biệt header qua <code>curl -I</code>, và DB lưu key chứ không URL.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">API endpoint URL</span><span class="v">Host API S3; có auth, không cache — để upload/delete từ backend.</span></div>
+  <div class="kv"><span class="k">CDN / custom domain URL</span><span class="v">Public, cache ở edge — để serve cho browser.</span></div>
+  <div class="kv"><span class="k">Signed URL</span><span class="v">Short-lived, auth bằng chữ ký, không cache — cho private access.</span></div>
+  <div class="kv"><span class="k">Key</span><span class="v">Identifier của object lưu trong DB; URL dẫn xuất từ nó.</span></div>
+  <div class="kv"><span class="k">Build URL runtime</span><span class="v">Ghép URL từ key + base, nên đổi domain không cần migrate dữ liệu.</span></div>
+  <div class="kv"><span class="k">Cache header</span><span class="v">Thứ phân biệt URL CDN với URL API/signed không cache.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một object có ba dạng URL: API endpoint (upload/delete), CDN custom domain (serving), signed URL (private access).</li><li>Lưu key trong DB, không bao giờ URL đầy đủ — build URL lúc runtime.</li><li>Chỉ URL CDN được cache; URL API và signed thì không.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Public buckets and custom domains</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/public-buckets — setup guide.</span></span></div>
@@ -273,6 +317,28 @@ Combo cho private user data:
 <p><strong>One sentence.</strong> Cache-Control is set at upload time: immutable content (image, video, hashed asset) gets one year immutable, mutable content gets a one-hour max-age, a versioned URL beats a short cache plus invalidation, and the Cloudflare CDN tunes its own cache from that header — so set it correctly at upload.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Upload two objects: one with <code>CacheControl: &#39;public, max-age=31536000, immutable&#39;</code>, one with <code>&#39;public, max-age=3600&#39;</code>.</li>
+<li><code>curl -I</code> each through the CDN twice and read <code>cache-control</code> plus <code>cf-cache-status</code> (MISS then HIT) to watch the edge cache the immutable one.</li>
+<li>Rename an asset using a content hash in the key (<code>app.9f2c1.js</code>) and explain why a versioned URL lets you keep a one-year cache safely.</li>
+<li>Change the file behind a NON-versioned key and observe the stale year-long cache — then state the fix (version the URL, don't lengthen invalidation).</li>
+</ol>
+<p><strong>Done when:</strong> you have seen a MISS→HIT on the immutable object and can explain why versioning beats cache invalidation.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-Control</span><span class="v">The header set at upload that tells the CDN/browser how long to cache.</span></div>
+  <div class="kv"><span class="k">max-age</span><span class="v">Seconds a response may be reused — 31536000 is one year.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Promise the body will never change at this URL — no revalidation.</span></div>
+  <div class="kv"><span class="k">Versioned URL</span><span class="v">A content hash in the key, so a new version is a new URL.</span></div>
+  <div class="kv"><span class="k">Invalidation</span><span class="v">Forcing the CDN to drop a cached object — avoid by versioning.</span></div>
+  <div class="kv"><span class="k">cf-cache-status</span><span class="v">Cloudflare header: MISS/HIT/EXPIRED — proof the cache took effect.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Set <code>Cache-Control</code> at upload: immutable assets get one year + <code>immutable</code>, mutable content gets a short max-age.</li><li>A versioned URL (content hash in the key) beats a short cache plus invalidation.</li><li>The Cloudflare CDN tunes its edge cache from that header — a wrong value is a stale or uncached object.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">web.dev — HTTP caching</span><span class="lc-sub">web.dev/http-cache — Cache-Control guide.</span></span></div>
 <a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-10-4-phuc-vu-media-cache" target="_blank" rel="noopener">
@@ -366,6 +432,28 @@ Combo cho private user data:
 <div class="callout">
 <p><strong>Một câu.</strong> Cache-Control set lúc upload: immutable content (image, video, hashed asset) = 1 year immutable, mutable content = 1 hour max-age, versioned URL tốt hơn short cache + invalidation, và Cloudflare CDN cache-tuning tự động dựa vào header — set đúng lúc upload.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Upload hai object: một với <code>CacheControl: &#39;public, max-age=31536000, immutable&#39;</code>, một với <code>&#39;public, max-age=3600&#39;</code>.</li>
+<li><code>curl -I</code> từng cái qua CDN hai lần và đọc <code>cache-control</code> cùng <code>cf-cache-status</code> (MISS rồi HIT) để thấy edge cache cái immutable.</li>
+<li>Đổi tên một asset dùng content hash trong key (<code>app.9f2c1.js</code>) và giải thích vì sao versioned URL cho phép giữ cache một năm an toàn.</li>
+<li>Đổi file sau một key KHÔNG versioned và quan sát cache cũ kẹt cả năm — rồi nêu cách vá (version URL, đừng kéo dài invalidation).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã thấy MISS→HIT trên object immutable và giải thích được vì sao versioning tốt hơn invalidation.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cache-Control</span><span class="v">Header set lúc upload, bảo CDN/browser cache bao lâu.</span></div>
+  <div class="kv"><span class="k">max-age</span><span class="v">Số giây một response được tái dùng — 31536000 là một năm.</span></div>
+  <div class="kv"><span class="k">immutable</span><span class="v">Cam kết body không bao giờ đổi ở URL này — không revalidate.</span></div>
+  <div class="kv"><span class="k">Versioned URL</span><span class="v">Content hash trong key, nên version mới là URL mới.</span></div>
+  <div class="kv"><span class="k">Invalidation</span><span class="v">Buộc CDN bỏ một object đã cache — tránh bằng versioning.</span></div>
+  <div class="kv"><span class="k">cf-cache-status</span><span class="v">Header Cloudflare: MISS/HIT/EXPIRED — bằng chứng cache có hiệu lực.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Set <code>Cache-Control</code> lúc upload: asset immutable = một năm + <code>immutable</code>, content mutable = max-age ngắn.</li><li>Versioned URL (content hash trong key) tốt hơn short cache cộng invalidation.</li><li>Cloudflare CDN chỉnh edge cache theo header đó — giá trị sai là object cũ hoặc không cache.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">web.dev — HTTP caching</span><span class="lc-sub">web.dev/http-cache — Cache-Control guide.</span></span></div>
@@ -477,6 +565,28 @@ const url = await getSignedUrl(client, cmd, {
 <p><strong>One sentence.</strong> A signed URL gives short-lived private access (5-10 minutes for a download, an hour for streaming) without making the object public — this repo's pattern is an API endpoint that verifies entitlement and returns a signed URL for the client to fetch straight from R2, saving server bandwidth; signed URLs for upload (presigned PUT) are a separate topic, covered in Chapter 4.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Generate a signed GET URL with <code>getSignedUrl</code> and <code>expiresIn: 300</code> (5 min) for a PRIVATE object, and open it in the browser — it works.</li>
+<li>Wait past the expiry and reload — read the 403 and its <code>&lt;Code&gt;</code> (expired signature).</li>
+<li>Build the repo's pattern: an authenticated route that checks the user is entitled, then returns a signed URL so the client fetches straight from R2 (not proxied through your server).</li>
+<li>Explain the one bandwidth number this saves: bytes that would otherwise pass through your server on every download.</li>
+</ol>
+<p><strong>Done when:</strong> a short-lived signed URL worked then expired, and you have an entitlement-check route that returns a signed URL instead of streaming bytes.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Signed URL</span><span class="v">A URL carrying a time-limited signature that grants access without making the object public.</span></div>
+  <div class="kv"><span class="k">getSignedUrl</span><span class="v">The <code>s3-request-presigner</code> call that produces one.</span></div>
+  <div class="kv"><span class="k">expiresIn</span><span class="v">Lifetime in seconds — short for downloads, longer for streaming.</span></div>
+  <div class="kv"><span class="k">Entitlement check</span><span class="v">The server verifying the user may access the object before signing.</span></div>
+  <div class="kv"><span class="k">Direct fetch</span><span class="v">Client downloads straight from R2, so bytes never pass through your server.</span></div>
+  <div class="kv"><span class="k">Presigned PUT</span><span class="v">The upload variant — a separate topic in Chapter 4.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A signed URL is short-lived private access (5–10 min download, ~1h streaming) without a public object.</li><li>The repo's pattern: an authed route checks entitlement, then returns a signed URL the client fetches directly from R2 — saving server bandwidth.</li><li>Signed URLs for upload (presigned PUT) are a separate topic, covered in Chapter 4.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@aws-sdk/s3-request-presigner</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/packages/s3-request-presigner — API.</span></span></div>
 </div>
@@ -572,6 +682,28 @@ const url = await getSignedUrl(client, cmd, {
 <div class="callout">
 <p><strong>Một câu.</strong> Signed URL = short-lived (5-10 phút cho download, 1 giờ cho streaming) private access mà không public hoá object — kho này pattern: API endpoint verify entitlement + return signed URL cho client fetch trực tiếp từ R2, tiết kiệm server bandwidth; signed URL cho upload (presigned PUT) là topic riêng cover trong Chương 4.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Sinh một signed GET URL với <code>getSignedUrl</code> và <code>expiresIn: 300</code> (5 phút) cho một object PRIVATE, mở trong browser — chạy được.</li>
+<li>Chờ qua hạn và tải lại — đọc 403 và <code>&lt;Code&gt;</code> của nó (chữ ký hết hạn).</li>
+<li>Dựng pattern của kho: một route có auth kiểm user được phép, rồi trả signed URL để client fetch thẳng từ R2 (không proxy qua server).</li>
+<li>Giải thích con số bandwidth duy nhất việc này tiết kiệm: byte lẽ ra đi qua server bạn ở mỗi lượt download.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một signed URL short-lived chạy rồi hết hạn, và bạn có một route kiểm entitlement trả signed URL thay vì stream byte.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Signed URL</span><span class="v">URL mang chữ ký có hạn, cấp quyền mà không public hoá object.</span></div>
+  <div class="kv"><span class="k">getSignedUrl</span><span class="v">Lời gọi <code>s3-request-presigner</code> sinh ra nó.</span></div>
+  <div class="kv"><span class="k">expiresIn</span><span class="v">Tuổi thọ theo giây — ngắn cho download, dài hơn cho streaming.</span></div>
+  <div class="kv"><span class="k">Entitlement check</span><span class="v">Server xác minh user được phép truy cập object trước khi ký.</span></div>
+  <div class="kv"><span class="k">Direct fetch</span><span class="v">Client tải thẳng từ R2, nên byte không đi qua server bạn.</span></div>
+  <div class="kv"><span class="k">Presigned PUT</span><span class="v">Biến thể upload — topic riêng ở Chương 4.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Signed URL là private access short-lived (download 5–10 phút, streaming ~1h) mà không cần object public.</li><li>Pattern của kho: route có auth kiểm entitlement, rồi trả signed URL client fetch thẳng từ R2 — tiết kiệm server bandwidth.</li><li>Signed URL cho upload (presigned PUT) là topic riêng, cover ở Chương 4.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">@aws-sdk/s3-request-presigner</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/packages/s3-request-presigner — API.</span></span></div>

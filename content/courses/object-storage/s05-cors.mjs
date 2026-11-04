@@ -68,6 +68,29 @@ Preflight OPTIONS response:
 <p><strong>One sentence.</strong> Browser blocks cross-origin PUT to R2 unless bucket CORS policy allows the origin + method (PUT) + headers (content-type); config in Cloudflare dashboard with explicit AllowedOrigins for production; failed CORS shows in DevTools Network as &quot;blocked:cors&quot; before PUT even sent.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>On the bucket (Cloudflare dashboard, or a local MinIO), set a CORS policy that allows ONLY <code>https://cuongthai.com</code> for <code>PUT, GET, HEAD</code> with <code>AllowedHeaders: ["*"]</code>.</li>
+<li>From a page served at a DIFFERENT origin (e.g. <code>http://localhost:3000</code>), in the console run <code>fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: file })</code>.</li>
+<li>Open DevTools → Network: find the OPTIONS preflight before the PUT, read its <code>Access-Control-Allow-Origin</code> / <code>-Methods</code> response headers. The PUT is blocked because your origin is not listed.</li>
+<li>Add <code>http://localhost:3000</code> to <code>AllowedOrigins</code>, wait a minute, hard-refresh, retry — the PUT now succeeds.</li>
+<li>Reproduce the preflight from the shell: <code>curl -X OPTIONS -H 'Origin: http://localhost:3000' -H 'Access-Control-Request-Method: PUT' -I "$BUCKET_URL/some-key"</code>.</li>
+</ol>
+<p><strong>Done when:</strong> you saw the SAME PUT blocked and then allowed purely by editing <code>AllowedOrigins</code>, and can read the three <code>Access-Control-Allow-*</code> headers in the OPTIONS response.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Same-origin policy</span><span class="v">Browser rule that blocks cross-origin JS requests unless the server opts in.</span></div>
+  <div class="kv"><span class="k">CORS</span><span class="v">Cross-Origin Resource Sharing — the headers a server uses to opt in.</span></div>
+  <div class="kv"><span class="k">Origin</span><span class="v">scheme + host + port; <code>https://cuongthai.com</code> differs from <code>https://www.cuongthai.com</code>.</span></div>
+  <div class="kv"><span class="k">Preflight (OPTIONS)</span><span class="v">The probe a browser sends before a non-simple request to check permission.</span></div>
+  <div class="kv"><span class="k">AllowedOrigins</span><span class="v">Bucket CORS field listing which origins may call it.</span></div>
+  <div class="kv"><span class="k">blocked:cors</span><span class="v">The DevTools Network status when a request is stopped by CORS — the server never sees it.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A browser blocks a cross-origin PUT to R2 unless the bucket opts in with CORS headers.</li><li>Non-simple requests (PUT, or <code>Content-Type: image/jpeg</code>) send a preflight OPTIONS first; the real PUT runs only if the origin + method + headers are allowed.</li><li>Configure <code>AllowedOrigins</code> (explicit in production), <code>AllowedMethods</code> (include PUT), and <code>AllowedHeaders</code> on the bucket.</li><li>A blocked request shows as <code>blocked:cors</code> in DevTools and never reaches your server.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — CORS</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/cors — config guide.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS — protocol details.</span></span></div>
@@ -127,6 +150,29 @@ Preflight OPTIONS response:
 <div class="callout">
 <p><strong>Một câu.</strong> Browser chặn cross-origin PUT tới R2 trừ khi bucket CORS policy cho phép origin + method (PUT) + header (content-type); config ở Cloudflare dashboard với AllowedOrigins explicit cho production; CORS fail hiện trong DevTools Network là &quot;blocked:cors&quot; trước PUT gửi.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Trên bucket (Cloudflare dashboard, hoặc MinIO cục bộ), đặt CORS policy CHỈ cho phép <code>https://cuongthai.com</code> với <code>PUT, GET, HEAD</code> và <code>AllowedHeaders: ["*"]</code>.</li>
+<li>Từ một trang chạy ở origin KHÁC (vd <code>http://localhost:3000</code>), ở console chạy <code>fetch(uploadUrl, { method: 'PUT', headers: { 'Content-Type': 'image/jpeg' }, body: file })</code>.</li>
+<li>Mở DevTools → Network: tìm preflight OPTIONS trước PUT, đọc header response <code>Access-Control-Allow-Origin</code> / <code>-Methods</code>. PUT bị chặn vì origin của bạn không có trong danh sách.</li>
+<li>Thêm <code>http://localhost:3000</code> vào <code>AllowedOrigins</code>, chờ một phút, hard-refresh, thử lại — PUT giờ thành công.</li>
+<li>Tái hiện preflight bằng shell: <code>curl -X OPTIONS -H 'Origin: http://localhost:3000' -H 'Access-Control-Request-Method: PUT' -I "$BUCKET_URL/some-key"</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy CÙNG một PUT bị chặn rồi được cho phép chỉ bằng cách sửa <code>AllowedOrigins</code>, và đọc được ba header <code>Access-Control-Allow-*</code> trong response OPTIONS.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Same-origin policy</span><span class="v">Luật browser chặn request JS khác origin trừ khi server đồng ý.</span></div>
+  <div class="kv"><span class="k">CORS</span><span class="v">Cross-Origin Resource Sharing — bộ header server dùng để đồng ý.</span></div>
+  <div class="kv"><span class="k">Origin</span><span class="v">scheme + host + port; <code>https://cuongthai.com</code> khác <code>https://www.cuongthai.com</code>.</span></div>
+  <div class="kv"><span class="k">Preflight (OPTIONS)</span><span class="v">Mũi dò browser gửi trước request non-simple để hỏi quyền.</span></div>
+  <div class="kv"><span class="k">AllowedOrigins</span><span class="v">Field CORS của bucket liệt kê origin nào được gọi.</span></div>
+  <div class="kv"><span class="k">blocked:cors</span><span class="v">Trạng thái Network trong DevTools khi request bị CORS chặn — server không hề thấy.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Browser chặn PUT khác origin tới R2 trừ khi bucket đồng ý bằng header CORS.</li><li>Request non-simple (PUT, hoặc <code>Content-Type: image/jpeg</code>) gửi preflight OPTIONS trước; PUT thật chỉ chạy nếu origin + method + header được cho phép.</li><li>Cấu hình <code>AllowedOrigins</code> (explicit ở production), <code>AllowedMethods</code> (có PUT), và <code>AllowedHeaders</code> trên bucket.</li><li>Request bị chặn hiện <code>blocked:cors</code> trong DevTools và không bao giờ tới server.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — CORS</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/cors — config guide.</span></span></div>
@@ -320,6 +366,30 @@ Access-Control-Allow-Credentials: true</code></pre>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">MaxAgeSeconds caches the answer</span><span class="lz-d">Without it, every single upload costs two round trips. With it, one preflight covers the whole session.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">ExposeHeaders decides what JavaScript can read</span><span class="lz-d">The response arrives with <code>ETag</code> either way; without listing it, the browser hides it from your code and the verification step reads <code>undefined</code>.</span></div>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Set the bucket CORS policy with explicit <code>AllowedHeaders</code> (Content-Type, x-amz-content-sha256, x-amz-date, Authorization), <code>ExposeHeaders: ["ETag"]</code> and <code>MaxAgeSeconds: 3600</code>.</li>
+<li>In the browser, do two PUTs in a row from the same origin. In Network, confirm the FIRST is preceded by an OPTIONS and the SECOND is not (the preflight was cached).</li>
+<li>After a PUT, read <code>res.headers.get('etag')</code>. With ExposeHeaders set it returns the value; remove ExposeHeaders, hard-refresh, and it returns <code>null</code>.</li>
+<li>Change <code>AllowedHeaders</code> to <code>["*"]</code>, hard-refresh, and watch EVERY PUT preflight again (the wildcard defeats caching).</li>
+<li>Inspect the OPTIONS response from the shell and find the cache directive: <code>curl -X OPTIONS -H 'Origin: https://cuongthai.com' -H 'Access-Control-Request-Method: PUT' -H 'Access-Control-Request-Headers: content-type' -I "$BUCKET_URL/some-key"</code> → look for <code>Access-Control-Max-Age: 3600</code>.</li>
+</ol>
+<p><strong>Done when:</strong> you watched the second PUT skip its preflight with <code>MaxAgeSeconds</code> set, and saw <code>ETag</code> flip between a value and <code>null</code> as you toggle <code>ExposeHeaders</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Simple request</span><span class="v">GET/HEAD/POST with only safelisted headers and a form content type — no preflight.</span></div>
+  <div class="kv"><span class="k">MaxAgeSeconds</span><span class="v">CORS field = <code>Access-Control-Max-Age</code>; how long the browser caches the preflight (browser-capped).</span></div>
+  <div class="kv"><span class="k">ExposeHeaders</span><span class="v">Lists response headers (e.g. ETag) that cross-origin JS is allowed to read.</span></div>
+  <div class="kv"><span class="k">Class A operation</span><span class="v">A billed R2 write-type op; an uncached preflight is one, doubling upload cost.</span></div>
+  <div class="kv"><span class="k">AllowedHeaders wildcard</span><span class="v"><code>["*"]</code> works but prevents the browser caching the preflight.</span></div>
+  <div class="kv"><span class="k">Allow-Credentials</span><span class="v">Must be true (and origin explicit, not <code>*</code>) for <code>credentials: 'include'</code>.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Every browser PUT to R2/S3 preflights; you cannot avoid it, only cache it.</li><li><code>MaxAgeSeconds</code> caches the preflight (browser-capped, ~2h in Chrome); without it every PUT is a preflight+PUT pair.</li><li>Explicit <code>AllowedHeaders</code> (not <code>*</code>) and explicit <code>AllowedOrigins</code> let the browser cache the exact match.</li><li><code>ExposeHeaders</code> decides which response headers JS can read — forget <code>ETag</code> and your code reads <code>null</code>.</li><li><code>credentials: 'include'</code> is almost always a bug on presigned-URL uploads.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS preflight</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS#preflighted_requests — what triggers, what caches.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Access-Control-Max-Age</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age — per-browser caps.</span></span></div>
@@ -503,6 +573,30 @@ Access-Control-Allow-Credentials: true</code></pre>
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">MaxAgeSeconds nhớ đệm câu trả lời</span><span class="lz-d">Không có nó, mỗi lần tải lên đều tốn hai lượt đi về. Có nó, một lần preflight phủ cả phiên làm việc.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">ExposeHeaders quyết định JavaScript đọc được gì</span><span class="lz-d">Phản hồi kiểu gì cũng mang theo <code>ETag</code>; nhưng không liệt kê nó ra thì trình duyệt giấu nó khỏi mã của bạn và bước xác minh đọc ra <code>undefined</code>.</span></div>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đặt CORS policy của bucket với <code>AllowedHeaders</code> explicit (Content-Type, x-amz-content-sha256, x-amz-date, Authorization), <code>ExposeHeaders: ["ETag"]</code> và <code>MaxAgeSeconds: 3600</code>.</li>
+<li>Trong browser, làm hai PUT liên tiếp từ cùng origin. Ở Network, xác nhận cái ĐẦU có OPTIONS trước, cái THỨ HAI thì không (preflight đã được cache).</li>
+<li>Sau một PUT, đọc <code>res.headers.get('etag')</code>. Có ExposeHeaders thì trả giá trị; bỏ ExposeHeaders, hard-refresh, nó trả <code>null</code>.</li>
+<li>Đổi <code>AllowedHeaders</code> thành <code>["*"]</code>, hard-refresh, và xem MỌI PUT lại preflight (wildcard phá cache).</li>
+<li>Soi response OPTIONS bằng shell và tìm directive cache: <code>curl -X OPTIONS -H 'Origin: https://cuongthai.com' -H 'Access-Control-Request-Method: PUT' -H 'Access-Control-Request-Headers: content-type' -I "$BUCKET_URL/some-key"</code> → tìm <code>Access-Control-Max-Age: 3600</code>.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn thấy PUT thứ hai bỏ qua preflight khi có <code>MaxAgeSeconds</code>, và thấy <code>ETag</code> lật giữa một giá trị và <code>null</code> khi bật/tắt <code>ExposeHeaders</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Simple request</span><span class="v">GET/HEAD/POST chỉ với header an toàn và content type kiểu form — không preflight.</span></div>
+  <div class="kv"><span class="k">MaxAgeSeconds</span><span class="v">Field CORS = <code>Access-Control-Max-Age</code>; browser cache preflight bao lâu (bị cap theo browser).</span></div>
+  <div class="kv"><span class="k">ExposeHeaders</span><span class="v">Liệt kê header response (vd ETag) mà JS khác origin được phép đọc.</span></div>
+  <div class="kv"><span class="k">Class A operation</span><span class="v">Op ghi R2 có tính tiền; một preflight không cache là một op, gấp đôi cost upload.</span></div>
+  <div class="kv"><span class="k">AllowedHeaders wildcard</span><span class="v"><code>["*"]</code> work nhưng chặn browser cache preflight.</span></div>
+  <div class="kv"><span class="k">Allow-Credentials</span><span class="v">Phải true (và origin explicit, không <code>*</code>) cho <code>credentials: 'include'</code>.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mọi PUT browser tới R2/S3 đều preflight; không tránh được, chỉ cache được.</li><li><code>MaxAgeSeconds</code> cache preflight (bị cap theo browser, ~2h ở Chrome); không có thì mỗi PUT là cặp preflight+PUT.</li><li><code>AllowedHeaders</code> explicit (không <code>*</code>) và <code>AllowedOrigins</code> explicit cho phép browser cache đúng match.</li><li><code>ExposeHeaders</code> quyết định JS đọc được header response nào — quên <code>ETag</code> là code đọc <code>null</code>.</li><li><code>credentials: 'include'</code> gần như luôn là bug trên upload bằng presigned URL.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS preflight</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS#preflighted_requests — cái gì trigger, cái gì cache.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — Access-Control-Max-Age</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age — cap per-browser.</span></span></div>
@@ -696,6 +790,29 @@ Debug:
 <p><strong>One sentence.</strong> Almost every CORS bug maps to one of four archetypes — origin mismatch, method not allowed, header not allowed, or response header not exposed — and the fix is always the same shape (add the missing item to the corresponding <code>Allowed*</code> / <code>ExposeHeaders</code> list); the debugging is a five-second three-way compare between the browser's Request headers, the CORS Response headers, and your policy config in Cloudflare or AWS.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Start from a working CORS policy and a working browser upload. Reproduce Archetype 1: load the page from the <code>www</code> variant that is NOT in <code>AllowedOrigins</code>, watch the PUT block, then add the origin to fix it.</li>
+<li>Archetype 2: remove <code>PUT</code> from <code>AllowedMethods</code>, hard-refresh, read the console line &quot;Method PUT is not allowed...&quot;, then restore PUT.</li>
+<li>Archetype 3: add a custom header to the fetch (e.g. <code>x-request-id</code>), watch the preflight block, then add the exact header name to <code>AllowedHeaders</code>.</li>
+<li>Archetype 4: remove <code>ETag</code> from <code>ExposeHeaders</code> — the PUT still returns 200 but <code>res.headers.get('etag')</code> is <code>null</code>; add it back and the value appears.</li>
+<li>For each, run the three-way compare: the browser Request's Origin/Method/Headers vs the <code>Access-Control-Allow-*</code> response vs your policy.</li>
+</ol>
+<p><strong>Done when:</strong> you reproduced and fixed all four archetypes, and can read a console CORS error and name its archetype in under a minute.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Origin mismatch</span><span class="v">The browser's Origin is not in AllowedOrigins (e.g. www vs bare, http vs https).</span></div>
+  <div class="kv"><span class="k">Method not allowed</span><span class="v">The request method is absent from AllowedMethods; the response names what it allows.</span></div>
+  <div class="kv"><span class="k">Header not allowed</span><span class="v">A header in Access-Control-Request-Headers is missing from AllowedHeaders.</span></div>
+  <div class="kv"><span class="k">Invisible response header</span><span class="v">A header the server sent but JS cannot read because it is not in ExposeHeaders.</span></div>
+  <div class="kv"><span class="k">Three-way compare</span><span class="v">Request headers vs CORS response headers vs policy — the fast diagnosis.</span></div>
+  <div class="kv"><span class="k">net::ERR_FAILED</span><span class="v">A network error (DNS/TCP/URL), NOT CORS — no preflight appears at all.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Four archetypes cover almost every CORS incident: origin mismatch, method not allowed, header not allowed, response header not exposed.</li><li>The fix is always adding the missing item to the matching <code>Allowed*</code> / <code>ExposeHeaders</code> list.</li><li>Diagnose with a three-way compare: browser Request headers vs CORS Response headers vs your policy.</li><li><code>net::ERR_FAILED</code> with no preflight is a network error, not CORS.</li><li>CORS edits can lag; wait a minute and hard-refresh before concluding a change failed.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS errors reference</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors — every browser CORS error and its fix.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Fetch spec — CORS-safelisted response headers</span><span class="lc-sub">fetch.spec.whatwg.org — the six headers that are always visible.</span></span></div>
@@ -878,6 +995,29 @@ Debug:
 <div class="callout">
 <p><strong>Một câu.</strong> Gần như mọi bug CORS map tới một trong bốn archetype — origin lệch, method không allowed, header không allowed, hoặc response header không expose — và vá luôn cùng hình dạng (thêm item thiếu vào list <code>Allowed*</code> / <code>ExposeHeaders</code> tương ứng); debug là so ba-chiều năm giây giữa header Request của browser, header Response CORS, và config policy trong Cloudflare hoặc AWS.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Bắt đầu từ CORS policy đang chạy và một upload browser đang work. Tái hiện Archetype 1: tải trang từ biến thể <code>www</code> KHÔNG có trong <code>AllowedOrigins</code>, xem PUT bị chặn, rồi thêm origin đó để vá.</li>
+<li>Archetype 2: bỏ <code>PUT</code> khỏi <code>AllowedMethods</code>, hard-refresh, đọc dòng console &quot;Method PUT is not allowed...&quot;, rồi khôi phục PUT.</li>
+<li>Archetype 3: thêm một header custom vào fetch (vd <code>x-request-id</code>), xem preflight bị chặn, rồi thêm đúng tên header vào <code>AllowedHeaders</code>.</li>
+<li>Archetype 4: bỏ <code>ETag</code> khỏi <code>ExposeHeaders</code> — PUT vẫn trả 200 nhưng <code>res.headers.get('etag')</code> là <code>null</code>; thêm lại thì giá trị hiện ra.</li>
+<li>Với mỗi cái, chạy so ba chiều: Origin/Method/Headers của Request browser vs response <code>Access-Control-Allow-*</code> vs policy của bạn.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tái hiện và vá được cả bốn archetype, và đọc một error CORS trong console là gọi tên được archetype dưới một phút.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Origin lệch</span><span class="v">Origin của browser không có trong AllowedOrigins (vd www vs bare, http vs https).</span></div>
+  <div class="kv"><span class="k">Method không allowed</span><span class="v">Method của request vắng trong AllowedMethods; response nêu rõ method nào nó cho.</span></div>
+  <div class="kv"><span class="k">Header không allowed</span><span class="v">Một header trong Access-Control-Request-Headers thiếu khỏi AllowedHeaders.</span></div>
+  <div class="kv"><span class="k">Header response vô hình</span><span class="v">Header server đã gửi nhưng JS không đọc được vì không có trong ExposeHeaders.</span></div>
+  <div class="kv"><span class="k">So ba chiều</span><span class="v">Request headers vs CORS response headers vs policy — cách chẩn đoán nhanh.</span></div>
+  <div class="kv"><span class="k">net::ERR_FAILED</span><span class="v">Lỗi network (DNS/TCP/URL), KHÔNG phải CORS — không có preflight nào hiện ra.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bốn archetype phủ gần như mọi incident CORS: origin lệch, method không allowed, header không allowed, response header không expose.</li><li>Vá luôn là thêm item thiếu vào list <code>Allowed*</code> / <code>ExposeHeaders</code> tương ứng.</li><li>Chẩn đoán bằng so ba chiều: header Request browser vs header Response CORS vs policy.</li><li><code>net::ERR_FAILED</code> mà không có preflight là lỗi network, không phải CORS.</li><li>Sửa CORS có thể trễ; chờ một phút và hard-refresh trước khi kết luận thay đổi không work.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">MDN — CORS errors reference</span><span class="lc-sub">developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors — mọi error CORS browser và vá.</span></span></div>

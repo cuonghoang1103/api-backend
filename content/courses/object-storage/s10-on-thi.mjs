@@ -44,6 +44,28 @@ export default {
 <div class="callout">
 <p><strong>One sentence.</strong> The object-storage rules (flat keys, presigned signature scope, CORS, multipart cleanup) apply to every repo; the specific numbers (code size, the R2-versus-S3 delta, cache ratios) must be re-measured on yours; and intuitions about pricing and security are usually WRONG — read the docs and measure before concluding.</p>
 </div>
+
+<h3>🧪 Practice (15–20 min) — closed-book course drill</h3>
+<div class="callout ok"><ol>
+<li>From memory, write the presigned-PUT <code>signableHeaders</code> rule: why signing only <code>host</code> is a bug, and what binding <code>content-type</code> into the signature buys you (lesson 4.2).</li>
+<li>Recite the CORS preflight failure chain and the ONE bucket setting that fixes it — then say why a 403 with no CORS header still fails in the browser (lesson 5.1).</li>
+<li>Do the R2-vs-S3 cost math for a 10 TB/month egress app in your head, then check it against lessons 2.1 and 7.1.</li>
+<li>List the four Column-A always-true rules and one Column-C intuition that is always wrong, each with the lesson it came from.</li>
+</ol>
+<p><strong>Done when:</strong> you answered all four from memory first, then verified each against the lesson — note every gap to re-read before the exam.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Column A / B / C</span><span class="v">Always-true rule / true-only-where-measured / always-wrong intuition.</span></div>
+  <div class="kv"><span class="k">Signature scope</span><span class="v">Which headers a presigned URL signs — the heart of the 4.2 bug.</span></div>
+  <div class="kv"><span class="k">Preflight</span><span class="v">The browser's OPTIONS check before a cross-origin PUT.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Bytes served out — $0 on R2, the dominant S3 cost for media apps.</span></div>
+  <div class="kv"><span class="k">Re-measure</span><span class="v">Taking a Column-B number on YOUR repo before trusting it.</span></div>
+  <div class="kv"><span class="k">Intuition trap</span><span class="v">A plausible storage claim that measurement reverses.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Keep the Column-A rules (flat keys, signature scope, CORS, multipart cleanup) — they hold everywhere.</li><li>Re-measure the Column-B numbers (code size, R2-vs-S3 delta, cache ratio) on your own repo.</li><li>Distrust pricing and security intuitions (Column C) — read the docs and measure before concluding, and carry each number with the conditions it was taken under.</li></ul>
 <div class="pitfall">
 <p><strong>Trap — moving a Column B claim into Column A when you quote it later.</strong> The three columns in this lesson exist because most storage advice is a Column B statement — true where it was measured — repeated as if it were Column A. &quot;R2 is cheaper&quot; holds when egress dominates and reverses when Class A requests do; &quot;multipart is faster&quot; holds above a size threshold and is slower below it. The measurements here are labelled with their conditions precisely so the conditions travel with them. When you carry a number out of this course, carry the sentence that says where it was taken — a claim without its conditions is how Column C entries are created.</p>
 </div>
@@ -83,6 +105,28 @@ export default {
 <div class="callout">
 <p><strong>Một câu.</strong> Object storage quy luật (flat keys, presigned signature scope, CORS, multipart cleanup) áp cho mọi kho; số cụ thể (repo code size, R2 vs S3 delta, cache ratio) đo lại cho kho bạn; và trực giác về pricing + security thường SAI — đọc doc + đo thật trước conclusion.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút) — ôn cả khoá, gấp sách</h3>
+<div class="callout ok"><ol>
+<li>Theo trí nhớ, viết luật <code>signableHeaders</code> của presigned PUT: vì sao chỉ ký <code>host</code> là bug, và việc ràng <code>content-type</code> vào chữ ký mang lại gì (bài 4.2).</li>
+<li>Đọc lại chuỗi thất bại preflight CORS và MỘT setting bucket vá nó — rồi nói vì sao một 403 thiếu header CORS vẫn fail trên browser (bài 5.1).</li>
+<li>Nhẩm cost math R2 vs S3 cho app 10 TB/tháng egress, rồi đối chiếu bài 2.1 và 7.1.</li>
+<li>Liệt kê bốn luật Cột A luôn đúng và một trực giác Cột C luôn sai, mỗi cái kèm bài nó đến từ.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn trả lời cả bốn theo trí nhớ trước, rồi đối chiếu từng cái với bài — ghi lại mọi chỗ hổng để đọc lại trước khi thi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Cột A / B / C</span><span class="v">Luật luôn đúng / chỉ đúng nơi đã đo / trực giác luôn sai.</span></div>
+  <div class="kv"><span class="k">Signature scope</span><span class="v">Những header mà presigned URL ký — cốt lõi của bug bài 4.2.</span></div>
+  <div class="kv"><span class="k">Preflight</span><span class="v">Lượt OPTIONS browser kiểm trước một PUT cross-origin.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Byte truyền ra — $0 trên R2, chi phí S3 chủ đạo cho app media.</span></div>
+  <div class="kv"><span class="k">Re-measure</span><span class="v">Đo lại một số Cột B trên kho CỦA BẠN trước khi tin.</span></div>
+  <div class="kv"><span class="k">Intuition trap</span><span class="v">Một khẳng định storage nghe hợp lý mà phép đo đảo ngược.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Giữ các luật Cột A (flat keys, signature scope, CORS, dọn multipart) — chúng đúng ở mọi nơi.</li><li>Đo lại các số Cột B (code size, delta R2-vs-S3, cache ratio) trên chính kho của bạn.</li><li>Nghi ngờ trực giác về pricing và security (Cột C) — đọc doc và đo trước khi kết luận, và mang mỗi con số kèm điều kiện nó được đo.</li></ul>
 <div class="pitfall">
 <p><strong>Bẫy — chuyển một khẳng định ở Cột B sang Cột A khi bạn trích lại nó về sau.</strong> Ba cột trong bài này tồn tại vì phần lớn lời khuyên về lưu trữ đều là một phát biểu Cột B — đúng ở nơi nó được đo — rồi được nhắc lại như thể nó là Cột A. &quot;R2 rẻ hơn&quot; đúng khi phí truyền ra chiếm chủ đạo và đảo ngược khi request Class A chiếm chủ đạo; &quot;multipart nhanh hơn&quot; đúng trên một ngưỡng kích thước và chậm hơn ở dưới ngưỡng đó. Các phép đo ở đây được ghi kèm điều kiện chính là để điều kiện đi theo chúng. Khi bạn mang một con số ra khỏi khoá này, hãy mang theo cả cái câu nói rõ nó được đo ở đâu — một khẳng định tách khỏi điều kiện của nó chính là cách các mục ở Cột C ra đời.</p>
 </div>

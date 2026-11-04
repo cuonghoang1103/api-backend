@@ -124,6 +124,29 @@ After rule (7 days later):
 <p><strong>One sentence.</strong> Interrupted multipart uploads leak parts that never appear in <code>ListObjectsV2</code>, keep billing storage forever, and only a lifecycle rule with <code>AbortIncompleteMultipartUpload.DaysAfterInitiation</code> (7 days is a safe default) cleans them; without the rule, 20-30% of your R2 storage bill on any account that does browser uploads is invisible waste.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Create an incomplete upload: <code>CreateMultipartUpload</code>, upload ONE part, and STOP (never call complete). Then run <code>ListMultipartUploads</code> — it is there, billing storage, yet invisible to <code>ListObjectsV2</code>.</li>
+<li>Write a lifecycle config JSON with an abort rule: <code>AbortIncompleteMultipartUpload: { DaysAfterInitiation: 7 }</code>.</li>
+<li>Apply it: <code>aws s3api put-bucket-lifecycle-configuration --bucket my-bucket --lifecycle-configuration file://lc.json --endpoint-url $R2</code> (or the SDK <code>PutBucketLifecycleConfiguration</code>).</li>
+<li>Read it back with <code>GetBucketLifecycleConfiguration</code> and confirm the rule and its 7-day window.</li>
+<li>Write one sentence explaining why the leaked parts never show in <code>ListObjectsV2</code> and which command does reveal them.</li>
+</ol>
+<p><strong>Done when:</strong> you created an incomplete upload, saw it in <code>ListMultipartUploads</code> but not <code>ListObjectsV2</code>, and installed and verified a 7-day abort rule on the bucket.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Multipart upload</span><span class="v">Uploading a large object as parts stitched into one final object.</span></div>
+  <div class="kv"><span class="k">Incomplete upload</span><span class="v">Parts uploaded but never completed/aborted — they persist and bill.</span></div>
+  <div class="kv"><span class="k">AbortIncompleteMultipartUpload</span><span class="v">Lifecycle action that deletes parts of uploads never completed.</span></div>
+  <div class="kv"><span class="k">DaysAfterInitiation</span><span class="v">How long after an upload starts before its orphaned parts are aborted (7 is safe).</span></div>
+  <div class="kv"><span class="k">ListMultipartUploads</span><span class="v">The API that reveals in-progress/abandoned uploads (ListObjectsV2 does not).</span></div>
+  <div class="kv"><span class="k">PutBucketLifecycleConfiguration</span><span class="v">The call that installs the lifecycle rules on a bucket.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Interrupted multipart uploads leave parts that keep billing and never appear in <code>ListObjectsV2</code>.</li><li>Only a lifecycle rule with <code>AbortIncompleteMultipartUpload.DaysAfterInitiation</code> cleans them (7 days is a safe default).</li><li>See the leaked parts with <code>ListMultipartUploads</code>; install the rule once per bucket.</li><li>On accounts doing browser uploads this hidden waste can be 20-30% of the storage bill.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Object lifecycles</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/object-lifecycles — <code>AbortIncompleteMultipartUpload</code> supported since 2023.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — Multipart upload lifecycle</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/mpu-abort-incomplete-mpu-lifecycle-config.html — same schema R2 accepts.</span></span></div>
@@ -240,6 +263,29 @@ Sau rule (7 ngày sau):
 <div class="callout">
 <p><strong>Một câu.</strong> Multipart upload bị đứt để lại part không bao giờ hiện trong <code>ListObjectsV2</code>, tiếp tục tính tiền storage vĩnh viễn, và chỉ lifecycle rule với <code>AbortIncompleteMultipartUpload.DaysAfterInitiation</code> (7 ngày là mặc định an toàn) mới dọn được; không có rule, 20-30% hoá đơn R2 trên account làm browser upload là lãng phí vô hình.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo một upload dở: <code>CreateMultipartUpload</code>, upload MỘT part, rồi DỪNG (không gọi complete). Chạy <code>ListMultipartUploads</code> — nó ở đó, đang tính tiền storage, mà <code>ListObjectsV2</code> không thấy.</li>
+<li>Viết JSON lifecycle config với rule abort: <code>AbortIncompleteMultipartUpload: { DaysAfterInitiation: 7 }</code>.</li>
+<li>Áp dụng: <code>aws s3api put-bucket-lifecycle-configuration --bucket my-bucket --lifecycle-configuration file://lc.json --endpoint-url $R2</code> (hoặc SDK <code>PutBucketLifecycleConfiguration</code>).</li>
+<li>Đọc lại bằng <code>GetBucketLifecycleConfiguration</code> và xác nhận rule cùng cửa sổ 7 ngày.</li>
+<li>Viết một câu giải thích vì sao các part rò rỉ không bao giờ hiện trong <code>ListObjectsV2</code> và lệnh nào mới lộ chúng ra.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã tạo một upload dở, thấy nó trong <code>ListMultipartUploads</code> mà không trong <code>ListObjectsV2</code>, và cài + xác nhận rule abort 7 ngày trên bucket.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Multipart upload</span><span class="v">Upload object lớn thành nhiều part rồi ghép thành một object cuối.</span></div>
+  <div class="kv"><span class="k">Incomplete upload</span><span class="v">Part đã upload nhưng chưa complete/abort — tồn tại và tính tiền.</span></div>
+  <div class="kv"><span class="k">AbortIncompleteMultipartUpload</span><span class="v">Hành động lifecycle xoá part của upload không bao giờ hoàn tất.</span></div>
+  <div class="kv"><span class="k">DaysAfterInitiation</span><span class="v">Bao lâu sau khi upload khởi tạo thì part mồ côi bị abort (7 là an toàn).</span></div>
+  <div class="kv"><span class="k">ListMultipartUploads</span><span class="v">API lộ ra upload đang dở/bỏ dở (ListObjectsV2 không thấy).</span></div>
+  <div class="kv"><span class="k">PutBucketLifecycleConfiguration</span><span class="v">Lời gọi cài các rule lifecycle lên bucket.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Multipart upload bị đứt để lại part vẫn tính tiền và không hiện trong <code>ListObjectsV2</code>.</li><li>Chỉ lifecycle rule với <code>AbortIncompleteMultipartUpload.DaysAfterInitiation</code> dọn được (7 ngày là mặc định an toàn).</li><li>Thấy part rò rỉ bằng <code>ListMultipartUploads</code>; cài rule một lần cho mỗi bucket.</li><li>Trên account làm browser upload, lãng phí ẩn này có thể là 20-30% hoá đơn storage.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Object lifecycles</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/object-lifecycles — <code>AbortIncompleteMultipartUpload</code> hỗ trợ từ 2023.</span></span></div>
@@ -367,6 +413,29 @@ the paper trail.
 <p><strong>One sentence.</strong> Use lifecycle rules to expire objects that were never meant to be permanent (exports, temp files, reset tokens) with prefix-scoped <code>Expiration.Days</code>; the rule is worthless without matching prefix discipline in your app's paths, and R2's daily sweep means &quot;the day you set the rule&quot; and &quot;the day you see the drop&quot; are always at least 24 hours apart.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick a disposable prefix, e.g. <code>exports/</code>, and upload two objects under it. Upload one object under a permanent prefix like <code>users/</code> too.</li>
+<li>Write a lifecycle rule scoped to the disposable prefix: <code>Filter: { Prefix: "exports/" }</code> and <code>Expiration: { Days: 30 }</code>.</li>
+<li>Apply with <code>PutBucketLifecycleConfiguration</code>, then read back with <code>GetBucketLifecycleConfiguration</code> and confirm the prefix and the 30-day window.</li>
+<li>Verify the rule does NOT match <code>users/</code> — check the <code>Filter.Prefix</code>; prefix discipline is the whole safety net.</li>
+<li>Write down why the real deletion day lags the rule (R2 sweeps once a day, so expect deletion within ~24h after Days elapses, not to the second).</li>
+</ol>
+<p><strong>Done when:</strong> a prefix-scoped expiration rule is applied and verified, it clearly excludes your permanent prefixes, and you can explain the ~24h lag.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Expiration.Days</span><span class="v">Lifecycle action: delete an object this many days after creation.</span></div>
+  <div class="kv"><span class="k">Filter.Prefix</span><span class="v">Scopes a rule to keys starting with a string, e.g. <code>exports/</code>.</span></div>
+  <div class="kv"><span class="k">Prefix discipline</span><span class="v">Putting disposable objects under a dedicated prefix so a rule can target them safely.</span></div>
+  <div class="kv"><span class="k">Daily sweep</span><span class="v">R2 evaluates lifecycle once a day, so expiry is approximate, not instant.</span></div>
+  <div class="kv"><span class="k">Disposable object</span><span class="v">Exports, temp files, reset tokens — never meant to be permanent.</span></div>
+  <div class="kv"><span class="k">Lifecycle vs manual delete</span><span class="v">The rule deletes by age automatically; a manual delete is one-off and immediate.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Lifecycle expiration deletes objects by age, scoped by prefix.</li><li>Use <code>Expiration.Days</code> + <code>Filter.Prefix</code>; your app must place disposable objects under a dedicated prefix.</li><li>R2 sweeps daily, so the deletion day lags the rule by up to ~24 hours.</li><li>Never point an expiration rule at a prefix your app treats as permanent.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Object lifecycles</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/object-lifecycles — <code>Expiration</code> support and semantics.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — Lifecycle rules</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/object-lifecycle-mgmt.html — R2 accepts the same JSON schema.</span></span></div>
@@ -481,6 +550,29 @@ repo là dấu vết giấy.
 <div class="callout">
 <p><strong>Một câu.</strong> Dùng lifecycle rule để expire object không định permanent (export, temp, reset token) với <code>Expiration.Days</code> scope theo prefix; rule vô giá trị nếu không có kỷ luật prefix trong path của app, và sweep hàng ngày của R2 nghĩa là &quot;ngày set rule&quot; và &quot;ngày thấy tụt&quot; luôn cách nhau ít nhất 24 giờ.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một prefix dùng-rồi-bỏ, vd <code>exports/</code>, upload hai object dưới nó. Upload thêm một object dưới prefix vĩnh viễn như <code>users/</code>.</li>
+<li>Viết lifecycle rule scope theo prefix dùng-rồi-bỏ: <code>Filter: { Prefix: "exports/" }</code> và <code>Expiration: { Days: 30 }</code>.</li>
+<li>Áp dụng bằng <code>PutBucketLifecycleConfiguration</code>, rồi đọc lại bằng <code>GetBucketLifecycleConfiguration</code> và xác nhận prefix cùng cửa sổ 30 ngày.</li>
+<li>Kiểm rule KHÔNG khớp <code>users/</code> — soi <code>Filter.Prefix</code>; kỷ luật prefix chính là toàn bộ lưới an toàn.</li>
+<li>Ghi lại vì sao ngày xoá thật trễ hơn rule (R2 sweep mỗi ngày một lần, nên xoá trong vòng ~24h sau khi đủ Days, không chính xác tới giây).</li>
+</ol>
+<p><strong>Đạt khi:</strong> một rule expire theo prefix đã áp và xác nhận, nó loại rõ các prefix vĩnh viễn, và bạn giải thích được độ trễ ~24h.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Expiration.Days</span><span class="v">Hành động lifecycle: xoá object sau bấy nhiêu ngày kể từ lúc tạo.</span></div>
+  <div class="kv"><span class="k">Filter.Prefix</span><span class="v">Giới hạn rule vào các key bắt đầu bằng một chuỗi, vd <code>exports/</code>.</span></div>
+  <div class="kv"><span class="k">Kỷ luật prefix</span><span class="v">Đặt object dùng-rồi-bỏ dưới một prefix riêng để rule nhắm tới an toàn.</span></div>
+  <div class="kv"><span class="k">Daily sweep</span><span class="v">R2 xét lifecycle mỗi ngày một lần, nên hết hạn là xấp xỉ, không tức thì.</span></div>
+  <div class="kv"><span class="k">Disposable object</span><span class="v">Export, temp, reset token — không định tồn tại vĩnh viễn.</span></div>
+  <div class="kv"><span class="k">Lifecycle vs xoá tay</span><span class="v">Rule xoá theo tuổi tự động; xoá tay là một lần và tức thì.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Lifecycle expiration xoá object theo tuổi, giới hạn theo prefix.</li><li>Dùng <code>Expiration.Days</code> + <code>Filter.Prefix</code>; app phải đặt object dùng-rồi-bỏ dưới prefix riêng.</li><li>R2 sweep hàng ngày, nên ngày xoá trễ hơn rule tới ~24 giờ.</li><li>Đừng nhắm rule expire vào prefix mà app coi là vĩnh viễn.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Object lifecycles</span><span class="lc-sub">developers.cloudflare.com/r2/buckets/object-lifecycles — hỗ trợ và ngữ nghĩa <code>Expiration</code>.</span></span></div>
@@ -645,6 +737,29 @@ async function findMissingObjects() {
 <p><strong>One sentence.</strong> Bucket and database drift apart every time an atomic-looking write to both fails halfway; lifecycle rules cannot fix it because they cannot see the database; a reconciliation job that batches <code>ListObjectsV2</code> against <code>WHERE key IN (...)</code>, ignores anything younger than 24 hours, and requires two consecutive passes before deleting, catches both directions of orphan without breaking in-flight uploads.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Make one orphan each way: an object with no row (PUT a key, insert nothing) and a row with no object (insert a <code>MediaFile</code> row, then delete its object).</li>
+<li>Write a dry-run reconciliation script: page <code>ListObjectsV2</code>, compare keys against <code>SELECT key FROM media_files WHERE key IN (...)</code>, and classify each key into the two orphan buckets.</li>
+<li>Add the two safety rules: ignore any object or row younger than 24 hours (in-flight uploads), and require a key to look orphaned on TWO consecutive passes before acting.</li>
+<li>Run it report-only and read both lists: object-without-row and row-without-object.</li>
+<li>Write one sentence on why a lifecycle rule cannot do this job.</li>
+</ol>
+<p><strong>Done when:</strong> your script lists both orphan directions, skips anything younger than 24h, and deletes nothing until a second pass confirms the orphan.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Orphan object</span><span class="v">A key in the bucket with no matching database row.</span></div>
+  <div class="kv"><span class="k">Orphan row</span><span class="v">A database row whose object no longer exists in the bucket.</span></div>
+  <div class="kv"><span class="k">Reconciliation job</span><span class="v">A scheduled task that compares bucket keys to DB keys and fixes drift.</span></div>
+  <div class="kv"><span class="k">Dry-run / report-only</span><span class="v">A mode that lists what would be deleted without deleting anything.</span></div>
+  <div class="kv"><span class="k">Two-pass confirmation</span><span class="v">Acting only after a key looks orphaned on two separate runs.</span></div>
+  <div class="kv"><span class="k">24h grace window</span><span class="v">Skipping anything created in the last day so in-flight uploads are safe.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Bucket and DB drift whenever a write meant to hit both fails halfway.</li><li>Lifecycle rules cannot fix orphans — they cannot see the database.</li><li>A reconciliation job compares <code>ListObjectsV2</code> to the DB in batches, catching both directions.</li><li>Guard it: ignore anything younger than 24h and require two consecutive passes before deleting.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — ListObjectsV2</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html — pagination and 1000-key limit.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — HeadObject</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_HeadObject.html — 404 vs 403 distinction matters.</span></span></div>
@@ -802,6 +917,29 @@ async function findMissingObjects() {
 <div class="callout">
 <p><strong>Một câu.</strong> Bucket và database lệch nhau mỗi lần một &quot;atomic&quot; write vào cả hai fail giữa chừng; lifecycle rule không vá được vì không thấy database; job reconciliation batch <code>ListObjectsV2</code> với <code>WHERE key IN (...)</code>, bỏ qua bất kỳ cái nào trẻ hơn 24 giờ, và yêu cầu hai lượt liên tiếp trước khi xoá, bắt được cả hai hướng mồ côi mà không phá upload đang bay.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo mỗi hướng một mồ côi: một object không có row (PUT một key, không insert) và một row không có object (insert một row <code>MediaFile</code>, rồi xoá object của nó).</li>
+<li>Viết script reconciliation chạy thử (dry-run): phân trang <code>ListObjectsV2</code>, so key với <code>SELECT key FROM media_files WHERE key IN (...)</code>, và phân mỗi key vào hai nhóm mồ côi.</li>
+<li>Thêm hai luật an toàn: bỏ qua object hoặc row trẻ hơn 24 giờ (upload đang bay), và yêu cầu một key trông mồ côi ở HAI lượt liên tiếp mới xử lý.</li>
+<li>Chạy ở chế độ chỉ-báo-cáo và đọc hai danh sách: object-không-row và row-không-object.</li>
+<li>Viết một câu vì sao lifecycle rule không làm được việc này.</li>
+</ol>
+<p><strong>Đạt khi:</strong> script liệt kê cả hai hướng mồ côi, bỏ qua bất kỳ cái nào trẻ hơn 24h, và không xoá gì cho tới khi lượt thứ hai xác nhận.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Orphan object</span><span class="v">Một key trong bucket không có row DB tương ứng.</span></div>
+  <div class="kv"><span class="k">Orphan row</span><span class="v">Một row DB mà object của nó không còn trong bucket.</span></div>
+  <div class="kv"><span class="k">Reconciliation job</span><span class="v">Tác vụ định kỳ so key bucket với key DB và sửa lệch.</span></div>
+  <div class="kv"><span class="k">Dry-run / chỉ-báo-cáo</span><span class="v">Chế độ liệt kê cái sẽ xoá mà không xoá gì.</span></div>
+  <div class="kv"><span class="k">Xác nhận hai lượt</span><span class="v">Chỉ xử lý sau khi key trông mồ côi ở hai lần chạy riêng.</span></div>
+  <div class="kv"><span class="k">Cửa sổ ân hạn 24h</span><span class="v">Bỏ qua cái tạo trong ngày qua để upload đang bay được an toàn.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bucket và DB lệch mỗi khi một write định vào cả hai fail giữa chừng.</li><li>Lifecycle rule không vá mồ côi được — nó không thấy database.</li><li>Job reconciliation so <code>ListObjectsV2</code> với DB theo batch, bắt cả hai hướng.</li><li>Phòng thủ: bỏ qua cái trẻ hơn 24h và yêu cầu hai lượt liên tiếp trước khi xoá.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">S3 API — ListObjectsV2</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/API_ListObjectsV2.html — pagination và giới hạn 1000-key.</span></span></div>

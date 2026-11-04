@@ -82,6 +82,28 @@ For media serving app: 90% Class B via CDN cache HIT anyway = $0
 <p><strong>One sentence.</strong> R2's zero egress + $0.015/GB storage against S3's $0.09/GB egress + $0.023/GB storage — for a media app doing 10 TB/month of egress that is roughly $900 versus $20 (46× cheaper), and it is the main reason to choose R2; but ecosystem lock-in, compliance requirements, and S3's advanced features remain three valid reasons to stay.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick a realistic monthly profile for your app: storage GB held, and egress GB served. Write both numbers down.</li>
+<li>Compute the S3 bill: storage &times; $0.023 + egress &times; $0.09. Compute the R2 bill: storage &times; $0.015 + egress &times; $0 (egress free).</li>
+<li>Divide to get the ratio. Re-run it with egress at 1 TB and at 50 TB and watch the ratio move — egress is what drives it.</li>
+<li>List, for your situation, which of the three stay-on-S3 reasons apply (ecosystem lock-in, compliance/region, an S3 feature R2 lacks).</li>
+</ol>
+<p><strong>Done when:</strong> you have an S3-vs-R2 ratio for your own numbers and can say at what egress level R2 stops being dramatically cheaper.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Egress</span><span class="v">Bytes served out of the bucket — $0 on R2, $0.09/GB on S3.</span></div>
+  <div class="kv"><span class="k">Zero egress</span><span class="v">R2's model: you pay storage + operations, never for serving.</span></div>
+  <div class="kv"><span class="k">Storage rate</span><span class="v">R2 $0.015/GB-month vs S3 $0.023/GB-month.</span></div>
+  <div class="kv"><span class="k">Ecosystem lock-in</span><span class="v">Tooling/services that assume S3 — a reason to stay despite cost.</span></div>
+  <div class="kv"><span class="k">Compliance / region</span><span class="v">Data-residency rules R2's region model may not satisfy.</span></div>
+  <div class="kv"><span class="k">Break-even</span><span class="v">The egress level where R2's advantage stops being dramatic.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>R2 charges $0 egress + $0.015/GB storage; S3 charges $0.09/GB egress + $0.023/GB storage.</li><li>For a 10 TB/month-egress media app that is ~$900 vs ~$20 — roughly 46× cheaper, driven by egress.</li><li>Three valid reasons stay on S3: ecosystem lock-in, compliance/region, and advanced S3 features R2 lacks.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — chính thức, cập nhật.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 pricing</span><span class="lc-sub">aws.amazon.com/s3/pricing — so sánh trực tiếp.</span></span></div>
@@ -155,6 +177,28 @@ For media serving app: 90% Class B via CDN cache HIT anyway = $0
 <div class="callout">
 <p><strong>Một câu.</strong> R2 free egress + $0.015/GB storage vs S3 $0.09/GB egress + $0.023/GB storage — cho media app 10 TB/mo egress khác biệt là ~$900 vs ~$20 (46× cheaper), đây là lý do chính chọn R2; nhưng ecosystem lock-in, compliance, và advanced features S3 vẫn là ba lý do valid stick với S3.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn một profile tháng thực tế cho app: storage GB giữ, và egress GB serve. Ghi cả hai số.</li>
+<li>Tính bill S3: storage &times; $0.023 + egress &times; $0.09. Tính bill R2: storage &times; $0.015 + egress &times; $0 (egress miễn phí).</li>
+<li>Chia để ra tỉ lệ. Chạy lại với egress 1 TB và 50 TB và xem tỉ lệ thay đổi — egress mới là thứ quyết định.</li>
+<li>Liệt kê, cho tình huống của bạn, lý do nào trong ba lý do ở-lại-S3 áp dụng (ecosystem lock-in, compliance/region, một feature S3 mà R2 thiếu).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có tỉ lệ S3-vs-R2 cho số của chính mình và nói được ở mức egress nào thì R2 hết rẻ vượt trội.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Egress</span><span class="v">Byte serve ra khỏi bucket — $0 trên R2, $0.09/GB trên S3.</span></div>
+  <div class="kv"><span class="k">Zero egress</span><span class="v">Mô hình R2: trả storage + operation, không bao giờ trả cho serving.</span></div>
+  <div class="kv"><span class="k">Storage rate</span><span class="v">R2 $0.015/GB-tháng vs S3 $0.023/GB-tháng.</span></div>
+  <div class="kv"><span class="k">Ecosystem lock-in</span><span class="v">Tooling/service giả định S3 — lý do ở lại dù tốn hơn.</span></div>
+  <div class="kv"><span class="k">Compliance / region</span><span class="v">Luật data-residency mà mô hình region của R2 có thể không thoả.</span></div>
+  <div class="kv"><span class="k">Break-even</span><span class="v">Mức egress nơi lợi thế R2 hết còn vượt trội.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>R2 tính $0 egress + $0.015/GB storage; S3 tính $0.09/GB egress + $0.023/GB storage.</li><li>Cho media app 10 TB/tháng egress đó là ~$900 vs ~$20 — khoảng 46× rẻ hơn, do egress quyết định.</li><li>Ba lý do valid ở lại S3: ecosystem lock-in, compliance/region, và feature S3 nâng cao mà R2 thiếu.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2 pricing</span><span class="lc-sub">developers.cloudflare.com/r2/pricing — chính thức, cập nhật.</span></span></div>
@@ -244,6 +288,28 @@ But: for large single upload with checksums:
 <p><strong>One sentence.</strong> R2 quirks: region <code>&#39;auto&#39;</code> (required by the SDK but ignored by R2), <code>forcePathStyle: false</code> (virtual-hosted, for custom domains), and several S3 headers are silently ignored (storage class, SSE-KMS, requester pays, object lock) — check the R2 compatibility page before migrating S3-specific code.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Create an R2 client once with <code>region: &#39;auto&#39;</code>, then deliberately set <code>region: &#39;us-east-1&#39;</code> and confirm R2 behaves identically — the region is ignored.</li>
+<li>PutObject with <code>StorageClass: &#39;GLACIER&#39;</code> and a <code>requester-pays</code> flag, then HeadObject the result: the quirky headers were accepted and silently dropped.</li>
+<li>Open the R2 compatibility page and list three S3 features R2 does not support (e.g. SSE-KMS, object lock, requester pays).</li>
+<li>Grep your own upload code for any of those unsupported headers so you know what will silently no-op after a migration.</li>
+</ol>
+<p><strong>Done when:</strong> you have confirmed region is ignored, seen a header silently dropped, and listed three unsupported S3 features from the compat page.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">region: 'auto'</span><span class="v">SDK-required string; R2 has no regions and ignores the value.</span></div>
+  <div class="kv"><span class="k">forcePathStyle: false</span><span class="v">Virtual-hosted URLs (<code>bucket.host/key</code>) — needed for custom domains.</span></div>
+  <div class="kv"><span class="k">Silently ignored header</span><span class="v">Accepted by R2's API but with no effect (storage class, SSE-KMS…).</span></div>
+  <div class="kv"><span class="k">Compatibility page</span><span class="v">Cloudflare's list of which S3 features R2 does and does not implement.</span></div>
+  <div class="kv"><span class="k">SSE-KMS</span><span class="v">S3 key-managed encryption — not supported on R2.</span></div>
+  <div class="kv"><span class="k">Requester pays</span><span class="v">S3 billing mode shifting egress to the caller — no-op on R2.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>R2 needs <code>region: &#39;auto&#39;</code> (ignored) and <code>forcePathStyle: false</code> (virtual-hosted for custom domains).</li><li>Several S3 headers are accepted but silently ignored: storage class, SSE-KMS, requester pays, object lock.</li><li>Check the R2 compatibility page before migrating S3-specific code — silent no-ops are the trap.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — S3 API compatibility</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — chi tiết cái R2 support, cái không.</span></span></div>
 </div>
@@ -322,6 +388,28 @@ But: for large single upload with checksums:
 <p><strong>Một câu.</strong> R2 quirks: region <code>&#39;auto&#39;</code> (SDK required nhưng R2 ignore), <code>forcePathStyle: false</code> (virtual-hosted cho custom domain), một số S3 headers ignore silent (storage class, SSE-KMS, requester pays, object lock) — check R2 compat page trước migrate S3-specific code.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo client R2 một lần với <code>region: &#39;auto&#39;</code>, rồi cố ý set <code>region: &#39;us-east-1&#39;</code> và xác nhận R2 hành xử y hệt — region bị bỏ qua.</li>
+<li>PutObject với <code>StorageClass: &#39;GLACIER&#39;</code> và cờ <code>requester-pays</code>, rồi HeadObject kết quả: các header quirky được nhận và âm thầm bỏ.</li>
+<li>Mở trang R2 compatibility và liệt kê ba feature S3 mà R2 không hỗ trợ (vd: SSE-KMS, object lock, requester pays).</li>
+<li>Grep code upload của bạn tìm bất kỳ header không hỗ trợ nào để biết cái gì sẽ no-op âm thầm sau migration.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã xác nhận region bị bỏ qua, thấy một header bị bỏ âm thầm, và liệt kê ba feature S3 không hỗ trợ từ trang compat.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">region: 'auto'</span><span class="v">Chuỗi SDK yêu cầu; R2 không có region và bỏ qua giá trị.</span></div>
+  <div class="kv"><span class="k">forcePathStyle: false</span><span class="v">URL virtual-hosted (<code>bucket.host/key</code>) — cần cho custom domain.</span></div>
+  <div class="kv"><span class="k">Header bị bỏ âm thầm</span><span class="v">R2 nhận nhưng không có tác dụng (storage class, SSE-KMS…).</span></div>
+  <div class="kv"><span class="k">Compatibility page</span><span class="v">Danh sách Cloudflare về feature S3 nào R2 có và không có.</span></div>
+  <div class="kv"><span class="k">SSE-KMS</span><span class="v">Mã hoá quản-khoá của S3 — R2 không hỗ trợ.</span></div>
+  <div class="kv"><span class="k">Requester pays</span><span class="v">Chế độ billing S3 đẩy egress sang caller — no-op trên R2.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>R2 cần <code>region: &#39;auto&#39;</code> (bị bỏ qua) và <code>forcePathStyle: false</code> (virtual-hosted cho custom domain).</li><li>Một số header S3 được nhận nhưng âm thầm bỏ: storage class, SSE-KMS, requester pays, object lock.</li><li>Check trang R2 compatibility trước khi migrate code S3-specific — no-op âm thầm là cái bẫy.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — S3 API compatibility</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — chi tiết cái R2 support, cái không.</span></span></div>
 </div>
@@ -397,6 +485,28 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
 <p><strong>One sentence.</strong> R2 API tokens are long-lived and do not auto-rotate the way IAM STS credentials do — issue one per workload (backend, worker, admin) to limit the blast radius, rotate them quarterly and after any incident with a 24-hour overlap, and NEVER commit them to Git, ship them in a frontend bundle, bake them into a Docker image, or log them.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Issue TWO R2 API tokens with distinct names (e.g. <code>backend-prod</code>, <code>worker-thumbs</code>) so a leak of one does not expose the other.</li>
+<li>Put the keys in environment only; grep the repo for the key prefix and confirm zero hits in Git, the frontend bundle, and any <code>Dockerfile</code> <code>ENV</code>.</li>
+<li>Do one rotation: create the new token, deploy it, keep the old one live for a 24-hour overlap, then revoke the old one — write the four steps down as a runbook.</li>
+<li>Confirm your logger redacts secrets: log a request that carries the key and check the key does not appear in the output.</li>
+</ol>
+<p><strong>Done when:</strong> you have two per-workload tokens, zero keys in Git/bundle/image, and a written 4-step rotation runbook.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">R2 API token</span><span class="v">Long-lived access key; does not auto-expire like IAM STS.</span></div>
+  <div class="kv"><span class="k">Per-workload token</span><span class="v">One token per app/worker/admin, so a leak has a small blast radius.</span></div>
+  <div class="kv"><span class="k">Rotation</span><span class="v">Replacing a key on a schedule and after incidents.</span></div>
+  <div class="kv"><span class="k">Overlap window</span><span class="v">Old and new key both valid for ~24h so no request fails mid-rotation.</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">How much one leaked token can reach — minimised by scoping.</span></div>
+  <div class="kv"><span class="k">Secret redaction</span><span class="v">Logger masking so keys never reach log storage.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>R2 tokens are long-lived — no auto-rotation, so you own the rotation schedule.</li><li>One token per workload limits blast radius; rotate quarterly and after any incident with a 24h overlap.</li><li>Never commit a token to Git, ship it in a frontend bundle, bake it into an image, or log it.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — API tokens</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/tokens — tạo, permission, TTL.</span></span></div>
 </div>
@@ -462,6 +572,28 @@ MOI workload -&gt; MOT token. Neu 1 leak, xoa MOT token, khong break het.
 <div class="callout">
 <p><strong>Một câu.</strong> R2 API token là long-lived, không auto-rotate như IAM STS — tạo per-workload (backend, worker, admin) để limit blast radius, rotate quarterly + post-incident với overlap 24h, và KHÔNG BAO GIỜ commit vào Git, ship qua frontend bundle, bake vào Docker image, hay log output.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo HAI R2 API token với tên riêng (vd <code>backend-prod</code>, <code>worker-thumbs</code>) để lộ một cái không phơi cái kia.</li>
+<li>Đặt key chỉ trong environment; grep repo tìm prefix key và xác nhận không có hit nào trong Git, frontend bundle, và <code>ENV</code> của <code>Dockerfile</code>.</li>
+<li>Làm một lần rotate: tạo token mới, deploy, giữ token cũ sống thêm 24h overlap, rồi revoke cái cũ — ghi bốn bước đó thành runbook.</li>
+<li>Xác nhận logger che secret: log một request mang key và kiểm key không xuất hiện trong output.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có hai token per-workload, không key nào trong Git/bundle/image, và một runbook rotate 4 bước đã ghi.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">R2 API token</span><span class="v">Access key long-lived; không tự hết hạn như IAM STS.</span></div>
+  <div class="kv"><span class="k">Per-workload token</span><span class="v">Mỗi app/worker/admin một token, để lộ có blast radius nhỏ.</span></div>
+  <div class="kv"><span class="k">Rotation</span><span class="v">Thay key theo lịch và sau sự cố.</span></div>
+  <div class="kv"><span class="k">Overlap window</span><span class="v">Key cũ và mới cùng hợp lệ ~24h để không request nào fail giữa chừng.</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">Phạm vi một token lộ với tới — giảm bằng cách scope hẹp.</span></div>
+  <div class="kv"><span class="k">Secret redaction</span><span class="v">Logger che key để chúng không bao giờ vào log storage.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>R2 token là long-lived — không auto-rotate, nên bạn tự giữ lịch rotate.</li><li>Mỗi workload một token giới hạn blast radius; rotate hàng quý và sau mọi sự cố với overlap 24h.</li><li>Không bao giờ commit token vào Git, ship trong frontend bundle, bake vào image, hay log nó.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — API tokens</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/tokens — tạo, permission, TTL.</span></span></div>

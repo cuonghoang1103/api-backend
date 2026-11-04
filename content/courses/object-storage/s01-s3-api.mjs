@@ -82,6 +82,28 @@ r2: {
 <p><strong>One sentence.</strong> SDK v3 modular install (client-s3 + s3-request-presigner, ~450 KB total); lazy init pattern lets app boot without R2 credentials; R2-specific config = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep API endpoint (for upload) separate from public URL (for serving via CDN).</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>In a scratch project: <code>npm i @aws-sdk/client-s3 @aws-sdk/s3-request-presigner</code> and check the installed size with <code>du -sh node_modules/@aws-sdk</code>.</li>
+<li>Write a <code>getR2Client()</code> that builds the <code>S3Client</code> lazily (first call only) with <code>region: &#39;auto&#39;</code>, <code>forcePathStyle: false</code>, the R2 endpoint, and credentials from env.</li>
+<li>Prove the lazy init: import the module with NO R2 env vars set and confirm the process still boots (the client is only built when first called).</li>
+<li>Store two separate values — the API endpoint (used by the client for upload) and the public base URL (<code>media.cuongthai.com</code>, used to build serving URLs) — and write one line explaining why they must not be the same string.</li>
+</ol>
+<p><strong>Done when:</strong> the module imports with no credentials, the client builds on first use, and you can state why endpoint ≠ public URL.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">Modular S3 client; you install only the commands you use (~450 KB here).</span></div>
+  <div class="kv"><span class="k">S3Client</span><span class="v">The configured connection object that <code>.send()</code>s commands.</span></div>
+  <div class="kv"><span class="k">Lazy init</span><span class="v">Build the client on first use so the app boots without credentials.</span></div>
+  <div class="kv"><span class="k">region: 'auto'</span><span class="v">Required by the SDK, ignored by R2 (R2 has no regions).</span></div>
+  <div class="kv"><span class="k">forcePathStyle</span><span class="v"><code>false</code> = virtual-hosted URLs, needed for custom domains.</span></div>
+  <div class="kv"><span class="k">API endpoint vs public URL</span><span class="v">One for authenticated upload, one for CDN serving — never the same.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>SDK v3 is modular: install <code>client-s3</code> + <code>s3-request-presigner</code> (~450 KB), not a monolith.</li><li>Lazy init lets the app start without R2 credentials — the client is built on first call.</li><li>R2 config is <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; keep the API endpoint (upload) separate from the public CDN URL (serving).</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — S3</span><span class="lc-sub">docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3 — official docs.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare R2 — API compatibility</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — what R2 supports (~90% of S3 API).</span></span></div>
@@ -155,6 +177,28 @@ r2: {
 <div class="callout">
 <p><strong>Một câu.</strong> SDK v3 modular install (client-s3 + s3-request-presigner, ~450 KB total); pattern lazy init cho app boot mà không cần R2 credential; config R2-specific = <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (cho upload) riêng public URL (cho serving qua CDN).</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Trong một project nháp: <code>npm i @aws-sdk/client-s3 @aws-sdk/s3-request-presigner</code> rồi xem size đã cài bằng <code>du -sh node_modules/@aws-sdk</code>.</li>
+<li>Viết một <code>getR2Client()</code> dựng <code>S3Client</code> kiểu lazy (chỉ ở lần gọi đầu) với <code>region: &#39;auto&#39;</code>, <code>forcePathStyle: false</code>, endpoint R2, và credential từ env.</li>
+<li>Chứng minh lazy init: import module KHÔNG set env R2 nào và xác nhận tiến trình vẫn boot (client chỉ dựng khi được gọi lần đầu).</li>
+<li>Lưu hai giá trị riêng — API endpoint (client dùng để upload) và public base URL (<code>media.cuongthai.com</code>, dùng để dựng URL serving) — và viết một dòng giải thích vì sao chúng không được là cùng một chuỗi.</li>
+</ol>
+<p><strong>Đạt khi:</strong> module import được khi không có credential, client dựng ở lần dùng đầu, và bạn nói được vì sao endpoint ≠ public URL.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">AWS SDK v3</span><span class="v">S3 client modular; chỉ cài command bạn dùng (~450 KB ở đây).</span></div>
+  <div class="kv"><span class="k">S3Client</span><span class="v">Object kết nối đã cấu hình, <code>.send()</code> các command.</span></div>
+  <div class="kv"><span class="k">Lazy init</span><span class="v">Dựng client ở lần dùng đầu để app boot không cần credential.</span></div>
+  <div class="kv"><span class="k">region: 'auto'</span><span class="v">SDK yêu cầu, R2 bỏ qua (R2 không có region).</span></div>
+  <div class="kv"><span class="k">forcePathStyle</span><span class="v"><code>false</code> = URL virtual-hosted, cần cho custom domain.</span></div>
+  <div class="kv"><span class="k">API endpoint vs public URL</span><span class="v">Một để upload có auth, một để serving qua CDN — không bao giờ giống nhau.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>SDK v3 modular: cài <code>client-s3</code> + <code>s3-request-presigner</code> (~450 KB), không phải một khối lớn.</li><li>Lazy init cho app khởi động không cần credential R2 — client dựng ở lần gọi đầu.</li><li>Config R2 là <code>region: &#39;auto&#39;</code> + <code>forcePathStyle: false</code>; giữ API endpoint (upload) riêng public CDN URL (serving).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK v3 — S3</span><span class="lc-sub">docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/client/s3 — docs chính thức.</span></span></div>
@@ -268,13 +312,28 @@ await client.send(new DeleteObjectsCommand({
 <p><strong>One sentence.</strong> Four core operations: PutObject (upload, with ContentType + CacheControl MANDATORY), GetObject (streams the body; this repo rarely uses it because of the CDN), HeadObject (metadata only, cheap), and DeleteObject/DeleteObjects (batches of up to 1000, silent on missing keys) — 90% of S3 code uses only these four.</p>
 </div>
 
-<h3>The four operations, and what each one costs</h3>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">PutObject — write</span><span class="lz-d">A Class A request, billed at the higher rate. Overwriting an existing key is a Put too — there is no cheaper &quot;update&quot;.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">GetObject — read the bytes</span><span class="lz-d">Class B, plus egress if the caller is outside the provider's network. On S3 the egress is usually the whole bill.</span></div>
-  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">HeadObject — metadata only</span><span class="lz-d">Same headers as a Get, no body. Use it to check existence or size without paying to transfer the object.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DeleteObject(s) — remove</span><span class="lz-d">Free or near-free, and <code>DeleteObjects</code> takes up to 1000 keys in one request. Deleting one at a time in a loop is the expensive way to do a cheap thing.</span></div>
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li><code>PutObject</code> a small file WITH <code>ContentType</code> and <code>CacheControl</code> set; then PUT one WITHOUT them and compare how the browser treats each when you open the URL.</li>
+<li><code>HeadObject</code> the key and read <code>ContentLength</code>, <code>ContentType</code>, <code>ETag</code>, <code>LastModified</code> — confirm it transfers metadata only (no body, Class B, near-free).</li>
+<li><code>DeleteObject</code> a key that does NOT exist and observe it returns success (S3 delete is idempotent / silent on missing).</li>
+<li><code>DeleteObjects</code> a batch of 3 keys in one call and note the per-key result array; batches go up to 1000.</li>
+</ol>
+<p><strong>Done when:</strong> you have run all four, seen the no-ContentType browser difference, and confirmed delete is silent on a missing key.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PutObject</span><span class="v">Upload (full replace); set <code>ContentType</code> + <code>CacheControl</code> or the CDN misbehaves.</span></div>
+  <div class="kv"><span class="k">GetObject</span><span class="v">Streams the body; rare here because the CDN serves reads.</span></div>
+  <div class="kv"><span class="k">HeadObject</span><span class="v">Metadata only, no body — cheap existence/size check.</span></div>
+  <div class="kv"><span class="k">DeleteObject(s)</span><span class="v">Single or batch (≤1000) delete; silent on missing keys.</span></div>
+  <div class="kv"><span class="k">ContentType</span><span class="v">The MIME type stored on the object; wrong value = wrong browser handling.</span></div>
+  <div class="kv"><span class="k">Idempotent delete</span><span class="v">Deleting a non-existent key still returns success.</span></div>
 </div>
+
+<h3>📌 Summary</h3>
+<ul><li>Four operations cover ~90% of S3 code: Put, Get, Head, Delete.</li><li><code>ContentType</code> + <code>CacheControl</code> on PutObject are mandatory for correct CDN/browser behaviour.</li><li>HeadObject is a cheap metadata-only read; DeleteObjects batches up to 1000 and is silent on missing keys.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — API operations</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API — full list, 60+ operations.</span></span></div>
 </div>
@@ -377,13 +436,28 @@ await client.send(new DeleteObjectsCommand({
 <p><strong>Một câu.</strong> Bốn core operation: PutObject (upload với ContentType + CacheControl BẮT BUỘC), GetObject (stream body, kho này ít dùng vì CDN), HeadObject (chỉ metadata, rẻ), DeleteObject/DeleteObjects (batch tới 1000, silent khi missing) — 90% code S3 chỉ dùng bốn cái này.</p>
 </div>
 
-<h3>Bốn thao tác, và mỗi cái tốn gì</h3>
-<div class="lz-flow">
-  <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">PutObject — ghi</span><span class="lz-d">Một request Class A, tính giá cao hơn. Ghi đè lên một khoá đã có cũng là một Put — không có thao tác &quot;cập nhật&quot; nào rẻ hơn.</span></div>
-  <div class="lz-step"><span class="lz-k">2</span><span class="lz-t">GetObject — đọc các byte</span><span class="lz-d">Class B, cộng phí truyền ra nếu bên gọi nằm ngoài mạng của nhà cung cấp. Trên S3 thì phí truyền ra thường là toàn bộ hoá đơn.</span></div>
-  <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">HeadObject — chỉ lấy siêu dữ liệu</span><span class="lz-d">Cùng bộ header như Get, không có thân. Hãy dùng nó để kiểm sự tồn tại hay kích thước mà không phải trả tiền truyền cả object.</span></div>
-  <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">DeleteObject(s) — xoá</span><span class="lz-d">Miễn phí hoặc gần như miễn phí, và <code>DeleteObjects</code> nhận tới 1000 khoá trong một request. Xoá từng cái một trong vòng lặp là cách đắt đỏ để làm một việc rẻ tiền.</span></div>
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li><code>PutObject</code> một file nhỏ CÓ set <code>ContentType</code> và <code>CacheControl</code>; rồi PUT một file KHÔNG set, mở URL và so cách browser xử lý mỗi cái.</li>
+<li><code>HeadObject</code> key đó và đọc <code>ContentLength</code>, <code>ContentType</code>, <code>ETag</code>, <code>LastModified</code> — xác nhận nó chỉ truyền metadata (không body, Class B, gần như miễn phí).</li>
+<li><code>DeleteObject</code> một key KHÔNG tồn tại và quan sát nó trả success (delete S3 idempotent / silent khi missing).</li>
+<li><code>DeleteObjects</code> một batch 3 key trong một lời gọi và xem mảng kết quả per-key; batch lên tới 1000.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn đã chạy đủ bốn, thấy khác biệt browser khi thiếu ContentType, và xác nhận delete silent với key missing.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">PutObject</span><span class="v">Upload (replace nguyên object); set <code>ContentType</code> + <code>CacheControl</code> kẻo CDN sai.</span></div>
+  <div class="kv"><span class="k">GetObject</span><span class="v">Stream body; hiếm dùng ở đây vì CDN serve read.</span></div>
+  <div class="kv"><span class="k">HeadObject</span><span class="v">Chỉ metadata, không body — kiểm tồn tại/size rẻ.</span></div>
+  <div class="kv"><span class="k">DeleteObject(s)</span><span class="v">Xoá đơn hoặc batch (≤1000); silent với key missing.</span></div>
+  <div class="kv"><span class="k">ContentType</span><span class="v">MIME type lưu trên object; sai giá trị = browser xử lý sai.</span></div>
+  <div class="kv"><span class="k">Idempotent delete</span><span class="v">Xoá một key không tồn tại vẫn trả success.</span></div>
 </div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bốn operation bao ~90% code S3: Put, Get, Head, Delete.</li><li><code>ContentType</code> + <code>CacheControl</code> trên PutObject là bắt buộc để CDN/browser đúng.</li><li>HeadObject là read chỉ-metadata rẻ; DeleteObjects batch tới 1000 và silent với key missing.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS S3 — API operations</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API — full list, 60+ operations.</span></span></div>
 </div>
@@ -492,6 +566,28 @@ for (const u of uploads.Uploads ?? []) {
 <p><strong>One sentence.</strong> Multipart upload splits a file of 100 MB or more into parts of 10 MB-5 GB (max 10,000 parts), uploads them in parallel, and stitches them atomically with three commands; use the SDK <code>Upload</code> class rather than writing it yourself; abandoned uploads keep costing money — add a lifecycle rule that aborts them after 7 days.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Upload a 100+ MB file with the SDK <code>Upload</code> class (from <code>@aws-sdk/lib-storage</code>), setting <code>queueSize</code> and <code>partSize</code>, and log the progress events.</li>
+<li>Inspect the finished object's <code>ETag</code> — note it ends in <code>-N</code> (part count), so it is NOT a plain MD5.</li>
+<li>Start a multipart upload and kill the process before completing it; then run <code>ListMultipartUploads</code> and see the orphaned upload still holding (billable) storage.</li>
+<li>Write the lifecycle rule that aborts incomplete multipart uploads after 7 days (you will apply it in Chapter 6).</li>
+</ol>
+<p><strong>Done when:</strong> a large file uploaded via <code>Upload</code>, you have seen the <code>-N</code> ETag, and you have found an orphaned upload with <code>ListMultipartUploads</code>.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Multipart upload</span><span class="v">Split a large file into parts, upload in parallel, stitch atomically.</span></div>
+  <div class="kv"><span class="k">Part</span><span class="v">10 MB–5 GB chunk; up to 10,000 parts per object.</span></div>
+  <div class="kv"><span class="k">Upload class</span><span class="v"><code>@aws-sdk/lib-storage</code> helper that manages parts and retries for you.</span></div>
+  <div class="kv"><span class="k">CreateMultipartUpload / UploadPart / CompleteMultipartUpload</span><span class="v">The three commands the helper wraps.</span></div>
+  <div class="kv"><span class="k">Orphaned upload</span><span class="v">An incomplete multipart upload still billed until aborted.</span></div>
+  <div class="kv"><span class="k">AbortIncompleteMultipartUpload</span><span class="v">The lifecycle action that cleans orphans after N days.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Files ≥100 MB go up as multipart: parts of 10 MB–5 GB (max 10,000), uploaded in parallel and stitched atomically.</li><li>Use the SDK <code>Upload</code> class instead of hand-rolling the three commands.</li><li>Abandoned multipart uploads keep costing money — a lifecycle rule must abort them (7 days here).</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK — @aws-sdk/lib-storage</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/lib/lib-storage — high-level Upload helper.</span></span></div>
 </div>
@@ -590,6 +686,28 @@ for (const u of uploads.Uploads ?? []) {
 <div class="callout">
 <p><strong>Một câu.</strong> Multipart upload chia file &gt;=100 MB thành part 10 MB-5 GB (max 10.000 part), upload parallel, stitch atomic với 3 command; dùng SDK <code>Upload</code> class thay tự viết; abandoned upload chiếm cost — add lifecycle rule abort sau 7 ngày.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Upload một file 100+ MB bằng SDK <code>Upload</code> class (từ <code>@aws-sdk/lib-storage</code>), set <code>queueSize</code> và <code>partSize</code>, log các event tiến độ.</li>
+<li>Xem <code>ETag</code> object đã xong — để ý nó kết thúc bằng <code>-N</code> (số part), nên KHÔNG phải MD5 trần.</li>
+<li>Bắt đầu một multipart upload rồi kill tiến trình trước khi complete; chạy <code>ListMultipartUploads</code> và thấy upload mồ côi vẫn giữ storage (tính tiền).</li>
+<li>Viết lifecycle rule abort multipart upload dở sau 7 ngày (bạn sẽ áp ở Chương 6).</li>
+</ol>
+<p><strong>Đạt khi:</strong> một file lớn upload qua <code>Upload</code>, bạn đã thấy ETag <code>-N</code>, và tìm được một upload mồ côi bằng <code>ListMultipartUploads</code>.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Multipart upload</span><span class="v">Chia file lớn thành part, upload parallel, stitch atomic.</span></div>
+  <div class="kv"><span class="k">Part</span><span class="v">Chunk 10 MB–5 GB; tối đa 10.000 part mỗi object.</span></div>
+  <div class="kv"><span class="k">Upload class</span><span class="v">Helper <code>@aws-sdk/lib-storage</code> tự quản part và retry.</span></div>
+  <div class="kv"><span class="k">CreateMultipartUpload / UploadPart / CompleteMultipartUpload</span><span class="v">Ba command mà helper bọc lại.</span></div>
+  <div class="kv"><span class="k">Orphaned upload</span><span class="v">Multipart upload dở vẫn bị tính tiền tới khi abort.</span></div>
+  <div class="kv"><span class="k">AbortIncompleteMultipartUpload</span><span class="v">Action lifecycle dọn mồ côi sau N ngày.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>File ≥100 MB đi multipart: part 10 MB–5 GB (max 10.000), upload parallel và stitch atomic.</li><li>Dùng SDK <code>Upload</code> class thay vì tự viết ba command.</li><li>Multipart upload bỏ dở vẫn tốn tiền — một lifecycle rule phải abort chúng (7 ngày ở đây).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SDK — @aws-sdk/lib-storage</span><span class="lc-sub">github.com/aws/aws-sdk-js-v3/tree/main/lib/lib-storage — high-level Upload helper.</span></span></div>

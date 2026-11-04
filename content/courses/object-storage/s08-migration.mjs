@@ -158,6 +158,28 @@ Failure 2 — mid-run S3 permission change
 <p><strong>One sentence.</strong> Super Slurper is a Cloudflare-hosted, IAM-authorized, one-way, one-shot S3-to-R2 copier that handles rate limits and retries itself; you pay AWS egress ($0.09/GB), you pay Cloudflare $0 for the tool, and you get typical throughput of 1-5 TB/day with object count driving the ceiling more than total bytes — use it whenever the source is stable enough to freeze for a few hours, and pair it with a dual-write or a follow-up sync for anything larger or still receiving uploads.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Configure rclone (or the AWS CLI) with two remotes: an S3 source, and an R2 remote whose endpoint is <code>https://&lt;account-id&gt;.r2.cloudflarestorage.com</code> with <code>region = auto</code>.</li>
+<li>Dry-run a copy of ONE prefix (for example <code>avatars/</code>): <code>rclone copy --dry-run s3:bucket/avatars r2:bucket/avatars</code> — nothing is written.</li>
+<li>Read the object count and total bytes the dry-run reports; estimate the one-time AWS egress at bytes &times; $0.09/GB.</li>
+<li>Decide for that prefix: is the source stable enough to freeze for the copy window, or is it still receiving uploads (then you need the dual-write of lesson 8.2)?</li>
+</ol>
+<p><strong>Done when:</strong> you have the prefix's object count, byte total, an egress estimate, and a freeze-vs-dual-write decision.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Super Slurper</span><span class="v">Cloudflare's hosted one-shot S3→R2 copier; retries and rate-limits itself.</span></div>
+  <div class="kv"><span class="k">Migration egress</span><span class="v">The AWS $0.09/GB you pay once to read the source out.</span></div>
+  <div class="kv"><span class="k">Dry-run</span><span class="v">A copy that lists and counts but writes nothing (<code>--dry-run</code>).</span></div>
+  <div class="kv"><span class="k">Freeze window</span><span class="v">A span where the source takes no new writes, so one shot is complete.</span></div>
+  <div class="kv"><span class="k">Object-count ceiling</span><span class="v">Throughput is limited by number of objects more than total bytes.</span></div>
+  <div class="kv"><span class="k">R2 endpoint</span><span class="v"><code>https://&lt;account&gt;.r2.cloudflarestorage.com</code> — the S3-compatible API host.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Super Slurper is a one-way, one-shot, self-retrying copier — $0 for the tool, AWS egress for the bytes.</li><li>Throughput (1–5 TB/day typical) is driven by object count more than total size.</li><li>Use it when the source can be frozen; pair it with dual-write (8.2) when the source still takes uploads.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Super Slurper</span><span class="lc-sub">developers.cloudflare.com/r2/data-migration/super-slurper — the managed migration tool, config walkthrough.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — S3 request rate performance</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/optimizing-performance.html — the 5,500 GET/s per-prefix limit.</span></span></div>
@@ -306,6 +328,28 @@ Fail 2 — thay đổi permission S3 giữa run
 <div class="callout">
 <p><strong>Một câu.</strong> Super Slurper là copier S3-to-R2 hosted-Cloudflare, IAM-authorized, một chiều, một shot xử rate limit và retry tự; bạn trả AWS egress ($0.09/GB), trả Cloudflare $0 cho tool, và được throughput điển hình 1-5 TB/ngày với số object driving trần hơn tổng byte — dùng khi source ổn định đủ để freeze vài giờ, và cặp với dual-write hoặc sync follow-up cho bất cứ gì lớn hơn hoặc vẫn nhận upload.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Cấu hình rclone (hoặc AWS CLI) với hai remote: nguồn S3, và remote R2 có endpoint <code>https://&lt;account-id&gt;.r2.cloudflarestorage.com</code> với <code>region = auto</code>.</li>
+<li>Dry-run copy MỘT prefix (ví dụ <code>avatars/</code>): <code>rclone copy --dry-run s3:bucket/avatars r2:bucket/avatars</code> — không ghi gì cả.</li>
+<li>Đọc số object và tổng byte dry-run báo; ước lượng AWS egress một lần = byte &times; $0.09/GB.</li>
+<li>Quyết cho prefix đó: source có ổn định đủ để freeze trong cửa sổ copy không, hay vẫn đang nhận upload (thì cần dual-write ở bài 8.2)?</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có số object của prefix, tổng byte, ước lượng egress, và quyết định freeze-hay-dual-write.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Super Slurper</span><span class="v">Copier S3→R2 một-shot do Cloudflare host; tự retry và tự rate-limit.</span></div>
+  <div class="kv"><span class="k">Migration egress</span><span class="v">Khoản AWS $0.09/GB trả một lần để đọc nguồn ra.</span></div>
+  <div class="kv"><span class="k">Dry-run</span><span class="v">Lượt copy chỉ liệt kê và đếm, không ghi gì (<code>--dry-run</code>).</span></div>
+  <div class="kv"><span class="k">Freeze window</span><span class="v">Khoảng thời gian nguồn không nhận ghi mới, để một shot là đủ.</span></div>
+  <div class="kv"><span class="k">Object-count ceiling</span><span class="v">Throughput bị giới hạn bởi số object hơn là tổng byte.</span></div>
+  <div class="kv"><span class="k">R2 endpoint</span><span class="v"><code>https://&lt;account&gt;.r2.cloudflarestorage.com</code> — host API tương thích S3.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Super Slurper là copier một chiều, một shot, tự retry — $0 cho tool, trả AWS egress cho byte.</li><li>Throughput (điển hình 1–5 TB/ngày) do số object quyết định hơn là tổng dung lượng.</li><li>Dùng khi nguồn freeze được; cặp với dual-write (8.2) khi nguồn vẫn nhận upload.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Super Slurper</span><span class="lc-sub">developers.cloudflare.com/r2/data-migration/super-slurper — tool migration managed, hướng dẫn config.</span></span></div>
@@ -464,6 +508,28 @@ ETag between S3 and R2 for every recently-modified key.
 <p><strong>One sentence.</strong> The Sipper pattern layers a dual-write (primary S3, secondary R2 fire-and-forget) plus a read-fallback (R2 first, S3 on 404, opportunistic backfill) on top of a Super Slurper backfill, so users see zero downtime and no lost writes while the migration completes; you cutover in three phases — dual-write ON reads from S3, reads flip to R2, then dual-write OFF R2-only — each reversible by a single deploy.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Write pseudocode for a dual-write wrapper: PUT to S3 (primary, awaited), then a fire-and-forget PUT to R2 whose failure is logged but never blocks the user.</li>
+<li>Write the read-fallback: GET from R2; on 404, GET from S3 and opportunistically backfill that object into R2 before returning it.</li>
+<li>List the three cutover phases and the ONE config flag that flips each (dual-write on, reads→R2, dual-write off).</li>
+<li>For each phase, state its rollback — a single deploy flipping the flag back — and confirm no phase loses a write.</li>
+</ol>
+<p><strong>Done when:</strong> you can name all three phases, the flag that flips each, and the one-deploy rollback for each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Dual-write</span><span class="v">Write to S3 (primary) and R2 (secondary) on every upload.</span></div>
+  <div class="kv"><span class="k">Fire-and-forget</span><span class="v">The secondary write whose failure is logged, not surfaced to the user.</span></div>
+  <div class="kv"><span class="k">Read-fallback</span><span class="v">Read R2 first, fall back to S3 on a 404.</span></div>
+  <div class="kv"><span class="k">Opportunistic backfill</span><span class="v">Copying an object into R2 the moment a fallback read finds it missing.</span></div>
+  <div class="kv"><span class="k">Cutover phase</span><span class="v">One reversible step of the migration, flipped by a single flag.</span></div>
+  <div class="kv"><span class="k">Reversible deploy</span><span class="v">A rollback that is one flag change and one deploy, no data move.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Sipper = dual-write + read-fallback + backfill layered on a Super Slurper copy, for zero downtime and no lost writes.</li><li>Cut over in three phases: dual-write on (read S3) → reads flip to R2 → dual-write off (R2 only).</li><li>Each phase is one flag and reversible by a single deploy — never a one-way door.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Sippy (incremental migration)</span><span class="lc-sub">developers.cloudflare.com/r2/data-migration/sippy — Cloudflare's built-in read-through migration for R2.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">GitLab — Zero-downtime storage migration</span><span class="lc-sub">about.gitlab.com/blog/2022/02/24/zero-downtime-storage-migration — dual-write case study.</span></span></div>
@@ -610,6 +676,28 @@ ETag giữa S3 và R2 cho mọi key gần-modified.
 <div class="callout">
 <p><strong>Một câu.</strong> Pattern Sipper lớp một dual-write (primary S3, secondary R2 fire-and-forget) plus read-fallback (R2 trước, S3 khi 404, backfill opportunistic) lên trên backfill Super Slurper, nên user thấy zero downtime và không mất write khi migration xong; cutover ba phase — dual-write ON đọc từ S3, đọc flip sang R2, rồi dual-write OFF chỉ R2 — mỗi cái reversible bằng một deploy.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Viết pseudocode wrapper dual-write: PUT lên S3 (primary, có await), rồi PUT fire-and-forget lên R2 mà lỗi chỉ log chứ không chặn user.</li>
+<li>Viết read-fallback: GET từ R2; khi 404, GET từ S3 rồi backfill opportunistic object đó vào R2 trước khi trả về.</li>
+<li>Liệt kê ba phase cutover và MỘT config flag flip mỗi phase (dual-write on, reads→R2, dual-write off).</li>
+<li>Với mỗi phase, nêu rollback — một deploy flip flag về — và xác nhận không phase nào mất write.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn gọi được tên cả ba phase, flag flip mỗi phase, và rollback-một-deploy cho mỗi phase.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Dual-write</span><span class="v">Ghi cả S3 (primary) và R2 (secondary) ở mỗi upload.</span></div>
+  <div class="kv"><span class="k">Fire-and-forget</span><span class="v">Lượt ghi secondary mà lỗi chỉ log, không đẩy ra cho user.</span></div>
+  <div class="kv"><span class="k">Read-fallback</span><span class="v">Đọc R2 trước, lùi về S3 khi gặp 404.</span></div>
+  <div class="kv"><span class="k">Opportunistic backfill</span><span class="v">Copy object vào R2 ngay khi một read-fallback thấy nó thiếu.</span></div>
+  <div class="kv"><span class="k">Cutover phase</span><span class="v">Một bước migration reversible, flip bằng một flag duy nhất.</span></div>
+  <div class="kv"><span class="k">Reversible deploy</span><span class="v">Rollback chỉ là đổi một flag và một deploy, không dời dữ liệu.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Sipper = dual-write + read-fallback + backfill lớp lên một bản copy Super Slurper, để zero downtime và không mất write.</li><li>Cutover ba phase: dual-write on (đọc S3) → đọc flip sang R2 → dual-write off (chỉ R2).</li><li>Mỗi phase là một flag và reversible bằng một deploy — không bao giờ là cửa một chiều.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Sippy (migration tăng dần)</span><span class="lc-sub">developers.cloudflare.com/r2/data-migration/sippy — migration built-in read-through cho R2.</span></span></div>
@@ -806,6 +894,28 @@ for (const line of lines) {
 <p><strong>One sentence.</strong> Verify a migration with two layers: (1) an ETag <code>HeadObject</code> scan across 100% of keys, cheap enough to run for under $5 on 4M objects, which flags MISSING / ETag-mismatch / multipart-difference; and (2) a stratified byte-hash sample of ~500 objects across small-medium-large buckets to catch anything the ETag algorithm cannot see; only after Layer 1 mismatches are repaired and Layer 2 hashes match should you flip reads to R2.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pick ~50 keys. Run <code>HeadObject</code> against both S3 and R2 and compare the ETag of each (Class B, pennies).</li>
+<li>Sort every mismatch into one of three buckets: MISSING on R2, ETag-mismatch, or multipart-difference (ETag ends in <code>-N</code> on one side only).</li>
+<li>Take a stratified sample — a few small, medium and large objects — download both copies and compare a real <code>sha256</code>, catching corruption an ETag cannot.</li>
+<li>Write the flip gate as a rule: flip reads to R2 only after Layer-1 mismatches are repaired AND every Layer-2 hash matches.</li>
+</ol>
+<p><strong>Done when:</strong> you have a categorised mismatch list and a pass/fail flip gate you would act on.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ETag</span><span class="v">The object's content fingerprint; MD5 for a simple single-part upload.</span></div>
+  <div class="kv"><span class="k">HeadObject scan</span><span class="v">Metadata-only reads over every key — cheap Class B, no bytes moved.</span></div>
+  <div class="kv"><span class="k">Multipart ETag</span><span class="v"><code>hash-N</code> form (N = part count); never a plain MD5, so it differs across tools.</span></div>
+  <div class="kv"><span class="k">Stratified sample</span><span class="v">A sample spread across small/medium/large so size bias cannot hide corruption.</span></div>
+  <div class="kv"><span class="k">Byte hash</span><span class="v">A real <code>sha256</code> of downloaded bytes — the ground truth an ETag approximates.</span></div>
+  <div class="kv"><span class="k">Flip gate</span><span class="v">The pass/fail rule that must hold before reads move to R2.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Layer 1: an ETag <code>HeadObject</code> scan over 100% of keys flags MISSING / mismatch / multipart-difference for under $5 on millions of objects.</li><li>Layer 2: a stratified <code>sha256</code> sample catches corruption the ETag algorithm cannot see.</li><li>Flip reads to R2 only after Layer-1 is repaired and every Layer-2 hash matches.</li></ul>
+
 <h3>Verifying a migration in two layers</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Layer 1 — compare ETags for everything</span><span class="lz-d">Cheap, and it catches the common failures: a missing object, a truncated upload, a key that landed under the wrong prefix.</span></div>
@@ -1000,6 +1110,28 @@ for (const line of lines) {
 <div class="callout">
 <p><strong>Một câu.</strong> Verify migration với hai lớp: (1) scan ETag <code>HeadObject</code> trên 100% key, đủ rẻ chạy dưới $5 trên 4M object, flag MISSING / ETag-mismatch / khác-biệt-multipart; và (2) mẫu stratified byte-hash ~500 object trên bucket nhỏ-trung-lớn để bắt điều thuật toán ETag không thấy; chỉ sau khi mismatch Lớp 1 vá và hash Lớp 2 match thì flip đọc sang R2.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chọn ~50 key. Chạy <code>HeadObject</code> trên cả S3 và R2 rồi so ETag từng cái (Class B, vài xu).</li>
+<li>Xếp mỗi mismatch vào một trong ba nhóm: MISSING trên R2, ETag-mismatch, hoặc khác-biệt-multipart (ETag kết thúc <code>-N</code> chỉ một bên).</li>
+<li>Lấy mẫu stratified — vài object nhỏ, trung, lớn — tải cả hai bản xuống và so <code>sha256</code> thật, bắt corruption mà ETag không thấy.</li>
+<li>Viết flip gate thành luật: chỉ flip đọc sang R2 sau khi mismatch Lớp 1 đã vá VÀ mọi hash Lớp 2 match.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có danh sách mismatch đã phân loại và một flip gate pass/fail bạn sẽ hành động theo.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">ETag</span><span class="v">Vân tay nội dung của object; là MD5 với upload single-part đơn giản.</span></div>
+  <div class="kv"><span class="k">HeadObject scan</span><span class="v">Đọc chỉ-metadata trên mọi key — Class B rẻ, không dời byte.</span></div>
+  <div class="kv"><span class="k">Multipart ETag</span><span class="v">Dạng <code>hash-N</code> (N = số part); không phải MD5 trần nên khác giữa các tool.</span></div>
+  <div class="kv"><span class="k">Stratified sample</span><span class="v">Mẫu trải đều nhỏ/trung/lớn để kích thước không che được corruption.</span></div>
+  <div class="kv"><span class="k">Byte hash</span><span class="v"><code>sha256</code> thật của byte tải xuống — sự thật gốc mà ETag xấp xỉ.</span></div>
+  <div class="kv"><span class="k">Flip gate</span><span class="v">Luật pass/fail phải thoả trước khi đọc chuyển sang R2.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Lớp 1: scan ETag <code>HeadObject</code> trên 100% key, flag MISSING / mismatch / khác-biệt-multipart với dưới $5 trên hàng triệu object.</li><li>Lớp 2: mẫu stratified <code>sha256</code> bắt corruption mà thuật toán ETag không thấy.</li><li>Chỉ flip đọc sang R2 sau khi Lớp 1 đã vá và mọi hash Lớp 2 match.</li></ul>
 
 <h3>Xác minh một lần di trú theo hai lớp</h3>
 <div class="lz-flow">

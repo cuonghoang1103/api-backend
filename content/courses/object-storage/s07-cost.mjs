@@ -129,6 +129,28 @@ And scale the objects to 100M:
 <p><strong>One sentence.</strong> Object-storage bills are five line items (storage, Class A writes, Class B reads, egress, infra fees) not one; R2's headline win is zero-egress which typically makes it 6-13× cheaper than S3 for browser- and CDN-facing apps, but on internal-only or CloudFront-fronted workloads the two are within 30%, and the sneakiest cost driver on either service is Class A from over-frequent LIST operations.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Pull one month of real usage from the R2 dashboard (Metrics) or your billing API: storage GB-month, Class A count, Class B count, egress GB.</li>
+<li>Compute the R2 bill by hand: storage GB &times; $0.015 + Class A (per million &times; $4.50) + Class B (per million &times; $0.36); egress is $0.</li>
+<li>Compute the SAME traffic on S3: storage &times; $0.023 + egress GB &times; $0.09 + Class A/B at S3 rates. Write down the ratio R2 : S3.</li>
+<li>Find your single biggest line item. If it is Class A, grep the code for <code>ListObjectsV2</code> / LIST calls on a hot path and move that tracking into the database.</li>
+</ol>
+<p><strong>Done when:</strong> you have two monthly totals (R2 vs S3) and can name the one line item that dominates each.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Storage (GB-month)</span><span class="v">Bytes held &times; time; R2 $0.015/GB, S3 $0.023/GB.</span></div>
+  <div class="kv"><span class="k">Class A operation</span><span class="v">Writes and LIST (PUT, POST, COPY, LIST) — the expensive class.</span></div>
+  <div class="kv"><span class="k">Class B operation</span><span class="v">Reads (GET, HEAD) — roughly 10&times; cheaper than Class A.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Bytes served out; $0 on R2, $0.09/GB on S3 — the headline difference.</span></div>
+  <div class="kv"><span class="k">Line item</span><span class="v">One billed dimension; a storage bill has five, not one.</span></div>
+  <div class="kv"><span class="k">Steady state</span><span class="v">Your normal monthly spend — the baseline an alert multiplies.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A storage bill is five line items (storage, Class A, Class B, egress, infra fees), not a single number.</li><li>R2's zero egress makes it 6–13&times; cheaper than S3 for browser/CDN apps; on internal or CloudFront-fronted traffic the two land within 30%.</li><li>The sneakiest driver on either service is Class A from over-frequent LIST — track keys in your DB so you never list a hot path.</li></ul>
+
 <h3>Reading an object-storage bill</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Storage — per GB-month</span><span class="lz-d">The number everyone compares, and usually the smallest line on a bill with real traffic.</span></div>
@@ -261,6 +283,28 @@ Và scale object lên 100M:
 <p><strong>Một câu.</strong> Bill object-storage là năm line item (storage, Class A ghi, Class B đọc, egress, phí infra) không phải một; win headline của R2 là zero-egress thường làm nó rẻ 6-13× so S3 cho app browser- và CDN-facing, nhưng trên workload chỉ-internal hoặc CloudFront-fronted hai cái trong 30% nhau, và cost driver nham hiểm nhất trên cả hai service là Class A từ LIST operation quá thường xuyên.</p>
 </div>
 
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Lấy một tháng usage thật từ dashboard R2 (Metrics) hoặc billing API: storage GB-tháng, số Class A, số Class B, egress GB.</li>
+<li>Tính bill R2 bằng tay: storage GB &times; $0.015 + Class A (mỗi triệu &times; $4.50) + Class B (mỗi triệu &times; $0.36); egress là $0.</li>
+<li>Tính CÙNG traffic đó trên S3: storage &times; $0.023 + egress GB &times; $0.09 + Class A/B theo giá S3. Ghi lại tỉ lệ R2 : S3.</li>
+<li>Tìm line item lớn nhất. Nếu là Class A, grep code tìm <code>ListObjectsV2</code> / LIST trên hot path và chuyển việc tracking đó vào database.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có hai tổng chi phí tháng (R2 vs S3) và gọi được tên line item chiếm chủ đạo của mỗi bên.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Storage (GB-tháng)</span><span class="v">Byte lưu &times; thời gian; R2 $0.015/GB, S3 $0.023/GB.</span></div>
+  <div class="kv"><span class="k">Class A operation</span><span class="v">Ghi và LIST (PUT, POST, COPY, LIST) — lớp đắt.</span></div>
+  <div class="kv"><span class="k">Class B operation</span><span class="v">Đọc (GET, HEAD) — rẻ hơn Class A khoảng 10&times;.</span></div>
+  <div class="kv"><span class="k">Egress</span><span class="v">Byte truyền ra; $0 trên R2, $0.09/GB trên S3 — khác biệt headline.</span></div>
+  <div class="kv"><span class="k">Line item</span><span class="v">Một chiều tính tiền; bill storage có năm, không phải một.</span></div>
+  <div class="kv"><span class="k">Steady state</span><span class="v">Mức tiêu bình thường mỗi tháng — baseline mà alert nhân lên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Bill storage là năm line item (storage, Class A, Class B, egress, phí infra), không phải một con số.</li><li>Zero egress của R2 làm nó rẻ 6–13&times; so S3 cho app browser/CDN; trên traffic internal hoặc CloudFront-fronted hai bên cách nhau trong 30%.</li><li>Driver nham hiểm nhất của cả hai là Class A từ LIST quá thường xuyên — track key trong DB để không bao giờ list trên hot path.</li></ul>
+
 <h3>Đọc một hoá đơn lưu trữ đối tượng</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">Dung lượng — theo GB-tháng</span><span class="lz-d">Con số ai cũng đem ra so, và thường là dòng nhỏ nhất trên một hoá đơn có lưu lượng thật.</span></div>
@@ -391,6 +435,28 @@ are used every day         Cheaper (no compute)      Compute per generation
 <p><strong>One sentence.</strong> Every user upload multiplies into 10-15 variant objects, and every regeneration multiplies Class A cost by the same factor; on-demand generation with a CDN cache in front (Cloudflare Images, Vercel, or a custom Worker) trades small first-view latency for near-zero storage-of-never-viewed-variants and near-zero Class B on subsequent reads, which for a typical consumer app is a 10-100× cost reduction over pre-generating everything on upload.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Count the variants your pipeline writes per upload (thumb, medium, large, webp, avif…) — call that multiplier N.</li>
+<li>Estimate storage two ways for 100,000 uploads: pre-generate all N on upload, versus on-demand behind a CDN cache where only viewed variants ever get written.</li>
+<li>Compute the Class A cost of ONE regeneration pass (you change the resize rules): N &times; 100,000 writes &times; $4.50/million.</li>
+<li>Sketch an on-demand route (<code>GET /img/:key?w=400</code>) behind a CDN cache, and name the one cost it adds: first-view latency.</li>
+</ol>
+<p><strong>Done when:</strong> you have the N multiplier, a pre-generate vs on-demand storage comparison, and the cost of one regeneration pass.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variant</span><span class="v">A derived object (resized/re-encoded) of one original upload.</span></div>
+  <div class="kv"><span class="k">Pre-generation</span><span class="v">Writing every variant at upload time, viewed or not.</span></div>
+  <div class="kv"><span class="k">On-demand generation</span><span class="v">Creating a variant on first request, then caching it.</span></div>
+  <div class="kv"><span class="k">CDN cache</span><span class="v">Edge layer that serves a variant after the first miss, cutting Class B.</span></div>
+  <div class="kv"><span class="k">Regeneration pass</span><span class="v">Re-writing all variants after a rule change — N&times; Class A.</span></div>
+  <div class="kv"><span class="k">First-view latency</span><span class="v">The one-time delay to build a variant on its first request.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>One upload becomes 10–15 variant objects, so storage and Class A scale by the multiplier N.</li><li>Every regeneration pass re-writes N&times; objects — a silent four-digit Class A bill.</li><li>On-demand generation behind a CDN cache trades small first-view latency for a 10–100&times; saving over pre-generating everything.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare Images — pricing</span><span class="lc-sub">developers.cloudflare.com/images/pricing — on-demand variants at $5/100k images stored.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Vercel — Image Optimization</span><span class="lc-sub">vercel.com/docs/image-optimization — on-demand pattern.</span></span></div>
@@ -500,6 +566,28 @@ dùng mỗi ngày              Rẻ hơn (không compute)   Compute per generati
 <div class="callout">
 <p><strong>Một câu.</strong> Mỗi upload user nhân thành 10-15 object variant, và mỗi regeneration nhân cost Class A với cùng hệ số; sinh on-demand với CDN cache trước (Cloudflare Images, Vercel, hoặc Worker tự) đánh đổi latency first-view nhỏ lấy near-zero storage-của-variant-không-view và near-zero Class B trên subsequent read, mà với app consumer điển hình là giảm cost 10-100× so pre-generate mọi thứ on-upload.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Đếm số variant pipeline của bạn ghi mỗi upload (thumb, medium, large, webp, avif…) — gọi hệ số đó là N.</li>
+<li>Ước lượng storage hai cách cho 100.000 upload: pre-generate đủ N lúc upload, so với on-demand sau CDN cache (chỉ variant được xem mới ghi).</li>
+<li>Tính cost Class A của MỘT regeneration pass (bạn đổi luật resize): N &times; 100.000 lượt ghi &times; $4.50/triệu.</li>
+<li>Phác một route on-demand (<code>GET /img/:key?w=400</code>) sau CDN cache, và gọi tên cost duy nhất nó thêm: latency first-view.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn có hệ số N, một so sánh storage pre-generate vs on-demand, và cost của một regeneration pass.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Variant</span><span class="v">Object dẫn xuất (resize/re-encode) từ một bản upload gốc.</span></div>
+  <div class="kv"><span class="k">Pre-generation</span><span class="v">Ghi mọi variant ngay lúc upload, dù có được xem hay không.</span></div>
+  <div class="kv"><span class="k">On-demand generation</span><span class="v">Tạo variant ở request đầu tiên, rồi cache lại.</span></div>
+  <div class="kv"><span class="k">CDN cache</span><span class="v">Lớp edge serve variant sau lần miss đầu, cắt Class B.</span></div>
+  <div class="kv"><span class="k">Regeneration pass</span><span class="v">Ghi lại toàn bộ variant sau khi đổi luật — N&times; Class A.</span></div>
+  <div class="kv"><span class="k">First-view latency</span><span class="v">Độ trễ một lần để dựng variant ở request đầu tiên.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Một upload thành 10–15 object variant, nên storage và Class A nhân theo hệ số N.</li><li>Mỗi regeneration pass ghi lại N&times; object — một bill Class A bốn chữ số âm thầm.</li><li>Sinh on-demand sau CDN cache đánh đổi latency first-view nhỏ lấy mức tiết kiệm 10–100&times; so pre-generate mọi thứ.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare Images — pricing</span><span class="lc-sub">developers.cloudflare.com/images/pricing — variant on-demand $5/100k ảnh lưu.</span></span></div>
@@ -643,6 +731,28 @@ zcat logs/r2/2026/08/*.json.gz \\
 <p><strong>One sentence.</strong> Set three defenses on every bucket the day it is created: a budget alert (page you when spend exceeds your steady state × 1.5), a rate alarm (page you when Class A ops/min exceeds baseline × 5 for 15+ minutes), and request logging piped to a separate bucket for 30 days (so you can query &quot;which token did this&quot; after an incident); combined they cost under $2/month and prevent the four-digit charges that any of the three alone might miss.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Create a budget alert on one bucket at steady state &times; 1.5 (Cloudflare billing notification, or an AWS Budgets alert on the S3 side).</li>
+<li>Define a rate alarm in words: page me when Class A ops/min &gt; baseline &times; 5 sustained 15+ minutes — then write the metric query that would fire it.</li>
+<li>Turn on request logging to a SEPARATE bucket with a 30-day lifecycle so a runaway job cannot also bloat the log.</li>
+<li>Write the single forensic query you would run after a spike: group logged requests by access-key/token to answer &quot;which token did this&quot;.</li>
+</ol>
+<p><strong>Done when:</strong> all three defenses exist on the bucket and you have the post-incident query written down.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Budget alert</span><span class="v">Pages you when monthly spend crosses steady state &times; 1.5.</span></div>
+  <div class="kv"><span class="k">Rate alarm</span><span class="v">Pages you when ops/min exceeds a baseline multiple for N minutes.</span></div>
+  <div class="kv"><span class="k">Baseline</span><span class="v">The normal rate an alarm multiplies to find anomalies.</span></div>
+  <div class="kv"><span class="k">Request logging</span><span class="v">Per-request audit lines written to a separate bucket.</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">How much damage one leaked/looping token can do before you notice.</span></div>
+  <div class="kv"><span class="k">Forensics</span><span class="v">Querying the logs after an incident to name the cause.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Three defenses on day one: budget alert (spend &times; 1.5), rate alarm (Class A ops/min &times; 5), and request logging to a separate bucket for 30 days.</li><li>Together they cost under $2/month and catch what any one alone would miss.</li><li>Logging is what lets you answer &quot;which token did this&quot; — without it, a spike is a mystery.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Billing notifications</span><span class="lc-sub">developers.cloudflare.com/billing/notifications — email + webhook thresholds.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — Cost budgets</span><span class="lc-sub">docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html — SNS action targets.</span></span></div>
@@ -775,6 +885,28 @@ zcat logs/r2/2026/08/*.json.gz \\
 <div class="callout">
 <p><strong>Một câu.</strong> Set ba phòng thủ trên mọi bucket ngày tạo: alert budget (page bạn khi tiêu vượt steady state × 1.5), alarm rate (page bạn khi Class A op/phút vượt baseline × 5 trong 15+ phút), và log request pipe tới bucket riêng 30 ngày (để query &quot;token nào làm cái này&quot; sau incident); kết hợp tốn dưới $2/tháng và ngăn charge bốn chữ số mà bất kỳ một trong ba có thể miss.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tạo budget alert trên một bucket ở mức steady state &times; 1.5 (notification billing Cloudflare, hoặc AWS Budgets bên S3).</li>
+<li>Định nghĩa rate alarm bằng lời: page tôi khi Class A op/phút &gt; baseline &times; 5 kéo dài 15+ phút — rồi viết câu query metric sẽ kích hoạt nó.</li>
+<li>Bật request logging ra một bucket RIÊNG với lifecycle 30 ngày để một job chạy loạn không phình luôn cả log.</li>
+<li>Viết câu query forensic duy nhất bạn sẽ chạy sau spike: gom request đã log theo access-key/token để trả lời &quot;token nào làm cái này&quot;.</li>
+</ol>
+<p><strong>Đạt khi:</strong> cả ba phòng thủ có trên bucket và bạn đã ghi sẵn câu query sau sự cố.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Budget alert</span><span class="v">Page bạn khi tiêu tháng vượt steady state &times; 1.5.</span></div>
+  <div class="kv"><span class="k">Rate alarm</span><span class="v">Page bạn khi op/phút vượt một bội số baseline trong N phút.</span></div>
+  <div class="kv"><span class="k">Baseline</span><span class="v">Mức bình thường mà alarm nhân lên để tìm bất thường.</span></div>
+  <div class="kv"><span class="k">Request logging</span><span class="v">Dòng audit mỗi request ghi ra một bucket riêng.</span></div>
+  <div class="kv"><span class="k">Blast radius</span><span class="v">Thiệt hại một token lộ/chạy loạn gây ra trước khi bạn phát hiện.</span></div>
+  <div class="kv"><span class="k">Forensics</span><span class="v">Query log sau sự cố để gọi tên nguyên nhân.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Ba phòng thủ ngay ngày đầu: budget alert (tiêu &times; 1.5), rate alarm (Class A op/phút &times; 5), và request logging ra bucket riêng 30 ngày.</li><li>Cùng nhau chúng tốn dưới $2/tháng và bắt được điều mà từng cái riêng lẻ sẽ bỏ sót.</li><li>Logging là thứ cho bạn trả lời &quot;token nào làm cái này&quot; — thiếu nó, một spike là một ẩn số.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Billing notifications</span><span class="lc-sub">developers.cloudflare.com/billing/notifications — threshold email + webhook.</span></span></div>

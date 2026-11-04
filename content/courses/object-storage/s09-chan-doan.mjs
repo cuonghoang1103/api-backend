@@ -168,6 +168,28 @@ curl -v -X PUT \\
 <p><strong>One sentence.</strong> A 403 from an S3-compatible service is six different problems wearing the same status code, so the first move is to read the XML body (Code and Message fields); a &quot;SignatureDoesNotMatch&quot; or &quot;InvalidAccessKeyId&quot; is Layer A (clock, region, secret), a plain &quot;AccessDenied&quot; is Layer B (IAM/policy), and a presigned-URL context is Layer C (expiry or header tampering) — three totally separate paths that look identical if you only read the status code.</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Reproduce Layer A: sign a GetObject with a deliberately wrong secret, send it, and read the XML body — expect <code>&lt;Code&gt;SignatureDoesNotMatch&lt;/Code&gt;</code>.</li>
+<li>Reproduce the clock cause: skew your machine clock by 20 minutes, retry a valid request, and read the time-related signature error.</li>
+<li>Reproduce Layer C: generate a presigned URL with a 10-second expiry, wait, then GET it — read the expiry 403.</li>
+<li>For each, write the XML <code>Code</code> and the layer (A clock/region/secret, B IAM/policy, C presign expiry/tamper); never fix a 403 before reading its body.</li>
+</ol>
+<p><strong>Done when:</strong> you have produced at least two distinct 403 XML bodies and labelled each with its layer and fix.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">403 (Forbidden)</span><span class="v">One status code hiding six distinct causes — read the body to tell them apart.</span></div>
+  <div class="kv"><span class="k">SignatureDoesNotMatch</span><span class="v">Layer A: wrong secret, wrong region, or clock skew.</span></div>
+  <div class="kv"><span class="k">InvalidAccessKeyId</span><span class="v">Layer A: the access key id itself is unknown or disabled.</span></div>
+  <div class="kv"><span class="k">AccessDenied</span><span class="v">Layer B: the credential is valid but policy forbids the action.</span></div>
+  <div class="kv"><span class="k">Clock skew</span><span class="v">Local time off by more than ~15 min invalidates a SigV4 signature.</span></div>
+  <div class="kv"><span class="k">Error XML body</span><span class="v">The <code>&lt;Code&gt;</code>/<code>&lt;Message&gt;</code> response — the first thing to read, not the status.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A 403 is six problems in one status code — always read the XML <code>Code</code>/<code>Message</code> first.</li><li>Layer A (SignatureDoesNotMatch / InvalidAccessKeyId) = clock, region, or secret; Layer B (AccessDenied) = IAM/policy; Layer C = presigned-URL expiry or tampering.</li><li>The three paths look identical from the status code alone — the body is what routes you.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — Signature Version 4 errors</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html — every error code and its meaning.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">R2 — Common errors</span><span class="lc-sub">developers.cloudflare.com/r2/api/s3/api — R2 error mapping vs AWS.</span></span></div>
@@ -327,6 +349,28 @@ curl -v -X PUT \\
 <div class="callout">
 <p><strong>Một câu.</strong> 403 từ service S3-compatible là sáu vấn đề khác nhau mặc cùng status code, nên move đầu là đọc body XML (field Code và Message); &quot;SignatureDoesNotMatch&quot; hoặc &quot;InvalidAccessKeyId&quot; là Lớp A (clock, region, secret), &quot;AccessDenied&quot; trần là Lớp B (IAM/policy), và context presigned-URL là Lớp C (hết hạn hoặc header bị đổi) — ba path hoàn toàn riêng biệt trông giống hệt nếu chỉ đọc status code.</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Tái hiện Lớp A: ký một GetObject với secret cố tình sai, gửi đi, rồi đọc body XML — chờ <code>&lt;Code&gt;SignatureDoesNotMatch&lt;/Code&gt;</code>.</li>
+<li>Tái hiện nguyên nhân clock: lệch đồng hồ máy 20 phút, thử lại một request hợp lệ, và đọc lỗi signature liên quan thời gian.</li>
+<li>Tái hiện Lớp C: sinh một presigned URL hết hạn sau 10 giây, chờ qua, rồi GET nó — đọc 403 do hết hạn.</li>
+<li>Với mỗi cái, ghi <code>Code</code> XML và lớp (A clock/region/secret, B IAM/policy, C presign hết hạn/bị đổi); đừng bao giờ vá 403 trước khi đọc body.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tạo được ít nhất hai body XML 403 khác nhau và gán nhãn lớp + cách vá cho mỗi cái.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">403 (Forbidden)</span><span class="v">Một status code che sáu nguyên nhân khác nhau — đọc body để phân biệt.</span></div>
+  <div class="kv"><span class="k">SignatureDoesNotMatch</span><span class="v">Lớp A: sai secret, sai region, hoặc lệch đồng hồ.</span></div>
+  <div class="kv"><span class="k">InvalidAccessKeyId</span><span class="v">Lớp A: access key id không tồn tại hoặc bị vô hiệu.</span></div>
+  <div class="kv"><span class="k">AccessDenied</span><span class="v">Lớp B: credential hợp lệ nhưng policy cấm hành động đó.</span></div>
+  <div class="kv"><span class="k">Clock skew</span><span class="v">Giờ máy lệch hơn ~15 phút làm chữ ký SigV4 vô hiệu.</span></div>
+  <div class="kv"><span class="k">Body XML lỗi</span><span class="v">Response <code>&lt;Code&gt;</code>/<code>&lt;Message&gt;</code> — thứ đọc đầu tiên, không phải status.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>403 là sáu vấn đề trong một status code — luôn đọc <code>Code</code>/<code>Message</code> XML trước.</li><li>Lớp A (SignatureDoesNotMatch / InvalidAccessKeyId) = clock, region hoặc secret; Lớp B (AccessDenied) = IAM/policy; Lớp C = presigned-URL hết hạn hoặc bị đổi.</li><li>Ba path trông giống hệt nếu chỉ nhìn status code — body mới là thứ dẫn đường.</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS — Signature Version 4 errors</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html — mọi error code và ý nghĩa.</span></span></div>
@@ -500,6 +544,28 @@ appearing 100+ times. If it is, either:
 <p><strong>One sentence.</strong> Storage latency spikes are almost always one of five specific causes (cold connection, first-TLS-handshake, local network, hot prefix, genuine service blip), each with a distinguishing measurement — run <code>curl -w</code> ten times to see whether TCP/TLS/TTFB is the ballooning number, then match to cause: if <code>connect</code>+<code>tls</code> spike it is connection setup (fix: keep-alive), if <code>ttfb</code> spikes intermittently on the same key it is prefix (fix: spread keys), and if it spikes across every request from every client it is the service (fix: wait, or file support).</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Run <code>curl -o /dev/null -s -w "connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer}\\n" &lt;object-url&gt;</code> ten times against one object.</li>
+<li>Read which field balloons: <code>connect</code>+<code>tls</code> spiking means connection setup; <code>ttfb</code> spiking on the same key means a hot prefix or a service blip.</li>
+<li>Re-use one SDK client / enable keep-alive and re-measure — a fixed <code>connect</code>+<code>tls</code> should now be near zero on later requests.</li>
+<li>Use <code>curl -I</code> (HeadObject) to tell a stale CDN cache (200 with an old <code>Last-Modified</code> and <code>cf-cache-status: HIT</code>) from a missing object (404).</li>
+</ol>
+<p><strong>Done when:</strong> you can point to the ballooning timing field, name the matching cause, and distinguish a stale cache HIT from a 404.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">TTFB</span><span class="v">Time to first byte — the server/prefix part of latency (<code>time_starttransfer</code>).</span></div>
+  <div class="kv"><span class="k">time_connect</span><span class="v">TCP handshake time; spikes point at connection setup, not the object.</span></div>
+  <div class="kv"><span class="k">time_appconnect</span><span class="v">TLS handshake time; paid once per new connection.</span></div>
+  <div class="kv"><span class="k">Keep-alive</span><span class="v">Re-using a connection so TCP+TLS cost is paid once, not per request.</span></div>
+  <div class="kv"><span class="k">Hot prefix</span><span class="v">Many keys sharing one prefix, serialised on one partition — raises TTFB.</span></div>
+  <div class="kv"><span class="k">cf-cache-status</span><span class="v">Cloudflare header: HIT/MISS/EXPIRED — tells cache state from origin state.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>Latency spikes are one of five causes; <code>curl -w</code> ten times shows which timing field balloons.</li><li><code>connect</code>+<code>tls</code> spiking = connection setup, fixed by keep-alive / client reuse.</li><li><code>ttfb</code> on one key = hot prefix (spread keys); across all clients = a service blip (wait or file support); <code>curl -I</code> separates a stale cache HIT from a 404.</li></ul>
+
 <h3>Where the milliseconds in one request go</h3>
 <div class="lz-flow">
   <div class="lz-step"><span class="lz-k">1</span><span class="lz-t">DNS and TLS, once per connection</span><span class="lz-d">Tens to hundreds of milliseconds, and entirely avoidable — a reused connection pays it zero times after the first.</span></div>
@@ -669,6 +735,28 @@ xuất hiện 100+ lần. Nếu có, hoặc:
 <div class="callout">
 <p><strong>Một câu.</strong> Spike latency storage gần như luôn là một trong năm nguyên nhân cụ thể (connection cold, handshake TLS đầu, mạng local, prefix hot, blip service thật), mỗi cái với đo phân biệt — chạy <code>curl -w</code> mười lần để xem TCP/TLS/TTFB là số phình, rồi match nguyên nhân: nếu <code>connect</code>+<code>tls</code> spike là setup connection (vá: keep-alive), nếu <code>ttfb</code> spike intermittent trên cùng key là prefix (vá: trải key), và nếu spike qua mọi request từ mọi client là service (vá: chờ, hoặc mở support).</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Chạy <code>curl -o /dev/null -s -w "connect=%{time_connect} tls=%{time_appconnect} ttfb=%{time_starttransfer}\\n" &lt;object-url&gt;</code> mười lần trên một object.</li>
+<li>Đọc field nào phình: <code>connect</code>+<code>tls</code> phình = setup connection; <code>ttfb</code> phình trên cùng key = prefix hot hoặc blip service.</li>
+<li>Dùng lại một SDK client / bật keep-alive rồi đo lại — <code>connect</code>+<code>tls</code> cố định nay phải gần 0 ở các request sau.</li>
+<li>Dùng <code>curl -I</code> (HeadObject) để phân biệt cache CDN cũ (200 với <code>Last-Modified</code> cũ và <code>cf-cache-status: HIT</code>) với object thiếu (404).</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn chỉ ra được field thời gian phình, gọi tên nguyên nhân khớp, và phân biệt cache HIT cũ với 404.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">TTFB</span><span class="v">Time to first byte — phần server/prefix của latency (<code>time_starttransfer</code>).</span></div>
+  <div class="kv"><span class="k">time_connect</span><span class="v">Thời gian handshake TCP; phình = setup connection, không phải object.</span></div>
+  <div class="kv"><span class="k">time_appconnect</span><span class="v">Thời gian handshake TLS; trả một lần mỗi connection mới.</span></div>
+  <div class="kv"><span class="k">Keep-alive</span><span class="v">Dùng lại connection để chi phí TCP+TLS trả một lần, không mỗi request.</span></div>
+  <div class="kv"><span class="k">Hot prefix</span><span class="v">Nhiều key chung một prefix, nối tiếp trên một partition — làm TTFB tăng.</span></div>
+  <div class="kv"><span class="k">cf-cache-status</span><span class="v">Header Cloudflare: HIT/MISS/EXPIRED — tách trạng thái cache khỏi origin.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Spike latency là một trong năm nguyên nhân; <code>curl -w</code> mười lần cho thấy field thời gian nào phình.</li><li><code>connect</code>+<code>tls</code> phình = setup connection, vá bằng keep-alive / dùng lại client.</li><li><code>ttfb</code> trên một key = prefix hot (trải key); qua mọi client = blip service (chờ hoặc mở support); <code>curl -I</code> tách cache HIT cũ với 404.</li></ul>
 
 <h3>Các mili giây trong một request đi đâu</h3>
 <div class="lz-flow">

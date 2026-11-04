@@ -84,6 +84,28 @@ Voi videos 500 MB, direct upload la BAT BUOC (khong workaround)
 <p><strong>One sentence.</strong> Uploading directly from the browser to R2 with a presigned PUT URL sidesteps Cloudflare's 100 MB proxy limit, backend RAM exhaustion, and double-hop latency — the trade is more complex client code (presign → PUT → notify) and a security requirement to pin the content type via signableHeaders (Lesson 4.2).</p>
 </div>
 
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>Build the three-step flow: a backend route returns a presigned PUT URL for a key; the browser PUTs the file straight to R2; a second route records the finished key in your DB.</li>
+<li>Upload a file larger than 100 MB through the direct flow and confirm it succeeds — then recall that the same file proxied through Cloudflare would hit the 100 MB limit.</li>
+<li>Watch your backend RAM during the direct upload: it stays flat, because the bytes never pass through the server.</li>
+<li>Write down the two downsides this buys: more client code (presign→PUT→notify) and the signableHeaders security requirement you will fix in 4.2.</li>
+</ol>
+<p><strong>Done when:</strong> a &gt;100 MB file uploaded browser→R2 directly, backend RAM stayed flat, and the key was recorded by the notify step.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Presigned PUT URL</span><span class="v">A time-limited URL that lets the browser upload one object directly to R2.</span></div>
+  <div class="kv"><span class="k">Direct upload</span><span class="v">Browser→R2 with no bytes through your server.</span></div>
+  <div class="kv"><span class="k">100 MB proxy limit</span><span class="v">Cloudflare's request body cap that a proxied upload would hit.</span></div>
+  <div class="kv"><span class="k">presign → PUT → notify</span><span class="v">The three-step flow: get URL, upload, tell the backend it's done.</span></div>
+  <div class="kv"><span class="k">Double-hop latency</span><span class="v">The extra time of routing bytes client→server→R2 instead of client→R2.</span></div>
+  <div class="kv"><span class="k">signableHeaders</span><span class="v">The signed-header set that pins content-type — the 4.2 security fix.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>A presigned PUT lets the browser upload straight to R2, past Cloudflare's 100 MB limit, backend RAM, and double-hop latency.</li><li>The cost is a three-step client flow: presign → PUT → notify.</li><li>Direct upload needs a security requirement — pin the content type via signableHeaders (Lesson 4.2).</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Request body size limits</span><span class="lc-sub">developers.cloudflare.com/rules/reference/edge-response-headers — 100 MB free/pro.</span></span></div>
 </div>
@@ -158,6 +180,28 @@ Voi videos 500 MB, direct upload la BAT BUOC (khong workaround)
 <div class="callout">
 <p><strong>Một câu.</strong> Direct upload từ browser đến R2 với presigned PUT URL bypass Cloudflare 100 MB proxy limit + backend RAM exhaustion + double-hop latency — trade off là client code phức tạp hơn (presign → PUT → notify) và security cần pin content type qua signableHeaders (Bài 4.2).</p>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Dựng flow ba bước: một route backend trả presigned PUT URL cho một key; browser PUT file thẳng lên R2; một route thứ hai ghi key đã xong vào DB.</li>
+<li>Upload một file lớn hơn 100 MB qua flow trực tiếp và xác nhận thành công — rồi nhớ lại rằng cùng file đó proxy qua Cloudflare sẽ chạm giới hạn 100 MB.</li>
+<li>Theo dõi RAM backend trong lúc upload trực tiếp: nó phẳng, vì byte không bao giờ qua server.</li>
+<li>Ghi lại hai nhược điểm đổi lại: nhiều client code hơn (presign→PUT→notify) và yêu cầu security signableHeaders bạn sẽ vá ở 4.2.</li>
+</ol>
+<p><strong>Đạt khi:</strong> một file &gt;100 MB upload browser→R2 trực tiếp, RAM backend phẳng, và key được bước notify ghi lại.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">Presigned PUT URL</span><span class="v">URL có hạn cho browser upload một object thẳng lên R2.</span></div>
+  <div class="kv"><span class="k">Direct upload</span><span class="v">Browser→R2 không byte nào qua server bạn.</span></div>
+  <div class="kv"><span class="k">100 MB proxy limit</span><span class="v">Giới hạn body request của Cloudflare mà upload proxy sẽ chạm.</span></div>
+  <div class="kv"><span class="k">presign → PUT → notify</span><span class="v">Flow ba bước: lấy URL, upload, báo backend đã xong.</span></div>
+  <div class="kv"><span class="k">Double-hop latency</span><span class="v">Thời gian thừa khi định tuyến byte client→server→R2 thay vì client→R2.</span></div>
+  <div class="kv"><span class="k">signableHeaders</span><span class="v">Tập header được ký, pin content-type — bản vá security ở 4.2.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Presigned PUT cho browser upload thẳng lên R2, vượt giới hạn 100 MB của Cloudflare, RAM backend, và double-hop latency.</li><li>Cái giá là flow client ba bước: presign → PUT → notify.</li><li>Direct upload cần một yêu cầu security — pin content type qua signableHeaders (Bài 4.2).</li></ul>
 
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Cloudflare — Request body size limits</span><span class="lc-sub">developers.cloudflare.com/rules/reference/edge-response-headers — 100 MB free/pro.</span></span></div>
@@ -278,6 +322,30 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">So the uploader can change it after signing</span><span class="lz-d">The signature still verifies. The object lands with <code>text/html</code> instead of the image type the server approved.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">And the bucket serves it as a page</span><span class="lz-d">Any visitor opening that object URL executes the attacker's script, on the bucket's origin. The fix is one line: sign the header you care about.</span></div>
 </div>
+
+<h3>🧪 Practice (15–20 min)</h3>
+<div class="callout ok"><ol>
+<li>In <code>src/config/r2.ts</code> read <code>getSignedUploadUrl</code> and its SECURITY comment; find the line <code>signableHeaders: new Set(['host', 'content-type'])</code>.</li>
+<li>Generate a presigned PUT URL for <code>image/jpeg</code> (sandbox, or a local MinIO via <code>STORAGE_SANDBOX_ENDPOINT=http://localhost:9000</code>). In the URL query, confirm <code>X-Amz-SignedHeaders</code> lists <code>content-type</code>.</li>
+<li>Upload with the RIGHT type: <code>curl -T ./a.jpg "$URL" -H "Content-Type: image/jpeg"</code> → expect <code>200</code>.</li>
+<li>Attack it: <code>curl -X PUT "$URL" -H "Content-Type: text/html" --data "&lt;script&gt;alert(1)&lt;/script&gt;"</code> → expect <code>403 SignatureDoesNotMatch</code>.</li>
+<li>Temporarily sign with host only (drop <code>content-type</code> from <code>signableHeaders</code>) and repeat step 4 — now the text/html PUT returns <code>200</code> and a later GET comes back <code>content-type: text/html</code>. Restore the fix.</li>
+</ol>
+<p><strong>Done when:</strong> you watched the SAME attack return 403 with the header signed and 200 without it, and can explain why <code>ContentType</code> on <code>PutObjectCommand</code> alone is only a default.</p></div>
+
+<h3>🗂 Key terms</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SigV4</span><span class="v">AWS Signature Version 4 — the signing protocol S3/R2 use to authenticate a request.</span></div>
+  <div class="kv"><span class="k">signableHeaders</span><span class="v">The SDK option naming which headers the signature covers; default is <code>host</code> only.</span></div>
+  <div class="kv"><span class="k">X-Amz-SignedHeaders</span><span class="v">Query param listing exactly which headers were signed — read it to audit a presigned URL.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">A script saved on the server and served back to visitors, running on the site's origin.</span></div>
+  <div class="kv"><span class="k">SignatureDoesNotMatch</span><span class="v">The 403 R2/S3 returns when a signed header's value differs from what was signed.</span></div>
+  <div class="kv"><span class="k">Default vs pinned</span><span class="v">ContentType on the command is a default the client may override; pinning it means the signature rejects any other value.</span></div>
+</div>
+
+<h3>📌 Summary</h3>
+<ul><li>By default the SDK signs only <code>host</code>, so <code>ContentType</code> on <code>PutObjectCommand</code> is just a default the client can override.</li><li>An attacker overrides it to <code>text/html</code> → R2 stores and serves HTML from the media domain → stored XSS on your origin.</li><li>The fix is one line: <code>signableHeaders: new Set(['host', 'content-type'])</code> — a mismatched PUT then returns 403.</li><li>The client must send the exact content type used at signing; add a wrong-type case to your test suite.</li><li>Signatures do not cover size by default — pin <code>content-length</code> too when you know it.</li></ul>
+
 <h3>Sources</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (this repo)</span><span class="lc-sub">Real comment documenting the vulnerability, fix, and verification against real S3.</span></span></div>
@@ -394,6 +462,30 @@ $ curl -X PUT "$UPLOAD_URL" -H "Content-Type: text/html" -d "&lt;script&gt;"
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Nên bên tải lên đổi được nó SAU khi đã ký</span><span class="lz-d">Chữ ký vẫn xác minh được. Object rơi xuống với <code>text/html</code> thay vì kiểu ảnh mà máy chủ đã duyệt.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Và bucket phục vụ nó như một trang web</span><span class="lz-d">Mọi khách mở URL của object đó đều chạy script của kẻ tấn công, trên chính origin của bucket. Cách chữa là một dòng: hãy ký cái header mà bạn quan tâm.</span></div>
 </div>
+
+<h3>🧪 Thực hành (15–20 phút)</h3>
+<div class="callout ok"><ol>
+<li>Trong <code>src/config/r2.ts</code> đọc <code>getSignedUploadUrl</code> và comment SECURITY của nó; tìm dòng <code>signableHeaders: new Set(['host', 'content-type'])</code>.</li>
+<li>Sinh một presigned PUT URL cho <code>image/jpeg</code> (sandbox, hoặc MinIO cục bộ qua <code>STORAGE_SANDBOX_ENDPOINT=http://localhost:9000</code>). Trong query URL, xác nhận <code>X-Amz-SignedHeaders</code> có liệt kê <code>content-type</code>.</li>
+<li>Upload đúng kiểu: <code>curl -T ./a.jpg "$URL" -H "Content-Type: image/jpeg"</code> → mong đợi <code>200</code>.</li>
+<li>Tấn công: <code>curl -X PUT "$URL" -H "Content-Type: text/html" --data "&lt;script&gt;alert(1)&lt;/script&gt;"</code> → mong đợi <code>403 SignatureDoesNotMatch</code>.</li>
+<li>Tạm ký với host thôi (bỏ <code>content-type</code> khỏi <code>signableHeaders</code>) rồi lặp lại bước 4 — giờ PUT text/html trả <code>200</code> và GET sau đó trả về <code>content-type: text/html</code>. Khôi phục bản vá.</li>
+</ol>
+<p><strong>Đạt khi:</strong> bạn tận mắt thấy CÙNG một tấn công trả 403 khi header được ký và 200 khi không, và giải thích được vì sao <code>ContentType</code> trên <code>PutObjectCommand</code> một mình chỉ là default.</p></div>
+
+<h3>🗂 Thuật ngữ trong bài</h3>
+<div class="kv-grid">
+  <div class="kv"><span class="k">SigV4</span><span class="v">AWS Signature Version 4 — giao thức ký mà S3/R2 dùng để xác thực request.</span></div>
+  <div class="kv"><span class="k">signableHeaders</span><span class="v">Tuỳ chọn SDK khai header nào được chữ ký phủ; mặc định chỉ <code>host</code>.</span></div>
+  <div class="kv"><span class="k">X-Amz-SignedHeaders</span><span class="v">Tham số query liệt kê đúng những header đã ký — đọc nó để kiểm một presigned URL.</span></div>
+  <div class="kv"><span class="k">Stored XSS</span><span class="v">Script lưu trên server rồi phục vụ lại cho khách, chạy trên origin của site.</span></div>
+  <div class="kv"><span class="k">SignatureDoesNotMatch</span><span class="v">Lỗi 403 R2/S3 trả khi giá trị header đã ký khác với lúc ký.</span></div>
+  <div class="kv"><span class="k">Default vs pinned</span><span class="v">ContentType trên command là default client đổi được; pin nghĩa là chữ ký từ chối mọi giá trị khác.</span></div>
+</div>
+
+<h3>📌 Tóm tắt</h3>
+<ul><li>Mặc định SDK chỉ ký <code>host</code>, nên <code>ContentType</code> trên <code>PutObjectCommand</code> chỉ là default client đổi được.</li><li>Attacker đổi thành <code>text/html</code> → R2 lưu và phục vụ HTML từ media domain → stored XSS trên origin của bạn.</li><li>Bản vá một dòng: <code>signableHeaders: new Set(['host', 'content-type'])</code> — PUT sai kiểu sẽ trả 403.</li><li>Client phải gửi đúng content type dùng lúc ký; thêm ca sai-kiểu vào bộ test.</li><li>Chữ ký mặc định không phủ kích thước — pin thêm <code>content-length</code> khi bạn biết.</li></ul>
+
 <h3>Nguồn</h3>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">AWS SigV4 signing process</span><span class="lc-sub">docs.aws.amazon.com/general/latest/gr/sigv4_signing.html — protocol spec, canonical request formatting.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">src/config/r2.ts:117 (kho này)</span><span class="lc-sub">Comment thật tài liệu vulnerability, fix, và verify với S3 thật.</span></span></div>

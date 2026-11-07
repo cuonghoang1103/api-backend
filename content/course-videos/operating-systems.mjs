@@ -43,8 +43,8 @@ export default {
     "osg202-6-2-banker": { yt: "bYFVbzLLxfY", credit: "Jenny's Lectures CS IT — Lec23 Deadlock Avoidance: Banker's Algorithm with example | Operating System", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/06-be-tac/06-01-slide-be-tac-tron-bd682a4f.mp4' }, defaultVideoTrack: 'VI'},
 
     // Chapter 7 — Linux & shell
-    "osg202-7-1-lenh-linux": { yt: "ZtqBQ68cfJc", credit: "freeCodeCamp.org — The 50 Most Popular Linux & Terminal Commands - Full Course for Beginners" },
-    "osg202-7-2-shell-script": { yt: "tK9Oc6AEnR4", credit: "freeCodeCamp.org — Bash Scripting Tutorial for Beginners" },
+    "osg202-7-1-lenh-linux": { yt: "ZtqBQ68cfJc", credit: "freeCodeCamp.org — The 50 Most Popular Linux & Terminal Commands - Full Course for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-03-lab-1-lenh-linux-tron-272a6ed1.mp4' }, defaultVideoTrack: 'VI'},
+    "osg202-7-2-shell-script": { yt: "tK9Oc6AEnR4", credit: "freeCodeCamp.org — Bash Scripting Tutorial for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI'},
 
     // N1 — from OS to the cloud
     "osg202-n1-1-cloud-container": { yt: "Jz8Gs4UHTO8", credit: "ByteByteGo — Big Misconceptions about Bare Metal, Virtual Machines, and Containers" },
@@ -73,10 +73,10 @@ export default {
     'osg202-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-ae743a2c.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-on-ch1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/01-gioi-thieu-he-dieu-hanh/01-07-thuc-hanh-chuong-1-tron-d4b3e2c2.mp4' }, defaultVideoTrack: 'VI' },
-    'osg202-lab-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-03-lab-1-lenh-linux-tron-272a6ed1.mp4' }, defaultVideoTrack: 'VI' },
-    'osg202-lab-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI' },
-    'osg202-lab-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-05-lab-3-lap-trinh-c-tron-bd81e18a.mp4' }, defaultVideoTrack: 'VI' },
-    'osg202-lab-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-06-lab-4-quan-sat-he-thong-tron-4bb6fe04.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/01-gioi-thieu-he-dieu-hanh/01-07-thuc-hanh-chuong-1-tron-d4b3e2c2.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-lab-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-03-lab-1-lenh-linux-tron-272a6ed1.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-lab-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-lab-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-05-lab-3-lap-trinh-c-tron-bd81e18a.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-lab-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-06-lab-4-quan-sat-he-thong-tron-4bb6fe04.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

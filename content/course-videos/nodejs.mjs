@@ -16,7 +16,7 @@ export default {
     /* ── Mục 0 — Giới thiệu ─────────────────────────────────────────────── */
     'nodejs-0-1-gioi-thieu': { yt: 'ztspvPYybIY', credit: 'stri8ted — Ryan Dahl: Original Node.js presentation', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-01-ve-khoa-hoc-ban-do-49e84971.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-0-2-cach-hoc': { yt: 'LAUi8pPlcUM', credit: 'Codevolution — Node.js Tutorial - 1 - Introduction', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-02-cach-hoc-hieu-qua-da4a5b8b.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-0-3-cai-dat': { yt: 'ENrzD9HAZK4', credit: 'Fireship — Node.js Ultimate Beginner’s Guide in 7 Easy Steps' },
+    'nodejs-0-3-cai-dat': { yt: 'ENrzD9HAZK4', credit: 'Fireship — Node.js Ultimate Beginner’s Guide in 7 Easy Steps', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-moi-truong-ae3e6b60.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-0-4-du-an': { yt: 'tt1R-DEhvxg', credit: 'Codevolution — Node.js Tutorial - 6 - Hello World', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-04-du-an-xuyen-suot-1278771a.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 1 — JavaScript cho backend ──────────────────────────────── */
@@ -34,7 +34,7 @@ export default {
     'nodejs-2-5-worker-threads': { yt: 'Wm4MZwfEZd4', credit: 'Codevolution — Node.js Tutorial - 62 - Worker Threads Module', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/02-ben-trong-nodejs-runtime/02-05-dua-viec-nang-ra-khoi-event-loop-51be7838.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 3 — Module lõi ──────────────────────────────────────────── */
-    'nodejs-3-1-path-fs': { yt: 'p995SdRXw_E', credit: 'Codevolution — Node.js Tutorial - 19 - Path Module' },
+    'nodejs-3-1-path-fs': { yt: 'p995SdRXw_E', credit: 'Codevolution — Node.js Tutorial - 19 - Path Module', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/03-cac-module-loi/03-01-path-va-fs-a94705cb.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-3-2-buffer': { yt: 'br8VB99qPzE', credit: 'Codevolution — Node.js Tutorial - 24 - Streams and Buffers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/03-cac-module-loi/03-02-buffer-du-lieu-nhi-phan-ec871b32.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-3-3-stream': { yt: 'qnzC6vpBuxw', credit: 'Codevolution — Node.js Tutorial - 28 - Streams', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/03-cac-module-loi/03-03-stream-thi-nghiem-348-mb-aa175390.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-3-4-eventemitter': { yt: 'Su0-Y9coU3s', credit: 'Codevolution — Node.js Tutorial - 21 - Events Module', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/03-cac-module-loi/03-04-eventemitter-2fc858ec.mp4' }, defaultVideoTrack: 'VI'},
@@ -42,36 +42,36 @@ export default {
 
     /* ── Chương 4 — npm & vệ sinh dự án ─────────────────────────────────── */
     'nodejs-4-1-package-json': { yt: 'bSuFQY0fB8Y', credit: 'Codevolution — Node.js Tutorial - 50 - package.json', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/04-npm-giu-du-an-sach/04-01-package-json-npm-scripts-a3a9fc27.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-4-2-semver-lockfile': { yt: 'LuV5upokyBY', credit: 'Codevolution — Node.js Tutorial - 54 - Versioning' },
+    'nodejs-4-2-semver-lockfile': { yt: 'LuV5upokyBY', credit: 'Codevolution — Node.js Tutorial - 54 - Versioning', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/04-npm-giu-du-an-sach/04-02-semver-va-lockfile-8cfd217e.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-4-3-bao-mat-npm': { yt: '-MmyAFR_pYw', credit: 'DigitalOcean — NPM Supply Chain Attacks Explained (And How To Stop Them)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/04-npm-giu-du-an-sach/04-03-an-toan-chuoi-cung-ung-d00e7d5b.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 5 — Express ─────────────────────────────────────────────── */
-    'nodejs-5-1-tu-http-toi-express': { yt: '_eeZQwPqteM', credit: 'Codevolution — Node.js Tutorial - 36 - Web Framework' },
-    'nodejs-5-2-dinh-tuyen': { yt: 'Lr9WUkeYSA8', credit: 'Net Ninja — Node.js Crash Course Tutorial #6 - Express Apps' },
+    'nodejs-5-1-tu-http-toi-express': { yt: '_eeZQwPqteM', credit: 'Codevolution — Node.js Tutorial - 36 - Web Framework', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/05-express/05-01-tu-http-toi-express-tron-27681eef.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-5-2-dinh-tuyen': { yt: 'Lr9WUkeYSA8', credit: 'Net Ninja — Node.js Crash Course Tutorial #6 - Express Apps', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/05-express/05-02-dinh-tuyen-params-query-router-8fdab27e.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-5-3-middleware': { yt: '_GJKAs7A0_4', credit: 'Net Ninja — Node.js Crash Course Tutorial #8 - Middleware', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/05-express/05-03-middleware-soi-day-chuyen-tron-8b15042c.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-5-4-xu-ly-loi': { yt: 'FauTQ_g6xgM', credit: 'WittCode — Express Error Handling' },
-    'nodejs-5-5-notes-api': { yt: 'zW_tZR0Ir3Q', credit: 'Net Ninja — Node.js Crash Course Tutorial #11 - Express Router & MVC' },
+    'nodejs-5-4-xu-ly-loi': { yt: 'FauTQ_g6xgM', credit: 'WittCode — Express Error Handling', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/05-express/05-04-xu-ly-loi-tap-trung-tron-e7527312.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-5-5-notes-api': { yt: 'zW_tZR0Ir3Q', credit: 'Net Ninja — Node.js Crash Course Tutorial #11 - Express Router & MVC', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/05-express/05-05-rap-notes-api-tron-962f2228.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 6 — Thiết kế REST API ───────────────────────────────────── */
     'nodejs-6-1-tai-nguyen-phuong-thuc': { yt: '-MTSQjw5DrM', credit: 'Fireship — RESTful APIs in 100 Seconds // Build an API from Scratch with Node.js Express', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/06-thiet-ke-rest-api/06-01-tai-nguyen-phuong-thuc-tron-b23533b5.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-6-2-ma-trang-thai': { yt: '36--CQc19u4', credit: 'Milan Jovanović — 8 Pragmatic REST API Design Tips (From Real Projects)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/06-thiet-ke-rest-api/06-02-ma-trang-thai-tron-d5fcb661.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-6-3-validate-schema': { yt: 'ZPa9I_pvRU0', credit: 'Austin Davis — Stop Writing Types AND Validation (Use Zod)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/06-thiet-ke-rest-api/06-03-validate-schema-tron-1aeb2b34.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-6-4-phan-trang': { yt: 'JF5x_hJQfh8', credit: 'TechViz - The Data Science Guy — API Design - 3 common Pagination Strategies' },
-    'nodejs-6-5-hop-dong-api': { yt: 't99NvIazD68', credit: 'Software Developer Diaries — Idempotency in APIs: you should be aware of this!' },
+    'nodejs-6-4-phan-trang': { yt: 'JF5x_hJQfh8', credit: 'TechViz - The Data Science Guy — API Design - 3 common Pagination Strategies', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/06-thiet-ke-rest-api/06-04-phan-trang-tron-580dfdd5.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-6-5-hop-dong-api': { yt: 't99NvIazD68', credit: 'Software Developer Diaries — Idempotency in APIs: you should be aware of this!', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/06-thiet-ke-rest-api/06-05-hop-dong-api-tron-8143e954.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 7 — PostgreSQL & Prisma ─────────────────────────────────── */
     'nodejs-7-1-ket-noi-va-pool': { yt: 'rLRIB6AF2Dg', credit: 'Fireship — Prisma in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-01-ket-noi-va-pool-tron-60bcc5b2.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-7-2-luoc-do-va-migration': { yt: 'ZaCFsFES5yQ', credit: 'Prisma — Prisma Migrations: A Step-by-Step Guide' },
-    'nodejs-7-3-crud-transaction': { yt: 'O1S0ax7GlL8', credit: 'Prisma — Prisma ORM + Prisma Postgres: 5-Minutes Quickstart' },
-    'nodejs-7-4-quan-he-va-n-plus-1': { yt: 'phixQBZNZwU', credit: 'TomDoesTech — Learn Prisma Relationships (1-1, 1-m, m-m)' },
-    'nodejs-7-5-chi-muc-va-explain': { yt: 'GmX8tjT7UcQ', credit: 'InterviewBuddies — Understanding Explain and Explain Analyze in PostgreSQL' },
+    'nodejs-7-2-luoc-do-va-migration': { yt: 'ZaCFsFES5yQ', credit: 'Prisma — Prisma Migrations: A Step-by-Step Guide', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-02-luoc-do-va-migration-tron-7b5ce802.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-7-3-crud-transaction': { yt: 'O1S0ax7GlL8', credit: 'Prisma — Prisma ORM + Prisma Postgres: 5-Minutes Quickstart', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-03-crud-transaction-tron-26e88ecd.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-7-4-quan-he-va-n-plus-1': { yt: 'phixQBZNZwU', credit: 'TomDoesTech — Learn Prisma Relationships (1-1, 1-m, m-m)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-04-quan-he-va-n-plus-1-d8feecf1.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-7-5-chi-muc-va-explain': { yt: 'GmX8tjT7UcQ', credit: 'InterviewBuddies — Understanding Explain and Explain Analyze in PostgreSQL', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-05-chi-muc-va-explain-375fe591.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-7-6-hop-dong-api-voi-du-lieu-that': { yt: '0Ik45qw8KhM', credit: 'fromDev2Dev — Let\'s learn Prisma ORM: migrate in detail (seeding, down migration, production)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/07-postgresql-prisma/07-06-hop-dong-api-voi-du-lieu-that-tron-e2c9852c.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 8 — Xác thực & phân quyền ───────────────────────────────── */
     'nodejs-8-1-mat-khau-va-bam': { yt: 'uXDnS5PcjCA', credit: 'LearnWebCode — Cookies, Sessions, JSON Web Tokens (JWT) and More 🍪🔐' },
-    'nodejs-8-2-jwt-access-refresh': { yt: 'pkKn8q5AvsY', credit: 'Sheryians Coding School — Complete Authentication System | JWT, Refresh Token, OTP, Logout All Devices' },
+    'nodejs-8-2-jwt-access-refresh': { yt: 'pkKn8q5AvsY', credit: 'Sheryians Coding School — Complete Authentication System | JWT, Refresh Token, OTP, Logout All Devices', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-02-jwt-access-refresh-tron-c299cbc8.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-8-3-requireauth-phan-quyen': { yt: 'cIZvG3jZP5w', credit: 'WittCode — Express Authentication Cookies and JWTs' },
-    'nodejs-8-4-cookie-csrf-thu-hoi': { yt: 'hjTY1Lf21W0', credit: 'Tejas Kumar — CSRF and CORS Explained' },
+    'nodejs-8-4-cookie-csrf-thu-hoi': { yt: 'hjTY1Lf21W0', credit: 'Tejas Kumar — CSRF and CORS Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/08-xac-thuc-phan-quyen/08-04-cookie-csrf-thu-hoi-tron-8cc3a7ba.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Bảo mật ứng dụng ────────────────────────────────────── */
     'nodejs-9-1-header-csp-cors': { yt: '4bQeGUzHpOE', credit: 'ByteMonk — HTTP Secure Headers for Web App Security | CORS, CSP, HSTS and more', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-01-header-csp-cors-tron-cf81d3e0.mp4' }, defaultVideoTrack: 'VI'},
@@ -80,7 +80,7 @@ export default {
     'nodejs-9-4-bi-mat-va-phu-thuoc': { yt: 'Wq6yMdt11LM', credit: 'Better Stack — npm installs can hack your laptop (Here\'s how to stop it)' },
 
     /* ── Chương 10 — Upload & object storage ────────────────────────────── */
-    'nodejs-10-1-nhan-file-multipart': { yt: 'jwp4U6v-3h4', credit: 'Sanjeev Thiyagarajan — NodeJs How to upload Files + uploading to AWS S3 using Express, Multer' },
+    'nodejs-10-1-nhan-file-multipart': { yt: 'jwp4U6v-3h4', credit: 'Sanjeev Thiyagarajan — NodeJs How to upload Files + uploading to AWS S3 using Express, Multer', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-01-nhan-file-multipart-tron-ef1bde72.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-10-2-object-storage-presigned': { yt: '6VHc41idHZs', credit: 'Rahul Ahire — The Ultimate S3 & Nodejs Guide | Bucket & Objects | Put Object, Pre-signed URL, Multipart Upload,etc' },
     'nodejs-10-3-kiem-file-that': { yt: 'yz78h9JQiFA', credit: 'Education with Ankur — File Upload Type Validation Filters and Limit File Size and Error Handling in Node.js using Multer' },
     'nodejs-10-4-phuc-vu-media-cache': { yt: 'JKxlsvZXG7c', credit: 'Fireship — NGINX Explained in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-04-phuc-vu-media-cache-tron-000a2ca4.mp4' }, defaultVideoTrack: 'VI'},

@@ -22,7 +22,7 @@ export default {
     "sdn302-8-1-nestjs-hono": { yt: "wqhNoDE6pb4", credit: "Traversy Media — NestJS Crash Course" },
     "sdn302-8-2-production": { yt: "DYme1m4RiwI", credit: "Software Developer Diaries — Node.js Security Best Practices: JWT blacklisting, rate limiting, schema validation" },
     // YouTube bổ sung 31/10/2026
-    'sdn302-cong-cu': { yt: 'bBA9rUdqmgY', credit: 'MongoDB — Getting Started with MongoDB Atlas - A Modern Database!' },
+    'sdn302-cong-cu': { yt: 'bBA9rUdqmgY', credit: 'MongoDB — Getting Started with MongoDB Atlas - A Modern Database!', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-moi-truong-ae3e6b60.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-project-checklist': { yt: 'ICMnoKxlYYg', credit: 'Dipesh Malvia — JWT Authentication Tutorial With Express & MongoDB | Rest API Project | Node.js for Beginners #10' },
     'sdn302-ngan-hang-de-tai': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4' }, defaultVideoTrack: 'VI' },
     'sdn302-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI' },

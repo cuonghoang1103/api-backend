@@ -28,7 +28,18 @@ ${slide('git-18', 9, 'git pull = fetch + merge, và ba chỗ nó vấp')}
 <p><strong>The safe move is always the same order:</strong> commit your work (a commit on your own branch is safe and reversible), <code>git fetch</code>, look at what is coming, merge it into your branch:</p>
 @@T('keo-main-nham','git commit','git merge origin/main',nth=1)@@
 <p><code>git log main..origin/main</code> reads "commits on origin/main that my main does not have": one line, An's commit. Now the merge into the branch:</p>
-@@T('keo-main-nham','git merge origin/main')@@
+@@T('keo-main-nham','git merge origin/main','Merge main vao feature/trang-chu')@@
+<p>Read the conflict before touching it:</p>
+<pre><code class="language-bash"><span class="tok-comment"># — Chi —</span>
+tail -6 src/java/com/nhom/servlet/HomeServlet.java</code></pre>
+<div class="out">}
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+// Chi: banner khuyen mai
+=======
+// An: hien thi ten benh nhan
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</div>
+<p>Two independent comments, so keep both: edit the file until it ends with the two lines and no marker lines, then commit (<code>-a</code> also stages the resolved file). Never run the commit straight after <code>CONFLICT</code> without editing — the markers would go into the commit.</p>
+@@T('keo-main-nham','Merge main vao feature/trang-chu')@@
 <p>The merge conflicted because both people appended to the end of the same file. Here the two added lines are independent comments, so the resolution is to keep both (after reading them, not by deleting markers blindly — see 18.2), then commit. The graph shows the merge commit with two parents. Work on a feature branch, bring <code>main</code> in with a merge, and <code>main</code> itself is never touched.</p>
 <div class="callout warn"><code>git stash</code> is the other safe option when you are not ready to commit: <code>git stash</code>, then pull, then <code>git stash pop</code>. It can conflict at the <code>pop</code> step too — the cure is the same, and your stashed work stays in the stash until the pop succeeds (Chapter 4).</div>
 
@@ -122,7 +133,18 @@ ${slide('git-18', 9, 'git pull = fetch + merge, và ba chỗ nó vấp')}
 <p><strong>Nước đi an toàn luôn cùng một thứ tự:</strong> commit việc của bạn (commit trên nhánh riêng là an toàn và hoàn tác được), <code>git fetch</code>, xem cái gì sắp về, merge nó vào nhánh của bạn:</p>
 @@T('keo-main-nham','git commit','git merge origin/main',nth=1)@@
 <p><code>git log main..origin/main</code> đọc là "các commit trên origin/main mà main của tôi chưa có": một dòng, commit của An. Giờ merge vào nhánh:</p>
-@@T('keo-main-nham','git merge origin/main')@@
+@@T('keo-main-nham','git merge origin/main','Merge main vao feature/trang-chu')@@
+<p>Đọc vùng xung đột trước khi đụng vào:</p>
+<pre><code class="language-bash"><span class="tok-comment"># — Chi —</span>
+tail -6 src/java/com/nhom/servlet/HomeServlet.java</code></pre>
+<div class="out">}
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+// Chi: banner khuyen mai
+=======
+// An: hien thi ten benh nhan
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; origin/main</div>
+<p>Hai chú thích độc lập nên giữ cả hai: sửa tệp cho tới khi nó kết thúc bằng hai dòng đó và không còn dòng dấu hiệu nào, rồi mới commit (<code>-a</code> tự đưa tệp đã giải vào index). Đừng bao giờ commit ngay sau <code>CONFLICT</code> mà chưa sửa — dấu hiệu sẽ đi vào commit.</p>
+@@T('keo-main-nham','Merge main vao feature/trang-chu')@@
 <p>Merge xung đột vì hai người cùng nối thêm vào cuối một tệp. Ở đây hai dòng thêm là hai chú thích độc lập nên cách giải là giữ cả hai (sau khi đọc chúng, không phải xoá dấu hiệu một cách mù quáng — xem 18.2), rồi commit. Đồ thị cho thấy commit merge có hai cha. Làm trên nhánh tính năng, đưa <code>main</code> vào bằng merge, và bản thân <code>main</code> không bao giờ bị đụng.</p>
 <div class="callout warn"><code>git stash</code> là lựa chọn an toàn còn lại khi bạn chưa muốn commit: <code>git stash</code>, rồi pull, rồi <code>git stash pop</code>. Bước <code>pop</code> cũng có thể xung đột — cách chữa y hệt, và việc đã cất vẫn nằm trong stash cho tới khi pop thành công (Chương 4).</div>
 

@@ -32,7 +32,7 @@ ${slide('git-18', 15, 'Chẩn đoán năm lệnh, rồi sửa từng lớp')}
 <h3>Step 2 — save: nothing is lost, and we leave the half-done merge</h3>
 <p>The first move is the safest: leave the unfinished merge with <code>git merge --abort</code>. It returns to the state before the pull, with Chi's commit intact. Then put the work on a branch <em>before</em> moving <code>main</code> (18.4):</p>
 @@T('tong-hop','git merge --abort','git rm -r')@@
-<p><code>main</code> now equals the remote's (<code>HEAD is now at a2efb48 …</code>) and the work sits on <code>feature/tra-cuu</code>. Nothing was pushed anywhere, nothing can be lost: the branch holds the commit.</p>
+<p><code>main</code> now equals the remote's (<code>HEAD is now at 31f81f7 …</code>) and the work sits on <code>feature/tra-cuu</code>. Nothing was pushed anywhere, nothing can be lost: the branch holds the commit.</p>
 
 <h3>Steps 3–5 — peel off the layers on the branch</h3>
 <p>On the branch: stop tracking build output (18.1), bring <code>main</code> in and resolve the shared file by rebuilding it and validating it (18.2), then push <em>the branch</em> and open a pull request instead of touching <code>main</code> (18.5):</p>
@@ -142,7 +142,7 @@ ${slide('git-18', 15, 'Chẩn đoán năm lệnh, rồi sửa từng lớp')}
 <h3>Bước 2 — cất việc: không mất gì, và rời phép merge dang dở</h3>
 <p>Nước đi đầu tiên là an toàn nhất: rời phép merge chưa xong bằng <code>git merge --abort</code>. Nó quay về trạng thái trước lần pull, với commit của Chi còn nguyên. Rồi đặt việc lên một nhánh <em>trước</em> khi dời <code>main</code> (18.4):</p>
 @@T('tong-hop','git merge --abort','git rm -r')@@
-<p>Giờ <code>main</code> bằng remote (<code>HEAD is now at a2efb48 …</code>) và việc nằm trên <code>feature/tra-cuu</code>. Chưa push đi đâu, không gì mất được: nhánh giữ commit.</p>
+<p>Giờ <code>main</code> bằng remote (<code>HEAD is now at 31f81f7 …</code>) và việc nằm trên <code>feature/tra-cuu</code>. Chưa push đi đâu, không gì mất được: nhánh giữ commit.</p>
 
 <h3>Bước 3–5 — bóc từng lớp trên nhánh</h3>
 <p>Trên nhánh: ngừng theo dõi sản phẩm build (18.1), đưa <code>main</code> vào và giải tệp chung bằng cách dựng lại rồi kiểm hợp lệ (18.2), sau đó push <em>nhánh</em> và mở pull request thay vì đụng <code>main</code> (18.5):</p>

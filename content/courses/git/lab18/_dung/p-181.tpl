@@ -47,7 +47,7 @@ dist/
 nbproject/private/
 <span class="tok-comment"># NetBeans — Maven</span>
 target/
-nbam-nbactions.xml
+nbactions.xml
 <span class="tok-comment"># Secrets and local config</span>
 .env
 db.properties</code></pre>
@@ -161,7 +161,7 @@ dist/
 nbproject/private/
 <span class="tok-comment"># NetBeans — Maven</span>
 target/
-nbam-nbactions.xml
+nbactions.xml
 <span class="tok-comment"># Bí mật và cấu hình riêng</span>
 .env
 db.properties</code></pre>

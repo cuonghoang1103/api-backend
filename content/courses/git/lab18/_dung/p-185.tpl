@@ -19,19 +19,21 @@ ${slide('git-18', 13, 'Merge không qua PR và merge có rào chắn')}
 <p>Everyone who pulls now has two servlets mapped to <code>/home</code>, a configuration Tomcat rejects at deployment. The line <code>grep -c</code> printed <code>2</code>: the pattern appears twice. The merge itself is perfectly valid Git; Git cannot know that two URLs collide. Only a human (or a build that starts the app) can.</p>
 
 <h3>How to see afterwards that a review was skipped</h3>
-<p>The history of <code>main</code> tells the story. <code>git log --first-parent --oneline</code> shows what each step on <code>main</code> was, and <code>--merges</code> with a format shows who made each merge. On GitHub a merged pull request leaves a commit titled <em>Merge pull request #N from …</em>; a merge with any other title (here <em>"Merge nhanh trang-chu-moi (khong qua PR)"</em>) was made on a laptop. If the PR list has no entry for a commit that is on <code>main</code>, nobody reviewed it.</p>
+<p>The history of <code>main</code> tells the story. <code>git log --first-parent --oneline</code> shows what each step on <code>main</code> was, and <code>--merges</code> with a format shows who made each merge. On GitHub a merged pull request leaves a commit titled <em>Merge pull request #N from …</em>; a merge with any other title (here <em>"Merge nhanh trang-chu-moi (khong qua PR)"</em>) was made on a laptop. If the PR list has no entry for a commit that is on <code>main</code>, nobody reviewed it. The reverse does not hold: a <em>Merge pull request #N</em> title proves there was a pull request, not that anyone reviewed it — an author who clicks <em>Merge</em> on their own unprotected PR gets exactly the same kind of line. Open the pull request and look at its reviews, or better, make an approval required (below).</p>
 
 <h3>The remedy that works: make <code>main</code> refuse the shortcut</h3>
 <p>Good intentions do not survive a deadline night; rules enforced by the server do. In the lab the remote carries a small hook that rejects pushes to <code>main</code>. <strong>This is a simulation</strong>: GitHub's real message is different, but the effect for the person who typed the command is the same:</p>
 @@T('tu-merge','index.jsp: them footer')@@
 <p>An's direct push is refused; the correct way — a branch, pushed, then a pull request — goes through. The hook is only these lines in <code>hooks/pre-receive</code> of the bare repository:</p>
-<pre><code class="language-bash"><span class="tok-comment">#!/bin/sh   (simulation of "main only accepts pull requests")</span>
+<pre><code class="language-bash">#!/bin/sh
+<span class="tok-comment"># simulation of "main only accepts pull requests"</span>
 while read old new ref; do
   if [ "$ref" = "refs/heads/main" ] &amp;&amp; [ -z "$LAB18_QUA_PR" ]; then
-    echo "SIMULATION: main only accepts changes through a pull request." &gt;&amp;2
+    echo "MO PHONG luat bao ve nhanh: main chi nhan thay doi qua pull request." &gt;&amp;2
     exit 1
   fi
 done</code></pre>
+<p>Keep the first line exactly <code>#!/bin/sh</code> and put comments on their own lines: anything written after the interpreter on the <code>#!</code> line is passed to it as an argument, the hook fails, and the server then rejects <em>every</em> push, branches included (on macOS: <code>remote: /bin/sh: (simulation: No such file or directory</code>; a Linux server says <code>cannot open (simulation of …): No such file</code>). Remember <code>chmod +x</code>.</p>
 
 <h3>Turning it on in GitHub (as of 10/2026)</h3>
 <p>On GitHub the same idea is a <strong>ruleset</strong>. Path in the repository: <em>Settings → Rulesets → New ruleset → New branch ruleset</em> (per GitHub Docs). Then:</p>
@@ -114,19 +116,21 @@ ${slide('git-18', 13, 'Merge không qua PR và merge có rào chắn')}
 <p>Ai pull về giờ cũng có hai servlet cùng ánh xạ tới <code>/home</code>, một cấu hình Tomcat từ chối lúc deploy. Dòng <code>grep -c</code> in ra <code>2</code>: mẫu xuất hiện hai lần. Bản thân phép merge là Git hoàn toàn hợp lệ; Git không thể biết hai URL va nhau. Chỉ con người (hoặc một lần build có chạy ứng dụng) mới biết.</p>
 
 <h3>Làm sao biết sau đó rằng review đã bị bỏ qua</h3>
-<p>Lịch sử của <code>main</code> kể lại chuyện. <code>git log --first-parent --oneline</code> cho thấy mỗi bước trên <code>main</code> là gì, và <code>--merges</code> kèm định dạng cho thấy ai làm từng lần merge. Trên GitHub, một pull request đã merge để lại commit tên <em>Merge pull request #N from …</em>; merge có tên khác (ở đây <em>"Merge nhanh trang-chu-moi (khong qua PR)"</em>) được làm trên một laptop. Nếu danh sách PR không có mục nào cho một commit đang nằm trên <code>main</code>, thì chưa ai review nó.</p>
+<p>Lịch sử của <code>main</code> kể lại chuyện. <code>git log --first-parent --oneline</code> cho thấy mỗi bước trên <code>main</code> là gì, và <code>--merges</code> kèm định dạng cho thấy ai làm từng lần merge. Trên GitHub, một pull request đã merge để lại commit tên <em>Merge pull request #N from …</em>; merge có tên khác (ở đây <em>"Merge nhanh trang-chu-moi (khong qua PR)"</em>) được làm trên một laptop. Nếu danh sách PR không có mục nào cho một commit đang nằm trên <code>main</code>, thì chưa ai review nó. Chiều ngược lại thì không đúng: tên <em>Merge pull request #N</em> chỉ chứng minh có pull request, không chứng minh có người review — tác giả tự bấm <em>Merge</em> trên PR của mình khi nhánh chưa được bảo vệ cũng ra đúng kiểu dòng đó. Hãy mở pull request xem phần review, hoặc tốt hơn, bắt buộc phải có lượt duyệt (bên dưới).</p>
 
 <h3>Thuốc chữa có tác dụng: cho <code>main</code> từ chối đường tắt</h3>
 <p>Thiện chí không sống nổi qua đêm sát hạn; luật do máy chủ thực thi thì sống. Trong lab, remote mang một hook nhỏ từ chối push vào <code>main</code>. <strong>Đây là mô phỏng</strong>: thông báo thật của GitHub khác, nhưng tác dụng với người gõ lệnh là như nhau:</p>
 @@T('tu-merge','index.jsp: them footer')@@
 <p>Lần push thẳng của An bị từ chối; cách đúng — một nhánh, đẩy nhánh, rồi pull request — đi qua. Hook chỉ là mấy dòng này trong <code>hooks/pre-receive</code> của kho bare:</p>
-<pre><code class="language-bash"><span class="tok-comment">#!/bin/sh   (mô phỏng "main chỉ nhận pull request")</span>
+<pre><code class="language-bash">#!/bin/sh
+<span class="tok-comment"># mô phỏng "main chỉ nhận pull request"</span>
 while read old new ref; do
   if [ "$ref" = "refs/heads/main" ] &amp;&amp; [ -z "$LAB18_QUA_PR" ]; then
-    echo "MO PHONG: main chi nhan thay doi qua pull request." &gt;&amp;2
+    echo "MO PHONG luat bao ve nhanh: main chi nhan thay doi qua pull request." &gt;&amp;2
     exit 1
   fi
 done</code></pre>
+<p>Giữ dòng đầu đúng là <code>#!/bin/sh</code>, chú thích viết ở dòng riêng: mọi chữ viết sau trình thông dịch trên dòng <code>#!</code> bị truyền vào làm đối số, hook hỏng, và máy chủ từ chối <em>mọi</em> lần push, kể cả nhánh thường (macOS in <code>remote: /bin/sh: (mô: No such file or directory</code>; máy chủ Linux in <code>cannot open (mô phỏng …): No such file</code>). Nhớ <code>chmod +x</code>.</p>
 
 <h3>Bật nó trên GitHub (tính đến 10/2026)</h3>
 <p>Trên GitHub, cùng ý đó là một <strong>ruleset</strong>. Đường đi trong repository: <em>Settings → Rulesets → New ruleset → New branch ruleset</em> (theo GitHub Docs). Sau đó:</p>

@@ -665,7 +665,7 @@ ${slide('git-14', 11, 'includeIf: hai danh tính, không bao giờ nhầm email'
 
 <h3>The two silent traps</h3>
 ${slide('git-14', 12, 'Hai cái bẫy includeIf — đều IM LẶNG')}
-<p><strong>Trap 1 — no trailing slash.</strong> <code>gitdir:~/fpt</code> (without <code>/</code>) does not mean "everything under <code>~/fpt</code>"; it matches only a <code>.git</code> directory with exactly that path. Nothing matches, nothing is included, and Git says nothing — in the test, <code>git config --show-origin user.email</code> printed no line at all and exited with 1 (the key was not set anywhere). With the trailing <code>/</code>, Git adds <code>**</code> for you and every repository inside the folder matches.</p>
+<p><strong>Trap 1 — no trailing slash.</strong> <code>gitdir:~/fpt</code> (without <code>/</code>) does not mean "everything under <code>~/fpt</code>"; it matches only a <code>.git</code> directory with exactly that path. Nothing matches, nothing is included, and Git says nothing — in the test, <code>git config --show-origin user.email</code> printed no line at all and exited with 1 (the key was not set anywhere). If your <code>[user]</code> block already has a personal email, the same command prints that personal email from <code>~/.gitconfig</code> instead — still silent, still wrong. With the trailing <code>/</code>, Git adds <code>**</code> for you and every repository inside the folder matches.</p>
 <p><strong>Trap 2 — <code>includeIf</code> before <code>[user]</code>.</strong> The included file is read where the <code>includeIf</code> line stands. Put it at the top and the plain <code>[user] email</code> below is read later and wins:</p>
 <div class="out">file:~/.gitconfig	cuong@example.com</div>
 <p>— your personal email, inside the school repository, with no warning. Always put <code>includeIf</code> blocks at the <em>end</em> of <code>~/.gitconfig</code>, and verify once in each root folder with <code>git config --show-origin user.email</code>.</p>
@@ -811,7 +811,7 @@ ${slide('git-14', 11, 'includeIf: hai danh tính, không bao giờ nhầm email'
 
 <h3>Hai cái bẫy im lặng</h3>
 ${slide('git-14', 12, 'Hai cái bẫy includeIf — đều IM LẶNG')}
-<p><strong>Bẫy 1 — thiếu dấu gạch chéo cuối.</strong> <code>gitdir:~/fpt</code> (không có <code>/</code>) không có nghĩa là "mọi thứ bên trong <code>~/fpt</code>"; nó chỉ khớp một thư mục <code>.git</code> có đúng đường dẫn đó. Không gì khớp, không gì được chèn, và Git không nói gì — trong bộ thử, <code>git config --show-origin user.email</code> không in dòng nào và thoát với mã 1 (khoá chưa được đặt ở đâu cả). Có <code>/</code> ở cuối thì Git tự thêm <code>**</code> và mọi kho bên trong thư mục đều khớp.</p>
+<p><strong>Bẫy 1 — thiếu dấu gạch chéo cuối.</strong> <code>gitdir:~/fpt</code> (không có <code>/</code>) không có nghĩa là "mọi thứ bên trong <code>~/fpt</code>"; nó chỉ khớp một thư mục <code>.git</code> có đúng đường dẫn đó. Không gì khớp, không gì được chèn, và Git không nói gì — trong bộ thử, <code>git config --show-origin user.email</code> không in dòng nào và thoát với mã 1 (khoá chưa được đặt ở đâu cả). Nếu khối <code>[user]</code> đã có sẵn email cá nhân thì cùng lệnh đó in email cá nhân từ <code>~/.gitconfig</code> — vẫn im lặng, vẫn sai. Có <code>/</code> ở cuối thì Git tự thêm <code>**</code> và mọi kho bên trong thư mục đều khớp.</p>
 <p><strong>Bẫy 2 — <code>includeIf</code> đặt TRƯỚC <code>[user]</code>.</strong> File được chèn vào đọc tại chỗ dòng <code>includeIf</code> đứng. Đặt nó ở đầu file thì dòng <code>[user] email</code> thường ở dưới được đọc sau và thắng:</p>
 <div class="out">file:~/.gitconfig	cuong@example.com</div>
 <p>— email cá nhân, bên trong kho của trường, không một lời cảnh báo. Luôn đặt các khối <code>includeIf</code> ở <em>cuối</em> <code>~/.gitconfig</code>, và kiểm một lần trong mỗi thư mục gốc bằng <code>git config --show-origin user.email</code>.</p>
@@ -881,6 +881,8 @@ git diff | cat -v</code></pre>
 <p><code>^M</code> is how <code>cat -v</code> prints <code>\\r</code>. On a real 300-line file that is a 600-line diff that hides the one line anyone cares about — and a merge conflict on every line the next time someone touches it.</p>
 <p>Worse, a shell script with CRLF endings does not run on Linux at all. The first line <code>#!/bin/bash</code> becomes <code>#!/bin/bash\\r</code>, and there is no program called <code>bash\\r</code>:</p>
 <div class="out">bash: ./deploy.sh: /bin/bash^M: bad interpreter: No such file or directory</div>
+<p>That is the wording of the bash that ships with macOS (3.2). The bash in <code>debian:12</code> (5.2) does not even mention the <code>^M</code> any more (real run, same file):</p>
+<div class="out">bash: line 1: ./deploy.sh: cannot execute: required file not found</div>
 <p>Inside a Docker container (a real <code>debian:12</code> run of the same file) the message is even less helpful — it blames the script itself:</p>
 <div class="out">exec ./deploy.sh: no such file or directory</div>
 
@@ -1022,6 +1024,8 @@ git diff | cat -v</code></pre>
 <p><code>^M</code> là cách <code>cat -v</code> in ra <code>\\r</code>. Với một file thật 300 dòng, đó là một bản diff 600 dòng che mất đúng một dòng mà ai cũng quan tâm — và một xung đột trên mọi dòng ở lần kế tiếp có người đụng vào file.</p>
 <p>Tệ hơn, một shell script có đuôi CRLF không chạy được trên Linux. Dòng đầu <code>#!/bin/bash</code> thành <code>#!/bin/bash\\r</code>, mà không có chương trình nào tên <code>bash\\r</code>:</p>
 <div class="out">bash: ./deploy.sh: /bin/bash^M: bad interpreter: No such file or directory</div>
+<p>Đó là câu của bản bash đi kèm macOS (3.2). Bash trong <code>debian:12</code> (5.2) thậm chí không còn nhắc tới <code>^M</code> (chạy thật, cùng file đó):</p>
+<div class="out">bash: line 1: ./deploy.sh: cannot execute: required file not found</div>
 <p>Trong một container Docker (chạy thật cùng file đó trên <code>debian:12</code>) thông báo còn khó hiểu hơn — nó đổ lỗi cho chính file script:</p>
 <div class="out">exec ./deploy.sh: no such file or directory</div>
 

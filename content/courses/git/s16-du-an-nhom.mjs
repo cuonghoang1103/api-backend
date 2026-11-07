@@ -148,7 +148,7 @@ git check-ignore -v .env node_modules/x/i.js .env.example</code></pre>
 - Kẹt quá 30 phút: hỏi trong nhóm, dán nguyên văn &#96;git status&#96;.</code></pre>
 
 <h3>Issue forms and a pull request template</h3>
-<p>An issue form turns "làm cái lịch" into a user story with checkable acceptance criteria. Forms are YAML files in <code>.github/ISSUE_TEMPLATE/</code>; the required top-level keys are <code>name</code>, <code>description</code> and <code>body</code> (docs.github.com, "Syntax for issue forms"). Note one detail from the docs: <code>labels</code> are only applied if they already exist — create <code>tinh-nang</code> and <code>loi</code> in the Labels page first.</p>
+<p>An issue form turns "làm cái lịch" into a user story with checkable acceptance criteria. Forms are YAML files in <code>.github/ISSUE_TEMPLATE/</code>; the required top-level keys are <code>name</code>, <code>description</code> and <code>body</code> (docs.github.com, "Syntax for issue forms"). Write placeholders as <code>[ai]</code>, not <code>&lt;ai&gt;</code>: the description is rendered as Markdown, and an ASCII word in angle brackets is read as an HTML tag and dropped (on a self-hosted Forgejo the hint showed up as "Là , tôi muốn &lt;gì&gt;…"). Note one detail from the docs: <code>labels</code> are only applied if they already exist — create <code>tinh-nang</code> and <code>loi</code> in the Labels page first.</p>
 <pre><code class="language-yaml">name: Tính năng
 description: Một việc cần làm cho đồ án — nhỏ, xong trong 1–3 ngày.
 title: "[Tính năng]: "
@@ -158,7 +158,7 @@ body:
     id: user-story
     attributes:
       label: User story
-      description: Là &lt;ai&gt;, tôi muốn &lt;gì&gt;, để &lt;vì sao&gt;.
+      description: Là [ai], tôi muốn [gì], để [vì sao].
       placeholder: Là bệnh nhân, tôi muốn xem các khung giờ còn trống, để chọn giờ khám.
     validations:
       required: true
@@ -283,10 +283,11 @@ jobs:
       - run: npm test</code></pre>
 <p>Three details carry the weight. <code>permissions: contents: read</code> gives the job the least it needs. <code>concurrency</code> cancels the previous run when someone pushes twice in a minute. And the job id, <code>kiem-tra</code>, is the name you will pick as the required status check. (The actions are pinned to their current major version, <code>v7</code>, as of 09/2026; earlier chapters used <code>v4</code>, which also still exists.)</p>
 <p>Now the trap. Before the first test file existed, Cường ran the test command:</p>
-<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"</code></pre>
+<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"</code></pre>
 <div class="out"># tests 0
 # pass 0
 # fail 0</div>
+<p>(That is Node 22, the version CI uses: it prints the summary as <code># tests</code>. Node 23 and later print <code>ℹ tests</code> instead even in a pipe — hence <code>(#|ℹ)</code> in the pattern; with only <code>^#</code> the command prints nothing on a newer laptop.)</p>
 <p>Zero tests, exit code 0 — CI would be <em>green</em> while checking nothing. A required check that cannot fail protects no one. So one real test goes in before CI is switched on:</p>
 <pre><code class="language-javascript">import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -454,7 +455,7 @@ git check-ignore -v .env node_modules/x/i.js .env.example</code></pre>
 - Kẹt quá 30 phút: hỏi trong nhóm, dán nguyên văn &#96;git status&#96;.</code></pre>
 
 <h3>Mẫu issue và mẫu pull request</h3>
-<p>Một issue form (mẫu issue dạng biểu mẫu) biến câu "làm cái lịch" thành một user story (câu chuyện người dùng) có tiêu chí hoàn thành kiểm được. Mẫu là file YAML trong <code>.github/ISSUE_TEMPLATE/</code>; ba khoá bắt buộc ở cấp trên cùng là <code>name</code>, <code>description</code> và <code>body</code> (docs.github.com, "Syntax for issue forms"). Để ý một chi tiết trong tài liệu: <code>labels</code> chỉ được gắn nếu nhãn ĐÃ tồn tại — tạo nhãn <code>tinh-nang</code> và <code>loi</code> ở trang Labels trước.</p>
+<p>Một issue form (mẫu issue dạng biểu mẫu) biến câu "làm cái lịch" thành một user story (câu chuyện người dùng) có tiêu chí hoàn thành kiểm được. Mẫu là file YAML trong <code>.github/ISSUE_TEMPLATE/</code>; ba khoá bắt buộc ở cấp trên cùng là <code>name</code>, <code>description</code> và <code>body</code> (docs.github.com, "Syntax for issue forms"). Viết chỗ trống là <code>[ai]</code>, đừng viết <code>&lt;ai&gt;</code>: phần mô tả được hiển thị như Markdown, và một chữ ASCII trong ngoặc nhọn bị đọc thành thẻ HTML rồi bị bỏ (chạy thật trên Forgejo tự dựng, dòng gợi ý hiện ra "Là , tôi muốn &lt;gì&gt;…"). Để ý một chi tiết trong tài liệu: <code>labels</code> chỉ được gắn nếu nhãn ĐÃ tồn tại — tạo nhãn <code>tinh-nang</code> và <code>loi</code> ở trang Labels trước.</p>
 <pre><code class="language-yaml">name: Tính năng
 description: Một việc cần làm cho đồ án — nhỏ, xong trong 1–3 ngày.
 title: "[Tính năng]: "
@@ -464,7 +465,7 @@ body:
     id: user-story
     attributes:
       label: User story
-      description: Là &lt;ai&gt;, tôi muốn &lt;gì&gt;, để &lt;vì sao&gt;.
+      description: Là [ai], tôi muốn [gì], để [vì sao].
       placeholder: Là bệnh nhân, tôi muốn xem các khung giờ còn trống, để chọn giờ khám.
     validations:
       required: true
@@ -589,10 +590,11 @@ jobs:
       - run: npm test</code></pre>
 <p>Ba chi tiết gánh cả file. <code>permissions: contents: read</code> cho job đúng mức quyền tối thiểu nó cần. <code>concurrency</code> (chạy đồng thời) huỷ lượt chạy trước khi ai đó push hai lần trong một phút. Và mã job, <code>kiem-tra</code>, chính là tên bạn sẽ chọn làm status check (phép kiểm trạng thái) bắt buộc. (Các action được ghim ở bản chính hiện tại, <code>v7</code>, tính đến 09/2026; các chương trước dùng <code>v4</code>, bản đó vẫn còn.)</p>
 <p>Giờ tới cái bẫy. Khi chưa có file test nào, Cường chạy lệnh test:</p>
-<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"</code></pre>
+<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"</code></pre>
 <div class="out"># tests 0
 # pass 0
 # fail 0</div>
+<p>(Đó là Node 22, bản CI dùng: dòng tổng kết bắt đầu bằng <code># tests</code>. Node 23 trở lên in <code>ℹ tests</code> kể cả khi đi qua ống — vì thế mẫu là <code>(#|ℹ)</code>; chỉ <code>^#</code> thì trên laptop Node mới lệnh không in gì.)</p>
 <p>Không test nào, mã thoát 0 — CI sẽ <em>xanh</em> trong khi chẳng kiểm gì. Một phép kiểm bắt buộc mà không thể trượt thì không bảo vệ được ai. Nên một test thật phải vào trước khi bật CI:</p>
 <pre><code class="language-javascript">import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -714,7 +716,7 @@ export const NGHI_TRUA = ['12:00', '13:00'];</code></pre>
 <pre><code class="language-bash">git commit -m "feat(lich): tính các khung giờ trống trong ngày"
 git commit -m "test(lich): kiểm số khung giờ và giờ đã đặt"
 git log --oneline -2
-npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git push -u origin feat/1-khung-gio</code></pre>
 <div class="out">81804c4 test(lich): kiểm số khung giờ và giờ đã đặt
 119d551 feat(lich): tính các khung giờ trống trong ngày
@@ -814,7 +816,7 @@ index c7749e2,b88bb86..0000000
 + export const NGHI_TRUA = ['12:00', '13:00'];
  +export const SO_LICH_TOI_DA = 3;</div>
 <p>Two columns of <code>+</code>: the first column is "added compared with my side", the second "compared with <code>main</code>" — each line comes from one side, nothing else changed. Then the step students skip: <strong>run the tests before committing the merge</strong>, because "no conflict markers left" is not the same as "works".</p>
-<pre><code class="language-bash">git add src/config.js &amp;&amp; npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+<pre><code class="language-bash">git add src/config.js &amp;&amp; npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git commit --no-edit
 git log --oneline --graph -6
 git push</code></pre>
@@ -928,7 +930,7 @@ export const NGHI_TRUA = ['12:00', '13:00'];</code></pre>
 <pre><code class="language-bash">git commit -m "feat(lich): tính các khung giờ trống trong ngày"
 git commit -m "test(lich): kiểm số khung giờ và giờ đã đặt"
 git log --oneline -2
-npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git push -u origin feat/1-khung-gio</code></pre>
 <div class="out">81804c4 test(lich): kiểm số khung giờ và giờ đã đặt
 119d551 feat(lich): tính các khung giờ trống trong ngày
@@ -1028,7 +1030,7 @@ index c7749e2,b88bb86..0000000
 + export const NGHI_TRUA = ['12:00', '13:00'];
  +export const SO_LICH_TOI_DA = 3;</div>
 <p>Hai cột dấu <code>+</code>: cột thứ nhất là "thêm so với phía mình", cột thứ hai là "so với <code>main</code>" — mỗi dòng đến từ một phía, không gì khác bị đổi. Rồi tới bước sinh viên hay bỏ: <strong>chạy test trước khi commit lần merge</strong>, vì "hết dấu xung đột" không có nghĩa là "chạy đúng".</p>
-<pre><code class="language-bash">git add src/config.js &amp;&amp; npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+<pre><code class="language-bash">git add src/config.js &amp;&amp; npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git commit --no-edit
 git log --oneline --graph -6
 git push</code></pre>
@@ -1126,7 +1128,7 @@ ${slide('git-16', 12, 'Bảng Projects chạy theo issue và PR')}
 ${slide('git-16', 3, 'Ba tuần của nhóm 5 — trục thời gian')}
 <p>After sprint 1, sprint 2 added two more squash-merged pull requests (#10, the "booked appointments" page, and #12, a test for the three-bookings limit). Before freezing, Cường checks that <code>main</code> is green and reads the whole history once:</p>
 <pre><code class="language-bash">git switch main &amp;&amp; git pull
-npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git log --oneline</code></pre>
 <div class="out"># tests 7
 # pass 7
@@ -1212,7 +1214,7 @@ index 5c96aff..171b301 100644
    if (!ten || !/^0\\d{9}$/.test(sdt)) throw new Error('Thiếu tên hoặc số điện thoại sai');
    if (ds.some((l) =&gt; l.ngay === ngay &amp;&amp; l.gio === gio)) throw new Error(&#96;Giờ &#36;{gio} ngày &#36;{ngay} đã có người đặt&#96;);
    if (ds.filter((l) =&gt; l.sdt === sdt).length &gt;= SO_LICH_TOI_DA) throw new Error('Quá số lịch cho phép');</code></pre>
-<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git commit -m "fix(dat-lich): chặn đặt lịch vào Chủ nhật" -m "Closes #15"
 git log --oneline -1</code></pre>
 <div class="out"># tests 8
@@ -1327,7 +1329,7 @@ d131916 chore: phát hành 1.0.1
 ${slide('git-16', 3, 'Ba tuần của nhóm 5 — trục thời gian')}
 <p>Sau sprint 1, sprint 2 thêm hai pull request được squash merge nữa (#10 trang "lịch đã đặt", và #12 một test cho giới hạn ba lịch). Trước khi đóng băng, Cường kiểm <code>main</code> xanh và đọc lại cả lịch sử một lượt:</p>
 <pre><code class="language-bash">git switch main &amp;&amp; git pull
-npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git log --oneline</code></pre>
 <div class="out"># tests 7
 # pass 7
@@ -1413,7 +1415,7 @@ index 5c96aff..171b301 100644
    if (!ten || !/^0\\d{9}$/.test(sdt)) throw new Error('Thiếu tên hoặc số điện thoại sai');
    if (ds.some((l) =&gt; l.ngay === ngay &amp;&amp; l.gio === gio)) throw new Error(&#96;Giờ &#36;{gio} ngày &#36;{ngay} đã có người đặt&#96;);
    if (ds.filter((l) =&gt; l.sdt === sdt).length &gt;= SO_LICH_TOI_DA) throw new Error('Quá số lịch cho phép');</code></pre>
-<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^# (tests|pass|fail)"
+<pre><code class="language-bash">npm test 2&gt;&amp;1 | grep -E "^(#|ℹ) (tests|pass|fail)"
 git commit -m "fix(dat-lich): chặn đặt lịch vào Chủ nhật" -m "Closes #15"
 git log --oneline -1</code></pre>
 <div class="out"># tests 8

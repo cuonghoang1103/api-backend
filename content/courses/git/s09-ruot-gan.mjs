@@ -623,6 +623,7 @@ ls -lh .git/objects/pack/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">.pack</span><span class="v">All the objects, concatenated and delta-compressed.</span></div>
   <div class="kv"><span class="k">.idx</span><span class="v">The index: which hash lives at which byte offset, so any object is one seek away.</span></div>
+  <div class="kv"><span class="k">.rev</span><span class="v">Since Git 2.41 a third file usually sits next to these two: the reverse index (byte offset → object), so Git can walk the pack in order without rebuilding that table. You never touch it.</span></div>
 </div>
 
 <h3>Delta compression — the actual saving</h3>
@@ -750,6 +751,7 @@ ls -lh .git/objects/pack/</code></pre>
 <div class="kv-grid">
   <div class="kv"><span class="k">.pack</span><span class="v">Mọi đối tượng, nối lại và nén theo delta.</span></div>
   <div class="kv"><span class="k">.idx</span><span class="v">Bảng chỉ mục: mã băm nào nằm ở byte thứ mấy, nên với tới đối tượng nào cũng chỉ tốn một lần nhảy.</span></div>
+  <div class="kv"><span class="k">.rev</span><span class="v">Từ Git 2.41 thường có thêm file thứ ba nằm cạnh hai file trên: chỉ mục ngược (vị trí byte → đối tượng), để Git đi lần lượt trong pack mà không phải dựng lại bảng đó. Bạn không bao giờ phải đụng vào nó.</span></div>
 </div>
 
 <h3>Nén delta — chỗ tiết kiệm thật sự</h3>

@@ -95,7 +95,9 @@ Third-year IT student at FPT University, looking for a **Web/Backend internship 
 - 🌱 Learning: testing, Docker, contributing to open source
 
 **Tech:** TypeScript · React · Java · PostgreSQL
+
 **Contact:** school email · linkedin.com/in/…</code></pre>
+<p>Note the empty line between the last two lines: in a README, two lines written one under the other are joined into one line when rendered (a single newline is just a space in Markdown). Leave a blank line, as above, whenever you want a new line.</p>
 <div class="callout warn">Resist the badge wall: twenty technology logos, a visitor counter, an animated "top languages" card and a random quote. Every one of them pushes the three lines that matter further down the screen, and a language card measures bytes of code, not skill — one large generated or copied file can make it call you a "CSS developer". Links to real work beat decoration.</div>
 
 <h3>Six pins: choose like an editor</h3>
@@ -238,7 +240,9 @@ Sinh viên CNTT năm 3 tại FPTU. Đang tìm **thực tập (OJT)** vị trí W
 - 🌱 Đang học: kiểm thử, Docker, đóng góp mã nguồn mở
 
 **Công nghệ:** TypeScript · React · Java · PostgreSQL
+
 **Liên hệ:** email trường · linkedin.com/in/…</code></pre>
+<p>Để ý dòng trống giữa hai dòng cuối: trong README, hai dòng viết liền nhau sẽ bị gộp thành một dòng khi hiển thị (một lần xuống dòng đơn trong Markdown chỉ là một dấu cách). Muốn xuống dòng thì chừa một dòng trống, như trên.</p>
 <div class="callout warn">Cưỡng lại "bức tường huy hiệu": hai mươi logo công nghệ, bộ đếm lượt xem, thẻ "ngôn ngữ dùng nhiều nhất" chuyển động và một câu trích dẫn ngẫu nhiên. Mỗi thứ đẩy ba dòng quan trọng xuống thấp hơn, còn thẻ ngôn ngữ thì đo số byte mã chứ không đo kỹ năng — một file lớn sinh tự động hay chép từ đâu về là đủ để nó gọi bạn là "lập trình viên CSS". Link tới việc thật thắng mọi thứ trang trí.</div>
 
 <h3>Sáu repo ghim: chọn như một biên tập viên</h3>
@@ -1080,7 +1084,7 @@ git push --force-with-lease origin fix/12-chu-nhat-day-du</code></pre>
 To ../oss-fork.git
  + a9fee7e...2cb8aac fix/12-chu-nhat-day-du -&gt; fix/12-chu-nhat-day-du (forced update)</div>
 <p>The commit got a new hash (<code>a9fee7e</code> → <code>2cb8aac</code>) because its parent changed — Chapter 8’s rule that rebasing rewrites commits. Force-pushing is fine here because the branch is yours alone; <code>--force-with-lease</code> refuses if the remote branch moved in a way you have not seen (a maintainer can push to your PR branch). <code>--ff-only</code> on <code>main</code> guarantees you never create a merge commit on your fork’s copy of their branch.</p>
-<p>Shortcuts, per the <code>gh</code> help and GitHub Docs: <code>gh repo sync</code> inside your clone updates your local branch from the parent repository; <code>gh repo sync &lt;you&gt;/&lt;fork&gt;</code> updates the fork on GitHub; the <strong>Sync fork</strong> button on your fork’s page does the same from the web. All three only fast-forward — if they cannot, fall back to the commands above.</p>
+<p>Shortcuts, per the <code>gh</code> help and GitHub Docs: <code>gh repo sync</code> inside your clone updates your local branch from the parent repository; <code>gh repo sync &lt;you&gt;/&lt;fork&gt;</code> updates the fork on GitHub; the <strong>Sync fork</strong> button on your fork’s page does the same from the web. By default <code>gh repo sync</code> only fast-forwards; with <code>--force</code> it hard-resets the destination branch to match the source, which throws away any commit that exists only on your fork’s branch (that is what <code>gh repo sync --help</code> prints). The <strong>Sync fork</strong> button, when the update would conflict, offers to open a pull request instead. Whenever a plain fast-forward is not possible, fall back to the commands above.</p>
 
 <h3>Review: the part that decides the merge</h3>
 <ul>
@@ -1207,7 +1211,7 @@ git push --force-with-lease origin fix/12-chu-nhat-day-du</code></pre>
 To ../oss-fork.git
  + a9fee7e...2cb8aac fix/12-chu-nhat-day-du -&gt; fix/12-chu-nhat-day-du (forced update)</div>
 <p>Commit nhận mã băm mới (<code>a9fee7e</code> → <code>2cb8aac</code>) vì cha của nó đã đổi — đúng luật của Chương 8: rebase viết lại commit. Force-push ở đây ổn vì nhánh chỉ của riêng bạn; <code>--force-with-lease</code> từ chối nếu nhánh trên remote đã đổi theo cách bạn chưa thấy (maintainer có thể push lên nhánh PR của bạn). <code>--ff-only</code> trên <code>main</code> bảo đảm bạn không bao giờ tạo merge commit trên bản sao nhánh của họ trong fork.</p>
-<p>Đường tắt, theo phần trợ giúp của <code>gh</code> và GitHub Docs: <code>gh repo sync</code> chạy trong bản clone sẽ cập nhật nhánh cục bộ từ repo cha; <code>gh repo sync &lt;bạn&gt;/&lt;fork&gt;</code> cập nhật fork trên GitHub; nút <strong>Sync fork</strong> trên trang fork làm việc tương tự từ web. Cả ba chỉ tua thẳng (fast-forward) — không được thì quay về các lệnh ở trên.</p>
+<p>Đường tắt, theo phần trợ giúp của <code>gh</code> và GitHub Docs: <code>gh repo sync</code> chạy trong bản clone sẽ cập nhật nhánh cục bộ từ repo cha; <code>gh repo sync &lt;bạn&gt;/&lt;fork&gt;</code> cập nhật fork trên GitHub; nút <strong>Sync fork</strong> trên trang fork làm việc tương tự từ web. Mặc định <code>gh repo sync</code> chỉ tua thẳng (fast-forward); thêm <code>--force</code> thì nó reset cứng nhánh đích cho bằng nguồn — mọi commit chỉ có trên nhánh đó của fork bị bỏ (đúng như <code>gh repo sync --help</code> in ra). Nút <strong>Sync fork</strong> gặp xung đột thì gợi ý mở một pull request. Hễ không tua thẳng được thì quay về các lệnh ở trên.</p>
 
 <h3>Review: phần quyết định có merge hay không</h3>
 <ul>

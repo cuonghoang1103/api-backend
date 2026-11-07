@@ -67,7 +67,7 @@ export default {
 
     /* ── Chương 5 — Remote & GitHub ── */
     'git-5-0-slides': { yt: 'Gg4bLk8cGNo', credit: "David Mahler — Introduction to Git - Remotes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-00-slide-chuong-5-3b5eef19.mp4' }, defaultVideoTrack: 'VI'},
-    'git-5-1-remote-fetch-pull': { yt: 'T13gDBXarj0', credit: "The Modern Coder — Git Pull vs Fetch: When To Use Each", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-01-remote-fetch-pull-477f53b7.mp4' }, defaultVideoTrack: 'VI'},
+    'git-5-1-remote-fetch-pull': { yt: 'T13gDBXarj0', credit: "The Modern Coder — Git Pull vs Fetch: When To Use Each", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-01-remote-fetch-pull-e4cd2cb6.mp4' }, defaultVideoTrack: 'VI'},
     'git-5-2-xac-thuc': { yt: 'Lhyu_2iLO8w', credit: "HenrikM Dev — How to Git Clone From GitHub via HTTPS and SSH [2 Ways]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-02-xac-thuc-28186923.mp4' }, defaultVideoTrack: 'VI'},
     'git-5-3-push': { yt: 'wBc0WcyTtOA', credit: "Cameron McKenzie — Git Set Upstream Example | Learn Branch Management in Git", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-03-push-9d211b94.mp4' }, defaultVideoTrack: 'VI'},
     'git-5-4-fork-upstream': { yt: 'deEYHVpE1c8', credit: "Faraday Academy — Git Forking & Fetch: How to Keep your Fork in Sync with an Upstream Repository", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/06-remote-github/06-04-fork-upstream-7fe8375c.mp4' }, defaultVideoTrack: 'VI'},
@@ -88,13 +88,13 @@ export default {
     /* ── Chương 8 — Viết lại lịch sử an toàn ── */
     'git-8-0-slides': { yt: 'qsTthZi23VE', credit: "freeCodeCamp.org — Advanced Git Tutorial - Interactive Rebase, Cherry-Picking, Reflog, Submodules and more", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-00-slide-chuong-8-21113a6f.mp4' }, defaultVideoTrack: 'VI'},
     'git-8-1-amend': { yt: 'q53umU5vMkk', credit: "The Modern Coder — Git Amend Tutorial: Rewrite Git History", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-01-amend-39564eb7.mp4' }, defaultVideoTrack: 'VI'},
-    'git-8-2-force-with-lease': { yt: 'BkKBWgPXMwE', credit: "Steven Lee — git push   force vs git push   force with lease" },
+    'git-8-2-force-with-lease': { yt: 'BkKBWgPXMwE', credit: "Steven Lee — git push   force vs git push   force with lease", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-02-force-with-lease-eeb7f09f.mp4' }, defaultVideoTrack: 'VI'},
     'git-8-3-go-bi-mat': { yt: 'msUDPYsbABY', credit: "GitGuardian — How to permanently remove files from git and  rewrite your git history", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/09-viet-lai-lich-su/09-03-go-bi-mat-21b5a6d0.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 9 — Bên dưới nắp capo: kho đối tượng ── */
     'git-9-0-slides': { yt: 'lG90LZotrpo', credit: "CS50 — Git Internals by John Britton of GitHub - CS50 Tech Talk", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-00-slide-chuong-9-b4745628.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-1-thu-muc-git': { yt: 'bSA91XTzeuA', credit: "Computerphile — Inside the Hidden Git Folder - Computerphile" },
-    'git-9-2-bon-doi-tuong': { yt: 'MyvyqdQ3OjI', credit: "Brief — Git Internals - Git Objects" },
+    'git-9-2-bon-doi-tuong': { yt: 'MyvyqdQ3OjI', credit: "Brief — Git Internals - Git Objects", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-02-bon-doi-tuong-edf10d8b.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-3-packfile-gc': { yt: 'xo6YqzUROcg', credit: "Bogdan Stashchuk — Git Garbage Collection | Advanced Git - 14" },
 
     /* ── Chương 10 — Kho mã lớn & quy trình nâng cao ── */
@@ -105,13 +105,13 @@ export default {
 
     /* ── Chương 11 — Nền tảng GitHub ── */
     'git-11-0-slides': { yt: 'NUELGzIHT-I', credit: "GitHub — The ultimate beginner's guide to GitHub in 2026", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-00-slide-chuong-11-2a86bef3.mp4' }, defaultVideoTrack: 'VI'},
-    'git-11-1-issue-projects-gh': { yt: 'c67GaAkf1BE', credit: "GitHub — How to use GitHub issues and projects | GitHub for Beginners" },
+    'git-11-1-issue-projects-gh': { yt: 'c67GaAkf1BE', credit: "GitHub — How to use GitHub issues and projects | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-f1bf49b3.mp4' }, defaultVideoTrack: 'VI'},
     'git-11-2-actions': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker" },
     'git-11-4-bao-mat-kho': { yt: 'zhxXaFzzJYA', credit: "GitHub — Getting started with GitHub security | GitHub for Beginners" },
 
     /* ── Chương 12 — Hook, ký commit & tự động hoá ── */
     'git-12-0-slides': { yt: '1OFiiPretCM', credit: "GitGuardian — What are GitHooks? Explained in 5 minutes" },
-    'git-12-1-hooks': { yt: 'ObksvAZyWdo', credit: "GitGuardian — Complete guide to GitHooks - Creating your own pre-commit hooks" },
+    'git-12-1-hooks': { yt: 'ObksvAZyWdo', credit: "GitGuardian — Complete guide to GitHooks - Creating your own pre-commit hooks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-01-hooks-1a36fcde.mp4' }, defaultVideoTrack: 'VI'},
     'git-12-2-ky-commit': { yt: '4166ExAnxmo', credit: "Nick Janetakis — Signing and Verifying Git Commits on the Command Line and GitHub" },
     'git-12-4-chinh-sach-may-chu': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets" },
 

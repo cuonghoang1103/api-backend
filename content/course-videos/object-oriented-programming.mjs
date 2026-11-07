@@ -30,7 +30,7 @@ export default {
     // 8.1 — List, Set & Map (Collections API)
     "pro192-8-1-collections": { yt: "Kn1RbK02YpM", credit: "Telusko — #91 Collection API in Java", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/08-java-collections/08-01-slide-collections-tron-d2200835.mp4' }, defaultVideoTrack: 'VI'},
     // 9.1 — Reading & writing files
-    "pro192-9-1-file-io": { yt: "ScUJx4aWRi0", credit: "Coding with John — Java File Input/Output - It's Way Easier Than You Think" },
+    "pro192-9-1-file-io": { yt: "ScUJx4aWRi0", credit: "Coding with John — Java File Input/Output - It's Way Easier Than You Think", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-luong-doc-ghi-tep/09-04-slide-file-io-van-ban-tron-43c67e54.mp4' }, defaultVideoTrack: 'VI'},
     // N2.1 — Good OO design & SOLID basics
     "pro192-n2-1-solid": { yt: "_jDNAf3CzeY", credit: "Amigoscode — Learn SOLID Principles with CLEAN CODE Examples", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/10-nang-cao-java-hien-dai-thiet-ke/10-02-n2-1-solid-3417b2e4.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-bat-dau-tai-day': { yt: 'ZqGSg4b_cZA', credit: 'CultRepo — The Java Story | The Official Documentary', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-01-bat-dau-tai-day-2eb71fe9.mp4' }, defaultVideoTrack: 'VI'},
@@ -105,16 +105,19 @@ export default {
     'pro192-slide-cs5-2': { yt: 'kwFP-zCLV2M', credit: 'Java — Mastering JVM Memory Troubleshooting - From OutOfMemoryErrors to Leaks', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-15-slide-cs5-2-jvm-tron-0cf30315.mp4' }, defaultVideoTrack: 'VI'},
     // YouTube bổ sung 31/10/2026
     'pro192-slide-pro2-1': { yt: 'fQKbV-NeY18', credit: 'Amit Thinks — Install NetBeans IDE 27 with Java JDK 24 on Windows 11 | Beginner\'s Guide (2025)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-087fe194.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-on-ch6': { yt: 'XhH93_woZIY', credit: 'Bro Code — Java custom exceptions 🛑' },
+    'pro192-on-ch6': { yt: 'XhH93_woZIY', credit: 'Bro Code — Java custom exceptions 🛑', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/06-xu-ly-ngoai-le/06-03-thuc-hanh-tron-1ed79134.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-on-ch7': { yt: '2j64wdFNWyE', credit: 'Telusko — #32 Array of Objects in Java' },
-    'pro192-lab-7-danh-sach-doi-tuong': { yt: 'lFbBI85oTnY', credit: 'Java — Write Efficient Bug-free and Simple Comparators in Java - JEP Café #17' },
-    'pro192-slide-pro14-2': { yt: 'lHFlAYaNfdo', credit: 'Alex Lee — Files In Java - Read Text File Easily #38' },
-    'pro192-slide-cs1-2': { yt: 'HsOVdmmBS9E', credit: 'Geekific — Functional Interfaces and Lambda Expressions in Java with Examples | Geekific' },
-    'pro192-cs2-on': { yt: 'cbRwk-usJFs', credit: 'The Curious Coder — Java 8 Stream API Interview Questions | 20 Coding Problems Solved Live 🔥' },
-    'pro192-slide-cs4-1': { yt: 'dCt9sfZV8Sg', credit: 'Telusko — #58 Object Class equals toString hashcode in Java' },
-    'pro192-cs4-on': { yt: 'pUXeNAeyY34', credit: 'Java — Immutable Collections' },
-    'pro192-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-lab-7-danh-sach-doi-tuong': { yt: 'lFbBI85oTnY', credit: 'Java — Write Efficient Bug-free and Simple Comparators in Java - JEP Café #17', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/07-mang-doi-tuong/07-51-lab-7-danh-sach-doi-tuong-tron-74599255.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-pro14-2': { yt: 'lHFlAYaNfdo', credit: 'Alex Lee — Files In Java - Read Text File Easily #38', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-luong-doc-ghi-tep/09-04-slide-file-io-van-ban-tron-43c67e54.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-cs1-2': { yt: 'HsOVdmmBS9E', credit: 'Geekific — Functional Interfaces and Lambda Expressions in Java with Examples | Geekific', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-02-slide-cs1-2-lambda-tron-e4240c39.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-cs2-on': { yt: 'cbRwk-usJFs', credit: 'The Curious Coder — Java 8 Stream API Interview Questions | 20 Coding Problems Solved Live 🔥', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-07-cs2-on-bai-tap-tron-8943568c.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-slide-cs4-1': { yt: 'dCt9sfZV8Sg', credit: 'Telusko — #58 Object Class equals toString hashcode in Java', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-13-slide-cs4-1-hop-dong-tron-46c8b5a1.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-cs4-on': { yt: 'pUXeNAeyY34', credit: 'Java — Immutable Collections', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-14-cs4-bai-tap-tron-2664f996.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-luyen-pe-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-03-luyen-pe-1-tron-2c85c9ac.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-luyen-pe-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-05-luyen-pe-3-tron-e5574da9.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-luyen-pe-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-06-luyen-pe-4-tron-2dc540fa.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

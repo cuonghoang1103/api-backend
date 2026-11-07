@@ -93,14 +93,14 @@ export default {
 
     /* ── Chương 9 — Bên dưới nắp capo: kho đối tượng ── */
     'git-9-0-slides': { yt: 'lG90LZotrpo', credit: "CS50 — Git Internals by John Britton of GitHub - CS50 Tech Talk", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-00-slide-chuong-9-b4745628.mp4' }, defaultVideoTrack: 'VI'},
-    'git-9-1-thu-muc-git': { yt: 'bSA91XTzeuA', credit: "Computerphile — Inside the Hidden Git Folder - Computerphile" },
+    'git-9-1-thu-muc-git': { yt: 'bSA91XTzeuA', credit: "Computerphile — Inside the Hidden Git Folder - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-01-thu-muc-git-7343d66b.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-2-bon-doi-tuong': { yt: 'MyvyqdQ3OjI', credit: "Brief — Git Internals - Git Objects", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-02-bon-doi-tuong-edf10d8b.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-3-packfile-gc': { yt: 'xo6YqzUROcg', credit: "Bogdan Stashchuk — Git Garbage Collection | Advanced Git - 14" },
 
     /* ── Chương 10 — Kho mã lớn & quy trình nâng cao ── */
-    'git-10-0-slides': { yt: 'LMG_-uJVdsw', credit: "GitLab Unfiltered — Speed Run: Partial Clone, Sparse Checkout, and File Locking" },
+    'git-10-0-slides': { yt: 'LMG_-uJVdsw', credit: "GitLab Unfiltered — Speed Run: Partial Clone, Sparse Checkout, and File Locking", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-00-slide-chuong-10-e353d4b4.mp4' }, defaultVideoTrack: 'VI'},
     'git-10-1-worktree': { yt: 'Vf_0QpLsFRs', credit: "Net Ninja — Git Worktrees Tutorial #1 - What are Git Worktrees?" },
-    'git-10-2-submodule-subtree': { yt: 'JESI498HSMA', credit: "Philomatics — Why everyone hates git submodules" },
+    'git-10-2-submodule-subtree': { yt: 'JESI498HSMA', credit: "Philomatics — Why everyone hates git submodules", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-02-submodule-subtree-0559f185.mp4' }, defaultVideoTrack: 'VI'},
     'git-10-3-monorepo-lfs': { yt: 'jOVWHIDvpe8', credit: "Bryant Son — Optimize checkout and clone time for GitHub monorepos using sparse-checkout and filter commands", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-03-monorepo-lfs-af561eab.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Nền tảng GitHub ── */
@@ -110,9 +110,9 @@ export default {
     'git-11-4-bao-mat-kho': { yt: 'zhxXaFzzJYA', credit: "GitHub — Getting started with GitHub security | GitHub for Beginners" },
 
     /* ── Chương 12 — Hook, ký commit & tự động hoá ── */
-    'git-12-0-slides': { yt: '1OFiiPretCM', credit: "GitGuardian — What are GitHooks? Explained in 5 minutes" },
+    'git-12-0-slides': { yt: '1OFiiPretCM', credit: "GitGuardian — What are GitHooks? Explained in 5 minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-00-slide-chuong-12-f6162b42.mp4' }, defaultVideoTrack: 'VI'},
     'git-12-1-hooks': { yt: 'ObksvAZyWdo', credit: "GitGuardian — Complete guide to GitHooks - Creating your own pre-commit hooks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-01-hooks-1a36fcde.mp4' }, defaultVideoTrack: 'VI'},
-    'git-12-2-ky-commit': { yt: '4166ExAnxmo', credit: "Nick Janetakis — Signing and Verifying Git Commits on the Command Line and GitHub" },
+    'git-12-2-ky-commit': { yt: '4166ExAnxmo', credit: "Nick Janetakis — Signing and Verifying Git Commits on the Command Line and GitHub", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-02-ky-commit-d1963ef4.mp4' }, defaultVideoTrack: 'VI'},
     'git-12-4-chinh-sach-may-chu': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets" },
 
     /* ── Chương 13 — Cứu hộ & Git trong quy trình thật ── */

@@ -95,11 +95,11 @@ export default {
     'git-9-0-slides': { yt: 'lG90LZotrpo', credit: "CS50 — Git Internals by John Britton of GitHub - CS50 Tech Talk", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-00-slide-chuong-9-b4745628.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-1-thu-muc-git': { yt: 'bSA91XTzeuA', credit: "Computerphile — Inside the Hidden Git Folder - Computerphile", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-01-thu-muc-git-7343d66b.mp4' }, defaultVideoTrack: 'VI'},
     'git-9-2-bon-doi-tuong': { yt: 'MyvyqdQ3OjI', credit: "Brief — Git Internals - Git Objects", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-02-bon-doi-tuong-edf10d8b.mp4' }, defaultVideoTrack: 'VI'},
-    'git-9-3-packfile-gc': { yt: 'xo6YqzUROcg', credit: "Bogdan Stashchuk — Git Garbage Collection | Advanced Git - 14" },
+    'git-9-3-packfile-gc': { yt: 'xo6YqzUROcg', credit: "Bogdan Stashchuk — Git Garbage Collection | Advanced Git - 14", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/10-ruot-gan/10-03-packfile-gc-e69ab832.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 10 — Kho mã lớn & quy trình nâng cao ── */
     'git-10-0-slides': { yt: 'LMG_-uJVdsw', credit: "GitLab Unfiltered — Speed Run: Partial Clone, Sparse Checkout, and File Locking", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-00-slide-chuong-10-e353d4b4.mp4' }, defaultVideoTrack: 'VI'},
-    'git-10-1-worktree': { yt: 'Vf_0QpLsFRs', credit: "Net Ninja — Git Worktrees Tutorial #1 - What are Git Worktrees?" },
+    'git-10-1-worktree': { yt: 'Vf_0QpLsFRs', credit: "Net Ninja — Git Worktrees Tutorial #1 - What are Git Worktrees?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-01-worktree-d954fbe3.mp4' }, defaultVideoTrack: 'VI'},
     'git-10-2-submodule-subtree': { yt: 'JESI498HSMA', credit: "Philomatics — Why everyone hates git submodules", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-02-submodule-subtree-0559f185.mp4' }, defaultVideoTrack: 'VI'},
     'git-10-3-monorepo-lfs': { yt: 'jOVWHIDvpe8', credit: "Bryant Son — Optimize checkout and clone time for GitHub monorepos using sparse-checkout and filter commands", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/11-kho-lon/11-03-monorepo-lfs-af561eab.mp4' }, defaultVideoTrack: 'VI'},
 
@@ -116,12 +116,12 @@ export default {
     'git-12-4-chinh-sach-may-chu': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets" },
 
     /* ── Chương 13 — Cứu hộ & Git trong quy trình thật ── */
-    'git-13-0-slides': { yt: 'FsSTd4Vcm90', credit: "International PHP Conference — Git: Undoing Things and recovering from Mistakes | Tobias Günther | IPC Spring 2018" },
+    'git-13-0-slides': { yt: 'FsSTd4Vcm90', credit: "International PHP Conference — Git: Undoing Things and recovering from Mistakes | Tobias Günther | IPC Spring 2018", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-00-slide-chuong-13-3f9c6329.mp4' }, defaultVideoTrack: 'VI'},
     'git-13-1-cuu-ho': { yt: 'lX9hsdsAeTk', credit: "freeCodeCamp.org — How to Undo Mistakes With Git Using the Command Line" },
-    'git-13-2-quy-trinh-that': { yt: 'jhtbhSpV5YA', credit: "Ako Dev — How to use GIT when working with a team?" },
+    'git-13-2-quy-trinh-that': { yt: 'jhtbhSpV5YA', credit: "Ako Dev — How to use GIT when working with a team?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-03-quy-trinh-that-25f276f6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Git hằng ngày trong công cụ: VS Code, giao diện đồ hoạ & cấu hình ── */
-    'git-14-0-slides': { yt: 'NFjz1AGKA4c', credit: "GitHub — How to use Git and GitHub in VS Code | Tutorial for beginners" },
+    'git-14-0-slides': { yt: 'NFjz1AGKA4c', credit: "GitHub — How to use Git and GitHub in VS Code | Tutorial for beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-00-slide-chuong-14-4c40b84f.mp4' }, defaultVideoTrack: 'VI'},
     'git-14-1-vs-code': { yt: 'i_23KUAEtUM', credit: "Visual Studio Code — Using Git with Visual Studio Code (Official Beginner Tutorial)" },
     'git-14-2-gitlens-desktop': { yt: 'oJdlGtsbc3U', credit: "GitKraken — GitLens Tutorial: How to use the VS Code Extension" },
     'git-14-3-cau-hinh': { yt: 'G3NJzFX6XhY', credit: "codingjerk — Configure your Git" },

@@ -77,12 +77,12 @@ export default {
     'nodejs-9-1-header-csp-cors': { yt: '4bQeGUzHpOE', credit: 'ByteMonk — HTTP Secure Headers for Web App Security | CORS, CSP, HSTS and more', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-01-header-csp-cors-tron-cf81d3e0.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-9-2-xss-va-sanitize': { yt: 'v969_M6cWk0', credit: 'Fireship — Ethical Hacking in 100 Seconds // And why do we need CORS?' },
     'nodejs-9-3-dau-vao-doc-hai': { yt: 'QqHavAYDYKM', credit: 'SBS online classes — helmet.js | Secure Node.js and Express.js APP/API', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-03-dau-vao-doc-hai-tron-d3a46b59.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-9-4-bi-mat-va-phu-thuoc': { yt: 'Wq6yMdt11LM', credit: 'Better Stack — npm installs can hack your laptop (Here\'s how to stop it)' },
+    'nodejs-9-4-bi-mat-va-phu-thuoc': { yt: 'Wq6yMdt11LM', credit: 'Better Stack — npm installs can hack your laptop (Here\'s how to stop it)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/09-bao-mat-ung-dung/09-04-bi-mat-va-phu-thuoc-tron-5762f0cb.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 10 — Upload & object storage ────────────────────────────── */
     'nodejs-10-1-nhan-file-multipart': { yt: 'jwp4U6v-3h4', credit: 'Sanjeev Thiyagarajan — NodeJs How to upload Files + uploading to AWS S3 using Express, Multer', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-01-nhan-file-multipart-tron-ef1bde72.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-10-2-object-storage-presigned': { yt: '6VHc41idHZs', credit: 'Rahul Ahire — The Ultimate S3 & Nodejs Guide | Bucket & Objects | Put Object, Pre-signed URL, Multipart Upload,etc' },
-    'nodejs-10-3-kiem-file-that': { yt: 'yz78h9JQiFA', credit: 'Education with Ankur — File Upload Type Validation Filters and Limit File Size and Error Handling in Node.js using Multer' },
+    'nodejs-10-2-object-storage-presigned': { yt: '6VHc41idHZs', credit: 'Rahul Ahire — The Ultimate S3 & Nodejs Guide | Bucket & Objects | Put Object, Pre-signed URL, Multipart Upload,etc', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-02-object-storage-presigned-tron-58e1cb98.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-10-3-kiem-file-that': { yt: 'yz78h9JQiFA', credit: 'Education with Ankur — File Upload Type Validation Filters and Limit File Size and Error Handling in Node.js using Multer', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-03-kiem-file-that-tron-e2332832.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-10-4-phuc-vu-media-cache': { yt: 'JKxlsvZXG7c', credit: 'Fireship — NGINX Explained in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-04-phuc-vu-media-cache-tron-000a2ca4.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Realtime ───────────────────────────────────────────── */

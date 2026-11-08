@@ -189,6 +189,12 @@ ${BANG_DO}
 <li>A slow or flaky test is a bug in the suite: fix it or move it down.</li>
 </ol>
 
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-14-1-vi-sao-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Also in the Node.js course — 14.1: what a test costs and what it buys</span><span class="lc-sub">The pyramid priced on one rule of a Notes API: 0.001 ms per unit test against 2.398 ms per supertest + PostgreSQL test — and the surprise that end-to-end came out cheaper than integration. Plus node:test vs vitest vs jest, measured.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+
 <h3>🧪 Practice (15 minutes)</h3>
 <div class="callout ok">
 <p>Place each test at a level (unit · integration · API · component · end-to-end), and write one reason. Then compare with the answers below.</p>
@@ -311,6 +317,12 @@ ${BANG_DO}
 <li>Khi test đầu-cuối bắt được lỗi, thêm test cấp thấp hơn mà lẽ ra đã bắt được nó sớm hơn.</li>
 <li>Test chậm hay chập chờn là lỗi của bộ test: sửa nó, hoặc chuyển nó xuống cấp thấp hơn.</li>
 </ol>
+
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-14-1-vi-sao-test" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Gặp lại ở khoá Node.js — 14.1: một bài test giá bao nhiêu và mua được gì</span><span class="lc-sub">Kim tự tháp có giá trên một luật của Notes API: 0,001 ms mỗi unit test so với 2,398 ms mỗi test supertest + PostgreSQL — và bất ngờ end-to-end lại rẻ hơn integration. Kèm node:test, vitest, jest đo bằng số.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 
 <h3>🧪 Thực hành (15 phút)</h3>
 <div class="callout ok">

@@ -52,6 +52,7 @@ jest 30.4.2           0,86s*     2,08s        322          43MB
 <p>Two things fall out of that table, and neither matches the marketing.</p>
 <p><strong>One.</strong> "vitest is much faster than jest" is not true for plain unit tests — at 1000 tests jest was <em>slightly ahead</em>. Vitest's speed advantage is real in a Vite front-end project, where it reuses the same transform pipeline your app already uses. On a plain Node backend there is no such pipeline to reuse.</p>
 <p><strong>Two.</strong> The built-in runner beat both at every size, and it beat them by the widest margin on the small suite — 0,10s versus 0,76s — which is exactly the case you run hundreds of times a day while writing code.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — Node 22.23.3, vitest 5.1.0, jest 30.5.2).</strong> Same rule, median of five rounds of 100: unit 0.001 ms, integration 2.398 ms, end-to-end 2.110 ms per test — end-to-end still cheaper than integration; the pure slugify call 0.0004 ms (2,355,643 calls per second). Runners, best of three, 6 / 1000 tests: node:test 0.09 s / 0.58 s, vitest 0.49 s / 1.36 s, jest 0.44 s / 0.96 s — this time jest was ahead of vitest at <em>both</em> sizes. A fresh install added 35 packages / 38 MB (vitest) and 278 packages / 50 MB (jest). Different machine, different versions, the same conclusions — which is exactly why you measure your own.</p></div>
 
 <h3>What the built-in runner looks like</h3>
 <p>No install, no config file, no <code>node_modules</code> entry:</p>
@@ -102,7 +103,7 @@ Tests:       12 passed, 12 total</div>
 <p>This chapter writes its examples in vitest, because its <code>expect</code> API is the one most readers will meet in job interviews and in existing repos, and because its assertion output is the most readable while you are learning. Every example converts to <code>node:test</code> mechanically: <code>expect(x).toBe(y)</code> becomes <code>assert.equal(x, y)</code>, and lesson 14.2 shows the one place where the two runners genuinely behave differently.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> This site runs the built-in runner and nothing else. <code>package.json</code> has <code>"test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts"</code> — three files, 272 lines, <strong>20 tests in 1297ms</strong>, zero test-framework dependencies in <code>devDependencies</code>. The header comment of <code>money.test.ts</code> states the selection rule out loud: "Pure functions — no DB, no network — so they run fast and deterministically in CI." What got tested is exactly what is expensive to get wrong and cheap to check: decimal-safe money arithmetic (<code>0.1 + 0.2</code> must be <code>0.3</code>, not <code>0.30000000000000004</code>), HALF_UP rounding, a hand-verified 12-month debt schedule, and VNPay signature verification. Nobody wrote a test for "the profile page renders".</p>
+<p><strong>How cuongthai.com does it.</strong> This site runs the built-in runner and nothing else. <code>package.json</code> has <code>"test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts"</code> — those were the first three files; the list has since grown to <strong>190 test files</strong> (43 of them database tests that only run against a real PostgreSQL, see lesson 14.4), still with zero test-framework dependencies in <code>devDependencies</code>. The header comment of <code>money.test.ts</code> states the selection rule out loud: "Pure functions — no DB, no network — so they run fast and deterministically in CI." What got tested is exactly what is expensive to get wrong and cheap to check: decimal-safe money arithmetic (<code>0.1 + 0.2</code> must be <code>0.3</code>, not <code>0.30000000000000004</code>), HALF_UP rounding, a hand-verified 12-month debt schedule, and VNPay signature verification. Nobody wrote a test for "the profile page renders".</p>
 </div>
 
 <div class="link-card codelab">
@@ -111,6 +112,11 @@ Tests:       12 passed, 12 total</div>
 <div class="link-card codelab">
   <a href="/code-lab/javascript${REF}#module-268"><span class="lc-t">Code Lab · JavaScript Patterns and Testing</span><span class="lc-d">Foundations of writing tests in JavaScript</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 0.1: the testing pyramid</span><span class="lc-sub">The course behind this chapter: what each level costs and catches, drawn as a pyramid. This lesson measured the price on one rule — 0.001 ms as a unit test, 2.398 ms through supertest and PostgreSQL, 2.110 ms end-to-end — so you can see where the textbook shape holds and where it does not.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -147,6 +153,7 @@ jest 30.4.2           0,86s*     2,08s        322          43MB
 <p>Bảng này rút ra hai điều, và cả hai đều không khớp với lời quảng cáo.</p>
 <p><strong>Một.</strong> "vitest nhanh hơn jest nhiều" là không đúng với test unit thuần — ở mốc 1000 test thì jest còn <em>nhỉnh hơn một chút</em>. Lợi thế tốc độ của vitest là có thật trong một dự án front-end dùng Vite, nơi nó dùng lại đúng đường ống biên dịch mà ứng dụng của bạn đã có sẵn. Trên một backend Node thuần thì không có đường ống nào để dùng lại cả.</p>
 <p><strong>Hai.</strong> Bộ chạy có sẵn thắng cả hai ở mọi kích cỡ, và thắng đậm nhất ở bộ nhỏ — 0,10s so với 0,76s — mà đó lại đúng là trường hợp bạn chạy hàng trăm lần mỗi ngày trong lúc đang viết code.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — Node 22.23.3, vitest 5.1.0, jest 30.5.2).</strong> Cùng một luật, trung vị năm vòng × 100: unit 0,001 ms, integration 2,398 ms, end-to-end 2,110 ms mỗi test — end-to-end vẫn rẻ hơn integration; riêng hàm slugify thuần 0,0004 ms (2.355.643 lần mỗi giây). Bộ chạy, tốt nhất trong ba lần, 6 / 1000 test: node:test 0,09 s / 0,58 s, vitest 0,49 s / 1,36 s, jest 0,44 s / 0,96 s — lần này jest nhanh hơn vitest ở <em>cả hai</em> cỡ. Cài mới thêm 35 gói / 38 MB (vitest) và 278 gói / 50 MB (jest). Máy khác, phiên bản khác, kết luận vẫn vậy — chính vì thế phải tự đo.</p></div>
 
 <h3>Bộ chạy có sẵn trông thế nào</h3>
 <p>Không cài gì, không file cấu hình, không có dòng nào trong <code>node_modules</code>:</p>
@@ -197,7 +204,7 @@ Tests:       12 passed, 12 total</div>
 <p>Chương này viết ví dụ bằng vitest, vì API <code>expect</code> của nó là thứ đa số người đọc sẽ gặp trong phỏng vấn và trong các repo có sẵn, và vì thông báo lỗi của nó dễ đọc nhất trong lúc đang học. Mọi ví dụ đều chuyển sang <code>node:test</code> được một cách máy móc: <code>expect(x).toBe(y)</code> thành <code>assert.equal(x, y)</code>. Bài 14.2 sẽ chỉ ra đúng một chỗ mà hai bộ chạy này hành xử khác nhau thật sự.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Site này chạy bộ test có sẵn và không dùng gì khác. Trong <code>package.json</code>: <code>"test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts"</code> — ba file, 272 dòng, <strong>20 test trong 1297ms</strong>, không một gói framework test nào trong <code>devDependencies</code>. Khối chú thích đầu file <code>money.test.ts</code> nói thẳng ra quy tắc chọn lọc: "Hàm thuần — không DB, không mạng — nên chúng chạy nhanh và tất định trong CI." Thứ được chọn để test đúng là thứ sai thì đắt mà kiểm thì rẻ: số học tiền tệ an toàn thập phân (<code>0.1 + 0.2</code> phải bằng <code>0.3</code>, không phải <code>0.30000000000000004</code>), làm tròn HALF_UP, một bảng lịch trả nợ 12 tháng đã tính tay đối chiếu, và việc kiểm chữ ký VNPay. Không ai viết test cho chuyện "trang cá nhân hiển thị được".</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Site này chạy bộ test có sẵn và không dùng gì khác. Trong <code>package.json</code>: <code>"test": "tsx --test src/services/finance/money.test.ts src/services/payment/vnpay.test.ts src/services/cv/cv.test.ts"</code> — đó là ba file đầu tiên; danh sách nay đã lên <strong>190 file test</strong> (43 file trong đó là test cơ sở dữ liệu, chỉ chạy với một PostgreSQL thật, xem bài 14.4), vẫn không một gói framework test nào trong <code>devDependencies</code>. Khối chú thích đầu file <code>money.test.ts</code> nói thẳng ra quy tắc chọn lọc: "Hàm thuần — không DB, không mạng — nên chúng chạy nhanh và tất định trong CI." Thứ được chọn để test đúng là thứ sai thì đắt mà kiểm thì rẻ: số học tiền tệ an toàn thập phân (<code>0.1 + 0.2</code> phải bằng <code>0.3</code>, không phải <code>0.30000000000000004</code>), làm tròn HALF_UP, một bảng lịch trả nợ 12 tháng đã tính tay đối chiếu, và việc kiểm chữ ký VNPay. Không ai viết test cho chuyện "trang cá nhân hiển thị được".</p>
 </div>
 
 <div class="link-card codelab">
@@ -235,6 +242,11 @@ Tests:       12 passed, 12 total</div>
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Nền tảng Web 10.1 — Tư duy như lập trình viên</span><span class="lc-sub">Lập kế hoạch, dò tay, rồi biến ca biên thành phép kiểm node --test: bản đầu đạt 1/5, sửa tới 5/5</span></span>
   <span class="lc-cta">Mở bài</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-0-1-kim-tu-thap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 0.1: kim tự tháp kiểm thử</span><span class="lc-sub">Khoá học đứng sau chương này: mỗi tầng tốn bao nhiêu và bắt được gì, vẽ thành kim tự tháp. Bài này đo giá trên đúng một luật — 0,001 ms ở unit, 2,398 ms qua supertest và PostgreSQL, 2,110 ms end-to-end — để bạn thấy chỗ hình sách giáo khoa đúng và chỗ nó không đúng.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -400,7 +412,7 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> <code>src/services/cv/cv.test.ts</code> is the largest of the three test files (176 lines) and it never touches the database, because the CV bullet linter it guards is a pure function over text. That is what makes the interesting assertion possible: the CI step is named "fails the build if the CV bullet linter regresses — especially if it starts marking STRONG bullets WEAK", the exact false positive that would quietly ruin every user's CV review while nothing appeared broken. The same repo also has a fabrication test that feeds the AI reviewer a CV with no metrics in it and fails if the model invents a number — a test that <em>skips</em> (exit 0) when no AI key is present, so the suite stays runnable on a laptop.</p>
+<p><strong>How cuongthai.com does it.</strong> <code>src/services/cv/cv.test.ts</code> (176 lines, one of the 190 test files in <code>npm test</code>) never touches the database, because the CV bullet linter it guards is a pure function over text. That is what makes the interesting assertion possible: the comment on the CI step that runs its golden set says it "fails the build if the CV bullet linter regresses — especially if it starts marking STRONG bullets WEAK", the exact false positive that would quietly ruin every user's CV review while nothing appeared broken. The same repo also has a fabrication test that feeds the AI reviewer a CV with no metrics in it and fails if the model invents a number — a test that <em>skips</em> (exit 0) when no AI key is present, so the suite stays runnable on a laptop.</p>
 </div>
 
 <div class="link-card codelab">
@@ -419,6 +431,11 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 10.1: TDD, and the classicist vs mockist choice</span><span class="lc-sub">Same: inject what you replace, assert on the outcome rather than the calls. Deeper there: a feature built test-first in seven recorded red/green steps, and the same service tested both ways — a harmless refactor turns the mockist test red, a repository bug leaves it green.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 3.4: designing for test doubles</span><span class="lc-sub">Why the Notes service could only be unit-tested after it took its repository as an argument — the course lesson turns that one-line change into a design rule, with the five kinds of double and when a call is the behaviour.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
@@ -576,7 +593,7 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> <code>src/services/cv/cv.test.ts</code> là file lớn nhất trong ba file test (176 dòng) và nó không hề chạm vào cơ sở dữ liệu, vì bộ soát gạch đầu dòng CV mà nó canh giữ là một hàm thuần trên văn bản. Chính điều đó làm cho khẳng định thú vị nhất trở nên khả thi: bước CI được đặt tên là "làm hỏng build nếu bộ soát gạch đầu dòng CV bị thoái hoá — đặc biệt là nếu nó bắt đầu chấm các gạch đầu dòng MẠNH thành YẾU", đúng cái dương tính giả sẽ âm thầm phá hỏng phần nhận xét CV của mọi người dùng trong khi ngoài mặt chẳng có gì trông có vẻ hỏng. Cũng repo đó còn có một bài test chống bịa đặt: đưa cho bộ nhận xét AI một bản CV không có con số nào và bắt lỗi nếu mô hình tự nghĩ ra một con số — bài test này <em>tự bỏ qua</em> (thoát 0) khi không có khoá AI, để bộ test vẫn chạy được trên máy cá nhân.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> <code>src/services/cv/cv.test.ts</code> (176 dòng, một trong 190 file test của <code>npm test</code>) không hề chạm vào cơ sở dữ liệu, vì bộ soát gạch đầu dòng CV mà nó canh giữ là một hàm thuần trên văn bản. Chính điều đó làm cho khẳng định thú vị nhất trở nên khả thi: chú thích của bước CI chạy bộ mẫu chuẩn của nó ghi rằng nó "làm hỏng build nếu bộ soát gạch đầu dòng CV bị thoái hoá — đặc biệt là nếu nó bắt đầu chấm các gạch đầu dòng MẠNH thành YẾU", đúng cái dương tính giả sẽ âm thầm phá hỏng phần nhận xét CV của mọi người dùng trong khi ngoài mặt chẳng có gì trông có vẻ hỏng. Cũng repo đó còn có một bài test chống bịa đặt: đưa cho bộ nhận xét AI một bản CV không có con số nào và bắt lỗi nếu mô hình tự nghĩ ra một con số — bài test này <em>tự bỏ qua</em> (thoát 0) khi không có khoá AI, để bộ test vẫn chạy được trên máy cá nhân.</p>
 </div>
 
 <div class="link-card codelab">
@@ -595,6 +612,11 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-10-1-tdd" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — 10.1: TDD, và chọn classicist hay mockist</span><span class="lc-sub">Giống: tiêm thứ cần thay, khẳng định kết cục thay vì các lời gọi. Sâu thêm ở đó: một tính năng viết test trước qua bảy bước đỏ/xanh có ghi lại, và cùng một service được test theo cả hai kiểu — refactor vô hại làm test mockist đỏ, bug ở repository lại để nó xanh.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-3-4-thiet-ke" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 3.4: thiết kế để dùng được hàng giả</span><span class="lc-sub">Vì sao service ghi chú chỉ unit test được sau khi nhận repository làm tham số — bài của khoá biến thay đổi một dòng đó thành một nguyên tắc thiết kế, kèm năm loại hàng giả và khi nào lời gọi chính là hành vi.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
@@ -695,6 +717,7 @@ it('409 on a duplicate slug', async () =&gt; {
   <div class="lz-step"><span class="lz-t">a long-lived server</span><span class="lz-d">once <code>listen()</code> trong <code>beforeAll</code>, closed in <code>afterAll</code>; every request reuses it. Faster, but closing it is your responsibility</span></div>
 </div>
 <p>At six tests per file the difference is two milliseconds and not worth a line of code. At six hundred it is 1,3 seconds per file. Measure before optimising; the shape of your suite decides which side of that line you are on.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026).</strong> Six HTTP tests against PostgreSQL 17: 147 ms inside the file, 525 ms for the whole command. supertest 2.398 ms versus a long-lived server 2.110 ms per request — a gap of 0.29 ms, so six hundred requests cost about 0.17 s per file on that machine, not 1.3 s. The gap is a property of the machine; measure yours before you optimise.</p></div>
 
 <div class="callout ok">
 <p><strong>Two habits that keep this level cheap.</strong> First, <code>await</code> every supertest call — it is a thenable, and an un-awaited one produces exactly the silent green test from lesson 14.2. Second, never assert on the whole response body with <code>toEqual</code>: an object comparison that includes <code>id</code>, <code>createdAt</code> and every column will go red on the next migration for reasons that have nothing to do with the rule being tested. Assert on the fields the contract actually promises.</p>
@@ -706,6 +729,11 @@ it('409 on a duplicate slug', async () =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-946"><span class="lc-t">Code Lab · Testing &amp; Debugging Realtime</span><span class="lc-d">Testing authorisation per socket event — exactly the error class in the frame above</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-1-supertest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 5.1: Supertest, requests without a running server</span><span class="lc-sub">The same createApp/listen split on a bigger API, with headers and bodies in the contract. This lesson ran six HTTP tests against PostgreSQL 17 in 147 ms and showed the 404 test that must also read the row back.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -765,7 +793,12 @@ it('trả 409 khi slug trùng', async () =&gt; {
 <div class="out">$ npx vitest run tests/http.int.test.mjs
  Test Files  1 passed (1)
       Tests  6 passed (6)
-   Duration  455ms (transform 37ms, import 222ms, tests 117ms)</div>
+   Duration  455ms (transform 37ms, import 222ms, tests 117ms)<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-5-1-supertest" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 5.1: Supertest, gửi request không cần bật server</span><span class="lc-sub">Cùng cách tách createApp khỏi listen trên một API lớn hơn, header và body cũng nằm trong hợp đồng. Bài này chạy sáu test HTTP với PostgreSQL 17 trong 147 ms và cho thấy bài test 404 phải đọc lại cả dòng dữ liệu.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 <p>Sáu vòng HTTP kèm SQL thật: <strong>117ms</strong>, khoảng 20ms mỗi bài. Mười hai bài test đơn vị ở bài 14.2 tốn tổng cộng 8ms. Chính tỉ lệ đó là lý do đừng viết mọi bài test ở tầng này — và cũng là lý do phải viết <em>một số</em> bài ở đây, bởi không một bài nào trong mười hai bài kia nhận ra được nếu thiếu <code>express.json()</code>, nếu bộ xử lý lỗi bị đăng ký trước các route, hay nếu route bị gắn nhầm vào <code>/note</code>.</p>
 
 <h3>Bài test trả đủ tiền cho cả file</h3>
@@ -795,6 +828,7 @@ it('trả 409 khi slug trùng', async () =&gt; {
   <div class="lz-step"><span class="lz-t">server thường trú</span><span class="lz-d">gọi <code>listen()</code> một lần trong <code>beforeAll</code>, đóng ở <code>afterAll</code>; mọi request dùng lại. Nhanh hơn, nhưng bạn tự chịu trách nhiệm đóng nó</span></div>
 </div>
 <p>Ở mức sáu bài test mỗi file thì khác biệt là hai mili-giây, không đáng đổi lấy một dòng code. Ở mức sáu trăm bài thì đó là 1,3 giây cho mỗi file. Hãy đo trước rồi hãy tối ưu; hình dạng bộ test của bạn quyết định bạn nằm ở phía nào của cái ranh đó.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026).</strong> Sáu test HTTP với PostgreSQL 17: 147 ms trong file, 525 ms cả lệnh. supertest 2,398 ms so với server sống lâu 2,110 ms mỗi request — chênh 0,29 ms, nên sáu trăm request chỉ tốn khoảng 0,17 giây mỗi file trên máy đó, không phải 1,3 giây. Khoảng chênh là tính chất của máy; đo máy bạn trước khi tối ưu.</p></div>
 
 <div class="callout ok">
 <p><strong>Hai thói quen giữ cho tầng này rẻ.</strong> Thứ nhất, <code>await</code> mọi lời gọi supertest — nó là một thenable, và một lời gọi quên await sẽ cho ra đúng cái bài test xanh im lặng ở bài 14.2. Thứ hai, đừng bao giờ khẳng định trên nguyên cả thân phản hồi bằng <code>toEqual</code>: một phép so object bao gồm <code>id</code>, <code>createdAt</code> và mọi cột sẽ đỏ lên ở lần migration kế tiếp vì những lý do chẳng liên quan gì tới cái luật đang được kiểm. Hãy khẳng định trên đúng những trường mà hợp đồng có hứa.</p>
@@ -847,6 +881,7 @@ it('trả 409 khi slug trùng', async () =&gt; {
 
 <div class="pitfall">
 <p><strong>Pitfall in the measurement itself.</strong> The first two attempts to reproduce this race <em>failed</em> — five parallel requests produced <code>201 409 409 409 409</code>, the correct answer, and the bug looked imaginary. The reason: <code>pg.Pool</code> opens connections lazily, and the TCP + authentication handshake for connections 2 to 5 took longer than the first request's whole check-then-act, so they were serialised by accident. The race only appears once five connections are <strong>opened and warmed</strong> first. Any concurrency bug you cannot reproduce may be hiding behind a warm-up cost like this — and it is precisely why the same code behaves differently under production load than on your laptop.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026, PostgreSQL 17).</strong> On that machine even the <em>cold</em> pool raced: <code>500 201 500 500 500</code>, the same as the warm one — every 500 a driver error <code>23505 notes_slug_key</code>, one row in the table. Whether the race shows depends on handshake cost versus the length of check-then-act; that dependence is the lesson, not the exact sequence.</p></div>
 </div>
 
 <h3>What else a fake will never tell you</h3>
@@ -904,6 +939,7 @@ psql kết nối THẬT được      1149 ms
 lỗi trong khoảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> is the honest price of a guaranteed-clean database per run — cheap against a five-minute CI job, expensive against the 0,10s inner loop you run while typing.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026, postgres:17).</strong> <code>docker run</code> returned after 443 ms, <code>pg_isready</code> first said OK at 2,015 ms, a real <code>SELECT 1</code> from Node worked at 2,345 ms (psql inside the container at 2,402 ms). Seen <em>after</em> pg_isready said OK: "Connection terminated unexpectedly", "database \"notes\" does not exist", "the database system is shutting down", "No such file or directory", "the database system is starting up".</p></div>
 <div class="pitfall">
 <p><strong>Pitfall — <code>pg_isready</code> lies during initialisation.</strong> It reported ready at 954ms; a real connection only succeeded at 1149ms, and in between the socket did not exist. The Postgres entrypoint starts a temporary server to run the init scripts, then shuts it down and starts the real one, and <code>pg_isready</code> happily answers during that window. Wait for a <strong>real query</strong> to succeed — <code>SELECT 1</code> in a retry loop — not for a health probe. This 195ms window is the source of an entire genre of "works locally, fails in CI" reports.</p>
 </div>
@@ -918,7 +954,7 @@ AssertionError: expected 1 to be +0</div>
 <p>The cause was a separate script — the race demo at the top of this lesson — which had left one row in the table. Transaction rollback isolates each test from <em>the other tests</em>; it does nothing about state that was already there when the suite started. Two defences, and use both: assert relative to what the test itself created (<code>WHERE author_id = 7</code>, not <code>count(*)</code>), and start the suite from a known state (<code>TRUNCATE</code> once in <code>beforeAll</code>, or a fresh schema).</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> This site has <strong>no</strong> database tests — the three files in <code>npm test</code> are pure functions by explicit choice, and CI never starts a PostgreSQL. That is a real gap, and it is worth naming rather than hiding: the compensating control is the migration protocol in <code>CLAUDE.md</code>, which forbids <code>prisma migrate reset</code> and <code>db push</code> against production, forbids auto-resolving a failed migration, and requires <code>prisma migrate diff</code> before touching a drifted schema. Those rules exist <em>because</em> nothing else catches a bad migration before it reaches production. A test suite that starts a container, applies <code>prisma migrate deploy</code> and runs the repository layer against it would move that check from a document to a CI step — which is precisely the next thing this repository should build.</p>
+<p><strong>How cuongthai.com does it.</strong> When this lesson was first written the site had <strong>no</strong> database tests and CI never started a PostgreSQL — the compensating control was the migration protocol in <code>CLAUDE.md</code> (no <code>prisma migrate reset</code> or <code>db push</code> against production, no auto-resolving a failed migration, <code>prisma migrate diff</code> before touching a drifted schema). Since October 2026 the gap is closed: <strong>43 database test files</strong> (<code>*.db.test.ts</code>, enabled by <code>WORK_DB_TEST=1</code>) and a <code>work-db-tests</code> job in <code>.github/workflows/ci-lint.yml</code> that starts a <code>pgvector/pgvector:pg16</code> service with <code>--health-cmd "pg_isready …"</code>, rebuilds the schema from the migration history (<code>scripts/db-test-tu-migration.mjs</code>), then runs the files one by one. Note the order: the health probe only gates the service; the tests start after real queries have built the schema — exactly the "wait for a real query" rule above. Measured on 08/11/2026: that test step takes 451 s, the longest pole of the whole CI run.</p>
 </div>
 
 <div class="link-card codelab">
@@ -937,6 +973,11 @@ AssertionError: expected 1 to be +0</div>
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-11-2-backend" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — 11.2: four bugs only PostgreSQL shows</span><span class="lc-sub">Same: tests against a real database, not a fake. Deeper there: one feature with a measured list of what the in-memory version cannot see — dates handed back as JS Dates at local midnight, an exclusion constraint that still blocks a cancelled slot, a non-atomic UPDATE that lets two cancels win, an id beyond int4 that becomes a 500 — every unit test green, every integration test red.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 4.1: why integration tests</span><span class="lc-sub">The case for a real database, made in general terms. This lesson made it with one measurement: five concurrent duplicates answer 201 five times against a fake and 500 four times against a real table (code 23505).</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
@@ -971,6 +1012,7 @@ AssertionError: expected 1 to be +0</div>
 
 <div class="pitfall">
 <p><strong>Bẫy nằm ngay trong chính phép đo.</strong> Hai lần đầu dựng lại cuộc đua này đều <em>thất bại</em> — năm request song song cho ra <code>201 409 409 409 409</code>, tức là đáp án đúng, và con bug trông như tưởng tượng. Lý do: <code>pg.Pool</code> mở kết nối một cách lười biếng, và cú bắt tay TCP cộng xác thực cho các kết nối thứ 2 tới 5 lâu hơn cả quãng kiểm-rồi-làm của request đầu tiên, nên chúng bị tuần tự hoá một cách tình cờ. Cuộc đua chỉ hiện ra khi năm kết nối đã được <strong>mở sẵn và làm nóng</strong> trước. Bất kỳ lỗi tương tranh nào bạn không dựng lại được đều có thể đang nấp sau một khoản chi phí khởi động kiểu này — và đó chính xác là lý do cùng một đoạn code lại cư xử khác nhau dưới tải production so với trên máy của bạn.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026, PostgreSQL 17).</strong> Trên máy đó ngay cả pool <em>nguội</em> cũng đua: <code>500 201 500 500 500</code>, y như pool ấm — mỗi 500 là một lỗi driver <code>23505 notes_slug_key</code>, bảng chỉ có một dòng. Cuộc đua có lộ ra hay không tuỳ chi phí bắt tay so với độ dài quãng kiểm-rồi-làm; sự phụ thuộc đó mới là bài học, không phải đúng chuỗi kết quả.</p></div>
 </div>
 
 <h3>Còn gì nữa mà hàng giả sẽ không bao giờ nói cho bạn biết</h3>
@@ -998,7 +1040,12 @@ afterEach(async () =&gt; { await client.query('ROLLBACK'); });</code></pre>
 <div class="out">SONG SONG (mặc định): PASS=0 FAIL=10
 AssertionError: expected 76 to be 20
 AssertionError: expected 78 to be 20
-AssertionError: expected 80 to be 20</div>
+AssertionError: expected 80 to be 20<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-4-1-vi-sao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 4.1: vì sao cần test tích hợp</span><span class="lc-sub">Lập luận cho một cơ sở dữ liệu thật, ở dạng tổng quát. Bài này lập luận bằng một phép đo: năm yêu cầu trùng đồng thời ra 201 năm lần với đồ giả và 500 bốn lần với bảng thật (mã 23505).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+</div>
 <p>Mỗi file xoá sạch cái bảng mà các file kia đang đổ dữ liệu vào dở dang. Không phải chập chờn — mà là hỏng <em>một cách chắc chắn</em>, 10 trên 10.</p>
 
 <h4>3. Mỗi worker một schema — vừa song song vừa đúng</h4>
@@ -1028,6 +1075,7 @@ psql kết nối THẬT được      1149 ms
 lỗi trong khoảng giữa: psql: error: connection to server on socket
   "/var/run/postgresql/.s.PGSQL.5432" failed: No such file or directory</div>
 <p><strong>1149ms</strong> là cái giá trung thực cho một cơ sở dữ liệu bảo đảm sạch ở mỗi lượt chạy — rẻ khi so với một job CI năm phút, đắt khi so với vòng lặp 0,10s bạn chạy trong lúc đang gõ code.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026, postgres:17).</strong> <code>docker run</code> trả về sau 443 ms, <code>pg_isready</code> báo OK lần đầu ở 2.015 ms, một <code>SELECT 1</code> thật từ Node chạy được ở 2.345 ms (psql trong container ở 2.402 ms). Thấy <em>sau</em> khi pg_isready đã báo OK: "Connection terminated unexpectedly", "database \"notes\" does not exist", "the database system is shutting down", "No such file or directory", "the database system is starting up".</p></div>
 <div class="pitfall">
 <p><strong>Bẫy — <code>pg_isready</code> nói dối trong lúc khởi tạo.</strong> Nó báo sẵn sàng ở mốc 954ms; một kết nối thật chỉ thành công ở mốc 1149ms, và ở quãng giữa thì cái socket còn chưa tồn tại. Entrypoint của Postgres dựng một server tạm để chạy các script khởi tạo, rồi tắt nó đi và mới dựng server thật, còn <code>pg_isready</code> thì vẫn vui vẻ trả lời trong suốt cửa sổ đó. Hãy chờ cho tới khi một <strong>truy vấn thật</strong> chạy được — <code>SELECT 1</code> trong một vòng lặp thử lại — chứ đừng chờ một phép thăm dò sức khoẻ. Cửa sổ 195ms này là nguồn gốc của cả một dòng họ báo cáo "chạy ở máy tôi thì được, lên CI thì hỏng".</p>
 </div>
@@ -1042,7 +1090,7 @@ AssertionError: expected 1 to be +0</div>
 <p>Thủ phạm là một script riêng — chính cái demo tương tranh ở đầu bài này — đã để sót lại một dòng trong bảng. Rollback theo transaction cô lập từng bài test khỏi <em>các bài test khác</em>; nó không làm gì được với trạng thái vốn đã nằm sẵn ở đó từ trước khi bộ test bắt đầu. Hai phòng tuyến, và hãy dùng cả hai: khẳng định tương đối so với thứ chính bài test đó tạo ra (<code>WHERE author_id = 7</code> chứ không phải <code>count(*)</code>), và khởi động bộ test từ một trạng thái đã biết (một lần <code>TRUNCATE</code> trong <code>beforeAll</code>, hoặc một schema mới tinh).</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Site này <strong>không có</strong> bài test cơ sở dữ liệu nào — ba file trong <code>npm test</code> đều là hàm thuần theo lựa chọn có chủ ý, và CI không bao giờ khởi động PostgreSQL. Đó là một lỗ hổng thật, và đáng gọi tên ra chứ không nên giấu đi: thứ bù đắp cho nó là bộ quy tắc migration trong <code>CLAUDE.md</code>, vốn cấm <code>prisma migrate reset</code> và <code>db push</code> lên production, cấm tự động gỡ một migration đã hỏng, và bắt buộc chạy <code>prisma migrate diff</code> trước khi động vào một lược đồ đã trôi lệch. Những quy tắc ấy tồn tại <em>chính vì</em> không còn thứ gì khác bắt được một migration hỏng trước khi nó tới production. Một bộ test biết khởi động container, chạy <code>prisma migrate deploy</code> rồi kiểm tầng repository trên đó sẽ chuyển phép kiểm ấy từ một tài liệu thành một bước CI — và đó đúng là thứ tiếp theo mà repo này nên dựng.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Lúc bài này mới viết, site <strong>chưa có</strong> bài test cơ sở dữ liệu nào và CI không bao giờ khởi động PostgreSQL — thứ bù lại là quy trình migration trong <code>CLAUDE.md</code> (cấm <code>prisma migrate reset</code> và <code>db push</code> vào production, cấm tự gỡ một migration hỏng, bắt chạy <code>prisma migrate diff</code> trước khi đụng vào schema bị lệch). Từ tháng 10/2026 lỗ hổng đó đã được lấp: <strong>43 file test cơ sở dữ liệu</strong> (<code>*.db.test.ts</code>, bật bằng <code>WORK_DB_TEST=1</code>) và một job <code>work-db-tests</code> trong <code>.github/workflows/ci-lint.yml</code> dựng service <code>pgvector/pgvector:pg16</code> kèm <code>--health-cmd "pg_isready …"</code>, dựng lại schema từ lịch sử migration (<code>scripts/db-test-tu-migration.mjs</code>), rồi chạy từng file một. Để ý thứ tự: phép dò sức khoẻ chỉ chặn service; test chỉ chạy sau khi truy vấn thật đã dựng xong schema — đúng luật "chờ một truy vấn thật" ở trên. Đo ngày 08/11/2026: bước test đó tốn 451 giây, cây cột dài nhất của cả lượt CI.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1113,6 +1161,7 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
  notes.service.mjs |   93.33 |    83.33 |      75 |    90.9 | 21
 -------------------|---------|----------|---------|---------|-------------------
 21 test · Duration 1.84s</div>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026, vitest 5.1.0 + @vitest/coverage-v8 5.1.0).</strong> The four test files of this chapter, 20 tests: All files 90.62 / 90.32 / 88.46 / 89.36 — <code>slug.mjs</code> and <code>notes.service.mjs</code> at 100 % in every column (and still holding the EDITOR escalation), <code>app.mjs</code> line 28, <code>notes.repo.mjs</code> lines 17–25: the 23505 → 409 branch of 14.4 that no test reaches.</p></div>
 <div class="callout ok">
 <p><strong>The technique that does answer the real question.</strong> Change the production code on purpose and check that a test goes red — <code>canEdit</code> with <code>||</code> swapped for <code>&amp;&amp;</code>, a <code>404</code> changed to <code>403</code>, a <code>&gt;=</code> changed to <code>&gt;</code>. Automating exactly this is called mutation testing (Stryker is the usual tool in the Node ecosystem); doing it by hand on the ten most dangerous lines in your codebase costs an afternoon and finds more than any coverage threshold ever will.</p>
 </div>
@@ -1167,17 +1216,23 @@ jobs:
       - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
       - run: npm run eval:cv-linter            # bắt buộc
       - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
-      - run: npm test                          # bắt buộc — 20 test, 1297ms
+      - run: npm test                          # bắt buộc — 190 file test (DB test tự bỏ qua ở job này)
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>
-<div class="out">gh run list --workflow=ci-lint.yml --limit 6
-success  …  1m50s
-success  …  1m30s
-success  …  2m8s
-success  …  2m7s
-success  …  1m55s
-success  …  1m49s</div>
-<p>Between 1m30s and 2m8s, and the actual test step is 1,3 seconds of that. Nearly all of it is <code>npm ci</code> and TypeScript. That ratio is normal, and it is the reason "our tests are too slow for CI" is almost never true at this size — install and type-check dominate long before the tests do.</p>
+<div class="out">gh run list --workflow=ci-lint.yml --limit 8      (08/11/2026)
+failure  push  2026-11-03 17:52  10m20s
+failure  push  2026-11-03 15:58  11m51s
+failure  push  2026-11-03 13:48  11m28s
+failure  push  2026-11-03 04:25  8m44s
+failure  push  2026-11-02 09:43  8m53s
+failure  push  2026-11-02 04:51  8m24s
+failure  push  2026-11-01 14:26  11m16s
+failure  push  2026-11-01 14:24  11m29s
+gh run view 41688419844 --json jobs   (the newest run)
+CT Work DB tests (Postgres): success · 615 s   (test step 451 s)
+Frontend Type Check: failure · 340 s   (TypeScript type-check 208 s)
+Backend Type Check: failure · 169 s    (TypeScript type-check 109 s · unit tests skipped)</div>
+<p>When this lesson was first written the whole run took 1m30s–2m08s with a 1,3-second test step. Today the workflow has three jobs and every one of the last eight runs took 8m24s–11m51s — and failed, at the TypeScript type-check of the frontend and backend, not at a test. The longest pole is the database job (451 s). A clean <code>node:22-alpine</code> container shows the same shape at small scale: <code>npm ci</code> 21.142 ms, the 20 tests of this chapter 842 ms. Nearly all of it is <code>npm ci</code> and TypeScript. That ratio is normal, and it is the reason "our tests are too slow for CI" is almost never true at this size — install and type-check dominate long before the tests do.</p>
 
 <h3>Four design decisions visible in that file</h3>
 <div class="kv-grid">
@@ -1191,7 +1246,7 @@ success  …  1m49s</div>
 <p>The list is shorter than it looks, and it follows from the whole chapter: type check, the tests whose failure means something is <em>wrong</em> rather than <em>untidy</em>, and — once a suite touches the database — a migration that applies cleanly on an empty schema. Style opinions, coverage thresholds and lint warnings belong in the informational column. Every gate you add that a developer cannot fix in under a minute is a gate they will eventually learn to bypass.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it — including what is still missing.</strong> The deploy path here is deliberately not push-to-deploy: <code>CLAUDE.md</code> requires the local checklist first, then <code>bash deploy.sh</code> from the local machine, then a human testing production, and only then a <code>git push</code> to sync GitHub with what production is already running. The reason is written in the file — two workflows racing each other caused real outages on 2026-07-03 and 2026-07-06. On top of that, <code>deploy.sh</code> ends with a <strong>post-deploy smoke test</strong> that curls core GET routes on the internal backend and fails the deploy if any returns 404, because a 404 means the route was never mounted, which means the container is running a stale image — the exact failure that took the GIF picker down on 2026-07-02. That smoke test is an end-to-end test wearing a shell script's clothes, and it earns its place: it catches the one class of bug no unit test can, namely "the thing that got deployed is not the thing you built".</p>
+<p><strong>How cuongthai.com does it — including what is still missing.</strong> The deploy path here is deliberately not push-to-deploy: the local checklist first, a commit to local <code>main</code>, then <code>bash deploy-nha.sh</code> — the home machine builds both images, pushes them to GHCR, the VPS only swaps them and smoke-tests; finally the script runs the required CI checks on a <em>clean git worktree of exactly the deployed commit</em> and pushes that commit to GitHub only if they pass. The reason is written in the file — two workflows racing each other caused real outages on 2026-07-03 and 2026-07-06. On top of that, the deploy ends with a <strong>post-deploy smoke test</strong> that curls core GET routes on the internal backend and fails the deploy if any returns 404, because a 404 means the route was never mounted, which means the container is running a stale image — the exact failure that took the GIF picker down on 2026-07-02. That smoke test is an end-to-end test wearing a shell script's clothes, and it earns its place: it catches the one class of bug no unit test can, namely "the thing that got deployed is not the thing you built".</p>
 </div>
 
 <div class="link-card codelab">
@@ -1203,6 +1258,16 @@ success  …  1m49s</div>
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Go deeper in the Testing course — Chapter 9: tests in CI, step by step</span><span class="lc-sub">Same: CI runs the suite on every push. Deeper there: the course project’s workflow rehearsed with act — a PostgreSQL service, Playwright, reports and artifacts, one required check, a Node matrix and shards.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 8.1: coverage</span><span class="lc-sub">What the four columns of a coverage report count, and how to read the uncovered column. This lesson measured the trap: canEdit at 100 % in all four columns while any EDITOR can edit every note.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Testing — lesson 8.3: flaky tests</span><span class="lc-sub">Hunting order dependence, shared state and real clocks. Every one of the four causes listed in this lesson was measured somewhere in chapter 14 — 0/10 on a shared table, "expected 2 to be 1" from one leftover row.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
@@ -1246,6 +1311,7 @@ All files          |   83.33 |    70.83 |   79.16 |   84.61 |
  notes.service.mjs |   93.33 |    83.33 |      75 |    90.9 | 21
 -------------------|---------|----------|---------|---------|-------------------
 21 test · Duration 1.84s</div>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026, vitest 5.1.0 + @vitest/coverage-v8 5.1.0).</strong> Bốn file test của chương, 20 test: All files 90,62 / 90,32 / 88,46 / 89,36 — <code>slug.mjs</code> và <code>notes.service.mjs</code> 100 % mọi cột (và vẫn giữ lỗ leo thang EDITOR), <code>app.mjs</code> dòng 28, <code>notes.repo.mjs</code> dòng 17–25: nhánh 23505 → 409 của bài 14.4 chưa test nào chạy tới.</p></div>
 <div class="callout ok">
 <p><strong>Kỹ thuật thật sự trả lời được câu hỏi thật.</strong> Cố ý sửa code production rồi kiểm xem có bài test nào đỏ lên không — đổi <code>||</code> trong <code>canEdit</code> thành <code>&amp;&amp;</code>, đổi một mã <code>404</code> thành <code>403</code>, đổi một dấu <code>&gt;=</code> thành <code>&gt;</code>. Tự động hoá đúng việc này gọi là mutation testing (trong hệ sinh thái Node thì công cụ thông dụng là Stryker); còn làm bằng tay trên mười dòng nguy hiểm nhất của dự án thì tốn một buổi chiều và tìm ra nhiều hơn bất kỳ ngưỡng độ phủ nào.</p>
 </div>
@@ -1300,17 +1366,23 @@ jobs:
       - run: npm run eval:grader               # bắt buộc — bộ vàng, không DB, không khoá LLM
       - run: npm run eval:cv-linter            # bắt buộc
       - run: npm run eval:cv-fabrication       # tự BỎ QUA nếu thiếu khoá AI
-      - run: npm test                          # bắt buộc — 20 test, 1297ms
+      - run: npm test                          # bắt buộc — 190 file test (DB test tự bỏ qua ở job này)
       - run: npm run lint
         continue-on-error: true                # ← chỉ để tham khảo, không chặn merge</code></pre>
-<div class="out">gh run list --workflow=ci-lint.yml --limit 6
-success  …  1m50s
-success  …  1m30s
-success  …  2m8s
-success  …  2m7s
-success  …  1m55s
-success  …  1m49s</div>
-<p>Từ 1 phút 30 tới 2 phút 8, và bước chạy test thật sự chỉ chiếm 1,3 giây trong số đó. Gần như toàn bộ thời gian là <code>npm ci</code> và TypeScript. Tỉ lệ này là bình thường, và nó là lý do câu "test của tụi mình chậm quá không đưa lên CI được" gần như không bao giờ đúng ở quy mô này — cài đặt và kiểm kiểu áp đảo phần test từ rất lâu trước đó.</p>
+<div class="out">gh run list --workflow=ci-lint.yml --limit 8      (08/11/2026)
+failure  push  2026-11-03 17:52  10m20s
+failure  push  2026-11-03 15:58  11m51s
+failure  push  2026-11-03 13:48  11m28s
+failure  push  2026-11-03 04:25  8m44s
+failure  push  2026-11-02 09:43  8m53s
+failure  push  2026-11-02 04:51  8m24s
+failure  push  2026-11-01 14:26  11m16s
+failure  push  2026-11-01 14:24  11m29s
+gh run view 41688419844 --json jobs   (the newest run)
+CT Work DB tests (Postgres): success · 615 s   (test step 451 s)
+Frontend Type Check: failure · 340 s   (TypeScript type-check 208 s)
+Backend Type Check: failure · 169 s    (TypeScript type-check 109 s · unit tests skipped)</div>
+<p>Lúc bài này mới viết, cả lượt chạy chỉ 1 phút 30 tới 2 phút 8, bước test 1,3 giây. Hôm nay workflow có ba job, và cả tám lượt gần nhất đều mất 8 phút 24 tới 11 phút 51 — và đều đỏ, ở bước kiểm kiểu TypeScript của frontend và backend, không phải ở test. Cây cột dài nhất là job cơ sở dữ liệu (451 giây). Một container <code>node:22-alpine</code> sạch cho thấy cùng hình dạng ở cỡ nhỏ: <code>npm ci</code> 21.142 ms, 20 test của chương này 842 ms. Gần như toàn bộ thời gian là <code>npm ci</code> và TypeScript. Tỉ lệ này là bình thường, và nó là lý do câu "test của tụi mình chậm quá không đưa lên CI được" gần như không bao giờ đúng ở quy mô này — cài đặt và kiểm kiểu áp đảo phần test từ rất lâu trước đó.</p>
 
 <h3>Bốn quyết định thiết kế nhìn thấy được trong file đó</h3>
 <div class="kv-grid">
@@ -1324,7 +1396,7 @@ success  …  1m49s</div>
 <p>Danh sách ngắn hơn vẻ ngoài của nó, và nó suy ra từ cả chương: kiểm kiểu, những bài test mà hỏng nghĩa là có gì đó <em>sai</em> chứ không phải <em>chưa gọn</em>, và — một khi bộ test đã chạm tới cơ sở dữ liệu — một migration áp được sạch sẽ lên lược đồ trống. Ý kiến về phong cách, ngưỡng độ phủ và cảnh báo lint thì thuộc về cột tham khảo. Mỗi cái chốt chặn bạn thêm vào mà lập trình viên không sửa nổi trong vòng một phút là một cái chốt rồi họ sẽ học được cách đi vòng qua.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào — kể cả phần còn thiếu.</strong> Đường deploy ở đây cố ý không phải là đẩy-lên-là-deploy: <code>CLAUDE.md</code> bắt chạy checklist ở máy trước, rồi <code>bash deploy.sh</code> từ máy cá nhân, rồi một con người test production, và chỉ sau đó mới <code>git push</code> để đồng bộ GitHub với thứ production vốn đã chạy. Lý do được ghi thẳng trong file — hai workflow chạy đua nhau đã gây ra sự cố thật vào ngày 03/07/2026 và 06/07/2026. Trên nữa, <code>deploy.sh</code> kết thúc bằng một <strong>bài smoke test sau deploy</strong>: nó curl các route GET lõi trên backend nội bộ và làm hỏng cả lượt deploy nếu có route nào trả 404, bởi 404 nghĩa là route chưa từng được mount, nghĩa là container đang chạy một ảnh cũ — đúng cái lỗi đã hạ gục bộ chọn GIF ngày 02/07/2026. Bài smoke test đó là một bài test đầu-cuối khoác áo shell script, và nó xứng đáng có mặt: nó bắt được đúng lớp lỗi mà không test đơn vị nào bắt nổi, ấy là "thứ vừa được deploy không phải thứ bạn vừa build".</p>
+<p><strong>cuongthai.com làm thế nào — kể cả phần còn thiếu.</strong> Đường deploy ở đây cố ý không phải là đẩy-lên-là-deploy: chạy checklist ở máy trước, commit vào <code>main</code> ở máy, rồi <code>bash deploy-nha.sh</code> — máy nhà dựng cả hai ảnh, đẩy lên GHCR, VPS chỉ tráo ảnh rồi smoke test; cuối cùng script chạy các phép kiểm CI bắt buộc trên một <em>git worktree sạch đúng commit vừa deploy</em> và chỉ đẩy commit đó lên GitHub nếu xanh. Lý do được ghi thẳng trong file — hai workflow chạy đua nhau đã gây ra sự cố thật vào ngày 03/07/2026 và 06/07/2026. Trên nữa, lượt deploy kết thúc bằng một <strong>bài smoke test sau deploy</strong>: nó curl các route GET lõi trên backend nội bộ và làm hỏng cả lượt deploy nếu có route nào trả 404, bởi 404 nghĩa là route chưa từng được mount, nghĩa là container đang chạy một ảnh cũ — đúng cái lỗi đã hạ gục bộ chọn GIF ngày 02/07/2026. Bài smoke test đó là một bài test đầu-cuối khoác áo shell script, và nó xứng đáng có mặt: nó bắt được đúng lớp lỗi mà không test đơn vị nào bắt nổi, ấy là "thứ vừa được deploy không phải thứ bạn vừa build".</p>
 </div>
 
 <div class="link-card codelab">
@@ -1336,6 +1408,16 @@ success  …  1m49s</div>
 <a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-9-1-github-actions" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Học sâu hơn ở khoá Testing — Chương 9: test trong CI, từng bước</span><span class="lc-sub">Giống: CI chạy bộ test ở mỗi lần push. Sâu thêm ở đó: workflow của dự án khoá học tổng duyệt bằng act — service PostgreSQL, Playwright, báo cáo và artifact, một check bắt buộc, matrix Node và shard.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-1-do-phu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 8.1: độ phủ</span><span class="lc-sub">Bốn cột của báo cáo độ phủ đếm gì, và cách đọc cột chưa phủ. Bài này đo cái bẫy: canEdit đạt 100 % cả bốn cột trong khi mọi EDITOR sửa được mọi ghi chú.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/testing/learn?lessonSlug=tst-8-3-flaky" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Testing — bài 8.3: test chập chờn</span><span class="lc-sub">Săn phụ thuộc thứ tự, trạng thái dùng chung và đồng hồ thật. Cả bốn nguyên nhân trong bài này đều đã đo ở chương 14 — 0/10 trên một bảng chung, "expected 2 to be 1" từ một dòng sót.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
@@ -1463,7 +1545,7 @@ success  …  1m49s</div>
             points: 1,
           },
           {
-            question: 'The real CI on this site runs 1m30s to 2m8s, of which the test step is 1,3 seconds — the rest is npm ci and tsc — and the lint step is marked continue-on-error while tsc and npm test are required. Which reading of those two facts is correct?|||CI thật của site này chạy từ 1 phút 30 tới 2 phút 8, trong đó bước chạy test chỉ chiếm 1,3 giây — phần còn lại là npm ci và tsc — còn bước lint được đánh dấu continue-on-error trong khi tsc và npm test là bắt buộc. Cách hiểu nào về hai dữ kiện đó là đúng?',
+            question: 'In a clean node:22-alpine container npm ci took 21.142 ms and the 20 tests of this chapter 842 ms, and on the CI of this site the lint step is marked continue-on-error while tsc and npm test are required. Which reading of those two facts is correct?|||Trong một container node:22-alpine sạch, npm ci mất 21.142 ms còn 20 test của chương này 842 ms; còn trên CI của site này, bước lint được đánh dấu continue-on-error trong khi tsc và npm test là bắt buộc. Cách hiểu nào về hai dữ kiện đó là đúng?',
             options: [
               'The suite is too small; every CI minute should be spent running tests|||Bộ test quá nhỏ; mỗi phút CI đều nên dành cho việc chạy test',
               '"Our tests are too slow for CI" is rarely true at this size, and gates should block only on failures that mean something is wrong rather than untidy — a lint warning blocking a hotfix teaches the team to bypass CI|||"Test của tụi mình chậm quá không đưa lên CI được" hiếm khi đúng ở quy mô này, và chốt chặn chỉ nên chặn ở những lần hỏng mang nghĩa có gì đó sai chứ không phải chưa gọn — một cảnh báo lint chặn được hotfix sẽ dạy cả nhóm cách đi vòng qua CI',

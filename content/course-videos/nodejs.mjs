@@ -100,9 +100,9 @@ export default {
     'nodejs-12-6-van-hanh-production': { yt: 'cK1_csGSFFw', credit: 'Tejav Academy — Distributed Caching Explained | Redis, Cache-Aside & System Design', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-06-van-hanh-production-tron-6452fa5b.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Tác vụ nền & hàng đợi ──────────────────────────────── */
-    'nodejs-13-1-vi-sao-hang-doi': { yt: 'yXPKB7fHxfo', credit: 'Piyush Garg — What are Message Queues? | BullMQ Queues NodeJS' },
+    'nodejs-13-1-vi-sao-hang-doi': { yt: 'yXPKB7fHxfo', credit: 'Piyush Garg — What are Message Queues? | BullMQ Queues NodeJS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-01-vi-sao-hang-doi-cf70b8c4.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-13-2-bullmq-co-ban': { yt: '90WGktxfNUw', credit: 'Code Architecture — BullMQ Tutorial in Node.js: Step-by-Step with Redis & Docker | Real Project & Microservice Usage' },
-    'nodejs-13-3-thu-lai-va-idempotent': { yt: 'zLEtzg04HUI', credit: 'Codeminer42 — Background Jobs in NodeJS with BullMQ. by Douglas Marques' },
+    'nodejs-13-3-thu-lai-va-idempotent': { yt: 'zLEtzg04HUI', credit: 'Codeminer42 — Background Jobs in NodeJS with BullMQ. by Douglas Marques', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-03-thu-lai-va-idempotent-tron-9d31b565.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-13-4-lich-trinh': { yt: 'osYgivmFULE', credit: 'Hey Delphi — NodeJS : BullMQ - Persistence job queuing & managing jobs between server restart' },
     'nodejs-13-5-worker-chet-va-van-hanh': { yt: 'bdj33b7k_5U', credit: 'Full Stack Mastery — I Built an Industry-Grade Email Queue System ⚡ (BullMQ + Node.js)' },
 
@@ -114,19 +114,19 @@ export default {
     'nodejs-14-5-do-phu-flaky-ci': { yt: 'W-dc5fpxUVs', credit: 'Codevolution — React Testing Tutorial - 14 - Code Coverage' },
 
     /* ── Chương 15 — Log & quan sát hệ thống ────────────────────────────── */
-    'nodejs-15-1-log-co-cau-truc': { yt: 'umm-MyCl3Q4', credit: 'System Design Lab — Observability Crash Course: Logs, Metrics, Traces Explained' },
-    'nodejs-15-2-request-id': { yt: 'kft86_LA-Pg', credit: 'OpenObserve — Logs, Metrics, Traces: How to Correlate Them with OpenTelemetry' },
-    'nodejs-15-3-chi-phi-va-tim-kiem': { yt: 'd1VRuGpJd10', credit: 'Code with Jay — Node.js Logging Like a Pro: Centralized Logs Using Pino Transport, Loki & Grafana (Fastify Demo)' },
-    'nodejs-15-4-metrics-prometheus': { yt: 'tLSS2t7Md3w', credit: 'That DevOps Guy — Metrics SIMPLIFIED with OpenTelemetry & Prometheus' },
-    'nodejs-15-5-opentelemetry-trace': { yt: 'NbVVZlSsvvM', credit: 'Better Stack — OpenTelemetry in Node.js - Traces, Metrics and Logs' },
-    'nodejs-15-6-health-check-canh-bao': { yt: 'ItZouStG_nk', credit: 'George Alonge — OpenTelemetry Fundamentals: Traces, Metrics & Logs Explained' },
+    'nodejs-15-1-log-co-cau-truc': { yt: 'umm-MyCl3Q4', credit: 'System Design Lab — Observability Crash Course: Logs, Metrics, Traces Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-01-log-co-cau-truc-tron-2ae8a3b5.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-15-2-request-id': { yt: 'kft86_LA-Pg', credit: 'OpenObserve — Logs, Metrics, Traces: How to Correlate Them with OpenTelemetry', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-02-request-id-tron-8335b2e2.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-15-3-chi-phi-va-tim-kiem': { yt: 'd1VRuGpJd10', credit: 'Code with Jay — Node.js Logging Like a Pro: Centralized Logs Using Pino Transport, Loki & Grafana (Fastify Demo)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-03-chi-phi-va-tim-kiem-tron-d9802e08.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-15-4-metrics-prometheus': { yt: 'tLSS2t7Md3w', credit: 'That DevOps Guy — Metrics SIMPLIFIED with OpenTelemetry & Prometheus', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-04-metrics-prometheus-tron-a349635f.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-15-5-opentelemetry-trace': { yt: 'NbVVZlSsvvM', credit: 'Better Stack — OpenTelemetry in Node.js - Traces, Metrics and Logs', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-05-opentelemetry-trace-tron-d48e80e9.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-15-6-health-check-canh-bao': { yt: 'ItZouStG_nk', credit: 'George Alonge — OpenTelemetry Fundamentals: Traces, Metrics & Logs Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-06-health-check-canh-bao-tron-98afe821.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Hiệu năng ──────────────────────────────────────────── */
-    'nodejs-16-1-do-truoc-khi-doan': { yt: 'uBAW4xXCgmw', credit: 'i learned today — Best Node js Profiler | Doctor Graph | Clinic Js | how to profile node js' },
-    'nodejs-16-2-nut-that-that-su': { yt: 'v7oc80C9vlg', credit: 'CITYJS CONFERENCE — Next-Gen Flame Graphs: Making Node.js Performance Profiling Actually Work // Matteo  Collina' },
-    'nodejs-16-3-nen-va-duong-truyen': { yt: 'YaRrmdMa_Cg', credit: 'Web Dev Cody — How to understand a flamegraph to tune performance' },
-    'nodejs-16-4-cluster-mo-rong': { yt: 'SHR-KmfRIsU', credit: 'Codevolution — Node.js Tutorial - 61 - Cluster Module' },
-    'nodejs-16-5-ro-ri-bo-nho': { yt: 'F_qshjijxlE', credit: 'Geekle Official — Finding memory leaks and CPU bottlenecks with Node.js debug tools - Vladimir de Turckheim' },
+    'nodejs-16-1-do-truoc-khi-doan': { yt: 'uBAW4xXCgmw', credit: 'i learned today — Best Node js Profiler | Doctor Graph | Clinic Js | how to profile node js', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-01-do-truoc-khi-doan-e4c84a33.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-16-2-nut-that-that-su': { yt: 'v7oc80C9vlg', credit: 'CITYJS CONFERENCE — Next-Gen Flame Graphs: Making Node.js Performance Profiling Actually Work // Matteo  Collina', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-02-nut-that-that-su-ab5e7e7d.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-16-3-nen-va-duong-truyen': { yt: 'YaRrmdMa_Cg', credit: 'Web Dev Cody — How to understand a flamegraph to tune performance', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-03-nen-va-duong-truyen-d22c1e48.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-16-4-cluster-mo-rong': { yt: 'SHR-KmfRIsU', credit: 'Codevolution — Node.js Tutorial - 61 - Cluster Module', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-04-cluster-mo-rong-b0b0d05c.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-16-5-ro-ri-bo-nho': { yt: 'F_qshjijxlE', credit: 'Geekle Official — Finding memory leaks and CPU bottlenecks with Node.js debug tools - Vladimir de Turckheim', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-05-ro-ri-bo-nho-c2008ec8.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-16-6-toi-uu-vo-ich': { yt: 'ASv8188AkVk', credit: 'InfoQ — A New Way to Profile Node.js' },
 
     /* ── Chương 17 — Docker & triển khai ────────────────────────────────── */

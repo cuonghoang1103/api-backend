@@ -1,0 +1,16 @@
+{
+  "_ghiChu": "Trần số khai báo màu THÔ mỗi tệp CSS (xem mauCung.test.ts). Chỉ được HẠ.",
+  "css": {
+    "features/admin/quanTri.css": 13,
+    "features/creator/creator.css": 7,
+    "features/dashboard/workspace.css": 39,
+    "features/exam/exam-desk.css": 59,
+    "features/music/music2.css": 102,
+    "features/odin/odin.css": 7,
+    "features/projects/projects.css": 10,
+    "features/sach/sach.css": 28,
+    "features/settings/settings.css": 24,
+    "styles.css": 157
+  },
+  "tsxTong": 6
+}

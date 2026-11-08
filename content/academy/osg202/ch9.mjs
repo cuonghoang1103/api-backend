@@ -3969,7 +3969,7 @@ const L_on_ch9 = {
     Intern: { Report: 'R', Printer: 'W' },
   },
 };</code></pre></details>
-<div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/44288d5a37349a5cf86bbdc1be636a88f1609bb5.svg" alt="Cut by column: ACLs" loading="lazy" /><p class="chu-thich">🧮 Cut by column: ACLs</p></div>
+<div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/1d73343d00c55b398228c8d0eb140bf02e56a1a6.svg" alt="Cut by column: ACLs" loading="lazy" /><p class="chu-thich">🧮 Cut by column: ACLs</p></div>
 <details><summary>This picture is COMPUTED, not drawn by hand — see the simulator code (JavaScript)</summary><pre><code class="language-javascript">const MT = {
   doiTuong: ['Payroll', 'Report', 'Code', 'Backup', 'Printer', 'Router'],
   mien: {
@@ -4011,7 +4011,7 @@ const L_on_ch9 = {
     Intern: { Report: 'R', Printer: 'W' },
   },
 };</code></pre></details>
-<div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/3dab7037ced64701b2ae94b8b8e4452ae2b68650.svg" alt="Cắt theo cột: ACL" loading="lazy" /><p class="chu-thich">🧮 Cắt theo cột: ACL</p></div>
+<div class="anh-slide uml sim"><img src="https://media.cuongthai.com/images/academy/OSG202/hinh/321a38440f97dc6961948cbf50894752ee6f17b1.svg" alt="Cắt theo cột: ACL" loading="lazy" /><p class="chu-thich">🧮 Cắt theo cột: ACL</p></div>
 <details><summary>Hình này do máy TÍNH thật — xem mã mô phỏng (JavaScript)</summary><pre><code class="language-javascript">const MT = {
   doiTuong: ['Payroll', 'Report', 'Code', 'Backup', 'Printer', 'Router'],
   mien: {

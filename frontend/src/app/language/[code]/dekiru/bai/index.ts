@@ -58,8 +58,8 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 10: return Promise.all([import('./bai10'), import('./luyenThemB10')]).then(([m, lt]) => [...m.BAI_10, ...lt.LUYEN_THEM_B10, m.SACH_10]);
     case 11: return Promise.all([import('./bai11'), import('./luyenThemB1112')]).then(([m, lt]) => [...m.BAI_11, ...lt.LUYEN_THEM_B11, m.SACH_11]);
     case 12: return Promise.all([import('./bai12'), import('./luyenThemB1112')]).then(([m, lt]) => [...m.BAI_12, ...lt.LUYEN_THEM_B12, m.SACH_12]);
-    case 13: return import('./bai13').then((m) => [...m.BAI_13, m.SACH_13]);
-    case 14: return import('./bai14').then((m) => [...m.BAI_14, m.SACH_14]);
+    case 13: return Promise.all([import('./bai13'), import('./luyenThemB1314')]).then(([m, lt]) => [...m.BAI_13, ...lt.LUYEN_THEM_B13, m.SACH_13]);
+    case 14: return Promise.all([import('./bai14'), import('./luyenThemB1314')]).then(([m, lt]) => [...m.BAI_14, ...lt.LUYEN_THEM_B14, m.SACH_14]);
     case 15: return import('./bai15').then((m) => [...m.BAI_15, m.SACH_15]);
     // Bài 16+ (tiếp sau sách → N2, 09/11/2026): một tệp gồm cốt lõi + buổi trên lớp + luyện thêm.
     case 16: return import('./bai16').then((m) => m.BAI_16);

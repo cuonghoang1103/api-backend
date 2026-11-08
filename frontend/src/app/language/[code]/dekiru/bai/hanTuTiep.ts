@@ -5,7 +5,9 @@
  */
 import type { HanTu } from '@/components/sach-hoc/kanji';
 import { HAN_TU_16 } from './hanTu16';
+import { HAN_TU_17 } from './hanTu17';
 
 export const HAN_TU_TIEP: Record<string, HanTu> = {
   ...HAN_TU_16,
+  ...HAN_TU_17,
 };

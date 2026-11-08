@@ -61,6 +61,7 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 15: return import('./bai15').then((m) => [...m.BAI_15, m.SACH_15]);
     // Bài 16+ (tiếp sau sách → N2, 09/11/2026): một tệp gồm cốt lõi + buổi trên lớp + luyện thêm.
     case 16: return import('./bai16').then((m) => m.BAI_16);
+    case 17: return import('./bai17').then((m) => m.BAI_17);
     default: return null;
   }
 }

@@ -11,8 +11,8 @@
  */
 import type { Lesson } from '@/components/sach-hoc/types';
 
-/** Bài có dữ liệu thẻ (onTheData.ts sinh từ Bài 1–15). */
-const CO_THE = (n: number) => n >= 1 && n <= 15;
+/** Bài có dữ liệu thẻ: onTheData.ts sinh từ MỌI baiN.ts (Bài 1–15 sách + Bài 16+ tiếp sau sách). */
+const CO_THE = (n: number) => n >= 1;
 
 export function mucLuyenNho(n: number): Lesson | null {
   if (n === 0) {

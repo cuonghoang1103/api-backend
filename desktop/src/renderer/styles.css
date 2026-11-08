@@ -2877,6 +2877,23 @@ code:not(.work-root *) {
   color: var(--text-primary);
 }
 
+/* Khung NGOÀI của mọi trang web dùng lại trong app (08/11/2026).
+ *
+ * Vỏ app (`.ct-sidebar`, `.ct-titlebar`) không định vị, không z-index ⇒ bất kỳ phần tử `fixed` nào của trang web
+ * (nền canvas `fixed inset-0` của /academy, hộp thoại `fixed inset-0 z-50`…) tính theo CỬA SỔ và vẽ ĐÈ lên chúng.
+ * Người dùng thấy /academy chiếm trọn cửa sổ, "không có nút gì hết" — không còn đường sang trang khác.
+ *
+ * `contain: layout paint` biến khung này thành KHỐI CHỨA cho con `fixed` + ngữ cảnh xếp lớp riêng (cách
+ * `.ct-work-host` đã làm cho CT Work). Khung KHÔNG cuộn — `.ct-web-host` bên trong mới cuộn — nên lớp `fixed`
+ * đứng yên đúng vùng nội dung, không trôi theo nội dung. Portal ra <body> (menu, toast) không bị ảnh hưởng. */
+.ct-web-khung {
+  position: relative;
+  height: 100%;
+  min-width: 0;
+  overflow: hidden;
+  contain: layout paint;
+}
+
 .ct-web-host {
   /* Web khai --app-nav-h (chiều cao thanh điều hướng của WEB) ở globals.css; app
      không có thanh đó. Thiếu biến ⇒ `top: var(--app-nav-h)` và
@@ -2959,7 +2976,8 @@ code:not(.work-root *) {
   contain: layout paint;
 }
 
-.ct-work-host > .ct-web-host {
+.ct-work-host > .ct-web-host,
+.ct-work-host > .ct-web-khung > .ct-web-host {
   overflow: hidden;
 }
 

@@ -107,18 +107,18 @@ export function TheGoiYThanhBen({ goiY }: { goiY: GoiY | null }) {
   const giua = Math.min(Math.max(goiY.giua, 36), window.innerHeight - 36);
   return createPortal(
     <div
-      className="ct-goiy"
+      className="ct-tbgy"
       role="tooltip"
       style={{ top: giua, left: goiY.trai }}
       // key theo tên: đổi mục là chạy lại hiệu ứng trượt nhẹ, thấy rõ thẻ đã đổi.
       key={goiY.ten}
     >
-      <span className="ct-goiy-mui" aria-hidden />
-      <div className="ct-goiy-dau">
-        <span className="ct-goiy-ten">{goiY.ten}</span>
-        {goiY.nhom && <span className="ct-goiy-nhom">{goiY.nhom}</span>}
+      <span className="ct-tbgy-mui" aria-hidden />
+      <div className="ct-tbgy-dau">
+        <span className="ct-tbgy-ten">{goiY.ten}</span>
+        {goiY.nhom && <span className="ct-tbgy-nhom">{goiY.nhom}</span>}
       </div>
-      {goiY.moTa && <div className="ct-goiy-mota">{goiY.moTa}</div>}
+      {goiY.moTa && <div className="ct-tbgy-mota">{goiY.moTa}</div>}
     </div>,
     document.body,
   );

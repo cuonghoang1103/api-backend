@@ -108,8 +108,12 @@ export function VoWeb({ children }: { children: React.ReactNode }) {
      nên nối nó vào thiết đặt giao diện của APP (cùng ba giá trị light/dark/system). */
   return (
     <ThemeBridgeProvider preference={theme === 'theo-gio' ? 'system' : theme} resolvedTheme={resolvedTheme} onChange={(p) => setSetting('theme', p)}>
-      <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
-        <TanStackQueryProvider>{children}</TanStackQueryProvider>
+      {/* `ct-web-khung` KHÔNG cuộn, là khối chứa cho mọi con `fixed` của trang web (xem styles.css) — nền
+          `fixed inset-0` của /academy từng phủ kín thanh bên + thanh tiêu đề của app (08/11/2026). */}
+      <div className="ct-web-khung">
+        <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
+          <TanStackQueryProvider>{children}</TanStackQueryProvider>
+        </div>
       </div>
     </ThemeBridgeProvider>
   );

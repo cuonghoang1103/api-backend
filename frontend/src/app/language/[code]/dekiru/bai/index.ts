@@ -56,8 +56,8 @@ function loadGoc(n: number): Promise<Lesson[]> | null {
     case 8: return Promise.all([import('./bai8'), import('./luyenThemB89')]).then(([m, lt]) => [...m.BAI_8, ...lt.LUYEN_THEM_B8, m.SACH_8]);
     case 9: return Promise.all([import('./bai9'), import('./luyenThemB89')]).then(([m, lt]) => [...m.BAI_9, ...lt.LUYEN_THEM_B9, m.SACH_9]);
     case 10: return Promise.all([import('./bai10'), import('./luyenThemB10')]).then(([m, lt]) => [...m.BAI_10, ...lt.LUYEN_THEM_B10, m.SACH_10]);
-    case 11: return import('./bai11').then((m) => [...m.BAI_11, m.SACH_11]);
-    case 12: return import('./bai12').then((m) => [...m.BAI_12, m.SACH_12]);
+    case 11: return Promise.all([import('./bai11'), import('./luyenThemB1112')]).then(([m, lt]) => [...m.BAI_11, ...lt.LUYEN_THEM_B11, m.SACH_11]);
+    case 12: return Promise.all([import('./bai12'), import('./luyenThemB1112')]).then(([m, lt]) => [...m.BAI_12, ...lt.LUYEN_THEM_B12, m.SACH_12]);
     case 13: return import('./bai13').then((m) => [...m.BAI_13, m.SACH_13]);
     case 14: return import('./bai14').then((m) => [...m.BAI_14, m.SACH_14]);
     case 15: return import('./bai15').then((m) => [...m.BAI_15, m.SACH_15]);

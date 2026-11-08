@@ -102,6 +102,7 @@ const SPECS: Spec[] = [
       const lt0 = (await load(join(dir, 'luyenThemB0.ts'))).LUYEN_THEM_B0 as Lesson[];
       const l89 = await load(join(dir, 'luyenThemB89.ts'));
       const l10 = (await load(join(dir, 'luyenThemB10.ts'))).LUYEN_THEM_B10 as Lesson[];
+      const l1112 = await load(join(dir, 'luyenThemB1112.ts'));
       const out: Record<number, Lesson[]> = {};
       // Tệp baiN.ts mà bộ nạp CHƯA import (agent đang soạn dở) ⇒ bỏ qua, không đưa vào mục lục (09/11/2026:
       // manifest từng commit kèm Bài 18 dở ⇒ kiểm "khớp nội dung" trên cây sạch báo đỏ).
@@ -113,7 +114,7 @@ const SPECS: Spec[] = [
         if (!Array.isArray(bai)) throw new Error(`bai${n}.ts không export BAI_${n}`);
         const extra: Lesson | undefined = m[`SACH_${n}`] ?? sach[n];
         // Bài 4–7: thêm "Theo slide lớp" + "Luyện thêm" — cùng luật chia với loadGoc (bai/index.ts).
-        const them: Lesson[] = n >= 1 && n <= 7 ? slideVaLuyen(n) : n === 0 ? lt0 : n === 8 || n === 9 ? l89[`LUYEN_THEM_B${n}`] : n === 10 ? l10 : [];
+        const them: Lesson[] = n >= 1 && n <= 7 ? slideVaLuyen(n) : n === 0 ? lt0 : n === 8 || n === 9 ? l89[`LUYEN_THEM_B${n}`] : n === 10 ? l10 : n === 11 || n === 12 ? l1112[`LUYEN_THEM_B${n}`] : [];
         const hinh: Lesson[] | undefined = n >= 1 && n <= 4 ? hinh14[`HINH_B${n}`] : n >= 5 && n <= 7 ? hinh57[`HINH_B${n}`] : n >= 8 && n <= 10 ? hinh810[`HINH_B${n}`] : n >= 11 && n <= 13 ? hinh1113[`HINH_B${n}`] : n >= 14 && n <= 15 ? hinh1415[`HINH_B${n}`] : undefined;
         const sau: Lesson[] = [...(n >= 1 && n <= 4 ? [docTo[`DOC_TO_B${n}`]] : []), ...(n === 3 ? thi113 : []), ...(n >= 4 && n <= 9 ? kt49[`KIEM_TRA_B${n}`] : []), ...(n === 7 ? ck123 : [])];
         out[n] = chenLuyenNho(n, chenHinh(n, [...chenHanLop(n, extra ? [...bai, ...them, extra] : [...bai, ...them]), ...sau], hinh));

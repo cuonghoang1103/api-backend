@@ -4,6 +4,11 @@
  * @socket.io/redis-adapter 8.3.0 + ioredis (Redis 7 trong Docker), express 5.2.1.
  * Cấu hình production lấy từ src/socket/messaging.socket.ts của chính cuongthai.com.
  */
+import G111 from './giang/node-11-1.mjs';
+
+import G112 from './giang/node-11-2.mjs';
+import G113 from './giang/node-11-3.mjs';
+import G114 from './giang/node-11-4.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -23,7 +28,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Bắt tay Upgrade in ra nguyên văn, và phép đo trả lời câu hỏi "polling đắt tới mức nào": 799 byte cho mỗi lần hỏi mà câu trả lời là KHÔNG.',
-      content: `
+      content: `${G111}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.1</span>
 <h2>From asking repeatedly to being told: WebSocket</h2>
@@ -240,7 +246,8 @@ server.listen(<span class="tok-num">3001</span>);</code></pre>
       slug: 'nodejs-11-2-ws-vs-socketio-rooms',
       type: 'VIDEO',
       description: 'Socket.IO thêm gì so với WebSocket trần, và cái giá đo được: 5.000 kết nối tốn +51MB với ws, +110MB với Socket.IO — cùng mô hình room đã cứu feed khỏi một vụ phát tin toàn cục.',
-      content: `
+      content: `${G112}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.2</span>
 <h2>ws or Socket.IO: what convenience costs</h2>
@@ -444,7 +451,8 @@ socket.on(<span class="tok-str">'thread:join'</span>, (id, ack) =&gt; {
       },
       type: 'VIDEO',
       description: 'JWT trong lúc bắt tay, và lỗ hổng cả bài này xoay quanh: một dòng thiếu kiểm quyền cho phép người lạ đọc tin nhắn riêng tư theo thời gian thực — tái hiện, rồi vá trên chính production.',
-      content: `
+      content: `${G113}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.3</span>
 <h2>Authenticate once, authorize every time</h2>
@@ -650,7 +658,8 @@ tự kết nối lại sau 1.053ms | id MỚI: eUE1ya (cũ: JBrWhg)
       },
       type: 'VIDEO',
       description: 'Ngày bạn chạy tiến trình thứ hai, realtime im lặng hỏng: chứng minh bằng đo, vá bằng adapter Redis 5,02ms, cộng hai cái bẫy — LB luân phiên giết long-polling và một client đọc chậm ăn 192MB RAM.',
-      content: `
+      content: `${G114}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 11 · Lesson 11.4</span>
 <h2>More than one process: adapters, sticky sessions, backpressure</h2>

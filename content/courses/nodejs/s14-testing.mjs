@@ -5,6 +5,12 @@
  * PostgreSQL 16 (local :5433 và container tạm), express 5.2.1, zod 4.4.3.
  * Phần CI và bộ test production lấy từ chính repo cuongthai.com.
  */
+import G141 from './giang/node-14-1.mjs';
+
+import G142 from './giang/node-14-2.mjs';
+import G143 from './giang/node-14-3.mjs';
+import G144 from './giang/node-14-4.mjs';
+import G145 from './giang/node-14-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -17,7 +23,8 @@ export default {
       slug: 'nodejs-14-1-vi-sao-test',
       type: 'VIDEO',
       description: 'Đo giá thật của một bài test ở ba tầng (0,0006ms · 5,5ms · 3,3ms), rồi so ba bộ chạy test node:test, vitest và jest bằng cùng một bộ 1000 test.',
-      content: `
+      content: `${G141}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.1</span>
 <h2>What a test costs and what it buys</h2>
@@ -258,7 +265,8 @@ Tests:       12 passed, 12 total</div>
       slug: 'nodejs-14-2-unit-test',
       type: 'VIDEO',
       description: 'Viết test đầu tiên theo AAA, tiêm phụ thuộc để thay bằng repo giả, dùng đồng hồ giả để 20 phút trôi trong 4ms, và bốn kiểu test màu xanh mà không kiểm gì — đo xem bộ chạy nào bắt được kiểu nào.',
-      content: `
+      content: `${G142}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.2</span>
 <h2>Unit tests, test doubles, and tests that assert nothing</h2>
@@ -629,7 +637,8 @@ Error: expected number of assertions to be 1, but got 0     ← bắt được c
       slug: 'nodejs-14-3-supertest',
       type: 'VIDEO',
       description: 'Tách app ra khỏi listen, gửi request thật vào Express mà không mở cổng, khẳng định trên mã trạng thái như một hợp đồng, và bài test hồi quy cho đúng lỗ IDOR đã sửa thật trên site này.',
-      content: `
+      content: `${G143}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.3</span>
 <h2>Testing the HTTP layer with supertest</h2>
@@ -850,7 +859,8 @@ it('trả 409 khi slug trùng', async () =&gt; {
       slug: 'nodejs-14-4-db-that',
       type: 'VIDEO',
       description: 'Repo giả trả 5 lần 201 trong khi bảng thật chỉ nhận 1 và ném 23505 bốn lần — cùng ba cách cô lập test (transaction, TRUNCATE, schema riêng) và giá thật của một container Postgres dùng một lần.',
-      content: `
+      content: `${G144}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.4</span>
 <h2>Testing against a real database</h2>
@@ -1121,7 +1131,8 @@ AssertionError: expected 1 to be +0</div>
       slug: 'nodejs-14-5-do-phu-flaky-ci',
       type: 'VIDEO',
       description: 'Một lỗ leo thang quyền sống sót qua báo cáo độ phủ 100% ở cả bốn cột — cộng với cách săn test chập chờn và bộ CI thật của cuongthai.com, từng bước một, kèm thời gian chạy thật.',
-      content: `
+      content: `${G145}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 14 · Lesson 14.5</span>
 <h2>Coverage, flaky tests, and CI</h2>

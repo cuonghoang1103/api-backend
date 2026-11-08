@@ -4,6 +4,13 @@
  * 80.454 dòng, 62 file route, 159 file service, 248 model Prisma,
  * 95 migration, 76 điểm gắn route, khởi động thật 3,63 giây.
  */
+import G181 from './giang/node-18-1.mjs';
+
+import G182 from './giang/node-18-2.mjs';
+import G183 from './giang/node-18-3.mjs';
+import G184 from './giang/node-18-4.mjs';
+import G185 from './giang/node-18-5.mjs';
+import G186 from './giang/node-18-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -16,7 +23,8 @@ export default {
       slug: 'nodejs-18-1-tang-va-trach-nhiem',
       type: 'VIDEO',
       description: 'Ba tầng của một backend, việc mỗi tầng được phép biết gì, và một phép đếm trên codebase thật cho thấy chính xác 28 trên 62 file route đã xuyên thủng tầng giữa.',
-      content: `
+      content: `${G181}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.1</span>
 <h2>Layers, and the 28 files that skip one</h2>
@@ -204,7 +212,8 @@ src/utils         5 file      336 dòng
       slug: 'nodejs-18-2-to-chuc-ma-nguon',
       type: 'VIDEO',
       description: 'Chia thư mục theo loại hay theo tính năng, đo trên phân bố cỡ file thật của 62 route, và cái ngưỡng cho biết khi nào một file đã quá to.',
-      content: `
+      content: `${G182}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.2</span>
 <h2>Organising by feature, and the 3.607-line file</h2>
@@ -374,7 +383,8 @@ file to nhất:
       slug: 'nodejs-18-3-ghep-noi-ranh-gioi',
       type: 'VIDEO',
       description: 'Đo mức ghép nối thật giữa các mô-đun — service nào bị nhiều nơi phụ thuộc nhất, 248 model dùng chung một lược đồ — và ranh giới nào là thật, ranh giới nào chỉ là thư mục.',
-      content: `
+      content: `${G183}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.3</span>
 <h2>Coupling: 248 models in one schema</h2>
@@ -563,7 +573,8 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
       },
       type: 'VIDEO',
       description: 'Dùng chính số đo của các chương trước để trả lời câu hỏi kiến trúc bị hỏi sai nhiều nhất, và ba dấu hiệu THẬT cho biết đã tới lúc tách một dịch vụ ra.',
-      content: `
+      content: `${G184}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.4</span>
 <h2>Monolith or services: deciding with numbers</h2>
@@ -723,7 +734,8 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
       slug: 'nodejs-18-5-quyet-dinh-kho-dao-nguoc',
       type: 'VIDEO',
       description: 'Phân biệt quyết định đảo ngược được với quyết định không, ghi lại LÝ DO chứ không phải cái gì, và cách nợ kỹ thuật thật sự tính lãi — có ví dụ thật từ chính dự án.',
-      content: `
+      content: `${G185}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.5</span>
 <h2>Decisions you cannot take back</h2>
@@ -885,7 +897,8 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
       slug: 'nodejs-18-6-tong-ket-khoa-hoc',
       type: 'VIDEO',
       description: 'Bản đồ toàn khoá: mỗi chương đã thêm gì vào hệ thống, những phép đo đáng nhớ nhất, và một danh sách kiểm trước khi đưa backend Node đầu tiên của bạn lên production.',
-      content: `
+      content: `${G186}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 18 · Lesson 18.6</span>
 <h2>Eighteen chapters, one system</h2>

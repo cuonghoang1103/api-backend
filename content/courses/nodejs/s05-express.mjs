@@ -2,6 +2,12 @@
  * Node.js — Chương 5: Express, bộ khung của mọi API.
  * Mọi output trong chương này đo thật: Node v22.21.0, express 5.2.1 và 4.22.2.
  */
+import G051 from './giang/node-05-1.mjs';
+
+import G052 from './giang/node-05-2.mjs';
+import G053 from './giang/node-05-3.mjs';
+import G054 from './giang/node-05-4.mjs';
+import G055 from './giang/node-05-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -14,7 +20,8 @@ export default {
       slug: 'nodejs-5-1-tu-http-toi-express',
       type: 'VIDEO',
       description: 'Bốn nỗi khổ của http thuần ở bài 3.5 và cách Express xoá từng cái — kèm phép đếm dòng code thật.',
-      content: `
+      content: `${G051}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>From raw <code>http</code> to Express</h2>
@@ -257,7 +264,8 @@ server log  : [error handler] ERR_HTTP_HEADERS_SENT</div>
       slug: 'nodejs-5-2-dinh-tuyen',
       type: 'VIDEO',
       description: 'Cách Express khớp đường dẫn, vì sao thứ tự khai báo route là một loại bug, và cách tách route ra file bằng express.Router().',
-      content: `
+      content: `${G052}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Routing: params, query and <code>Router</code></h2>
@@ -478,7 +486,8 @@ app.<span class="tok-fn">use</span>(<span class="tok-string">'/api/v1/notes'</sp
       },
       type: 'VIDEO',
       description: 'next(), thứ tự thực thi, express.json và express.static, middleware theo phạm vi, và chuyện gì xảy ra khi bạn quên next().',
-      content: `
+      content: `${G053}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.3</span>
 <h2>Middleware: the chain every request walks</h2>
@@ -762,7 +771,8 @@ curl exit=28   ← Operation timed out</div>
       },
       type: 'VIDEO',
       description: 'Error middleware 4 tham số, lớp AppError, 404 dạng JSON, và cú treo request kinh điển của Express 4 với handler async.',
-      content: `
+      content: `${G054}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.4</span>
 <h2>Centralised error handling</h2>
@@ -1031,7 +1041,8 @@ process.<span class="tok-fn">on</span>(<span class="tok-string">'uncaughtExcepti
       slug: 'nodejs-5-5-notes-api',
       type: 'VIDEO',
       description: 'Cấu trúc thư mục theo tầng, đủ 5 route CRUD chạy thật, tách app khỏi server để test được, và tắt server đúng cách.',
-      content: `
+      content: `${G055}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.5</span>
 <h2>Assembling the Notes API</h2>

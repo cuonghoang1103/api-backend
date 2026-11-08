@@ -3,6 +3,12 @@
  * MỌI số đo lấy từ chạy thật trên Node v22.21.0 với file mẫu 348 MB.
  * ⚠️ Trong code mẫu, mọi `${` phải viết thành \${ (file này là template literal).
  */
+import G031 from './giang/node-03-1.mjs';
+
+import G032 from './giang/node-03-2.mjs';
+import G033 from './giang/node-03-3.mjs';
+import G034 from './giang/node-03-4.mjs';
+import G035 from './giang/node-03-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -15,7 +21,8 @@ export default {
       slug: 'nodejs-3-1-path-fs',
       type: 'VIDEO',
       description: 'Làm việc với đường dẫn cho đúng trên mọi hệ điều hành, và ba phong cách API của fs.',
-      content: `
+      content: `${G031}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2><code>path</code> and <code>fs</code></h2>
@@ -205,7 +212,8 @@ join    : /var/www/uploads</div>
       },
       type: 'VIDEO',
       description: 'Vì sao "8 ký tự" lại là 9 byte, và điều gì xảy ra khi bạn cắt buffer sai chỗ.',
-      content: `
+      content: `${G032}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
 <h2>Buffers: binary data</h2>
@@ -343,7 +351,8 @@ Buffer.<span class="tok-function">concat</span>([a, b]);                <span cl
       },
       type: 'VIDEO',
       description: 'Đo RAM khi đọc nguyên file so với đọc theo dòng chảy, backpressure, và pipeline.',
-      content: `
+      content: `${G033}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.3</span>
 <h2>Streams: the 348 MB experiment</h2>
@@ -516,7 +525,8 @@ nén :  15.0 MB</div>
       slug: 'nodejs-3-4-eventemitter',
       type: 'VIDEO',
       description: 'Mẫu phát–nghe sự kiện nằm dưới toàn bộ Node, và cái bẫy rò rỉ bộ nhớ đi kèm.',
-      content: `
+      content: `${G034}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.4</span>
 <h2>EventEmitter</h2>
@@ -669,7 +679,8 @@ store.<span class="tok-function">off</span>(<span class="tok-string">'daLuu'</sp
       slug: 'nodejs-3-5-http-server',
       type: 'VIDEO',
       description: 'Tự tay dựng API bằng module http để hiểu Express thật ra đã làm giúp bạn những gì.',
-      content: `
+      content: `${G035}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.5</span>
 <h2>An HTTP server with no framework</h2>

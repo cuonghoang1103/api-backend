@@ -5,6 +5,13 @@
  * PostgreSQL 16 (local :5433, bảng notes 50.000 dòng).
  * Phần production lấy từ chính repo và VPS của cuongthai.com.
  */
+import G161 from './giang/node-16-1.mjs';
+
+import G162 from './giang/node-16-2.mjs';
+import G163 from './giang/node-16-3.mjs';
+import G164 from './giang/node-16-4.mjs';
+import G165 from './giang/node-16-5.mjs';
+import G166 from './giang/node-16-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -17,7 +24,8 @@ export default {
       slug: 'nodejs-16-1-do-truoc-khi-doan',
       type: 'VIDEO',
       description: 'Bật --cpu-prof trên một route chậm thật, đọc bảng hàm tốn CPU, rồi sửa bốn bước — mỗi bước đo lại — để thấy tăng gấp 11,6 lần mà không thay một thư viện nào.',
-      content: `
+      content: `${G161}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.1</span>
 <h2>Profile first: 285 to 3.550 req/s on one route</h2>
@@ -283,7 +291,8 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
       slug: 'nodejs-16-2-nut-that-that-su',
       type: 'VIDEO',
       description: 'Bấm giờ từng đoạn của một route thật rồi phát hiện 97,8% nằm ở truy vấn DB — trong khi chính PostgreSQL chỉ mất 0,03ms. Phần còn lại là hàng đợi, và đó là một luật chứ không phải một lỗi.',
-      content: `
+      content: `${G162}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.2</span>
 <h2>Where the time really goes: 97,8% in one line</h2>
@@ -509,7 +518,8 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
       slug: 'nodejs-16-3-nen-va-duong-truyen',
       type: 'VIDEO',
       description: 'Đo gzip và brotli ở mọi mức: tỉ lệ nén, giá CPU, throughput — rồi tìm ra brotli mức 11 vừa chậm hơn 490 lần vừa cho ra file to hơn mức 4.',
-      content: `
+      content: `${G163}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.3</span>
 <h2>Compression: the setting that is 490× slower for a bigger file</h2>
@@ -728,7 +738,8 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
       },
       type: 'VIDEO',
       description: 'Chạy cùng một app với 1 tới 10 worker trên hai loại route khác nhau, và phát hiện cluster nhân ba thông lượng ở route nặng CPU nhưng không làm gì ở route nặng I/O — rồi tệ đi khi thêm worker.',
-      content: `
+      content: `${G164}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.4</span>
 <h2>Scaling out: 3,4× for CPU work, 1,06× for I/O</h2>
@@ -923,7 +934,8 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
       },
       type: 'VIDEO',
       description: 'Ba kiểu rò rỉ bộ nhớ tái hiện thật với số đo RSS qua 170.000 request, cách phân biệt rò rỉ với việc heap chỉ đang lớn lên bình thường, và cái cảnh báo Node đã hét vào mặt bạn từ lâu.',
-      content: `
+      content: `${G165}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.5</span>
 <h2>Memory: the cache that never forgets</h2>
@@ -1159,7 +1171,8 @@ app.get('/__heap', (req, res) =&gt; {
       slug: 'nodejs-16-6-toi-uu-vo-ich',
       type: 'VIDEO',
       description: 'Đo một thư viện nổi tiếng nhanh gấp 1,39 lần rồi tính ra nó đóng góp 0,3% cho ứng dụng thật — kèm danh sách những phép tối ưu quen thuộc mà số đo trong chương này đã bác bỏ, và thứ tự đúng để tối ưu.',
-      content: `
+      content: `${G166}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 16 · Lesson 16.6</span>
 <h2>Optimisations that are not: the 1,39× that bought 0,3%</h2>

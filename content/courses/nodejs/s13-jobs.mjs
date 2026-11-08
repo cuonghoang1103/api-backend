@@ -5,6 +5,12 @@
  * Cấu hình production lấy từ src/services/cron.service.ts và
  * src/services/embedQueue.service.ts của chính cuongthai.com.
  */
+import G131 from './giang/node-13-1.mjs';
+
+import G132 from './giang/node-13-2.mjs';
+import G133 from './giang/node-13-3.mjs';
+import G134 from './giang/node-13-4.mjs';
+import G135 from './giang/node-13-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -24,7 +30,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Cùng một tính năng gửi email, cùng 100 request: làm ngay trong request gửi được 5 email và mất hẳn 95; đẩy vào hàng đợi gửi đủ 100. Có bằng chứng chạy thật.',
-      content: `
+      content: `${G131}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.1</span>
 <h2>A request is not a place to do work</h2>
@@ -233,7 +240,8 @@ app.post('/register', async (req, res) =&gt; {
       slug: 'nodejs-13-2-bullmq-co-ban',
       type: 'VIDEO',
       description: 'Một job là một Redis hash 6 trường và một id trong danh sách chờ — mở ra xem tận nơi. addBulk nhanh hơn 11 lần. Và concurrency giúp gấp 81 lần với việc chờ I/O nhưng ĐÚNG BẰNG KHÔNG với việc tốn CPU.',
-      content: `
+      content: `${G132}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.2</span>
 <h2>BullMQ: Queue, Worker, and what a job is in Redis</h2>
@@ -444,7 +452,8 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
       },
       type: 'VIDEO',
       description: 'Mặc định BullMQ KHÔNG thử lại. Bật thử lại lên thì backoff luỹ thừa giãn ra 288 → 417 → 826 → 1674ms. Và một job trừ tiền không idempotent đã trừ của khách 300.000đ thay vì 100.000đ.',
-      content: `
+      content: `${G133}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.3</span>
 <h2>Failure: retries, backoff, and the charge that ran three times</h2>
@@ -713,7 +722,8 @@ new Worker('email', async (job) =&gt; {
       slug: 'nodejs-13-4-lich-trinh',
       type: 'VIDEO',
       description: 'Hẹn giờ là "không sớm hơn" chứ không phải "đúng lúc" — sai số đo được 4–113ms. Và ba tiến trình cùng đăng ký một job định kỳ vẫn chỉ chạy MỘT lịch: đó là lý do đừng bao giờ dùng setInterval.',
-      content: `
+      content: `${G134}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.4</span>
 <h2>Scheduling: delays, priority, throttling and cron</h2>
@@ -939,7 +949,8 @@ new Worker('cron', async () =&gt; {
       slug: 'nodejs-13-5-worker-chet-va-van-hanh',
       type: 'VIDEO',
       description: 'SIGKILL worker giữa lúc chạy job: job KHÔNG mất, một worker khác nhặt lại sau 2036ms. Nhưng một job chặn event loop thì bị coi là treo và chạy lại. Và tắt êm khác tắt thô: 1296ms xong việc, hay 5ms cắt ngang.',
-      content: `
+      content: `${G135}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 13 · Lesson 13.5</span>
 <h2>When the worker dies: stalled jobs, deploys and cleanup</h2>

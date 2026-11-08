@@ -3,6 +3,12 @@
  * Output đo thật: Node v22.21.0, express 5.2.1, zod 4.4.3,
  * PostgreSQL 1.000.000 dòng cho phần phân trang.
  */
+import G061 from './giang/node-06-1.mjs';
+
+import G062 from './giang/node-06-2.mjs';
+import G063 from './giang/node-06-3.mjs';
+import G064 from './giang/node-06-4.mjs';
+import G065 from './giang/node-06-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -22,7 +28,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Đặt tên URL bằng danh từ, chọn đúng phương thức, và hiểu hai tính chất an toàn (safe) — bất biến (idempotent) bằng thí nghiệm thật.',
-      content: `
+      content: `${G061}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Resources, methods, and what REST actually means</h2>
@@ -236,7 +243,8 @@ Allow: GET, HEAD</div>
       },
       type: 'VIDEO',
       description: 'Chọn đúng mã trong 2xx/4xx/5xx, phân biệt 401/403 và 409/422, và thiết kế một hình dạng JSON mà frontend chỉ phải học một lần.',
-      content: `
+      content: `${G062}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.2</span>
 <h2>Status codes and response shape</h2>
@@ -431,7 +439,8 @@ Content-Type: application/json; charset=utf-8
       slug: 'nodejs-6-3-validate-schema',
       type: 'VIDEO',
       description: 'Thay validate viết tay bằng zod: một lược đồ khai báo luật, ép kiểu query, chặn mass-assignment và sinh lỗi nhất quán.',
-      content: `
+      content: `${G063}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.3</span>
 <h2>Validation with a schema</h2>
@@ -718,7 +727,8 @@ Content-Type: application/json; charset=utf-8
       },
       type: 'VIDEO',
       description: 'OFFSET và cursor đo trên 1.000.000 dòng PostgreSQL: 167ms so với 0,015ms — và con bug trùng bản ghi mà OFFSET gây ra.',
-      content: `
+      content: `${G064}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.4</span>
 <h2>Pagination, filtering and sorting</h2>
@@ -920,7 +930,8 @@ SELECT reltuples FROM pg_class …        →   0,025 ms   (ước lượng từ
       },
       type: 'VIDEO',
       description: 'Thay đổi API mà không làm vỡ client cũ, chặn mất bản ghi bằng ETag/If-Match (412), và chặn trừ tiền hai lần bằng Idempotency-Key.',
-      content: `
+      content: `${G065}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.5</span>
 <h2>The API contract: versions, ETag, idempotency</h2>

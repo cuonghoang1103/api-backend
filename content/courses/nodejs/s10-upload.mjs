@@ -5,6 +5,11 @@
  * storage tương thích S3 chạy bằng MinIO trong Docker (endpoint http://127.0.0.1:9010).
  * Header production lấy bằng curl thật trên https://media.cuongthai.com (27/07/2026).
  */
+import G101 from './giang/node-10-1.mjs';
+
+import G102 from './giang/node-10-2.mjs';
+import G103 from './giang/node-10-3.mjs';
+import G104 from './giang/node-10-4.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -24,7 +29,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Bốn cách nhận cùng một file 6,85MB, đo bằng RSS thật: base64 tốn 47MB, memoryStorage 19MB, stream ra đĩa 8,6MB — và bốn video 120MB cùng lúc đẩy máy chủ lên 786MB.',
-      content: `
+      content: `${G101}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.1</span>
 <h2>Receiving a file: multipart, base64, and the price in RAM</h2>
@@ -252,7 +258,8 @@ HTTP 413 | client đã gửi 7.183.298 byte</div>
       },
       type: 'VIDEO',
       description: 'S3/R2 nhìn từ trong ra: bucket, key, metadata; URL ký sẵn mổ xẻ từng tham số; và ba phát hiện đo được — Content-Type KHÔNG bị ký, kích thước KHÔNG bị ràng buộc, key bị sửa thì chữ ký gãy.',
-      content: `
+      content: `${G102}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.2</span>
 <h2>Object storage and presigned URLs</h2>
@@ -582,7 +589,8 @@ sau 7 giây    → HTTP 403
       },
       type: 'VIDEO',
       description: 'Ba lời khai của client đều giả được; magic bytes bắt được phần lớn nhưng không bắt được file lai; một PNG 758KB tiêu 445MB RAM của máy chủ; và vì sao mã hoá lại mới là phép kiểm thật.',
-      content: `
+      content: `${G103}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.3</span>
 <h2>Never trust the file: sniffing, polyglots and bombs</h2>
@@ -844,7 +852,8 @@ nếu gọi withMetadata()  : 12.136 byte | có EXIF: true</div>
       },
       type: 'VIDEO',
       description: 'Một tấm ảnh được xem hàng nghìn lần và upload đúng một lần: chọn định dạng và cỡ, đặt Cache-Control ngay lúc ghi, đọc header thật của media.cuongthai.com, và dọn rác object mồ côi.',
-      content: `
+      content: `${G104}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 10 · Lesson 10.4</span>
 <h2>Serving media back: formats, caching and the CDN</h2>

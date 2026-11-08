@@ -3,6 +3,13 @@
  * Mọi output là đo thật: Node v22.21.0, PostgreSQL 15.4, prisma 7.9.1,
  * @prisma/adapter-pg, bảng Note 751.000 dòng trên máy local.
  */
+import G071 from './giang/node-07-1.mjs';
+
+import G072 from './giang/node-07-2.mjs';
+import G073 from './giang/node-07-3.mjs';
+import G074 from './giang/node-07-4.mjs';
+import G075 from './giang/node-07-5.mjs';
+import G076 from './giang/node-07-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -22,7 +29,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Chứng minh dữ liệu trong RAM biến mất, đo giá của một kết nối PostgreSQL, và hiểu pool bằng bốn phép đo.',
-      content: `
+      content: `${G071}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>Why a database, and what one connection really costs</h2>
@@ -340,7 +348,8 @@ prisma.config.ts
       slug: 'nodejs-7-2-luoc-do-va-migration',
       type: 'VIDEO',
       description: 'Viết lược đồ Prisma, đọc file SQL nó sinh ra, phân biệt migrate dev với migrate deploy, và diễn tập một migration hỏng giữa chừng.',
-      content: `
+      content: `${G072}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.2</span>
 <h2>The schema, and migrations that survive production</h2>
@@ -785,7 +794,8 @@ All migrations have been successfully applied.
       },
       type: 'VIDEO',
       description: 'Giữ lời hứa của bài 5.5: cùng router, cùng mã trạng thái, ruột đổi từ Map sang PostgreSQL — cộng với chứng minh transaction cuộn ngược thật.',
-      content: `
+      content: `${G073}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.3</span>
 <h2>CRUD, transactions, and swapping the Notes API onto PostgreSQL</h2>
@@ -1144,7 +1154,8 @@ timeout or doing less work in the transaction.</div>
       },
       type: 'VIDEO',
       description: 'Đọc dữ liệu liên quan bằng include/select, nhìn SQL Prisma sinh ra, và đo chênh lệch giữa 51 truy vấn với 2 truy vấn.',
-      content: `
+      content: `${G074}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.4</span>
 <h2>Relations, and the N+1 problem measured</h2>
@@ -1421,7 +1432,8 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
       },
       type: 'VIDEO',
       description: 'Đo cùng một truy vấn trên 751.000 dòng trước và sau khi có chỉ mục, học đọc kế hoạch thực thi, và biết cái giá phải trả khi ghi.',
-      content: `
+      content: `${G075}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.5</span>
 <h2>Indexes, and reading EXPLAIN ANALYZE</h2>
@@ -1673,7 +1685,8 @@ prisma.$<span class="tok-fn">on</span>(<span class="tok-string">'query'</span>, 
       slug: 'nodejs-7-6-hop-dong-api-voi-du-lieu-that',
       type: 'VIDEO',
       description: 'Con trỏ phân trang trên 751.000 dòng, P2002 thành 409, chống ghi đè bằng cột version, và vì sao $queryRawUnsafe làm lộ cả bảng.',
-      content: `
+      content: `${G076}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.6</span>
 <h2>Keeping the chapter-6 contract with a real database</h2>

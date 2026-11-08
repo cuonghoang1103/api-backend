@@ -3,6 +3,12 @@
  * MỌI output trong bài đều lấy từ việc chạy thật trên Node v22.21.0.
  * Nhắc: backtick trong nội dung = &#96; ; mọi `${` trong code mẫu = \${ .
  */
+import G011 from './giang/node-01-1.mjs';
+
+import G012 from './giang/node-01-2.mjs';
+import G013 from './giang/node-01-3.mjs';
+import G014 from './giang/node-01-4.mjs';
+import G015 from './giang/node-01-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -15,7 +21,8 @@ export default {
       slug: 'nodejs-1-1-bien-pham-vi',
       type: 'VIDEO',
       description: 'Vì sao var bị khai tử trong code hiện đại, TDZ là gì, và const KHÔNG có nghĩa là bất biến.',
-      content: `
+      content: `${G011}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.1</span>
 <h2>Variables &amp; scope</h2>
@@ -166,7 +173,8 @@ sau freeze: { name: 'An' }</div>
       slug: 'nodejs-1-2-ham-closure-this',
       type: 'VIDEO',
       description: 'Closure là gì và vì sao backend dùng nó khắp nơi; this khác nhau ra sao giữa hàm thường và arrow.',
-      content: `
+      content: `${G012}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.2</span>
 <h2>Functions, closures and <code>this</code></h2>
@@ -370,7 +378,8 @@ buộc lại bằng bind: Xin chào từ NotesAPI</div>
       slug: 'nodejs-1-3-object-tham-chieu',
       type: 'VIDEO',
       description: 'Sao chép nông vs sâu, destructuring, spread — và vì sao "sửa bản sao" lại làm hỏng bản gốc.',
-      content: `
+      content: `${G013}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.3</span>
 <h2>Objects, arrays and references</h2>
@@ -503,7 +512,8 @@ bản sao sâu                 : {"name":"An","address":{"city":"Huế"},"tags":
       slug: 'nodejs-1-4-bat-dong-bo',
       type: 'VIDEO',
       description: 'Bài quan trọng nhất chương: cách Node xử lý việc chờ đợi, và 4 lỗi async khiến API sập.',
-      content: `
+      content: `${G014}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.4</span>
 <h2>Async: callbacks, Promises, async/await</h2>
@@ -725,7 +735,8 @@ Node.js v22.21.0
       slug: 'nodejs-1-5-module',
       type: 'VIDEO',
       description: 'Hai hệ module cùng tồn tại trong Node, khác nhau ở đâu, và chọn cái nào cho dự án mới.',
-      content: `
+      content: `${G015}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 1 · Lesson 1.5</span>
 <h2>Modules: CommonJS vs ES Modules</h2>

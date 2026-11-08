@@ -2,6 +2,10 @@
  * Node.js — Chương 4: npm, semver, lockfile và an toàn chuỗi cung ứng.
  * Số liệu đo thật bằng npm 10.9.4 / Node v22.21.0 trong sandbox.
  */
+import G041 from './giang/node-04-1.mjs';
+
+import G042 from './giang/node-04-2.mjs';
+import G043 from './giang/node-04-3.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -14,7 +18,8 @@ export default {
       slug: 'nodejs-4-1-package-json',
       type: 'VIDEO',
       description: 'Tấm căn cước của dự án: khai báo phụ thuộc, phân biệt dependencies và devDependencies, và dùng scripts cho đúng.',
-      content: `
+      content: `${G041}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2><code>package.json</code> and npm scripts</h2>
@@ -207,7 +212,8 @@ npx &lt;công cụ&gt;                <span class="tok-comment"># chạy công c
       },
       type: 'VIDEO',
       description: 'Dấu ^ thật sự cho phép những gì, và vì sao "máy tôi chạy được mà" hầu hết bắt nguồn từ đây.',
-      content: `
+      content: `${G042}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
 <h2>Semver and the lockfile</h2>
@@ -342,7 +348,8 @@ npm i express@latest         <span class="tok-comment"># nhảy hẳn một majo
       slug: 'nodejs-4-3-bao-mat-npm',
       type: 'VIDEO',
       description: 'Một dòng npm install kéo về 67 gói của người lạ — và vì sao chúng chạy được code trên máy bạn.',
-      content: `
+      content: `${G043}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.3</span>
 <h2>Supply chain safety</h2>

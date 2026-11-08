@@ -4,6 +4,13 @@
  * node:22-slim / node:22-alpine, một app Express 5 + pg + zod.
  * Phần production lấy từ chính deploy.sh và Dockerfile của cuongthai.com.
  */
+import G171 from './giang/node-17-1.mjs';
+
+import G172 from './giang/node-17-2.mjs';
+import G173 from './giang/node-17-3.mjs';
+import G174 from './giang/node-17-4.mjs';
+import G175 from './giang/node-17-5.mjs';
+import G176 from './giang/node-17-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -23,7 +30,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Build cùng một app bằng bốn kiểu Dockerfile và đo cỡ ảnh thật, rồi dựng multi-stage để loại toolchain và devDependencies ra khỏi thứ chạy ở production.',
-      content: `
+      content: `${G171}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.1</span>
 <h2>The image: 440MB down to 58,8MB</h2>
@@ -259,7 +267,8 @@ CMD ["node", "dist/index.js"]</code></pre>
       ],
       type: 'VIDEO',
       description: 'Đổi chỗ hai dòng trong Dockerfile và đo lại thời gian build sau khi sửa một dòng code, cộng phép đo .dockerignore cắt build context từ 64,27MB xuống 235 byte.',
-      content: `
+      content: `${G172}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.2</span>
 <h2>Layer cache: the line order that makes builds 5,6× slower</h2>
@@ -480,7 +489,8 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
       },
       type: 'VIDEO',
       description: 'Ba cách viết CMD, ba tiến trình PID 1 khác nhau, và chỉ một trong ba nhận được SIGTERM — chứng minh bằng một request 3 giây bị cắt ngang giữa lúc deploy.',
-      content: `
+      content: `${G173}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.3</span>
 <h2>PID 1: the CMD line that loses every in-flight request</h2>
@@ -696,7 +706,8 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
       slug: 'nodejs-17-4-bi-mat-cau-hinh',
       type: 'VIDEO',
       description: 'Một Dockerfile xoá file .npmrc ngay trong cùng lệnh RUN — rồi docker history in ra nguyên cái token. Kèm cách vá bằng BuildKit secret mount và ranh giới build-time với runtime.',
-      content: `
+      content: `${G174}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.4</span>
 <h2>Secrets: still there after you deleted them</h2>
@@ -930,7 +941,8 @@ if (missing.length) {
       ],
       type: 'VIDEO',
       description: 'Bắn request liên tục trong lúc deploy và đếm số cái hỏng: kiểu dừng-rồi-chạy-lại mất 1,5%, "blue-green" tự chế cũng mất 1,5% — chỉ khi có proxy đứng trước mới ra 0/327.',
-      content: `
+      content: `${G175}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.5</span>
 <h2>Zero downtime: 1,5% lost, or 0%</h2>
@@ -1135,7 +1147,8 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
       ],
       type: 'VIDEO',
       description: 'Một lần deploy báo thành công, container báo khoẻ, và một nửa API im lặng biến mất — sự cố có thật, cách chẩn đoán bằng một lệnh curl, và cái chốt chặn được thêm vào để nó không tái diễn.',
-      content: `
+      content: `${G176}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 17 · Lesson 17.6</span>
 <h2>When the deploy lies: stale builds, smoke tests, rollback</h2>

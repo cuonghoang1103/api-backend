@@ -5,6 +5,13 @@
  * Cấu hình production lấy từ src/config/redis.ts, src/services/quota.service.ts
  * và src/index.ts của chính cuongthai.com.
  */
+import G121 from './giang/node-12-1.mjs';
+
+import G122 from './giang/node-12-2.mjs';
+import G123 from './giang/node-12-3.mjs';
+import G124 from './giang/node-12-4.mjs';
+import G125 from './giang/node-12-5.mjs';
+import G126 from './giang/node-12-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -24,7 +31,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Một lệnh Redis mất 0,204ms nhưng chỉ một phần rất nhỏ trong đó là công việc thật. Gộp 10.000 lệnh vào một pipeline nhanh hơn 63 lần — và phép đo đó định hình mọi thứ bạn viết sau này.',
-      content: `
+      content: `${G121}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.1</span>
 <h2>What Redis really is, and where the time goes</h2>
@@ -242,7 +250,8 @@ export function getRedis() {
       },
       type: 'VIDEO',
       description: 'Cache nhanh hơn Postgres 120 lần — cho tới payload 1,2MB thì nó THUA. Tỉ lệ trúng 90% chỉ mang lại một phần nhỏ lợi ích so với 99%. Và 200 request cùng lúc biến cache thành một khẩu súng chĩa vào database.',
-      content: `
+      content: `${G122}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.2</span>
 <h2>Cache-aside: the pattern and its four betrayals</h2>
@@ -522,7 +531,8 @@ if (got) {
       slug: 'nodejs-12-3-cau-truc-du-lieu',
       type: 'VIDEO',
       description: 'Cùng một bài toán, ba cách lưu, RAM chênh nhau 2 lần. Đếm 100.000 người dùng duy nhất: Set 3,53MB, HyperLogLog 0,04MB. Và cú nhảy đáng sợ: thêm ĐÚNG MỘT trường thứ 513 làm RAM tăng 3,6 lần.',
-      content: `
+      content: `${G123}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.3</span>
 <h2>Picking the right structure is worth 95× the RAM</h2>
@@ -730,7 +740,8 @@ hash-max-listpack-entries = 512</div>
       },
       type: 'VIDEO',
       description: 'GET → kiểm tra → SET cho lọt cả 500 request qua một giới hạn 100. Cửa sổ cố định cho lọt gấp đôi ở ranh giới. Và một khoá phân tán viết sai xoá nhầm khoá của người khác — có bằng chứng chạy thật.',
-      content: `
+      content: `${G124}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.4</span>
 <h2>Atomicity: rate limiting and locks done right</h2>
@@ -1037,7 +1048,8 @@ const release = (key, token) =&gt; redis.eval(LUA_UNLOCK, 1, key, token);</code>
       },
       type: 'VIDEO',
       description: 'PUBLISH trả về 0 và tin nhắn biến mất khỏi vũ trụ. Stream giữ lại được, chia việc cho nhiều worker và đòi lại việc bỏ dở — có XAUTOCLAIM chạy thật chứng minh.',
-      content: `
+      content: `${G125}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.5</span>
 <h2>Pub/Sub and Streams: the message that vanished</h2>
@@ -1270,7 +1282,8 @@ stream-node-max-entries = 100</div>
       slug: 'nodejs-12-6-van-hanh-production',
       type: 'VIDEO',
       description: 'Một lệnh KEYS làm PING của client khác vọt lên 126,96ms. DEL một khoá lớn chặn 205,50ms, UNLINK chỉ 0,37ms. Và ba chính sách trục xuất, trong đó hai cái biến Redis thành chỉ-đọc.',
-      content: `
+      content: `${G126}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 12 · Lesson 12.6</span>
 <h2>Running Redis: the commands that freeze everything</h2>

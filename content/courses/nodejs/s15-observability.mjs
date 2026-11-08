@@ -5,6 +5,13 @@
  * express 5.2.1, pg 8.16.3, PostgreSQL 16 (local :5433), autocannon 8.0.0.
  * Phần production lấy bằng curl và đọc code thật của cuongthai.com.
  */
+import G151 from './giang/node-15-1.mjs';
+
+import G152 from './giang/node-15-2.mjs';
+import G153 from './giang/node-15-3.mjs';
+import G154 from './giang/node-15-4.mjs';
+import G155 from './giang/node-15-5.mjs';
+import G156 from './giang/node-15-6.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -17,7 +24,8 @@ export default {
       slug: 'nodejs-15-1-log-co-cau-truc',
       type: 'VIDEO',
       description: 'Đo thật con số mà ai cũng đoán mò: console.log so với pino về throughput, độ trễ p97.5, dung lượng đĩa và độ chặn event loop — rồi phát hiện thư viện log mặc định đang ghi nguyên Authorization header vào file.',
-      content: `
+      content: `${G151}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.1</span>
 <h2>Three pillars, and why <code>console.log</code> runs out</h2>
@@ -377,7 +385,8 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
       slug: 'nodejs-15-2-request-id',
       type: 'VIDEO',
       description: 'Ba request đồng thời, mười tám dòng log trộn lẫn vào nhau, và không dòng nào cho biết nó thuộc về ai — rồi sửa bằng AsyncLocalStorage và đo xem lớp sửa ấy tốn bao nhiêu.',
-      content: `
+      content: `${G152}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.2</span>
 <h2>Correlation: one id through every layer</h2>
@@ -743,7 +752,8 @@ RateLimit-Policy: 2000;w=900</div>
       slug: 'nodejs-15-3-chi-phi-va-tim-kiem',
       type: 'VIDEO',
       description: '51,6GB mỗi ngày chỉ vì một cấu hình mặc định, một lệnh grep 2,2 giây trên 229MB, và một chiến lược lấy mẫu cắt 100 lần dung lượng mà vẫn giữ 100% sự cố.',
-      content: `
+      content: `${G153}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.3</span>
 <h2>What logs cost, and finding one line in a million</h2>
@@ -1019,7 +1029,8 @@ request chậm  giữ 1/1 (100%)</div>
       slug: 'nodejs-15-4-metrics-prometheus',
       type: 'VIDEO',
       description: 'Dựng /metrics bằng prom-client, hiểu counter và histogram bằng con số thật, rồi tái hiện vụ nổ cardinality: một nhãn đặt sai chỗ biến 127 chuỗi thành 1.400.000 và 939MB RAM.',
-      content: `
+      content: `${G154}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.4</span>
 <h2>Metrics, and the label that ate 939MB</h2>
@@ -1335,7 +1346,8 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
       slug: 'nodejs-15-5-opentelemetry-trace',
       type: 'VIDEO',
       description: 'Bật OpenTelemetry, để nó tự vá Express và pg, rồi nhìn một cây span phơi bày lỗi N+1 mà không dòng log nào tố cáo — kèm hoá đơn thật: -40% throughput và một phát hiện phản trực giác về lấy mẫu.',
-      content: `
+      content: `${G155}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.5</span>
 <h2>Tracing: where the time actually went</h2>
@@ -1699,7 +1711,8 @@ span.end();</code></pre>
       slug: 'nodejs-15-6-health-check-canh-bao',
       type: 'VIDEO',
       description: 'Vì sao một health check kiểm tra database có thể tự tay giết chết ứng dụng đang khoẻ mạnh, cách phân biệt liveness với readiness, và quy tắc lọc cảnh báo sao cho người trực còn tin vào điện thoại của mình.',
-      content: `
+      content: `${G156}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 15 · Lesson 15.6</span>
 <h2>Health checks, alerts, and being woken at 3am</h2>

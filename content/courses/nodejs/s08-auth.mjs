@@ -3,6 +3,11 @@
  * Mọi output là đo thật: Node v22.21.0, express 5.2.1, argon2 0.45.1, bcrypt 6.0.0,
  * jsonwebtoken 9.0.3, PostgreSQL 15.4 + prisma 7.9.1, máy 10 nhân.
  */
+import G081 from './giang/node-08-1.mjs';
+
+import G082 from './giang/node-08-2.mjs';
+import G083 from './giang/node-08-3.mjs';
+import G084 from './giang/node-08-4.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -22,7 +27,8 @@ export default {
       },
       type: 'VIDEO',
       description: 'Đo tốc độ băm, vét cạn một triệu mật khẩu, hiểu muối và tham số argon2id, và bịt lỗ dò tài khoản qua thời gian trả lời.',
-      content: `
+      content: `${G081}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>Storing passwords: why almost every way is wrong</h2>
@@ -484,7 +490,8 @@ loginAnToan  : email KHÔNG tồn tại = 34.73ms | email CÓ tồn tại = 36.6
       },
       type: 'VIDEO',
       description: 'Mổ xẻ một JWT bằng tay, thử ba đòn tấn công lên nó, rồi dựng cặp access + refresh có xoay vòng và phát hiện token bị đánh cắp.',
-      content: `
+      content: `${G082}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.2</span>
 <h2>JWT, refresh tokens and rotation</h2>
@@ -997,7 +1004,8 @@ thử lại với token mới: HTTP 200  {"items":[{"id":1,"title":"Ghi chu cua 
       },
       type: 'VIDEO',
       description: 'Viết middleware xác thực với đủ sáu nhánh thất bại, phân biệt 401 với 403, và cho Notes API chạy trên người dùng thật thay vì một hằng số.',
-      content: `
+      content: `${G083}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.3</span>
 <h2>requireAuth, roles, and deleting AUTHOR_ID = 1</h2>
@@ -1392,7 +1400,8 @@ authorId sau PATCH = 2 (vẫn là Bình id=2)</div>
       },
       type: 'VIDEO',
       description: 'Chọn chỗ cất token, hiểu CSRF bằng bốn endpoint chạy thật, đăng xuất mọi thiết bị bằng tokenVersion, và chặn dò mật khẩu đúng cách.',
-      content: `
+      content: `${G084}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.4</span>
 <h2>Cookies, CSRF, revocation and rate limiting</h2>

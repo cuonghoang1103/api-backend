@@ -2,6 +2,12 @@
  * Node.js — Chương 2: Bên trong runtime (V8, libuv, event loop).
  * MỌI con số trong bài đều đo THẬT trên Node v22.21.0 (máy 10 nhân).
  */
+import G021 from './giang/node-02-1.mjs';
+
+import G022 from './giang/node-02-2.mjs';
+import G023 from './giang/node-02-3.mjs';
+import G024 from './giang/node-02-4.mjs';
+import G025 from './giang/node-02-5.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -14,7 +20,8 @@ export default {
       slug: 'nodejs-2-1-runtime-la-gi',
       type: 'VIDEO',
       description: 'V8 + libuv + lớp nối C++: bên trong Node có gì, và "đơn luồng" thật sự nghĩa là gì.',
-      content: `
+      content: `${G021}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>What Node.js actually is</h2>
@@ -146,7 +153,8 @@ node -p <span class="tok-string">"process.versions.uv"</span></code></pre>
       },
       type: 'VIDEO',
       description: 'Sáu pha của vòng lặp, thứ tự thực thi thật, và vì sao setTimeout(0) vs setImmediate không đoán được.',
-      content: `
+      content: `${G022}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.2</span>
 <h2>The event loop, phase by phase</h2>
@@ -317,7 +325,8 @@ immediate timeout</div>
       },
       type: 'VIDEO',
       description: 'Hai hàng đợi ưu tiên nằm ngoài sáu pha, thứ tự giữa chúng, và cách chúng làm treo cả tiến trình.',
-      content: `
+      content: `${G023}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.3</span>
 <h2>nextTick, microtasks and starvation</h2>
@@ -427,7 +436,8 @@ nextTick đã chạy: 1000000 lần</div>
       },
       type: 'VIDEO',
       description: 'Đo chính xác điều gì xảy ra khi một phép tính nặng chạy trên luồng chính, và khám phá thread pool ẩn của libuv.',
-      content: `
+      content: `${G024}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.4</span>
 <h2>Blocking the loop — measured</h2>
@@ -627,7 +637,8 @@ h.<span class="tok-function">enable</span>();
       },
       type: 'VIDEO',
       description: 'Ba cách xử lý việc nặng CPU — worker threads, chia nhỏ, nhiều tiến trình — kèm số đo và cái giá của từng cách.',
-      content: `
+      content: `${G025}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.5</span>
 <h2>Getting heavy work off the loop</h2>

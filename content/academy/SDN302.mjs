@@ -10,6 +10,16 @@
  * ESCAPE: backtick trong code -> &#96; ; ${..} -> \${ ; < > & trong <pre> -> &lt; &gt; &amp;
  * Seed: node scripts/academy-seed-course.mjs --file ./content/academy/SDN302.mjs --apply
  */
+import GS001 from './sdn302/giang/sdn-00-1.mjs';
+
+import GS005 from './sdn302/giang/sdn-00-5.mjs';
+import GS021 from './sdn302/giang/sdn-02-1.mjs';
+import GS031 from './sdn302/giang/sdn-03-1.mjs';
+import GS032 from './sdn302/giang/sdn-03-2.mjs';
+import GS041 from './sdn302/giang/sdn-04-1.mjs';
+import GS042 from './sdn302/giang/sdn-04-2.mjs';
+import GS051 from './sdn302/giang/sdn-05-1.mjs';
+import GS052 from './sdn302/giang/sdn-05-2.mjs';
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -38,7 +48,8 @@ export default {
           type: 'VIDEO',
           isFreePreview: true,
           description: 'Server-side là gì, ngăn xếp Node/Express/MongoDB, và bản đồ hành trình từ HTTP tới REST API triển khai.',
-          content: `
+          content: `${GS001}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>About SDN302 — Server-Side Development</h2>
@@ -270,7 +281,8 @@ npm install express mongoose</code></pre></div>
           slug: 'sdn302-ngan-hang-de-tai',
           type: 'VIDEO',
           description: '12 đề tài API đã kiểm phạm vi cho project + rubric 6 phép thử chọn đề vừa sức.',
-          content: `
+          content: `${GS005}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.5</span>
 <h2>Choosing your project</h2>
@@ -619,7 +631,8 @@ server.<span class="tok-function">listen</span>(<span class="tok-number">3000</s
           slug: 'sdn302-2-1-express-routing',
           type: 'VIDEO',
           description: 'Cài Express, tạo route theo method, route params, và Express Generator scaffold.',
-          content: `
+          content: `${GS021}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 2 · Lesson 2.1</span>
 <h2>Express: routing made simple</h2>
@@ -858,7 +871,8 @@ app.<span class="tok-function">use</span>((err, req, res, next) =&gt; {
           slug: 'sdn302-3-1-mongodb-crud',
           type: 'VIDEO',
           description: 'Mô hình tài liệu vs bảng quan hệ, collection/document, và bốn thao tác CRUD.',
-          content: `
+          content: `${GS031}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.1</span>
 <h2>NoSQL &amp; the document model</h2>
@@ -955,7 +969,8 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
           slug: 'sdn302-3-2-mongoose',
           type: 'VIDEO',
           description: 'Định nghĩa schema có validation, tạo model, quan hệ ref, và .populate() để mở rộng tham chiếu.',
-          content: `
+          content: `${GS032}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 3 · Lesson 3.2</span>
 <h2>Mongoose: structure over flexible data</h2>
@@ -1047,7 +1062,8 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
           slug: 'sdn302-4-1-rest-mvc',
           type: 'VIDEO',
           description: 'Phân lớp routes → controllers → services → models, mã trạng thái đúng, validation và xử lý lỗi.',
-          content: `
+          content: `${GS041}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.1</span>
 <h2>Building a full REST API in MVC</h2>
@@ -1178,7 +1194,8 @@ db.products.<span class="tok-function">deleteOne</span>({ name: <span class="tok
           slug: 'sdn302-4-2-templating',
           type: 'VIDEO',
           description: 'Render HTML từ server bằng EJS và Handlebars, truyền dữ liệu vào view, và khi nào dùng.',
-          content: `
+          content: `${GS042}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 4 · Lesson 4.2</span>
 <h2>Server-side templating (CLO8)</h2>
@@ -1268,7 +1285,8 @@ app.<span class="tok-function">get</span>(<span class="tok-string">'/products'</
           slug: 'sdn302-5-1-passwords-sessions',
           type: 'VIDEO',
           description: 'Băm mật khẩu an toàn với bcrypt, xác thực bằng session/cookie, và Passport-local.',
-          content: `
+          content: `${GS051}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.1</span>
 <h2>Authentication done safely (CLO6)</h2>
@@ -1389,7 +1407,8 @@ passport.<span class="tok-function">use</span>(<span class="tok-keyword">new</sp
           slug: 'sdn302-5-2-jwt-cors',
           type: 'VIDEO',
           description: 'Token-based auth với JWT, HTTPS an toàn, bật CORS cho client React, và upload file bằng Multer.',
-          content: `
+          content: `${GS052}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 5 · Lesson 5.2</span>
 <h2>Token auth (JWT), HTTPS, CORS &amp; uploads</h2>

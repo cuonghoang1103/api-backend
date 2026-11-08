@@ -3,6 +3,11 @@
  * Song ngữ EN/VI qua .ml-en / .ml-vi. KHÔNG dùng backtick trần trong content
  * (dùng &#96;), và mọi `${` trong code mẫu phải escape thành \${.
  */
+import G001 from './giang/node-00-1.mjs';
+
+import G002 from './giang/node-00-2.mjs';
+import G003 from './giang/node-00-3.mjs';
+import G004 from './giang/node-00-4.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -19,7 +24,8 @@ export default {
       // chính buổi ra mắt Node.js của người sáng lập.
       video: { url: 'https://youtu.be/ztspvPYybIY', durationSeconds: 0 },
       description: 'Node.js là gì, ai tạo ra và vì sao, nó thay thế cái gì, dùng ở đâu trong công việc — và bản đồ 18 chương.',
-      content: `
+      content: `${G001}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.1</span>
 <h2>Node.js — from zero to production</h2>
@@ -218,7 +224,8 @@ export default {
       type: 'VIDEO',
       isFreePreview: true,
       description: 'Vòng lặp học 5 bước, cách dùng Code Lab kèm theo, và quy tắc chống ảo tưởng "đã hiểu".',
-      content: `
+      content: `${G002}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.2</span>
 <h2>How to study this course</h2>
@@ -365,7 +372,8 @@ export default {
       // Video: Fireship "Node.js Ultimate Beginner's Guide" — tổng quan Node cho người mới.
       video: { url: 'https://youtu.be/ENrzD9HAZK4', durationSeconds: 0 },
       description: 'Cài Node bằng trình quản lý phiên bản, kiểm tra máy đã sẵn sàng, và chạy chương trình Node đầu tiên.',
-      content: `
+      content: `${G003}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.3</span>
 <h2>Setting up your environment</h2>
@@ -583,7 +591,8 @@ Type ".help" for more information.
       slug: 'nodejs-0-4-du-an',
       type: 'VIDEO',
       description: 'Một API duy nhất được xây dần qua 18 chương — từ 20 dòng đầu tiên tới bản chạy production.',
-      content: `
+      content: `${G004}
+
 <div class="ml-en">
 <span class="eyebrow">Section 0 · Lesson 0.4</span>
 <h2>The project we build together</h2>

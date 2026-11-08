@@ -4,6 +4,11 @@
  * sanitize-html 2.17.6, dompurify 3.4.12 + jsdom 29.1.1, jsonwebtoken 9.0.3.
  * Header production lấy bằng curl thật trên https://cuongthai.com (27/07/2026).
  */
+import G091 from './giang/node-09-1.mjs';
+
+import G092 from './giang/node-09-2.mjs';
+import G093 from './giang/node-09-3.mjs';
+import G094 from './giang/node-09-4.mjs';
 const REF = '?ref=%2Fcourses%2Fnodejs%2Flearn&reflabel=Node.js';
 
 export default {
@@ -16,7 +21,8 @@ export default {
       slug: 'nodejs-9-1-header-csp-cors',
       type: 'VIDEO',
       description: 'Đo chính xác helmet thêm gì vào phản hồi, đọc CSP thật của cuongthai.com từng chỉ thị, và chứng minh CORS không hề bảo vệ máy chủ của bạn.',
-      content: `
+      content: `${G091}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.1</span>
 <h2>The perimeter: security headers, CSP and CORS</h2>
@@ -318,7 +324,8 @@ số dư sau   : 900  ← tiền đã đi rồi</div>
       slug: 'nodejs-9-2-xss-va-sanitize',
       type: 'VIDEO',
       description: 'Tái hiện stored XSS end-to-end bằng một trình duyệt thật, đo chín payload qua năm cách lọc, và quyết định escape hay sanitize, ở tầng nào.',
-      content: `
+      content: `${G092}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.2</span>
 <h2>XSS: from a stranger's note to your session</h2>
@@ -565,7 +572,8 @@ DOMPurify    12.245ms cho 12.1KB  →    82 lần/giây</div>
       },
       type: 'VIDEO',
       description: 'Bốn đòn tấn công không cần mật khẩu, không cần XSS: một chuỗi 31 ký tự đóng băng máy chủ, một khoá JSON cấp quyền admin, một request 11MB, và một URL khiến máy chủ tự đi đọc bí mật của chính nó.',
-      content: `
+      content: `${G093}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.3</span>
 <h2>Input is the enemy: ReDoS, prototype pollution, body limits, SSRF</h2>
@@ -854,7 +862,8 @@ RSS sau 1.5 giây      : 213 MB</div>
       slug: 'nodejs-9-4-bi-mat-va-phu-thuoc',
       type: 'VIDEO',
       description: 'Bẻ khoá JWT yếu bằng từ điển trong 1ms, so sánh chuỗi bí mật cho đúng, đo xem một dự án Node điển hình cho bao nhiêu gói quyền đọc biến môi trường, và viết thông báo lỗi không khai báo gì.',
-      content: `
+      content: `${G094}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 9 · Lesson 9.4</span>
 <h2>Secrets, dependencies and what your errors give away</h2>

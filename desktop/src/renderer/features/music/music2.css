@@ -58,7 +58,7 @@
 .mz-nut:disabled { opacity: .45; cursor: default; }
 .mz-nut-trong { background: transparent; }
 .mz-nut-chinh {
-  background: var(--mz-a); border-color: transparent; color: #fff;
+  background: var(--mz-a); border-color: transparent; color: var(--ct-on-accent);
   box-shadow: 0 6px 18px color-mix(in srgb, var(--mz-a) 32%, transparent);
 }
 .mz-nut-chinh:hover:not(:disabled) { background: color-mix(in srgb, var(--mz-a) 88%, #fff); }

@@ -106,8 +106,8 @@
 .da-the-anh-trong { display: grid; place-items: center; width: 100%; height: 100%; color: var(--ct-text-faint); background: linear-gradient(135deg, color-mix(in srgb, var(--ct-accent) 22%, var(--ct-surface-2)), var(--ct-surface-2)); }
 .da-the-nhan { position: absolute; left: 10px; top: 10px; display: flex; gap: 5px; }
 .da-nhan { display: inline-flex; align-items: center; gap: 4px; height: 21px; padding: 0 8px; border-radius: 999px; font-size: 10.5px; font-weight: 700; color: #fff; background: rgba(10, 12, 20, .72); }
-.da-nhan-ghim { background: color-mix(in srgb, #5ec7c0 80%, #0b1020); }
-.da-nhan-sao { background: color-mix(in srgb, #d4a35a 85%, #0b1020); }
+.da-nhan-ghim { background: color-mix(in srgb, #5ec7c0 50%, #0b1020); }
+.da-nhan-sao { background: color-mix(in srgb, #d4a35a 55%, #0b1020); }
 .da-the-anh .da-tt { position: absolute; right: 10px; top: 10px; }
 .da-tt {
   display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 9px; border-radius: 999px;
@@ -119,7 +119,9 @@
 .da-the-ten { font-size: 15px; font-weight: 700; letter-spacing: -.01em; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .da-the-mota { font-size: 12.5px; line-height: 1.55; color: var(--ct-text-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 38px; }
 .da-the-chan { display: flex; align-items: center; gap: 6px; }
-.da-bac { display: inline-flex; align-items: center; height: 21px; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 650; color: var(--b); background: color-mix(in srgb, var(--b) 14%, transparent); white-space: nowrap; }
+.da-bac { display: inline-flex; align-items: center; height: 21px; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 650; color: color-mix(in srgb, var(--b) 55%, #000); background: color-mix(in srgb, var(--b) 14%, transparent); white-space: nowrap; }
+/* `--b` là tông 400 (viết cho nền tối) ⇒ chủ đề sáng pha về đen cho chữ (08/11/2026). */
+:root[data-ct-theme='dark'] .da-bac { color: var(--b); }
 .da-dm { display: inline-flex; align-items: center; height: 21px; padding: 0 8px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--ct-text-muted); background: var(--ct-surface-2); }
 .da-nam { margin-left: auto; font-size: 11.5px; color: var(--ct-text-faint); font-variant-numeric: tabular-nums; }
 .da-cn { display: flex; flex-wrap: wrap; gap: 5px; }

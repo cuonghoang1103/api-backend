@@ -12,8 +12,8 @@ type ND = {
   enabled: boolean; accountNonLocked: boolean; emailVerified: boolean; musicAccess: boolean; provider: string | null; createdAt: string; roles: string[];
 };
 const NHA_CC: Record<string, { ten: string; mau: string }> = {
-  credentials: { ten: 'Mật khẩu', mau: '#94a3b8' }, google: { ten: 'Google', mau: '#ea4335' }, github: { ten: 'GitHub', mau: '#e2e8f0' },
-  apple: { ten: 'Apple', mau: '#f5f5f7' }, facebook: { ten: 'Facebook', mau: '#1877f2' },
+  credentials: { ten: 'Mật khẩu', mau: 'var(--ct-text-muted)' }, google: { ten: 'Google', mau: '#ea4335' }, github: { ten: 'GitHub', mau: 'var(--ct-text)' },
+  apple: { ten: 'Apple', mau: 'var(--ct-text)' }, facebook: { ten: 'Facebook', mau: '#1877f2' },
 };
 const tenVaiTro = (r: string) => r.replace(/^ROLE_/i, '').toLowerCase();
 

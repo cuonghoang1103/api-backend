@@ -5,7 +5,7 @@
   --ct-sidebar-w: 224px; --ct-sidebar: #eaf0f8;
   --ct-bg: #f2f5fa; --ct-surface: #fff; --ct-surface-2: #eaf0f8;
   --ct-border: #d7dfeb; --ct-text: #192638; --ct-text-muted: #52647c;
-  --ct-text-faint: #5d6f85; --ct-accent: #5265d9; --ct-accent-text: #4154c4;
+  --ct-text-faint: #56687e; --ct-accent: #5265d9; --ct-accent-text: #4154c4;
 }
 :root[data-ct-theme='dark'] .ct-shell {
   --ct-sidebar: #171c26;
@@ -183,7 +183,7 @@
 .ct-workspace .ct-kh-cham i { width: 6px; height: 6px; box-shadow: 0 0 0 1.5px rgba(15, 23, 42, .5); }
 .ct-workspace .ct-kh-ngay[data-homnay='true'] .ct-kh-cham i { box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .7); }
 :root[data-ct-theme='light'] .ct-workspace .ct-kh-ngay { background: #f4f2ff; border-color: #e6e1fb; }
-:root[data-ct-theme='light'] .ct-workspace .ct-kh-ngay[data-cuoituan='true'] { color: #db2777; }
+:root[data-ct-theme='light'] .ct-workspace .ct-kh-ngay[data-cuoituan='true'] { color: #be185d; }
 :root[data-ct-theme='light'] .ct-workspace .ct-kh-ngay:has(.ct-kh-cham i) { background: #e0f2fe; border-color: #bae6fd; }
 :root[data-ct-theme='light'] .ct-workspace .ct-kh-thang strong { background-image: linear-gradient(90deg, #7c3aed, #db2777); }
 

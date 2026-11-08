@@ -130,14 +130,14 @@ export default {
     /* ── Chương 15 — GitHub cho sinh viên: hồ sơ, portfolio & mã nguồn mở ── */
     'git-15-0-slides': { yt: 'z8UPAVTh2aE', credit: "Miraya — How To Make Your GitHub Stand Out (Gets You Hired!)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-00-slide-chuong-15-91948e35.mp4' }, defaultVideoTrack: 'VI'},
     'git-15-1-ho-so-github': { yt: 'DWFs6aqknqw', credit: "Magdeline Huang — How to level up your GitHub profile README (Basic to Pro!)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-01-ho-so-github-09bfb0fc.mp4' }, defaultVideoTrack: 'VI'},
-    'git-15-2-github-pages': { yt: 'b2r9Cdvssi0', credit: "GitHub — Getting started with GitHub Pages for beginners | Tutorial" },
-    'git-15-3-student-pack-codespaces': { yt: 'HIVFdN9VGgw', credit: "GitHub — GitHub GitHub Education: free programs, technology, and opportunities available for Students" },
-    'git-15-4-dong-gop-ma-nguon-mo': { yt: 'WldXhauP024', credit: "GitHub — Getting started with open source contributions for beginners" },
+    'git-15-2-github-pages': { yt: 'b2r9Cdvssi0', credit: "GitHub — Getting started with GitHub Pages for beginners | Tutorial", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-02-github-pages-8b2f9a92.mp4' }, defaultVideoTrack: 'VI'},
+    'git-15-3-student-pack-codespaces': { yt: 'HIVFdN9VGgw', credit: "GitHub — GitHub GitHub Education: free programs, technology, and opportunities available for Students", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-03-student-pack-codespaces-a270da67.mp4' }, defaultVideoTrack: 'VI'},
+    'git-15-4-dong-gop-ma-nguon-mo': { yt: 'WldXhauP024', credit: "GitHub — Getting started with open source contributions for beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-04-dong-gop-ma-nguon-mo-dc558d03.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 16 — Dự án nhóm cuối khoá: vận hành một dự án nhóm trên GitHub ── */
-    'git-16-0-slides': { yt: 'ygqx50-JHEE', credit: "HenrikM Dev — How To Use Git to Collaborate with Others [Git Tutorial]" },
-    'git-16-1-khoi-tao-repo-nhom': { yt: 'IUgvj0lPYVM', credit: "FullStackWithLawrence — Pro Tips For Setting Up Your GitHub Repo - Part I" },
-    'git-16-2-sprint-mo-phong': { yt: '02aQhH5cNBg', credit: "Kahan Data Solutions — A typical GitHub workflow // what to expect" },
+    'git-16-0-slides': { yt: 'ygqx50-JHEE', credit: "HenrikM Dev — How To Use Git to Collaborate with Others [Git Tutorial]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-00-slide-chuong-16-e57c8219.mp4' }, defaultVideoTrack: 'VI'},
+    'git-16-1-khoi-tao-repo-nhom': { yt: 'IUgvj0lPYVM', credit: "FullStackWithLawrence — Pro Tips For Setting Up Your GitHub Repo - Part I", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-01-khoi-tao-repo-nhom-tron-96a10418.mp4' }, defaultVideoTrack: 'VI'},
+    'git-16-2-sprint-mo-phong': { yt: '02aQhH5cNBg', credit: "Kahan Data Solutions — A typical GitHub workflow // what to expect", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-02-sprint-mo-phong-tron-094de273.mp4' }, defaultVideoTrack: 'VI'},
     'git-16-3-phat-hanh-hotfix': { yt: '5q75eeEYApk', credit: "Cameron McKenzie — Gitflow Hotfix Branch Example" },
     'git-16-4-su-co-nhom': { yt: 'FdZecVxzJbk', credit: "Corey Schafer — Git Tutorial: Fixing Common Mistakes and Undoing Bad Commits" },
     'git-kd-1-kiem-tra-cai-dat': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-01-cai-va-kiem-tra-git-b050d93e.mp4' }, defaultVideoTrack: 'VI'},

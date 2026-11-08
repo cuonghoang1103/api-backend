@@ -546,9 +546,9 @@ epoch zero: 1970-01-01</div>
 <p class="meo">🧠 Học kỹ năm bộ lọc — <code>grep</code>, <code>sort</code>, <code>uniq -c</code>, <code>cut</code>/<code>awk</code>, <code>head</code>/<code>tail</code> — là trả lời được phần lớn câu hỏi về log mà không cần viết mã (slide sau cho thấy đúng như vậy).</p>
 <p class="pitfall">⚠️ "Linh tinh" của slide không có nghĩa là "không quan trọng": <code>date</code>, <code>bc</code>, <code>sleep</code>, <code>env</code>, <code>true</code>/<code>false</code> (chương trình chỉ trả 0 hoặc 1) dùng trong mọi script. Đừng bỏ chúng khi liệt kê các nhóm.</p>`],
       [7, 'Linux Utility Programs (2)',
-        `<p class="y-chinh">🎯 Figure 10-2 lists twenty utilities that POSIX <em>requires</em>: <code>cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr</code>. A program that stays inside this list runs on every POSIX system.</p>
-<p>The table is a kind of <em>passport</em>: a script that only uses these twenty (and the shell language) is portable between Linux, the BSDs and macOS. Check that this machine really has all of them, and how many other programs it carries:</p>
-<div class="out"># Slide 7, Figure 10-2: all twenty utilities of the figure exist on this machine<br>
+        `<p class="y-chinh">🎯 Figure 10-2 lists eighteen utilities that POSIX <em>requires</em>: <code>cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr</code>. A program that stays inside this list runs on every POSIX system.</p>
+<p>The table is a kind of <em>passport</em>: a script that only uses these eighteen (and the shell language) is portable between Linux, the BSDs and macOS. Check that this machine really has all of them, and how many other programs it carries:</p>
+<div class="out"># Slide 7, Figure 10-2: all eighteen utilities of the figure exist on this machine<br>
 $ for u in cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr; do printf '%-6s %s\\n' "$u" "$(command -v $u)"; done | column -c 100<br>
 cat &nbsp;&nbsp;&nbsp;/usr/bin/cat	head &nbsp;&nbsp;/usr/bin/head	paste &nbsp;/usr/bin/paste	sort &nbsp;&nbsp;/usr/bin/sort<br>
 chmod &nbsp;/usr/bin/chmod	ls &nbsp;&nbsp;&nbsp;&nbsp;/usr/bin/ls	pr &nbsp;&nbsp;&nbsp;&nbsp;/usr/bin/pr	tail &nbsp;&nbsp;/usr/bin/tail<br>
@@ -559,7 +559,7 @@ $ echo "programs in /usr/bin: $(ls /usr/bin | wc -l)"<br>
 programs in /usr/bin: 556<br>
 $ grep --version | head -1<br>
 grep (GNU grep) 3.8</div>
-<p>All twenty exist — and the machine has 556 programs in <code>/usr/bin</code> (Debian does not install everything, but a typical development image has hundreds). Notice the path <code>/usr/bin/cat</code>: older UNIX put essential programs in <code>/bin</code> and the rest in <code>/usr/bin</code>; modern Debian "merged" them, so <code>/bin</code> is just a link to <code>/usr/bin</code> (slide 33 shows this). Now use the utilities for a real backend job. A web server logged ten requests; answer three questions about them <em>without writing a program</em>:</p>
+<p>All eighteen exist — and the machine has 556 programs in <code>/usr/bin</code> (Debian does not install everything, but a typical development image has hundreds). Notice the path <code>/usr/bin/cat</code>: older UNIX put essential programs in <code>/bin</code> and the rest in <code>/usr/bin</code>; modern Debian "merged" them, so <code>/bin</code> is just a link to <code>/usr/bin</code> (slide 33 shows this). Now use the utilities for a real backend job. A web server logged ten requests; answer three questions about them <em>without writing a program</em>:</p>
 <div class="out"># Slide 7, Figure 10-2: the POSIX utilities doing a real backend job — reading a web-server log<br>
 $ wc -l _access.log<br>
 10 _access.log<br>
@@ -591,9 +591,9 @@ $ cut -d' ' -f1 _access.log | head -4 | pr -2 -t -w 30<br>
 <p>➕ <strong>Why "required by POSIX" still matters.</strong> POSIX (IEEE 1003.1) is the written contract that lets one script run anywhere; it also defines the shell language, the system calls (<code>fork</code>, <code>open</code>…), error codes (<code>errno</code>) and threads (<code>pthread</code>). When people say "POSIX-compliant" they mean: stay inside that contract and your code survives a change of operating system. Windows is not POSIX, which is why WSL (a real Linux kernel inside Windows) is the usual way Windows developers get these tools.</p>
 <p class="meo">🧠 For interviews, memorise one log one-liner: <code>awk '{print $9}' access.log | sort | uniq -c | sort -rn</code> (count HTTP statuses in an nginx log). It shows you can read production data from a terminal.</p>
 <p class="pitfall">⚠️ <code>sort | uniq -c</code> needs the <code>sort</code> first: <code>uniq</code> only merges <em>adjacent</em> equal lines, so on unsorted input it silently under-counts.</p>`,
-        `<p class="y-chinh">🎯 Hình 10-2 liệt kê hai mươi tiện ích mà POSIX <em>bắt buộc</em>: <code>cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr</code>. Chương trình chỉ dùng trong danh sách này chạy được trên mọi hệ POSIX.</p>
-<p>Bảng này như một <em>hộ chiếu</em>: script chỉ dùng hai mươi cái đó (và ngôn ngữ shell) mang đi được giữa Linux, các BSD và macOS. Kiểm xem máy này có đủ không, và mang thêm bao nhiêu chương trình khác:</p>
-<div class="out"># Slide 7, Hình 10-2: cả hai mươi tiện ích của hình đều có trên máy này<br>
+        `<p class="y-chinh">🎯 Hình 10-2 liệt kê mười tám tiện ích mà POSIX <em>bắt buộc</em>: <code>cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr</code>. Chương trình chỉ dùng trong danh sách này chạy được trên mọi hệ POSIX.</p>
+<p>Bảng này như một <em>hộ chiếu</em>: script chỉ dùng mười tám cái đó (và ngôn ngữ shell) mang đi được giữa Linux, các BSD và macOS. Kiểm xem máy này có đủ không, và mang thêm bao nhiêu chương trình khác:</p>
+<div class="out"># Slide 7, Hình 10-2: cả mười tám tiện ích của hình đều có trên máy này<br>
 $ for u in cat chmod cp cut grep head ls make mkdir od paste pr ps rm rmdir sort tail tr; do printf '%-6s %s\\n' "$u" "$(command -v $u)"; done | column -c 100<br>
 cat &nbsp;&nbsp;&nbsp;/usr/bin/cat	head &nbsp;&nbsp;/usr/bin/head	paste &nbsp;/usr/bin/paste	sort &nbsp;&nbsp;/usr/bin/sort<br>
 chmod &nbsp;/usr/bin/chmod	ls &nbsp;&nbsp;&nbsp;&nbsp;/usr/bin/ls	pr &nbsp;&nbsp;&nbsp;&nbsp;/usr/bin/pr	tail &nbsp;&nbsp;/usr/bin/tail<br>
@@ -604,7 +604,7 @@ $ echo "programs in /usr/bin: $(ls /usr/bin | wc -l)"<br>
 programs in /usr/bin: 556<br>
 $ grep --version | head -1<br>
 grep (GNU grep) 3.8</div>
-<p>Đủ cả hai mươi — và máy có 556 chương trình trong <code>/usr/bin</code> (Debian không cài mọi thứ, nhưng một ảnh phát triển điển hình có hàng trăm). Để ý đường dẫn <code>/usr/bin/cat</code>: UNIX cũ đặt chương trình thiết yếu ở <code>/bin</code> và phần còn lại ở <code>/usr/bin</code>; Debian hiện đại đã "gộp" chúng, nên <code>/bin</code> chỉ là liên kết tới <code>/usr/bin</code> (slide 33 cho thấy). Giờ dùng các tiện ích cho một việc backend thật. Một máy chủ web ghi lại mười request; trả lời ba câu hỏi về chúng <em>mà không viết chương trình</em>:</p>
+<p>Đủ cả mười tám — và máy có 556 chương trình trong <code>/usr/bin</code> (Debian không cài mọi thứ, nhưng một ảnh phát triển điển hình có hàng trăm). Để ý đường dẫn <code>/usr/bin/cat</code>: UNIX cũ đặt chương trình thiết yếu ở <code>/bin</code> và phần còn lại ở <code>/usr/bin</code>; Debian hiện đại đã "gộp" chúng, nên <code>/bin</code> chỉ là liên kết tới <code>/usr/bin</code> (slide 33 cho thấy). Giờ dùng các tiện ích cho một việc backend thật. Một máy chủ web ghi lại mười request; trả lời ba câu hỏi về chúng <em>mà không viết chương trình</em>:</p>
 <div class="out"># Slide 7, Hình 10-2: các tiện ích POSIX làm một việc backend thật — đọc log của máy chủ web<br>
 $ wc -l _access.log<br>
 10 _access.log<br>

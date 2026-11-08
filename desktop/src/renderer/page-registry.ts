@@ -37,9 +37,7 @@ import { NotesPage } from './features/notes/NotesPage';
 import { ProPage } from './features/pro/ProPage';
 import { TechTrendsWebPage } from './features/tech-trends/TechTrendsWebPage';
 import { PhongLabWebPage } from './features/phong-lab/PhongLabWebPage';
-import { HocVienPage } from './features/academy/HocVienPage';
-import { TuVanNganhPage } from './features/academy/TuVanNganhPage';
-import { KhoaHocPage } from './features/academy/KhoaHocPage';
+import { HocVienWebPage } from './features/academy/TuVanNganhPage';
 import { CodeLabPage } from './features/codelab/CodeLabPage';
 import { PhongThiPage } from './features/exam/PhongThiPage';
 import { GiongNoiPage } from './features/voice/GiongNoiPage';
@@ -74,8 +72,9 @@ export const NATIVE_PAGES: Readonly<Record<string, ComponentType>> = {
   '/tech-trends': TechTrendsWebPage,
   '/ai-templates': MauAIPage,
   '/voice': GiongNoiPage,
-  '/academy': HocVienPage,
-  '/courses': KhoaHocPage,
+  /* 08/11/2026: Học viện + Courses dựng NGUYÊN trang web (giống web 100%) — xem `dinhTuyenWeb.ts`. */
+  '/academy': HocVienWebPage,
+  '/courses': HocVienWebPage,
   '/code-lab': CodeLabPage,
   '/exam': PhongThiPage,
   '/algorithms': ThuatToanPage,
@@ -141,11 +140,9 @@ const CHU_CAY: ReadonlyArray<readonly [string, ComponentType]> = [
   ['/cpu-lab', PhongLabWebPage],
   ['/os-lab', PhongLabWebPage],
   ['/net-lab', PhongLabWebPage],
-  /* ⚠️ `/academy` KHỚP CHÍNH XÁC ở `NATIVE_PAGES` nên nó vẫn ra `HocVienPage`
-     (bản có đọc ngoại tuyến). Mục này chỉ bắt các trang CON — `tu-van-nganh`,
-     `so-do-mon-hoc` — vốn app chưa từng có. Thứ tự trong `nativePageFor` bảo
-     đảm điều đó: khớp chính xác trước, cây web sau. */
-  ['/academy', TuVanNganhPage],
+  /* Học viện + Courses — cả cây là trang web (08/11/2026): `/academy/so-do-mon-hoc`, `/courses/:slug/learn`… */
+  ['/academy', HocVienWebPage],
+  ['/courses', HocVienWebPage],
   ['/work', CtWorkPage],
   /* `/notes/graph` (Đồ thị liên kết) — ⌘K và trang chủ Sổ tay trỏ tới. Chỉ
      trang CON; `/notes` vẫn khớp chính xác ở `NATIVE_PAGES`. `NotesPage` tự
@@ -166,8 +163,6 @@ export function nativePageFor(path: string): ComponentType | undefined {
   if (path.startsWith('/quan-tri/')) return QuanTriPage;
   /* Library (05/10/2026) — `/books/<slug>` là trình đọc, ThuVienSachPage tự rẽ theo route. */
   if (path.startsWith('/books/')) return ThuVienSachPage;
-  /* `/academy/courses/<slug>` — Học viện NATIVE tự mở môn theo đường dẫn (04/10/2026). */
-  if (path.startsWith('/academy/courses/')) return HocVienPage;
   // Trang con của một cây web (`/language/ja/vocab`…). Chính trang chủ cây đọc
   // `route` rồi tự chọn màn hình con — xem `TrangWebTheoTuyen`.
   if (!thuocCayWeb(path)) return undefined;

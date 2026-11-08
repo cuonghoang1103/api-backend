@@ -317,6 +317,34 @@ declare module '@/lib/amThanhUi' {
   export function ganTuDong(): () => void;
 }
 
+/* Courses — phần CLIENT của ba trang máy chủ (08/11/2026, `features/web/trangKhoaHocApp.tsx`). */
+declare module '@/components/courses/chuong-trinh/ChuongTrinhClient' {
+  import type { ComponentType } from 'react';
+  const ChuongTrinhClient: ComponentType<{
+    banDau: unknown;
+    trangThaiDau: { xem: string; q: string; level: string; category: string };
+  }>;
+  export default ChuongTrinhClient;
+}
+declare module '@/components/courses/chuong-trinh/chu' {
+  export function docCheDo(v: string | undefined): string;
+}
+declare module '@/app/courses/[slug]/CoursePageClient' {
+  import type { ComponentType } from 'react';
+  const CoursePageClient: ComponentType;
+  export default CoursePageClient;
+}
+declare module '@/app/courses/[slug]/learn/LearnPageClient' {
+  import type { ComponentType } from 'react';
+  const LearnPageClient: ComponentType<{ slug: string }>;
+  export default LearnPageClient;
+}
+declare module '@/app/courses/[slug]/learn/ExamReturnBanner' {
+  import type { ComponentType } from 'react';
+  const ExamReturnBanner: ComponentType;
+  export default ExamReturnBanner;
+}
+
 declare module '@/app/*/page' {
   import type { ComponentType } from 'react';
   const Trang: ComponentType;

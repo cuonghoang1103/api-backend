@@ -318,7 +318,9 @@ describe('khopTuyenWeb', () => {
     // 27/10/2026: +1 chọn repo sau khi cài GitHub App CT Work (/work/github-app/done).
     // 28/10/2026: +3 phòng lab mô phỏng (/cpu-lab, /cpu-lab/3d, /os-lab).
     // 31/10/2026: +1 phòng lab mạng (/net-lab).
-    expect(thay.size).toBe(189);
+    // 08/11/2026: +8 — Code Lab Sự cố (/code-lab/su-co, /code-lab/su-co/:id); Học viện + Courses giống web 100%
+    // (/academy, /academy/courses/:slug(+/learn), /courses, /courses/:slug, /courses/:slug/learn).
+    expect(thay.size).toBe(197);
   });
 });
 

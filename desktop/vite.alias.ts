@@ -94,5 +94,7 @@ export function aliasDesktop(goc: string): Record<string, string> {
     'next/link': o('src/renderer/shims/next-link.tsx'),
     'next/image': o('src/renderer/shims/next-image.tsx'),
     'next/navigation': o('src/renderer/shims/next-navigation.tsx'),
+    /* 08/11/2026: không có SessionProvider trong app ⇒ `useSession()` thật trả undefined, trang khoá học sập. */
+    'next-auth/react': o('src/renderer/shims/next-auth-react.tsx'),
   };
 }

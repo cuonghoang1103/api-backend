@@ -125,6 +125,9 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   { mau: '/code-lab/search', nap: () => import('@/app/code-lab/search/page') },
   { mau: '/code-lab/phong-lab', nap: () => import('@/app/code-lab/phong-lab/page') },
   { mau: '/code-lab/phong-lab/:id', nap: () => import('@/app/code-lab/phong-lab/[id]/page') },
+  /* Sự cố (debug thật) — web thêm sau 04/10; app thiếu tuyến nên mở ra "Không tìm thấy" (08/11/2026). TĨNH trước động. */
+  { mau: '/code-lab/su-co', nap: () => import('@/app/code-lab/su-co/page') },
+  { mau: '/code-lab/su-co/:id', nap: () => import('@/app/code-lab/su-co/[id]/page') },
   { mau: '/code-lab/:trackSlug', nap: () => import('@/app/code-lab/[trackSlug]/page') },
   { mau: '/code-lab/:trackSlug/:exerciseSlug', nap: () => import('@/app/code-lab/[trackSlug]/[exerciseSlug]/page') },
 
@@ -161,6 +164,19 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
      chương trình đào tạo, rồi hai bản lệch nhau lúc nào không hay. */
   { mau: '/academy/tu-van-nganh', nap: () => import('@/app/academy/tu-van-nganh/page') },
   { mau: '/academy/so-do-mon-hoc', nap: () => import('@/app/academy/so-do-mon-hoc/page') },
+
+  /* ── Học viện + Courses: GIỐNG WEB 100% (08/11/2026) ──
+     Người dùng: *"giao diện và bố cục giống trên web 100%… trên web đã update nhiều rồi mà trên app vẫn như
+     cũ"*. Màn native `HocVienPage`/`KhoaHocPage` (08/2026) bị thay bằng nguyên trang web. Đổi lại mất phần
+     đọc ngoại tuyến của Học viện — người dùng chọn giống web (web là nơi nội dung được cập nhật).
+     Courses: ba `page.tsx` là server component ⇒ dựng qua `trangKhoaHocApp.tsx`.
+     `/academy/courses/*` là hai trang CHUYỂN HƯỚNG cũ của web (⇒ `/courses/*`) — giữ để link cũ không gãy. */
+  { mau: '/academy', nap: () => import('@/app/academy/page') },
+  { mau: '/academy/courses/:slug', nap: () => import('@/app/academy/courses/[slug]/page') },
+  { mau: '/academy/courses/:slug/learn', nap: () => import('@/app/academy/courses/[slug]/learn/page') },
+  { mau: '/courses', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocDanhSach })) },
+  { mau: '/courses/:slug', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocChiTiet })) },
+  { mau: '/courses/:slug/learn', nap: () => import('./trangKhoaHocApp').then((m) => ({ default: m.KhoaHocHoc })) },
 
   /* ── Tech Trends ──
      TĨNH TRƯỚC ĐỘNG. Sáu trang chuyên đề (`/news`, `/ielts`, `/hoc-sql`…) đều
@@ -364,10 +380,8 @@ export const GOC_WEB: readonly string[] = [
   '/tech-trends',
   /* Phòng lab mô phỏng (01/11/2026): `/cpu-lab` (+ `/cpu-lab/3d`), `/os-lab`, `/net-lab`. */
   '/cpu-lab', '/os-lab', '/net-lab',
-  /* ⚠️ `/academy` CHÍNH NÓ vẫn là màn native (`HocVienPage`, có đọc ngoại
-     tuyến) — `nativePageFor` khớp chính xác TRƯỚC khi hỏi tới cây web, nên
-     mục này chỉ mở đường cho các trang CON: `tu-van-nganh`, `so-do-mon-hoc`. */
-  '/academy',
+  /* Học viện + Courses — cả cây là trang web từ 08/11/2026 (trước đó `/academy`, `/courses` là màn native). */
+  '/academy', '/courses',
   /* CT Work — cả cây, gồm hai đường công khai `invite/*` và `share/*`. */
   '/work',
   /* Huấn luyện học kỳ — `/hoc-tap/mon/:id`. */

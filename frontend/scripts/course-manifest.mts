@@ -77,6 +77,7 @@ const SPECS: Spec[] = [
       const hinh14 = await load(join(dir, 'hinhB14.ts'));
       const hinh57 = await load(join(dir, 'hinhB57.ts'));
       const hinh810 = await load(join(dir, 'hinhB810.ts'));
+      const hinh1113 = await load(join(dir, 'hinhB1113.ts'));
       const docTo = await load(join(dir, 'docTo14.ts'));
       const thi113 = (await load(join(dir, 'thiThu113.ts'))).THI_THU_113 as Lesson[];
       const kt49 = await load(join(dir, 'kiemTraBai49.ts'));
@@ -108,7 +109,7 @@ const SPECS: Spec[] = [
         const extra: Lesson | undefined = m[`SACH_${n}`] ?? sach[n];
         // Bài 4–7: thêm "Theo slide lớp" + "Luyện thêm" — cùng luật chia với loadGoc (bai/index.ts).
         const them: Lesson[] = n >= 1 && n <= 7 ? slideVaLuyen(n) : n === 0 ? lt0 : n === 8 || n === 9 ? l89[`LUYEN_THEM_B${n}`] : n === 10 ? l10 : [];
-        const hinh: Lesson[] | undefined = n >= 1 && n <= 4 ? hinh14[`HINH_B${n}`] : n >= 5 && n <= 7 ? hinh57[`HINH_B${n}`] : n >= 8 && n <= 10 ? hinh810[`HINH_B${n}`] : undefined;
+        const hinh: Lesson[] | undefined = n >= 1 && n <= 4 ? hinh14[`HINH_B${n}`] : n >= 5 && n <= 7 ? hinh57[`HINH_B${n}`] : n >= 8 && n <= 10 ? hinh810[`HINH_B${n}`] : n >= 11 && n <= 13 ? hinh1113[`HINH_B${n}`] : undefined;
         const sau: Lesson[] = [...(n >= 1 && n <= 4 ? [docTo[`DOC_TO_B${n}`]] : []), ...(n === 3 ? thi113 : []), ...(n >= 4 && n <= 9 ? kt49[`KIEM_TRA_B${n}`] : []), ...(n === 7 ? ck123 : [])];
         out[n] = chenLuyenNho(n, chenHinh(n, [...chenHanLop(n, extra ? [...bai, ...them, extra] : [...bai, ...them]), ...sau], hinh));
       }

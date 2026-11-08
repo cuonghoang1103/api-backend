@@ -164,9 +164,12 @@ RUN chmod +x /usr/local/bin/fix-uploads-perms.sh
 #
 # Vì nó nằm CUỐI, phá cache ở đây chỉ dựng lại 40MB. Đừng dời nó lên trên:
 # lên trên `COPY node_modules` là mỗi lần deploy đẩy lại 750MB.
+#
+# `--retry … --retry-all-errors` (08/11/2026): hai lượt deploy liền bị GitHub trả 504 rồi 502 ở đúng URL này (máy nhà
+# tải lại ngay sau đó vẫn 200) — một lần CDN chập chờn không được làm hỏng cả lượt build.
 ARG YTDLP_NGAY=khong-ro
 RUN echo "yt-dlp bust: ${YTDLP_NGAY}" >/dev/null && \
-    curl -fsSL https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux \
+    curl -fsSL --retry 6 --retry-delay 5 --retry-all-errors --connect-timeout 20 https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux \
       -o /usr/local/bin/yt-dlp && chmod a+rx /usr/local/bin/yt-dlp \
  && /usr/local/bin/yt-dlp --version
 

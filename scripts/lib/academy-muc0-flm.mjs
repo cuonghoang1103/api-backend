@@ -2,8 +2,8 @@
  * Ghép phần SINH TỰ ĐỘNG theo FLM vào spec một môn Academy:
  *   1. "Mục 0 — Khung môn học chính thức theo syllabus FLM"  ← content/academy/_muc0-flm/<MÃ>.mjs
  *      (scripts/academy-muc0-flm.mjs sinh từ content/academy/_syllabus-flm/<MÃ>.json)
- *   2. Các chương "📑 Slide của trường"                        ← content/academy/_slide-flm/<MÃ>.mjs
- *      (scripts/academy-slide-flm.mjs sinh từ bản đồ slide của scripts/flm-tai-lieu.py)
+ *   2. KHOÁ FLM: chương ↔ buổi + slide đúng buổi + thi + tài liệu ← content/academy/_khoa-flm/<MÃ>.mjs
+ *      (scripts/academy-khoa-flm.mjs); môn có Mục 0 làm tay chỉ có chương slide ← _slide-flm/ (academy-slide-flm.mjs)
  *
  * Hai phần này KHÔNG nằm trong file môn (content/academy/<MÃ>.mjs) vì:
  *   - 500+ file môn có cấu trúc khác nhau, chèn tay vào từng file dễ vỡ;
@@ -36,7 +36,10 @@ export async function ganMuc0Flm(spec, specFile) {
   const secs = (trongCourse ? spec.course.sections : spec.sections) || [];
   const daCo = new Set(secs.map((s) => s.title));
   const muc0 = (await napNeuCo(path.join(dir, '_muc0-flm', `${ma}.mjs`))).filter((s) => !daCo.has(s.title));
-  const slide = (await napNeuCo(path.join(dir, '_slide-flm', `${ma}.mjs`))).filter((s) => !daCo.has(s.title));
+  // KHOÁ FLM trọn (chương ↔ buổi, slide đặt đúng buổi, thi, tài liệu) — academy-khoa-flm.mjs — thắng
+  // chương slide rời (academy-slide-flm.mjs, chỉ dùng cho môn có Mục 0 làm tay).
+  const khoa = await napNeuCo(path.join(dir, '_khoa-flm', `${ma}.mjs`));
+  const slide = (khoa.length ? khoa : await napNeuCo(path.join(dir, '_slide-flm', `${ma}.mjs`))).filter((s) => !daCo.has(s.title));
   if (!muc0.length && !slide.length) return spec;
   // Môn đã có Mục 0 / tài liệu / giới thiệu làm tay ở đầu ⇒ chương slide đứng SAU khối mở đầu đó, trước nội dung.
   let mo = 0;

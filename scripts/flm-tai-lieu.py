@@ -107,6 +107,8 @@ def pptx_text(p):
             x = z.read(f).decode('utf8', 'ignore')
             if re.search(r'<p:sld [^>]*show="0"', x):
                 continue
+            # bỏ khối hiệu ứng động: <p:attrName>style.visibility</p:attrName>… là CHỮ trong XML, lọt vào text
+            x = re.sub(r'<p:timing>.*?</p:timing>', '', x, flags=re.S)
             k += 1
             note = ''
             nrel = f.replace('slides/', 'slides/_rels/') + '.rels'
@@ -191,7 +193,7 @@ def trich(p, tmp):
 
 # ── Google Drive: nhiều môn để zip FLM chỉ chứa một file Word ghi link Drive ─────────────
 DRIVE_RE = re.compile(r'https?://(?:drive|docs)\.google\.com/[^\s<>"\')\]]+')
-GDOWN = str(Path(__file__).resolve().parent / 'venv' / 'bin' / 'gdown')
+GDOWN = os.environ.get('FLM_GDOWN') or str(Path(__file__).resolve().parent / 'venv' / 'bin' / 'gdown')
 
 
 def theo_drive(raw, tmp, links_syl):
@@ -224,14 +226,42 @@ def theo_drive(raw, tmp, links_syl):
         dich = raw / '_drive' / f'{len(kq) + 1:02d}'
         dich.mkdir(parents=True, exist_ok=True)
         la_thu_muc = '/folders/' in u
-        cmd = [GDOWN, '--quiet', '--folder', u, '-O', str(dich)] if la_thu_muc else [GDOWN, '--quiet', u, '-O', str(dich) + '/']
-        try:
-            r = subprocess.run(cmd, capture_output=True, timeout=3600)
-            ok = r.returncode == 0
-        except Exception:
-            ok = False
+        # gdown CHỈ để liệt kê thư mục; tải từng tệp bằng curl qua drive.usercontent.google.com — đường tải của
+        # gdown (drive.google.com/uc) bị Google siết ("Cannot retrieve the public link… many accesses") trong khi
+        # usercontent vẫn trả tệp (đo 09/11/2026). Nghỉ 1,5 s giữa các tệp cho lịch sự.
+        tep = []
+        if la_thu_muc:
+            try:
+                r = subprocess.run([GDOWN, u, '--json'], capture_output=True, timeout=600)
+                tep = [(re.search(r'id=([\w-]+)', x['url']).group(1), x['path']) for x in json.loads(r.stdout.decode('utf8', 'ignore') or '[]')]
+            except Exception:
+                tep = []
+        else:
+            tep = [(m.group(1), None)]
+        ok_n, loi_n = 0, 0
+        for fid, ten in tep:
+            dst = dich / ten if ten else dich
+            if ten:
+                dst.parent.mkdir(parents=True, exist_ok=True)
+            cmd = ['curl', '-sL', '--retry', '2', '-w', '%{http_code} %{content_type}', f'https://drive.usercontent.google.com/download?id={fid}&export=download&confirm=t']
+            cmd += (['-o', str(dst)] if ten else ['-J', '-O'])
+            try:
+                r = subprocess.run(cmd, capture_output=True, timeout=1800, cwd=None if ten else str(dich))
+                code = r.stdout.decode().strip()
+            except Exception:
+                code = 'loi'
+            if code.startswith('200') and 'text/html' not in code:
+                ok_n += 1
+            else:
+                loi_n += 1
+                if ten and dst.exists():
+                    dst.unlink()
+                for x in dich.glob('download*'):
+                    x.unlink()
+            time.sleep(1.5)
+        ok = ok_n > 0 and loi_n == 0
         giai_nen_khac(dich)
-        kq.append({'url': u, 'thuMuc': la_thu_muc, 'ok': ok, 'soFile': sum(1 for x in dich.rglob('*') if x.is_file()),
+        kq.append({'url': u, 'thuMuc': la_thu_muc, 'ok': ok, 'tepLoi': loi_n, 'soFile': sum(1 for x in dich.rglob('*') if x.is_file()),
                    'bytes': sum(x.stat().st_size for x in dich.rglob('*') if x.is_file())})
     return kq
 
@@ -261,6 +291,20 @@ def giai_nen_khac(goc_dir):
                         d.mkdir(parents=True, exist_ok=True)
                         r = subprocess.run(c, capture_output=True, timeout=1800)
                         if r.returncode == 0:
+                            ok = True
+                            break
+                        # Giải được PHẦN LỚN, vài tệp hỏng (JPD116: 43/44, "Slot 8.ppt … Failed!") ⇒ giữ phần tốt,
+                        # xoá đúng tệp hỏng (tệp cụt mà dựng ảnh thì ra rác).
+                        ra = r.stdout.decode('utf8', 'ignore') + r.stderr.decode('utf8', 'ignore')
+                        tot = [x for x in d.rglob('*') if x.is_file()]
+                        if tot:
+                            for dong in ra.splitlines():
+                                m2 = re.match(r'\s*(.+?)\s+\(\d+ B\)\.\.\. Failed', dong)
+                                if m2:
+                                    (d / m2.group(1)).unlink(missing_ok=True)
+                            for x in tot:
+                                if x.exists() and x.stat().st_size == 0:
+                                    x.unlink()
                             ok = True
                             break
                     if not ok:

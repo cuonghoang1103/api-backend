@@ -78,7 +78,9 @@ export default {
     'osg202-lab-2': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-04-lab-2-shell-script-tron-f58fd50d.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-lab-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-05-lab-3-lap-trinh-c-tron-bd81e18a.mp4' }, defaultVideoTrack: 'VI'},
     'osg202-lab-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/07-linux-va-shell-lab/07-06-lab-4-quan-sat-he-thong-tron-4bb6fe04.mp4' }, defaultVideoTrack: 'VI'},
-    'osg202-slide-osg7-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-01-slide-ao-hoa-dam-may-tron-e231b5a6.mp4' }, defaultVideoTrack: 'VI' },
-    'osg202-on-n1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-02-thuc-hanh-n1-tron-2f99df2f.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-slide-osg7-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-01-slide-ao-hoa-dam-may-tron-e231b5a6.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-on-n1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/08-nang-cao-ao-hoa-dam-may/08-02-thuc-hanh-n1-tron-2f99df2f.mp4' }, defaultVideoTrack: 'VI'},
+    'osg202-slide-osg8-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/09-he-thong-nhieu-bo-xu-ly/09-01-slide-nhieu-bo-xu-ly-tron-dc3e26b6.mp4' }, defaultVideoTrack: 'VI' },
+    'osg202-on-ch8': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/operating-systems/09-he-thong-nhieu-bo-xu-ly/09-03-thuc-hanh-chuong-8-tron-bb9dda5f.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

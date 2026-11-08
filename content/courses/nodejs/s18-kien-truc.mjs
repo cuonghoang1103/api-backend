@@ -89,6 +89,7 @@ src/utils         5 file      336 dòng
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> The layering is real but not enforced, and the 28-of-62 count is the honest measure of that. What holds the system together despite the leak is that the <em>cross-cutting</em> layer is not leaked at all: authentication, the request id, rate limiting and error handling all live in middleware mounted once in <code>src/index.ts</code>, so no route can accidentally opt out of them. That is the right thing to have been strict about — a route that skips the service layer writes a slightly awkward query, while a route that skips <code>requireAuth</code> is an incident. Being deliberate about <em>which</em> boundary is load-bearing is more valuable than being uniformly strict about all of them.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> The repository is now about four times the size measured above, and the conclusion holds. 50 of 150 route files import Prisma directly (33%): 39 of them also call a service, 11 call none. 382 of 705 service files (54%). 900 files, 302,781 lines — routes 50,242, services 241,068, so services : routes = 4.8 : 1. Middleware: 6 files, 949 lines; the request id is still first (line 261, before helmet at 270, CORS at 334 and the rate limiter at 555).</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -178,6 +179,7 @@ src/utils         5 file      336 dòng
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Việc phân tầng là có thật nhưng không được cưỡng chế, và con số 28 trên 62 là phép đo trung thực cho điều đó. Cái giữ cho hệ thống đứng vững bất chấp chỗ rò ấy là tầng <em>cắt ngang</em> thì hoàn toàn không rò: xác thực, mã request, giới hạn tần suất và xử lý lỗi đều nằm trong middleware gắn đúng một lần ở <code>src/index.ts</code>, nên không route nào có thể vô tình chọn không dùng chúng. Đó chính là thứ đáng phải nghiêm khắc — một route bỏ qua tầng service thì viết ra một câu truy vấn hơi vụng, còn một route bỏ qua <code>requireAuth</code> là một sự cố. Việc <em>chủ đích</em> chọn ranh giới nào là ranh giới chịu lực có giá trị hơn việc nghiêm khắc đồng đều với tất cả.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> Repo giờ lớn khoảng bốn lần so với lúc đo ở trên, và kết luận vẫn đứng. 50/150 file route import thẳng Prisma (33 %): 39 file trong đó vẫn gọi service, 11 file không gọi service nào. 382/705 file service (54 %). 900 file, 302.781 dòng — routes 50.242, services 241.068, tức services : routes = 4,8 : 1. Middleware: 6 file, 949 dòng; mã request vẫn đứng đầu (dòng 261, trước helmet dòng 270, CORS dòng 334 và bộ giới hạn dòng 555).</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -276,6 +278,7 @@ file to nhất:
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> Organised by type at the top level, but with a partial migration toward by-feature visible inside <code>src/services</code>: eight subdirectories — <code>cv/</code>, <code>finance/</code>, <code>games/</code>, <code>interview/</code>, <code>payment/</code>, <code>srs/</code>, <code>techTrends/</code>, <code>voiceHub/</code> — hold 82 of the 159 service files. Those are exactly the features that grew large enough to make the flat directory painful. Nobody planned a migration; the structure bent where the pressure was. That is how organisation usually evolves in a codebase that is being used, and it is a healthier signal than a scheme imposed on day one that nothing has tested.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> 150 route files: 91 under 200 lines, 36 of 200–500, 12 of 500–1000, 11 above 1000. Largest files: roadmap.seed.mo-rong.ts 6,113 lines and roadmap.seed.ts 3,646 (seed data — 42 branches in the latter), course.routes.ts 3,626, social.service.ts 2,503 (246 branches). src/services now has 33 subfolders holding 560 of 705 service files (work/ alone 306). index.ts: 997 lines, 126 app.use('/api/v1…') lines.</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -356,6 +359,7 @@ file to nhất:
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Tổ chức theo loại ở cấp cao nhất, nhưng có một cuộc di cư bán phần sang theo-tính-năng nhìn thấy được bên trong <code>src/services</code>: tám thư mục con — <code>cv/</code>, <code>finance/</code>, <code>games/</code>, <code>interview/</code>, <code>payment/</code>, <code>srs/</code>, <code>techTrends/</code>, <code>voiceHub/</code> — chứa 82 trên 159 file service. Đó chính xác là những tính năng đã lớn tới mức làm cái thư mục phẳng trở nên đau đớn. Không ai lên kế hoạch di cư cả; cấu trúc tự uốn ở chỗ có áp lực. Đó là cách tổ chức thường tiến hoá trong một codebase đang được dùng thật, và nó là tín hiệu lành mạnh hơn một sơ đồ áp đặt từ ngày đầu mà chưa có gì kiểm chứng.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> 150 file route: 91 file dưới 200 dòng, 36 file 200–500, 12 file 500–1000, 11 file trên 1000. Lớn nhất: roadmap.seed.mo-rong.ts 6.113 dòng và roadmap.seed.ts 3.646 (dữ liệu mẫu — file sau chỉ 42 nhánh), course.routes.ts 3.626, social.service.ts 2.503 (246 nhánh). src/services nay có 33 thư mục con giữ 560/705 file service (riêng work/ 306). index.ts: 997 dòng, 126 dòng app.use('/api/v1…').</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -447,6 +451,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> One schema, 248 models, 95 migrations, 76 route groups — a monolith by any measure, and coherent because the coupling is mostly one-directional: features depend on shared concepts (<code>pro</code>, <code>notification</code>, <code>quota</code>) and shared concepts do not depend on features. The place this shows strain is exactly where you would predict: <code>social.service.ts</code> at 2.262 lines is imported by five other modules, so it is both a hub and a large file, which is the combination that makes changes slow. Nothing is broken — but that pairing is the single most useful thing an import-graph count tells you about where to look first.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> Most-imported services: work/permissions 143 files, work/common 111, interview/llm/index 76, work/audit 76; pro.service has 39 importers and now imports no other service — the hub no longer depends upward. Biggest fan-out: a tool registry with 54, cron.service with 40. 28 pairs of services import each other (19 inside work/, 6 inside agent/). The schema: 608 models, 17,569 lines, 243 migrations; 126 app.use('/api/v1…') lines. social.service.ts: 2,503 lines, 4 importers. The hidden coupling, counted: prisma.user is queried from 57 separate places.</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -533,6 +538,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Một lược đồ, 248 model, 95 migration, 76 nhóm route — một khối nguyên (monolith) theo mọi thước đo, và nó mạch lạc được là vì phần ghép nối phần lớn đi một chiều: các tính năng phụ thuộc vào khái niệm dùng chung (<code>pro</code>, <code>notification</code>, <code>quota</code>) còn khái niệm dùng chung thì không phụ thuộc ngược vào tính năng. Chỗ lộ ra sức căng đúng như bạn đoán được: <code>social.service.ts</code> ở mức 2.262 dòng bị năm mô-đun khác import, nên nó vừa là một đầu mối vừa là một file lớn, đúng cái tổ hợp làm cho việc thay đổi trở nên chậm. Chưa có gì hỏng cả — nhưng cặp đôi ấy là thứ hữu dụng nhất mà một phép đếm đồ thị import nói cho bạn biết về việc nên nhìn vào đâu trước.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> Service bị import nhiều nhất: work/permissions 143 file, work/common 111, interview/llm/index 76, work/audit 76; pro.service có 39 file import và nay không import service nào — hub không còn dựa ngược lên. Toả ra nhiều nhất: một bảng đăng ký lệnh 54, cron.service 40. 28 cặp service import lẫn nhau (19 trong work/, 6 trong agent/). Lược đồ: 608 model, 17.569 dòng, 243 migration; 126 dòng app.use('/api/v1…'). social.service.ts: 2.503 dòng, 4 file import. Ghép nối ẩn, đếm thật: bảng users được truy vấn thẳng từ 57 chỗ khác nhau.</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -620,6 +626,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> One backend process, one frontend process, one database, one Redis, on one VPS. By the signals above that is correct on all three counts: the workload is I/O-bound (chapter 16 measured 97,8% of request time inside a database call, and forking gains 5,7% on that shape), everything ships on the same cadence, and there is one person. What the system does have is the <em>useful</em> boundaries — R2 for files, Redis for shared state, external APIs for payments and AI — each of which was adopted because something specific required it. The two places that would split first if the constraints changed are already visible: <code>embedQueue.service.ts</code> (an in-process array queue that its own comments admit loses in-flight jobs on crash) and <code>cron.service.ts</code> (eleven schedules guarded by a single-process flag). Both are correct today and both are the exact pieces a second process would break — which is a much more useful thing to know than an opinion about microservices.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> A function call took 2.0 ns; the same work over HTTP on 127.0.0.1 took 0.072 ms with keep-alive and 0.177 ms with a new connection (Node 22.23.3, median of 5 — about 35,500× and 88,000×). cron.service.ts now holds 40 cron.schedule calls, still guarded by the per-process _started flag, and embedQueue.service.ts is still an in-process array (const _jobs). On the video's machine OpenTelemetry cost −17.6% throughput (chapter 15) and extra processes gained +6.7% on I/O-bound work (chapter 16).</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -695,6 +702,7 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Một tiến trình backend, một tiến trình frontend, một cơ sở dữ liệu, một Redis, trên một VPS. Theo các dấu hiệu ở trên thì điều đó đúng ở cả ba mặt: khối lượng công việc nghẽn ở I/O (chương 16 đo được 97,8% thời gian request nằm trong một lời gọi cơ sở dữ liệu, và rẽ nhánh chỉ được 5,7% với dạng đó), mọi thứ phát hành cùng một nhịp, và chỉ có một người. Cái hệ thống <em>có</em> là những ranh giới <em>hữu dụng</em> — R2 cho file, Redis cho trạng thái dùng chung, API bên ngoài cho thanh toán và AI — mỗi cái được nhận vào vì có một thứ cụ thể đòi hỏi nó. Hai chỗ sẽ tách ra đầu tiên nếu các ràng buộc thay đổi thì đã nhìn thấy được rồi: <code>embedQueue.service.ts</code> (một hàng đợi bằng mảng trong tiến trình mà chính chú thích của nó thừa nhận là mất job đang chạy khi tiến trình sập) và <code>cron.service.ts</code> (mười một lịch chạy được canh bằng một cờ trong một tiến trình). Cả hai đều đúng ở hiện tại và cả hai đều đúng là những mảnh mà một tiến trình thứ hai sẽ phá vỡ — thứ đó hữu dụng hơn nhiều so với một ý kiến về microservices.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> Một lời gọi hàm mất 2,0 ns; cùng việc đó qua HTTP trên 127.0.0.1 mất 0,072 ms khi giữ kết nối và 0,177 ms khi mở kết nối mới (Node 22.23.3, trung vị 5 lần — khoảng 35.500 và 88.000 lần). cron.service.ts nay có 40 lời gọi cron.schedule, vẫn chặn bằng cờ _started trong tiến trình, và embedQueue.service.ts vẫn là một mảng trong tiến trình (const _jobs). Trên máy quay video, OpenTelemetry làm mất 17,6 % thông lượng (chương 15) và thêm tiến trình chỉ được +6,7 % cho việc dạng I/O (chương 16).</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -780,11 +788,17 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> This project keeps its decisions in an unusual place: a <code>CLAUDE.md</code> at the repo root with a "Known Error Patterns" table — date, what broke, lesson learned — plus <em>forbidden actions</em> written as absolutes ("never run <code>migrate reset</code>", "never <code>db push</code> against production", "never auto-resolve a failed migration"). Each of those rules is a scar. It works because the rules live next to the code and are read before every change, rather than in a wiki that is written once and never opened. The habit generalises: <strong>a decision record is only useful where the decision is being made.</strong></p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> The real comment at the top of embedQueue.service.ts reads "BullMQ adds 50MB deps + Redis-only state" and records the decision, the accepted trade-off and the mitigation — but not when to revisit it; the example above is a paraphrase that adds that line. CLAUDE.md now carries 21 rows of "Known Error Patterns" and 9 NEVER rules. For scale: 50 of 150 route files skip the service layer (18.1) and the schema has 243 migrations.</p></div>
 </div>
 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Reversible decisions, ADRs and debt</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-4-cua-mot-chieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 6.4: one-way doors</span><span class="lc-sub">This lesson sorts decisions into two-way and one-way doors, reads the real "Why no BullMQ?" comment in this website's code, and names the line it is missing: when to revisit.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -851,11 +865,17 @@ async function share(note, to, notify) { await notify(to, 'Ghi chú mới', note
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Dự án này giữ các quyết định ở một chỗ khá lạ: một file <code>CLAUDE.md</code> ở gốc kho mã với một bảng "Known Error Patterns" — ngày tháng, cái gì hỏng, bài học rút ra — cộng với các <em>hành động bị cấm</em> viết dưới dạng tuyệt đối ("không bao giờ chạy <code>migrate reset</code>", "không bao giờ <code>db push</code> lên production", "không bao giờ tự động resolve một migration hỏng"). Mỗi quy tắc trong đó là một vết sẹo. Nó hiệu quả vì các quy tắc nằm <em>ngay cạnh code</em> và được đọc trước mỗi lần thay đổi, chứ không nằm trong một wiki viết một lần rồi không ai mở nữa. Thói quen này tổng quát hoá được: <strong>một bản ghi quyết định chỉ hữu dụng ở nơi quyết định đang được đưa ra.</strong></p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> Chú thích thật ở đầu embedQueue.service.ts ghi "BullMQ adds 50MB deps + Redis-only state" và có đủ quyết định, cái giá chấp nhận, cách giảm thiểu — nhưng KHÔNG có dòng "khi nào nghĩ lại"; ví dụ ở trên là bản diễn giải có thêm dòng đó. CLAUDE.md nay có 21 dòng "Known Error Patterns" và 9 luật NEVER. Để so: 50/150 file route bỏ qua tầng service (18.1) và lược đồ có 243 migration.</p></div>
 </div>
 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-621"><span class="lc-t">Code Lab · Advanced Patterns and Architectural Decisions</span><span class="lc-d">Quyết định đảo ngược được, ADR và nợ kỹ thuật</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-4-cua-mot-chieu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 6.4: cửa một chiều</span><span class="lc-sub">Bài này chia quyết định thành cửa hai chiều và cửa một chiều, đọc chú thích thật "Why no BullMQ?" trong mã website, và chỉ ra dòng nó còn thiếu: khi nào nghĩ lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -933,6 +953,7 @@ khởi động toàn bộ: 3,63 giây</div>
 
 <div class="note-ct">
 <p><strong>How cuongthai.com does it.</strong> This course is not written about a demo. It is written about the system serving the page you are reading — 244 TypeScript files, 80.454 lines, 248 database models, 95 migrations, 76 route groups, one VPS. Every "how this site does it" box in eighteen chapters was checked against the running code, including the parts where the honest answer was "it does not do this yet": no <code>/metrics</code>, no OpenTelemetry, no <code>AsyncLocalStorage</code>, 28 of 62 route files skipping the service layer, no <code>stop_grace_period</code>. A system you can describe accurately, including its gaps, is one you can improve. That is the last idea in the course, and the one the other seventeen chapters were quietly building toward.</p>
+<div class="callout"><p><strong>Re-measured for the video (08/11/2026 — api-backend @ 9076fb918, code files only, tests excluded).</strong> 900 code files, 302,781 lines, 608 models, 243 migrations, 126 app.use('/api/v1…') lines; 50 of 150 route files skip the service layer. Still no /metrics and no OpenTelemetry, and still no stop_grace_period for the backend. One thing changed: AsyncLocalStorage is now used in four CT Work files. Docker's default stop grace re-measured 3.14 s on Docker Desktop 29.8.0 (lesson 17.3) — the documentation says 10 s, which is the point of idea 3.</p></div>
 </div>
 
 <div class="link-card codelab">
@@ -1013,6 +1034,7 @@ khởi động toàn bộ: 3,63 giây</div>
 
 <div class="note-ct">
 <p><strong>cuongthai.com làm thế nào.</strong> Khoá học này không viết về một bản demo. Nó viết về chính cái hệ thống đang phục vụ trang bạn đang đọc — 244 file TypeScript, 80.454 dòng, 248 model cơ sở dữ liệu, 95 migration, 76 nhóm route, một cái VPS. Mọi khung "site này làm thế nào" trong mười tám chương đều được đối chiếu với code đang chạy, kể cả những chỗ mà câu trả lời trung thực là "cái này chưa làm": không có <code>/metrics</code>, không có OpenTelemetry, không có <code>AsyncLocalStorage</code>, 28 trên 62 file route bỏ qua tầng service, không đặt <code>stop_grace_period</code>. Một hệ thống mà bạn mô tả được chính xác, kể cả những lỗ hổng của nó, là một hệ thống bạn cải thiện được. Đó là ý tưởng cuối cùng của khoá học, và là thứ mà mười bảy chương kia đã lặng lẽ hướng tới.</p>
+<div class="callout"><p><strong>Đo lại cho video (08/11/2026 — api-backend @ 9076fb918, chỉ tệp mã, không tính test).</strong> 900 file mã, 302.781 dòng, 608 model, 243 migration, 126 dòng app.use('/api/v1…'); 50/150 file route bỏ qua tầng service. Vẫn không có /metrics, không có OpenTelemetry, và backend vẫn chưa đặt stop_grace_period. Có một điều đã đổi: AsyncLocalStorage nay được dùng ở bốn file CT Work. Thời gian ân hạn mặc định của Docker đo lại 3,14 giây trên Docker Desktop 29.8.0 (bài 17.3) — tài liệu ghi 10 giây, đúng tinh thần ý tưởng thứ 3.</p></div>
 </div>
 
 <div class="link-card codelab">

@@ -1703,6 +1703,11 @@ huy y dinh chua gui        : 10</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Stripe — idempotent requests</span><span class="lc-sub">docs.stripe.com/api/idempotent_requests — the clearest specification of an idempotency key anywhere, and the reason the duplicate-send pitfall above is solvable rather than fundamental.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Amazon S3 — using versioning in buckets</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html — the one one-way door on the list above that you can genuinely close in advance, by turning versioning on before you need it.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — transactions, and what commits together</span><span class="lc-sub">/courses/postgresql/learn${REF} — why the two inserts above are genuinely atomic, and what SELECT ... FOR UPDATE SKIP LOCKED does for a worker queue.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-5-quyet-dinh-kho-dao-nguoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 18.5: decisions you cannot take back</span><span class="lc-sub">Five one-way doors in a backend, a four-heading ADR, what technical debt really is (50 route files that skip a layer are; a 6,113-line seed file is not), and three debts this website paid.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1887,6 +1892,11 @@ huy y dinh chua gui        : 10</div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Stripe — idempotent requests</span><span class="lc-sub">docs.stripe.com/api/idempotent_requests — bản đặc tả rõ nhất về khoá bất biến ở bất cứ đâu, và là lý do cái bẫy gửi-trùng ở trên giải được chứ không phải bản chất.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Amazon S3 — dùng versioning trong bucket</span><span class="lc-sub">docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html — cánh cửa một chiều DUY NHẤT trong danh sách trên mà bạn thật sự đóng trước được, bằng cách bật versioning từ khi chưa cần.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">PostgreSQL — giao dịch, và cái gì chốt cùng nhau</span><span class="lc-sub">/courses/postgresql/learn${REF} — vì sao hai câu chèn ở trên thật sự nguyên tử, và SELECT ... FOR UPDATE SKIP LOCKED làm được gì cho một hàng đợi thợ.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-18-5-quyet-dinh-kho-dao-nguoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 18.5: những quyết định không rút lại được</span><span class="lc-sub">Năm cửa một chiều trong một backend, ADR bốn tiêu đề, nợ kỹ thuật thật ra là gì (50 file route bỏ tầng là nợ; file seed 6.113 dòng thì không), và ba khoản nợ website này đã trả.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

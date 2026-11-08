@@ -23,6 +23,12 @@
  * đề tối, phạm vi đúng trong cây web.
  */
 import { MoTrenWeb } from '../../components/MoTrenWeb';
+// CSS nội dung bài học CẮT từ globals.css của web (`.rich-content`: ẩn EN/VI theo
+// `data-ml`, bảng có khung, khoảng cách đoạn…). Trước 0.5.213 chỉ màn Học viện
+// native (monHoc.tsx) nạp nó; xoá màn đó là mất luôn ⇒ bài học Courses hiện CẢ
+// HAI thứ tiếng, bảng trơn (ảnh người dùng 08/11/2026). Nạp ở khung chung của
+// mọi trang web dựng lại để trang nào dùng `.rich-content` cũng có.
+import '../academy/noiDungBai';
 import { Component, Suspense, lazy, useEffect, useMemo, useState,
   type ComponentType, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';

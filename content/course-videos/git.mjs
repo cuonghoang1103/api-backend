@@ -138,8 +138,8 @@ export default {
     'git-16-0-slides': { yt: 'ygqx50-JHEE', credit: "HenrikM Dev — How To Use Git to Collaborate with Others [Git Tutorial]", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-00-slide-chuong-16-e57c8219.mp4' }, defaultVideoTrack: 'VI'},
     'git-16-1-khoi-tao-repo-nhom': { yt: 'IUgvj0lPYVM', credit: "FullStackWithLawrence — Pro Tips For Setting Up Your GitHub Repo - Part I", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-01-khoi-tao-repo-nhom-tron-96a10418.mp4' }, defaultVideoTrack: 'VI'},
     'git-16-2-sprint-mo-phong': { yt: '02aQhH5cNBg', credit: "Kahan Data Solutions — A typical GitHub workflow // what to expect", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-02-sprint-mo-phong-tron-094de273.mp4' }, defaultVideoTrack: 'VI'},
-    'git-16-3-phat-hanh-hotfix': { yt: '5q75eeEYApk', credit: "Cameron McKenzie — Gitflow Hotfix Branch Example" },
-    'git-16-4-su-co-nhom': { yt: 'FdZecVxzJbk', credit: "Corey Schafer — Git Tutorial: Fixing Common Mistakes and Undoing Bad Commits" },
+    'git-16-3-phat-hanh-hotfix': { yt: '5q75eeEYApk', credit: "Cameron McKenzie — Gitflow Hotfix Branch Example", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-03-phat-hanh-hotfix-tron-ca8f4b80.mp4' }, defaultVideoTrack: 'VI'},
+    'git-16-4-su-co-nhom': { yt: 'FdZecVxzJbk', credit: "Corey Schafer — Git Tutorial: Fixing Common Mistakes and Undoing Bad Commits", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/17-du-an-nhom/17-04-su-co-nhom-tron-984aba84.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-1-kiem-tra-cai-dat': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-01-cai-va-kiem-tra-git-b050d93e.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-2-danh-tinh': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-02-danh-tinh-git-0e687bc2.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-3-dang-nhap-github': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-03-dang-nhap-github-c2549ca8.mp4' }, defaultVideoTrack: 'VI'},
@@ -151,5 +151,7 @@ export default {
     'git-kd-9-loi-thuong-gap': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-09-loi-thuong-gap-1162b854.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-10-noi-ct-work': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-10-noi-ct-work-93b74622.mp4' }, defaultVideoTrack: 'VI'},
     'git-kd-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/01-khoi-dong-nhanh/01-00-slide-khoi-dong-nhanh-751b1960.mp4' }, defaultVideoTrack: 'VI'},
+    'git-18-0-slides': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-00-slide-chuong-18-f7b15952.mp4' }, defaultVideoTrack: 'VI' },
+    'git-18-1-lo-commit-build': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/18-tai-nan-nhom/18-01-lo-commit-build-tron-28930533.mp4' }, defaultVideoTrack: 'VI' },
   },
 };

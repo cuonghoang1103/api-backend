@@ -114,10 +114,11 @@ export function doiDuongApp(duong: string): string {
   const m = /^\/language\/en\/ielts(\/.*)?$/.exec(duong);
   if (m) return `/ielts${m[1] ?? ''}`;
   /* 05/10/2026: khoá JP, Bài giảng trên lớp (Dekiru) và CH là mục riêng của app. */
+  /* 09/11/2026: mục JP = khoá theo lớp (Dekiru → N2); khoá JLPT tự soạn cũ ở /jp/jlpt. */
   const jp = /^\/language\/ja\/jp(\/.*)?$/.exec(duong);
-  if (jp) return `/jp${jp[1] ?? ''}`;
+  if (jp) return `/jp/jlpt${jp[1] ?? ''}`;
   const dk = /^\/language\/ja\/dekiru(\/.*)?$/.exec(duong);
-  if (dk) return `/jp/tren-lop${dk[1] ?? ''}`;
+  if (dk) return `/jp${dk[1] ?? ''}`;
   const ch = /^\/language\/zh\/ch(\/.*)?$/.exec(duong);
   if (ch) return `/ch${ch[1] ?? ''}`;
   /* 04/10/2026 (rà toàn bộ link): app đã đăng nhập sẵn — "Đăng nhập/Đăng ký" của web

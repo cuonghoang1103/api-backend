@@ -1,0 +1,112 @@
+/* Khối có hình: thẻ từ, cảnh minh hoạ, bộ slide (HinhSlide.tsx). Biến màu --lh-* của course.module.css. */
+
+.khung { margin: 18px 0; }
+.dau, .boDau { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+.nutNhom { display: flex; flex-wrap: wrap; gap: 6px; }
+.bat { border-color: var(--lh-accent) !important; color: var(--lh-accent) !important; }
+
+/* ── Thẻ từ có hình ── */
+.luoi { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.the {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 12px 8px 10px; border: 1px solid var(--lh-line); border-radius: 12px;
+  background: var(--lh-surface); color: var(--lh-ink); text-align: center; cursor: pointer;
+  transition: border-color .15s, transform .15s, box-shadow .15s;
+}
+.the:hover { border-color: var(--lh-accent); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0, 0, 0, .06); }
+.the:focus-visible { outline: 2px solid var(--lh-accent); outline-offset: 2px; }
+.anhThe { width: 84px; height: 84px; object-fit: contain; margin-bottom: 4px; }
+.chuNhat { font-size: 19px; font-weight: 600; line-height: 1.5; }
+.ro { font-size: 12.5px; }
+.nghia { font-size: 13.5px; color: var(--lh-ink-2); }
+.loa { position: absolute; top: 8px; right: 8px; color: var(--lh-ink-3); opacity: .7; }
+.che { filter: blur(6px); user-select: none; }
+.the:hover .che { filter: blur(5px); }
+
+/* ── Cảnh minh hoạ ── */
+.canh { margin: 14px 0; padding: 14px 16px; border: 1px dashed var(--lh-line); border-radius: 14px; background: var(--lh-surface-2); }
+.canhHinh { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end; gap: 14px; }
+.anhCanh { width: 76px; height: 76px; object-fit: contain; }
+.canhChu { margin-top: 8px; text-align: center; font-size: 14px; color: var(--lh-ink-2); }
+
+/* ── Bộ slide ── */
+.boSlide { margin: 18px 0; outline: none; }
+.manChieu { width: 100%; }
+.slide {
+  --sl-nen: #fffdf6; --sl-chu: #1d2230; --sl-vang: #ffe45c; --sl-do: #c8102e; --sl-vien: #e9e3cf;
+  position: relative; aspect-ratio: 16 / 9; width: 100%; overflow: hidden;
+  display: flex; flex-direction: column; padding: 3.2% 4% 2.4% 5.2%;
+  background: var(--sl-nen); color: var(--sl-chu); border: 1px solid var(--sl-vien); border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .08); container-type: inline-size;
+}
+/* Dải đỏ dọc bên trái — nhắc gáy sách できる日本語 trên slide lớp. */
+.slide::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1.6%; background: var(--sl-do); }
+.slideTieuDe {
+  align-self: flex-start; max-width: 100%; padding: .35em .9em; border-radius: .3em;
+  background: var(--sl-vang); font-weight: 700; font-size: clamp(14px, 3.1cqi, 34px); line-height: 1.35;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .08);
+}
+.slideThan { flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: 2.5cqi; margin-top: 2cqi; }
+.slideHai { flex-direction: row; align-items: center; }
+.slideHai .slideHinh { flex: 0 0 42%; }
+.slideHai .slideChu { flex: 1; }
+.slideHinh { display: flex; justify-content: center; align-items: flex-end; gap: 3cqi; flex-wrap: wrap; }
+.slideO { display: flex; flex-direction: column; align-items: center; gap: .8cqi; }
+.anhSlide { width: clamp(64px, 18cqi, 220px); height: clamp(64px, 18cqi, 220px); object-fit: contain; }
+.slideHinh[data-so='2'] .anhSlide { width: clamp(72px, 22cqi, 260px); height: clamp(72px, 22cqi, 260px); }
+.slideHinh[data-so='1'] .anhSlide { width: clamp(90px, 28cqi, 320px); height: clamp(90px, 28cqi, 320px); }
+.slideHinh[data-so='4'] .anhSlide { width: clamp(48px, 11cqi, 140px); height: clamp(48px, 11cqi, 140px); }
+.slideNhan {
+  border: 1px solid var(--sl-vien); background: #fff; color: var(--sl-chu); border-radius: .4em;
+  padding: .15em .7em; font-weight: 600; font-size: clamp(12px, 2.3cqi, 26px); cursor: pointer; line-height: 1.6;
+}
+.slideChu { display: flex; flex-direction: column; gap: 1.2cqi; font-size: clamp(13px, 2.5cqi, 28px); line-height: 1.55; }
+.slideDong b { color: var(--sl-do); }
+.slideRo { font-size: .62em; color: #5b6170; }
+.slideBang { border-collapse: collapse; font-size: .85em; background: #fff; }
+.slideBang th, .slideBang td { border: 1px solid var(--sl-vien); padding: .3em .6em; text-align: left; }
+.slideBang th { background: #fbf6df; }
+.slideHoi {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .6em; margin-top: 1.4cqi; padding: .5em .8em;
+  border-radius: .5em; background: #eef6ee; font-size: clamp(12px, 2.2cqi, 24px);
+}
+.hoiNhan { font-size: 1.1em; }
+.hoiChu { font-weight: 600; }
+.nutDap { border: 1px solid #9cc79c; background: #fff; border-radius: 999px; padding: .1em .8em; cursor: pointer; font-size: .85em; color: #1f5f2f; }
+.dap { color: #1f6b35; font-weight: 600; }
+.slideChan { display: flex; justify-content: space-between; margin-top: 1cqi; font-size: clamp(9px, 1.4cqi, 15px); color: #8a8f99; }
+.ghiGiang { margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: var(--lh-warn-soft); font-size: 14px; line-height: 1.6; color: var(--lh-ink); }
+.dieuKhien { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 10px; }
+.cham { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; flex: 1; }
+.chamNut { width: 9px; height: 9px; border-radius: 50%; border: 0; padding: 0; background: var(--lh-line); cursor: pointer; }
+.chamBat { background: var(--lh-accent); transform: scale(1.25); }
+
+/* Toàn màn hình (trong trang, không cần Fullscreen API — chạy cả trong app desktop). */
+.toanMan {
+  position: fixed; inset: 0; z-index: 80; margin: 0; padding: 16px 24px;
+  display: flex; flex-direction: column; justify-content: center; background: #0f1115;
+}
+.toanMan .boDau { color: #e8eaee; }
+.toanMan .manChieu { width: min(100%, calc((100vh - 140px) * 16 / 9)); margin: 0 auto; }
+.toanMan .ghiGiang { width: min(100%, calc((100vh - 140px) * 16 / 9)); margin: 10px auto 0; }
+
+/* ── In (bản chép trong iframe riêng — inKhung.ts) ── */
+.banIn { display: none; }
+@media print {
+  .trangIn { break-after: page; page-break-after: always; }
+  .trangIn .slide { box-shadow: none; border-radius: 0; width: 100%; }
+  .nutDap { display: none; }
+}
+
+/* Chuyển động: slide mới trượt vào, thẻ hình nảy khi chạm (tắt khi máy đặt giảm chuyển động). */
+@keyframes slideVao { from { opacity: 0; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+@keyframes nayHinh { 40% { transform: scale(1.12) rotate(-3deg); } }
+.manChieu > .slide { animation: slideVao .28s ease-out; }
+.the:active .anhThe { animation: nayHinh .3s ease-out; }
+.the:hover .anhThe { transform: translateY(-2px); transition: transform .15s; }
+@media (prefers-reduced-motion: reduce) { .manChieu > .slide, .the:active .anhThe { animation: none !important; } }
+
+/* Slide hai cột (hình + chữ) có 3–4 hình: hình nhỏ lại để không tràn xuống chân slide (đo 09/11, slide Bài 1). */
+.slideHai .slideHinh[data-so='3'] .anhSlide, .slideHai .slideHinh[data-so='4'] .anhSlide { width: clamp(44px, 11cqi, 130px); height: clamp(44px, 11cqi, 130px); }
+.slideHai .slideHinh[data-so='2'] .anhSlide { width: clamp(56px, 16cqi, 190px); height: clamp(56px, 16cqi, 190px); }
+.slideThan { overflow: hidden; }

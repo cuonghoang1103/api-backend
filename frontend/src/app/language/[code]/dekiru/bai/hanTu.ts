@@ -133,6 +133,29 @@ export const HAN_TU: Record<string, HanTu> = {
       { w: '{私|わたし}の{国|くに}', ro: 'watashi no kuni', vi: 'nước tôi' },
     ],
   },
+  /* 才・校: thêm 09/11/2026 khi khớp danh sách chữ Hán CHÍNH THỨC Bài 1 của cô (私人才学生校日本語). */
+  '才': {
+    hv: 'TÀI', nghia: 'tài năng; tuổi (viết thay 歳)', en: 'talent / years old',
+    on: ['サイ'], kun: [],
+    nho: 'Chỉ 3 nét: nét ngang là mặt đất, nét sổ móc (亅) là thân mầm đâm xuyên lên, nét phẩy là chiếc lá — mầm non mới nhú đã mang sẵn sức lớn = TÀI năng. Người Nhật mượn chữ ít nét này viết thay 歳 (tuổi): 20才.',
+    tu: [
+      { w: '～{才|さい}', ro: '~sai', vi: '~ tuổi (1才 いっさい, 8才 はっさい, 10才 じゅっさい)' },
+      { w: '{何才|なんさい}', ro: 'nansai', vi: 'mấy tuổi' },
+      { w: '{二十才|はたち}', ro: 'hatachi', vi: '20 tuổi (đọc đặc biệt はたち)' },
+      { w: '{十八才|じゅうはっさい}', ro: 'juuhassai', vi: '18 tuổi' },
+    ],
+  },
+  '校': {
+    hv: 'HIỆU', nghia: 'trường học', en: 'school',
+    on: ['コウ'], kun: [],
+    nho: 'Bên trái 木 (cây, gỗ), bên phải 交 (đan chéo, giao nhau): hàng rào gỗ đan chéo bao quanh nơi mọi người đến học = TRƯỜNG học. Đọc コウ: 学校 = がっこう (chính 学 がく đổi thành がっ khi đứng trước 校).',
+    tu: [
+      { w: '{学校|がっこう}', ro: 'gakkou', vi: 'trường học' },
+      { w: '{日本語学校|にほんごがっこう}', ro: 'nihongo gakkou', vi: 'trường tiếng Nhật' },
+      { w: '{高校|こうこう}', ro: 'koukou', vi: 'trường cấp 3 (THPT)' },
+      { w: '{高校生|こうこうせい}', ro: 'koukousei', vi: 'học sinh cấp 3' },
+    ],
+  },
   '会': {
     hv: 'HỘI', nghia: 'gặp; hội họp', en: 'meet / meeting',
     on: ['カイ'], kun: ['あ・います'],
@@ -407,6 +430,30 @@ export const HAN_TU: Record<string, HanTu> = {
       { w: '～{曜日|ようび}', ro: '~youbi', vi: 'thứ ~' },
       { w: '{何曜日|なんようび}', ro: 'nan\'youbi', vi: 'thứ mấy' },
       { w: '{日曜日|にちようび}', ro: 'nichiyoubi', vi: 'Chủ nhật' },
+    ],
+  },
+  /* 年・間: thêm 09/11/2026 khi khớp danh sách chữ Hán CHÍNH THỨC Bài 3 của cô (月火水木金土日曜何年時間分). */
+  '年': {
+    hv: 'NIÊN', nghia: 'năm; tuổi', en: 'year',
+    on: ['ネン'], kun: ['とし'],
+    nho: 'Chữ cổ vẽ một người (phần dưới, nay thành 干 có thêm nét) vác bó lúa chín (phần trên, nét phẩy + ngang như bông lúa trĩu) trên vai: lúa chín, gặt một lần mỗi NĂM.',
+    tu: [
+      { w: '～{年|ねん}', ro: '~nen', vi: 'năm ~ (2026年 にせんにじゅうろくねん)' },
+      { w: '{今年|ことし}', ro: 'kotoshi', vi: 'năm nay (đọc đặc biệt ことし)' },
+      { w: '{来年|らいねん}', ro: 'rainen', vi: 'năm sau' },
+      { w: '{去年|きょねん}', ro: 'kyonen', vi: 'năm ngoái' },
+      { w: '{一年中|いちねんじゅう}', ro: 'ichinenjuu', vi: 'quanh năm' },
+    ],
+  },
+  '間': {
+    hv: 'GIAN', nghia: 'khoảng (thời gian, không gian); ở giữa', en: 'interval / between',
+    on: ['カン', 'ケン'], kun: ['あいだ', 'ま'],
+    nho: '門 (cánh cổng) bao ngoài, 日 (mặt trời) ở trong: ánh mặt trời lọt qua KHE HỞ giữa hai cánh cổng = khoảng GIỮA, KHOẢNG thời gian. Đừng nhầm 聞 (có 耳 — nghe) và 問 (có 口 — hỏi).',
+    tu: [
+      { w: '{時間|じかん}', ro: 'jikan', vi: 'thời gian' },
+      { w: '～{時間|じかん}', ro: '~jikan', vi: '~ tiếng (đồng hồ): {二時間|にじかん} = 2 tiếng' },
+      { w: '～{時間半|じかんはん}', ro: '~jikan han', vi: '~ tiếng rưỡi (Bài 4)' },
+      { w: '{間|あいだ}', ro: 'aida', vi: 'ở giữa — N1 と N2 の 間 (Bài 7)' },
     ],
   },
   '朝': {

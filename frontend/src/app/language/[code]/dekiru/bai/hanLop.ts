@@ -3,7 +3,9 @@
  * bài `bN-kanji` sẵn có (bài cũ giữ nguyên để học thêm).
  *
  * Danh sách chữ mỗi bài:
- *  - `nguon: 'slide'`   = khớp ĐÚNG slide của cô (Bài 4, 5, 6, 7 — slide lớp JPD123; Bài 1–3 và 8–15 còn dự kiến);
+ *  - `nguon: 'slide'`   = khớp ĐÚNG danh sách của cô: Bài 4, 5, 6, 7 (slide lớp JPD123) và Bài 1, 2, 3 (09/11/2026 —
+ *                         "Chữ Hán (1).pdf", danh sách chữ Hán chính thức Bài 1–7; chữ trùng giữa các bài giữ đúng như cô ghi,
+ *                         vd. 日 có ở cả Bài 1 lẫn Bài 3); Bài 8–15 còn dự kiến;
  *  - `nguon: 'du-kien'` = dự kiến — chọn chữ Hán N5/N4 phổ biến trong từ vựng/ngữ pháp
  *    của bài, không trùng bài khác; sẽ sửa cho khớp slide khi người học gửi ảnh.
  * Chi tiết từng chữ (Hán Việt, On/Kun, cách nhớ, từ đi chung) ở hanTu.ts — tải chậm.
@@ -28,27 +30,27 @@ export type HanLopSoan = HanLopBai & {
 
 export const HAN_LOP: Record<number, HanLopSoan> = {
   1: {
-    chars: '日本人学生語何私英員',
-    nguon: 'du-kien',
-    chuDe: 'giới thiệu bản thân: người Nhật, học sinh, tiếng, tôi, tiếng Anh, nhân viên',
+    chars: '私人才学生校日本語',
+    nguon: 'slide',
+    chuDe: 'giới thiệu bản thân: tôi, người (nước), tuổi, học sinh, trường học, Nhật Bản, tiếng',
     doc: [
-      { text: '{私|わたし}の{名前|なまえ}はマルコです。', ro: 'Watashi no namae wa Maruko desu.', vi: 'Tên tôi là Marco.' },
+      { text: '{私|わたし}はマルコです。', ro: 'Watashi wa Maruko desu.', vi: 'Tôi là Marco.' },
       { text: '{私|わたし}はイタリア{人|じん}です。', ro: 'Watashi wa Itaria-jin desu.', vi: 'Tôi là người Ý.' },
-      { text: 'お{国|くに}はどちらですか。', ro: 'O-kuni wa dochira desu ka.', vi: 'Bạn đến từ nước nào?' },
-      { text: 'ワンさんは{中国人|ちゅうごくじん}です。', ro: 'Wan-san wa Chuugoku-jin desu.', vi: 'Chị Vương là người Trung Quốc.' },
-      { text: '{私|わたし}は{日本語|にほんご}の{学生|がくせい}です。', ro: 'Watashi wa nihongo no gakusei desu.', vi: 'Tôi là sinh viên học tiếng Nhật.' },
-      { text: 'アンナさんも{学生|がくせい}です。', ro: 'Anna-san mo gakusei desu.', vi: 'Anna cũng là sinh viên.' },
-      { text: 'お{名前|なまえ}は{何|なん}ですか。', ro: 'O-namae wa nan desu ka.', vi: 'Tên bạn là gì?' },
-      { text: 'ダニエルさんは{会社員|かいしゃいん}ですか。', ro: 'Danieru-san wa kaishain desu ka.', vi: 'Anh Daniel là nhân viên công ty à?' },
-      { text: 'いいえ、{会社員|かいしゃいん}じゃありません。{学生|がくせい}です。', ro: 'Iie, kaishain ja arimasen. Gakusei desu.', vi: 'Không, tôi không phải nhân viên công ty. Tôi là sinh viên.' },
-      { text: '{日本|にほん}の{会社|かいしゃ}の{人|ひと}です。', ro: 'Nihon no kaisha no hito desu.', vi: 'Đó là người của một công ty Nhật.' },
-      { text: '{私|わたし}の{国|くに}はベトナムです。', ro: 'Watashi no kuni wa Betonamu desu.', vi: 'Nước tôi là Việt Nam.' },
-      { text: '{誕生日|たんじょうび}はいつですか。', ro: 'Tanjoubi wa itsu desu ka.', vi: 'Sinh nhật bạn là khi nào?' },
+      { text: '{私|わたし}は20{才|さい}です。', ro: 'Watashi wa nijussai desu.', vi: 'Tôi 20 tuổi.' },
+      { text: 'ダニエルさんはなん{才|さい}ですか。', ro: 'Danieru-san wa nansai desu ka.', vi: 'Anh Daniel bao nhiêu tuổi?' },
+      { text: '{私|わたし}は{学生|がくせい}です。', ro: 'Watashi wa gakusei desu.', vi: 'Tôi là sinh viên.' },
+      { text: 'いいえ、{学生|がくせい}じゃありません。', ro: 'Iie, gakusei ja arimasen.', vi: 'Không, tôi không phải sinh viên.' },
+      { text: 'ここは{日本語学校|にほんごがっこう}です。', ro: 'Koko wa nihongo gakkou desu.', vi: 'Đây là trường tiếng Nhật.' },
+      { text: '{私|わたし}はさくら{日本語学校|にほんごがっこう}の{学生|がくせい}です。', ro: 'Watashi wa Sakura nihongo gakkou no gakusei desu.', vi: 'Tôi là học viên trường tiếng Nhật Sakura.' },
+      { text: 'あの{人|ひと}はだれですか。', ro: 'Ano hito wa dare desu ka.', vi: 'Người kia là ai vậy?' },
+      { text: 'ワンさんはちゅうごく{人|じん}です。', ro: 'Wan-san wa chuugoku-jin desu.', vi: 'Chị Vương là người Trung Quốc.' },
+      { text: 'たなかさんは{日本人|にほんじん}の{学生|がくせい}です。', ro: 'Tanaka-san wa nihonjin no gakusei desu.', vi: 'Anh Tanaka là sinh viên người Nhật.' },
+      { text: 'これは{日本語|にほんご}の{本|ほん}です。', ro: 'Kore wa nihongo no hon desu.', vi: 'Đây là sách tiếng Nhật.' },
     ],
   },
   2: {
     chars: '一二三四五六七八九十百千万円',
-    nguon: 'du-kien',
+    nguon: 'slide',
     chuDe: 'con số, đếm đồ vật và giá tiền khi mua sắm',
     doc: [
       { text: 'このりんごは{一|ひと}つ{百円|ひゃくえん}です。', ro: 'Kono ringo wa hitotsu hyaku-en desu.', vi: 'Táo này 100 yên một quả.' },
@@ -66,22 +68,24 @@ export const HAN_LOP: Record<number, HanLopSoan> = {
     ],
   },
   3: {
-    chars: '時分月火水木金土曜朝晩',
-    nguon: 'du-kien',
-    chuDe: 'giờ giấc, buổi sáng/tối và bảy ngày trong tuần',
+    chars: '月火水木金土日曜何年時間分',
+    nguon: 'slide',
+    chuDe: 'thứ trong tuần, năm, giờ giấc, khoảng thời gian và từ để hỏi 何',
     doc: [
-      { text: '{今|いま}、{何時|なんじ}ですか。', ro: 'Ima, nanji desu ka.', vi: 'Bây giờ là mấy giờ?' },
+      { text: 'いま、{何時|なんじ}ですか。', ro: 'Ima, nanji desu ka.', vi: 'Bây giờ là mấy giờ?' },
       { text: '{九時|くじ}{十分|じゅっぷん}です。', ro: 'Kuji juppun desu.', vi: 'Chín giờ mười phút.' },
-      { text: '{毎朝|まいあさ}{七時半|しちじはん}に{起|お}きます。', ro: 'Maiasa shichiji han ni okimasu.', vi: 'Sáng nào tôi cũng dậy lúc 7 giờ rưỡi.' },
-      { text: '{月曜日|げつようび}から{金曜日|きんようび}まで{学校|がっこう}へ{行|い}きます。', ro: 'Getsuyoubi kara kin\'youbi made gakkou e ikimasu.', vi: 'Từ thứ Hai đến thứ Sáu tôi đi học.' },
-      { text: '{土曜日|どようび}と{日曜日|にちようび}は{休|やす}みです。', ro: 'Doyoubi to nichiyoubi wa yasumi desu.', vi: 'Thứ Bảy và Chủ nhật được nghỉ.' },
+      { text: '{月曜日|げつようび}から{金曜日|きんようび}まで{学校|がっこう}へいきます。', ro: 'Getsuyoubi kara kin\'youbi made gakkou e ikimasu.', vi: 'Từ thứ Hai đến thứ Sáu tôi đi học.' },
+      { text: '{土曜日|どようび}と{日曜日|にちようび}はやすみです。', ro: 'Doyoubi to nichiyoubi wa yasumi desu.', vi: 'Thứ Bảy và Chủ nhật được nghỉ.' },
       { text: '{火曜日|かようび}と{木曜日|もくようび}にアルバイトをします。', ro: 'Kayoubi to mokuyoubi ni arubaito o shimasu.', vi: 'Tôi làm thêm vào thứ Ba và thứ Năm.' },
-      { text: '{水曜日|すいようび}の{午後|ごご}、{日本語|にほんご}を{勉強|べんきょう}します。', ro: 'Suiyoubi no gogo, nihongo o benkyou shimasu.', vi: 'Chiều thứ Tư tôi học tiếng Nhật.' },
-      { text: '{授業|じゅぎょう}は{八時|はちじ}から{十時半|じゅうじはん}までです。', ro: 'Jugyou wa hachiji kara juuji han made desu.', vi: 'Giờ học từ 8 giờ đến 10 giờ rưỡi.' },
-      { text: '{今日|きょう}は{何曜日|なんようび}ですか。', ro: 'Kyou wa nan\'youbi desu ka.', vi: 'Hôm nay là thứ mấy?' },
-      { text: '{毎日|まいにち}{二時間|にじかん}{勉強|べんきょう}します。', ro: 'Mainichi nijikan benkyou shimasu.', vi: 'Mỗi ngày tôi học hai tiếng.' },
-      { text: '{日曜日|にちようび}の{朝|あさ}、{新聞|しんぶん}を{読|よ}みます。', ro: 'Nichiyoubi no asa, shinbun o yomimasu.', vi: 'Sáng Chủ nhật tôi đọc báo.' },
-      { text: '{朝|あさ}ご{飯|はん}は{六時|ろくじ}{四十五分|よんじゅうごふん}です。', ro: 'Asagohan wa rokuji yonjuugo-fun desu.', vi: 'Bữa sáng lúc 6 giờ 45.' },
+      { text: '{水曜日|すいようび}のごご、{日本語|にほんご}をべんきょうします。', ro: 'Suiyoubi no gogo, nihongo o benkyou shimasu.', vi: 'Chiều thứ Tư tôi học tiếng Nhật.' },
+      { text: 'きょうは{何曜日|なんようび}ですか。', ro: 'Kyou wa nan\'youbi desu ka.', vi: 'Hôm nay là thứ mấy?' },
+      { text: 'じゅぎょうは{八時|はちじ}から{十時|じゅうじ}{三十分|さんじゅっぷん}までです。', ro: 'Jugyou wa hachiji kara juuji sanjuppun made desu.', vi: 'Giờ học từ 8 giờ đến 10 giờ 30.' },
+      { text: 'まいにち{二時間|にじかん}べんきょうします。', ro: 'Mainichi nijikan benkyou shimasu.', vi: 'Mỗi ngày tôi học hai tiếng.' },
+      { text: 'ひるやすみは{一時間|いちじかん}です。', ro: 'Hiruyasumi wa ichijikan desu.', vi: 'Nghỉ trưa một tiếng.' },
+      { text: 'すみません、{時間|じかん}がありません。', ro: 'Sumimasen, jikan ga arimasen.', vi: 'Xin lỗi, tôi không có thời gian.' },
+      { text: 'ことしは{二千二十六年|にせんにじゅうろくねん}です。', ro: 'Kotoshi wa nisen nijuuroku-nen desu.', vi: 'Năm nay là năm 2026.' },
+      { text: 'たんじょうびは{何月何日|なんがつなんにち}ですか。', ro: 'Tanjoubi wa nangatsu nannichi desu ka.', vi: 'Sinh nhật bạn là ngày mấy tháng mấy?' },
+      { text: '{日本語|にほんご}のテストは{四月|しがつ}{十日|とおか}です。', ro: 'Nihongo no tesuto wa shigatsu tooka desu.', vi: 'Bài kiểm tra tiếng Nhật vào ngày 10 tháng 4.' },
     ],
   },
   4: {
@@ -362,7 +366,7 @@ export function hanLopLesson(n: number): Lesson | null {
     {
       t: 'p',
       text: slide
-        ? `Đây là **đúng ${chars.length} chữ trên slide của cô** cho Bài ${n}: **${chars.join(' ')}**. Chạm vào một chữ để xem **thứ tự nét chạy từng nét**, âm Hán Việt, On/Kun (viết kiểu cô: み・ます), cách nhớ bằng hình, **các từ đi chung** — kể cả từ ghép với chữ Hán đã học ở bài trước — và tập viết ngay trong thẻ.`
+        ? `Đây là **đúng ${chars.length} chữ trong danh sách chữ Hán của cô** cho Bài ${n}: **${chars.join(' ')}**. Chạm vào một chữ để xem **thứ tự nét chạy từng nét**, âm Hán Việt, On/Kun (viết kiểu cô: み・ます), cách nhớ bằng hình, **các từ đi chung** — kể cả từ ghép với chữ Hán đã học ở bài trước — và tập viết ngay trong thẻ.`
         : `Bài ${n} có ${chars.length} chữ Hán của lớp: **${chars.join(' ')}**. Chạm vào một chữ để xem thứ tự nét, âm Hán Việt, On/Kun, cách nhớ, các từ đi chung (kể cả từ ghép với chữ đã học ở bài trước) và tập viết.`,
     },
   ];
@@ -398,7 +402,7 @@ export function hanLopLesson(n: number): Lesson | null {
   return {
     id: `b${n}-han-lop`,
     kind: 'kanji',
-    title: `Chữ Hán của lớp · Bài ${n}${slide ? ' — đúng slide của cô' : ' — dự kiến'}`,
+    title: `Chữ Hán của lớp · Bài ${n}${slide ? ' — đúng danh sách của cô' : ' — dự kiến'}`,
     goal: `Nhận mặt, đọc, hiểu nghĩa và viết đúng thứ tự nét ${chars.length} chữ ${chars.join(' ')} — ${d.chuDe} — cùng các từ đi chung với chúng.`,
     minutes: 35,
     blocks,

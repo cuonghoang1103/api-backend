@@ -320,7 +320,8 @@ describe('khopTuyenWeb', () => {
     // 31/10/2026: +1 phòng lab mạng (/net-lab).
     // 08/11/2026: +8 — Code Lab Sự cố (/code-lab/su-co, /code-lab/su-co/:id); Học viện + Courses giống web 100%
     // (/academy, /academy/courses/:slug(+/learn), /courses, /courses/:slug, /courses/:slug/learn).
-    expect(thay.size).toBe(197);
+    // 09/11/2026: +2 — /jp/sach-goc, /jp/jlpt (mục JP mở khoá theo lớp, khoá JLPT cũ dời /jp/jlpt).
+    expect(thay.size).toBe(199);
   });
 });
 

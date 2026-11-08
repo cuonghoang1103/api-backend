@@ -204,3 +204,82 @@ Bài 5 (29/09): từ vựng khớp đủ 61/61 "Từ mới bài 5.pdf", ポイ�
 - **Để sau** (chưa có khối, đừng giả lập bằng khối khác): viết hội thoại + AI chấm (`vietHoiThoai`),
   trả lời câu hỏi tự do + AI kiểm (`traLoi`), AI chấm NÓI tiếng Nhật (chamNoi đang cứng `en`/thang IELTS),
   dữ liệu `phatam` (Azure ja-JP) cho câu mẫu mỗi ポイント.
+
+## 8. 🚀 TIẾP SAU SÁCH — Bài 16–55, N4 → N3 → N2 (09/11/2026)
+
+Người dùng (09/11/2026): "hãy học theo kiểu trên lớp… để mình và các user trong trường học, và
+soạn tiếp phần đã kết thúc đấy đến N2 đầy đủ, chuyên nghiệp, chất lượng để mình học ngữ pháp,
+từ vựng, chữ Hán, hội thoại, nghe, nói, đọc, viết… all thi N2". Sách 初級 dừng ở Bài 15
+(ポイント 124, ≈ N5 + nửa N4); Bài 16–55 nối tiếp CÙNG KHUÔN lớp, tự soạn 100% theo chuẩn JLPT.
+Mục lục + mẫu ngữ pháp từng bài: OUTLINE trong `data.ts` — tiêu đề là lời hứa, dạy ĐỦ mọi mẫu ghi
+trong tiêu đề (được thêm mẫu cùng nhóm nếu cần cho đủ cấp).
+
+**Phạm vi & người học.** Người học đã xong trọn Bài 1–15 (mọi ポイント 1–124 + từ vựng sách) và
+các bài 16…N−1 trước đó. Bài cấp Nx chỉ dùng từ/ngữ pháp của cấp đó trở xuống + bài trước. Trước
+khi soạn: đọc tiêu đề các bài trước trong OUTLINE + `grep` mẫu ngữ pháp trong `bai/` để KHÔNG dạy
+lại thứ đã có (nếu cần nhắc thì 1 dòng "ôn: Bài X ポイント Y").
+
+**Nhân vật** giữ của sách (đọc tên + vai ở `bai/bai1.ts`…`bai15.ts`, dùng lại đúng giới tính/giọng);
+người mới (đồng nghiệp, sếp…) khai ở chú thích đầu tệp kèm giới tính + giọng `ja-nu`/`ja-nam`.
+Bối cảnh lớn dần: N4 đời sống du học + làm thêm · N3 đại học, thực tập, công ty · N2 tìm việc,
+công ty IT Nhật, họp, báo cáo, tin tức.
+
+**Một tệp `bai/baiN.ts` export `BAI_N: Lesson[]`** gồm, theo thứ tự:
+
+A. **① Cốt lõi** (id cố định — `nhom.ts` gom theo id):
+  1. `bN-hoi-thoai` conversation — 3 tình huống (can-do), `dialogue` 8–14 dòng, `examples`.
+  2. `bN-tu-vung` vocab — N4 40–50 từ · N3/N2 50–70 từ, chia nhóm chủ đề; từ N3 thêm nhóm
+     **từ dễ nhầm** (類義語, bảng phân biệt) + **kết hợp từ** (コロケーション); `mcq` ≥10.
+  3. `bN-ngu-phap` grammar — mỗi mẫu một `h`: công thức (bảng chia đủ V/イA/ナA/N) → giải
+     thích → ≥5 ví dụ có `ro` → cặp hỏi↔đáp → bảng thay thế → `rule` → lỗi hay mắc; từ N3 thêm
+     **bảng phân biệt với mẫu gần nghĩa** (mẫu · sắc thái · nói/viết · ví dụ). Cuối: `build` ≥10,
+     `quiz` ≥10, `mcq` ≥8 dạng đề JLPT (文法形式の判断 + 文の組み立て ★).
+  4. `bN-han-tu` kanji — chữ MỚI của bài: N4 12–15 · N3 18–22 · N2 20–25 chữ (tích luỹ ~300 /
+     ~650 / ~1.000), không trùng chữ đã dạy (grep `bai/` + `bai/hanTu.ts`). `table` [Chữ, Hán Việt,
+     On, Kun, Nghĩa, Từ ví dụ, Mức 👁/✍] → "đứng riêng hay đứng chung" → `readkanji` ≥15 câu (đề
+     KHÔNG furigana) → `mcq` đọc chữ + chọn chữ đúng (漢字読み・表記) ≥10 → `write`.
+  5. `bN-nghe` listening — 4–6 bài `listen` theo đủ dạng đề JLPT của cấp (課題理解・ポイント理解・
+     概要理解・発話表現・即時応答; N2 thêm 統合理解), ghi dạng đề trong `note`, mỗi bài `mcq`.
+  6. `bN-doc` reading — 2–3 `passage` (N4 200–400 chữ · N3 400–700 · N2 600–1.000) dạng
+     内容理解 短文/中文/長文・情報検索 (N2 thêm 統合理解・主張理解), `mcq` + giải thích đáp án.
+  7. `bN-noi` speaking — `phatam` 10–14 câu hay dùng; `dialogue` mẫu; `speak` 5–6 câu hỏi
+     (thi nói kiểu JPD: tự giới thiệu, kể, nêu ý kiến; N3+ có trình bày 1 phút).
+  8. `bN-viet` writing — viết đoạn/email/ý kiến theo chủ đề bài (N4 150–200 chữ, N3 300, N2 400–600),
+     có dàn ý, bài mẫu + từ nối, tiêu chí tự chấm.
+  9. `bN-bai-tap` homework — `quiz` dịch Việt→Nhật ≥12, `mcq` ≥12, `build` ≥8, có đáp án.
+
+B. **② Theo buổi trên lớp** — 3 buổi `bN-buoi-1-<slug>` … `bN-buoi-3-<slug>` kind `review`, như
+   buổi Slot của lớp (mẫu: `slideB67.ts`): `recap` mục tiêu buổi → các "slide" (`h` + nội dung ngắn,
+   bảng, ví dụ — trình tự giáo viên giảng: khởi động/ôn bài cũ → từ mới → ngữ pháp → hội thoại →
+   チャレンジ luyện cặp) → bài luyện có đáp án → **"Giáo viên hay hỏi gì khi gọi phát biểu"** (câu
+   hỏi + câu trả lời mẫu có `ro`). Buổi chia đúng thứ tự mục A, KHÔNG chép lại nguyên văn mục A —
+   cô đọng, nhịp lớp học, có câu hỏi kiểm tra đầu/cuối buổi.
+
+C. **③ Luyện thêm dễ → khó** — 3–5 bài `bN-lt-<slug>` kind `homework` (mọi id phải bắt đầu `bN-` — bộ kiểm đòi): tổng ≥120 câu có đáp án +
+   giải thích ngắn (từ vựng → chữ Hán → ngữ pháp → đọc → đề tổng hợp có thang điểm).
+
+D. **④ Kiểm tra** — bài 20, 30, 35, 45, 50: `bN-kiem-tra` kind `review` (~60′, ≥50 câu, đủ 文字・語彙,
+   文法, 読解, 聴解, phủ mọi bài của chặng, thang điểm + "sai câu nào ôn bài nào"). Bài 25 / 40 / 55
+   là bài **thi thử cả cấp**: thay mục A–C bằng `bN-thi-thu-1-moji` … theo ĐÚNG cấu trúc đề JLPT cấp
+   đó (số mondai, số câu, thời gian), ≥120 câu, bảng quy đổi điểm + điểm liệt từng phần, mục ôn
+   tổng hợp ngữ pháp/từ vựng/chữ Hán cả cấp.
+
+Độ dày: ~350–600 KB mỗi tệp. Tạo bằng Write 1–2 mục rồi Edit nối từng mục. Romaji MỌI câu, furigana
+MỌI chữ Hán `{漢字|かな}` (trừ `readkanji`), giảng tiếng Việt cho người mất gốc, KHÔNG chép giáo trình
+nào (Shin Kanzen, Soumatome, Minna…): kiến thức chung dùng được, câu/bài đọc/kịch bản VIẾT MỚI.
+Không chắc một cách đọc/nghĩa thì chọn ví dụ khác, không đoán.
+
+**Thẻ chữ Hán của chữ mới (bắt buộc, từ Bài 16):** tệp riêng `bai/hanTuN.ts` export `HAN_TU_N: Record<string, HanTu>`
+(đúng khuôn `hanTu.ts`: hv, nghia, en, on, kun, nho = cách nhớ theo ĐÚNG cấu tạo chữ, tu 3–5 từ) cho mọi chữ mới của
+`bN-han-tu`. Nét viết: `node --experimental-strip-types --no-warnings scripts/kanjivg-bo-sung.mts` (người điều phối).
+**Cấp chữ Hán lệch sớm (đo 09/11):** sách 初級 + chữ của lớp đã phủ gần hết chữ N4 ⇒ từ Bài 17 chữ mới chủ yếu là N3
+(ghi đúng cấp trong cột Mức). Bài 16 dùng: 代意考答問質正工堂面接決夢将守 — không dạy lại.
+**Hình ảnh (bắt buộc):** mỗi bài ≥1 khối `hinh` (thẻ từ có hình, 12–24 từ cụ thể: đồ vật, con vật, nơi chốn, hành
+động) trong `bN-tu-vung`, ≥1 `canh` mở mỗi tình huống hội thoại, và mỗi buổi trên lớp có 1 khối `slides` (10–18
+slide như slide của cô: tranh to + mẫu câu + câu hỏi gọi phát biểu `hoi`/`dap` + `ghi` giảng). Tên hình lấy trong
+`scripts/hinh/fluent-catalog.json` (Fluent Emoji, ~1.600 tên tiếng Anh viết thường, gạch nối: `dog`, `bento-box`,
+`man-cook`…) — `kiem-khoa-sach` báo tên sai. Không có hình đúng nghĩa thì BỎ (đừng gán hình sai nghĩa).
+
+Thêm `case N: return import('./baiN').then((m) => m.BAI_N);` vào `bai/index.ts` (người điều phối làm),
+rồi `npm run course:manifest`, `npx tsc --noEmit`. 🎬 Video giảng cho Bài 16+: làm sau khi chữ ổn
+(dự án video, gắn qua `videos.ts` như Bài 1–15).

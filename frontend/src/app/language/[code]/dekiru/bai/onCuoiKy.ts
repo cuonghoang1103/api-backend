@@ -602,8 +602,8 @@ const NGU_PHAP: Lesson = {
           examples: [
             E('あのビルの{後|うし}ろに{交番|こうばん}があります。', 'Ano biru no ushiro ni kouban ga arimasu.', 'Sau toà nhà kia có đồn công an.'),
             E('{交番|こうばん}はあのビルの{後|うし}ろにあります。', 'Kouban wa ano biru no ushiro ni arimasu.', 'Đồn công an ở sau toà nhà kia.'),
-            E('{交番|こうばん}の{前|まえ}にパクさんがいます。', 'Kouban no mae ni Paku-san ga imasu.', 'Trước đồn công an có anh Park.'),
-            E('パクさんは{交番|こうばん}の{前|まえ}にいます。', 'Paku-san wa kouban no mae ni imasu.', 'Anh Park đang ở trước đồn công an.'),
+            E('{交番|こうばん}の{前|まえ}にパクさんがいます。', 'Kouban no mae ni Paku-san ga imasu.', 'Trước đồn công an có chị Park.'),
+            E('パクさんは{交番|こうばん}の{前|まえ}にいます。', 'Paku-san wa kouban no mae ni imasu.', 'Chị Park đang ở trước đồn công an.'),
             E('{銀行|ぎんこう}は{本屋|ほんや}とパン{屋|や}の{間|あいだ}にあります。', 'Ginkou wa hon-ya to pan-ya no aida ni arimasu.', 'Ngân hàng nằm giữa hiệu sách và tiệm bánh.'),
           ],
         },
@@ -627,8 +627,8 @@ const NGU_PHAP: Lesson = {
           formula: 'V て います',
           vi: 'Đang V (hành động đang diễn ra). Hỏi: **{何|なに}をしていますか**; hỏi người: **だれが～ていますか**.',
           examples: [
-            E('パクさんは{台所|だいどころ}でお{皿|さら}を{洗|あら}っています。', 'Paku-san wa daidokoro de osara o aratte imasu.', 'Anh Park đang rửa đĩa trong bếp.'),
-            E('ワンさんは{何|なに}をしていますか。…{電話|でんわ}をかけています。', 'Wan-san wa nani o shite imasu ka. Denwa o kakete imasu.', 'Anh Wang đang làm gì vậy? — Đang gọi điện.'),
+            E('パクさんは{台所|だいどころ}でお{皿|さら}を{洗|あら}っています。', 'Paku-san wa daidokoro de osara o aratte imasu.', 'Chị Park đang rửa đĩa trong bếp.'),
+            E('ワンさんは{何|なに}をしていますか。…{電話|でんわ}をかけています。', 'Wan-san wa nani o shite imasu ka. Denwa o kakete imasu.', 'Chị Wang đang làm gì vậy? — Đang gọi điện.'),
           ],
         },
         {
@@ -1199,7 +1199,7 @@ const CHIA_DONG_TU: Lesson = {
           vi: 'Đang V.',
           examples: [
             E('ダニエルさんはギターを{弾|ひ}いています。', 'Danieru-san wa gitaa o hiite imasu.', 'Daniel đang chơi ghi-ta.'),
-            E('ワンさんは{電話|でんわ}をかけています。', 'Wan-san wa denwa o kakete imasu.', 'Anh Wang đang gọi điện.'),
+            E('ワンさんは{電話|でんわ}をかけています。', 'Wan-san wa denwa o kakete imasu.', 'Chị Wang đang gọi điện.'),
           ],
         },
       ],
@@ -1385,9 +1385,9 @@ const NGHE_B4: Block[] = [
     F('アンナ', '{古|ふる}い{教会|きょうかい}と、きれいな{川|かわ}があります。', 'Furui kyoukai to, kirei na kawa ga arimasu.', 'Có một nhà thờ cổ và một con sông đẹp.'),
   ]),
   LS('ck-ng-4-04', '④ Bắc Kinh', [
-    N('ワン', 'ペキンはどんなところですか。', 'Pekin wa donna tokoro desu ka.', 'Bắc Kinh là nơi như thế nào?'),
+    F('ワン', 'ペキンはどんなところですか。', 'Pekin wa donna tokoro desu ka.', 'Bắc Kinh là nơi như thế nào?'),
     F('パク', 'とても{大|おお}きいです。そして、にぎやかです。{人|ひと}が{多|おお}いです。', 'Totemo ookii desu. Soshite, nigiyaka desu. Hito ga ooi desu.', 'Rất lớn. Và nhộn nhịp. Đông người.'),
-    N('ワン', '{山|やま}がありますか。', 'Yama ga arimasu ka.', 'Có núi không?'),
+    F('ワン', '{山|やま}がありますか。', 'Yama ga arimasu ka.', 'Có núi không?'),
     F('パク', 'いいえ、{山|やま}はありません。でも、{古|ふる}いお{城|しろ}があります。', 'Iie, yama wa arimasen. Demo, furui oshiro ga arimasu.', 'Không, không có núi. Nhưng có một toà thành cổ.'),
   ]),
   LS('ck-ng-4-05', '⑤ Quê của Marco', [
@@ -1398,13 +1398,13 @@ const NGHE_B4: Block[] = [
   ]),
   LS('ck-ng-4-06', '⑥ Tháng 12 ở đâu cũng lạnh?', [
     F('リン', '{今日|きょう}は{寒|さむ}いですね。', 'Kyou wa samui desu ne.', 'Hôm nay lạnh nhỉ.'),
-    N('パク', 'そうですね。ダニエルさんの{国|くに}も{十二月|じゅうにがつ}、{寒|さむ}いですか。', 'Sou desu ne. Danieru-san no kuni mo juunigatsu, samui desu ka.', 'Ừ nhỉ. Nước Daniel tháng 12 cũng lạnh à?'),
+    F('パク', 'そうですね。ダニエルさんの{国|くに}も{十二月|じゅうにがつ}、{寒|さむ}いですか。', 'Sou desu ne. Danieru-san no kuni mo juunigatsu, samui desu ka.', 'Ừ nhỉ. Nước Daniel tháng 12 cũng lạnh à?'),
     N('ダニエル', 'いいえ、{寒|さむ}くないです。{十二月|じゅうにがつ}は{夏|なつ}です。とても{暑|あつ}いです。', 'Iie, samukunai desu. Juunigatsu wa natsu desu. Totemo atsui desu.', 'Không, không lạnh. Tháng 12 là mùa hè. Rất nóng.'),
   ]),
   LS('ck-ng-4-07', '⑦ Mùa hè Nhật Bản', [
-    N('ワン', '{日本|にほん}の{夏|なつ}はどうですか。', 'Nihon no natsu wa dou desu ka.', 'Mùa hè Nhật thế nào?'),
+    F('ワン', '{日本|にほん}の{夏|なつ}はどうですか。', 'Nihon no natsu wa dou desu ka.', 'Mùa hè Nhật thế nào?'),
     F('アンナ', 'とても{暑|あつ}いです。そして、{雨|あめ}が{多|おお}いです。', 'Totemo atsui desu. Soshite, ame ga ooi desu.', 'Rất nóng. Và mưa nhiều.'),
-    N('ワン', 'ベトナムは{一年中|いちねんじゅう}{暑|あつ}いです。でも、{雪|ゆき}は{見|み}ません。', 'Betonamu wa ichinenjuu atsui desu. Demo, yuki wa mimasen.', 'Việt Nam nóng quanh năm. Nhưng không thấy tuyết.'),
+    F('ワン', 'ベトナムは{一年中|いちねんじゅう}{暑|あつ}いです。でも、{雪|ゆき}は{見|み}ません。', 'Betonamu wa ichinenjuu atsui desu. Demo, yuki wa mimasen.', 'Việt Nam nóng quanh năm. Nhưng không thấy tuyết.'),
   ]),
   LS('ck-ng-4-08', '⑧ Quả dưa lưới', [
     F('リン', 'これは{何|なん}ですか。', 'Kore wa nan desu ka.', 'Đây là gì?'),
@@ -1412,9 +1412,9 @@ const NGHE_B4: Block[] = [
     F('リン', 'ありがとうございます。わあ、{冷|つめ}たいですね。おいしいです。', 'Arigatou gozaimasu. Waa, tsumetai desu ne. Oishii desu.', 'Cảm ơn. Oa, mát lạnh nhỉ. Ngon quá.'),
   ]),
   LS('ck-ng-4-09', '⑨ Món cà ri', [
-    N('パク', 'このカレーは{辛|から}いですか。', 'Kono karee wa karai desu ka.', 'Món cà ri này có cay không?'),
+    F('パク', 'このカレーは{辛|から}いですか。', 'Kono karee wa karai desu ka.', 'Món cà ri này có cay không?'),
     F('アンナ', 'はい、とても{辛|から}いです。でも、{冷|つめ}たいジュースがありますよ。', 'Hai, totemo karai desu. Demo, tsumetai juusu ga arimasu yo.', 'Có, rất cay. Nhưng có nước ép lạnh đấy.'),
-    N('パク', 'ありがとう。{少|すこ}しだけ{食|た}べます。', 'Arigatou. Sukoshi dake tabemasu.', 'Cảm ơn. Tôi chỉ ăn một chút thôi.'),
+    F('パク', 'ありがとう。{少|すこ}しだけ{食|た}べます。', 'Arigatou. Sukoshi dake tabemasu.', 'Cảm ơn. Tôi chỉ ăn một chút thôi.'),
   ]),
   LS('ck-ng-4-10', '⑩ Hội thoại dài (もう{一度|いちど}{聞|き}こう): Đà Lạt', [
     F('アンナ', 'リンさんの{町|まち}はどこですか。', 'Rin-san no machi wa doko desu ka.', 'Thành phố của Linh ở đâu?'),
@@ -1473,9 +1473,9 @@ const NGHE_B4: Block[] = [
 const NGHE_B5: Block[] = [
   { t: 'h', text: 'Bài 5 — Cuối tuần, cảm tưởng, thích/muốn, đi để làm gì (dạng やってみよう 1–3)' },
   LS('ck-ng-5-01', '① Chủ nhật của Marco', [
-    N('パク', 'マルコさん、{日曜日|にちようび}、どこかへ{行|い}きましたか。', 'Maruko-san, nichiyoubi, dokoka e ikimashita ka.', 'Marco, Chủ nhật bạn có đi đâu không?'),
+    F('パク', 'マルコさん、{日曜日|にちようび}、どこかへ{行|い}きましたか。', 'Maruko-san, nichiyoubi, dokoka e ikimashita ka.', 'Marco, Chủ nhật bạn có đi đâu không?'),
     N('マルコ', 'はい。{友達|ともだち}と{海|うみ}へ{行|い}きました。', 'Hai. Tomodachi to umi e ikimashita.', 'Có. Tôi đi biển với bạn.'),
-    N('パク', '{何|なに}をしましたか。', 'Nani o shimashita ka.', 'Bạn đã làm gì?'),
+    F('パク', '{何|なに}をしましたか。', 'Nani o shimashita ka.', 'Bạn đã làm gì?'),
     N('マルコ', '{写真|しゃしん}を{撮|と}りました。そして、おいしい{魚|さかな}を{食|た}べました。', 'Shashin o torimashita. Soshite, oishii sakana o tabemashita.', 'Tôi chụp ảnh. Và ăn cá ngon.'),
   ]),
   LS('ck-ng-5-02', '② Cuối tuần ở nhà', [
@@ -1486,14 +1486,14 @@ const NGHE_B5: Block[] = [
   ]),
   LS('ck-ng-5-03', '③ Mua sắm hôm qua', [
     F('アンナ', '{昨日|きのう}、デパートへ{行|い}きました。', 'Kinou, depaato e ikimashita.', 'Hôm qua tôi đã đi trung tâm thương mại.'),
-    N('ワン', '{何|なに}を{買|か}いましたか。', 'Nani o kaimashita ka.', 'Bạn mua gì?'),
+    F('ワン', '{何|なに}を{買|か}いましたか。', 'Nani o kaimashita ka.', 'Bạn mua gì?'),
     F('アンナ', '{服|ふく}を{買|か}いました。{安|やす}かったです。', 'Fuku o kaimashita. Yasukatta desu.', 'Tôi mua quần áo. Rẻ lắm.'),
-    N('ワン', 'いいですね。', 'Ii desu ne.', 'Hay quá.'),
+    F('ワン', 'いいですね。', 'Ii desu ne.', 'Hay quá.'),
   ]),
   LS('ck-ng-5-04', '④ Chuyến đi Kyoto', [
-    N('パク', '{京都|きょうと}はどうでしたか。', 'Kyouto wa dou deshita ka.', 'Kyoto thế nào?'),
+    F('パク', '{京都|きょうと}はどうでしたか。', 'Kyouto wa dou deshita ka.', 'Kyoto thế nào?'),
     F('リン', 'とても{良|よ}かったです。お{寺|てら}がきれいでした。', 'Totemo yokatta desu. Otera ga kirei deshita.', 'Rất tuyệt. Các ngôi chùa đẹp.'),
-    N('パク', '{天気|てんき}はどうでしたか。', 'Tenki wa dou deshita ka.', 'Thời tiết thế nào?'),
+    F('パク', '{天気|てんき}はどうでしたか。', 'Tenki wa dou deshita ka.', 'Thời tiết thế nào?'),
     F('リン', '{雨|あめ}でした。でも、{寒|さむ}くなかったです。', 'Ame deshita. Demo, samukunakatta desu.', 'Trời mưa. Nhưng không lạnh.'),
   ]),
   LS('ck-ng-5-05', '⑤ Bài kiểm tra hôm qua', [
@@ -1503,9 +1503,9 @@ const NGHE_B5: Block[] = [
   ]),
   LS('ck-ng-5-06', '⑥ Cái bạn muốn nhất', [
     F('アンナ', 'パクさん、{今|いま}、{何|なに}がいちばんほしいですか。', 'Paku-san, ima, nani ga ichiban hoshii desu ka.', 'Park, bây giờ bạn muốn có gì nhất?'),
-    N('パク', '{新|あたら}しいパソコンがほしいです。', 'Atarashii pasokon ga hoshii desu.', 'Tôi muốn có một cái máy tính mới.'),
+    F('パク', '{新|あたら}しいパソコンがほしいです。', 'Atarashii pasokon ga hoshii desu.', 'Tôi muốn có một cái máy tính mới.'),
     F('アンナ', 'どうしてですか。', 'Doushite desu ka.', 'Tại sao vậy?'),
-    N('パク', '{今|いま}のパソコンは{古|ふる}いですから。', 'Ima no pasokon wa furui desu kara.', 'Vì máy tính hiện giờ đã cũ.'),
+    F('パク', '{今|いま}のパソコンは{古|ふる}いですから。', 'Ima no pasokon wa furui desu kara.', 'Vì máy tính hiện giờ đã cũ.'),
   ]),
   LS('ck-ng-5-07', '⑦ Tháng sau muốn làm gì', [
     F('リン', '{来月|らいげつ}、{何|なに}をしたいですか。', 'Raigetsu, nani o shitai desu ka.', 'Tháng sau bạn muốn làm gì?'),
@@ -1513,20 +1513,20 @@ const NGHE_B5: Block[] = [
     F('リン', 'いいですね。{私|わたし}は{友達|ともだち}と{山|やま}に{登|のぼ}りたいです。', 'Ii desu ne. Watashi wa tomodachi to yama ni noboritai desu.', 'Hay quá. Tôi muốn leo núi cùng bạn.'),
   ]),
   LS('ck-ng-5-08', '⑧ Ngày mai đi đâu', [
-    N('ワン', '{明日|あした}、どこへ{行|い}きますか。', 'Ashita, doko e ikimasu ka.', 'Ngày mai bạn đi đâu?'),
+    F('ワン', '{明日|あした}、どこへ{行|い}きますか。', 'Ashita, doko e ikimasu ka.', 'Ngày mai bạn đi đâu?'),
     N('マルコ', '{図書館|としょかん}へ{行|い}きます。{本|ほん}を{借|か}りに{行|い}きます。', 'Toshokan e ikimasu. Hon o kari ni ikimasu.', 'Tôi đi thư viện. Tôi đi mượn sách.'),
-    N('ワン', 'そうですか。{私|わたし}は{友達|ともだち}に{会|あ}いに{行|い}きます。', 'Sou desu ka. Watashi wa tomodachi ni ai ni ikimasu.', 'Vậy à. Tôi đi gặp bạn.'),
+    F('ワン', 'そうですか。{私|わたし}は{友達|ともだち}に{会|あ}いに{行|い}きます。', 'Sou desu ka. Watashi wa tomodachi ni ai ni ikimasu.', 'Vậy à. Tôi đi gặp bạn.'),
   ]),
   LS('ck-ng-5-09', '⑨ Hội thoại dài (もう{一度|いちど}{聞|き}こう): Hakone và ở nhà', [
-    N('パク', 'アンナさん、{日曜日|にちようび}、{何|なに}をしましたか。', 'Anna-san, nichiyoubi, nani o shimashita ka.', 'Anna, Chủ nhật bạn làm gì?'),
+    F('パク', 'アンナさん、{日曜日|にちようび}、{何|なに}をしましたか。', 'Anna-san, nichiyoubi, nani o shimashita ka.', 'Anna, Chủ nhật bạn làm gì?'),
     F('アンナ', '{友達|ともだち}と{山|やま}へ{行|い}きました。', 'Tomodachi to yama e ikimashita.', 'Tôi đi núi cùng bạn.'),
-    N('パク', '{山|やま}？どこの{山|やま}ですか。', 'Yama? Doko no yama desu ka.', 'Núi? Núi nào vậy?'),
+    F('パク', '{山|やま}？どこの{山|やま}ですか。', 'Yama? Doko no yama desu ka.', 'Núi? Núi nào vậy?'),
     F('アンナ', '{箱根|はこね}です。{温泉|おんせん}に{入|はい}りました。', 'Hakone desu. Onsen ni hairimashita.', 'Là Hakone. Tôi đã tắm suối nước nóng.'),
-    N('パク', 'いいですね。{天気|てんき}はどうでしたか。', 'Ii desu ne. Tenki wa dou deshita ka.', 'Hay quá. Thời tiết thế nào?'),
+    F('パク', 'いいですね。{天気|てんき}はどうでしたか。', 'Ii desu ne. Tenki wa dou deshita ka.', 'Hay quá. Thời tiết thế nào?'),
     F('アンナ', 'とても{良|よ}かったです。{景色|けしき}がきれいでした。', 'Totemo yokatta desu. Keshiki ga kirei deshita.', 'Rất đẹp trời. Cảnh đẹp lắm.'),
-    N('パク', '{写真|しゃしん}を{撮|と}りましたか。', 'Shashin o torimashita ka.', 'Bạn có chụp ảnh không?'),
+    F('パク', '{写真|しゃしん}を{撮|と}りましたか。', 'Shashin o torimashita ka.', 'Bạn có chụp ảnh không?'),
     F('アンナ', 'はい、たくさん{撮|と}りました。パクさんは？', 'Hai, takusan torimashita. Paku-san wa?', 'Có, tôi chụp nhiều. Còn Park?'),
-    N('パク', '{私|わたし}はどこへも{行|い}きませんでした。{雨|あめ}でしたから、{家|いえ}で{映画|えいが}を{見|み}ました。', 'Watashi wa doko e mo ikimasen deshita. Ame deshita kara, ie de eiga o mimashita.', 'Tôi không đi đâu cả. Vì trời mưa nên tôi xem phim ở nhà.'),
+    F('パク', '{私|わたし}はどこへも{行|い}きませんでした。{雨|あめ}でしたから、{家|いえ}で{映画|えいが}を{見|み}ました。', 'Watashi wa doko e mo ikimasen deshita. Ame deshita kara, ie de eiga o mimashita.', 'Tôi không đi đâu cả. Vì trời mưa nên tôi xem phim ở nhà.'),
   ]),
   {
     t: 'mcq',
@@ -1581,9 +1581,9 @@ const NGHE_B6: Block[] = [
     N('ダニエル', 'はい、わかりました。', 'Hai, wakarimashita.', 'Vâng, tôi hiểu rồi.'),
   ]),
   LS('ck-ng-6-02', '② Rủ đi lái xe', [
-    N('パク', 'ワンさん、{日曜日|にちようび}、{一緒|いっしょ}にドライブに{行|い}きませんか。', 'Wan-san, nichiyoubi, issho ni doraibu ni ikimasen ka.', 'Wang, Chủ nhật cùng đi lái xe chơi không?'),
+    F('パク', 'ワンさん、{日曜日|にちようび}、{一緒|いっしょ}にドライブに{行|い}きませんか。', 'Wan-san, nichiyoubi, issho ni doraibu ni ikimasen ka.', 'Wang, Chủ nhật cùng đi lái xe chơi không?'),
     F('ワン', 'ああ、{日曜日|にちようび}ですか。すみません、{日曜日|にちようび}はちょっと……。うちで{友達|ともだち}と{料理|りょうり}を{作|つく}りますから。', 'Aa, nichiyoubi desu ka. Sumimasen, nichiyoubi wa chotto. Uchi de tomodachi to ryouri o tsukurimasu kara.', 'À, Chủ nhật à. Xin lỗi, Chủ nhật thì hơi… Vì tôi nấu ăn với bạn ở nhà.'),
-    N('パク', 'そうですか。{残念|ざんねん}です。', 'Sou desu ka. Zannen desu.', 'Vậy à. Tiếc quá.'),
+    F('パク', 'そうですか。{残念|ざんねん}です。', 'Sou desu ka. Zannen desu.', 'Vậy à. Tiếc quá.'),
   ]),
   LS('ck-ng-6-03', '③ Đổi sang ngày khác', [
     N('マルコ', 'アンナさん、{一緒|いっしょ}にご{飯|はん}を{食|た}べませんか。', 'Anna-san, issho ni gohan o tabemasen ka.', 'Anna, cùng ăn cơm không?'),
@@ -1592,7 +1592,7 @@ const NGHE_B6: Block[] = [
   ]),
   LS('ck-ng-6-04', '④ Có vé nhưng có hẹn', [
     F('リン', 'パクさん、{来週|らいしゅう}、{一緒|いっしょ}にコンサートに{行|い}きませんか。チケットが{二枚|にまい}あります。', 'Paku-san, raishuu, issho ni konsaato ni ikimasen ka. Chiketto ga nimai arimasu.', 'Park, tuần sau cùng đi hoà nhạc không? Mình có 2 vé.'),
-    N('パク', 'いいですね。あ、でも{来週|らいしゅう}は{約束|やくそく}があります。すみません。', 'Ii desu ne. A, demo raishuu wa yakusoku ga arimasu. Sumimasen.', 'Hay đấy. À, nhưng tuần sau tôi có hẹn. Xin lỗi.'),
+    F('パク', 'いいですね。あ、でも{来週|らいしゅう}は{約束|やくそく}があります。すみません。', 'Ii desu ne. A, demo raishuu wa yakusoku ga arimasu. Sumimasen.', 'Hay đấy. À, nhưng tuần sau tôi có hẹn. Xin lỗi.'),
     F('リン', 'そうですか。また{今度|こんど}。', 'Sou desu ka. Mata kondo.', 'Vậy à. Hẹn lần sau nhé.'),
   ]),
   LS('ck-ng-6-05', '⑤ Rủ ăn thịt nướng', [
@@ -1603,7 +1603,7 @@ const NGHE_B6: Block[] = [
   ]),
   LS('ck-ng-6-06', '⑥ Chọn quán', [
     F('リン', 'ラーメンの{店|みせ}とお{好|この}み{焼|や}きの{店|みせ}と、どちらがいいですか。', 'Raamen no mise to okonomiyaki no mise to, dochira ga ii desu ka.', 'Quán ramen và quán okonomiyaki, quán nào tốt hơn?'),
-    N('パク', 'ラーメンの{店|みせ}のほうが{近|ちか}いです。でも、お{好|この}み{焼|や}きの{店|みせ}のほうが{安|やす}いです。', 'Raamen no mise no hou ga chikai desu. Demo, okonomiyaki no mise no hou ga yasui desu.', 'Quán ramen gần hơn. Nhưng quán okonomiyaki rẻ hơn.'),
+    F('パク', 'ラーメンの{店|みせ}のほうが{近|ちか}いです。でも、お{好|この}み{焼|や}きの{店|みせ}のほうが{安|やす}いです。', 'Raamen no mise no hou ga chikai desu. Demo, okonomiyaki no mise no hou ga yasui desu.', 'Quán ramen gần hơn. Nhưng quán okonomiyaki rẻ hơn.'),
     F('リン', 'じゃ、お{好|この}み{焼|や}きの{店|みせ}にしましょう。', 'Ja, okonomiyaki no mise ni shimashou.', 'Vậy chọn quán okonomiyaki nhé.'),
   ]),
   LS('ck-ng-6-07', '⑦ Nơi đẹp nhất nước Nhật', [
@@ -1613,14 +1613,14 @@ const NGHE_B6: Block[] = [
     N('マルコ', '{北海道|ほっかいどう}は{京都|きょうと}より{寒|さむ}いですよ。', 'Hokkaidou wa Kyouto yori samui desu yo.', 'Hokkaido lạnh hơn Kyoto đấy.'),
   ]),
   LS('ck-ng-6-08', '⑧ Mùa hè hay mùa đông', [
-    N('ワン', '{夏|なつ}と{冬|ふゆ}と、どちらが{好|す}きですか。', 'Natsu to fuyu to, dochira ga suki desu ka.', 'Mùa hè và mùa đông, bạn thích mùa nào hơn?'),
-    N('パク', '{冬|ふゆ}のほうが{好|す}きです。{夏|なつ}はとても{暑|あつ}いですから。', 'Fuyu no hou ga suki desu. Natsu wa totemo atsui desu kara.', 'Tôi thích mùa đông hơn. Vì mùa hè rất nóng.'),
-    N('ワン', '{私|わたし}はどちらも{好|す}きです。', 'Watashi wa dochira mo suki desu.', 'Tôi thích cả hai.'),
+    F('ワン', '{夏|なつ}と{冬|ふゆ}と、どちらが{好|す}きですか。', 'Natsu to fuyu to, dochira ga suki desu ka.', 'Mùa hè và mùa đông, bạn thích mùa nào hơn?'),
+    F('パク', '{冬|ふゆ}のほうが{好|す}きです。{夏|なつ}はとても{暑|あつ}いですから。', 'Fuyu no hou ga suki desu. Natsu wa totemo atsui desu kara.', 'Tôi thích mùa đông hơn. Vì mùa hè rất nóng.'),
+    F('ワン', '{私|わたし}はどちらも{好|す}きです。', 'Watashi wa dochira mo suki desu.', 'Tôi thích cả hai.'),
   ]),
   LS('ck-ng-6-09', '⑨ Đã ăn trưa chưa', [
-    N('パク', 'マルコさん、もう{昼|ひる}ご{飯|はん}を{食|た}べましたか。', 'Maruko-san, mou hirugohan o tabemashita ka.', 'Marco, bạn ăn trưa chưa?'),
+    F('パク', 'マルコさん、もう{昼|ひる}ご{飯|はん}を{食|た}べましたか。', 'Maruko-san, mou hirugohan o tabemashita ka.', 'Marco, bạn ăn trưa chưa?'),
     N('マルコ', 'いいえ、まだです。', 'Iie, mada desu.', 'Chưa ạ.'),
-    N('パク', 'じゃ、{一緒|いっしょ}に{食|た}べませんか。', 'Ja, issho ni tabemasen ka.', 'Vậy cùng ăn không?'),
+    F('パク', 'じゃ、{一緒|いっしょ}に{食|た}べませんか。', 'Ja, issho ni tabemasen ka.', 'Vậy cùng ăn không?'),
     N('マルコ', 'いいですね。{食|た}べましょう。', 'Ii desu ne. Tabemashou.', 'Hay quá. Ăn thôi.'),
   ]),
   LS('ck-ng-6-10', '⑩ Vé bóng đá', [
@@ -1631,15 +1631,15 @@ const NGHE_B6: Block[] = [
   ]),
   LS('ck-ng-6-11', '⑪ Hội thoại dài (もう{一度|いちど}{聞|き}こう): Hẹn đi xem phim', [
     F('リン', 'パクさん、{今度|こんど}の{土曜日|どようび}、{時間|じかん}がありますか。', 'Paku-san, kondo no doyoubi, jikan ga arimasu ka.', 'Park, thứ Bảy này bạn có rảnh không?'),
-    N('パク', '{土曜日|どようび}ですか。{午前|ごぜん}は{約束|やくそく}がありますが、{午後|ごご}はひまです。', 'Doyoubi desu ka. Gozen wa yakusoku ga arimasu ga, gogo wa hima desu.', 'Thứ Bảy à. Buổi sáng tôi có hẹn nhưng buổi chiều thì rảnh.'),
+    F('パク', '{土曜日|どようび}ですか。{午前|ごぜん}は{約束|やくそく}がありますが、{午後|ごご}はひまです。', 'Doyoubi desu ka. Gozen wa yakusoku ga arimasu ga, gogo wa hima desu.', 'Thứ Bảy à. Buổi sáng tôi có hẹn nhưng buổi chiều thì rảnh.'),
     F('リン', 'よかった。{一緒|いっしょ}に{映画|えいが}を{見|み}に{行|い}きませんか。', 'Yokatta. Issho ni eiga o mi ni ikimasen ka.', 'Tốt quá. Cùng đi xem phim không?'),
-    N('パク', 'いいですね。{何|なん}の{映画|えいが}ですか。', 'Ii desu ne. Nan no eiga desu ka.', 'Hay đấy. Phim gì vậy?'),
+    F('パク', 'いいですね。{何|なん}の{映画|えいが}ですか。', 'Ii desu ne. Nan no eiga desu ka.', 'Hay đấy. Phim gì vậy?'),
     F('リン', 'コメディーです。チケットが{二枚|にまい}あります。', 'Komedii desu. Chiketto ga nimai arimasu.', 'Phim hài. Mình có 2 vé.'),
-    N('パク', 'コメディーはおもしろいですね。{何時|なんじ}からですか。', 'Komedii wa omoshiroi desu ne. Nanji kara desu ka.', 'Phim hài thú vị nhỉ. Từ mấy giờ vậy?'),
+    F('パク', 'コメディーはおもしろいですね。{何時|なんじ}からですか。', 'Komedii wa omoshiroi desu ne. Nanji kara desu ka.', 'Phim hài thú vị nhỉ. Từ mấy giờ vậy?'),
     F('リン', '{三時|さんじ}からです。', 'Sanji kara desu.', 'Từ 3 giờ.'),
-    N('パク', 'じゃ、{二時|にじ}に{映画館|えいがかん}の{前|まえ}で{会|あ}いましょう。', 'Ja, niji ni eigakan no mae de aimashou.', 'Vậy 2 giờ gặp nhau trước rạp chiếu phim nhé.'),
+    F('パク', 'じゃ、{二時|にじ}に{映画館|えいがかん}の{前|まえ}で{会|あ}いましょう。', 'Ja, niji ni eigakan no mae de aimashou.', 'Vậy 2 giờ gặp nhau trước rạp chiếu phim nhé.'),
     F('リン', 'はい。{映画|えいが}の{後|あと}で、{一緒|いっしょ}にご{飯|はん}を{食|た}べませんか。', 'Hai. Eiga no ato de, issho ni gohan o tabemasen ka.', 'Vâng. Sau phim cùng ăn cơm nhé?'),
-    N('パク', 'いいですね。{行|い}きましょう。', 'Ii desu ne. Ikimashou.', 'Hay quá. Đi thôi.'),
+    F('パク', 'いいですね。{行|い}きましょう。', 'Ii desu ne. Ikimashou.', 'Hay quá. Đi thôi.'),
   ]),
   {
     t: 'mcq',
@@ -1692,9 +1692,9 @@ const NGHE_B7: Block[] = [
   { t: 'h', text: 'Bài 7 — Vị trí, nhờ vả, đang làm gì, ai làm, còn/hết (dạng やってみよう 1–3)' },
   LS('ck-ng-7-01', '① Gọi điện hỏi đang ở đâu', [
     F('リン', 'もしもし、パクさん。いま、どこにいますか。', 'Moshimoshi, Paku-san. Ima, doko ni imasu ka.', 'A lô, Park. Bây giờ bạn đang ở đâu?'),
-    N('パク', '{駅|えき}の{前|まえ}にいます。', 'Eki no mae ni imasu.', 'Tôi đang ở trước ga.'),
+    F('パク', '{駅|えき}の{前|まえ}にいます。', 'Eki no mae ni imasu.', 'Tôi đang ở trước ga.'),
     F('リン', '{駅|えき}の{前|まえ}？{改札|かいさつ}の{前|まえ}ですか。', 'Eki no mae? Kaisatsu no mae desu ka.', 'Trước ga? Trước cổng soát vé à?'),
-    N('パク', 'いいえ、{交番|こうばん}の{前|まえ}です。', 'Iie, kouban no mae desu.', 'Không, trước đồn công an.'),
+    F('パク', 'いいえ、{交番|こうばん}の{前|まえ}です。', 'Iie, kouban no mae desu.', 'Không, trước đồn công an.'),
     F('リン', 'わかりました。すぐ{行|い}きます。', 'Wakarimashita. Sugu ikimasu.', 'Tôi hiểu rồi. Tôi đến ngay.'),
   ]),
   LS('ck-ng-7-02', '② Hỏi đường đến ngân hàng', [
@@ -1704,15 +1704,15 @@ const NGHE_B7: Block[] = [
     F('{女|おんな}の{人|ひと}', 'ええ。コンビニの{隣|となり}です。', 'Ee. Konbini no tonari desu.', 'Vâng. Ngay bên cạnh cửa hàng tiện lợi.'),
   ]),
   LS('ck-ng-7-03', '③ Gần đây có gì', [
-    N('ワン', 'この{近|ちか}くに{何|なに}がありますか。', 'Kono chikaku ni nani ga arimasu ka.', 'Gần đây có gì vậy?'),
+    F('ワン', 'この{近|ちか}くに{何|なに}がありますか。', 'Kono chikaku ni nani ga arimasu ka.', 'Gần đây có gì vậy?'),
     F('アンナ', '{駅|えき}の{前|まえ}に{本屋|ほんや}があります。{本屋|ほんや}とパン{屋|や}の{間|あいだ}に{郵便局|ゆうびんきょく}があります。', 'Eki no mae ni hon-ya ga arimasu. Hon-ya to pan-ya no aida ni yuubinkyoku ga arimasu.', 'Trước ga có hiệu sách. Giữa hiệu sách và tiệm bánh có bưu điện.'),
-    N('ワン', 'ありがとうございます。', 'Arigatou gozaimasu.', 'Cảm ơn bạn.'),
+    F('ワン', 'ありがとうございます。', 'Arigatou gozaimasu.', 'Cảm ơn bạn.'),
   ]),
   LS('ck-ng-7-04', '④ Lấy nước ép ra', [
     F('アンナ', 'すみませんが、{冷蔵庫|れいぞうこ}からジュースを{出|だ}してください。', 'Sumimasen ga, reizouko kara juusu o dashite kudasai.', 'Xin lỗi, hãy lấy nước ép ra khỏi tủ lạnh giúp tôi.'),
-    N('パク', 'はい。どのジュースですか。', 'Hai. Dono juusu desu ka.', 'Vâng. Nước ép nào ạ?'),
+    F('パク', 'はい。どのジュースですか。', 'Hai. Dono juusu desu ka.', 'Vâng. Nước ép nào ạ?'),
     F('アンナ', '{赤|あか}いジュースです。', 'Akai juusu desu.', 'Nước ép màu đỏ.'),
-    N('パク', 'これですね。', 'Kore desu ne.', 'Cái này nhỉ.'),
+    F('パク', 'これですね。', 'Kore desu ne.', 'Cái này nhỉ.'),
   ]),
   LS('ck-ng-7-05', '⑤ Xếp đĩa lên bàn', [
     F('リン', 'ダニエルさん、お{皿|さら}をテーブルの{上|うえ}に{置|お}いてください。', 'Danieru-san, osara o teeburu no ue ni oite kudasai.', 'Daniel, hãy đặt đĩa lên bàn.'),
@@ -1721,16 +1721,16 @@ const NGHE_B7: Block[] = [
     N('ダニエル', 'わかりました。', 'Wakarimashita.', 'Tôi hiểu rồi.'),
   ]),
   LS('ck-ng-7-06', '⑥ Đề nghị giúp thái rau', [
-    N('ワン', '{手伝|てつだ}いましょうか。', 'Tetsudaimashou ka.', 'Để tôi giúp nhé?'),
+    F('ワン', '{手伝|てつだ}いましょうか。', 'Tetsudaimashou ka.', 'Để tôi giúp nhé?'),
     F('アンナ', 'ありがとうございます。じゃ、{野菜|やさい}を{切|き}ってください。', 'Arigatou gozaimasu. Ja, yasai o kitte kudasai.', 'Cảm ơn. Vậy hãy thái rau giúp tôi.'),
-    N('ワン', 'ナイフはどこにありますか。', 'Naifu wa doko ni arimasu ka.', 'Dao ở đâu ạ?'),
+    F('ワン', 'ナイフはどこにありますか。', 'Naifu wa doko ni arimasu ka.', 'Dao ở đâu ạ?'),
     F('アンナ', 'テーブルの{上|うえ}にありますよ。', 'Teeburu no ue ni arimasu yo.', 'Ở trên bàn đấy.'),
-    N('ワン', 'これですね。', 'Kore desu ne.', 'Cái này nhỉ.'),
+    F('ワン', 'これですね。', 'Kore desu ne.', 'Cái này nhỉ.'),
   ]),
   LS('ck-ng-7-07', '⑦ Cái ô của Daniel', [
-    N('ワン', 'ダニエルさんの{傘|かさ}はどれですか。', 'Danieru-san no kasa wa dore desu ka.', 'Ô của Daniel là cái nào?'),
+    F('ワン', 'ダニエルさんの{傘|かさ}はどれですか。', 'Danieru-san no kasa wa dore desu ka.', 'Ô của Daniel là cái nào?'),
     N('ダニエル', 'あの{青|あお}い{傘|かさ}です。', 'Ano aoi kasa desu.', 'Cái ô xanh kia.'),
-    N('ワン', 'どの{傘|かさ}ですか。', 'Dono kasa desu ka.', 'Cái ô nào cơ?'),
+    F('ワン', 'どの{傘|かさ}ですか。', 'Dono kasa desu ka.', 'Cái ô nào cơ?'),
     N('ダニエル', 'あのテーブルの{隣|となり}のです。', 'Ano teeburu no tonari no desu.', 'Cái ở bên cạnh cái bàn kia.'),
   ]),
   LS('ck-ng-7-08', '⑧ Mọi người đang làm gì', [
@@ -1741,20 +1741,20 @@ const NGHE_B7: Block[] = [
   ]),
   LS('ck-ng-7-09', '⑨ Ai làm bánh', [
     N('マルコ', 'だれがこのケーキを{作|つく}りましたか。', 'Dare ga kono keeki o tsukurimashita ka.', 'Ai đã làm chiếc bánh này vậy?'),
-    N('ワン', 'アンナさんが{作|つく}りました。', 'Anna-san ga tsukurimashita.', 'Anna làm đấy.'),
+    F('ワン', 'アンナさんが{作|つく}りました。', 'Anna-san ga tsukurimashita.', 'Anna làm đấy.'),
     N('マルコ', 'おいしいですね。', 'Oishii desu ne.', 'Ngon nhỉ.'),
-    N('ワン', 'ええ。まだありますよ。', 'Ee. Mada arimasu yo.', 'Ừ. Vẫn còn đấy.'),
+    F('ワン', 'ええ。まだありますよ。', 'Ee. Mada arimasu yo.', 'Ừ. Vẫn còn đấy.'),
   ]),
   LS('ck-ng-7-10', '⑩ Rượu còn không', [
     N('ダニエル', 'お{酒|さけ}はまだありますか。', 'Osake wa mada arimasu ka.', 'Rượu còn không?'),
-    N('パク', 'いいえ、もうありません。', 'Iie, mou arimasen.', 'Không, hết rồi.'),
+    F('パク', 'いいえ、もうありません。', 'Iie, mou arimasen.', 'Không, hết rồi.'),
     N('ダニエル', 'じゃ、ジュースはどうですか。', 'Ja, juusu wa dou desu ka.', 'Vậy nước ép thì sao?'),
-    N('パク', 'ジュースはまだありますよ。', 'Juusu wa mada arimasu yo.', 'Nước ép vẫn còn đấy.'),
+    F('パク', 'ジュースはまだありますよ。', 'Juusu wa mada arimasu yo.', 'Nước ép vẫn còn đấy.'),
   ]),
   LS('ck-ng-7-11', '⑪ Nhờ chỉ cách đọc chữ Hán', [
-    N('パク', 'すみません、この{漢字|かんじ}の{読|よ}み{方|かた}を{教|おし}えてください。', 'Sumimasen, kono kanji no yomikata o oshiete kudasai.', 'Xin lỗi, hãy chỉ cho tôi cách đọc chữ Hán này.'),
+    F('パク', 'すみません、この{漢字|かんじ}の{読|よ}み{方|かた}を{教|おし}えてください。', 'Sumimasen, kono kanji no yomikata o oshiete kudasai.', 'Xin lỗi, hãy chỉ cho tôi cách đọc chữ Hán này.'),
     F('ワン', 'どの{漢字|かんじ}ですか。', 'Dono kanji desu ka.', 'Chữ Hán nào vậy?'),
-    N('パク', 'これです。', 'Kore desu.', 'Chữ này.'),
+    F('パク', 'これです。', 'Kore desu.', 'Chữ này.'),
     F('ワン', 'ああ、「かいしゃ」です。', 'Aa, "kaisha" desu.', 'À, đó là “kaisha”.'),
   ]),
   LS('ck-ng-7-12', '⑫ Ăn cơm bằng gì', [
@@ -2428,7 +2428,7 @@ const DE_LUYEN: Lesson = {
         { q: 'Trên bàn có sách, bút và một cái cốc.', answers: V('テーブルの{上|うえ}に{本|ほん}とペンとコップがあります。', 'テーブルの{上|うえ}に{本|ほん}やペンやコップがあります。'), hint: 'テーブル, 上, あります' },
         { q: 'Tuần trước tôi đã đi bảo tàng mỹ thuật cùng bạn.', answers: V('{先週|せんしゅう}、{友達|ともだち}と{美術館|びじゅつかん}へ{行|い}きました。', '{私|わたし}は{先週|せんしゅう}、{友達|ともだち}と{美術館|びじゅつかん}へ{行|い}きました。'), hint: '先週, 友達, 美術館' },
         { q: 'Để tôi chỉ cách dùng máy tính cho bạn nhé!', answers: V('パソコンの{使|つか}い{方|かた}を{教|おし}えましょうか。'), hint: '使い方, 教えます' },
-        { q: 'Anh Park đang đọc sách một mình trong phòng à?', answers: V('パクさんは{部屋|へや}で{一人|ひとり}で{本|ほん}を{読|よ}んでいますか。', 'パクさんは{一人|ひとり}で{部屋|へや}で{本|ほん}を{読|よ}んでいますか。'), hint: '部屋, 一人で, 読みます' },
+        { q: 'Chị Park đang đọc sách một mình trong phòng à?', answers: V('パクさんは{部屋|へや}で{一人|ひとり}で{本|ほん}を{読|よ}んでいますか。', 'パクさんは{一人|ひとり}で{部屋|へや}で{本|ほん}を{読|よ}んでいますか。'), hint: '部屋, 一人で, 読みます' },
         { q: 'Cô Yamada là một giáo viên tốt và còn xinh nữa.', answers: V('{山田|やまだ}さんはいい{先生|せんせい}です。そして、きれいです。'), hint: '先生, いい, きれい' },
         { q: 'Từ nhà tôi đến ga đi bộ mất 10 phút.', answers: V('{私|わたし}のうちから{駅|えき}まで{歩|ある}いて{十分|じゅっぷん}です。', '{私|わたし}のうちから{駅|えき}まで{歩|ある}いて10{分|ぷん}です。', '{私|わたし}のうちから{駅|えき}まで{歩|ある}いて10分です。'), hint: '歩いて, 十分' },
       ],
@@ -2445,7 +2445,7 @@ const DE_LUYEN: Lesson = {
         M('おすしとてんぷらとどちらが{好|す}きですか。', 'Sushi và tempura, bạn thích món nào hơn?', ['Bạn thích sushi nhất hay tempura nhất?', 'Sushi và tempura bạn đã ăn món nào rồi?', 'Bạn ghét sushi hay tempura hơn?'], 'A と B と どちらが ～ = chọn 1 trong 2.', 3),
         M('だれがこのケーキを{作|つく}りましたか。', 'Ai đã làm chiếc bánh này vậy?', ['Bạn đã làm chiếc bánh này ở đâu?', 'Chiếc bánh này là của ai?', 'Chiếc bánh này khi nào làm xong?'], 'だれが + V ました = ai đã làm.', 1),
         M('すみません、その{箱|はこ}をここへ{持|も}って{来|き}てください。', 'Xin lỗi, hãy mang cái hộp đó đến đây.', ['Xin lỗi, hãy mang cái hộp này đi giúp tôi.', 'Xin lỗi, cái hộp đó ở đâu?', 'Xin lỗi, tôi sẽ mang cái hộp đó đến.'], '持って来る = mang đến (phía người nói); ください = hãy.', 2),
-        M('パクさん、この{漢字|かんじ}の{書|か}き{方|かた}がわかりませんから、{教|おし}えてください。', 'Anh Park, tôi không biết cách viết chữ Hán này nên anh chỉ giúp tôi.', ['Anh Park, tôi không đọc được chữ Hán này nên anh hãy viết giúp.', 'Anh Park, chữ Hán này khó nên tôi không học.', 'Anh Park, hãy chỉ tôi cách đọc chữ Hán.'], '書き方 = cách VIẾT; わかりません = không biết; ～から = vì.', 0),
+        M('パクさん、この{漢字|かんじ}の{書|か}き{方|かた}がわかりませんから、{教|おし}えてください。', 'Chị Park, tôi không biết cách viết chữ Hán này nên chị chỉ giúp tôi.', ['Chị Park, tôi không đọc được chữ Hán này nên chị hãy viết giúp.', 'Chị Park, chữ Hán này khó nên tôi không học.', 'Chị Park, hãy chỉ tôi cách đọc chữ Hán.'], '書き方 = cách VIẾT; わかりません = không biết; ～から = vì.', 0),
       ],
     },
 

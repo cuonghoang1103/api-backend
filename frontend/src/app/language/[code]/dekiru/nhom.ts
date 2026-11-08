@@ -11,10 +11,12 @@
 import type { Lesson } from '@/components/sach-hoc/types';
 import type { NhomMuc } from '@/components/sach-hoc/course';
 
-const LOI = /^b\d+-(hoi-thoai|tu-vung|ngu-phap|han-lop|nghe|noi|bai-tap)$/;
-const BUOI_CO = /^(slot-|slide-tong-hop-|s113-)/;
-const LUYEN = /^lt-/;
-const ON_THI = /^(bt-|on-giua-ky|chia-the-te-)/;
+// Bài 16+ (tiếp sau sách, 09/11/2026): chữ Hán `bN-han-tu`, đọc hiểu `bN-doc` là phần cốt lõi; buổi học
+// `bN-buoi-K-…`; luyện thêm `bN-lt-…`; kiểm tra chặng / thi thử `bN-kiem-tra…` / `bN-thi-thu…`.
+const LOI = /^b\d+-(hoi-thoai|tu-vung|ngu-phap|han-lop|han-tu|nghe|doc|noi|viet|bai-tap|luyen-nho|doc-to|hinh-tu)$|^b0-/;
+const BUOI_CO = /^(slot-|slide-tong-hop-|s113-|b\d+-buoi-)/;
+const LUYEN = /^(lt-|b\d+-lt-)/;
+const ON_THI = /^(bt-|on-giua-ky|chia-the-te-|b\d+-kiem-tra|b\d+-thi-thu)/;
 
 function phut(ls: Lesson[]) {
   const h = ls.reduce((a, l) => a + (l.minutes || 0), 0) / 60;
@@ -34,11 +36,11 @@ export function nhomMucDekiru(lessons: Lesson[]): NhomMuc[] | null {
   const ds: NhomMuc[] = [
     { key: 'loi', ten: '① Học trước — phần cốt lõi', batDau: true, lessons: g.loi,
       mota: `Chỉ ${g.loi.length} mục, ${phut(g.loi)}. Làm đủ phần này là nắm xong bài; các nhóm dưới học khi cần.` },
-    { key: 'co', ten: '② Học lại theo buổi của cô', lessons: g.co,
-      mota: 'Cùng nội dung bài, chia đúng từng buổi trên lớp. Dùng khi muốn ôn lại buổi vừa học hoặc đối chiếu slide.' },
+    { key: 'co', ten: '② Học theo buổi trên lớp', lessons: g.co,
+      mota: 'Cùng nội dung bài, chia đúng từng buổi như trên lớp (slide → giảng → luyện → câu hỏi phát biểu). Dùng để học theo nhịp lớp hoặc ôn lại buổi vừa học.' },
     { key: 'luyen', ten: '③ Luyện thêm — từ dễ đến khó', lessons: g.luyen,
       mota: 'Bài tập soạn thêm có đáp án. Bắt đầu từ mục "đọc trước" để biết thứ tự; làm khi đã xong nhóm ①.' },
-    { key: 'thi', ten: '④ Ôn thi & đáp án bài của cô', lessons: g.thi,
+    { key: 'thi', ten: '④ Ôn thi · kiểm tra · đáp án', lessons: g.thi,
       mota: 'Đề và bài tập cô giao có đáp án + giải thích. Làm vào tuần trước kỳ thi.' },
     { key: 'bs', ten: '⑤ Bổ sung & tra sách', lessons: g.bs,
       mota: 'Chữ Hán trong từ vựng và phần Theo sách (đi theo từng trang) — tra khi cần.' },

@@ -6784,49 +6784,49 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "リンさん、{今度|こんど}の{土曜日|どようび}、ひまですか。",
             "ro": "Rin-san, kondo no doyoubi, hima desu ka.",
             "vi": "Rin ơi, thứ Bảy tới bạn rảnh không?"
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "a",
             "text": "はい、ひまです。{何|なに}かありますか。",
             "ro": "Hai, hima desu. Nani ka arimasu ka.",
             "vi": "Có, mình rảnh. Có gì không?"
           },
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "{映画館|えいがかん}でコメディーの{映画|えいが}があります。{一緒|いっしょ}に{見|み}に{行|い}きませんか。",
             "ro": "Eigakan de komedii no eiga ga arimasu. Issho ni mi ni ikimasen ka.",
             "vi": "Ở rạp có phim hài. Cùng đi xem không?"
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "a",
             "text": "いいですね。{行|い}きましょう。{何時|なんじ}に{会|あ}いますか。",
             "ro": "Ii desu ne. Ikimashou. Nanji ni aimasu ka.",
             "vi": "Hay đấy. Đi thôi. Mấy giờ gặp?"
           },
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "{二時|にじ}はどうですか。",
             "ro": "Niji wa dou desu ka.",
             "vi": "2 giờ thì sao?"
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "a",
             "text": "{二時|にじ}ですね。わかりました。{駅|えき}の{前|まえ}で{会|あ}いましょう。",
             "ro": "Niji desu ne. Wakarimashita. Eki no mae de aimashou.",
             "vi": "2 giờ nhỉ. Mình hiểu rồi. Gặp trước ga nhé."
           },
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "はい、そうしましょう。",
             "ro": "Hai, soushimashou.",
             "vi": "Ừ, cứ vậy nhé."
@@ -6975,56 +6975,56 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "ワンさん、{今晩|こんばん}、カラオケに{行|い}きませんか。",
             "ro": "Wan-san, konban, karaoke ni ikimasen ka.",
             "vi": "Wang ơi, tối nay đi karaoke không?"
           },
           {
             "who": "ワン",
-            "role": "b",
+            "role": "a",
             "text": "すみません、{今晩|こんばん}はちょっと……。",
             "ro": "Sumimasen, konban wa chotto....",
             "vi": "Xin lỗi, tối nay hơi…"
           },
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "{用事|ようじ}がありますか。",
             "ro": "Youji ga arimasu ka.",
             "vi": "Bạn có việc bận à?"
           },
           {
             "who": "ワン",
-            "role": "b",
+            "role": "a",
             "text": "ええ、{友達|ともだち}と{約束|やくそく}があります。",
             "ro": "Ee, tomodachi to yakusoku ga arimasu.",
             "vi": "Ừ, mình có hẹn với bạn."
           },
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "そうですか。ざんねんですね。{来週|らいしゅう}はどうですか。",
             "ro": "Sou desu ka. Zannen desu ne. Raishuu wa dou desu ka.",
             "vi": "Vậy à. Tiếc nhỉ. Tuần sau thì sao?"
           },
           {
             "who": "ワン",
-            "role": "b",
+            "role": "a",
             "text": "{来週|らいしゅう}の{金曜日|きんようび}はひまですよ。",
             "ro": "Raishuu no kin'youbi wa hima desu yo.",
             "vi": "Thứ Sáu tuần sau mình rảnh đấy."
           },
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "じゃあ、{来週|らいしゅう}の{金曜日|きんようび}に{行|い}きましょう。",
             "ro": "Jaa, raishuu no kin'youbi ni ikimashou.",
             "vi": "Vậy thứ Sáu tuần sau đi nhé."
           },
           {
             "who": "ワン",
-            "role": "b",
+            "role": "a",
             "text": "ええ、そうしましょう。",
             "ro": "Ee, soushimashou.",
             "vi": "Ừ, cứ vậy nhé."
@@ -7184,7 +7184,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "c",
             "text": "そうですねえ。{焼|や}き{肉|にく}のほうがおいしいですが、ラーメンのほうが{安|やす}いですよ。",
             "ro": "Soudesunee. Yakiniku no hou ga oishii desu ga, raamen no hou ga yasui desu yo.",
             "vi": "Để xem nào. Thịt nướng ngon hơn nhưng ramen rẻ hơn đấy."
@@ -7205,7 +7205,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "c",
             "text": "いいですね。そうしましょう。",
             "ro": "Ii desu ne. Soushimashou.",
             "vi": "Hay đấy. Cứ vậy nhé."
@@ -7361,7 +7361,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "アンナ",
-            "role": "b",
+            "role": "c",
             "text": "いいえ、まだです。リンさんは？",
             "ro": "Iie, mada desu. Rin-san wa?",
             "vi": "Chưa. Còn Rin?"
@@ -7375,7 +7375,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "アンナ",
-            "role": "b",
+            "role": "c",
             "text": "そうですか。いいですね。{一枚|いちまい}ください。",
             "ro": "Sou desu ka. Ii desu ne. Ichimai kudasai.",
             "vi": "Vậy à. Hay quá. Cho mình một vé nhé."
@@ -7389,7 +7389,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "アンナ",
-            "role": "b",
+            "role": "c",
             "text": "{六時|ろくじ}ですね。じゃあ、{五時|ごじ}に{駅|えき}で{会|あ}いましょう。",
             "ro": "Rokuji desu ne. Jaa, goji ni eki de aimashou.",
             "vi": "6 giờ nhỉ. Vậy 5 giờ gặp ở ga nhé."
@@ -8648,7 +8648,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "アンナさん、{日曜日|にちようび}、{一緒|いっしょ}に{映画|えいが}を{見|み}ませんか。",
             "ro": "Anna-san, nichiyoubi, issho ni eiga o mimasen ka.",
             "vi": "Anna, Chủ nhật cùng xem phim không?"
@@ -8669,7 +8669,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "リンさん、{今晩|こんばん}、カラオケに{行|い}きませんか。",
             "ro": "Rin-san, konban, karaoke ni ikimasen ka.",
             "vi": "Rin, tối nay đi karaoke không?"
@@ -8718,7 +8718,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "ええ、ぜひ。しましょう。",
             "ro": "Ee, zehi. Shimashou.",
             "vi": "Ừ, nhất định. Chơi thôi."
@@ -8739,7 +8739,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいですね。{火曜日|かようび}はひまです。{食|た}べましょう。",
             "ro": "Ii desu ne. Kayoubi wa hima desu. Tabemashou.",
             "vi": "Hay đấy. Thứ Ba mình rảnh. Ăn thôi."
@@ -8849,7 +8849,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{三枚|さんまい}あります。{一枚|いちまい}{二千円|にせんえん}です。",
             "ro": "Sanmai arimasu. Ichimai nisen'en desu.",
             "vi": "Mình có 3 vé. Một vé 2.000 yên."
@@ -8870,7 +8870,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{午後|ごご}{六時|ろくじ}からです。{五時|ごじ}に{駅|えき}で{会|あ}いましょう。",
             "ro": "Gogo rokuji kara desu. Goji ni eki de aimashou.",
             "vi": "Từ 6 giờ chiều. 5 giờ gặp ở ga nhé."
@@ -8891,7 +8891,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{電車|でんしゃ}のほうが{早|はや}いです。でも、バスのほうが{安|やす}いですよ。",
             "ro": "Densha no hou ga hayai desu. Demo, basu no hou ga yasui desu yo.",
             "vi": "Tàu điện nhanh hơn. Nhưng xe buýt rẻ hơn đấy."
@@ -9043,7 +9043,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{三時|さんじ}はちょっと……。{四時|よじ}はどうですか。",
             "ro": "Sanji wa chotto.... Yoji wa dou desu ka.",
             "vi": "3 giờ hơi khó. 4 giờ thì sao?"
@@ -9064,7 +9064,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{映画館|えいがかん}の{前|まえ}で{会|あ}いましょう。",
             "ro": "Eigakan no mae de aimashou.",
             "vi": "Gặp trước rạp phim nhé."
@@ -9078,7 +9078,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいですよ。{駅|えき}の{前|まえ}ですね。",
             "ro": "Ii desu yo. Eki no mae desu ne.",
             "vi": "Được. Trước ga nhỉ."
@@ -9134,7 +9134,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいえ、まだです。{今日|きょう}{買|か}います。",
             "ro": "Iie, mada desu. Kyou kaimasu.",
             "vi": "Chưa. Hôm nay mình mua."
@@ -9155,7 +9155,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "リンさん、もう{宿題|しゅくだい}をしましたか。",
             "ro": "Rin-san, mou shukudai o shimashita ka.",
             "vi": "Rin, bạn làm bài tập chưa?"
@@ -9169,7 +9169,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{私|わたし}はもうしました。{昨日|きのう}しました。",
             "ro": "Watashi wa mou shimashita. Kinou shimashita.",
             "vi": "Mình làm rồi. Mình làm hôm qua."
@@ -9218,7 +9218,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいですね。{何時|なんじ}からですか。",
             "ro": "Ii desu ne. Nanji kara desu ka.",
             "vi": "Hay đấy. Mấy giờ bắt đầu?"
@@ -9239,14 +9239,14 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{私|わたし}は{行|い}きます。{五時|ごじ}に{駅|えき}で{会|あ}いましょう。",
             "ro": "Watashi wa ikimasu. Goji ni eki de aimashou.",
             "vi": "Mình đi. 5 giờ gặp ở ga nhé."
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "わかりました。アンナさんと{私|わたし}とワンさんと、{三人|さんにん}ですね。",
             "ro": "Wakarimashita. Anna-san to watashi to Wan-san to, sannin desu ne.",
             "vi": "Hiểu rồi. Anna, mình và Wang — ba người nhỉ."
@@ -9260,7 +9260,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
         "lines": [
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{明日|あした}、{日本語|にほんご}のテストがありますよ。",
             "ro": "Ashita, nihongo no tesuto ga arimasu yo.",
             "vi": "Mai có bài kiểm tra tiếng Nhật đấy."
@@ -9274,7 +9274,7 @@ export const LUYEN_THEM_B6: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{九時|くじ}からです。{八時半|はちじはん}に{教室|きょうしつ}で{会|あ}いましょう。",
             "ro": "Kuji kara desu. Hachijihan ni kyoushitsu de aimashou.",
             "vi": "Từ 9 giờ. 8 giờ rưỡi gặp ở lớp nhé."
@@ -21846,35 +21846,35 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "アンナさん、ナイフはどこにありますか。",
             "ro": "Anna-san, naifu wa doko ni arimasu ka.",
             "vi": "Anna, con dao ở đâu vậy?"
           },
           {
             "who": "アンナ",
-            "role": "b",
+            "role": "a",
             "text": "ナイフは{台所|だいどころ}のテーブルの{上|うえ}にあります。",
             "ro": "Naifu wa daidokoro no teeburu no ue ni arimasu.",
             "vi": "Dao ở trên bàn trong bếp."
           },
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "テーブルの{上|うえ}に{何|なに}がありますか。",
             "ro": "Teeburu no ue ni nani ga arimasu ka.",
             "vi": "Trên bàn có gì?"
           },
           {
             "who": "アンナ",
-            "role": "b",
+            "role": "a",
             "text": "ナイフとフォークとスプーンがあります。お{皿|さら}は{冷蔵庫|れいぞうこ}の{横|よこ}にあります。",
             "ro": "Naifu to fooku to supuun ga arimasu. Osara wa reizouko no yoko ni arimasu.",
             "vi": "Có dao, dĩa và thìa. Đĩa thì ở bên cạnh tủ lạnh."
           },
           {
             "who": "マルコ",
-            "role": "a",
+            "role": "b",
             "text": "わかりました。ありがとう。",
             "ro": "Wakarimashita. Arigatou.",
             "vi": "Mình hiểu rồi. Cảm ơn."
@@ -22032,7 +22032,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "c",
             "text": "いいですよ。ビールはどこにありますか。",
             "ro": "Ii desu yo. Biiru wa doko ni arimasu ka.",
             "vi": "Được thôi. Bia ở đâu vậy?"
@@ -22046,7 +22046,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "c",
             "text": "わかりました。お{皿|さら}も{洗|あら}いましょうか。",
             "ro": "Wakarimashita. Osara mo araimashou ka.",
             "vi": "Mình hiểu rồi. Mình rửa đĩa luôn nhé?"
@@ -22213,7 +22213,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "c",
             "text": "ああ、アンナさん。{今|いま}、{台所|だいどころ}で{料理|りょうり}を{作|つく}っています。",
             "ro": "Aa, Anna-san. Ima, daidokoro de ryouri o tsukutte imasu.",
             "vi": "À, Anna. Bây giờ mình đang nấu ăn trong bếp."
@@ -22227,7 +22227,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "c",
             "text": "いいえ、{大丈夫|だいじょうぶ}です。でも、すみませんが、ワンさんを{迎|むか}えに{行|い}ってください。",
             "ro": "Iie, daijoubu desu. Demo, sumimasen ga, Wan-san o mukaeni itte kudasai.",
             "vi": "Không, ổn rồi. Nhưng xin lỗi, hãy đi đón Wang giúp mình nhé."
@@ -22241,7 +22241,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "c",
             "text": "{改札|かいさつ}の{前|まえ}にいます。",
             "ro": "Kaisatsu no mae ni imasu.",
             "vi": "Anh ấy ở trước cổng soát vé."
@@ -22397,35 +22397,35 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "リンさん、この{電子|でんし}レンジの{使|つか}い{方|かた}がわかりません。",
             "ro": "Rin-san, kono denshirenji no tsukaikata ga wakarimasen.",
             "vi": "Rin, mình không biết cách dùng lò vi sóng này."
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "a",
             "text": "どれですか。",
             "ro": "Dore desu ka.",
             "vi": "Cái nào vậy?"
           },
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "これです。ピザを{入|い}れたいです。",
             "ro": "Kore desu. Piza o iretai desu.",
             "vi": "Cái này. Mình muốn cho pizza vào."
           },
           {
             "who": "リン",
-            "role": "b",
+            "role": "a",
             "text": "ああ、これですか。{教|おし}えましょう。ピザを{入|い}れて、ドアを{閉|し}めてください。",
             "ro": "Aa, kore desu ka. Oshiemashou. Piza o irete, doa o shimete kudasai.",
             "vi": "À, cái này à. Để mình chỉ. Hãy cho pizza vào rồi đóng cửa lại."
           },
           {
             "who": "ダニエル",
-            "role": "a",
+            "role": "b",
             "text": "はい。ありがとうございます。",
             "ro": "Hai. Arigatou gozaimasu.",
             "vi": "Vâng. Cảm ơn bạn."
@@ -22600,7 +22600,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "a",
             "text": "ビールはまだありますか。",
             "ro": "Biiru wa mada arimasu ka.",
             "vi": "Còn bia không?"
@@ -22614,7 +22614,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "role": "b",
+            "role": "a",
             "text": "お{願|ねが}いします。{駅|えき}の{前|まえ}に{自動販売機|じどうはんばいき}がありますよ。",
             "ro": "Onegai shimasu. Eki no mae ni jidouhanbaiki ga arimasu yo.",
             "vi": "Nhờ bạn. Trước ga có máy bán hàng tự động đấy."
@@ -23706,7 +23706,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいですよ。",
             "ro": "Ii desu yo.",
             "vi": "Được thôi."
@@ -23720,7 +23720,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "すみませんが、ナイフを{貸|か}してください。",
             "ro": "Sumimasen ga, naifu o kashite kudasai.",
             "vi": "Xin lỗi, cho mình mượn con dao."
@@ -23762,7 +23762,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{手伝|てつだ}いましょうか。",
             "ro": "Tetsudaimashou ka.",
             "vi": "Để mình giúp nhé?"
@@ -23790,7 +23790,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "はい、わかりました。",
             "ro": "Hai, wakarimashita.",
             "vi": "Vâng, mình hiểu rồi."
@@ -23903,14 +23903,14 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "すみません、ポストはどこにありますか。",
             "ro": "Sumimasen, posuto wa doko ni arimasu ka.",
             "vi": "Xin lỗi, hòm thư ở đâu?"
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{駅|えき}の{前|まえ}にあります。{交番|こうばん}の{横|よこ}です。",
             "ro": "Eki no mae ni arimasu. Kouban no yoko desu.",
             "vi": "Ở trước ga. Nó ở bên cạnh đồn công an."
@@ -23973,7 +23973,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "マルコさんは{歌|うた}を{歌|うた}っています。ワンさんはギターを{弾|ひ}いています。リンさんは{電話|でんわ}をかけています。",
             "ro": "Maruko-san wa uta o utatte imasu. Wan-san wa gitaa o hiite imasu. Rin-san wa denwa o kakete imasu.",
             "vi": "Marco đang hát. Wang đang chơi ghi ta. Rin đang gọi điện thoại."
@@ -24008,7 +24008,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{塩|しお}はどれですか。",
             "ro": "Shio wa dore desu ka.",
             "vi": "Muối là cái nào?"
@@ -24022,7 +24022,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "これですか。",
             "ro": "Kore desu ka.",
             "vi": "Cái này à?"
@@ -24193,7 +24193,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{五時|ごじ}ですね。わかりました。",
             "ro": "Goji desu ne. Wakarimashita.",
             "vi": "5 giờ nhỉ. Mình hiểu rồi."
@@ -24214,7 +24214,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{十二時|じゅうにじ}はちょっと……。{一時|いちじ}はどうですか。",
             "ro": "Juuniji wa chotto.... Ichiji wa dou desu ka.",
             "vi": "12 giờ hơi khó. 1 giờ thì sao?"
@@ -24242,7 +24242,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{四|よっ}つあります。でも、{一|ひと}つは{小|ちい}さいです。お{皿|さら}は{五枚|ごまい}あります。",
             "ro": "Yottsu arimasu. Demo, hitotsu wa chiisai desu. Osara wa gomai arimasu.",
             "vi": "Có 4 cái. Nhưng một cái nhỏ. Đĩa có 5 cái."
@@ -24291,7 +24291,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "はい。リンさんはいま{台所|だいどころ}にいます。すみませんが、あとでかけてください。",
             "ro": "Hai. Rin-san wa ima daidokoro ni imasu. Sumimasen ga, atode kakete kudasai.",
             "vi": "Vâng. Rin đang ở trong bếp. Xin lỗi, hãy gọi lại sau nhé."
@@ -24312,7 +24312,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
         "lines": [
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "ビールはまだありますか。",
             "ro": "Biiru wa mada arimasu ka.",
             "vi": "Còn bia không?"
@@ -24326,7 +24326,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "じゃあ、ジュースを{飲|の}みます。",
             "ro": "Jaa, juusu o nomimasu.",
             "vi": "Vậy mình uống nước ép."
@@ -24347,7 +24347,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "パク",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "いいですよ。{野菜|やさい}も{切|き}りましょうか。",
             "ro": "Ii desu yo. Yasai mo kirimashou ka.",
             "vi": "Được thôi. Mình cắt cả rau nhé?"
@@ -24361,7 +24361,7 @@ export const LUYEN_THEM_B7: Lesson[] = [
           },
           {
             "who": "ワン",
-            "voice": "ja-nam",
+            "voice": "ja-nu",
             "text": "{窓|まど}を{開|あ}けます。ギターも{弾|ひ}きましょうか。",
             "ro": "Mado o akemasu. Gitaa mo hikimashou ka.",
             "vi": "Mình mở cửa sổ. Mình chơi ghi ta luôn nhé?"

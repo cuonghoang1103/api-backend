@@ -16,7 +16,7 @@ export const MO_TA_TRANG: Readonly<Record<string, string>> = {
   '/ai-templates': 'Mẫu lệnh AI dùng lại được',
   '/books': 'Thư viện sách và giáo trình',
   '/ielts': 'Khoá IELTS 0 → 7.5, luyện nói có chấm điểm',
-  '/jp': 'Tiếng Nhật từ số 0 đến N1',
+  '/jp': 'Tiếng Nhật theo lớp (できる日本語) → N2',
   '/ch': 'Tiếng Trung từ số 0 đến HSK 6',
   '/academy': 'Môn học theo chương trình đại học',
   '/courses': 'Khoá học kỹ năng đi làm',

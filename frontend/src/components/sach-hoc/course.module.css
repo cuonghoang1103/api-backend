@@ -1945,3 +1945,7 @@
 .tqNhomHead { cursor: pointer; font-size: 14px; color: var(--lh-ink); }
 .tqNhomHead em { font-style: normal; color: var(--lh-accent); font-weight: 600; }
 .tqNhomHead small { color: var(--lh-ink-3); }
+
+/* Nút mở 📖 Bản sách (09/11/2026) — trên Tổng quan buổi và dưới mục tiêu mỗi bài. */
+.nutSach { display: flex; justify-content: flex-end; margin: 6px 0 10px; }
+@media print { .nutSach { display: none; } }

@@ -22,6 +22,7 @@ import { foldJp, foldVi, jpVariants, matchJp, matchVi, toHira, viAnswers } from 
 import { CAU, HAN, NHOM, NP, TU } from '@/app/language/[code]/dekiru/bai/onTheData';
 import s from '../course.module.css';
 import c from './onthe.module.css';
+import GhepCau from './GhepCau';
 
 /* ── Mô hình ───────────────────────────────────────────────────────────── */
 
@@ -738,14 +739,24 @@ const MODES = [
   { id: 'ghep', icon: '🧩', ten: 'Ghép cặp', mo: 'bấm giờ' },
   { id: 'kt', icon: '📝', ten: 'Kiểm tra', mo: '20 câu' },
   { id: 'sai', icon: '🔁', ten: 'Ôn từ sai', mo: '5 hộp' },
+  // 09/11/2026: ghép câu từ các khối `build` của bài — luyện NGỮ PHÁP, không chỉ từ (GhepCau.tsx).
+  { id: 'cau', icon: '🧱', ten: 'Ghép câu', mo: 'ngữ pháp' },
 ] as const;
 type ModeId = (typeof MODES)[number]['id'];
 type Opt = { bai: number[]; loai: Loai[]; dir: Dir; furi: boolean; mode: ModeId };
 
-export default function OnTapThe() {
+/**
+ * `baiCo` (09/11/2026): mở NGAY TRONG một bài ("🃏 Luyện nhớ Bài N") — khoá bộ lọc bài vào đúng bài đó,
+ * nhớ tuỳ chọn riêng cho từng bài. Không truyền = mục Tra cứu chung, chọn bài tuỳ ý như cũ.
+ */
+export default function OnTapThe({ baiCo }: { baiCo?: number[] } = {}) {
   const store = useStore();
-  const [opt, setOptRaw] = useState<Opt>(() => readJson<Opt>(LUU_TUY_CHON, { bai: [4, 5], loai: ['tu', 'han', 'np'], dir: 'jv', furi: true, mode: 'lat' }));
-  const setOpt = (p: Partial<Opt>) => setOptRaw((o) => { const nx = { ...o, ...p }; writeJson(LUU_TUY_CHON, nx); return nx; });
+  const khoaLuu = baiCo?.length ? `${LUU_TUY_CHON}:${baiCo.join(',')}` : LUU_TUY_CHON;
+  const [opt, setOptRaw] = useState<Opt>(() => {
+    const o = readJson<Opt>(khoaLuu, { bai: baiCo?.length ? baiCo : [4, 5], loai: ['tu', 'han', 'np'], dir: 'jv', furi: true, mode: 'lat' });
+    return baiCo?.length ? { ...o, bai: baiCo } : o;
+  });
+  const setOpt = (p: Partial<Opt>) => setOptRaw((o) => { const nx = { ...o, ...p }; writeJson(khoaLuu, nx); return nx; });
   const pool = useMemo(() => ALL_CARDS.filter((x) => opt.bai.includes(x.n) && opt.loai.includes(x.loai)), [opt.bai, opt.loai]);
   const caus = useMemo(() => ALL_CAU.filter((x) => opt.bai.includes(x.n) && opt.loai.includes(x.loai)), [opt.bai, opt.loai]);
   const dem = useMemo(() => {
@@ -762,11 +773,11 @@ export default function OnTapThe() {
   return (
     <div className={`${c.root} ${opt.furi ? '' : s.noFuri}`}>
       <div className={c.filters}>
-        <div className={c.fRow}>
+        {!baiCo?.length && <div className={c.fRow}>
           <span className={c.fLbl}>Bài</span>
           {BAI.map((n) => <button key={n} type="button" className={c.chip} aria-pressed={opt.bai.includes(n)} onClick={() => setOpt({ bai: toggle(opt.bai, n) })}>B{n}<small>{dem[n] ?? 0}</small></button>)}
           <button type="button" className={c.chip} aria-pressed={false} onClick={() => setOpt({ bai: [...BAI] })}>Tất cả</button>
-        </div>
+        </div>}
         <div className={c.fRow}>
           <span className={c.fLbl}>Loại</span>
           {(['tu', 'han', 'np'] as Loai[]).map((l) => <button key={l} type="button" className={c.chip} aria-pressed={opt.loai.includes(l)} onClick={() => setOpt({ loai: toggle(opt.loai, l) })}>{LOAI_TEN[l]}</button>)}
@@ -797,6 +808,7 @@ export default function OnTapThe() {
         {opt.mode === 'ghep' && <GhepCap pool={pool} store={store} bestKey={bestKey} />}
         {opt.mode === 'kt' && <KiemTra pool={pool} caus={caus} dir={opt.dir} store={store} />}
         {opt.mode === 'sai' && <OnTuSai dir={opt.dir} store={store} bai={opt.bai} />}
+        {opt.mode === 'cau' && <GhepCau bai={opt.bai} />}
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, List, X, Clock, CalendarDays, BookOpen } from 'lucide-react';
 import api from '@/lib/api';
 import RobotAI from '@/components/academy/RobotAI';
 import { useLangUser } from '@/components/language/primitives';
@@ -23,10 +23,12 @@ const GoiGiaSu = dynamic(() => import('./GoiGiaSu'), { ssr: false });
 const ChaoBuoiSang = dynamic(() => import('./ChaoBuoiSang'), { ssr: false });
 import { daChaoHomNay } from './chaoNgay';
 import { HuanLuyen } from './HuanLuyen';
+// 📖 Bản sách (in được) — chunk riêng, chỉ tải khi mở ?sach=N.
+const BanSach = dynamic(() => import('./BanSach'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang dựng bản sách…</div> });
 import s from './course.module.css';
 
 /** Trang đang mở: một bài, tổng quan một buổi, hoặc kế hoạch & tiến độ. */
-type View = { t: 'lesson'; id: string } | { t: 'day'; n: number } | { t: 'plan' };
+type View = { t: 'lesson'; id: string } | { t: 'day'; n: number } | { t: 'plan' } | { t: 'sach'; n: number };
 
 function viewFromUrl(course: Course): View | null {
   const q = docTruyVan();
@@ -34,12 +36,14 @@ function viewFromUrl(course: Course): View | null {
   if (bai && course.readyLessons.some((l) => l.id === bai)) return { t: 'lesson', id: bai };
   const buoi = Number(q.get('buoi'));
   if (buoi >= 1 && buoi <= course.days.length) return { t: 'day', n: buoi };
+  const sach = Number(q.get('sach'));
+  if (sach >= 1 && sach <= course.days.length) return { t: 'sach', n: sach };
   if (q.get('xem') === 'ke-hoach') return { t: 'plan' };
   return null;
 }
 
 function viewToQuery(v: View): [string, string] {
-  return v.t === 'lesson' ? ['bai', v.id] : v.t === 'day' ? ['buoi', String(v.n)] : ['xem', 'ke-hoach'];
+  return v.t === 'lesson' ? ['bai', v.id] : v.t === 'day' ? ['buoi', String(v.n)] : v.t === 'sach' ? ['sach', String(v.n)] : ['xem', 'ke-hoach'];
 }
 
 /**
@@ -65,7 +69,7 @@ export default function CoursePage({ course, lessonExtra }: {
   // xong bao nhiêu. Người lần đầu vào sẽ thấy form đặt lịch ngay ở đó.
   const [view, setView] = useState<View>({ t: 'plan' });
   // Chuyển bài / buổi / trang kế hoạch: dừng tiếng đang phát (bài cũ không được nói tiếp).
-  const viewKey = view.t === 'lesson' ? `l:${view.id}` : view.t === 'day' ? `d:${view.n}` : 'plan';
+  const viewKey = view.t === 'lesson' ? `l:${view.id}` : view.t === 'day' ? `d:${view.n}` : view.t === 'sach' ? `s:${view.n}` : 'plan';
   useEffect(() => { stopAudio(); }, [viewKey]);
   const [tocOpen, setTocOpen] = useState(false);
   // Nhóm mục lục đang MỞ theo người dùng: khoá `${buổi}:${nhóm}` → true/false (không có = theo mặc định).
@@ -113,7 +117,7 @@ export default function CoursePage({ course, lessonExtra }: {
     setTurns([]);
     setSelection('');
     const [k, val] = viewToQuery(v);
-    ghiTruyVan((q) => { ['bai', 'buoi', 'xem'].forEach((x) => q.delete(x)); q.set(k, val); });
+    ghiTruyVan((q) => { ['bai', 'buoi', 'xem', 'sach'].forEach((x) => q.delete(x)); q.set(k, val); });
     window.scrollTo({ top: 0 });
   }, []);
   const open = useCallback((l: Lesson) => {
@@ -150,11 +154,11 @@ export default function CoursePage({ course, lessonExtra }: {
   const prev = idx > 0 ? READY_LESSONS[idx - 1] : null;
   const next = idx >= 0 && idx < READY_LESSONS.length - 1 ? READY_LESSONS[idx + 1] : null;
 
-  const viewTitle = lesson ? lesson.title : view.t === 'day' ? `Tổng quan buổi ${view.n}` : 'Kế hoạch & tiến độ';
+  const viewTitle = lesson ? lesson.title : view.t === 'day' ? `Tổng quan buổi ${view.n}` : view.t === 'sach' ? `Bản sách — ${course.dayName(view.n)}` : 'Kế hoạch & tiến độ';
   const contextText = useMemo(() => {
     // Chưa tải xong thì gia sư chỉ có tên + mục tiêu bài.
     if (lesson) return lessonText(full ?? lesson);
-    if (view.t === 'day') return (course.contentOf(view.n) ?? DAYS[view.n - 1].lessons).map(lessonText).join('\n').slice(0, 3900);
+    if (view.t === 'day' || view.t === 'sach') return (course.contentOf(view.n) ?? DAYS[view.n - 1].lessons).map(lessonText).join('\n').slice(0, 3900);
     return course.planContext;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lesson, full, view, DAYS, course, tick]);
@@ -394,6 +398,17 @@ export default function CoursePage({ course, lessonExtra }: {
               />
             )}
 
+            {view.t === 'sach' && (
+              <BanSach course={course} n={view.n} onBack={() => go({ t: 'day', n: view.n })} />
+            )}
+
+            {view.t === 'day' && day && day.lessons.some(isReady) && (
+              <div className={s.nutSach}>
+                <button type="button" className={s.btnGhost} onClick={() => go({ t: 'sach', n: day.n })}>
+                  <BookOpen size={15} /> Xem bản sách · in ra giấy / PDF
+                </button>
+              </div>
+            )}
             {view.t === 'day' && day && (
               <TongQuanBuoi
                 course={course}
@@ -425,6 +440,13 @@ export default function CoursePage({ course, lessonExtra }: {
                     <Clock size={13} className="inline" style={{ marginTop: -2 }} /> ~{lesson.minutes} phút
                   </span>
                 </div>
+                {day && (
+                  <div className={s.nutSach}>
+                    <button type="button" className={s.linkBtn} onClick={() => go({ t: 'sach', n: day.n })}>
+                      <BookOpen size={14} className="inline" style={{ marginTop: -2 }} /> Bản sách cả {course.dayName(day.n).toLowerCase()} (in được)
+                    </button>
+                  </div>
+                )}
                 {lessonExtra?.(lesson, day?.n)}
                 {/* Video theo MỤC (videoNeo): danh sách "🎬 Video của bài" + video đầu bài; video của
                     từng mục chèn ngay dưới tiêu đề mục đó (Blocks › sauTieuDe). Chưa tải nội dung bài

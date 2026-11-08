@@ -100,10 +100,45 @@ export type Block =
   /** Công cụ chia động từ & tính từ tiếng Nhật (bảng quy tắc + ô tra nhanh + bài tập) — nhat/ChiaDongTu.tsx. */
   | { t: 'chia' }
   /** Ôn tập bằng thẻ — 8 cách ôn kiểu Quizlet trên từ vựng/chữ Hán/ngữ pháp cả khoá Dekiru — nhat/OnTapThe.tsx. */
-  | { t: 'onthe' };
+  | { t: 'onthe'; bai?: number[] }
+  /** 🎌 Luyện bảng chữ cái hiragana/katakana kiểu Tofugu Kana Quiz / kana.pro — nhat/LuyenKana.tsx. */
+  | { t: 'luyenKana' }
+  /**
+   * 🖼️ Thẻ từ CÓ HÌNH (09/11/2026 — "có hình ảnh con vật, đồ vật… để học từ vựng"). `anh` = TÊN hình trong
+   * `scripts/hinh/fluent-catalog.json` (Microsoft Fluent Emoji, MIT — vd. `dog`, `cook`, `bento-box`) hoặc
+   * URL https. Ảnh phục vụ từ media.cuongthai.com/hoc/hinh/<tên>.webp — chạy `npx tsx scripts/hinh/len-r2.mts`
+   * sau khi thêm hình mới. Chạm thẻ = nghe từ; nút "Che nghĩa" để tự kiểm tra.
+   */
+  | { t: 'hinh'; title?: string; items: { anh: string; w: string; ro: string; vi: string }[] }
+  /** 🎬 Cảnh minh hoạ: vài hình đứng cạnh nhau + lời dẫn (bối cảnh hội thoại, "言ってみよう"). */
+  | { t: 'canh'; anh: string[]; caption: string }
+  /**
+   * 📽️ Bộ slide kiểu bài giảng trên lớp (giống slide của cô): xem từng slide, phím ←/→, toàn màn hình,
+   * in cả bộ (mỗi slide một trang). Chữ trong slide theo cú pháp Inline (`{漢字|かな}`, `**đậm**`).
+   */
+  | { t: 'slides'; id: string; title: string; slides: Slide[] };
+
+/**
+ * Một slide. `tieuDe` = dòng tiêu đề (dải vàng như slide lớp). `anh` = 0–4 hình (tên Fluent Emoji / URL) đặt
+ * to ở giữa; `nhan` = chữ dưới từng hình (cùng thứ tự). `dong` = các dòng nội dung; `ro` = romaji ứng với
+ * từng dòng (cùng chỉ số, bỏ trống được). `bang` = bảng nhỏ. `hoi`/`dap` = câu hỏi giáo viên + đáp án (ẩn,
+ * bấm mới hiện). `ghi` = ghi chú giảng bằng tiếng Việt (hiện dưới slide, không vào bản in slide).
+ */
+export type Slide = {
+  tieuDe: string;
+  anh?: string[];
+  nhan?: string[];
+  dong?: string[];
+  ro?: string[];
+  bang?: { head: string[]; rows: string[][] };
+  hoi?: string;
+  dap?: string;
+  ghi?: string;
+};
 
 /** `dan` = người dẫn bài nghe (giới thiệu, đánh số câu) — giọng riêng, khác mọi nhân vật. */
-export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'zh-nu' | 'zh-nam' | 'dan';
+/** `ja2-*` = giọng THỨ HAI cùng giới (09/11/2026) — trang tự gán cho người thứ hai cùng giới trong một hội thoại/bài nghe. */
+export type Voice = 'uk-nu' | 'uk-nam' | 'us-nu' | 'us-nam' | 'ja-nu' | 'ja-nam' | 'ja2-nu' | 'ja2-nam' | 'zh-nu' | 'zh-nam' | 'dan';
 /** Nhân vật trong hội thoại — mỗi vai một hình và một giọng cố định. */
 export type Role = 'examiner' | 'candidate' | 'a' | 'b' | 'c';
 

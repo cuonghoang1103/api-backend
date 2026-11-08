@@ -1223,7 +1223,7 @@ const KANJI: Lesson = {
         { text: '{私|わたし}はベトナム{人|じん}です。', ro: 'Watashi wa Betonamujin desu.', vi: 'Tôi là người Việt Nam.' },
         { text: 'お{国|くに}はどちらですか。', ro: 'Okuni wa dochira desu ka.', vi: 'Bạn đến từ nước nào?' },
         { text: 'キムさんは{韓国人|かんこくじん}です。', ro: 'Kimu-san wa kankokujin desu.', vi: 'Anh Kim là người Hàn Quốc.' },
-        { text: 'ワンさんは{中国|ちゅうごく}の{大学|だいがく}の{学生|がくせい}です。', ro: 'Wan-san wa Chuugoku no daigaku no gakusei desu.', vi: 'Anh Vương là sinh viên đại học ở Trung Quốc.' },
+        { text: 'ワンさんは{中国|ちゅうごく}の{大学|だいがく}の{学生|がくせい}です。', ro: 'Wan-san wa Chuugoku no daigaku no gakusei desu.', vi: 'Chị Vương là sinh viên đại học ở Trung Quốc.' },
         { text: 'リンさんは{日本語学校|にほんごがっこう}の{学生|がくせい}です。', ro: 'Rin-san wa nihongo gakkou no gakusei desu.', vi: 'Linh là học viên trường tiếng Nhật.' },
         { text: '{先生|せんせい}は{日本人|にほんじん}です。', ro: 'Sensei wa nihonjin desu.', vi: 'Cô giáo là người Nhật.' },
         { text: 'お{仕事|しごと}は{何|なん}ですか。', ro: 'Oshigoto wa nan desu ka.', vi: 'Bạn làm nghề gì?' },
@@ -1717,7 +1717,7 @@ const NOI: Lesson = {
         {
           en: 'ワットさんはアメリカ{人|じん}です。おおさか{大学|だいがく}の{先生|せんせい}です。61さいです。ワットさんのしゅみはおんがくとスポーツです。きむらさんのしゅみもスポーツです。',
           ro: 'Watto-san wa Amerika-jin desu. Ōsaka daigaku no sensei desu. Rokujūissai desu. Watto-san no shumi wa ongaku to supōtsu desu. Kimura-san no shumi mo supōtsu desu.',
-          vi: 'Ông Watt là người Mỹ. Ông là giáo viên ĐH Osaka. 61 tuổi. Sở thích của ông Watt là âm nhạc và thể thao. Sở thích của ông Kimura cũng là thể thao. — Chú ý: 61 = ろくじゅう**いっ**さい; しゅみ**も**.',
+          vi: 'Ông Watt là người Mỹ. Ông là giáo viên ĐH Osaka. 61 tuổi. Sở thích của ông Watt là âm nhạc và thể thao. Sở thích của chị Kimura cũng là thể thao. — Chú ý: 61 = ろくじゅう**いっ**さい; しゅみ**も**.',
         },
       ],
     },

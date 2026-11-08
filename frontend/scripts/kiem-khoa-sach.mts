@@ -9,7 +9,7 @@
  * câu tiếng Nhật/Trung thiếu romaji/pinyin (`ro`), giọng đọc lệch thứ tiếng, khối
  * luyện phát âm thiếu phiên âm, bài thiếu mục tiêu/thời lượng.
  */
-import { readdirSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -47,6 +47,12 @@ function quetChu(x: unknown, o: string) {
   if (typeof x === 'string') return markup(x, o);
   if (Array.isArray(x)) x.forEach((y, i) => quetChu(y, `${o}[${i}]`));
   else if (x && typeof x === 'object') for (const [k, v] of Object.entries(x)) quetChu(v, `${o}.${k}`);
+}
+/** Tên hình (khối hinh/canh/slides) phải có trong danh mục Fluent Emoji — scripts/hinh/fluent-catalog.json ở gốc repo. */
+const DANH_MUC_HINH: Record<string, string> = JSON.parse(readFileSync(join(import.meta.dirname, '../../scripts/hinh/fluent-catalog.json'), 'utf8')).hinh;
+function ktAnh(a: unknown, o: string) {
+  if (typeof a !== 'string' || !a) return loi.push(`${o}: hình thiếu tên`);
+  if (!/^https:\/\//.test(a) && !DANH_MUC_HINH[a]) loi.push(`${o}: hình "${a}" không có trong danh mục (scripts/hinh/fluent-catalog.json)`);
 }
 const bt = (id: unknown, o: string) => {
   if (typeof id !== 'string' || !id) return loi.push(`${o}: bài tập thiếu id`);
@@ -115,6 +121,20 @@ for (const n of so) {
         case 'readkanji': bt(b.id, ob); for (const x of b.items) if (!x.ro || !x.vi) loi.push(`${ob}: thiếu ro/vi`); break;
         case 'speak': case 'write': case 'dictation': case 'essay': bt(b.id, ob); break;
         case 'alphabet': for (const g of b.groups) for (const x of g.letters) if (!x.l || !x.ipa) loi.push(`${ob}: chữ thiếu l/ipa`); break;
+        case 'hinh':
+          for (const x of b.items) { ktAnh(x.anh, ob); if (!x.w || !x.vi) loi.push(`${ob}: thẻ hình thiếu w/vi`); canRo(x.w, x.ro, ob); }
+          break;
+        case 'canh': for (const a of b.anh) ktAnh(a, ob); if (!b.caption) loi.push(`${ob}: cảnh thiếu caption`); break;
+        case 'slides':
+          bt(b.id, ob);
+          if (!b.slides?.length) loi.push(`${ob}: bộ slide rỗng`);
+          for (const [k, x] of (b.slides ?? []).entries()) {
+            if (!x.tieuDe) loi.push(`${ob} slide ${k + 1}: thiếu tieuDe`);
+            for (const a of x.anh ?? []) ktAnh(a, `${ob} slide ${k + 1}`);
+            if (x.nhan && x.anh && x.nhan.length > x.anh.length) loi.push(`${ob} slide ${k + 1}: nhan nhiều hơn anh`);
+            (x.dong ?? []).forEach((d: string, j: number) => canRo(d, x.ro?.[j], `${ob} slide ${k + 1} dòng ${j + 1}`));
+          }
+          break;
         case 'hanlop': case 'chia': if (khoa !== 'dekiru') loi.push(`${ob}: khối ${b.t} chỉ dùng cho khoá Dekiru`); break;
       }
     });

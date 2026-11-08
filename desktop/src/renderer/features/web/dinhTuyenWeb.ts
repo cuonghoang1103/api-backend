@@ -82,7 +82,11 @@ const TUYEN_KHAC: readonly TuyenWeb[] = [
   /* ── JP & CH — mục riêng dưới IELTS (05/10/2026), cùng bộ khung sách-học. ── */
   { mau: '/language/:code/jp', nap: () => import('@/app/language/[code]/jp/page') },
   { mau: '/language/:code/ch', nap: () => import('@/app/language/[code]/ch/page') },
-  { mau: '/jp', nap: () => import('@/app/language/[code]/jp/page'), thamSoCo: { code: 'ja' } },
+  // 09/11/2026: mục JP mở THẲNG khoá theo lớp (Dekiru Bài 0–15 + tiếp lên N2) — người dùng: "JP này giống
+  // 100% Bài giảng trên lớp mà? hãy học theo kiểu trên lớp". Khoá JLPT tự soạn cũ (Bài 0–5) dời về /jp/jlpt.
+  { mau: '/jp', nap: () => import('@/app/language/[code]/dekiru/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page'), thamSoCo: { code: 'ja' } },
+  { mau: '/jp/jlpt', nap: () => import('@/app/language/[code]/jp/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/tren-lop', nap: () => import('@/app/language/[code]/dekiru/page'), thamSoCo: { code: 'ja' } },
   { mau: '/jp/tren-lop/sach-goc', nap: () => import('@/app/language/[code]/dekiru/sach-goc/page'), thamSoCo: { code: 'ja' } },
   { mau: '/ch', nap: () => import('@/app/language/[code]/ch/page'), thamSoCo: { code: 'zh' } },

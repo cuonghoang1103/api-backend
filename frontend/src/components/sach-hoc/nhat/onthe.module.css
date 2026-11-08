@@ -16,7 +16,7 @@
 .count { font-size: 13px; color: var(--lh-ink-3); font-variant-numeric: tabular-nums; }
 
 /* Tab 8 cách ôn */
-.modes { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.modes { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 6px; }
 .mode {
   font: inherit; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px;
   padding: 9px 4px; border-radius: 12px; border: 1px solid var(--lh-line); background: var(--lh-surface); color: var(--lh-ink);

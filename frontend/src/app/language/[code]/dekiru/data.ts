@@ -109,6 +109,50 @@ const OUTLINE: { n: number; title: string }[] = [
   { n: 13, title: '私のおすすめ — Gợi ý của tôi' },
   { n: 14, title: '国の習慣 — Phong tục nước tôi' },
   { n: 15, title: 'テレビ・雑誌から — Từ TV, tạp chí' },
+  // ─── TIẾP SAU SÁCH (09/11/2026) — cùng khuôn lớp, tự soạn, tới N2. Xem SOAN-BAI.md mục 8. ───
+  // N4 (phần sách 初級 chưa dạy) — kiểm tra chặng ở Bài 20, thi thử N4 ở Bài 25.
+  { n: 16, title: 'アルバイト — Làm thêm · N4: thể khả năng, thể ý chí, 〜つもり' },
+  { n: 17, title: '旅行の計画 — Kế hoạch du lịch · N4: 〜ば, 〜なら, 〜し, 〜すぎる, 〜やすい・にくい' },
+  { n: 18, title: '引っ越し — Chuyển nhà · N4: 〜てあげる・もらう・くれる, 〜ておく, 〜てある' },
+  { n: 19, title: '失敗 — Sự cố · N4: 〜てしまう, 〜てみる, 〜ところ, 〜のに' },
+  { n: 20, title: 'うわさ — Tin đồn · N4: 〜そう, 〜ようだ・みたい・らしい, 〜かもしれない, 〜はず' },
+  { n: 21, title: '目標 — Mục tiêu · N4: 〜ために, 〜ように, 〜ようになる・する, 〜ことにする・なる' },
+  { n: 22, title: '困ったこと — Chuyện phiền · N4: thể bị động, 〜ばかり' },
+  { n: 23, title: '子どもの頃 — Thời thơ ấu · N4: thể sai khiến, mệnh lệnh, 〜ように言う' },
+  { n: 24, title: '会社訪問 — Thăm công ty · N4: kính ngữ, khiêm nhường ngữ, 〜かどうか' },
+  { n: 25, title: 'N4 総復習 — Ôn tập & thi thử N4' },
+  // N3 — kiểm tra chặng ở Bài 30, 35; thi thử N3 ở Bài 40.
+  { n: 26, title: '留学生活 — Đời du học · N3: 〜うちに, 〜間に, 〜最中に, 〜たとたん' },
+  { n: 27, title: 'ニュース — Tin tức · N3: 〜せいで, 〜おかげで, 〜によって, 〜ため' },
+  { n: 28, title: '意見を言う — Nêu ý kiến · N3: 〜くせに, 〜ものの, 〜にもかかわらず, 〜に対して' },
+  { n: 29, title: '健康 — Sức khoẻ · N3: 〜ほど, 〜くらい, 〜ば〜ほど, 〜さえ〜ば, 〜うえに' },
+  { n: 30, title: '伝言 — Nhắn lại · N3: 〜って, 〜とのことだ, 〜ということだ, 〜にとって' },
+  { n: 31, title: '推理 — Suy luận · N3: 〜に違いない, 〜はずがない, 〜わけだ・わけではない' },
+  { n: 32, title: '昔と今 — Xưa và nay · N3: 〜ものだ, 〜ことだ, 〜につれて, 〜一方だ' },
+  { n: 33, title: '調査 — Khảo sát · N3: 〜によると, 〜に基づいて, 〜をもとに, 〜とともに' },
+  { n: 34, title: '習慣 — Thói quen · N3: 〜がちだ, 〜気味, 〜っぱなし, 〜としたら' },
+  { n: 35, title: 'インターン — Thực tập · N3: 〜させられる, 〜させていただく, 〜ばよかった' },
+  { n: 36, title: '文化の違い — Khác biệt văn hoá · N3: 〜というのは, 〜とは, 〜やら, 〜にしても' },
+  { n: 37, title: '職場の日本語 — Tiếng Nhật công sở · N3: kính ngữ đầy đủ, email, điện thoại' },
+  { n: 38, title: '読解 N3 — Đọc hiểu: báo, thông báo, email; chiến thuật làm đề' },
+  { n: 39, title: '聴解 N3 — Nghe hiểu: nghe ý chính, nghe chi tiết; chiến thuật làm đề' },
+  { n: 40, title: 'N3 総復習 — Ôn tập & thi thử N3' },
+  // N2 — kiểm tra chặng ở Bài 45, 50; thi thử N2 ở Bài 55.
+  { n: 41, title: '就職活動 — Tìm việc · N2: 〜際に, 〜に際して, 〜にあたって, 〜をきっかけに' },
+  { n: 42, title: '社会問題 — Vấn đề xã hội · N2: 〜に限らず, 〜をはじめ, 〜を問わず, 〜にかかわらず' },
+  { n: 43, title: '評価 — Đánh giá · N2: 〜からすると, 〜にしては, 〜わりに, 〜はともかく' },
+  { n: 44, title: '結果 — Kết cục · N2: 〜あげく, 〜末に, 〜きり, 〜次第' },
+  { n: 45, title: '義務と感情 — Bổn phận & cảm xúc · N2: 〜ざるを得ない, 〜ずにはいられない, 〜てたまらない' },
+  { n: 46, title: 'リスク — Rủi ro · N2: 〜得る, 〜かねない, 〜かねる, 〜おそれがある' },
+  { n: 47, title: '決意 — Quyết tâm · N2: 〜しかない, 〜ほかない, 〜からには, 〜以上は' },
+  { n: 48, title: '原因と結果 — Nhân quả · N2: 〜ばかりに, 〜ことから, 〜だけに, 〜ものだから' },
+  { n: 49, title: '変化 — Biến đổi · N2: 〜一方で, 〜に伴って, 〜かと思うと, 〜や否や' },
+  { n: 50, title: '比較 — So sánh · N2: 〜に比べて, 〜に反して, 〜反面, 〜どころか' },
+  { n: 51, title: '強調 — Nhấn mạnh · N2: 〜さえ, 〜すら, 〜こそ, 〜ものがある, 〜ことか' },
+  { n: 52, title: 'レポート — Báo cáo, luận · N2: 〜上で, 〜面で, 〜である, 〜べきだ, 〜ねばならない' },
+  { n: 53, title: 'ビジネスメール — Email công việc · N2: kính ngữ nâng cao, 〜させていただきます' },
+  { n: 54, title: '読解・聴解 N2 — Đọc & nghe N2: văn bình luận, so sánh, nghe tổng hợp' },
+  { n: 55, title: 'N2 総復習 — Ôn tập & thi thử N2' },
 ];
 
 export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
@@ -121,7 +165,7 @@ export const DAYS: Day[] = OUTLINE.map(({ n, title }) => ({
 export const DEKIRU = defineCourse({
   stage: 'dekiru1',
   storageKey: 'dekiru-v1',
-  title: 'Tiếng Nhật できる日本語 初級 · Bài 0–15',
+  title: 'Tiếng Nhật できる日本語 · Bài 0–15 theo sách → N2',
   backHref: '/language/ja',
   unit: 'Bài',
   shownNum: (n) => n - 1,
@@ -136,9 +180,10 @@ export const DEKIRU = defineCourse({
   days: DAYS,
   // Chữ Hán: chữ của lớp (soạn tay) + chỉ mục từ đi chung (sinh lúc build) — tải chậm, 3 chunk.
   kanji: () =>
-    Promise.all([import('./bai/hanTu'), import('./bai/hanLop'), import('./bai/kanjiIndex')]).then(([h, l, k]) => ({
+    Promise.all([import('./bai/hanTu'), import('./bai/hanLop'), import('./bai/kanjiIndex'), import('./bai/hanTuTiep')]).then(([h, l, k, t]) => ({
       ...k.KANJI_INDEX,
-      han: h.HAN_TU,
+      // Chữ của lớp (Bài 1–15) thắng khi trùng — bảng tiếp sau sách chỉ bổ sung chữ mới.
+      han: { ...t.HAN_TU_TIEP, ...h.HAN_TU },
       lop: l.LOP,
     })),
   // Manifest khoá theo số tệp baiN; buổi n = Bài n − 1.
@@ -154,5 +199,5 @@ export const DEKIRU = defineCourse({
   kindHue: {},
   voice: 'ja-nu',
   tutor: { name: 'Gia sư tiếng Nhật', mon: 'nhat' },
-  planContext: 'Trang kế hoạch học tiếng Nhật theo giáo trình できる日本語 初級, Bài 0–15 (môn JPD113/JPD123).',
+  planContext: 'Trang kế hoạch học tiếng Nhật: Bài 0–15 theo giáo trình できる日本語 初級 (môn JPD113/JPD123), Bài 16–55 tiếp cùng khuôn lớp lên N4 → N3 → N2 (thi thử ở Bài 25, 40, 55).',
 });

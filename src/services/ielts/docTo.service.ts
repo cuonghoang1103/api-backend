@@ -37,6 +37,10 @@ export const GIONG = {
   // Khoá tiếng Nhật (Dekiru, JPD113/123) dùng chung đường này.
   'ja-nu': 'ja-JP-Wavenet-A',
   'ja-nam': 'ja-JP-Wavenet-C',
+  // Giọng THỨ HAI cùng giới (09/11/2026): hội thoại/bài nghe có 2 người cùng giới (マルコ + ナタポン…) từng
+  // đọc chung một giọng ⇒ không biết ai nói. Trang tự gán người thứ hai sang ja2-* (sach-hoc/Blocks2 tachGiong).
+  'ja2-nu': 'ja-JP-Wavenet-B',
+  'ja2-nam': 'ja-JP-Wavenet-D',
   // Khoá JP/CH (05/10/2026): tiếng Trung phổ thông.
   'zh-nu': 'cmn-CN-Wavenet-A',
   'zh-nam': 'cmn-CN-Wavenet-B',
@@ -53,6 +57,8 @@ const GIONG_AZURE: Record<Giong, string> = {
   'us-nam': 'en-US-AndrewNeural',
   'ja-nu': 'ja-JP-NanamiNeural',
   'ja-nam': 'ja-JP-KeitaNeural',
+  'ja2-nu': 'ja-JP-AoiNeural',
+  'ja2-nam': 'ja-JP-DaichiNeural',
   'zh-nu': 'zh-CN-XiaoxiaoNeural',
   'zh-nam': 'zh-CN-YunxiNeural',
   dan: 'en-GB-LibbyNeural',

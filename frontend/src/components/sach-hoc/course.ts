@@ -238,7 +238,11 @@ export function lessonText(l: Lesson): string {
       case 'build': out.push(`${b.title}: ${b.items.map((x) => `${x.vi} → ${x.answer.join('')}`).join(' / ')}`); break;
       case 'hanlop': out.push(`Thẻ chữ Hán của lớp — Bài ${b.bai}.`); break;
       case 'chia': out.push('Công cụ chia động từ & tính từ: nhóm I/II/III, thể ます/て/た/ない/từ điển/普通形, tính từ い/な.'); break;
-      case 'onthe': out.push('Ôn tập bằng thẻ: từ vựng, chữ Hán của lớp, mẫu ngữ pháp Bài 1–15 — thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra 20 câu, ôn từ sai theo hộp.'); break;
+      case 'onthe': out.push(`Ôn tập bằng thẻ: từ vựng, chữ Hán của lớp, mẫu ngữ pháp ${b.bai?.length ? `Bài ${b.bai.join(', ')}` : 'Bài 1–15'} — thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra 20 câu, ôn từ sai theo hộp.`); break;
+      case 'luyenKana': out.push('Luyện bảng chữ cái hiragana/katakana: nhìn chữ gõ romaji, nhìn romaji chọn chữ, nghe chọn chữ, bảng tiến độ từng chữ.'); break;
+      case 'hinh': out.push(`${b.title ?? 'Từ vựng bằng hình'}: ${b.items.map((x) => `${strip(x.w)} = ${x.vi}`).join('; ')}`); break;
+      case 'canh': out.push(`Cảnh: ${strip(b.caption)}`); break;
+      case 'slides': out.push(`Slide "${b.title}": ${b.slides.map((x) => [x.tieuDe, ...(x.dong ?? []), x.hoi].filter(Boolean).map((t) => strip(t as string)).join(' · ')).join(' / ')}`); break;
     }
   }
   return out.join('\n').slice(0, 3900);

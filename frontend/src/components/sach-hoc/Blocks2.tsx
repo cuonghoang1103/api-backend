@@ -5,7 +5,7 @@
  * AI chấm, biểu đồ Task 1, luyện nói có ghi âm. Tách khỏi Blocks.tsx để mỗi
  * tệp giữ được một việc — Blocks.tsx là phần "sách" (lý thuyết + bài tập).
  */
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Play, Square, Eye, EyeOff, Mic, Volume2, Sparkles, RotateCcw } from 'lucide-react';
 import api from '@/lib/api';
 import ChatMarkdown from '@/components/chat/ChatMarkdown';
@@ -22,11 +22,14 @@ import { useMicro } from './useMicro';
 import HanLop from './HanLop';
 import PhatAm from './PhatAm';
 import VietHanZh from './VietHanZh';
+import { HinhTu, Canh, BoSlide } from './HinhSlide';
 import s from './course.module.css';
 
 // Công cụ chia động từ chỉ có ở một mục tra cứu — tách chunk riêng.
 const ChiaDongTu = dynamic(() => import('./nhat/ChiaDongTu'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
 // Ôn tập bằng thẻ: kèm ~330 KB dữ liệu sinh (dekiru/bai/onTheData.ts) ⇒ chỉ tải khi mở mục.
+// Luyện bảng chữ cái kiểu Tofugu / kana.pro (09/11/2026).
+const LuyenKana = dynamic(() => import('./nhat/LuyenKana'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ luyện bảng chữ…</div> });
 const OnTapThe = dynamic(() => import('./nhat/OnTapThe'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải bộ thẻ…</div> });
 // Tra cứu từ vựng cả khoá — cũng chỉ ở một mục tra cứu.
 const TraTuVung = dynamic(() => import('./TraTuVung'), { ssr: false, loading: () => <div className={s.soonBox} aria-busy="true">Đang tải…</div> });
@@ -59,6 +62,23 @@ function useVoiceFor() {
     if (who && /^(Cô|cô|李老师)/.test(who)) return `${nn}-nu`;
     return role === 'examiner' || role === 'b' ? `${nn}-nam` : `${nn}-nu`;
   };
+}
+
+/**
+ * Hai người CÙNG GIỚI trong một hội thoại/bài nghe tiếng Nhật (マルコ + ナタポン, パク + ワン…) từng đọc chung
+ * một giọng máy ⇒ người học không biết ai đang nói (09/11/2026). Người thứ hai (tính theo tên, theo thứ tự xuất
+ * hiện) cùng giọng gốc ⇒ đổi sang giọng thứ hai `ja2-*`; từ người thứ ba lại xoay vòng. Chỉ áp cho tiếng Nhật.
+ */
+export function tachGiong(voices: (Voice | undefined)[], whos: (string | undefined)[]): (Voice | undefined)[] {
+  const thuTu = new Map<string, string[]>(); // giọng gốc → các tên đã gặp
+  return voices.map((v, i) => {
+    const who = whos[i]?.trim();
+    if (!v || !who || !/^ja-(nu|nam)$/.test(v)) return v;
+    const ds = thuTu.get(v) ?? [];
+    if (!ds.includes(who)) ds.push(who);
+    thuTu.set(v, ds);
+    return ds.indexOf(who) % 2 === 1 ? (v.replace('ja-', 'ja2-') as Voice) : v;
+  });
 }
 
 /** Nhân vật hoạt hình vẽ bằng SVG — không tải ảnh, sáng/tối đều rõ. */
@@ -113,6 +133,8 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
   const [plays, setPlays] = useState(0);
   const [show, setShow] = useState(false);
   const [line, setLine] = useState<number | null>(null);
+  // Người thứ hai cùng giới ⇒ giọng thứ hai (tachGiong).
+  const giongNghe = useMemo(() => tachGiong(b.lines.map((l) => l.voice), b.lines.map((l) => l.who)), [b.lines]);
   /** Đang ở đâu trong băng: lời dẫn đầu / hội thoại / lời kết (chỉ khi có `b.dan`). */
   const [doan, setDoan] = useState<'mo' | 'bai' | 'ket' | null>(null);
   /** Hết giờ đọc câu hỏi lúc nào (đang ở khoảng im lặng) — null khi không chờ. */
@@ -121,7 +143,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
 
   // Bấm phát lúc đang phát = phát LẠI TỪ ĐẦU (người học muốn nghe lại); dừng có nút riêng.
   const start = () => {
-    const bai = b.lines.map((l) => ({ text: l.text, voice: l.voice }));
+    const bai = b.lines.map((l, i) => ({ text: l.text, voice: giongNghe[i] }));
     const { mo, ket } = b.dan ? dungLoiDan({ ...b.dan, tieuDe: b.title }) : { mo: [], ket: [] };
     const all: Clip[] = [...mo, ...bai, ...ket];
     play(all, () => { setPlaying(false); setDoan(null); setCho(null); }, {
@@ -174,7 +196,7 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
                 type="button"
                 className={s.speak}
                 aria-label="Nghe câu này"
-                onClick={() => { play({ text: l.text, voice: l.voice }, () => setLine(null)); setLine(i); setPlaying(false); setDoan(null); }}
+                onClick={() => { play({ text: l.text, voice: giongNghe[i] }, () => setLine(null)); setLine(i); setPlaying(false); setDoan(null); }}
               >
                 <Volume2 size={14} />
               </button>
@@ -194,7 +216,9 @@ function Listen({ b }: { b: Extract<Block, { t: 'listen' }> }) {
 /* ── Hội thoại có nhân vật ───────────────────────────────────────────── */
 
 function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
-  const voiceFor = useVoiceFor();
+  const voiceGoc = useVoiceFor();
+  const giongThoai = useMemo(() => tachGiong(b.lines.map((l) => voiceGoc(l.role, l.who)), b.lines.map((l) => l.who)), [b.lines, voiceGoc]);
+  const voiceFor = (_role: Role, _who: string | undefined, i: number) => giongThoai[i];
   const [on, setOn] = useState<number | null>(null);
   const [all, setAll] = useState(false);
   useEffect(() => () => stopAudio(), []);
@@ -204,7 +228,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
     // MỘT lượt phát cho cả đoạn, tô sáng người đang nói qua onClip. (Trước 03/10
     // là vòng lặp chờ từng câu — bị nút khác chen vào thì vòng lặp tưởng câu đã
     // xong và tự phát tiếp câu sau, đè lên tiếng của nút kia.)
-    play(b.lines.map((l) => ({ text: l.text, voice: voiceFor(l.role, l.who) })), () => { setAll(false); setOn(null); }, { onClip: (i) => setOn(i) });
+    play(b.lines.map((l, i) => ({ text: l.text, voice: voiceFor(l.role, l.who, i) })), () => { setAll(false); setOn(null); }, { onClip: (i) => setOn(i) });
     setAll(true);
     setOn(0);
   };
@@ -227,7 +251,7 @@ function Dialogue({ b }: { b: Extract<Block, { t: 'dialogue' }> }) {
               <button
                 type="button"
                 className={s.dText}
-                onClick={() => { play({ text: l.text, voice: voiceFor(l.role, l.who) }, () => setOn(null)); setOn(i); }}
+                onClick={() => { play({ text: l.text, voice: voiceFor(l.role, l.who, i) }, () => setOn(null)); setOn(i); }}
               >
                 <Inline text={l.text} />
               </button>
@@ -610,8 +634,12 @@ export function renderBlock2(b: Block, i: number) {
     case 'write': return ngonNguKhoa() === 'zh' ? <VietHanZh key={b.id} b={b} /> : <WriteBlock key={b.id} b={b} />;
     case 'hanlop': return <HanLop key={`hanlop-${b.bai}`} b={b} />;
     case 'chia': return <ChiaDongTu key="chia" />;
-    case 'onthe': return <OnTapThe key="onthe" />;
+    case 'onthe': return <OnTapThe key={`onthe-${b.bai?.join(',') ?? 'all'}`} baiCo={b.bai} />;
+    case 'luyenKana': return <LuyenKana key="luyenKana" />;
     case 'vocabAll': return <TraTuVung key="vocabAll" />;
+    case 'hinh': return <HinhTu key={i} b={b} />;
+    case 'canh': return <Canh key={i} b={b} />;
+    case 'slides': return <BoSlide key={b.id} b={b} />;
     default: return null;
   }
 }

@@ -106,18 +106,18 @@ export default {
     /* ── Chương 11 — Nền tảng GitHub ── */
     'git-11-0-slides': { yt: 'NUELGzIHT-I', credit: "GitHub — The ultimate beginner's guide to GitHub in 2026", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-00-slide-chuong-11-2a86bef3.mp4' }, defaultVideoTrack: 'VI'},
     'git-11-1-issue-projects-gh': { yt: 'c67GaAkf1BE', credit: "GitHub — How to use GitHub issues and projects | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-01-issue-projects-gh-f1bf49b3.mp4' }, defaultVideoTrack: 'VI'},
-    'git-11-2-actions': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker" },
-    'git-11-4-bao-mat-kho': { yt: 'zhxXaFzzJYA', credit: "GitHub — Getting started with GitHub security | GitHub for Beginners" },
+    'git-11-2-actions': { yt: 'R8_veQiYBjI', credit: "TechWorld with Nana — GitHub Actions Tutorial - Basic Concepts and CI/CD Pipeline with Docker", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-02-actions-2b682281.mp4' }, defaultVideoTrack: 'VI'},
+    'git-11-4-bao-mat-kho': { yt: 'zhxXaFzzJYA', credit: "GitHub — Getting started with GitHub security | GitHub for Beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/12-nen-tang-github/12-03-bao-mat-kho-tron-5c9c5ad9.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — Hook, ký commit & tự động hoá ── */
     'git-12-0-slides': { yt: '1OFiiPretCM', credit: "GitGuardian — What are GitHooks? Explained in 5 minutes", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-00-slide-chuong-12-f6162b42.mp4' }, defaultVideoTrack: 'VI'},
     'git-12-1-hooks': { yt: 'ObksvAZyWdo', credit: "GitGuardian — Complete guide to GitHooks - Creating your own pre-commit hooks", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-01-hooks-1a36fcde.mp4' }, defaultVideoTrack: 'VI'},
     'git-12-2-ky-commit': { yt: '4166ExAnxmo', credit: "Nick Janetakis — Signing and Verifying Git Commits on the Command Line and GitHub", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-02-ky-commit-d1963ef4.mp4' }, defaultVideoTrack: 'VI'},
-    'git-12-4-chinh-sach-may-chu': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets" },
+    'git-12-4-chinh-sach-may-chu': { yt: 'ZTbM-h9RZOo', credit: "Mickey Gousset — Introduction to GitHub Actions - Part 6 - Repository Rulesets", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/13-hook-ky/13-03-chinh-sach-may-chu-tron-fbb170f1.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Cứu hộ & Git trong quy trình thật ── */
     'git-13-0-slides': { yt: 'FsSTd4Vcm90', credit: "International PHP Conference — Git: Undoing Things and recovering from Mistakes | Tobias Günther | IPC Spring 2018", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-00-slide-chuong-13-3f9c6329.mp4' }, defaultVideoTrack: 'VI'},
-    'git-13-1-cuu-ho': { yt: 'lX9hsdsAeTk', credit: "freeCodeCamp.org — How to Undo Mistakes With Git Using the Command Line" },
+    'git-13-1-cuu-ho': { yt: 'lX9hsdsAeTk', credit: "freeCodeCamp.org — How to Undo Mistakes With Git Using the Command Line", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-01-cuu-ho-tron-7f3e75ba.mp4' }, defaultVideoTrack: 'VI'},
     'git-13-2-quy-trinh-that': { yt: 'jhtbhSpV5YA', credit: "Ako Dev — How to use GIT when working with a team?", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/14-cuu-ho/14-03-quy-trinh-that-25f276f6.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Git hằng ngày trong công cụ: VS Code, giao diện đồ hoạ & cấu hình ── */

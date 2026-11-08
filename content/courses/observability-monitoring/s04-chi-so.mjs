@@ -1028,6 +1028,11 @@ users we have", it is not a label. It is a log field.</code></pre>
   <span class="lc-body"><span class="lc-title">Robust Perception — cardinality is key</span><span class="lc-sub">The classic write-up on why the count is a product, from the people who ran Prometheus in production longest.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-4-metrics-prometheus" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.4: metrics, and the label that ate the memory</span><span class="lc-sub">A /metrics in fifteen lines, reading a histogram, RED — and the cardinality incident measured at 1k / 10k / 100k label values.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1173,6 +1178,11 @@ trường trong log.</code></pre>
   <span class="lc-body"><span class="lc-title">Robust Perception — lực lượng là mấu chốt</span><span class="lc-sub">Bài viết kinh điển về việc vì sao con số ấy là một tích, từ những người vận hành Prometheus trên production lâu nhất.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-4-metrics-prometheus" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.4: metric, và cái nhãn ngốn bộ nhớ</span><span class="lc-sub">/metrics trong mười lăm dòng, đọc histogram, RED — và sự cố lực lượng nhãn đo ở 1 nghìn / 10 nghìn / 100 nghìn giá trị.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

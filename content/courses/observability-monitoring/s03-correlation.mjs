@@ -461,6 +461,11 @@ Compare the version that does NOT work:
   <span class="lc-body"><span class="lc-title">Node.js — async_hooks</span><span class="lc-sub">The layer underneath: how Node tracks that one async operation caused another, which is what makes ambient context possible at all.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-2-request-id" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.2: one id through every layer</span><span class="lc-sub">route → service → repo without a reqId parameter, the cost (−4 to −6%, noise), six id generators measured, and the inbound-id rules this site runs.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -625,6 +630,11 @@ So với phiên bản KHÔNG chạy:
   <span class="lc-body"><span class="lc-title">Node.js — async_hooks</span><span class="lc-sub">Tầng bên dưới: cách Node theo dõi việc một thao tác bất đồng bộ gây ra thao tác khác, thứ làm cho ngữ cảnh bao quanh khả thi ngay từ đầu.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-2-request-id" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.2: một mã xuyên qua mọi tầng</span><span class="lc-sub">route → service → repo không cần tham số reqId, giá (−4 tới −6 %, trong nhiễu), sáu cách sinh mã đo thật, và luật mã gửi tới của website này.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

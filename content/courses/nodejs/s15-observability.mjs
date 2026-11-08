@@ -164,7 +164,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <p><strong>How cuongthai.com does it.</strong> HTTP access logs come from <code>morgan('combined')</code>, with one deliberate override worth copying: some endpoints accept a JWT in the query string for SSE streaming, and morgan's default <code>:url</code> token would write that token into the access log verbatim. The site overrides the token to strip it — the same class of leak this lesson found in pino-http, caught by someone who thought about it in advance:</p>
 <pre><code class="language-typescript">morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
   .replace(/([?&amp;](?:token|code)=)[^&amp;]+/gi, '$1[REDACTED]'));</code></pre>
-<p>Health probes are excluded via <code>skip</code>, so uptime checks every ten seconds do not drown the real traffic.</p>
+<p>The two health URLs (<code>/health</code> and <code>/api/v1/system/health</code>) are excluded via <code>skip</code>, so uptime checks every few seconds do not drown the real traffic (<code>/health/live</code> and <code>/health/ready</code> are still logged).</p>
 </div>
 
 <h3>The decision, compressed</h3>
@@ -182,6 +182,16 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-985"><span class="lc-t">Code Lab · Structured Logging</span><span class="lc-d">Turning console.log into machine-readable evidence</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 1.1: from console.log to a machine-readable line</span><span class="lc-sub">The full course on structured logs. This lesson adds the Node measurements: pino 2.4× faster than console.log because of buffering, a sync burst freezing the loop 371 ms, 486 B per pino-http line.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-5-stdout-la-mot-cai-ong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 1.5: stdout is a pipe, and pipes fill up</span><span class="lc-sub">Measured here in a real Linux container: a stalled reader leaves 10.3 MB queued inside the Node process instead of blocking it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -330,7 +340,7 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <p><strong>cuongthai.com làm thế nào.</strong> Access log HTTP đến từ <code>morgan('combined')</code>, kèm đúng một chỗ ghi đè rất đáng bắt chước: vài endpoint nhận JWT qua query string để chạy SSE, và token <code>:url</code> mặc định của morgan sẽ ghi nguyên cái JWT ấy vào access log. Site ghi đè token đó để cắt bỏ — cùng loại lỗ rò mà bài này vừa tìm thấy ở pino-http, chỉ khác là có người đã nghĩ tới trước:</p>
 <pre><code class="language-typescript">morgan.token('url', (req) =&gt; (req.originalUrl || req.url || '')
   .replace(/([?&amp;](?:token|code)=)[^&amp;]+/gi, '$1[REDACTED]'));</code></pre>
-<p>Các endpoint kiểm tra sức khoẻ được loại ra bằng <code>skip</code>, nên phép kiểm uptime chạy mỗi mười giây không nhấn chìm lưu lượng thật.</p>
+<p>Hai đường kiểm sức khoẻ (<code>/health</code> và <code>/api/v1/system/health</code>) được loại ra bằng <code>skip</code>, nên phép kiểm uptime chạy vài giây một lần không nhấn chìm lưu lượng thật (<code>/health/live</code> và <code>/health/ready</code> vẫn được ghi).</p>
 </div>
 
 <h3>Chốt lại thành quyết định</h3>
@@ -348,6 +358,16 @@ console.log có canh cấp độ bằng if            0,9ms  114.209.618 lần/g
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-985"><span class="lc-t">Code Lab · Structured Logging</span><span class="lc-d">Biến console.log thành bằng chứng máy đọc được</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-1-tu-console-toi-json" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 1.1: từ console.log tới một dòng máy đọc được</span><span class="lc-sub">Khoá chuyên về log có cấu trúc. Bài này thêm số đo Node: pino nhanh hơn console.log 2,4× nhờ bộ đệm, một loạt ghi đồng bộ đứng event loop 371 ms, 486 B mỗi dòng pino-http.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-1-5-stdout-la-mot-cai-ong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 1.5: stdout là một cái ống, và ống thì đầy được</span><span class="lc-sub">Đo ở đây trong container Linux thật: bộ đọc nghẽn để lại 10,3 MB xếp hàng trong tiến trình Node thay vì chặn nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -530,6 +550,11 @@ RateLimit-Policy: 2000;w=900</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-986"><span class="lc-t">Code Lab · Error Tracking with Sentry</span><span class="lc-d">Turning a stack trace into a tagged, searchable event</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-2-asynclocalstorage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 3.2: AsyncLocalStorage, and what it really costs</span><span class="lc-sub">This lesson reproduces the problem (3 concurrent requests, 18 anonymous lines) and measures the global-variable shortcut: 6 of 18 lines carry another request’s id.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -704,6 +729,11 @@ RateLimit-Policy: 2000;w=900</div>
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-986"><span class="lc-t">Code Lab · Error Tracking with Sentry</span><span class="lc-d">Biến một stack trace thành sự kiện có tag, tìm kiếm được</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-3-2-asynclocalstorage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 3.2: AsyncLocalStorage, và nó thật sự tốn bao nhiêu</span><span class="lc-sub">Bài này tái hiện vấn đề (3 request cùng lúc, 18 dòng không tên) và đo lối tắt biến toàn cục: 6/18 dòng mang mã của request khác.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -841,6 +871,11 @@ request chậm  giữ 1/1 (100%)</div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Log-reading commands on a VPS</span><span class="lc-d">docker logs, journalctl, grep + jq in practice</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 2.2: rotate, or the disk fills</span><span class="lc-sub">Measured here with a real container: max-size 1m × 2 files kept only 12,492 of 100,000 lines — rotate AND ship.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -970,6 +1005,11 @@ request chậm  giữ 1/1 (100%)</div>
 <div class="link-card exphub">
   <a href="/exp-hub${REF}"><span class="lc-t">Exp Hub · Lệnh đọc log trên VPS</span><span class="lc-d">docker logs, journalctl, grep + jq trong thực tế</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-2-2-xoay-vong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 2.2: xoay vòng, hoặc là đĩa đầy</span><span class="lc-sub">Đo ở đây bằng container thật: max-size 1m × 2 tệp chỉ giữ 12.492 trên 100.000 dòng — xoay vòng VÀ gửi đi.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1118,7 +1158,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p><code>/metrics</code> describes your internals: route names, error rates, memory, sometimes version strings. It should not be on the public internet. Three options, in order of preference: bind the metrics server to a second port that only the private network can reach; or keep it on the main app and block <code>/metrics</code> at nginx for non-internal IPs; or require a bearer token. <strong>Do not skip this because "there is nothing sensitive in it"</strong> — route names alone map your entire attack surface.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Honest answer: this site has <strong>no <code>/metrics</code> endpoint at all</strong> — <code>curl</code> returns 404 for every plausible path. There is no Prometheus, no Grafana, no continuous view of rate/errors/duration; incidents are noticed by a person and diagnosed from <code>docker logs</code>. What it does have is Sentry, which covers the "errors" third of RED and nothing else. And one detail worth stealing: a middleware tags each request with its route template before reporting to Sentry, precisely so Sentry transactions do not explode into one entry per dynamic id — <strong>the same cardinality discipline this lesson measured, applied to a different tool</strong>. Adding <code>prom-client</code> is the single highest-value observability upgrade this codebase could make.</p>
+<p><strong>How cuongthai.com does it.</strong> Honest answer: this site has <strong>no <code>/metrics</code> endpoint at all</strong> — <code>curl</code> returns 404 for every plausible path. There is no Prometheus, no Grafana, no continuous view of rate/errors/duration; incidents are noticed by a person and diagnosed from <code>docker logs</code>. What it does have is Sentry, which covers the "errors" third of RED and nothing else. There is also a middleware that <em>means</em> to tag each Sentry event with the route template, so events do not explode into one value per dynamic id — the same cardinality discipline this lesson measured. But it is mounted before the routers, where <code>req.route</code> is still empty, so it falls back to <code>req.path</code>: a replica tags <code>/v1/courses/42</code>, <code>/v1/courses/43</code>… — one value per id. Read inside <code>res.on('finish')</code>, the same code gives <code>/api/v1/courses/:id</code>. <strong>The template has to be read after routing</strong>, for Sentry exactly as for <code>prom-client</code>. Adding <code>prom-client</code> is the single highest-value observability upgrade this codebase could make.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1127,6 +1167,11 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">Instrumenting a Node backend end to end</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-4-luc-luong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 4.4: label cardinality</span><span class="lc-sub">Measured here with prom-client: a raw-URL label made /metrics 40× bigger for the same 300 requests; 100,000 user ids held 1,494 MB.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1267,7 +1312,7 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <p><code>/metrics</code> mô tả nội tạng của bạn: tên route, tỉ lệ lỗi, bộ nhớ, đôi khi cả chuỗi phiên bản. Nó không nên nằm trên Internet công cộng. Ba lựa chọn, xếp theo mức độ ưa dùng: cho máy chủ metric nghe ở một cổng thứ hai mà chỉ mạng nội bộ với tới được; hoặc để chung app rồi chặn <code>/metrics</code> ở nginx với IP không nội bộ; hoặc bắt buộc bearer token. <strong>Đừng bỏ qua bước này với lý do "có gì nhạy cảm đâu"</strong> — chỉ riêng danh sách tên route đã vẽ ra toàn bộ bề mặt tấn công của bạn.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Câu trả lời trung thực: site này <strong>hoàn toàn không có endpoint <code>/metrics</code></strong> — <code>curl</code> trả 404 cho mọi đường dẫn hợp lý. Không có Prometheus, không Grafana, không có cái nhìn liên tục về tốc độ/lỗi/thời lượng; sự cố được phát hiện bởi một con người và chẩn đoán từ <code>docker logs</code>. Cái nó <em>có</em> là Sentry, thứ phủ được một phần ba "lỗi" của RED và không gì khác. Và một chi tiết đáng ăn cắp: một middleware gắn cho mỗi request mẫu route của nó <em>trước khi</em> báo sang Sentry, chính là để transaction của Sentry không nổ thành một mục cho mỗi id động — <strong>đúng cái kỷ luật cardinality mà bài này vừa đo, áp vào một công cụ khác</strong>. Thêm <code>prom-client</code> là nâng cấp quan sát có giá trị cao nhất mà codebase này có thể làm.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Câu trả lời trung thực: site này <strong>hoàn toàn không có endpoint <code>/metrics</code></strong> — <code>curl</code> trả 404 cho mọi đường dẫn hợp lý. Không có Prometheus, không Grafana, không có cái nhìn liên tục về tốc độ/lỗi/thời lượng; sự cố được phát hiện bởi một con người và chẩn đoán từ <code>docker logs</code>. Cái nó <em>có</em> là Sentry, thứ phủ được một phần ba "lỗi" của RED và không gì khác. Còn có một middleware <em>định</em> gắn cho mỗi sự kiện Sentry mẫu route của nó, để không nổ thành một giá trị cho mỗi id động — đúng cái kỷ luật cardinality bài này vừa đo. Nhưng nó được gắn trước các router, lúc <code>req.route</code> còn rỗng, nên rơi về <code>req.path</code>: một bản sao gắn <code>/v1/courses/42</code>, <code>/v1/courses/43</code>… — mỗi id một giá trị. Đọc trong <code>res.on('finish')</code> thì cùng đoạn code cho ra <code>/api/v1/courses/:id</code>. <strong>Mẫu route phải được đọc sau khi định tuyến</strong>, với Sentry y như với <code>prom-client</code>. Thêm <code>prom-client</code> là nâng cấp quan sát có giá trị cao nhất mà codebase này có thể làm.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1276,6 +1321,11 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">Gắn đo đạc cho một backend Node từ đầu tới cuối</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-4-luc-luong-nhan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 4.4: lực lượng nhãn</span><span class="lc-sub">Đo ở đây với prom-client: nhãn URL thô làm /metrics to gấp 40 lần cho cùng 300 request; 100.000 mã người dùng giữ 1.494 MB.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1307,13 +1357,13 @@ thêm nhãn user_id                      426 chuỗi       300 chuỗi          
 
 <pre><code class="language-javascript">// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace';      // 3.x (2.x: sdk-trace-base)
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({ 'service.name': 'notes-api' }),
-  spanProcessor: new BatchSpanProcessor(exporter),
+  spanProcessors: [new BatchSpanProcessor({ exporter })],   // 3.x: an array + an options object
   instrumentations: [getNodeAutoInstrumentations({
     '@opentelemetry/instrumentation-fs': { enabled: false },   // quá ồn
   })],
@@ -1325,6 +1375,7 @@ const { default: express } = await import('express');</code></pre>
 
 <div class="pitfall">
 <p><strong>A real trap, and a silent one.</strong> If the SDK starts after <code>express</code> or <code>pg</code> is imported, there is nothing left to patch — those modules are already bound. You get no error, no warning, just an empty trace tree, and you conclude tracing "does not work". Either use a top-level <code>await import()</code> as above, or start the SDK from a separate file loaded with <code>node --import ./tracing.mjs app.js</code>.</p>
+<div class="callout warn"><p><strong>A second silent trap: the 3.x packages changed shape.</strong> With today's packages (<code>@opentelemetry/sdk-node</code> 0.301, <code>@opentelemetry/sdk-trace</code> 3.1), measured: the singular key <code>spanProcessor:</code> is silently ignored (0 spans reach your exporter), and the 1.x/2.x form <code>new BatchSpanProcessor(exporter)</code> also delivers 0 spans — the constructor now takes <code>{ exporter }</code>. Mixing <code>@opentelemetry/sdk-trace-base@2</code> with today's <code>sdk-node</code> fails at install (<code>npm ERESOLVE</code>, peer conflict on <code>@opentelemetry/api</code>). Use <code>spanProcessors: [new BatchSpanProcessor({ exporter })]</code> as above, or pin every OpenTelemetry package to the versions of the example you copy.</p></div>
 </div>
 
 <h3>What one request looks like</h3>
@@ -1442,7 +1493,7 @@ span.end();</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> There is no OpenTelemetry here either — but Sentry's performance monitoring is a partial substitute: it records transactions with a span tree for a sampled fraction of requests. It covers the HTTP and database layers, and because a middleware tags transactions with the route template it does not suffer the cardinality problem. What it does not give is the vendor-neutral <code>trace_id</code> in log lines, so the log-to-trace jump described above still requires a human matching timestamps. Given the 39,6% measured overhead, the pragmatic path for a single-container deployment is: keep Sentry, add <code>prom-client</code> first, and reach for full OpenTelemetry when a second service appears — because that is the point at which "where did the time go" stops being answerable any other way.</p>
+<p><strong>How cuongthai.com does it.</strong> There is no OpenTelemetry here either — but Sentry's performance monitoring is a partial substitute: it records transactions with a span tree for a sampled fraction of requests. It covers the HTTP and database layers, but its route tag is set before routing (lesson 15.4 found it falls back to the raw URL), so grouping by that tag inherits the cardinality problem until the template is read after routing. What it does not give is the vendor-neutral <code>trace_id</code> in log lines, so the log-to-trace jump described above still requires a human matching timestamps. Given the 39,6% measured overhead, the pragmatic path for a single-container deployment is: keep Sentry, add <code>prom-client</code> first, and reach for full OpenTelemetry when a second service appears — because that is the point at which "where did the time go" stops being answerable any other way.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1451,6 +1502,16 @@ span.end();</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">OpenTelemetry on a real Express + pg service</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 6.2: OpenTelemetry in Node</span><span class="lc-sub">This lesson runs it on today’s 3.x packages: one request = 33 spans with 12 pg.query (N+1 by shape), and three silent setup traps that give 0 spans.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-3-lay-mau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 6.3: sampling, the arithmetic nobody does</span><span class="lc-sub">Measured here: sampler 0.01 exported 73× fewer spans but recovered only 3.4% throughput and no memory — it saves the bill, not the CPU.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1474,13 +1535,13 @@ span.end();</code></pre>
 
 <pre><code class="language-javascript">// PHẢI nạp TRƯỚC mọi import khác, nếu không việc vá thư viện không kịp
 import { NodeSDK } from '@opentelemetry/sdk-node';
-import { BatchSpanProcessor } from '@opentelemetry/sdk-trace-base';
+import { BatchSpanProcessor } from '@opentelemetry/sdk-trace';      // 3.x (2.x: sdk-trace-base)
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { resourceFromAttributes } from '@opentelemetry/resources';
 
 const sdk = new NodeSDK({
   resource: resourceFromAttributes({ 'service.name': 'notes-api' }),
-  spanProcessor: new BatchSpanProcessor(exporter),
+  spanProcessors: [new BatchSpanProcessor({ exporter })],   // 3.x: an array + an options object
   instrumentations: [getNodeAutoInstrumentations({
     '@opentelemetry/instrumentation-fs': { enabled: false },   // quá ồn
   })],
@@ -1492,6 +1553,7 @@ const { default: express } = await import('express');</code></pre>
 
 <div class="pitfall">
 <p><strong>Bẫy thật, và nó im lặng.</strong> Nếu SDK khởi động <em>sau</em> khi <code>express</code> hay <code>pg</code> đã được import thì chẳng còn gì để vá — các module đó đã bị ràng buộc xong. Bạn không nhận được lỗi nào, không cảnh báo nào, chỉ có một cây trace rỗng, rồi bạn kết luận rằng trace "không chạy được". Hoặc dùng <code>await import()</code> ở cấp cao nhất như trên, hoặc khởi động SDK từ một file riêng nạp bằng <code>node --import ./tracing.mjs app.js</code>.</p>
+<div class="callout warn"><p><strong>Bẫy im lặng thứ hai: bộ gói 3.x đã đổi hình dạng.</strong> Với bộ gói hôm nay (<code>@opentelemetry/sdk-node</code> 0.301, <code>@opentelemetry/sdk-trace</code> 3.1), đo thật: khoá số ít <code>spanProcessor:</code> bị bỏ qua trong im lặng (0 span tới exporter), và cách viết của bản 1.x/2.x <code>new BatchSpanProcessor(exporter)</code> cũng ra 0 span — hàm khởi tạo giờ nhận <code>{ exporter }</code>. Trộn <code>@opentelemetry/sdk-trace-base@2</code> với <code>sdk-node</code> hôm nay thì cài không được (<code>npm ERESOLVE</code>, xung đột peer ở <code>@opentelemetry/api</code>). Dùng <code>spanProcessors: [new BatchSpanProcessor({ exporter })]</code> như trên, hoặc ghim mọi gói OpenTelemetry đúng phiên bản của ví dụ bạn chép.</p></div>
 </div>
 
 <h3>Một request trông như thế nào</h3>
@@ -1609,7 +1671,7 @@ span.end();</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Ở đây cũng không có OpenTelemetry — nhưng phần theo dõi hiệu năng của Sentry là một vật thay thế bán phần: nó ghi lại transaction kèm cây span cho một phần request được lấy mẫu. Nó phủ được tầng HTTP và tầng cơ sở dữ liệu, và vì một middleware gắn mẫu route cho transaction nên nó không dính vấn đề cardinality. Cái nó <em>không</em> cho là <code>trace_id</code> trung lập nằm trong dòng log, nên cú nhảy log-sang-trace mô tả ở trên vẫn phải để một con người đối chiếu dấu thời gian bằng tay. Với chi phí 39,6% đã đo được, con đường thực dụng cho một triển khai một container là: giữ Sentry, thêm <code>prom-client</code> trước, và với tới OpenTelemetry đầy đủ khi có dịch vụ thứ hai xuất hiện — vì đó là thời điểm mà câu "thời gian đi đâu mất" không còn cách nào khác để trả lời.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Ở đây cũng không có OpenTelemetry — nhưng phần theo dõi hiệu năng của Sentry là một vật thay thế bán phần: nó ghi lại transaction kèm cây span cho một phần request được lấy mẫu. Nó phủ được tầng HTTP và tầng cơ sở dữ liệu, còn tag route của nó được gắn trước khi định tuyến (bài 15.4 thấy nó rơi về URL thô), nên nhóm theo tag đó vẫn dính vấn đề cardinality cho tới khi mẫu route được đọc sau định tuyến. Cái nó <em>không</em> cho là <code>trace_id</code> trung lập nằm trong dòng log, nên cú nhảy log-sang-trace mô tả ở trên vẫn phải để một con người đối chiếu dấu thời gian bằng tay. Với chi phí 39,6% đã đo được, con đường thực dụng cho một triển khai một container là: giữ Sentry, thêm <code>prom-client</code> trước, và với tới OpenTelemetry đầy đủ khi có dịch vụ thứ hai xuất hiện — vì đó là thời điểm mà câu "thời gian đi đâu mất" không còn cách nào khác để trả lời.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1618,6 +1680,16 @@ span.end();</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-618"><span class="lc-t">Code Lab · Advanced Observability and Distributed Tracing</span><span class="lc-d">OpenTelemetry trên một dịch vụ Express + pg thật</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-2-otel-trong-node" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 6.2: OpenTelemetry trong Node</span><span class="lc-sub">Bài này chạy trên bộ gói 3.x hôm nay: một request = 33 span với 12 pg.query (N+1 qua hình dạng), và ba bẫy cài đặt im lặng cho 0 span.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-3-lay-mau" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 6.3: lấy mẫu, phép tính chẳng ai chịu làm</span><span class="lc-sub">Đo ở đây: sampler 0,01 xuất ít hơn 73 lần span nhưng chỉ lấy lại 3,4 % thông lượng và không lấy lại bộ nhớ — giảm hoá đơn, không giảm CPU.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1679,7 +1751,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>A real trap:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result for a few seconds. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
+<p><strong>A real trap:</strong> a readiness check that queries the database on <em>every</em> call is itself load. At a ten-second interval across six containers behind three probes, that is a query every 0,55 seconds, forever, for information that changes rarely. Cache the result — for longer than the gap between two probes of the same container (about 3,3 seconds here), or the cache never hits: 10 seconds turns 1,8 queries per second into 0,6. A readiness check that contributes to the overload it is meant to detect is a very expensive kind of irony.</p>
 </div>
 
 <h3>Alerts: the number that matters is how many you ignore</h3>
@@ -1734,7 +1806,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 <p>Item 3 deserves emphasis because it is ten minutes of work and covers a blind spot nothing else does: <strong>monitoring that runs inside the thing it monitors cannot report that the thing is gone.</strong> A check from outside your network, hitting a real URL, is the only signal that survives the machine dying.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Three probes exist in <code>src/index.ts</code>: <code>/health</code> (detailed — DB check plus uptime, environment and connection status), <code>/health/live</code> (unconditional 200, correct), and <code>/health/ready</code> (DB check, 503 on failure, correct). The separation is right. Two gaps are worth naming honestly. First, nginx proxies only <code>/api/</code>, so none of the three is reachable from outside — the externally visible one is <code>/api/v1/system/health</code>, which returns <code>{"status":"ok"}</code> and <em>does not check the database at all</em>. If an external uptime monitor watches that URL, it will report "ok" during a total database outage. Second, the DB check has no explicit timeout, which is the exact hang measured earlier in this lesson. Both are small changes; neither is visible until the day it matters.</p>
+<p><strong>How cuongthai.com does it.</strong> Three probes exist in <code>src/index.ts</code>: <code>/health</code> (detailed — DB check plus uptime, environment and connection status), <code>/health/live</code> (unconditional 200, correct), and <code>/health/ready</code> (DB check, 503 on failure, correct). The separation is right. Two gaps are worth naming honestly. First, nginx proxies only <code>/api/</code>, so none of the three is reachable from outside — the externally visible one is <code>/api/v1/system/health</code>, which returns <code>{"success":true,"data":{"status":"ok",…}}</code> and <em>does not check the database at all</em>. If an external uptime monitor watches that URL, it will report "ok" during a total database outage. Second, the DB check has no explicit timeout, which is the exact hang measured earlier in this lesson. Both are small changes; neither is visible until the day it matters.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1743,6 +1815,16 @@ app.get('/health/ready', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-991"><span class="lc-t">Code Lab · Alerting &amp; On-Call</span><span class="lc-d">Thresholds, runbooks and keeping alerts trustworthy</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-2-tu-ban-vao-chan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 8.2: the liveness probe that restarts a healthy service</span><span class="lc-sub">Measured here: a database that accepts and never answers — 503 in 809 ms with connectionTimeoutMillis: 800, no answer at all without it.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-1-loi-hua-danh-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 9.1: an alert is a promise to wake someone</span><span class="lc-sub">This lesson adds the four rules (symptom, duration, ratio, runbook), the alerts that pay for themselves, and the disk-full incident of this project.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1796,7 +1878,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Bẫy thật:</strong> một readiness check truy vấn database ở <em>mọi</em> lần gọi thì bản thân nó là tải. Với chu kỳ mười giây, sáu container, ba nơi cùng probe, đó là một truy vấn mỗi 0,55 giây, mãi mãi, để lấy một thông tin hiếm khi đổi. Hãy cache kết quả vài giây. Một readiness check góp phần vào chính cái quá tải mà nó sinh ra để phát hiện là một kiểu mỉa mai rất đắt tiền.</p>
+<p><strong>Bẫy thật:</strong> một readiness check truy vấn database ở <em>mọi</em> lần gọi thì bản thân nó là tải. Với chu kỳ mười giây, sáu container, ba nơi cùng probe, đó là một truy vấn mỗi 0,55 giây, mãi mãi, để lấy một thông tin hiếm khi đổi. Hãy cache kết quả — lâu hơn khoảng cách giữa hai lượt probe vào cùng một container (ở đây khoảng 3,3 giây), nếu không cache chẳng bao giờ trúng: 10 giây biến 1,8 truy vấn mỗi giây thành 0,6. Một readiness check góp phần vào chính cái quá tải mà nó sinh ra để phát hiện là một kiểu mỉa mai rất đắt tiền.</p>
 </div>
 
 <h3>Cảnh báo: con số quan trọng là bạn phớt lờ bao nhiêu cái</h3>
@@ -1851,7 +1933,7 @@ app.get('/health/ready', async (req, res) =&gt; {
 <p>Mục 3 đáng được nhấn mạnh vì nó tốn mười phút và phủ được một điểm mù mà không thứ nào khác phủ nổi: <strong>hệ giám sát chạy bên trong chính thứ nó giám sát thì không báo được rằng thứ đó đã biến mất.</strong> Một phép kiểm từ ngoài mạng của bạn, gọi vào một URL thật, là tín hiệu duy nhất sống sót khi cả cái máy chết.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Có ba probe trong <code>src/index.ts</code>: <code>/health</code> (chi tiết — kiểm DB cộng uptime, môi trường, trạng thái kết nối), <code>/health/live</code> (trả 200 vô điều kiện, đúng chuẩn), và <code>/health/ready</code> (kiểm DB, 503 khi hỏng, đúng chuẩn). Việc tách bạch là chính xác. Có hai lỗ hổng đáng gọi tên một cách trung thực. <em>Một</em>, nginx chỉ chuyển tiếp <code>/api/</code>, nên không cái nào trong ba cái với tới được từ bên ngoài — cái nhìn thấy từ ngoài là <code>/api/v1/system/health</code>, trả về <code>{"status":"ok"}</code> và <em>hoàn toàn không kiểm tra database</em>. Nếu một dịch vụ theo dõi uptime bên ngoài canh URL đó thì nó sẽ báo "ok" trong lúc database sập hoàn toàn. <em>Hai</em>, phép kiểm DB không đặt timeout tường minh, đúng cái kiểu treo đã đo ở trên. Cả hai đều là thay đổi nhỏ; và cả hai đều vô hình cho tới đúng cái ngày nó quan trọng.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Có ba probe trong <code>src/index.ts</code>: <code>/health</code> (chi tiết — kiểm DB cộng uptime, môi trường, trạng thái kết nối), <code>/health/live</code> (trả 200 vô điều kiện, đúng chuẩn), và <code>/health/ready</code> (kiểm DB, 503 khi hỏng, đúng chuẩn). Việc tách bạch là chính xác. Có hai lỗ hổng đáng gọi tên một cách trung thực. <em>Một</em>, nginx chỉ chuyển tiếp <code>/api/</code>, nên không cái nào trong ba cái với tới được từ bên ngoài — cái nhìn thấy từ ngoài là <code>/api/v1/system/health</code>, trả về <code>{"success":true,"data":{"status":"ok",…}}</code> và <em>hoàn toàn không kiểm tra database</em>. Nếu một dịch vụ theo dõi uptime bên ngoài canh URL đó thì nó sẽ báo "ok" trong lúc database sập hoàn toàn. <em>Hai</em>, phép kiểm DB không đặt timeout tường minh, đúng cái kiểu treo đã đo ở trên. Cả hai đều là thay đổi nhỏ; và cả hai đều vô hình cho tới đúng cái ngày nó quan trọng.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1860,6 +1942,16 @@ app.get('/health/ready', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-991"><span class="lc-t">Code Lab · Alerting &amp; On-Call</span><span class="lc-d">Ngưỡng, runbook và giữ cho cảnh báo còn đáng tin</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-8-2-tu-ban-vao-chan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 8.2: liveness khởi động lại một dịch vụ khoẻ mạnh</span><span class="lc-sub">Đo ở đây: database nhận kết nối rồi im lặng — 503 sau 809 ms với connectionTimeoutMillis: 800, không có câu trả lời nào nếu thiếu nó.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-9-1-loi-hua-danh-thuc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 9.1: một cảnh báo là lời hứa sẽ đánh thức ai đó</span><span class="lc-sub">Bài này thêm bốn luật (triệu chứng, thời lượng, tỉ lệ, runbook), các cảnh báo tự trả lại tiền, và sự cố đầy đĩa của dự án này.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

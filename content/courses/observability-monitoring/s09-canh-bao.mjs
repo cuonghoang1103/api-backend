@@ -173,6 +173,11 @@ description of the metric.</code></pre>
   <span class="lc-body"><span class="lc-title">Prometheus — alerting rules</span><span class="lc-sub">The expr / for / labels / annotations structure above, and how the &quot;for&quot; duration interacts with evaluation intervals.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.6: the alerts worth having for a Node API</span><span class="lc-sub">5xx ratio, p95 over SLO, traffic near zero, event-loop lag, disk — with a sample rule and why liveness must never touch the database.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -329,6 +334,11 @@ chính xác về cái chỉ số.</code></pre>
   <span class="lc-body"><span class="lc-title">Prometheus — luật cảnh báo</span><span class="lc-sub">Cấu trúc expr / for / labels / annotations ở trên, và cách khoảng thời gian &quot;for&quot; tương tác với chu kỳ đánh giá.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.6: các cảnh báo đáng có cho một API Node</span><span class="lc-sub">Tỉ lệ 5xx, p95 vượt mục tiêu, lưu lượng gần không, độ trễ event loop, đĩa — kèm luật mẫu và vì sao liveness không bao giờ chạm database.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

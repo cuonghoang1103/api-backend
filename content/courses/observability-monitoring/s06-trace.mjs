@@ -499,6 +499,11 @@ sampling "10% minus whatever got dropped".</code></pre>
   <span class="lc-body"><span class="lc-title">auto-instrumentations-node</span><span class="lc-sub">Every library it patches, and the per-instrumentation config options used above to silence health checks and fs.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.5: tracing, where the time actually went</span><span class="lc-sub">A real span tree of an Express + pg route, the cold-pool block, linking pino logs to traces, and the measured bill (−17.6% req/s, +80 MB).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -674,6 +679,11 @@ ra là "10% trừ đi bao nhiêu cái đã bị vứt".</code></pre>
   <span class="lc-body"><span class="lc-title">auto-instrumentations-node</span><span class="lc-sub">Mọi thư viện nó vá, và các tuỳ chọn cấu hình theo từng bộ đo đạc dùng ở trên để làm im phép kiểm sức khoẻ và fs.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.5: trace, thời gian thật sự đi đâu</span><span class="lc-sub">Cây span thật của một route Express + pg, khối pool lạnh, nối log pino với trace, và hoá đơn đo được (−17,6 % req/s, +80 MB).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -856,6 +866,11 @@ you actually have to think.</code></pre>
   <span class="lc-body"><span class="lc-title">The tail sampling processor</span><span class="lc-sub">Every policy type, the memory implications of decision_wait and num_traces, and the load-balancing requirement from this lesson.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.5: does sampling fix the overhead?</span><span class="lc-sub">Four configs measured on Express + pg (none, 1.0, 0.1, 0.01) with an exporter that only counts spans.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1030,6 +1045,11 @@ bạn thật sự phải suy nghĩ.</code></pre>
   <span class="lc-body"><span class="lc-title">Bộ xử lý lấy mẫu đuôi</span><span class="lc-sub">Mọi loại chính sách, hệ quả bộ nhớ của decision_wait và num_traces, và yêu cầu cân bằng tải nêu trong bài này.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-5-opentelemetry-trace" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.5: lấy mẫu có chữa được chi phí không?</span><span class="lc-sub">Bốn cấu hình đo trên Express + pg (không, 1,0, 0,1, 0,01) với một exporter chỉ đếm span.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

@@ -498,6 +498,11 @@ predict what any of them does during one.</code></pre>
   <span class="lc-body"><span class="lc-title">Google SRE Book — addressing cascading failures</span><span class="lc-sub">The general shape of the positive-feedback loop in the pitfall, including thundering herds and why restarts amplify them.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.6: health checks, alerts, and being woken at 3 am</span><span class="lc-sub">Liveness vs readiness in Express, the timeout measured, why a readiness cache must outlive the probe gap, and this site’s probes.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -667,6 +672,11 @@ TRONG một sự cố.</code></pre>
   <span class="lc-body"><span class="lc-title">Sách SRE của Google — xử lý hỏng hóc dây chuyền</span><span class="lc-sub">Hình dạng tổng quát của cái vòng phản hồi dương ở cái bẫy trên, kể cả đàn trâu húc cửa và vì sao việc khởi động lại khuếch đại chúng.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-6-health-check-canh-bao" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.6: health check, cảnh báo, và bị gọi dậy lúc ba giờ sáng</span><span class="lc-sub">Liveness và readiness trong Express, timeout đo thật, vì sao cache readiness phải sống lâu hơn khoảng cách thăm dò, và các thăm dò của website này.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

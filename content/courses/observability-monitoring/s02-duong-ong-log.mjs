@@ -423,6 +423,11 @@ du -m "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
   <span class="lc-body"><span class="lc-title">logrotate(8)</span><span class="lc-sub">The system tool for everything Docker is not rotating — nginx access logs, postgres logs — and the copytruncate option that solves the same open-descriptor problem as the pitfall above.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-3-chi-phi-va-tim-kiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.3: what logs cost, and finding one line in a million</span><span class="lc-sub">Four log shapes priced per day, grep vs jq on a million lines, p95 blind to an 8-second request, and sampling by a hash of the request id (1.00% kept).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -566,6 +571,11 @@ du -m "$(docker inspect --format '{{.LogPath}}' &lt;container&gt;)"</code></pre>
   <span class="lc-body"><span class="lc-title">logrotate(8)</span><span class="lc-sub">Công cụ hệ thống cho mọi thứ Docker không xoay vòng — log truy cập nginx, log postgres — và tuỳ chọn copytruncate giải đúng bài toán descriptor mở của cái bẫy ở trên.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-3-chi-phi-va-tim-kiem" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.3: log tốn bao nhiêu, và tìm một dòng trong một triệu</span><span class="lc-sub">Bốn hình dạng dòng log quy ra mỗi ngày, grep vs jq trên một triệu dòng, p95 mù trước request 8 giây, và lấy mẫu theo băm mã request (giữ 1,00 %).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

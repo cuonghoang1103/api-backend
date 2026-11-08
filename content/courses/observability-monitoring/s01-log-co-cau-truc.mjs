@@ -132,6 +132,11 @@ cat app.log | jq 'select(.ms &gt; 5000)'</code></pre>
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">JSON Lines (NDJSON)</span><span class="lc-sub">The one-object-per-line format this repo emits, and the reason a log file stays streamable and greppable.</span></span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.1: three pillars, and why console.log runs out</span><span class="lc-sub">100,000 lines five ways, the heartbeat test, the cost per request of five logging setups, and the default that writes every bearer token into the log.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -246,6 +251,11 @@ cat app.log | jq 'select(.ms &gt; 5000)'</code></pre>
 <a class="link-card dl" href="https://jsonlines.org/" target="_blank" rel="noopener">
   <span class="lc-ico">📄</span>
   <span class="lc-body"><span class="lc-title">JSON Lines (NDJSON)</span><span class="lc-sub">Định dạng mỗi-dòng-một-object mà kho này phát ra, và lý do một file log vẫn truyền được theo luồng và grep được.</span></span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.1: ba trụ cột, và điểm dừng của console.log</span><span class="lc-sub">100.000 dòng năm cách, phép thử nhịp tim, giá mỗi request của năm cách ghi log, và cấu hình mặc định ghi cả token đăng nhập vào log.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
 </div>
 `,
@@ -1053,6 +1063,11 @@ node m5.mjs | python3 slowreader.py</code></pre>
   <span class="lc-body"><span class="lc-title">Node.js Streams — Buffering and backpressure</span><span class="lc-sub">What writableLength, writableNeedDrain and the &#96;drain&#96; event mean, and the contract a well-behaved writer is supposed to honour.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 15.1: the same burst, file vs pipe</span><span class="lc-sub">A file blocks the event loop (371 ms); a stalled pipe queues the bytes in RAM (10.3 MB) — measured on macOS and in node:22-alpine.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1210,6 +1225,11 @@ node m5.mjs | python3 slowreader.py</code></pre>
   <span class="lc-body"><span class="lc-title">Node.js Streams — Đệm và nghẽn ngược</span><span class="lc-sub">writableLength, writableNeedDrain và sự kiện &#96;drain&#96; nghĩa là gì, và cái giao kèo mà một bên ghi tử tế lẽ ra phải tôn trọng.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-15-1-log-co-cau-truc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 15.1: cùng một loạt log, file và pipe</span><span class="lc-sub">Ghi ra file chặn event loop (371 ms); pipe nghẽn dồn byte vào RAM (10,3 MB) — đo trên macOS và trong node:22-alpine.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

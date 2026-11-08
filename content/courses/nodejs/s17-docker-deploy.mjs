@@ -123,6 +123,11 @@ CMD ["node", "dist/index.js"]</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/docker${REF}"><span class="lc-t">Code Lab · Docker</span><span class="lc-d">Images, layers and multi-stage builds</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 6.1: multi-stage builds, properly</span><span class="lc-sub">Measured here on one Node app: naive 430 MB, slim 84.3, alpine 65.5, multi-stage 81.7 MB; the naive image carries 121 packages, a 19 MB npm cache and the full toolchain.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -224,6 +229,11 @@ CMD ["node", "dist/index.js"]</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/docker${REF}"><span class="lc-t">Code Lab · Docker</span><span class="lc-d">Ảnh, tầng và build nhiều giai đoạn</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-6-1-multi-stage" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 6.1: multi-stage build, làm cho đúng</span><span class="lc-sub">Đo trên một app Node: naive 430 MB, slim 84,3, alpine 65,5, multi-stage 81,7 MB; ảnh naive mang 121 gói, 19 MB bộ nhớ đệm npm và cả bộ công cụ build.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -337,7 +347,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Images are built <em>on the VPS</em>, one at a time. The comment in <code>deploy.sh</code> explains why: parallel cold builds of the backend and frontend once had the kernel OOM-kill <code>next build</code> with exit 137 on the 6GB box (2026-07-06). The build cache is pruned after every deploy to keep the disk from filling — the incident from chapter 15 — which means every deploy is a cold build, which in turn is exactly why the layer ordering in this lesson matters here more than it would with a warm cache. The two constraints interact: prune the cache to save disk, and layer order becomes the only thing keeping deploys short.</p>
+<p><strong>How cuongthai.com does it.</strong> Since 2026-08-18 images are <em>not</em> built on the VPS. <code>deploy-nha.sh</code> builds the backend and frontend images <em>in parallel</em> on a 12-core home machine, pushes them to GHCR tagged with the commit SHA, and the VPS only pulls and swaps — so the 6GB VPS no longer keeps a build cache on the same disk as the database. That move came from two constraints that fought each other: parallel cold builds on the VPS once had the kernel OOM-kill <code>next build</code> with exit 137 (2026-07-06), so <code>deploy.sh</code> — still the fallback when the home machine is down — builds the two images one at a time and prunes the cache afterwards to keep the disk from filling (the chapter 15 incident), which made every deploy a cold build. The layer order still matters on both paths: <code>Dockerfile.backend</code> copies <code>package*.json</code> at line 25, runs <code>npm ci</code> at 51 and copies the source at 69, and its one argument that changes every day (<code>YTDLP_NGAY</code>, a cache-buster for yt-dlp) is declared right before the single <code>RUN</code> that uses it (line 167) — measured 08/11/2026.</p>
 </div>
 
 <div class="link-card codelab">
@@ -346,6 +356,11 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 <div class="link-card codelab">
   <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing in CI</span><span class="lc-d">Caching Docker layers between CI runs</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-2-thu-tu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 5.2: ordering, the four-minute rebuild made six seconds</span><span class="lc-sub">Measured here: one edited line rebuilds in 4.36 s with COPY . . first and 0.47 s with package*.json first (9.3×); .dockerignore cuts the context from 66.16 MB to 465 B.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -435,7 +450,7 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Ảnh được build <em>trên VPS</em>, mỗi lần một cái. Dòng chú thích trong <code>deploy.sh</code> giải thích vì sao: có lần build nguội song song backend và frontend đã bị nhân hệ điều hành giết <code>next build</code> vì hết bộ nhớ, exit 137, trên cái máy 6GB (06/07/2026). Cache build bị dọn sau mỗi lần deploy để đĩa khỏi đầy — chính sự cố ở chương 15 — nghĩa là mọi lần deploy đều là build nguội, mà điều đó lại đúng là lý do thứ tự tầng trong bài này quan trọng ở đây hơn hẳn so với khi có cache ấm. Hai ràng buộc ấy tương tác với nhau: dọn cache để cứu đĩa, và thứ tự tầng trở thành thứ duy nhất giữ cho thời gian deploy còn ngắn.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Từ 18/08/2026 ảnh <em>không còn</em> được build trên VPS. <code>deploy-nha.sh</code> build ảnh backend và frontend <em>song song</em> trên một máy 12 nhân ở nhà, đẩy lên GHCR với tag là mã commit, còn VPS chỉ kéo về và tráo — nên cái VPS 6GB không còn giữ cache build trên chính ổ đĩa chứa database. Bước chuyển đó đến từ hai ràng buộc giẫm lên nhau: build nguội song song trên VPS từng bị nhân hệ điều hành giết <code>next build</code> vì hết bộ nhớ, exit 137 (06/07/2026), nên <code>deploy.sh</code> — vẫn là đường lùi khi máy nhà tắt — build hai ảnh lần lượt từng cái rồi dọn cache để đĩa khỏi đầy (sự cố ở chương 15), khiến mọi lần deploy đều là build nguội. Thứ tự tầng vẫn quan trọng ở cả hai đường: <code>Dockerfile.backend</code> chép <code>package*.json</code> ở dòng 25, chạy <code>npm ci</code> ở dòng 51 rồi mới chép mã nguồn ở dòng 69, và đối số duy nhất đổi mỗi ngày (<code>YTDLP_NGAY</code>, để buộc cài lại yt-dlp) được khai ngay trước đúng lệnh <code>RUN</code> dùng nó (dòng 167) — đo 08/11/2026.</p>
 </div>
 
 <div class="link-card codelab">
@@ -444,6 +459,11 @@ docker buildx build --platform linux/amd64,linux/arm64 -t ghcr.io/me/app:1.4.2 -
 <div class="link-card codelab">
   <a href="/code-lab/github-actions${REF}#module-924"><span class="lc-t">Code Lab · Building &amp; Testing in CI</span><span class="lc-d">Cache tầng Docker giữa các lần chạy CI</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-5-2-thu-tu" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 5.2: thứ tự, bốn phút build lại thành sáu giây</span><span class="lc-sub">Đo ở đây: sửa một dòng, build lại 4,36 s khi COPY . . đứng trước và 0,47 s khi chép package*.json trước (9,3×); .dockerignore cắt context từ 66,16 MB xuống 465 B.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -507,6 +527,7 @@ docker stop -t 10               thoát sau 2,22s  exit   0   client nhận 200</
 
 <div class="danger">
 <p><strong>The default was not enough.</strong> On this Docker version the bare <code>docker stop</code> killed the container after about 1,26 seconds — reproducibly, three times out of three — while the request needed three. The application did everything right: it caught the signal, called <code>server.close()</code>, and was working through the request when it was killed. <strong>Exit code 137 is 128 + 9: SIGKILL.</strong> If you see 137 in your deploy logs, this is one of the two things it means (the other is an out-of-memory kill, chapter 16).</p>
+<p><em>Re-measured 2026-11-08 on Docker Desktop 29.8.0:</em> a bare <code>docker stop</code> on a PID 1 that ignores SIGTERM (<code>sleep</code>) killed it after 3,14 s, three times out of three; a 3-second request survived that default and a 5-second one did not (exit 137, 0 of 3), while <code>-t 10</code> let it finish (exit 0 after 4,2 s). Docker Engine's documentation says 10 seconds. Three different numbers for "the default" is the strongest argument for setting it yourself.</p>
 </div>
 
 <p>The commonly quoted default is ten seconds. This measurement says otherwise on Docker 29.5.3, which is exactly the reason to <strong>set it explicitly rather than inherit it</strong>:</p>
@@ -545,10 +566,10 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \\
   CMD node -e "fetch('http://127.0.0.1:3000/health/live').then(r=&gt;process.exit(r.ok?0:1)).catch(()=&gt;process.exit(1))"</code></pre>
 
-<p><code>--start-period</code> is the parameter people omit and then get paged about: during it, failures do not count towards <code>--retries</code>. Without it, a service that takes 15 seconds to boot is marked unhealthy and restarted, and restarts forever. And per chapter 15: the health check URL must be the <em>liveness</em> probe, not one that touches the database — otherwise a database blip restarts every container at once.</p>
+<p><code>--start-period</code> is the parameter people omit and then get paged about: during it, failures do not count towards <code>--retries</code>. Without it, a service that is still booting is marked unhealthy — measured: an app that needs 12 s to boot, checked every 2 s with 3 retries, turned <code>unhealthy</code> at 6 s and <code>healthy</code> at 12 s; with <code>--start-period 20s</code> it went straight from <code>starting</code> to <code>healthy</code>. What happens next depends on who is watching: plain Docker does <em>not</em> restart an unhealthy container (restart count stayed 0 under <code>restart: unless-stopped</code> — restart policies react to the process exiting), but anything that waits for "healthy" — <code>depends_on: condition: service_healthy</code>, a deploy script — sees a failure, and Swarm, Kubernetes or an autoheal tool will kill and restart it, in a loop if boot always outlasts the checks. And per chapter 15: the health check URL must be the <em>liveness</em> probe, not one that touches the database — otherwise a database blip marks every container unhealthy at once.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The graceful shutdown here is real and measured: chapter 13 recorded the log sequence <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> with the process exiting after 1296ms, against 5ms and one stuck active job when SIGTERM was not handled. The deploy path uses <code>docker compose up -d --force-recreate</code>, whose comment in <code>deploy.sh</code> notes it swaps containers atomically rather than <code>down &amp;&amp; up</code> — the right instinct. The gap this lesson identifies is that no <code>stop_grace_period</code> is set anywhere, so the swap inherits whatever default the installed Docker has, which the table above shows can be about one second. For an API where the slowest routes are AI calls measured in <em>hundreds</em> of seconds, that is worth pinning down explicitly.</p>
+<p><strong>How cuongthai.com does it.</strong> The graceful shutdown here is real and measured: chapter 13 recorded the log sequence <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> with the process exiting after 1296ms, against 5ms and one stuck active job when SIGTERM was not handled. PID 1 is right: <code>Dockerfile.backend</code> runs <code>ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/fix-uploads-perms.sh"]</code> and that script ends with <code>exec "$@"</code>, so node receives SIGTERM directly and tini reaps any zombie children (ffmpeg, yt-dlp). The deploy path (<code>deploy-nha.sh</code>) swaps with <code>docker compose up -d --no-build</code>. The gap this lesson identifies is still there (checked 2026-11-08): the backend has no <code>stop_grace_period</code> — only nginx sets one (30 s) — while the app's own shutdown waits up to 30 s before forcing <code>process.exit(1)</code>, so the swap inherits whatever default the installed Docker has, which the measurements above put anywhere between about one and ten seconds. For an API where the slowest routes are AI calls measured in <em>hundreds</em> of seconds, that is worth pinning down explicitly. The compose healthcheck also calls <code>/health</code>, which runs <code>SELECT 1</code> — a readiness question asked by a liveness check.</p>
 </div>
 
 <div class="link-card codelab">
@@ -557,6 +578,11 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-989"><span class="lc-t">Code Lab · Health Checks &amp; Uptime</span><span class="lc-d">Probes that an orchestrator can act on</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 4.3: CMD, ENTRYPOINT and entrypoint scripts</span><span class="lc-sub">Measured here: npm start and the shell form never deliver SIGTERM to node (exit 1 / exit 137); the exec form does (exit 0); an entry script needs exec; --init reaps 12 zombies down to 0.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -605,6 +631,7 @@ docker stop -t 10               thoát sau 2,22s  exit   0   client nhận 200</
 
 <div class="danger">
 <p><strong>Mặc định là KHÔNG ĐỦ.</strong> Trên phiên bản Docker này, lệnh <code>docker stop</code> trần giết container sau khoảng 1,26 giây — lặp lại được, ba lần trên ba — trong khi request cần ba giây. Ứng dụng đã làm đúng mọi thứ: nó bắt tín hiệu, gọi <code>server.close()</code>, và đang xử lý nốt request thì bị giết. <strong>Mã thoát 137 là 128 + 9: SIGKILL.</strong> Nếu bạn thấy 137 trong log deploy thì đây là một trong hai nghĩa của nó (nghĩa còn lại là bị giết vì hết bộ nhớ, chương 16).</p>
+<p><em>Đo lại 08/11/2026 trên Docker Desktop 29.8.0:</em> <code>docker stop</code> trần với PID 1 là tiến trình bỏ qua SIGTERM (<code>sleep</code>) giết nó sau 3,14 giây, cả ba lần; một request 3 giây sống được qua mặc định đó, còn request 5 giây thì không (exit 137, 0/3), trong khi <code>-t 10</code> để nó chạy xong (exit 0 sau 4,2 giây). Tài liệu Docker Engine ghi 10 giây. Ba con số khác nhau cho cùng một chữ "mặc định" chính là lý lẽ mạnh nhất để tự đặt nó.</p>
 </div>
 
 <p>Con số mặc định người ta hay trích là mười giây. Phép đo này nói khác trên Docker 29.5.3, và đó chính xác là lý do phải <strong>đặt nó tường minh chứ đừng thừa kế</strong>:</p>
@@ -643,10 +670,10 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <pre><code>HEALTHCHECK --interval=30s --timeout=3s --start-period=20s --retries=3 \\
   CMD node -e "fetch('http://127.0.0.1:3000/health/live').then(r=&gt;process.exit(r.ok?0:1)).catch(()=&gt;process.exit(1))"</code></pre>
 
-<p><code>--start-period</code> là tham số người ta hay bỏ qua rồi bị gọi dậy vì nó: trong khoảng đó, các lần trượt <em>không</em> tính vào <code>--retries</code>. Không có nó, một dịch vụ mất 15 giây để khởi động sẽ bị đánh dấu là không khoẻ và bị khởi động lại, rồi khởi động lại mãi mãi. Và theo chương 15: URL của health check phải là probe <em>liveness</em>, đừng là cái chạm vào cơ sở dữ liệu — nếu không một cú nấc của database sẽ khởi động lại toàn bộ container cùng lúc.</p>
+<p><code>--start-period</code> là tham số người ta hay bỏ qua rồi bị gọi dậy vì nó: trong khoảng đó, các lần trượt <em>không</em> tính vào <code>--retries</code>. Không có nó, một dịch vụ đang khởi động sẽ bị đánh dấu là không khoẻ — đo thật: app cần 12 giây để khởi động, kiểm mỗi 2 giây, cho hỏng 3 lần, bị đánh dấu <code>unhealthy</code> ở giây thứ 6 rồi mới <code>healthy</code> ở giây 12; có <code>--start-period 20s</code> thì đi thẳng từ <code>starting</code> sang <code>healthy</code>. Chuyện gì xảy ra tiếp tuỳ ai đang canh: Docker trơn <em>không</em> tự khởi động lại container unhealthy (số lần restart vẫn là 0 với <code>restart: unless-stopped</code> — chính sách restart chỉ phản ứng khi tiến trình thoát), nhưng mọi thứ chờ trạng thái "healthy" — <code>depends_on: condition: service_healthy</code>, một script deploy — sẽ thấy thất bại, còn Swarm, Kubernetes hay công cụ autoheal sẽ giết rồi khởi động lại nó, thành vòng lặp nếu khởi động luôn lâu hơn các lần kiểm. Và theo chương 15: URL của health check phải là probe <em>liveness</em>, đừng là cái chạm vào cơ sở dữ liệu — nếu không một cú nấc của database sẽ đánh dấu mọi container không khoẻ cùng lúc.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Phần tắt êm ở đây là thật và đã được đo: chương 13 ghi lại chuỗi log <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> với tiến trình thoát sau 1296ms, so với 5ms và một job kẹt ở trạng thái active khi không xử lý SIGTERM. Đường deploy dùng <code>docker compose up -d --force-recreate</code>, mà dòng chú thích trong <code>deploy.sh</code> ghi rằng nó đổi container một cách nguyên tử thay vì <code>down &amp;&amp; up</code> — bản năng đúng. Lỗ hổng mà bài này chỉ ra là <em>không nơi nào đặt <code>stop_grace_period</code></em>, nên phép đổi ấy thừa kế bất kỳ mặc định nào mà bản Docker đang cài có, mà bảng ở trên cho thấy con số đó có thể là khoảng một giây. Với một API mà những route chậm nhất là các lời gọi AI tính bằng <em>hàng trăm</em> giây, đó là thứ đáng chốt lại cho rõ ràng.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Phần tắt êm ở đây là thật và đã được đo: chương 13 ghi lại chuỗi log <code>SAN-SANG | BATDAU 1 | NHAN-SIGTERM | XONG 1 | DA-DONG</code> với tiến trình thoát sau 1296ms, so với 5ms và một job kẹt ở trạng thái active khi không xử lý SIGTERM. PID 1 thì đúng: <code>Dockerfile.backend</code> chạy <code>ENTRYPOINT ["/usr/bin/tini", "--", "/usr/local/bin/fix-uploads-perms.sh"]</code> và script đó kết thúc bằng <code>exec "$@"</code>, nên node nhận SIGTERM trực tiếp và tini thu dọn các tiến trình con zombie (ffmpeg, yt-dlp). Đường deploy (<code>deploy-nha.sh</code>) tráo bằng <code>docker compose up -d --no-build</code>. Lỗ hổng mà bài này chỉ ra vẫn còn (kiểm 08/11/2026): backend <em>không đặt <code>stop_grace_period</code></em> — chỉ nginx có (30 giây) — trong khi hàm tắt của chính app chờ tới 30 giây rồi mới ép <code>process.exit(1)</code>, nên phép tráo thừa kế bất kỳ mặc định nào bản Docker đang cài có, mà các phép đo ở trên đặt nó đâu đó từ khoảng một tới mười giây. Với một API mà những route chậm nhất là các lời gọi AI tính bằng <em>hàng trăm</em> giây, đó là thứ đáng chốt lại cho rõ ràng. Healthcheck của compose cũng gọi <code>/health</code>, nơi chạy <code>SELECT 1</code> — một câu hỏi readiness đặt trong phép kiểm liveness.</p>
 </div>
 
 <div class="link-card codelab">
@@ -655,6 +682,11 @@ exec node dist/index.js        # ← 'exec' là từ khoá quan trọng nhất �
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-989"><span class="lc-t">Code Lab · Health Checks &amp; Uptime</span><span class="lc-d">Những probe mà bộ điều phối hành động được</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-3-cmd-entrypoint" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 4.3: CMD, ENTRYPOINT và entrypoint script</span><span class="lc-sub">Đo ở đây: npm start và dạng shell không bao giờ đưa SIGTERM tới node (exit 1 / exit 137); dạng exec thì có (exit 0); script khởi động cần exec; --init dọn 12 zombie còn 0.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -749,7 +781,7 @@ if (missing.length) {
 <p>Rotate it. Not "remove it from the image and rebuild" — <strong>rotate the credential itself</strong>. Deleting the layer does not un-pull the image from anyone who has it, and old tags may still exist in the registry, in a CI cache, on a developer's laptop. The only action that actually helps is making the leaked value worthless.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Runtime configuration lives in <code>/opt/cuonghoangdev/.env</code> on the VPS, outside the deployed tree, and the deploy script's rsync explicitly excludes <code>.env*</code> so values there survive every deploy. That arrangement is right and it has one documented sharp edge: appending a variable <em>while a deploy is running</em> does nothing, because that deploy already loaded the environment — the container has to be recreated afterwards. The project also carries the <code>NEXT_PUBLIC_</code> lesson as a permanent rule in its own instructions: third-party API keys never get that prefix; they go through an authenticated backend proxy so the key stays server-side and rotating it is a container restart rather than a rebuild.</p>
+<p><strong>How cuongthai.com does it.</strong> Runtime configuration lives in <code>/opt/cuonghoangdev/.env</code> on the VPS, outside the deployed tree: <code>deploy-nha.sh</code> passes that file to the swap (<code>ENV_FILE='/opt/cuonghoangdev/.env'</code>) and never ships an <code>.env</code> itself, the fallback <code>deploy.sh</code>'s rsync excludes <code>.env*</code>, and <code>.dockerignore</code> lists <code>.env</code> — so values there survive every deploy and never enter an image. That arrangement is right and it has one documented sharp edge: appending a variable <em>while a deploy is running</em> does nothing, because that deploy already loaded the environment — the container has to be recreated afterwards. The project also carries the <code>NEXT_PUBLIC_</code> lesson as a permanent rule in its own instructions: third-party API keys never get that prefix; they go through an authenticated backend proxy so the key stays server-side and rotating it is a container restart rather than a rebuild.</p>
 </div>
 
 <div class="link-card codelab">
@@ -762,6 +794,11 @@ if (missing.length) {
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: secrets and config travel through environment variables, never hard-coded. Different: Academy deploys to Render/Railway; Courses packages with Docker and shows how secrets leak into the image. In this lesson we add: docker history exposing a token you deleted, ENV writing a password into the image Config, mounting secrets at build time the right way. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Docker — lesson 4.4: ARG and ENV, build time versus run time</span><span class="lc-sub">Measured here with fake secrets: a token in docker history, a password in Config.Env, an .env read back from a deleted layer — and 0 traces with a secret mount.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
 
@@ -849,7 +886,7 @@ if (missing.length) {
 <p>Hãy xoay khoá. Không phải "gỡ nó khỏi ảnh rồi build lại" — <strong>hãy xoay chính cái thông tin xác thực đó</strong>. Xoá một tầng không lấy lại được cái ảnh từ những ai đã tải về, và các tag cũ có thể vẫn còn trong registry, trong cache CI, trên laptop của một lập trình viên. Hành động duy nhất thật sự có ích là làm cho giá trị bị lộ trở nên vô dụng.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Cấu hình lúc chạy nằm ở <code>/opt/cuonghoangdev/.env</code> trên VPS, nằm ngoài cây thư mục được deploy, và lệnh rsync của script deploy loại trừ tường minh <code>.env*</code> nên các giá trị ở đó sống sót qua mọi lần deploy. Cách sắp xếp ấy là đúng và nó có đúng một cạnh sắc đã được ghi lại: thêm một biến vào <em>trong lúc một lần deploy đang chạy</em> thì không có tác dụng gì, vì lần deploy đó đã nạp môi trường xong rồi — phải tạo lại container sau đó. Dự án cũng mang bài học <code>NEXT_PUBLIC_</code> vào thành một quy tắc vĩnh viễn trong tài liệu hướng dẫn của chính nó: khoá API của bên thứ ba không bao giờ được mang tiền tố đó; chúng đi qua một proxy backend có xác thực để khoá ở lại phía máy chủ và việc xoay khoá là một lần khởi động lại container chứ không phải một lần build lại.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Cấu hình lúc chạy nằm ở <code>/opt/cuonghoangdev/.env</code> trên VPS, nằm ngoài cây thư mục được deploy: <code>deploy-nha.sh</code> trao đúng tệp đó cho bước tráo (<code>ENV_FILE='/opt/cuonghoangdev/.env'</code>) và không bao giờ tự gửi một tệp <code>.env</code>, đường lùi <code>deploy.sh</code> thì rsync loại trừ <code>.env*</code>, và <code>.dockerignore</code> có dòng <code>.env</code> — nên các giá trị ở đó sống sót qua mọi lần deploy và không bao giờ vào ảnh. Cách sắp xếp ấy là đúng và nó có đúng một cạnh sắc đã được ghi lại: thêm một biến vào <em>trong lúc một lần deploy đang chạy</em> thì không có tác dụng gì, vì lần deploy đó đã nạp môi trường xong rồi — phải tạo lại container sau đó. Dự án cũng mang bài học <code>NEXT_PUBLIC_</code> vào thành một quy tắc vĩnh viễn trong tài liệu hướng dẫn của chính nó: khoá API của bên thứ ba không bao giờ được mang tiền tố đó; chúng đi qua một proxy backend có xác thực để khoá ở lại phía máy chủ và việc xoay khoá là một lần khởi động lại container chứ không phải một lần build lại.</p>
 </div>
 
 <div class="link-card codelab">
@@ -862,6 +899,11 @@ if (missing.length) {
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: bí mật và cấu hình đi qua biến môi trường, không hard-code. Khác: Academy deploy lên Render/Railway; Courses đóng gói bằng Docker và chỉ ra bí mật lọt vào ảnh thế nào. Ở bài này mình học thêm: docker history lộ token dù đã xoá, ENV ghi mật khẩu vào Config của ảnh, cách đúng là gắn bí mật lúc build. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/docker/learn?lessonSlug=dk-4-4-arg-env" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Docker — bài 4.4: ARG và ENV, lúc build và lúc chạy</span><span class="lc-sub">Đo ở đây với bí mật giả: token trong docker history, mật khẩu trong Config.Env, file .env đọc lại từ một tầng "đã xoá" — và 0 dấu vết với secret mount.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,
@@ -959,7 +1001,7 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The deploy has the right pieces and one honest gap. nginx owns ports 80 and 443 permanently and is not restarted during a deploy — that is the structural property this lesson says matters most. <code>deploy.sh</code> uses <code>docker compose up -d --force-recreate</code>, whose comment explains it swaps atomically rather than <code>down &amp;&amp; up</code>, and afterwards waits for the backend's health endpoint before continuing. The gap is that the health check runs <em>after</em> the swap rather than gating it: the new container takes the name and the network alias, and nginx points at the new one from that moment, so there is a real window between "container recreated" and "application answering". That is the measured 1,5%, and closing it is what method 3 above describes.</p>
+<p><strong>How cuongthai.com does it.</strong> The deploy has the right pieces and one honest gap. nginx owns ports 80 and 443 permanently and is not restarted during a deploy — that is the structural property this lesson says matters most. <code>deploy-nha.sh</code> (the standard path since 2026-08-18) recreates the backend and frontend in place with <code>docker compose up -d --no-build --remove-orphans backend frontend</code>, then reloads nginx immediately and checks health afterwards. That reload exists because of an outage: on 2026-09-11 the recreated containers came back with each other's IP addresses while nginx still held the old ones, and both domains returned 502 for 15 minutes until a later step happened to reload the config. The gap is that the health check runs <em>after</em> the swap rather than gating it: the new container takes the name and the network alias, so there is a real window between "container recreated" and "application answering" — method 1 behind a proxy, where users see 502 instead of a refused connection. Closing it is what method 3 above describes.</p>
 </div>
 
 <div class="link-card codelab">
@@ -968,6 +1010,11 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nginx${REF}#module-915"><span class="lc-t">Code Lab · nginx</span><span class="lc-d">Reverse proxy, upstreams and reloads</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 3.3: blue-green, the same deploy with zero failures</span><span class="lc-sub">Measured here with a probe every ~25 ms: stop-then-start lost 16 of 301 requests, "blue-green" without a proxy 35 of 291, nginx in front 0 — once the old workers were allowed to drain.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1040,7 +1087,7 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Phần deploy có đúng các mảnh cần có và một lỗ hổng trung thực. nginx sở hữu cổng 80 và 443 vĩnh viễn và không bị khởi động lại trong lúc deploy — chính là tính chất cấu trúc mà bài này nói là quan trọng nhất. <code>deploy.sh</code> dùng <code>docker compose up -d --force-recreate</code>, với dòng chú thích giải thích rằng nó đổi container một cách nguyên tử thay vì <code>down &amp;&amp; up</code>, và sau đó chờ endpoint health của backend rồi mới đi tiếp. Lỗ hổng là phép kiểm khoẻ chạy <em>sau</em> khi đã đổi chứ không phải làm chốt chặn cho phép đổi: container mới nhận lấy cái tên và bí danh mạng, nên nginx trỏ vào cái mới ngay từ khoảnh khắc đó, và tồn tại một cửa sổ thật giữa "container đã tạo lại" với "ứng dụng đã trả lời". Đó chính là 1,5% đã đo được, và đóng nó lại chính là điều cách 3 ở trên mô tả.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Phần deploy có đúng các mảnh cần có và một lỗ hổng trung thực. nginx sở hữu cổng 80 và 443 vĩnh viễn và không bị khởi động lại trong lúc deploy — chính là tính chất cấu trúc mà bài này nói là quan trọng nhất. <code>deploy-nha.sh</code> (đường chuẩn từ 18/08/2026) dựng lại backend và frontend tại chỗ bằng <code>docker compose up -d --no-build --remove-orphans backend frontend</code>, rồi nạp lại nginx ngay và kiểm khoẻ sau đó. Cú nạp lại ấy có vì một sự cố: ngày 11/09/2026 các container dựng lại nhận nhầm địa chỉ IP của nhau trong khi nginx vẫn giữ địa chỉ cũ, và cả hai tên miền trả 502 suốt 15 phút cho tới khi một bước sau tình cờ nạp lại cấu hình. Lỗ hổng là phép kiểm khoẻ chạy <em>sau</em> khi đã đổi chứ không phải làm chốt chặn cho phép đổi: container mới nhận lấy cái tên và bí danh mạng, nên tồn tại một cửa sổ thật giữa "container đã tạo lại" với "ứng dụng đã trả lời" — cách 1 đứng sau một proxy, người dùng thấy 502 thay vì kết nối bị từ chối. Đóng nó lại chính là điều cách 3 ở trên mô tả.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1049,6 +1096,11 @@ docker ps | grep green &amp;&amp; echo "sẵn sàng!"</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/nginx${REF}#module-915"><span class="lc-t">Code Lab · nginx</span><span class="lc-d">Reverse proxy, upstream và nạp lại cấu hình</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-3-3-xanh-lam" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 3.3: blue-green, cùng một lần deploy, không lỗi nào</span><span class="lc-sub">Đo ở đây với bộ dò ~25 ms một lần: dừng rồi chạy mất 16/301 request, "blue-green" không proxy mất 35/291, có nginx đứng trước mất 0 — khi để worker cũ xả xong.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1171,7 +1223,7 @@ git revert &lt;sha_xau&gt;
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The smoke test in this lesson is not an example — it is in <code>deploy.sh</code>, added after the 2026-07-02 incident, and it lists twenty-odd routes across every feature module. The deploy also fails on it. Two other rules came out of the same week and are now written into the project's own instructions: <strong>always run a full <code>bash deploy.sh</code> after a code change, never <code>--no-build</code></strong> (which only rsyncs, leaves the old image running, and skips the smoke test — exactly how the stale build shipped), and diagnose route health with unauthenticated <code>curl</code> rather than the browser. The chat history was a separate bug entirely, found the same day: nothing was lost, a per-viewer <code>deletedAt</code> filter was hiding it. Two unrelated causes presenting as one symptom is normal during an incident, and it is the reason step 3 above is a <em>measurement</em> rather than a guess.</p>
+<p><strong>How cuongthai.com does it.</strong> The smoke test in this lesson is not an example — its route list lives in <code>deploy.sh</code>, added after the 2026-07-02 incident, and by 2026-11-08 it lists 78 routes across every feature module; <code>deploy-nha.sh</code> (the standard path since 2026-08-18) reads that same list and fails the deploy on any 404. A second check was added after 2026-09-11, when the in-container smoke test reported "clean (52 routes)" while both domains returned 502: a request from <em>outside</em>, through nginx, the way users arrive. Images are tagged with the commit SHA, so the previous one always has a name. Two other rules came out of the 2026-07-02 week and are written into the project's own instructions: <strong>if you fall back to <code>deploy.sh</code>, always run it in full after a code change, never <code>--no-build</code></strong> (which only rsyncs, leaves the old image running, and skips the smoke test — exactly how the stale build shipped), and diagnose route health with unauthenticated <code>curl</code> rather than the browser. The chat history was a separate bug entirely, found the same day: nothing was lost, a per-viewer <code>deletedAt</code> filter was hiding it. Two unrelated causes presenting as one symptom is normal during an incident, and it is the reason step 3 above is a <em>measurement</em> rather than a guess.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1184,6 +1236,11 @@ git revert &lt;sha_xau&gt;
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">You met this in SDN302 — lesson 6.1: Connecting React, deploying &amp; BaaS</span><span class="lc-sub">If you took SDN302 on Academy, this part will feel familiar. Same: "works locally, fails in production" is almost always a deploy problem. Different: Courses recounts a real deploy incident and a one-command diagnosis. In this lesson we add: why a green health check can hide a missing feature, unauthenticated curl to tell 401 from 404, smoke tests and rollback. If you have not taken SDN302, no problem — this lesson stands on its own from the start.</span></span>
   <span class="lc-cta">OPEN SDN302 LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Deploy to a VPS — lesson 6.1: the rollback that works</span><span class="lc-sub">Measured here: a stale build answers /health 200, /messages 401 and /gifs 404; a smoke test turns that into exit 1; rolling back by image took 0.82 s against 5.05 s to rebuild.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
 
@@ -1274,7 +1331,7 @@ git revert &lt;sha_xau&gt;
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Cái smoke test trong bài này không phải một ví dụ — nó nằm trong <code>deploy.sh</code>, được thêm vào sau sự cố ngày 02/07/2026, và nó liệt kê hơn hai chục route trải khắp mọi mô-đun tính năng. Lần deploy cũng hỏng theo nó. Hai quy tắc khác ra đời trong cùng tuần ấy và giờ đã được viết vào chính tài liệu hướng dẫn của dự án: <strong>luôn chạy một lần <code>bash deploy.sh</code> ĐẦY ĐỦ sau khi đổi code, không bao giờ dùng <code>--no-build</code></strong> (thứ chỉ rsync, để nguyên ảnh cũ đang chạy, và bỏ qua cả smoke test — chính xác là cách cái build cũ đã lên tới nơi), và chẩn đoán sức khoẻ route bằng <code>curl</code> không xác thực chứ đừng bằng trình duyệt. Còn chuyện lịch sử chat là một con bug hoàn toàn khác, phát hiện cùng ngày: chẳng có gì mất cả, một bộ lọc <code>deletedAt</code> theo từng người xem đang giấu nó đi. Hai nguyên nhân không liên quan biểu hiện thành một triệu chứng là chuyện bình thường trong lúc có sự cố, và đó là lý do bước 3 ở trên là một <em>phép đo</em> chứ không phải một phỏng đoán.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Cái smoke test trong bài này không phải một ví dụ — danh sách route của nó nằm trong <code>deploy.sh</code>, được thêm vào sau sự cố ngày 02/07/2026, và tới 08/11/2026 nó liệt kê 78 route trải khắp mọi mô-đun tính năng; <code>deploy-nha.sh</code> (đường chuẩn từ 18/08/2026) đọc đúng danh sách đó và làm hỏng lần deploy khi có bất kỳ 404 nào. Một phép kiểm thứ hai được thêm sau ngày 11/09/2026, khi smoke test bên trong container báo "sạch (52 route)" trong lúc cả hai tên miền đang trả 502: một request từ <em>bên ngoài</em>, đi qua nginx, đúng đường người dùng đi. Ảnh được gắn tag theo mã commit, nên bản trước luôn có tên. Hai quy tắc khác ra đời trong tuần 02/07/2026 và đã được viết vào chính tài liệu hướng dẫn của dự án: <strong>nếu phải lùi về <code>deploy.sh</code> thì luôn chạy ĐẦY ĐỦ sau khi đổi code, không bao giờ dùng <code>--no-build</code></strong> (thứ chỉ rsync, để nguyên ảnh cũ đang chạy, và bỏ qua cả smoke test — chính xác là cách cái build cũ đã lên tới nơi), và chẩn đoán sức khoẻ route bằng <code>curl</code> không xác thực chứ đừng bằng trình duyệt. Còn chuyện lịch sử chat là một con bug hoàn toàn khác, phát hiện cùng ngày: chẳng có gì mất cả, một bộ lọc <code>deletedAt</code> theo từng người xem đang giấu nó đi. Hai nguyên nhân không liên quan biểu hiện thành một triệu chứng là chuyện bình thường trong lúc có sự cố, và đó là lý do bước 3 ở trên là một <em>phép đo</em> chứ không phải một phỏng đoán.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1287,6 +1344,11 @@ git revert &lt;sha_xau&gt;
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Bạn đã học phần này ở SDN302 — bài 6.1: Nối React, triển khai &amp; BaaS</span><span class="lc-sub">Nếu bạn đã học môn SDN302 ở Academy thì phần này không còn lạ. Giống: "chạy local nhưng lỗi ở production" gần như luôn là chuyện deploy. Khác: Courses kể một sự cố deploy thật và cách chẩn đoán bằng một lệnh. Ở bài này mình học thêm: vì sao health check xanh mà tính năng vẫn mất, curl không xác thực để phân biệt 401 với 404, smoke test và quay lui. Chưa học SDN302 cũng không sao — bài này tự đủ từ đầu.</span></span>
   <span class="lc-cta">MỞ BÀI SDN302 →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/deploy-vps/learn?lessonSlug=deploy-6-1-lui-chay-duoc" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Deploy lên VPS — bài 6.1: lần quay lui chạy được</span><span class="lc-sub">Đo ở đây: build cũ trả /health 200, /messages 401 và /gifs 404; smoke test biến điều đó thành exit 1; quay lui bằng ảnh mất 0,82 s so với 5,05 s build lại.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
 `,

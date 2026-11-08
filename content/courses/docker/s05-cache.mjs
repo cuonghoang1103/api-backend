@@ -717,6 +717,11 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 
 <div class="pitfall"><strong>Pitfall:</strong> <code>COPY . .</code> immediately followed by the dependency install, in a repository where CI writes a file into the working directory before building. A coverage report, a <code>build-info.json</code>, a <code>.env</code> rendered from secrets — any of them changes the context hash on every run, so the cache misses on <em>every single CI build</em> even though the ordering looks correct locally. The symptom is "the cache works on my machine and never in CI". Check what is in the context at build time (<code>docker build --progress=plain</code> shows the transferred size) and add the generated files to <code>.dockerignore</code>, or write them after the build instead of before.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> Order instructions by how often their inputs change — rarest at the top — because invalidation only ever cascades downward. Copy dependency manifests and install <em>before</em> copying source; in a monorepo that means enumerating every workspace <code>package.json</code>, which is verbose and worth it. And "fewer layers" is not the goal: group <code>RUN</code> steps by change frequency, and let a multi-stage build handle the size question separately.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.2: the line order that makes builds 9.3× slower</span><span class="lc-sub">npm ci before the source, a .dockerignore that kept a fake .env out of the image, an ARG at the top that re-ran npm ci, and amd64 emulation 12.5× slower on an arm64 Mac.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 5 · Bài 5.2</span>
@@ -936,6 +941,11 @@ docker build --progress=plain -f Dockerfile.fast -t o:m . 2&gt;&amp;1 \\
 
 <div class="pitfall"><strong>Bẫy:</strong> <code>COPY . .</code> đứng ngay trước lượt cài thư viện, trong một kho mã mà CI ghi một file vào thư mục làm việc TRƯỚC khi dựng. Một báo cáo độ phủ, một <code>build-info.json</code>, một <code>.env</code> được dựng ra từ bí mật — cái nào cũng làm đổi mã băm của ngữ cảnh ở mọi lượt chạy, nên cache TRƯỢT ở <em>MỌI LƯỢT DỰNG CI</em> dù thứ tự nhìn ở máy thì có vẻ đúng. Triệu chứng là "cache chạy trên máy tôi và không bao giờ chạy trong CI". Hãy kiểm xem trong ngữ cảnh có gì lúc dựng (<code>docker build --progress=plain</code> hiện ra kích thước đã truyền) rồi thêm những file được sinh ra vào <code>.dockerignore</code>, hoặc ghi chúng SAU lượt dựng thay vì trước.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Hãy sắp các chỉ thị theo tần suất thay đổi của đầu vào — ít đổi nhất lên trên — vì việc vô hiệu hoá chỉ lan xuống dưới. Hãy chép file khai báo thư viện rồi cài TRƯỚC khi chép mã nguồn; trong một monorepo thì điều đó nghĩa là liệt kê MỌI <code>package.json</code> của workspace, dài dòng nhưng đáng. Và "ít tầng hơn" KHÔNG phải mục tiêu: hãy gộp các bước <code>RUN</code> theo tần suất thay đổi, và để một lượt dựng nhiều tầng lo riêng chuyện kích thước.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-2-cache-tang" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.2: thứ tự dòng làm build chậm 9,3 lần</span><span class="lc-sub">npm ci trước mã nguồn, .dockerignore giữ file .env giả ngoài ảnh, một ARG ở đầu tệp làm npm ci chạy lại, và giả lập amd64 chậm 12,5 lần trên Mac arm64.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

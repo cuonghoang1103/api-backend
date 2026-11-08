@@ -921,6 +921,11 @@ ${slide('dv-03', 17, 'nginx phân giải tên máy MỘT lần, lúc nạp')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">socket(7) — SO_REUSEPORT</span><span class="lc-sub">man7.org/linux/man-pages/man7/socket.7.html — what the option promises at the kernel level, which is not what the measurement above showed at the Node level.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.socket(5) — socket activation</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.socket.html — the variation where the kernel queues connections across a restart.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — upstream blocks, keepalive and reloading</span><span class="lc-sub">/courses/nginx/learn${REF} — the proxy side of this lesson in depth, including why the empty Connection header is required for upstream keepalive.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.5: zero downtime, 5.3% lost or 0%</span><span class="lc-sub">The same swap in Docker containers: why the health check gates nothing without a proxy, the 502 found when blue is dropped too soon, and WebSockets that never roll.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 3 · Bài 3.3</span>
@@ -1128,6 +1133,11 @@ ${slide('dv-03', 17, 'nginx phân giải tên máy MỘT lần, lúc nạp')}
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">socket(7) — SO_REUSEPORT</span><span class="lc-sub">man7.org/linux/man-pages/man7/socket.7.html — cái tuỳ chọn đó hứa gì ở tầng nhân hệ điều hành, mà đó không phải thứ phép đo ở trên cho thấy ở tầng Node.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">systemd.socket(5) — kích hoạt bằng socket</span><span class="lc-sub">freedesktop.org/software/systemd/man/systemd.socket.html — biến thể mà nhân hệ điều hành xếp hàng kết nối xuyên qua một lần khởi động lại.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Nginx — khối upstream, keepalive và nạp lại cấu hình</span><span class="lc-sub">/courses/nginx/learn${REF} — phía proxy của bài này ở mức sâu, kể cả vì sao cái header Connection rỗng là bắt buộc cho keepalive lên upstream.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-5-deploy-khong-gian-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.5: không gián đoạn, mất 5,3 % hay 0 %</span><span class="lc-sub">Cùng cú tráo nhưng bằng container Docker: vì sao health check không chốt được gì khi thiếu proxy, lỗi 502 khi bỏ blue quá sớm, và WebSocket không bao giờ cuốn chiếu được.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

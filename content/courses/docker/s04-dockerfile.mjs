@@ -1431,6 +1431,11 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
 
 <div class="pitfall"><strong>Pitfall:</strong> writing the JSON array with single quotes — <code>CMD ['node', 'server.js']</code>. That is not valid JSON, so Docker falls back to treating the entire line as <em>shell form</em> and runs <code>/bin/sh -c "['node', 'server.js']"</code>, which fails with something baffling like <code>[node,: not found</code>. An earlier version of this lesson said there is no warning at build time; current BuildKit does print one — <code>WARN: JSONArgsRecommended</code> — but it is one yellow line among many and easy to miss. Double quotes, always — and if you want to be sure, check afterwards with <code>docker image inspect img --format '{{.Config.Cmd}}'</code>: exec form shows the array intact, shell form shows <code>[/bin/sh -c …]</code>.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> ENTRYPOINT is the program and CMD is its default arguments; command-line arguments replace CMD and are appended to ENTRYPOINT. Always use exec form (a JSON array with double quotes) so your process is PID 1 and stops in milliseconds rather than ten seconds. And an entrypoint script must end in <code>exec "\$@"</code> — that one line is what makes the setup work disappear and hands PID 1 to your application.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-3-pid-1-tat-em" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.3: PID 1, the CMD line that loses every in-flight request</span><span class="lc-sub">A 3-second request during docker stop: cut with CMD npm start, answered with the exec form; a default grace of 3.14 s measured on Docker Desktop, and an unhealthy container Docker never restarts.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.3</span>
@@ -1712,6 +1717,11 @@ docker rmi sf ef ep noexp tt &gt;/dev/null 2&gt;&amp;1; rm -f entrypoint.sh</cod
 
 <div class="pitfall"><strong>Bẫy:</strong> viết mảng JSON bằng dấu nháy ĐƠN — <code>CMD ['node', 'server.js']</code>. Đó không phải JSON hợp lệ, nên Docker lùi về coi cả dòng là <em>DẠNG SHELL</em> rồi chạy <code>/bin/sh -c "['node', 'server.js']"</code>, và nó hỏng với một thông báo khó hiểu kiểu <code>[node,: not found</code>. Bản cũ của bài nói lúc dựng không có cảnh báo nào; BuildKit bây giờ CÓ in một dòng — <code>WARN: JSONArgsRecommended</code> — nhưng nó chỉ là một dòng vàng giữa rất nhiều dòng, rất dễ bỏ sót. Hãy dùng nháy KÉP, luôn luôn — và nếu muốn chắc chắn thì kiểm lại sau bằng <code>docker image inspect img --format '{{.Config.Cmd}}'</code>: dạng exec hiện ra cái mảng còn nguyên, dạng shell hiện ra <code>[/bin/sh -c …]</code>.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> ENTRYPOINT là chương trình còn CMD là tham số mặc định của nó; tham số trên dòng lệnh THAY THẾ CMD và được NỐI vào sau ENTRYPOINT. Hãy luôn dùng dạng exec (một mảng JSON với nháy kép) để tiến trình của bạn là PID 1 và dừng trong vài mili giây thay vì mười giây. Và một script entrypoint phải kết thúc bằng <code>exec "\$@"</code> — riêng dòng đó là thứ khiến phần thiết lập biến mất và trao PID 1 cho ứng dụng của bạn.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-3-pid-1-tat-em" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.3: PID 1, dòng CMD làm mất mọi request đang chạy</span><span class="lc-sub">Một request 3 giây giữa lúc docker stop: bị cắt với CMD npm start, được trả lời với dạng exec; ân hạn mặc định 3,14 s đo trên Docker Desktop, và container unhealthy mà Docker không tự khởi động lại.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -1941,6 +1951,11 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
 
 <div class="pitfall"><strong>Pitfall:</strong> using <code>ARG</code> to inject a frontend API URL, then wondering why changing it does not change the built site. Two separate problems hide here. First, <code>ARG</code> vanishes at run time, so a Next.js server reading <code>process.env.NEXT_PUBLIC_API_URL</code> finds nothing unless you also set an <code>ENV</code>. Second, values that a bundler inlines are baked in at <strong>build</strong> time, so changing the environment variable on the server and restarting does nothing at all — the string is already inside the JavaScript. Those need a rebuild, per environment, and it is worth writing that fact in a comment next to the <code>ARG</code> so the next person does not lose an afternoon to it.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> <code>ARG</code> exists only during the build and disappears; <code>ENV</code> is stored in the image and is present in every container — and both are readable by anyone who has the image. An <code>ARG</code> declared before <code>FROM</code> is usable only in <code>FROM</code> lines and must be re-declared inside each stage that needs it. And never pass a secret with <code>--build-arg</code>: use <code>RUN --mount=type=secret</code>, which leaves nothing in any layer or in <code>docker history</code>.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-4-bi-mat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.4: secrets, still there after you deleted them</span><span class="lc-sub">The careful-looking Dockerfile that leaks two secrets, the secret mount that leaves none, runtime env (image 0, container inspect 1), and failing fast on a missing variable.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.4</span>
@@ -2161,6 +2176,11 @@ ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit co
 
 <div class="pitfall"><strong>Bẫy:</strong> dùng <code>ARG</code> để tiêm một URL API cho frontend, rồi tự hỏi vì sao đổi nó mà trang đã dựng không đổi theo. Có HAI vấn đề riêng biệt ẩn ở đây. Thứ nhất, <code>ARG</code> biến mất lúc chạy, nên một máy chủ Next.js đọc <code>process.env.NEXT_PUBLIC_API_URL</code> sẽ chẳng thấy gì trừ khi bạn cũng đặt một <code>ENV</code>. Thứ hai, những giá trị mà bộ đóng gói NHÚNG THẲNG vào mã thì được nướng vào lúc <strong>DỰNG</strong>, nên đổi biến môi trường trên máy chủ rồi khởi động lại hoàn toàn chẳng làm gì — cái chuỗi đó đã nằm sẵn trong JavaScript rồi. Những thứ đó cần DỰNG LẠI, cho mỗi môi trường, và đáng viết sự thật đó vào một dòng chú thích cạnh cái <code>ARG</code> để người sau không mất trắng một buổi chiều vì nó.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> <code>ARG</code> chỉ tồn tại trong lúc dựng rồi biến mất; <code>ENV</code> được lưu trong ảnh và có mặt trong mọi container — và CẢ HAI đều đọc được bởi bất cứ ai có cái ảnh. Một <code>ARG</code> khai báo trước <code>FROM</code> chỉ dùng được trong các dòng <code>FROM</code> và phải được khai báo lại bên trong mỗi stage cần nó. Và đừng bao giờ truyền bí mật bằng <code>--build-arg</code>: hãy dùng <code>RUN --mount=type=secret</code>, nó không để lại gì trong tầng nào lẫn trong <code>docker history</code>.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-4-bi-mat-cau-hinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.4: bí mật vẫn còn sau khi bạn đã xoá</span><span class="lc-sub">Dockerfile trông cẩn thận mà lộ hai bí mật, secret mount không để lại gì, biến môi trường lúc chạy (ảnh 0, container inspect 1), và dừng ngay khi thiếu biến.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

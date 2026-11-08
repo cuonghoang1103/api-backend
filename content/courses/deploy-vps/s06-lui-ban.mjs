@@ -382,6 +382,11 @@ for v in v1 v2 v3; do mkdir -p ~/lui/ban/$v; cp ~/app.mjs ~/lui/ban/$v/; echo $v
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">cp(1) — the --link flag</span><span class="lc-sub">gnu.org/software/coreutils/manual/html_node/cp-invocation.html — what <code>cp -al</code> does and when hard links are and are not safe.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Capistrano — directory structure</span><span class="lc-sub">capistranorb.com/documentation/getting-started/structure — the <code>releases/</code> plus <code>current</code> layout this lesson measures has been standard since 2006; worth reading for the conventions, not the Ruby.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — links, inodes and what du actually counts</span><span class="lc-sub">/courses/linux-bash/learn${REF} — the hard-link measurement above makes a lot more sense once inodes do.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.6: when the deploy lies</span><span class="lc-sub">A real incident on cuongthai.com (a stale build behind a green health check), the five-second curl diagnosis, :latest versus SHA tags, and a deploy script that keeps going after a failed migration.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -698,6 +703,11 @@ for v in v1 v2 v3; do mkdir -p ~/lui/ban/$v; cp ~/app.mjs ~/lui/ban/$v/; echo $v
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">cp(1) — cờ --link</span><span class="lc-sub">gnu.org/software/coreutils/manual/html_node/cp-invocation.html — <code>cp -al</code> làm gì, và khi nào liên kết cứng an toàn, khi nào không.</span></span></div>
 <div class="link-card"><span class="lc-ico">📄</span><span class="lc-body"><span class="lc-title">Capistrano — cấu trúc thư mục</span><span class="lc-sub">capistranorb.com/documentation/getting-started/structure — bố cục <code>releases/</code> cộng <code>current</code> mà bài này đem đi đo đã là chuẩn từ 2006; đáng đọc vì quy ước, không phải vì Ruby.</span></span></div>
 <div class="link-card codelab"><span class="lc-ico">🧪</span><span class="lc-body"><span class="lc-title">Linux &amp; Bash — liên kết, inode, và du thật ra đếm cái gì</span><span class="lc-sub">/courses/linux-bash/learn${REF} — phép đo liên kết cứng ở trên dễ hiểu hơn nhiều khi đã hiểu inode.</span></span></div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-6-deploy-hong-quay-lui" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.6: khi deploy nói dối</span><span class="lc-sub">Một sự cố thật trên cuongthai.com (build cũ sau health check xanh), chẩn đoán bằng curl trong năm giây, tag :latest so với tag SHA, và script deploy chạy tiếp sau một migration hỏng.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

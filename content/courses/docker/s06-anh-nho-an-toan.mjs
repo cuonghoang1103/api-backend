@@ -343,6 +343,11 @@ EOF</code></pre>
 
 <div class="pitfall"><strong>Pitfall:</strong> copying <code>node_modules</code> from the build stage without pruning it first. The build stage installed <em>everything</em>, so <code>COPY --from=build /app/node_modules</code> brings 700 dev dependencies into your production image and the multi-stage build saves you almost nothing. Two fixes: run <code>npm prune --omit=dev</code> at the end of the build stage, or keep a separate <code>deps</code> stage that only ever ran <code>npm ci --omit=dev</code> and copy from that one. The same trap exists for Python (<code>pip install --prefix=/install</code> in the build stage) and for anything where the build and runtime dependency sets differ.</div>
 <p class="note-ct"><strong>Three things to remember.</strong> A later <code>FROM</code> starts a completely fresh filesystem, so things you do not copy forward are not in the image — which is the only reliable way to <em>not</em> ship something, since deleting leaves a whiteout. <code>COPY --from</code> reaches into a named stage, an external image or a named context, which makes adding a single static binary a two-line operation. And name every stage: it makes <code>--target</code> readable, survives insertions, and lets one Dockerfile produce dev, test, prod and debug images that cannot drift apart.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 17.1: the image, 430 MB down to 65.5 MB</span><span class="lc-sub">Four Dockerfiles for one Express app, measured; the Mac node_modules trap (bcrypt: build OK, then "invalid ELF header"); NODE_ENV, USER node and npm ci.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 6 · Bài 6.1</span>
@@ -625,6 +630,11 @@ EOF</code></pre>
 
 <div class="pitfall"><strong>Bẫy:</strong> chép <code>node_modules</code> từ stage dựng mà chưa tỉa nó. Stage dựng đã cài <em>MỌI THỨ</em>, nên <code>COPY --from=build /app/node_modules</code> lôi 700 thư viện dev vào ảnh production của bạn và lượt dựng nhiều tầng gần như chẳng tiết kiệm được gì. Hai cách chữa: chạy <code>npm prune --omit=dev</code> ở cuối stage dựng, hoặc giữ một stage <code>deps</code> riêng vốn chỉ từng chạy <code>npm ci --omit=dev</code> rồi chép từ cái đó. Cùng cái bẫy tồn tại với Python (<code>pip install --prefix=/install</code> trong stage dựng) và với mọi thứ mà bộ thư viện lúc dựng khác bộ thư viện lúc chạy.</div>
 <p class="note-ct"><strong>Ba thứ cần nhớ.</strong> Một lệnh <code>FROM</code> phía sau bắt đầu một hệ thống file HOÀN TOÀN MỚI, nên những thứ bạn không chép sang thì không có trong ảnh — và đó là cách đáng tin duy nhất để KHÔNG đem theo một thứ gì đó, vì xoá chỉ để lại một whiteout. <code>COPY --from</code> với được vào một stage có tên, một ảnh bên ngoài hoặc một ngữ cảnh có tên, và điều đó biến việc thêm MỘT chương trình tĩnh thành một thao tác hai dòng. Và hãy đặt TÊN cho mọi stage: nó làm <code>--target</code> đọc được, sống sót qua việc chèn thêm, và cho phép một Dockerfile sinh ra ảnh dev, test, prod và debug không thể lệch nhau.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-17-1-anh-docker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 17.1: ảnh Docker, từ 430 MB xuống 65,5 MB</span><span class="lc-sub">Bốn Dockerfile cho một app Express, đo thật; bẫy node_modules của Mac (bcrypt: build xanh rồi "invalid ELF header"); NODE_ENV, USER node và npm ci.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

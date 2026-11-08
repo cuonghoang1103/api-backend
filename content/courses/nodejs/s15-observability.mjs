@@ -145,7 +145,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 HEADER: {"authorization":"[ĐÃ CHE]","cookie":"[ĐÃ CHE]"}
 ---- có lộ SECRET/MatKhauThat/rt_xyz/abc123 trong file? -> false</div>
 
-<p>The <code>*.password</code> wildcard is the part that earns its keep. It matches the field wherever it appears — in a body, in a nested object, in a place you have not written yet — so the protection survives the next developer who logs something without thinking about it. Redaction that depends on everyone remembering is not redaction.</p>
+<p>The <code>*.password</code> wildcard is the part that earns its keep — within its limits. It matches the field <strong>one level down</strong> under any key (<code>body.password</code>, <code>user.password</code>), so the protection survives the next developer who logs <code>{ body }</code> without thinking. It does <strong>not</strong> match a top-level <code>password</code>, nor one two levels down. Measured with pino 10.4 and only <code>'*.password'</code>: <code>{"password":"top","user":{"password":"[Redacted]"},"body":{"user":{"password":"two"}}}</code>. So list the shapes you really log (<code>password</code>, <code>*.password</code>, <code>*.*.password</code>) and test the redaction once. Redaction that depends on everyone remembering is not redaction.</p>
 
 <h3>Levels: the cheapest performance feature you own</h3>
 <p>A log call that is below the configured level should cost nothing. Measure whether it does:</p>
@@ -321,7 +321,7 @@ pino-http (sync)        9.410    4ms    8ms   52ms  486 B/dòng  21,86MB</div>
 HEADER: {"authorization":"[ĐÃ CHE]","cookie":"[ĐÃ CHE]"}
 ---- có lộ SECRET/MatKhauThat/rt_xyz/abc123 trong file? -> false</div>
 
-<p>Ký tự đại diện <code>*.password</code> mới là thứ đáng đồng tiền. Nó khớp trường đó ở <em>bất kỳ đâu</em> — trong body, trong object lồng nhau, trong một chỗ bạn còn chưa viết ra — nên lớp bảo vệ sống sót qua được người tiếp theo lỡ log gì đó mà không nghĩ. Che bí mật mà phụ thuộc vào việc mọi người đều nhớ thì không phải là che bí mật.</p>
+<p>Ký tự đại diện <code>*.password</code> mới là thứ đáng đồng tiền — trong giới hạn của nó. Nó khớp trường đó <strong>sâu đúng một tầng</strong> dưới bất kỳ khoá nào (<code>body.password</code>, <code>user.password</code>), nên lớp bảo vệ sống sót qua được người tiếp theo lỡ log <code>{ body }</code> mà không nghĩ. Nó <strong>không</strong> khớp <code>password</code> ở tầng ngoài cùng, cũng không khớp ở tầng thứ hai. Đo với pino 10.4, chỉ khai <code>'*.password'</code>: <code>{"password":"top","user":{"password":"[Redacted]"},"body":{"user":{"password":"two"}}}</code>. Vì vậy hãy liệt kê đúng các hình dạng bạn thật sự log (<code>password</code>, <code>*.password</code>, <code>*.*.password</code>) và thử che một lần. Che bí mật mà phụ thuộc vào việc mọi người đều nhớ thì không phải là che bí mật.</p>
 
 <h3>Cấp độ log: tính năng hiệu năng rẻ nhất bạn đang sở hữu</h3>
 <p>Một lời gọi log nằm dưới cấp độ đã cấu hình thì lẽ ra phải tốn 0. Đo xem có đúng thế không:</p>

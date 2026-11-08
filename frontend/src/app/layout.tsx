@@ -52,6 +52,7 @@ import TanStackQueryProvider from '@/components/providers/TanStackQueryProvider'
 import ServiceWorkerRegister from '@/components/providers/ServiceWorkerRegister'
 import AppBootSplash from '@/components/ui/AppBootSplash'
 import AuthBoot from '@/components/providers/AuthBoot'
+import GacHoiDanhGia from '@/components/gopY/GacHoiDanhGia'
 import BaoHoatDong from '@/components/providers/BaoHoatDong'
 import MusicAudioController from '@/components/music/MusicAudioController'
 import MusicHistoryRecorder from '@/components/music/MusicHistoryRecorder'
@@ -404,6 +405,8 @@ export default function RootLayout({
             callers need it, and inside SessionProvider for consistency. */}
         <AuthBoot />
         <BaoHoatDong />
+        {/* Hộp robot hỏi đánh giá 5 sao sau một thời gian dùng (08/11/2026) — giao diện chỉ tải khi đủ điều kiện. */}
+        <GacHoiDanhGia />
         <ToasterProvider />
         <TanStackQueryProvider>
        <ThemeProvider>

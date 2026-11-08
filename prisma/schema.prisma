@@ -357,13 +357,14 @@ model User {
   snippetCommentReactions SnippetCommentReaction[]
 
   // ─── Code Lab — authored exercises + personal practice progress ──
-  codeExercises   CodeExercise[]
-  codeProgress    CodeProgress[]
-  codeSubmissions CodeSubmission[]
+  codeExercises           CodeExercise[]
+  codeProgress            CodeProgress[]
+  codeSubmissions         CodeSubmission[]
   // Phòng Lab: một phòng luyện có mục tiêu LOC, do chính người dùng lập.
-  labRooms        CodeLabRoom[]
+  labRooms                CodeLabRoom[]
   // Sự cố & Lỗi — người học chia sẻ sự cố/lỗi gặp phải + cách khắc phục.
   codeLabIncidents        CodeLabIncident[]
+  gopY                    UserFeedback[]           @relation("GopYNguoiGui")
   codeLabIncidentComments CodeLabIncidentComment[]
 
   // ─── My Language — learning progress (per-user, SRS) ─────────
@@ -17517,8 +17518,8 @@ model WorkDeleteRequest {
 // khác vào bình luận. CHỈ THÊM — không đụng bảng cũ.
 // ─────────────────────────────────────────────────────────────
 model CodeLabIncident {
-  id      Int @id @default(autoincrement())
-  userId  Int @map("user_id")
+  id      Int  @id @default(autoincrement())
+  userId  Int  @map("user_id")
   /// Gắn (tuỳ chọn) với một track để lọc theo môn/công nghệ. SetNull: xoá
   /// track thì sự cố vẫn còn, chỉ mất liên kết.
   trackId Int? @map("track_id")
@@ -17536,8 +17537,8 @@ model CodeLabIncident {
   imageKeys String[] @default([]) @map("image_keys")
 
   /// 'OPEN' | 'RESOLVED'
-  status     String @default("OPEN") @db.VarChar(12)
-  viewCount  Int    @default(0) @map("view_count")
+  status    String @default("OPEN") @db.VarChar(12)
+  viewCount Int    @default(0) @map("view_count")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -17566,4 +17567,47 @@ model CodeLabIncidentComment {
 
   @@index([incidentId, createdAt], map: "idx_cl_incident_comment")
   @@map("code_lab_incident_comments")
+}
+
+/// Góp ý & báo lỗi của người dùng (08/11/2026) — trang /gop-y + hộp đánh giá 5 sao tự hiện sau một thời gian dùng.
+/// Admin xử lý ở /admin/gop-y; mỗi góp ý mới đổ vào hộp thư admin (baoAdmin: chuông + Telegram) và email admin.
+model UserFeedback {
+  id          Int       @id @default(autoincrement())
+  /// Khách chưa đăng nhập vẫn gửi được (null). SetNull: xoá tài khoản thì góp ý còn lại, ẩn danh.
+  userId      Int?      @map("user_id")
+  /// BUG | FEATURE | IMPROVE | CONTENT | PRAISE | OTHER | RATING (chỉ chấm sao từ hộp tự hiện)
+  loai        String    @db.VarChar(12)
+  /// 1–5, tuỳ chọn
+  soSao       Int?      @map("so_sao") @db.SmallInt
+  tieuDe      String?   @map("tieu_de") @db.VarChar(200)
+  noiDung     String?   @map("noi_dung") @db.Text
+  /// Chỉ với BUG: THAP | VUA | CAO | CHAN (chặn hẳn, không dùng được)
+  mucDo       String?   @map("muc_do") @db.VarChar(8)
+  /// Trang người dùng đang xem khi gửi (pathname + query)
+  trang       String?   @db.VarChar(500)
+  /// PAGE (trang /gop-y) | POPUP (hộp tự hiện)
+  nguon       String    @default("PAGE") @db.VarChar(8)
+  /// Email liên hệ — khách chưa đăng nhập muốn được trả lời
+  emailLienHe String?   @map("email_lien_he") @db.VarChar(200)
+  /// Trình duyệt + cỡ màn hình — giúp tái hiện lỗi
+  thietBi     String?   @map("thiet_bi") @db.VarChar(400)
+  /// URL ảnh chụp màn hình (đã tải qua /files/upload, chỉ nhận URL thuộc kho media của web)
+  anhUrls     String[]  @default([]) @map("anh_urls")
+  /// MOI | DANG_XEM | DA_XU_LY | BO_QUA
+  trangThai   String    @default("MOI") @map("trang_thai") @db.VarChar(10)
+  /// Lời trả lời của admin — người gửi THẤY ở /gop-y + nhận thông báo
+  traLoi      String?   @map("tra_loi") @db.Text
+  traLoiBoiId Int?      @map("tra_loi_boi_id")
+  traLoiLuc   DateTime? @map("tra_loi_luc")
+  /// Ghi chú nội bộ — người gửi KHÔNG thấy
+  ghiChuNoiBo String?   @map("ghi_chu_noi_bo") @db.Text
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  user User? @relation("GopYNguoiGui", fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([trangThai, createdAt(sort: Desc)], map: "idx_gop_y_trang_thai")
+  @@index([userId, createdAt(sort: Desc)], map: "idx_gop_y_user")
+  @@index([loai, createdAt(sort: Desc)], map: "idx_gop_y_loai")
+  @@map("user_feedback")
 }

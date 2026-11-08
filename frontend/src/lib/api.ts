@@ -6191,3 +6191,69 @@ export const adminProjectRequestApi = {
   createWorkProject: (id: number) =>
     api.post<{ success: true; data: CreatedWorkProjectResult }>(`/admin/project-requests/${id}/create-work-project`),
 };
+
+// ─── Góp ý & báo lỗi (08/11/2026) — /gop-y, hộp đánh giá tự hiện, /admin/gop-y ───
+export type LoaiGopY = 'BUG' | 'FEATURE' | 'IMPROVE' | 'CONTENT' | 'PRAISE' | 'OTHER' | 'RATING';
+export type TrangThaiGopY = 'MOI' | 'DANG_XEM' | 'DA_XU_LY' | 'BO_QUA';
+export interface GopYGui {
+  loai: LoaiGopY;
+  soSao?: number | null;
+  tieuDe?: string;
+  noiDung?: string;
+  mucDo?: 'THAP' | 'VUA' | 'CAO' | 'CHAN' | null;
+  trang?: string;
+  nguon?: 'PAGE' | 'POPUP';
+  emailLienHe?: string;
+  anhUrls?: string[];
+  manHinh?: string;
+}
+export interface GopYCuaToi {
+  id: number;
+  loai: LoaiGopY;
+  soSao: number | null;
+  tieuDe: string | null;
+  noiDung: string | null;
+  mucDo: string | null;
+  trang: string | null;
+  anhUrls: string[];
+  trangThai: TrangThaiGopY;
+  traLoi: string | null;
+  traLoiLuc: string | null;
+  createdAt: string;
+}
+export interface GopYAdmin extends GopYCuaToi {
+  nguon: 'PAGE' | 'POPUP';
+  emailLienHe: string | null;
+  thietBi: string | null;
+  ghiChuNoiBo: string | null;
+  user: { id: number; username: string; email: string; avatarUrl: string | null } | null;
+}
+export interface ThongKeGopY {
+  theoTrangThai: Partial<Record<TrangThaiGopY, number>>;
+  theoLoai: Partial<Record<LoaiGopY, number>>;
+  saoTrungBinh: number | null;
+  soLuotSao: number;
+  saoTrungBinh30: number | null;
+  soLuotSao30: number;
+  phanBoSao: Record<string, number>;
+}
+export const gopYApi = {
+  gui: (d: GopYGui) => api.post<ApiResponse<{ id: number }>>('/gop-y', d).then((r) => r.data.data!),
+  cuaToi: () => api.get<ApiResponse<GopYCuaToi[]>>('/gop-y/cua-toi').then((r) => r.data.data ?? []),
+  nenHoi: () => api.get<ApiResponse<{ nenHoi: boolean }>>('/gop-y/nen-hoi').then((r) => r.data.data?.nenHoi ?? false),
+  /** Ảnh chụp màn hình — kho file chung (cần đăng nhập). */
+  taiAnh: (file: File) => {
+    const form = new FormData();
+    form.append('file', file);
+    form.append('category', 'images');
+    return api.post<ApiResponse<{ url: string; id: number }>>('/files/upload', form).then((r) => r.data.data!.url);
+  },
+};
+export const adminGopYApi = {
+  danhSach: (q: { trangThai?: string; loai?: string; tim?: string; trang?: number; id?: number }) =>
+    api.get<ApiResponse<{ items: GopYAdmin[]; tong: number; trang: number; kichTrang: number }>>('/admin/gop-y', { params: q })
+      .then((r) => r.data.data!),
+  thongKe: () => api.get<ApiResponse<ThongKeGopY>>('/admin/gop-y/thong-ke').then((r) => r.data.data!),
+  capNhat: (id: number, d: { trangThai?: TrangThaiGopY; traLoi?: string | null; ghiChuNoiBo?: string | null }) =>
+    api.patch<ApiResponse<GopYAdmin>>(`/admin/gop-y/${id}`, d).then((r) => r.data.data!),
+};

@@ -1011,6 +1011,7 @@ info "Smoke-testing core API routes are mounted..."
 smoke_failed=false
 for route in \
     work/workspaces \
+    gop-y/cua-toi \
     work/mcp \
     admin/project-requests \
     video-hoc/danh-muc \

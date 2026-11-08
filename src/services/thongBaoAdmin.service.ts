@@ -37,6 +37,7 @@ export type LoaiThongBao =
   | 'NAP_DIEM'               // nạp ví điểm
   | 'MUA_PRO'                // mua gói Pro
   | 'YEU_CAU_DU_AN'          // khách gửi phiếu yêu cầu dự án (/about/quy-trinh)
+  | 'GOP_Y'                  // góp ý / báo lỗi / đánh giá sao (/gop-y, hộp tự hiện) — 08/11/2026
   | 'KHAC';
 
 export interface ThongBaoAdmin {
@@ -65,6 +66,7 @@ const BIEU_TUONG: Record<LoaiThongBao, string> = {
   NAP_DIEM: '🪙',
   MUA_PRO: '👑',
   YEU_CAU_DU_AN: '📝',
+  GOP_Y: '💬',
   KHAC: '🔔',
 };
 

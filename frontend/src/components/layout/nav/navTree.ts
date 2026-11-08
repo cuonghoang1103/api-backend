@@ -22,7 +22,7 @@ import {
   Library, Award, Code2, Binary, Waypoints, CircuitBoard, Briefcase, FileText,
   Languages, Sparkles, AudioLines, Blocks, Puzzle, Terminal, KeyRound, Gauge,
   KanbanSquare, NotebookPen, Wallet, Music, Gamepad2, Wifi, Crown, ShoppingBag,
-  Newspaper, BookOpen, Megaphone, Users, MessagesSquare, FolderOpen, Github,
+  Newspaper, BookOpen, Megaphone, Users, MessagesSquare, MessageSquareHeart, FolderOpen, Github,
   FileCode2, Bookmark, User, Store, Send, Workflow, ShieldCheck, MonitorDown,
   LayoutDashboard, Settings, Receipt, Ticket, Shield,
 } from 'lucide-react';
@@ -340,6 +340,10 @@ export const NAV_TREE: NavMenu[] = [
             title: { en: 'Messenger', vi: 'Tin nhắn' },
             desc: { en: 'Direct messages and support chat.', vi: 'Nhắn tin riêng và hỗ trợ.' },
             keywords: 'tin nhan chat' },
+          { href: '/gop-y', icon: MessageSquareHeart,
+            title: { en: 'Feedback & bugs', vi: 'Góp ý & báo lỗi' },
+            desc: { en: 'Report a bug, suggest a feature, tell us what to improve.', vi: 'Báo lỗi, đề xuất tính năng, góp ý cho web tốt hơn.' },
+            keywords: 'gop y bao loi feedback bug de xuat danh gia' },
         ],
       },
       {
@@ -389,6 +393,9 @@ export const ACCOUNT_LINKS: NavItem[] = [
   { href: '/settings', icon: Settings, gate: 'auth',
     title: { en: 'Settings', vi: 'Cài đặt' }, desc: { en: 'Account, appearance and notifications.', vi: 'Tài khoản, giao diện và thông báo.' },
     keywords: 'cai dat' },
+  { href: '/gop-y', icon: MessageSquareHeart,
+    title: { en: 'Send feedback', vi: 'Góp ý & báo lỗi' }, desc: { en: 'Report a bug or suggest an improvement.', vi: 'Báo lỗi hoặc góp ý cho web.' },
+    keywords: 'gop y bao loi feedback' },
   { href: '/admin', icon: Shield, gate: 'admin',
     title: { en: 'Admin dashboard', vi: 'Trang quản trị' }, desc: { en: 'Site administration.', vi: 'Quản trị trang.' } },
 ];

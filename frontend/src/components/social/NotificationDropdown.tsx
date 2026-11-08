@@ -240,6 +240,9 @@ function targetUrl(n: SocialNotification): string {
   if (isWorkType(n.type)) return workUrl(n);
   // Admin announcement: entityId is the announcement id → /forum/:id
   if (n.type === 'ADMIN_ANNOUNCEMENT') {
+    // Thông báo có đường dẫn riêng (vd. admin trả lời góp ý ⇒ /gop-y?xem=…) — chỉ nhận đường nội bộ.
+    const url = typeof n.payload?.url === 'string' ? n.payload.url : '';
+    if (url.startsWith('/') && !url.startsWith('//')) return url;
     return n.entityId ? `/forum/${n.entityId}` : '/forum';
   }
   if (n.entityId) {

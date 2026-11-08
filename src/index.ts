@@ -717,6 +717,10 @@ app.use('/api/v1/admin', adminMessagesRoutes);
 // Admin moderation queue for thread reports (block/report system).
 const { default: adminReportsRoutes } = (await import(path.join(__dirname, 'routes', 'admin.reports.routes.js')));
 app.use('/api/v1/admin/reports', adminReportsRoutes);
+// Góp ý & báo lỗi (08/11/2026): trang /gop-y + hộp đánh giá 5 sao tự hiện; admin ở /admin/gop-y.
+const { gopYRouter, adminGopYRouter } = (await import(path.join(__dirname, 'routes', 'gopY.routes.js')));
+app.use('/api/v1/gop-y', gopYRouter);
+app.use('/api/v1/admin/gop-y', adminGopYRouter);
 // Kiểm duyệt từ hàng chờ báo cáo: gỡ nội dung / khoá người viết (App Store 1.2).
 const { default: adminModerationRoutes } = (await import(path.join(__dirname, 'routes', 'admin.moderation.routes.js')));
 app.use('/api/v1/admin/moderation', adminModerationRoutes);

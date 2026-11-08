@@ -12,6 +12,7 @@
  */
 import type { LucideIcon } from 'lucide-react';
 import {
+  MessageSquareHeart,
   Palette,
   Activity, AlertTriangle, BarChart3, BookOpen, Briefcase, Clapperboard, ClipboardList, Code2,
   CreditCard, Crown, Database, FileText, FlaskConical, FolderKanban, Gamepad2, Github,
@@ -119,6 +120,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
     hue: 'var(--n-people)',
     items: [
       { label: 'Users', vi: 'Người dùng', href: '/admin/users', icon: Users, keywords: 'người dùng quản lý users tài khoản' },
+      { label: 'Feedback', vi: 'Góp ý & báo lỗi', href: '/admin/gop-y', icon: MessageSquareHeart, keywords: 'góp ý báo lỗi feedback đánh giá sao rating' },
       { label: 'Reports', vi: 'Báo cáo vi phạm', href: '/admin/reports', icon: AlertTriangle, keywords: 'báo cáo vi phạm' },
       { label: 'Deletion requests', vi: 'Yêu cầu xoá TK', href: '/admin/deletion-requests', icon: UserX, keywords: 'yêu cầu xoá tài khoản' },
     ],

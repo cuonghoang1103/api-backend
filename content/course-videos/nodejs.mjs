@@ -101,14 +101,14 @@ export default {
 
     /* ── Chương 13 — Tác vụ nền & hàng đợi ──────────────────────────────── */
     'nodejs-13-1-vi-sao-hang-doi': { yt: 'yXPKB7fHxfo', credit: 'Piyush Garg — What are Message Queues? | BullMQ Queues NodeJS', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-01-vi-sao-hang-doi-cf70b8c4.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-13-2-bullmq-co-ban': { yt: '90WGktxfNUw', credit: 'Code Architecture — BullMQ Tutorial in Node.js: Step-by-Step with Redis & Docker | Real Project & Microservice Usage' },
+    'nodejs-13-2-bullmq-co-ban': { yt: '90WGktxfNUw', credit: 'Code Architecture — BullMQ Tutorial in Node.js: Step-by-Step with Redis & Docker | Real Project & Microservice Usage', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-02-bullmq-co-ban-71647b4c.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-13-3-thu-lai-va-idempotent': { yt: 'zLEtzg04HUI', credit: 'Codeminer42 — Background Jobs in NodeJS with BullMQ. by Douglas Marques', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-03-thu-lai-va-idempotent-tron-9d31b565.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-13-4-lich-trinh': { yt: 'osYgivmFULE', credit: 'Hey Delphi — NodeJS : BullMQ - Persistence job queuing & managing jobs between server restart' },
-    'nodejs-13-5-worker-chet-va-van-hanh': { yt: 'bdj33b7k_5U', credit: 'Full Stack Mastery — I Built an Industry-Grade Email Queue System ⚡ (BullMQ + Node.js)' },
+    'nodejs-13-4-lich-trinh': { yt: 'osYgivmFULE', credit: 'Hey Delphi — NodeJS : BullMQ - Persistence job queuing & managing jobs between server restart', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-04-lich-trinh-tron-5efc0130.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-13-5-worker-chet-va-van-hanh': { yt: 'bdj33b7k_5U', credit: 'Full Stack Mastery — I Built an Industry-Grade Email Queue System ⚡ (BullMQ + Node.js)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/13-tac-vu-nen-hang-doi/13-05-worker-chet-va-van-hanh-tron-c8925598.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 14 — Kiểm thử ───────────────────────────────────────────── */
-    'nodejs-14-1-vi-sao-test': { yt: 'Z_U6M1hMC6s', credit: 'Codevolution — React Testing Tutorial - 3 - Types of Tests' },
-    'nodejs-14-2-unit-test': { yt: '0yScewOhjmU', credit: 'Alex Rusin — The ULTIMATE Guide to Testing TypeScript Node.js with Jest.' },
+    'nodejs-14-1-vi-sao-test': { yt: 'Z_U6M1hMC6s', credit: 'Codevolution — React Testing Tutorial - 3 - Types of Tests', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-01-vi-sao-test-a3c8872d.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-14-2-unit-test': { yt: '0yScewOhjmU', credit: 'Alex Rusin — The ULTIMATE Guide to Testing TypeScript Node.js with Jest.', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-02-unit-test-tron-e9dc059f.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-14-3-supertest': { yt: 'LEYuxsGIeGo', credit: 'Alex Rusin — Node.js API Integration Testing: The Ultimate Guide with Jest and Supertest' },
     'nodejs-14-4-db-that': { yt: 'eRPkNd40n94', credit: 'Florian Ludewig — The Easiest Way to Run Integration Tests with Docker and Testcontainers' },
     'nodejs-14-5-do-phu-flaky-ci': { yt: 'W-dc5fpxUVs', credit: 'Codevolution — React Testing Tutorial - 14 - Code Coverage' },
@@ -127,7 +127,7 @@ export default {
     'nodejs-16-3-nen-va-duong-truyen': { yt: 'YaRrmdMa_Cg', credit: 'Web Dev Cody — How to understand a flamegraph to tune performance', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-03-nen-va-duong-truyen-d22c1e48.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-16-4-cluster-mo-rong': { yt: 'SHR-KmfRIsU', credit: 'Codevolution — Node.js Tutorial - 61 - Cluster Module', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-04-cluster-mo-rong-b0b0d05c.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-16-5-ro-ri-bo-nho': { yt: 'F_qshjijxlE', credit: 'Geekle Official — Finding memory leaks and CPU bottlenecks with Node.js debug tools - Vladimir de Turckheim', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-05-ro-ri-bo-nho-c2008ec8.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-16-6-toi-uu-vo-ich': { yt: 'ASv8188AkVk', credit: 'InfoQ — A New Way to Profile Node.js' },
+    'nodejs-16-6-toi-uu-vo-ich': { yt: 'ASv8188AkVk', credit: 'InfoQ — A New Way to Profile Node.js', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/16-hieu-nang/16-06-toi-uu-vo-ich-tron-0aa6e14a.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 17 — Docker & triển khai ────────────────────────────────── */
     'nodejs-17-1-anh-docker': { yt: 'YlVmVO0zAfw', credit: 'Chris Hay — use multi-stage to build super slim node.js docker images..  From 780MB to less than 50MB' },

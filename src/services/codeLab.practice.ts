@@ -85,6 +85,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'academy', ma: 'CEA201', ten: 'Computer Organization and Architecture', courseSlug: 'computer-organization-and-architecture', trackSlug: 'cea201-practice' },
   { loai: 'academy', ma: 'NWC204', ten: 'Computer Networking', courseSlug: 'nwc204-computer-networking', trackSlug: 'nwc204-practice' },
   { loai: 'academy', ma: 'MAD101', ten: 'Discrete Mathematics', courseSlug: 'discrete-mathematics', trackSlug: 'mad101-practice' },
+  { loai: 'academy', ma: 'SDN302', ten: 'Server-Side Development with NodeJS, Express, and MongoDB', courseSlug: 'server-side-development-nodejs-express-mongodb', trackSlug: 'server-side-development-nodejs-express-mongodb-practice' },
   { loai: 'course', ten: 'Nền tảng Web', courseSlug: 'web-foundations', trackSlug: 'web-foundations-practice' },
   { loai: 'course', ten: 'Networking for Developers', courseSlug: 'networking-for-developers', trackSlug: 'networking-practice' },
   { loai: 'course', ten: 'API & System Design', courseSlug: 'api-design', trackSlug: 'api-design-practice' },
@@ -92,6 +93,7 @@ export const PRACTICE_CATALOG: readonly MucDanhMuc[] = Object.freeze([
   { loai: 'course', ten: 'TypeScript', courseSlug: 'typescript', trackSlug: 'typescript-practice' },
   { loai: 'course', ten: 'Authentication', courseSlug: 'authentication', trackSlug: 'authentication-practice' },
   { loai: 'course', ten: 'PostgreSQL', courseSlug: 'postgresql', trackSlug: 'postgresql-practice' },
+  { loai: 'course', ten: 'Node.js', courseSlug: 'nodejs', trackSlug: 'nodejs-practice' },
 ] as MucDanhMuc[]);
 
 /** Track luyện tập của một khoá (bảng trên, không có thì `<courseSlug>-practice`). */

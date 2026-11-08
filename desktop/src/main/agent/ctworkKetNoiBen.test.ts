@@ -11,6 +11,9 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
+/* Máy dev có thể đặt sẵn CTWORK_TOKEN (cho MCP của Claude Code) ⇒ `coTokenCtwork()` thành true và phép
+   "không nối + không token ⇒ null" đỏ CHỈ trên máy đó (08/11/2026). Bài kiểm không được đọc môi trường thật. */
+delete process.env.CTWORK_TOKEN;
 const THU_MUC = await fs.mkdtemp(path.join(os.tmpdir(), 'ct-ben-'));
 const appGia: { getPath: () => string; isPackaged: boolean; getVersion: () => string; laLoiDocLap?: boolean } = { getPath: () => THU_MUC, isPackaged: false, getVersion: () => '1' };
 let giaiMaHong = false;

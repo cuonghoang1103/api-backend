@@ -236,7 +236,8 @@ export function KeHoachNgay({ onDoiViec }: { onDoiViec?: () => void }) {
           <button
             type="button"
             className="ct-kh-uytin"
-            style={{ borderColor: uyTin.bac.mau, color: uyTin.bac.mau }}
+            /* màu bậc do máy chủ đặt (tông 400, viết cho nền tối) ⇒ CSS `.ct-kh-uytin` pha cho chủ đề sáng */
+            style={{ borderColor: uyTin.bac.mau, ['--m' as string]: uyTin.bac.mau }}
             onClick={() => datMoSo((c) => !c)}
             aria-expanded={moSo}
             title={uyTin.bac.mo}

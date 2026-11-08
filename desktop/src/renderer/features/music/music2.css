@@ -14,11 +14,19 @@
 .mz-boc { container: mz / inline-size; height: 100%; min-height: 0; }
 .mz, .mz-tg, .mz-menu, .mz-phu, .mz-pb-trai {
   --mz-a: var(--ct-accent);
-  --mz-a2: #5ec7c0;
-  --mz-tim: #f472b6;
+  /* 08/11/2026: hai màu nhấn phụ + vàng BXH có bản SÁNG (tông 700) — bản tối cũ chỉ ~2:1 trên nền trắng. */
+  --mz-a2: #0f766e;
+  --mz-tim: #be185d;
+  --mz-vang: #92600c;
   --mz-nen: var(--ct-bg);
   --mz-mat: var(--ct-surface);
   --mz-vien: var(--ct-border);
+}
+:root[data-ct-theme='dark'] :is(.mz, .mz-menu, .mz-phu, .mz-pb-trai),
+.mz-tg /* chế độ thư giãn: luôn nền tối (ảnh bìa nhoè) */ {
+  --mz-a2: #5ec7c0;
+  --mz-tim: #f472b6;
+  --mz-vang: #e9c27f;
 }
 .mz {
   display: grid;
@@ -258,7 +266,7 @@
 .mz-dong-ten { font-size: 13.5px; font-weight: 550; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mz-dong-nghesi { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--ct-text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mz-dong-tai { color: var(--ct-ok); flex: 0 0 auto; }
-.mz-dong-yt { color: #f87171; flex: 0 0 auto; }
+.mz-dong-yt { color: var(--ct-err); flex: 0 0 auto; }
 .mz-dong-tg { text-align: right; font-size: 12.5px; color: var(--ct-text-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .mz-dong-nut { display: flex; justify-content: flex-end; gap: 2px; }
 .mz-dong .mz-tim { opacity: 0; }
@@ -500,7 +508,7 @@
 
 /* ── Bảng xếp hạng ─────────────────────────────────── */
 .mz-bia-mau[data-mau='vang'] { --m: #d4a35a; }
-.mz-nut-vang { border-color: color-mix(in srgb, #d4a35a 55%, var(--mz-vien)); color: #e9c27f; }
+.mz-nut-vang { border-color: color-mix(in srgb, #d4a35a 55%, var(--mz-vien)); color: var(--mz-vang); }
 .mz-bxh-the { padding: 0; }
 .mz-bxh-the button { flex: 0 0 auto; padding: 0 12px; }
 .mz-bxh-video { position: sticky; top: 0; z-index: 4; margin-bottom: 18px; padding-bottom: 4px; background: var(--mz-nen); }
@@ -513,8 +521,8 @@
 .mz-bxh-dong[data-dang='true'] { background: color-mix(in srgb, var(--mz-a) 12%, transparent); }
 .mz-bxh-dong:hover .mz-dong-bia-phu { opacity: 1; }
 .mz-bxh-hang { text-align: center; font-size: 15px; font-weight: 750; color: var(--ct-text-faint); font-variant-numeric: tabular-nums; }
-.mz-bxh-hang[data-top='true'] { color: #e9c27f; font-size: 17px; }
-.mz-bxh-tt { color: #f87171; opacity: .7; display: grid; place-items: center; }
+.mz-bxh-hang[data-top='true'] { color: var(--mz-vang); font-size: 17px; }
+.mz-bxh-tt { color: var(--ct-err); opacity: .7; display: grid; place-items: center; }
 .mz-bxh-luoi { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
 .mz-the-bia-rong { aspect-ratio: 16 / 9; }
 .mz-the-bia-rong .mz-art { width: 100% !important; height: 100% !important; object-fit: cover; }
@@ -555,9 +563,9 @@
 
 /* ── Quyền riêng tư playlist (QuyenPlaylist.tsx, 05/10/2026) ── */
 .mz-quyen { position: relative; }
-.mz-quyen > .mz-nut[data-che-do='rieng-tu'] { color: #f59e0b; }
-.mz-quyen > .mz-nut[data-che-do='chia-se'] { color: #a78bfa; }
-.mz-quyen > .mz-nut[data-che-do='cong-khai'] { color: #22c55e; }
+.mz-quyen > .mz-nut[data-che-do='rieng-tu'] { color: var(--ct-warn); }
+.mz-quyen > .mz-nut[data-che-do='chia-se'] { color: var(--ct-violet); }
+.mz-quyen > .mz-nut[data-che-do='cong-khai'] { color: var(--ct-ok); }
 .mz-quyen-bang { position: absolute; z-index: 30; top: calc(100% + 8px); left: 0; width: 340px; padding: 10px; border-radius: 16px; background: var(--ct-surface); border: 1px solid var(--ct-border, rgba(127,127,127,.2)); box-shadow: 0 24px 50px -18px rgba(0,0,0,.55); animation: mzQuyen .18s ease-out; }
 @keyframes mzQuyen { from { opacity: 0; transform: translateY(-6px); } }
 .mz-quyen-dau { margin: 2px 6px 8px; font-size: 12.5px; font-weight: 650; color: var(--ct-text-muted); }
@@ -566,9 +574,9 @@
 .mz-quyen-chon > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; font-size: 13.5px; }
 .mz-quyen-chon small { font-size: 12px; color: var(--ct-text-muted); }
 .mz-quyen-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0; }
-.mz-quyen-icon[data-che-do='cong-khai'] { color: #22c55e; background: rgba(34,197,94,.14); }
-.mz-quyen-icon[data-che-do='rieng-tu'] { color: #f59e0b; background: rgba(245,158,11,.14); }
-.mz-quyen-icon[data-che-do='chia-se'] { color: #a78bfa; background: rgba(167,139,250,.16); }
+.mz-quyen-icon[data-che-do='cong-khai'] { color: var(--ct-ok); background: var(--ct-ok-bg); }
+.mz-quyen-icon[data-che-do='rieng-tu'] { color: var(--ct-warn); background: var(--ct-warn-bg); }
+.mz-quyen-icon[data-che-do='chia-se'] { color: var(--ct-violet); background: color-mix(in srgb, var(--ct-violet) 14%, transparent); }
 .mz-quyen-ng { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--ct-border, rgba(127,127,127,.18)); }
 .mz-quyen-tim { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 10px; background: var(--ct-hover); color: var(--ct-text-muted); }
 .mz-quyen-tim input { flex: 1; min-width: 0; background: none; border: 0; outline: 0; color: var(--ct-text); font-size: 13.5px; }
@@ -730,7 +738,7 @@
 .lt-khoi h3 { display: flex; align-items: center; gap: 6px; margin: 0 0 8px; font-size: 13px; }
 .lt-nguoi { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .lt-nguoi li { display: flex; align-items: center; gap: 6px; font-size: 12.5px; padding: 3px 9px 3px 3px; border-radius: 999px; background: var(--ct-surface-2, var(--ct-bg)); }
-.lt-nguoi li svg { color: #f59e0b; }
+.lt-nguoi li svg { color: var(--ct-warn); }
 .lt-av { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--mz-a), var(--mz-tim)); }
 .lt-chat { max-height: 220px; min-height: 90px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px; }
 .lt-chat p { margin: 0; font-size: 13px; padding: 6px 10px; border-radius: 12px 12px 12px 4px; background: var(--ct-surface-2, var(--ct-bg)); align-self: flex-start; max-width: 90%; overflow-wrap: anywhere; }

@@ -119,11 +119,11 @@ kbd {
 .ctx-ray-nut[data-on='true'] .ctx-ray-so { color: inherit; }
 .ctx-ray-ky .ctx-ray-nut { min-height: 29px; font-size: 12.5px; }
 .ctx-cham { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; flex: none; }
-.ctx-cham-pt { background: rgba(249,115,22,.16); color: #fb923c; }
-.ctx-cham-fe { background: rgba(99,102,241,.16); color: #818cf8; }
-.ctx-cham-pe { background: rgba(139,92,246,.16); color: #a78bfa; }
-.ctx-cham-reading { background: rgba(20,184,166,.16); color: #2dd4bf; }
-.ctx-cham-speaking { background: rgba(236,72,153,.16); color: #f472b6; }
+.ctx-cham-pt { background: color-mix(in srgb, var(--ct-orange) 16%, transparent); color: var(--ct-orange); }
+.ctx-cham-fe { background: color-mix(in srgb, var(--ct-accent) 16%, transparent); color: var(--ct-accent-text); }
+.ctx-cham-pe { background: color-mix(in srgb, var(--ct-violet) 16%, transparent); color: var(--ct-violet); }
+.ctx-cham-reading { background: color-mix(in srgb, var(--ct-teal) 16%, transparent); color: var(--ct-teal); }
+.ctx-cham-speaking { background: color-mix(in srgb, var(--ct-pink) 16%, transparent); color: var(--ct-pink); }
 .ctx-ray-chan { margin-top: auto; padding-top: 12px; }
 .ctx-nn {
   display: flex; align-items: center; gap: 8px; width: 100%; height: 34px; padding: 0 10px; border-radius: 9px;

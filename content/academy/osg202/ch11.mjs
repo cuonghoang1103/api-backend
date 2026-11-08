@@ -4133,7 +4133,7 @@ FAT-32, 16 KB clusters: 4 TB &nbsp;&nbsp;&nbsp;(28-bit cluster numbers)<br>
 min of the two limits : 2 TB</div>
 <ul>
 <li><strong>FAT-16 / 4 KB:</strong> 2¹⁶ clusters × 4 KB = <strong>256 MB</strong> — the bank is right (FE3#26, FE4#32, FE12#32, FE14#36, FE15#33).</li>
-<li><strong>FAT-32 / 16 KB:</strong> a FAT-32 entry is 32 bits but only <strong>28</strong> are used for the cluster number, so 2²⁸ × 16 KB = <strong>4 TB</strong>. The bank's <strong>2 TB</strong> equals 2³² sectors × 512 bytes — the limit of a <em>32-bit sector count</em> in the MBR partition table, which would cap the partition at 2 TB whatever the cluster size. So 2 TB is defensible as the real-world answer and 4 TB as the pure-FAT answer: the question is <strong>ambiguous</strong>; in the exam give the bank's option (2 TB) and know why. (This belongs to Chapter 4, lesson 4.A–B; it is reported to the Chapter 4 owner.)</li>
+<li><strong>FAT-32 / 16 KB:</strong> a FAT-32 entry is 32 bits but only <strong>28</strong> are used for the cluster number, so 2²⁸ × 16 KB = <strong>4 TB</strong>. The bank's <strong>2 TB</strong> equals 2³² sectors × 512 bytes — the limit of a <em>32-bit sector count</em> in the MBR partition table, which would cap the partition at 2 TB whatever the cluster size. So 2 TB is defensible as the real-world answer and 4 TB as the pure-FAT answer: the question is <strong>ambiguous</strong>; in the exam give the bank's option (2 TB) and know why. (FAT itself is covered in Chapter 4, lessons 4.A–B.)</li>
 <li>Method: always compute <em>entries × cluster size</em>, then check the other limits (sector count, file-size field) and take the smaller.</li>
 </ul>
 </details>`,
@@ -4156,7 +4156,7 @@ FAT-32, 16 KB clusters: 4 TB &nbsp;&nbsp;&nbsp;(28-bit cluster numbers)<br>
 min of the two limits : 2 TB</div>
 <ul>
 <li><strong>FAT-16 / 4 KB:</strong> 2¹⁶ cluster × 4 KB = <strong>256 MB</strong> — ngân hàng đúng (FE3#26, FE4#32, FE12#32, FE14#36, FE15#33).</li>
-<li><strong>FAT-32 / 16 KB:</strong> một mục FAT-32 là 32 bit nhưng chỉ <strong>28</strong> bit dùng cho số cluster, nên 2²⁸ × 16 KB = <strong>4 TB</strong>. <strong>2 TB</strong> của ngân hàng bằng 2³² sector × 512 byte — giới hạn của <em>số sector 32 bit</em> trong bảng phân vùng MBR, sẽ chặn phân vùng ở 2 TB bất kể cỡ cluster. Vậy 2 TB biện hộ được như đáp án thực tế và 4 TB như đáp án FAT thuần: câu hỏi <strong>mơ hồ</strong>; trong kỳ thi hãy chọn phương án của ngân hàng (2 TB) và biết vì sao. (Điều này thuộc Chương 4, bài 4.A–B; đã báo người giữ Chương 4.)</li>
+<li><strong>FAT-32 / 16 KB:</strong> một mục FAT-32 là 32 bit nhưng chỉ <strong>28</strong> bit dùng cho số cluster, nên 2²⁸ × 16 KB = <strong>4 TB</strong>. <strong>2 TB</strong> của ngân hàng bằng 2³² sector × 512 byte — giới hạn của <em>số sector 32 bit</em> trong bảng phân vùng MBR, sẽ chặn phân vùng ở 2 TB bất kể cỡ cluster. Vậy 2 TB biện hộ được như đáp án thực tế và 4 TB như đáp án FAT thuần: câu hỏi <strong>mơ hồ</strong>; trong kỳ thi hãy chọn phương án của ngân hàng (2 TB) và biết vì sao. (Bản thân FAT được học ở Chương 4, bài 4.A–B.)</li>
 <li>Phương pháp: luôn tính <em>số mục × cỡ cluster</em>, rồi kiểm các giới hạn khác (số sector, trường cỡ tệp) và lấy cái nhỏ hơn.</li>
 </ul>
 </details>`),

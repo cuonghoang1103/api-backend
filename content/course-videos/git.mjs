@@ -122,8 +122,8 @@ export default {
 
     /* ── Chương 14 — Git hằng ngày trong công cụ: VS Code, giao diện đồ hoạ & cấu hình ── */
     'git-14-0-slides': { yt: 'NFjz1AGKA4c', credit: "GitHub — How to use Git and GitHub in VS Code | Tutorial for beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-00-slide-chuong-14-4c40b84f.mp4' }, defaultVideoTrack: 'VI'},
-    'git-14-1-vs-code': { yt: 'i_23KUAEtUM', credit: "Visual Studio Code — Using Git with Visual Studio Code (Official Beginner Tutorial)" },
-    'git-14-2-gitlens-desktop': { yt: 'oJdlGtsbc3U', credit: "GitKraken — GitLens Tutorial: How to use the VS Code Extension" },
+    'git-14-1-vs-code': { yt: 'i_23KUAEtUM', credit: "Visual Studio Code — Using Git with Visual Studio Code (Official Beginner Tutorial)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-01-vs-code-1bf34c4a.mp4' }, defaultVideoTrack: 'VI'},
+    'git-14-2-gitlens-desktop': { yt: 'oJdlGtsbc3U', credit: "GitKraken — GitLens Tutorial: How to use the VS Code Extension", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-02-gitlens-desktop-508e8b9c.mp4' }, defaultVideoTrack: 'VI'},
     'git-14-3-cau-hinh': { yt: 'G3NJzFX6XhY', credit: "codingjerk — Configure your Git" },
     'git-14-4-windows-crlf': { yt: 'zn7m2Mdm_Vg', credit: "ASCODE — CR LF line endings - understanding and fixing the invisible characters hiding between the lines" },
 

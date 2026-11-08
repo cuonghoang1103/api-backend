@@ -15,6 +15,8 @@ import { UserMenu } from './UserMenu';
 import { GROUP_LABELS, GROUP_ORDER, INTERNAL_ROUTES, THANH_BEN, findRoute } from '../routes';
 import { LogoCuongThai } from './LogoCuongThai';
 import { useDich } from '../i18n';
+import { TheGoiYThanhBen, useGoiYThanhBen } from './TheGoiYThanhBen';
+import { MO_TA_TRANG } from './thanhBenGoiY';
 
 /**
  * Ba trạng thái thay vì hai.
@@ -69,6 +71,13 @@ export function Sidebar() {
   const trongCtWork = route === '/work' || route.startsWith('/work/');
   const collapsed = mode === 'icons' || compact || trongCtWork;
   const listRef = useRef<HTMLDivElement>(null);
+  /* Thẻ gợi ý tên trang khi thu gọn (08/11/2026) — thay `title` gốc của HĐH (chậm ~1 s, lệch
+     xuống dưới, chữ nhỏ). Mỗi nút mang `data-goi-y*`; một thẻ duy nhất cho cả thanh bên. */
+  const { goiY, suKien } = useGoiYThanhBen(collapsed && mode !== 'hidden');
+  const goiYCho = (ten: string, duong: string, nhom = '') =>
+    collapsed
+      ? { 'data-goi-y': dich(ten), 'data-goi-y-mo-ta': MO_TA_TRANG[duong] ? dich(MO_TA_TRANG[duong]) : '', 'data-goi-y-nhom': nhom }
+      : {};
 
   const onKeyDown = useCallback((event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
@@ -107,6 +116,7 @@ export function Sidebar() {
       className="ct-sidebar"
       data-collapsed={collapsed}
       aria-label="Điều hướng chính"
+      {...suKien}
     >
       <div className="ct-sidebar-brand"><LogoCuongThai coChu={!collapsed} phu={dich('Không gian cá nhân')} /></div>
       <div className="ct-sidebar-scroll" ref={listRef} onKeyDown={onKeyDown}>
@@ -142,9 +152,8 @@ export function Sidebar() {
                     className="ct-nav-item"
                     data-active={active}
                     aria-current={active ? 'page' : undefined}
-                    // `title` cho tooltip gốc của HĐH khi sidebar thu gọn.
                     aria-label={dich(item.label)}
-                    title={collapsed ? dich(item.label) : undefined}
+                    {...goiYCho(item.label, item.path, dich(GROUP_LABELS[group]))}
                     tabIndex={active ? 0 : -1}
                     onClick={() => navigate(item.path)}
                   >
@@ -176,7 +185,7 @@ export function Sidebar() {
             className="ct-nav-item ct-nav-quantri"
             data-route="/quan-tri"
             data-active={route === '/quan-tri' || route.startsWith('/quan-tri/')}
-            title={collapsed ? dich('Quản trị') : undefined}
+            {...goiYCho('Quản trị', '/quan-tri')}
             onClick={() => navigate('/quan-tri')}
           >
             <ShieldCheck className="ct-nav-icon" size={17} aria-hidden />
@@ -188,7 +197,7 @@ export function Sidebar() {
           type="button"
           className="ct-nav-item"
           data-active={route === INTERNAL_ROUTES.settings}
-          title={collapsed ? dich('Cài đặt') : undefined}
+          {...goiYCho('Cài đặt', INTERNAL_ROUTES.settings)}
           onClick={() => navigate(INTERNAL_ROUTES.settings)}
         >
           <Settings className="ct-nav-icon" size={17} aria-hidden />
@@ -200,7 +209,9 @@ export function Sidebar() {
           className="ct-nav-item"
           onClick={() => setSetting('sidebarMode', NEXT_MODE[mode])}
           aria-label={dich(MODE_LABEL[mode])}
-          title={`${dich(MODE_LABEL[mode])}  (⌘B)`}
+          {...(collapsed
+            ? { 'data-goi-y': dich(MODE_LABEL[mode]), 'data-goi-y-mo-ta': `${navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl+'}B`, 'data-goi-y-nhom': '' }
+            : { title: `${dich(MODE_LABEL[mode])}  (${navigator.platform.startsWith('Mac') ? '⌘' : 'Ctrl+'}B)` })}
         >
           {mode === 'full' ? (
             <PanelLeftClose className="ct-nav-icon" size={17} aria-hidden />
@@ -210,6 +221,7 @@ export function Sidebar() {
           <span className="ct-nav-label">{dich('Thu gọn')}</span>
         </button>
       </div>
+      <TheGoiYThanhBen goiY={goiY} />
     </nav>
   );
 }

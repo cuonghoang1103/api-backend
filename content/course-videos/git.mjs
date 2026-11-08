@@ -124,12 +124,12 @@ export default {
     'git-14-0-slides': { yt: 'NFjz1AGKA4c', credit: "GitHub — How to use Git and GitHub in VS Code | Tutorial for beginners", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-00-slide-chuong-14-4c40b84f.mp4' }, defaultVideoTrack: 'VI'},
     'git-14-1-vs-code': { yt: 'i_23KUAEtUM', credit: "Visual Studio Code — Using Git with Visual Studio Code (Official Beginner Tutorial)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-01-vs-code-1bf34c4a.mp4' }, defaultVideoTrack: 'VI'},
     'git-14-2-gitlens-desktop': { yt: 'oJdlGtsbc3U', credit: "GitKraken — GitLens Tutorial: How to use the VS Code Extension", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-02-gitlens-desktop-508e8b9c.mp4' }, defaultVideoTrack: 'VI'},
-    'git-14-3-cau-hinh': { yt: 'G3NJzFX6XhY', credit: "codingjerk — Configure your Git" },
-    'git-14-4-windows-crlf': { yt: 'zn7m2Mdm_Vg', credit: "ASCODE — CR LF line endings - understanding and fixing the invisible characters hiding between the lines" },
+    'git-14-3-cau-hinh': { yt: 'G3NJzFX6XhY', credit: "codingjerk — Configure your Git", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-03-cau-hinh-67db1433.mp4' }, defaultVideoTrack: 'VI'},
+    'git-14-4-windows-crlf': { yt: 'zn7m2Mdm_Vg', credit: "ASCODE — CR LF line endings - understanding and fixing the invisible characters hiding between the lines", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/15-cong-cu-hang-ngay/15-04-windows-crlf-7ed30b2c.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 15 — GitHub cho sinh viên: hồ sơ, portfolio & mã nguồn mở ── */
-    'git-15-0-slides': { yt: 'z8UPAVTh2aE', credit: "Miraya — How To Make Your GitHub Stand Out (Gets You Hired!)" },
-    'git-15-1-ho-so-github': { yt: 'DWFs6aqknqw', credit: "Magdeline Huang — How to level up your GitHub profile README (Basic to Pro!)" },
+    'git-15-0-slides': { yt: 'z8UPAVTh2aE', credit: "Miraya — How To Make Your GitHub Stand Out (Gets You Hired!)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-00-slide-chuong-15-91948e35.mp4' }, defaultVideoTrack: 'VI'},
+    'git-15-1-ho-so-github': { yt: 'DWFs6aqknqw', credit: "Magdeline Huang — How to level up your GitHub profile README (Basic to Pro!)", vi: { url: 'https://media.cuongthai.com/videos/bai-giang/git/16-github-sinh-vien/16-01-ho-so-github-09bfb0fc.mp4' }, defaultVideoTrack: 'VI'},
     'git-15-2-github-pages': { yt: 'b2r9Cdvssi0', credit: "GitHub — Getting started with GitHub Pages for beginners | Tutorial" },
     'git-15-3-student-pack-codespaces': { yt: 'HIVFdN9VGgw', credit: "GitHub — GitHub GitHub Education: free programs, technology, and opportunities available for Students" },
     'git-15-4-dong-gop-ma-nguon-mo': { yt: 'WldXhauP024', credit: "GitHub — Getting started with open source contributions for beginners" },

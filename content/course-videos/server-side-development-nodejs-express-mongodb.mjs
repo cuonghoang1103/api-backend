@@ -24,9 +24,11 @@ export default {
     // YouTube bổ sung 31/10/2026
     'sdn302-cong-cu': { yt: 'bBA9rUdqmgY', credit: 'MongoDB — Getting Started with MongoDB Atlas - A Modern Database!', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/00-gioi-thieu-huong-dan-hoc/00-03-cai-dat-moi-truong-ae3e6b60.mp4' }, defaultVideoTrack: 'VI'},
     'sdn302-project-checklist': { yt: 'ICMnoKxlYYg', credit: 'Dipesh Malvia — JWT Authentication Tutorial With Express & MongoDB | Rest API Project | Node.js for Beginners #10' },
-    'sdn302-ngan-hang-de-tai': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4' }, defaultVideoTrack: 'VI'},
-    'sdn302-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI'},
-    'sdn302-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI'},
-    'sdn302-chong-mat-diem': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4' }, defaultVideoTrack: 'VI'},
+    'sdn302-ngan-hang-de-tai': { yt: 'CnailTcJV_U', credit: 'Dev Mastery — Using Clean Architecture for Microservice APIs in Node.js with MongoDB and Express', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4' }, defaultVideoTrack: 'VI'},
+    'sdn302-dieu-kien-qua-mon': { yt: '-MTSQjw5DrM', credit: 'Fireship — RESTful APIs in 100 Seconds // Build an API from Scratch with Node.js Express', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI'},
+    'sdn302-chuan-dau-ra': { yt: 'Dco1gzVZKVk', credit: 'Dave Gray — MVC Model-View-Controller Example | CRUD REST API | Node.js & Express tutorials for Beginners', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-01-gioi-thieu-sdn302-2a7cdc68.mp4' }, defaultVideoTrack: 'VI'},
+    'sdn302-chong-mat-diem': { yt: 'FauTQ_g6xgM', credit: 'WittCode — Express Error Handling', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/server-side-development-nodejs-express-mongodb/00-gioi-thieu-huong-dan-hoc/00-05-chon-de-tai-va-mat-diem-a978a37a.mp4' }, defaultVideoTrack: 'VI'},
+    // YouTube bổ sung 08/11/2026 (đợt 12b) — id đã dùng ở khoá khác, kiểm lại bằng verify-youtube-videos.mjs
+    'sdn302-7-1-exam-question-bank': { yt: '1j_IFw6PXi8', credit: 'ConquerTheFear — What are HTTP Status Codes | REST API | Complete Guide and List of HTTP Status Codes | Cheat Sheet' },
   },
 };

@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 18.1 (deck node-18-1, 15 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-18-1', 'Layers, and the 28 files that skip one', 'Các tầng, và 28 file đã bỏ qua một tầng', [
+export default walkNode('node-18-1', 'Layers, and the files that skip one', 'Các tầng, và những file bỏ qua một tầng', [
   [1, 'Layers, and the 50 route files that skip one',
     `<p>Chapter 18 is about architecture. Architecture is not diagrams: it is a few rules about who may know what, plus the habit of noticing when a rule has quietly stopped being followed. Everything here is measured on a real 302,781-line backend.</p>`,
     `<p>Chương 18 nói về kiến trúc. Kiến trúc không phải là sơ đồ: nó là vài quy tắc về ai được biết gì, cộng với thói quen để ý khi một quy tắc đã lặng lẽ ngừng được tuân theo. Mọi thứ trong bài đo trên một backend thật dài 302.781 dòng.</p>`],

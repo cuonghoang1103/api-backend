@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 16.3 (deck node-16-3, 16 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-16-3', 'Compression: the setting that is 490× slower for a bigger file', 'Nén: mức cài đặt chậm hơn 490 lần mà lại cho file TO HƠN', [
+export default walkNode('node-16-3', 'Compression: the level that is slower for a bigger file', 'Nén: mức nén chậm hơn mà file còn to hơn', [
   [1, 'Compression, and the setting that is 148× slower',
     `<p>Compression is the rare optimisation that openly trades one resource for another: CPU for bandwidth. It has a default that is fine, and an "obviously better" setting that is a disaster.</p>`,
     `<p>Nén là phép tối ưu hiếm hoi đổi tài nguyên này lấy tài nguyên kia một cách công khai: tốn CPU để tiết kiệm băng thông. Nó có một mức mặc định ổn, và một mức trông "rõ ràng tốt hơn" nhưng là thảm hoạ.</p>`],

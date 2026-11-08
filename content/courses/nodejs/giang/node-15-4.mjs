@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 15.4 (deck node-15-4, 23 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-15-4', 'Metrics, and the label that ate 939MB', 'Metric, và cái nhãn ngốn 939MB', [
+export default walkNode('node-15-4', 'Metrics, and the label that ate the memory', 'Metric, và cái nhãn ngốn hết bộ nhớ', [
   [1, 'Metrics, and the label that ate the memory',
     `<p>A counter incremented ten million times costs the same eight bytes as one incremented twice. That is why metrics are the only affordable way to watch a system all the time, and also why one careless label can destroy them.</p>`,
     `<p>Một bộ đếm tăng mười triệu lần tốn đúng tám byte như một bộ đếm tăng hai lần. Vì thế metric là cách duy nhất đủ rẻ để theo dõi hệ thống liên tục, và cũng vì thế một cái nhãn bất cẩn có thể phá hỏng nó.</p>`],

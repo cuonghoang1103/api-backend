@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 17.5 (deck node-17-5, 16 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-17-5', 'Zero downtime: 1,5% lost, or 0%', 'Deploy không gián đoạn: mất 1,5%, hay mất 0%', [
+export default walkNode('node-17-5', 'Zero downtime: losing requests, or none', 'Deploy không gián đoạn: mất request, hay không mất cái nào', [
   [1, 'Zero downtime: 5.3% lost, or 0%',
     `<p>"Zero-downtime deploy" is often said about setups nobody has measured. This lesson fires requests continuously through the whole deploy and counts the failures.</p>`,
     `<p>Cụm từ "deploy không gián đoạn" (zero downtime) hay được nói về những hệ thống chưa ai đo. Bài này bắn request liên tục suốt lúc deploy và đếm số request hỏng.</p>`],

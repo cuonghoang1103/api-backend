@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 16.4 (deck node-16-4, 16 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-16-4', 'Scaling out: 3,4× for CPU work, 1,06× for I/O', 'Mở rộng theo chiều ngang: 3,4× với việc CPU, 1,06× với việc I/O', [
+export default walkNode('node-16-4', 'Scaling out: CPU work vs I/O work', 'Mở rộng theo chiều ngang: việc CPU và việc I/O', [
   [1, 'Scaling out: 3.4× for CPU work, 1.07× for I/O',
     `<p>Node runs your JavaScript on one thread. On a ten-core machine the standard fix is <strong>cluster</strong>. Whether it helps depends entirely on what your route does.</p>`,
     `<p>Node chạy JavaScript của bạn trên một luồng. Ở máy mười nhân, cách sửa quen thuộc là <strong>cluster</strong>. Nó có giúp hay không tuỳ hoàn toàn vào việc route làm.</p>`],

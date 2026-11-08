@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 16.6 (deck node-16-6, 21 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-16-6', 'Optimisations that are not: the 1,39× that bought 0,3%', 'Những phép tối ưu không phải là tối ưu: 1,39 lần mua được 0,3%', [
+export default walkNode('node-16-6', 'Optimisations that are not', 'Những phép tối ưu không phải là tối ưu', [
   [1, 'Optimisations that are not',
     `<p>Five lessons of measurement leave a by-product: a list of things that sound like optimisations and are not, each one refuted by a number already measured in this chapter.</p>`,
     `<p>Năm bài đo để lại một sản phẩm phụ: danh sách những thứ nghe như tối ưu mà không phải, mỗi thứ bị bác bỏ bằng một con số đã đo sẵn trong chương này.</p>`],

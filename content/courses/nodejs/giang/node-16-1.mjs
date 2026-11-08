@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 16.1 (deck node-16-1, 17 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-16-1', 'Profile first: 285 to 3.550 req/s on one route', 'Đo trước đã: từ 285 lên 3.550 req/giây trên một route', [
+export default walkNode('node-16-1', 'Profile first: one route, step by step', 'Đo trước đã: một route, từng bước', [
   [1, 'Profile first: 276 to 3,395 req/s on one route',
     `<p>Every developer has an instinct about what is slow in their code. It is wrong often enough that acting on it is a bad habit. This lesson does one full lap: measure → profile → fix one thing → measure again. On this machine the route went from 276 to 3,395 requests per second.</p>`,
     `<p>Lập trình viên nào cũng có linh cảm về chỗ chậm trong code của mình. Linh cảm đó sai đủ thường để hành động theo nó là một thói quen xấu. Bài này đi trọn một vòng: đo → profile → sửa một thứ → đo lại. Trên máy này, route đi từ 276 lên 3.395 request mỗi giây.</p>`],

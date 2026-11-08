@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 18.3 (deck node-18-3, 15 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-18-3', 'Coupling: 248 models in one schema', 'Ghép nối: 248 model trong một lược đồ', [
+export default walkNode('node-18-3', 'Coupling: every model in one schema', 'Ghép nối: mọi model trong một lược đồ', [
   [1, 'Coupling: 608 models in one schema',
     `<p>Two modules are coupled when changing one forces you to change the other. Some coupling is unavoidable and even the point; the real question is which coupling you accept, and you should measure it, not guess.</p>`,
     `<p>Hai module bị ghép nối (coupling) khi sửa cái này buộc phải sửa cái kia. Có ghép nối là chuyện tất yếu; câu hỏi thật là bạn chấp nhận ghép nối nào, và hãy đo chứ đừng đoán.</p>`],

@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 12.3 (deck node-12-3, 22 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-12-3', 'Picking the right structure is worth 95× the RAM', 'Chọn đúng cấu trúc dữ liệu đáng giá 95 lần RAM', [
+export default walkNode('node-12-3', 'Data structures: the right one saves most of the RAM', 'Cấu trúc dữ liệu: chọn đúng tiết kiệm phần lớn RAM', [
   [1, 'Picking the right structure: the same data, a fraction of the RAM',
     `<p>Redis is a small library of data structures that happens to live on a server. Every number in this lesson is RAM read from Redis itself, before and after loading the same information.</p>`,
     `<p>Redis là một thư viện nhỏ các cấu trúc dữ liệu, tình cờ sống trên một máy chủ. Mọi con số trong bài là RAM đọc từ chính Redis, trước và sau khi nạp cùng một lượng thông tin.</p>`],

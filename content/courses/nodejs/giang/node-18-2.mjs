@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 18.2 (deck node-18-2, 14 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-18-2', 'Organising by feature, and the 3.607-line file', 'Tổ chức theo tính năng, và cái file 3.607 dòng', [
+export default walkNode('node-18-2', 'Organising by feature, and the biggest file', 'Tổ chức theo tính năng, và cái file lớn nhất', [
   [1, 'Organising by feature, and the 6,113-line file',
     `<p>Where a file lives decides what a developer reads before changing it. Two organising principles compete and both are defensible, and the one you pick early is nearly impossible to change later.</p>`,
     `<p>File nằm ở đâu quyết định lập trình viên phải đọc gì trước khi sửa nó. Hai nguyên tắc tổ chức cạnh tranh nhau, cả hai đều có lý, và nguyên tắc bạn chọn sớm gần như không đổi được về sau.</p>`],

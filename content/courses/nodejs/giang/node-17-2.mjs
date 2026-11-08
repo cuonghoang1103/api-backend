@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 17.2 (deck node-17-2, 19 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-17-2', 'Layer cache: the line order that makes builds 5,6× slower', 'Cache tầng: thứ tự dòng làm build chậm gấp 5,6 lần', [
+export default walkNode('node-17-2', 'Layer cache: the line order that slows every build', 'Cache tầng: thứ tự dòng làm mọi lần build chậm đi', [
   [1, 'Layer cache: the line order that makes builds 9.3× slower',
     `<p>Docker reuses every layer whose inputs did not change. So the order of lines in your Dockerfile decides how long every future build takes, on every commit, forever.</p>`,
     `<p>Docker dùng lại mọi tầng (layer) mà đầu vào không đổi. Vì vậy thứ tự dòng trong Dockerfile quyết định mọi lần build sau này mất bao lâu, ở mỗi commit, mãi mãi.</p>`],

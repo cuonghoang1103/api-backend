@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 16.2 (deck node-16-2, 17 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-16-2', 'Where the time really goes: 97,8% in one line', 'Thời gian thật sự nằm ở đâu: 97,8% trong một dòng', [
+export default walkNode('node-16-2', 'Where the time really goes', 'Thời gian thật sự nằm ở đâu', [
   [1, 'Where the time really goes: 97% in one line',
     `<p>Lesson 16.1 had no database. Real routes have one, and that changes the arithmetic so completely that most optimisation at the JavaScript level stops mattering.</p>`,
     `<p>Bài 16.1 không có database. Route thật thì có, và điều đó đổi phép tính tới mức phần lớn việc tối ưu ở tầng JavaScript không còn quan trọng.</p>`],

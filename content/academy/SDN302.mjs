@@ -20,6 +20,11 @@ import GS041 from './sdn302/giang/sdn-04-1.mjs';
 import GS042 from './sdn302/giang/sdn-04-2.mjs';
 import GS051 from './sdn302/giang/sdn-05-1.mjs';
 import GS052 from './sdn302/giang/sdn-05-2.mjs';
+import GS061 from './sdn302/giang/sdn-06-1.mjs';
+import GS062 from './sdn302/giang/sdn-06-2.mjs';
+import GS071 from './sdn302/giang/sdn-07-1.mjs';
+import GS081 from './sdn302/giang/sdn-08-1.mjs';
+import GS082 from './sdn302/giang/sdn-08-2.mjs';
 export default {
   semester: { code: 'FPTU_Hola7', name: 'Kỳ 7', ordinal: 9 },
   course: {
@@ -1626,7 +1631,8 @@ https.<span class="tok-function">createServer</span>({
           slug: 'sdn302-6-1-react-deploy',
           type: 'VIDEO',
           description: 'Gọi API từ React (axios/fetch), biến môi trường, triển khai lên Render/Railway, và BaaS (CLO7).',
-          content: `
+          content: `${GS061}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Lesson 6.1</span>
 <h2>Integrating React &amp; deploying</h2>
@@ -1699,7 +1705,8 @@ https.<span class="tok-function">createServer</span>({
           slug: 'sdn302-project-checklist',
           type: 'VIDEO',
           description: 'Danh sách kiểm hoàn chỉnh cho project server-side theo từng CLO trước khi nộp và thuyết trình.',
-          content: `
+          content: `${GS062}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 6 · Milestone</span>
 <h2>Project checklist</h2>
@@ -1731,6 +1738,27 @@ https.<span class="tok-function">createServer</span>({
 <div class="pitfall">Một project chỉ CRUD trên một collection, không auth và không population sẽ giới hạn điểm — nó không thể thể hiện CLO5 và CLO6, hai đầu ra kỹ thuật trọng số cao nhất.</div>
 </div>`,
         },
+        {
+          title: 'Chapter 6 quiz — React, deploy & the project checklist|||Quiz chương 6 — React, triển khai & checklist project',
+          slug: 'sdn302-quiz-6',
+          type: 'QUIZ',
+          description: 'Kiểm tra gọi API từ React qua CORS, cấu hình qua môi trường, các kiểu hỏng khi deploy, BaaS và sáu cổng của project.',
+          quiz: {
+            timeLimitSeconds: 480,
+            questions: [
+              { question: 'A React page on http://localhost:4610 shows only "TypeError: Failed to fetch" when calling the API on :4600. Where is the real reason printed?|||Trang React ở http://localhost:4610 chỉ hiện "TypeError: Failed to fetch" khi gọi API ở :4600. Lý do thật được in ở đâu?', options: ['in the API log|||trong log của API', 'in the page itself|||ngay trên trang', 'in the browser console (DevTools)|||trong console của trình duyệt (DevTools)', 'in MongoDB|||trong MongoDB'], correctIndex: 2, points: 1 },
+              { question: 'The API allows only http://localhost:5173 and the page comes from :4610. With a JSON POST, which request reaches the API?|||API chỉ cho phép http://localhost:5173 còn trang đến từ :4610. Với một POST JSON, request nào tới được API?', options: ['only the OPTIONS preflight|||chỉ OPTIONS (preflight)', 'the POST, then the browser hides the answer|||POST, rồi trình duyệt giấu câu trả lời', 'nothing at all|||không request nào', 'both OPTIONS and POST|||cả OPTIONS lẫn POST'], correctIndex: 0, points: 1 },
+              { question: 'Is VITE_PAYMENT_SECRET in a React (Vite) app a safe place for a payment key?|||VITE_PAYMENT_SECRET trong app React (Vite) có an toàn để giữ khoá thanh toán?', options: ['yes, env variables are secret|||có, biến môi trường là bí mật', 'only in production|||chỉ an toàn ở production', 'yes, if .env is git-ignored|||có, nếu .env đã git-ignore', 'no — VITE_* values are pasted into the public bundle at build time|||không — giá trị VITE_* được dán vào bundle công khai lúc build'], correctIndex: 3, points: 1 },
+              { question: 'On the host /health returns 200 but /api/login returns 500 "secretOrPrivateKey must have a value". What is missing?|||Trên host /health trả 200 nhưng /api/login trả 500 "secretOrPrivateKey must have a value". Thiếu gì?', options: ['the start script|||script start', 'JWT_SECRET on the host dashboard|||JWT_SECRET trên dashboard của host', 'CORS|||CORS', 'an index|||một chỉ mục'], correctIndex: 1, points: 1 },
+              { question: 'The code calls app.listen(4609) while the host sends traffic to $PORT=4605. What happens?|||Code gọi app.listen(4609) trong khi host chuyển request tới $PORT=4605. Chuyện gì xảy ra?', options: ['the log says "listening on 4609" but nothing answers on the host\'s port|||log ghi "listening on 4609" nhưng không ai trả lời ở cổng của host', 'the host rewrites the port|||host tự đổi cổng', 'Express picks the right port by itself|||Express tự chọn đúng cổng', 'MongoDB refuses the connection|||MongoDB từ chối kết nối'], correctIndex: 0, points: 1 },
+              { question: 'Why check required environment variables when the server starts?|||Vì sao kiểm các biến môi trường bắt buộc ngay lúc server khởi động?', options: ['it makes requests faster|||để request nhanh hơn', 'hosts require it|||host bắt buộc', 'the deploy fails with one clear line before any user arrives, instead of a 500 later|||lần deploy hỏng với một dòng rõ ràng trước khi người dùng nào tới, thay vì lỗi 500 về sau', 'to hide the secret|||để giấu khoá'], correctIndex: 2, points: 1 },
+              { question: 'When is Backend-as-a-Service (CLO7) a better choice than your own Express server?|||Khi nào Backend-as-a-Service (CLO7) tốt hơn tự viết server Express?', options: ['when you need your own data model and rules|||khi cần mô hình dữ liệu và luật riêng', 'small apps and prototypes where speed matters more than control|||app nhỏ, bản mẫu, khi tốc độ quan trọng hơn quyền kiểm soát', 'never|||không bao giờ', 'when the exam asks you to write the API|||khi đề thi bắt viết API'], correctIndex: 1, points: 1 },
+              { question: 'Which two checklist gates prove CLO5 and CLO6, the heaviest technical outcomes?|||Hai cổng nào trong checklist chứng minh CLO5 và CLO6, hai chuẩn đầu ra kỹ thuật nặng nhất?', options: ['data model and deploy|||mô hình dữ liệu và triển khai', 'MVC and README|||MVC và README', 'validation and Postman|||validation và Postman', 'population and authentication|||population và xác thực'], correctIndex: 3, points: 1 },
+              { question: 'A one-file project answers POST {} with 200 and saves an empty document. Which gate does that fail?|||Một project một tệp trả 200 cho POST {} và lưu một document rỗng. Nó trượt cổng nào?', options: ['gate 3 — population|||cổng 3 — population', 'gate 6 — deploy|||cổng 6 — triển khai', 'gate 5 — validation & errors|||cổng 5 — validation & lỗi', 'none, 200 is correct|||không cổng nào, 200 là đúng'], correctIndex: 2, points: 1 },
+              { question: 'In a project defence demo, what should you show first?|||Khi demo bảo vệ project, nên cho xem gì trước?', options: ['the happy path: register → login → create → list with populate|||đường vui: đăng ký → đăng nhập → tạo → danh sách có populate', 'a failure on purpose|||cố ý cho một ca lỗi', 'the source code line by line|||mã nguồn từng dòng', 'the MongoDB shell|||mongo shell'], correctIndex: 0, points: 1 },
+            ],
+          },
+        },
       ],
     },
 
@@ -1744,7 +1772,8 @@ https.<span class="tok-function">createServer</span>({
           slug: 'sdn302-7-1-exam-question-bank',
           type: 'VIDEO',
           description: 'Chiến lược Practical Exam 85 phút, bộ khung code nhớ sẵn, và ngân hàng câu hỏi theo 8 CLO.',
-          content: `
+          content: `${GS071}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 7 · Lesson 7.1</span>
 <h2>The three assessments &amp; how to beat them</h2>
@@ -1892,7 +1921,8 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
           slug: 'sdn302-8-1-nestjs-hono',
           type: 'VIDEO',
           description: 'Vì sao có framework có cấu trúc như NestJS, edge framework Hono, và MongoDB aggregation.',
-          content: `
+          content: `${GS081}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.1</span>
 <h2>NestJS, Hono &amp; aggregation</h2>
@@ -1951,7 +1981,8 @@ app.<span class="tok-function">listen</span>(<span class="tok-number">3000</span
           slug: 'sdn302-8-2-production',
           type: 'VIDEO',
           description: 'Biến một demo thành API bền: env config, validation chặt, rate limiting, index, và logging.',
-          content: `
+          content: `${GS082}
+
 <div class="ml-en">
 <span class="eyebrow">Chapter 8 · Lesson 8.2 · ★ Beyond the syllabus</span>
 <h2>Hardening an API for the real world</h2>

@@ -1,7 +1,7 @@
 /** Giảng theo slide — bài 17.1 (deck node-17-1, 18 slide). EN = dịch sát ý VI; VI viết cho người mới học backend. (agent giang, 08/11/2026) */
 import { walkNode } from '../_slides.mjs';
 
-export default walkNode('node-17-1', 'The image: 440MB down to 58,8MB', 'Ảnh Docker: từ 440MB xuống 58,8MB', [
+export default walkNode('node-17-1', 'The image: from naive to small', 'Ảnh Docker: từ ảnh ngây thơ tới ảnh gọn', [
   [1, 'The image: 430 MB down to 65.5 MB',
     `<p>Chapter 17 is about shipping the app in a container. A Docker image is downloaded on every deploy, stored on every server and scanned by every security tool. In this lesson the same app is built with four Dockerfiles, and every size is measured.</p>`,
     `<p>Chương 17 nói về việc đưa app lên máy chủ bằng container. Ảnh Docker (image) được tải về ở mỗi lần deploy, nằm trên mọi máy chủ và bị mọi công cụ bảo mật quét qua. Bài này build cùng một app bằng bốn Dockerfile và đo từng con số.</p>`],

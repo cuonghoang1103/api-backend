@@ -93,10 +93,10 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
   return (
     <div className="space-y-4">
       {/* Tổng quan tiến độ + mục tiêu */}
-      <div className="rounded-xl bg-darkbg/40 border border-darkborder/50 p-4">
+      <div className="rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] p-4">
         <div className="flex items-center justify-between gap-3 mb-2">
           <span className="text-sm font-medium text-text-primary">Tiến độ khoá học</span>
-          <span className="text-sm font-bold text-neon-violet">{overallProgress}%</span>
+          <span className="text-sm font-bold text-tone-violet">{overallProgress}%</span>
         </div>
         <div className="h-2 rounded-full bg-darkborder/60 overflow-hidden">
           <div className="h-full bg-gradient-to-r from-neon-indigo to-neon-violet transition-all" style={{ width: `${overallProgress}%` }} />
@@ -109,13 +109,13 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
         {/* Mục tiêu điểm */}
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center gap-1 text-xs text-text-muted"><Target className="w-3.5 h-3.5" /> Mục tiêu điểm:</span>
-          <div className="inline-flex rounded-lg border border-darkborder/60 overflow-hidden">
+          <div className="inline-flex rounded-lg border border-[var(--border-color)] overflow-hidden">
             {([['pass', 'Qua môn (6–7)'], ['good', 'GPA khá (8–9)']] as [Goal, string][]).map(([g, label]) => (
               <button
                 key={g}
                 onClick={() => pickGoal(g)}
                 aria-pressed={goal === g}
-                className={`px-3 py-1.5 text-xs font-medium transition-colors ${goal === g ? 'bg-neon-indigo/20 text-neon-indigo' : 'text-text-muted hover:text-text-secondary'}`}
+                className={`px-3 py-1.5 text-xs font-medium transition-colors ${goal === g ? 'bg-neon-indigo/20 text-tone-indigo' : 'text-text-muted hover:text-text-secondary'}`}
               >
                 {label}
               </button>
@@ -128,7 +128,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
         {courseCode && (
           <a
             href={`/exam?course=${encodeURIComponent(courseCode)}`}
-            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-neon-indigo/15 px-3 py-1.5 text-xs font-semibold text-neon-indigo transition-colors hover:bg-neon-indigo/25"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-neon-indigo/15 px-3 py-1.5 text-xs font-semibold text-tone-indigo transition-colors hover:bg-neon-indigo/25"
           >
             <PenLine className="w-3.5 h-3.5" /> Luyện đề {courseCode} trên Phòng Thi
           </a>
@@ -154,8 +154,8 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
               <div className="relative flex flex-col items-center pt-1">
                 <div
                   className={`z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold ${
-                    complete ? 'bg-green-500/20 text-green-400'
-                      : started ? 'bg-neon-indigo/20 text-neon-indigo'
+                    complete ? 'bg-green-500/20 text-tone-green'
+                      : started ? 'bg-neon-indigo/20 text-tone-indigo'
                         : 'bg-darkborder/50 text-text-muted'
                   }`}
                 >
@@ -170,7 +170,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                   onClick={() => toggle(section.id)}
                   aria-expanded={isOpen}
                   className={`w-full flex items-center gap-2 rounded-lg px-3 py-2 text-left transition-colors ${
-                    hasCurrent ? 'bg-neon-indigo/10' : 'hover:bg-darkbg/40'
+                    hasCurrent ? 'bg-neon-indigo/10' : 'hover:bg-[var(--bg-glass)]'
                   }`}
                 >
                   {isOpen ? <ChevronDown className="w-4 h-4 text-text-muted shrink-0" /> : <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />}
@@ -178,7 +178,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                     <span className="block text-sm font-semibold text-text-primary truncate">{pickLang(section.title, locale)}</span>
                     <span className="block text-xs text-text-muted">{dCount}/{tCount} bài · {pct}%</span>
                   </span>
-                  {complete && <span className="shrink-0 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-green-400">Xong</span>}
+                  {complete && <span className="shrink-0 rounded-full bg-green-500/15 px-2 py-0.5 text-[10px] font-bold uppercase text-tone-green">Xong</span>}
                 </button>
 
                 {/* Bài trong chương */}
@@ -193,14 +193,14 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                           <button
                             onClick={() => onJump(lesson)}
                             className={`w-full flex items-center gap-2 rounded-md px-3 py-1.5 text-left text-sm transition-colors ${
-                              isCurrent ? 'bg-neon-violet/15 text-neon-violet font-medium' : 'text-text-secondary hover:bg-darkbg/40 hover:text-text-primary'
+                              isCurrent ? 'bg-neon-violet/15 text-tone-violet font-medium' : 'text-text-secondary hover:bg-[var(--bg-glass)] hover:text-text-primary'
                             }`}
                           >
                             {ldone
-                              ? <CheckCircle2 className="w-4 h-4 shrink-0 text-green-400" />
+                              ? <CheckCircle2 className="w-4 h-4 shrink-0 text-tone-green" />
                               : <Circle className="w-4 h-4 shrink-0 text-text-muted" />}
                             <span className="flex-1 min-w-0 truncate">{pickLang(lesson.title, locale)}</span>
-                            {isCurrent && <span className="shrink-0 text-[10px] font-bold uppercase text-neon-violet">Đang học</span>}
+                            {isCurrent && <span className="shrink-0 text-[10px] font-bold uppercase text-tone-violet">Đang học</span>}
                           </button>
                         </li>
                       );
@@ -215,7 +215,7 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
                   {courseCode && counts[section.id] > 0 && (
                     <a
                       href={`/exam?course=${encodeURIComponent(courseCode)}&section=${section.id}`}
-                      className="ml-2 mt-1 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-neon-indigo transition-colors hover:bg-neon-indigo/10"
+                      className="ml-2 mt-1 inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium text-tone-indigo transition-colors hover:bg-neon-indigo/10"
                     >
                       <PenLine className="w-3.5 h-3.5" /> Mở đề chương này trên Phòng Thi
                     </a>
@@ -235,21 +235,21 @@ export function CourseRoadmap({ sections, isCompleted, currentLessonId, overallP
 export function CourseRoadmapPanel(props: Props & { defaultOpen?: boolean }) {
   const [open, setOpen] = useState(props.defaultOpen ?? false);
   return (
-    <div className="bg-darkcard border border-darkborder/50 rounded-2xl mb-8 overflow-hidden">
+    <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl mb-8 overflow-hidden">
       <button
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="w-full flex items-center justify-between gap-3 px-6 py-4 text-left hover:bg-darkbg/30 transition-colors"
+        className="w-full flex items-center justify-between gap-3 px-6 py-4 text-left hover:bg-[var(--bg-glass)] transition-colors"
       >
         <span className="flex items-center gap-2">
-          <MapIcon className="w-5 h-5 text-neon-violet" />
+          <MapIcon className="w-5 h-5 text-tone-violet" />
           <span className="font-semibold text-text-primary">Lộ trình học</span>
           <span className="text-sm text-text-muted">· {props.overallProgress}% hoàn thành</span>
         </span>
         {open ? <ChevronDown className="w-5 h-5 text-text-muted" /> : <ChevronRight className="w-5 h-5 text-text-muted" />}
       </button>
       {open && (
-        <div className="px-6 pb-6 pt-1 border-t border-darkborder/40">
+        <div className="px-6 pb-6 pt-1 border-t border-[var(--border-color)]">
           <CourseRoadmap {...props} />
         </div>
       )}

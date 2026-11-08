@@ -40,11 +40,11 @@ import { getCroppedImg, type PixelCrop } from './cropImage';
 // Dynamic imports — heavy client components
 const PostCard = dynamic(
   () => import('@/components/social/PostCard').then((m) => m.PostCard as ComponentType<{ post: any }>),
-  { loading: () => <div className="h-48 animate-pulse rounded-2xl bg-darkcard/30" /> },
+  { loading: () => <div className="h-48 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /> },
 );
 const PostComposer = dynamic(
   () => import('@/components/social/PostComposer').then((m) => m.PostComposer as ComponentType),
-  { ssr: false, loading: () => <div className="h-32 animate-pulse rounded-2xl bg-darkcard/30" /> },
+  { ssr: false, loading: () => <div className="h-32 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /> },
 );
 
 type MainTab = 'posts' | 'about' | 'friends' | 'photos' | 'videos';
@@ -485,8 +485,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         return (
           <div className="space-y-4">
             {p.work || p.workplace || p.jobTitle ? (
-              <div className="p-4 rounded-xl bg-darkbg/50 border border-darkborder/50 flex items-start gap-3">
-                <div className="p-2 rounded-lg bg-neon-violet/10"><Briefcase className="h-5 w-5 text-neon-violet" /></div>
+              <div className="p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] flex items-start gap-3">
+                <div className="p-2 rounded-lg bg-neon-violet/10"><Briefcase className="h-5 w-5 text-tone-violet" /></div>
                 <div>
                   {p.jobTitle && <p className="font-medium text-text-primary">{p.jobTitle}</p>}
                   {p.work && <p className="text-sm text-text-secondary">{p.work}</p>}
@@ -495,7 +495,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               </div>
             ) : <p className="text-text-muted italic">Chưa cập nhật thông tin công việc</p>}
             {(p.school || p.college) && (
-              <div className="p-4 rounded-xl bg-darkbg/50 border border-darkborder/50 flex items-start gap-3">
+              <div className="p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-emerald-500/10"><GraduationCap className="h-5 w-5 text-emerald-500" /></div>
                 <div>
                   {p.school && <p className="font-medium text-text-primary">{p.school}</p>}
@@ -509,13 +509,13 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         return (
           <div className="space-y-4">
             {p.location ? (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
-                <MapPinHouse className="h-5 w-5 text-neon-violet" />
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)]">
+                <MapPinHouse className="h-5 w-5 text-tone-violet" />
                 <div><p className="text-sm text-text-muted">Thành phố hiện tại</p><p className="font-medium text-text-primary">{p.location}</p></div>
               </div>
             ) : <p className="text-text-muted italic">Chưa cập nhật nơi ở</p>}
             {p.hometown && (
-              <div className="flex items-center gap-3 p-4 rounded-xl bg-darkbg/50 border border-darkborder/50">
+              <div className="flex items-center gap-3 p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)]">
                 <Home className="h-5 w-5 text-emerald-500" />
                 <div><p className="text-sm text-text-muted">Quê quán</p><p className="font-medium text-text-primary">{p.hometown}</p></div>
               </div>
@@ -538,7 +538,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                     const Icon = socialIcons[key.toLowerCase()] || Link2;
                     return (
                       <a key={key} href={String(url)} target="_blank" rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-darkbg/50 border border-darkborder/50 text-sm text-text-secondary hover:text-neon-violet hover:border-neon-violet/50 transition-colors">
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--bg-glass)] border border-[var(--border-color)] text-sm text-text-secondary hover:text-tone-violet hover:border-neon-violet/50 transition-colors">
                         <Icon className="h-4 w-4" />{key.charAt(0).toUpperCase() + key.slice(1)}
                       </a>
                     );
@@ -557,7 +557,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               <div>
                 <h3 className="text-sm font-medium text-text-muted mb-2">Ngôn ngữ</h3>
                 <div className="flex flex-wrap gap-2">
-                  {p.languages.map((lang, i) => <span key={i} className="px-3 py-1 rounded-full bg-darkbg/50 border border-darkborder/50 text-sm text-text-secondary">{lang}</span>)}
+                  {p.languages.map((lang, i) => <span key={i} className="px-3 py-1 rounded-full bg-[var(--bg-glass)] border border-[var(--border-color)] text-sm text-text-secondary">{lang}</span>)}
                 </div>
               </div>
             )}
@@ -572,16 +572,16 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
   if (loading) {
     return (
       <div className="mx-auto w-full max-w-[1050px] px-4">
-        <div className="h-[220px] sm:h-[300px] lg:h-[350px] animate-pulse rounded-2xl bg-darkcard/40 mb-16" />
+        <div className="h-[220px] sm:h-[300px] lg:h-[350px] animate-pulse rounded-2xl bg-[var(--bg-glass)] mb-16" />
         <div className="flex flex-col lg:flex-row gap-5">
-          <div className="w-full lg:w-2/5 space-y-4"><div className="h-[420px] animate-pulse rounded-2xl bg-darkcard/30" /></div>
-          <div className="flex-1 space-y-4"><div className="h-32 animate-pulse rounded-2xl bg-darkcard/30" /><div className="h-64 animate-pulse rounded-2xl bg-darkcard/30" /></div>
+          <div className="w-full lg:w-2/5 space-y-4"><div className="h-[420px] animate-pulse rounded-2xl bg-[var(--bg-glass)]" /></div>
+          <div className="flex-1 space-y-4"><div className="h-32 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /><div className="h-64 animate-pulse rounded-2xl bg-[var(--bg-glass)]" /></div>
         </div>
       </div>
     );
   }
   if (!profile) {
-    return <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-12 text-center text-text-muted">Không tìm thấy người dùng.</div>;
+    return <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center text-text-muted">Không tìm thấy người dùng.</div>;
   }
 
   const p = profile;
@@ -605,7 +605,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         />
       ) : (
       /* Cover + avatar header (avatar overlaps cover via negative margin, not clipped) */
-      <div className="relative rounded-2xl bg-darkcard border border-darkborder">
+      <div className="relative rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)]">
         {/* Cover photo — its own overflow-hidden box; the avatar is a SIBLING so it is never clipped */}
         <div
           className="h-[200px] sm:h-[280px] lg:h-[350px] w-full relative overflow-hidden rounded-t-2xl"
@@ -635,14 +635,14 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               <div className={`group relative h-[120px] w-[120px] sm:h-[168px] sm:w-[168px] rounded-full ring-4 shadow-2xl overflow-hidden transition-all duration-300 ${p.isPro ? 'ring-amber-400/80 hover:ring-amber-300' : 'ring-darkcard hover:ring-neon-violet/40'}`}>
                 {p.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={p.avatarUrl} alt="Ảnh đại diện" className="w-full h-full object-cover" />) : (
                   <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-neon-violet via-neon-purple to-neon-pink">
-                    <span className="text-5xl sm:text-6xl font-bold text-white drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>
+                    <span className="text-5xl sm:text-6xl font-bold text-text-primary drop-shadow-lg">{(p.displayName || p.fullName || p.username || '?').slice(0, 1).toUpperCase()}</span>
                   </div>
                 )}
                 {p.isOnline && <div className="absolute bottom-2.5 right-2.5 h-5 w-5 rounded-full bg-emerald-500 ring-2 ring-darkcard" />}
                 {isOwn && (
-                  <label className="absolute inset-0 flex items-center justify-center bg-black/0 hover:bg-black/40 transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
-                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-white" /> : <Camera className="h-5 w-5 text-white" />}
+                  <label className="absolute inset-0 flex items-center justify-center bg-[var(--bg-surface)] hover:bg-[var(--bg-surface)] transition-colors cursor-pointer rounded-full" aria-label="Đổi ảnh đại diện">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity h-11 w-11 rounded-full bg-black/70 backdrop-blur-sm flex items-center justify-center border-2 border-[var(--border-light-hover)]">
+                      {uploadingImage && showImageCropper === 'avatar' ? <Loader2 className="h-5 w-5 animate-spin text-text-primary" /> : <Camera className="h-5 w-5 text-text-primary" />}
                     </div>
                     <input type="file" accept="image/*" className="hidden" onChange={(e) => handleImageSelect(e, 'avatar')} />
                   </label>
@@ -668,16 +668,16 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   </button>
                   <div className="relative" ref={settingsRef}>
                     <button onClick={() => setShowSettings((s) => !s)} aria-label="Tùy chọn" aria-haspopup="menu" aria-expanded={showSettings}
-                      className="inline-flex items-center justify-center rounded-xl bg-darkcard/60 border border-darkborder p-2.5 hover:bg-darkcard/80 transition-colors">
+                      className="inline-flex items-center justify-center rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] p-2.5 hover:bg-[var(--bg-glass)] transition-colors">
                       <Settings className="h-5 w-5 text-text-secondary" />
                     </button>
                     <AnimatePresence>
                       {showSettings && (
                         <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                          role="menu" className="absolute right-0 mt-2 w-56 rounded-xl border border-darkborder bg-darkcard shadow-2xl overflow-hidden z-50">
-                          <button role="menuitem" onClick={() => { setShowSettings(false); setMainTab('about'); startEditing('overview'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" />Chỉnh sửa trang cá nhân</button>
-                          <button role="menuitem" onClick={copyProfileLink} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Copy className="h-4 w-4" />Sao chép liên kết</button>
-                          <button role="menuitem" onClick={() => { setShowSettings(false); toast.info('Cài đặt quyền riêng tư sẽ sớm ra mắt'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-white/5 hover:text-text-primary transition-colors"><Lock className="h-4 w-4" />Quyền riêng tư</button>
+                          role="menu" className="absolute right-0 mt-2 w-56 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl overflow-hidden z-50">
+                          <button role="menuitem" onClick={() => { setShowSettings(false); setMainTab('about'); startEditing('overview'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" />Chỉnh sửa trang cá nhân</button>
+                          <button role="menuitem" onClick={copyProfileLink} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Copy className="h-4 w-4" />Sao chép liên kết</button>
+                          <button role="menuitem" onClick={() => { setShowSettings(false); toast.info('Cài đặt quyền riêng tư sẽ sớm ra mắt'); }} className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary transition-colors"><Lock className="h-4 w-4" />Quyền riêng tư</button>
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -690,7 +690,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                     className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
                       friendStatus === 'none'
                         ? 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20'
-                        : 'bg-darkcard/80 border border-darkborder text-text-primary hover:bg-darkcard',
+                        : 'bg-[var(--bg-glass)] border border-[var(--border-color)] text-text-primary hover:bg-[var(--bg-card)]',
                       friendBusy && 'opacity-50')}>
                     {friendStatus === 'friends' ? <><UserCheck className="h-4 w-4" />Bạn bè</>
                       : friendStatus === 'pending_outgoing' ? <><Clock className="h-4 w-4" />Đã gửi lời mời</>
@@ -699,12 +699,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   </button>
                   <button onClick={toggleFollow} disabled={followBusy || following === null}
                     className={cn('inline-flex items-center gap-2 px-5 py-2.5 font-semibold rounded-xl transition-all shadow-lg',
-                      following ? 'bg-darkcard/80 border border-darkborder text-text-primary hover:bg-darkcard' : 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20',
+                      following ? 'bg-[var(--bg-glass)] border border-[var(--border-color)] text-text-primary hover:bg-[var(--bg-card)]' : 'bg-gradient-to-r from-neon-violet to-neon-purple text-white hover:opacity-90 shadow-neon-violet/20',
                       followBusy && 'opacity-50')}>
                     {following ? <><Check className="h-4 w-4" />Đang theo dõi</> : <><UserPlus className="h-4 w-4" />Theo dõi</>}
                   </button>
-                  <a href={`/messages?peer=${id}`} className="inline-flex items-center gap-2 rounded-xl bg-darkcard/80 border border-darkborder px-5 py-2.5 font-medium text-text-primary hover:bg-darkcard transition-colors"><Mail className="h-4 w-4" />Nhắn tin</a>
-                  <button aria-label="Thêm" className="inline-flex items-center justify-center rounded-xl bg-darkcard/60 border border-darkborder p-2.5 hover:bg-darkcard/80 transition-colors"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></button>
+                  <a href={`/messages?peer=${id}`} className="inline-flex items-center gap-2 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] px-5 py-2.5 font-medium text-text-primary hover:bg-[var(--bg-card)] transition-colors"><Mail className="h-4 w-4" />Nhắn tin</a>
+                  <button aria-label="Thêm" className="inline-flex items-center justify-center rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] p-2.5 hover:bg-[var(--bg-glass)] transition-colors"><MoreHorizontal className="h-5 w-5 text-text-secondary" /></button>
                 </>
               )}
             </div>
@@ -719,12 +719,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
           A sticky element resolves `top` against the scrollport, so .app-main's safe-area
           padding never reaches it and a hard top-16 parks it behind the navbar. z-30 < the
           navbar's z-40, so if it lands too high the navbar wins and this bar disappears. */}
-      <div className="sticky top-[var(--app-nav-h)] z-30 mt-2 rounded-xl border border-darkborder bg-darkcard/90 backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
+      <div className="sticky top-[var(--app-nav-h)] z-30 mt-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur supports-[backdrop-filter]:bg-darkcard/75">
         <div className="flex gap-1 overflow-x-auto scrollbar-hide px-1.5" role="tablist">
           {mainTabs.map((tab) => (
             <button key={tab.id} role="tab" aria-selected={mainTab === tab.id} onClick={() => setMainTab(tab.id)}
               className={cn('px-4 py-3.5 text-sm font-medium whitespace-nowrap transition-colors border-b-2 -mb-px',
-                mainTab === tab.id ? 'text-text-primary border-neon-violet' : 'text-text-muted border-transparent hover:text-text-primary hover:bg-white/[0.03]')}>
+                mainTab === tab.id ? 'text-text-primary border-neon-violet' : 'text-text-muted border-transparent hover:text-text-primary hover:bg-[var(--bg-surface-hover)]')}>
               {tab.label}
             </button>
           ))}
@@ -745,7 +745,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
             <div className="flex-1 min-w-0 space-y-4">
               {isOwn && <PostComposer />}
               {storePosts.length === 0 && !loadingPosts ? (
-                <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
+                <div className="rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center">
                   <Edit3 className="h-12 w-12 mx-auto text-text-muted mb-3" />
                   <p className="text-text-muted">Chưa có bài viết nào</p>
                 </div>
@@ -756,17 +756,17 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         )}
 
         {mainTab === 'about' && (
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
-            <div className="p-4 flex items-center justify-between border-b border-darkborder/50">
+          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
+            <div className="p-4 flex items-center justify-between border-b border-[var(--border-color)]">
               <h2 className="text-lg font-semibold text-text-primary">Giới thiệu</h2>
-              {isOwn && <button onClick={() => startEditing(aboutTab)} aria-label="Chỉnh sửa" className="p-2 rounded-lg hover:bg-white/5 text-text-muted hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" /></button>}
+              {isOwn && <button onClick={() => startEditing(aboutTab)} aria-label="Chỉnh sửa" className="p-2 rounded-lg hover:bg-[var(--bg-surface-hover)] text-text-muted hover:text-text-primary transition-colors"><Edit3 className="h-4 w-4" /></button>}
             </div>
             <div className="flex flex-col sm:flex-row">
-              <div className="sm:w-56 sm:border-r border-darkborder/50 p-2 flex sm:flex-col gap-1 overflow-x-auto">
+              <div className="sm:w-56 sm:border-r border-[var(--border-color)] p-2 flex sm:flex-col gap-1 overflow-x-auto">
                 {aboutTabs.map((tab) => (
                   <button key={tab.id} onClick={() => setAboutTab(tab.id)}
                     className={cn('flex items-center gap-2 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors whitespace-nowrap text-left',
-                      aboutTab === tab.id ? 'bg-neon-violet/10 text-neon-violet' : 'text-text-muted hover:text-text-primary hover:bg-white/[0.02]')}>
+                      aboutTab === tab.id ? 'bg-neon-violet/10 text-tone-violet' : 'text-text-muted hover:text-text-primary hover:bg-[var(--bg-surface-hover)]')}>
                     <tab.icon className="h-4 w-4" />{tab.label}
                   </button>
                 ))}
@@ -777,14 +777,14 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
         )}
 
         {mainTab === 'friends' && (
-          <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-5">
+          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-5">
             <h2 className="text-lg font-semibold text-text-primary mb-4">Bạn bè · {p.followerCount ?? 0}</h2>
             {friends.length === 0 ? <p className="text-text-muted italic">Chưa có người theo dõi nào</p> : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
                 {friends.map((f) => (
-                  <a key={f.id} href={`/profile/${f.id}/v2`} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-darkbg/40 border border-darkborder/40 hover:border-neon-violet/40 transition-colors">
+                  <a key={f.id} href={`/profile/${f.id}/v2`} className="flex flex-col items-center gap-2 p-3 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)] hover:border-neon-violet/40 transition-colors">
                     <div className="h-16 w-16 rounded-full overflow-hidden bg-gradient-to-br from-neon-violet/30 to-neon-pink/30 flex items-center justify-center">
-                      {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-xl font-bold text-white">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
+                      {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-xl font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
                     </div>
                     <span className="text-sm text-text-primary truncate max-w-full">{f.displayName || f.username}</span>
                   </a>
@@ -800,18 +800,18 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
               const items = mainTab === 'photos' ? photos : videos;
               if (items.length === 0 && !loadingMedia) {
                 return (
-                  <div className="rounded-2xl border border-dashed border-darkborder bg-darkcard/20 p-12 text-center">
+                  <div className="rounded-2xl border border-dashed border-[var(--border-color)] bg-[var(--bg-glass)] p-12 text-center">
                     <ImageIcon className="h-12 w-12 mx-auto text-text-muted mb-3" />
                     <p className="text-text-muted">{mainTab === 'photos' ? 'Chưa có ảnh nào' : 'Chưa có video nào'}</p>
                   </div>
                 );
               }
               return (
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-darkborder">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 rounded-2xl overflow-hidden border border-[var(--border-color)]">
                   {items.map((m) => (
-                    <a key={m.id} href={`/?post=${m.postId}`} className="group relative aspect-square overflow-hidden bg-darkcard/40">
+                    <a key={m.id} href={`/?post=${m.postId}`} className="group relative aspect-square overflow-hidden bg-[var(--bg-glass)]">
                       <MediaThumb url={m.url || m.thumbnail} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
-                      {m.type === 'VIDEO' && <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5"><ImageIcon className="h-4 w-4 text-white" /></div>}
+                      {m.type === 'VIDEO' && <div className="absolute top-2 right-2 bg-black/60 rounded-full p-1.5"><ImageIcon className="h-4 w-4 text-text-primary" /></div>}
                     </a>
                   ))}
                 </div>
@@ -826,12 +826,12 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       <AnimatePresence>
         {showImageCropper && imagePreview && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm px-4">
-            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-darkcard rounded-2xl border border-darkborder p-6 max-w-lg w-full shadow-2xl">
+            <motion.div initial={{ scale: 0.95 }} animate={{ scale: 1 }} exit={{ scale: 0.95 }} className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] p-6 max-w-lg w-full shadow-2xl">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-text-primary">{showImageCropper === 'avatar' ? 'Cập nhật ảnh đại diện' : 'Cập nhật ảnh bìa'}</h3>
                 <button onClick={() => { setShowImageCropper(null); setImagePreview(null); }} aria-label="Đóng"><X className="h-5 w-5 text-text-muted hover:text-text-primary" /></button>
               </div>
-              <div className="relative w-full h-[300px] bg-darkbg/60 rounded-xl overflow-hidden mb-4">
+              <div className="relative w-full h-[300px] bg-[var(--bg-glass)] rounded-xl overflow-hidden mb-4">
                 <Cropper
                   image={imagePreview}
                   crop={crop}
@@ -849,7 +849,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                 <input type="range" min={1} max={3} step={0.01} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} aria-label="Thu phóng" className="flex-1 accent-neon-violet" />
               </div>
               <div className="flex gap-3">
-                <button onClick={() => { setShowImageCropper(null); setImagePreview(null); }} className="flex-1 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-darkcard/50 transition-colors">Hủy</button>
+                <button onClick={() => { setShowImageCropper(null); setImagePreview(null); }} className="flex-1 py-2.5 rounded-xl border border-[var(--border-color)] text-text-secondary hover:bg-[var(--bg-glass)] transition-colors">Hủy</button>
                 <button onClick={handleImageUpload} disabled={uploadingImage} className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-neon-violet/20">
                   {uploadingImage ? <><Loader2 className="h-4 w-4 animate-spin" />Đang tải lên...</> : <><Check className="h-4 w-4" />Lưu</>}
                 </button>
@@ -863,8 +863,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
       <AnimatePresence>
         {editingSection && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4" onClick={() => !saving && setEditingSection(null)}>
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} onClick={(e) => e.stopPropagation()} className="bg-darkcard rounded-2xl border border-darkborder w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
-              <div className="flex items-center justify-between p-4 border-b border-darkborder">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} onClick={(e) => e.stopPropagation()} className="bg-[var(--bg-card)] rounded-2xl border border-[var(--border-color)] w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
+              <div className="flex items-center justify-between p-4 border-b border-[var(--border-color)]">
                 <h3 className="text-lg font-semibold text-text-primary">Chỉnh sửa {editingSection === 'overview' ? 'Tổng quan' : editingSection === 'work' ? 'Công việc & Học vấn' : editingSection === 'places' ? 'Địa điểm' : editingSection === 'contact' ? 'Thông tin liên hệ' : 'Chi tiết'}</h3>
                 <button onClick={() => setEditingSection(null)} aria-label="Đóng"><X className="h-5 w-5 text-text-muted hover:text-text-primary" /></button>
               </div>
@@ -897,8 +897,8 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
                   <EditField label="Ngôn ngữ (phân cách bằng dấu phẩy)" value={editForm.languages || ''} onChange={(v) => setEditForm((p) => ({ ...p, languages: v }))} type="text" placeholder="Vietnamese, English" />
                 </>)}
               </div>
-              <div className="flex gap-3 p-4 border-t border-darkborder bg-darkcard/50">
-                <button onClick={() => setEditingSection(null)} className="flex-1 py-2.5 rounded-xl border border-darkborder text-text-secondary hover:bg-darkcard/50 transition-colors">Hủy</button>
+              <div className="flex gap-3 p-4 border-t border-[var(--border-color)] bg-[var(--bg-glass)]">
+                <button onClick={() => setEditingSection(null)} className="flex-1 py-2.5 rounded-xl border border-[var(--border-color)] text-text-secondary hover:bg-[var(--bg-glass)] transition-colors">Hủy</button>
                 <button onClick={saveProfileUpdate} disabled={saving} className="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-neon-violet to-neon-purple text-white font-medium hover:opacity-90 transition-opacity disabled:opacity-50 flex items-center justify-center gap-2 shadow-lg shadow-neon-violet/20">
                   {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}Lưu
                 </button>
@@ -914,7 +914,7 @@ export function ProfileDetail({ userId: propUserId }: { userId?: number } = {}) 
 // ─── Sidebar cards ────────────────────────────────────────────
 function IntroCard({ profile: p, isOwn, onEdit, onShowAbout }: { profile: ExtendedProfile; isOwn: boolean; onEdit: () => void; onShowAbout: () => void }) {
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard/40 p-4">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-4">
       <h2 className="text-lg font-semibold text-text-primary mb-3">Giới thiệu</h2>
       {p.bio && <p className="text-sm text-text-secondary whitespace-pre-wrap mb-3 text-center">{p.bio}</p>}
       <div className="space-y-2">
@@ -924,9 +924,9 @@ function IntroCard({ profile: p, isOwn, onEdit, onShowAbout }: { profile: Extend
         {p.websiteUrl && <SidebarRow icon={LinkIcon} text={p.websiteUrl.replace(/^https?:\/\//, '')} href={p.websiteUrl} />}
       </div>
       {isOwn ? (
-        <button onClick={onEdit} className="mt-3 w-full py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium text-text-primary transition-colors">Chỉnh sửa chi tiết</button>
+        <button onClick={onEdit} className="mt-3 w-full py-2 rounded-lg bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] text-sm font-medium text-text-primary transition-colors">Chỉnh sửa chi tiết</button>
       ) : (
-        <button onClick={onShowAbout} className="mt-3 w-full py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm font-medium text-text-primary transition-colors">Xem thông tin</button>
+        <button onClick={onShowAbout} className="mt-3 w-full py-2 rounded-lg bg-[var(--bg-surface-hover)] hover:bg-[var(--bg-surface-active)] text-sm font-medium text-text-primary transition-colors">Xem thông tin</button>
       )}
     </div>
   );
@@ -935,16 +935,16 @@ function IntroCard({ profile: p, isOwn, onEdit, onShowAbout }: { profile: Extend
 function SidebarRow({ icon: Icon, text, href }: { icon: ComponentType<{ className?: string }>; text: string; href?: string }) {
   const inner = (<><Icon className="h-4 w-4 text-text-muted shrink-0" /><span className="text-sm text-text-secondary truncate">{text}</span></>);
   return href
-    ? <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-neon-violet">{inner}</a>
+    ? <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 hover:text-tone-violet">{inner}</a>
     : <div className="flex items-center gap-3">{inner}</div>;
 }
 
 function PhotosCard({ photos, onSeeAll }: { photos: any[]; onSeeAll: () => void }) {
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold text-text-primary">Ảnh</h2>
-        <button onClick={onSeeAll} className="text-sm text-neon-violet hover:underline">Xem tất cả</button>
+        <button onClick={onSeeAll} className="text-sm text-tone-violet hover:underline">Xem tất cả</button>
       </div>
       {photos.length === 0 ? (
         <div className="px-4 pb-5 pt-1 flex flex-col items-center text-center text-text-muted">
@@ -969,7 +969,7 @@ function MediaThumb({ url, className }: { url?: string | null; className?: strin
   const [failed, setFailed] = useState(false);
   if (!url || failed) {
     return (
-      <div className={cn('flex items-center justify-center bg-darkbg/60', className)}>
+      <div className={cn('flex items-center justify-center bg-[var(--bg-glass)]', className)}>
         <ImageIcon className="h-6 w-6 text-text-muted/50" />
       </div>
     );
@@ -980,21 +980,21 @@ function MediaThumb({ url, className }: { url?: string | null; className?: strin
 
 function FriendsCard({ friends, count, onSeeAll }: { friends: any[]; count: number; onSeeAll: () => void }) {
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard/40 overflow-hidden">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] overflow-hidden">
       <div className="p-4 flex items-center justify-between">
         <div><h2 className="text-lg font-semibold text-text-primary">Bạn bè</h2><p className="text-xs text-text-muted">{count} người theo dõi</p></div>
-        <button onClick={onSeeAll} className="text-sm text-neon-violet hover:underline">Xem tất cả</button>
+        <button onClick={onSeeAll} className="text-sm text-tone-violet hover:underline">Xem tất cả</button>
       </div>
       <div className="grid grid-cols-3 gap-2 p-2">
         {friends.slice(0, 6).map((f) => (
           <a key={f.id} href={`/profile/${f.id}/v2`} className="flex flex-col items-center gap-1">
             <div className="aspect-square w-full rounded-lg overflow-hidden bg-gradient-to-br from-neon-violet/20 to-neon-pink/20 flex items-center justify-center">
-              {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-lg font-bold text-white">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
+              {f.avatarUrl ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={f.avatarUrl} alt={f.displayName || f.username} className="w-full h-full object-cover" />) : <span className="text-lg font-bold text-text-primary">{(f.displayName || f.username || '?').slice(0, 1).toUpperCase()}</span>}
             </div>
             <span className="text-[11px] text-text-muted truncate max-w-full">{f.displayName || f.username}</span>
           </a>
         ))}
-        {friends.length === 0 && Array.from({ length: 6 }).map((_, i) => <div key={`fe-${i}`} className="aspect-square rounded-lg bg-darkbg/50" />)}
+        {friends.length === 0 && Array.from({ length: 6 }).map((_, i) => <div key={`fe-${i}`} className="aspect-square rounded-lg bg-[var(--bg-glass)]" />)}
       </div>
     </div>
   );
@@ -1003,11 +1003,11 @@ function FriendsCard({ friends, count, onSeeAll }: { friends: any[]; count: numb
 // ─── Shared sub-components ─────────────────────────────────────
 function InfoItem({ icon: Icon, label, value, isLink }: { icon: ComponentType<{ className?: string }>; label: string; value: string; isLink?: boolean }) {
   return (
-    <div className="flex items-center gap-3 p-3 rounded-lg bg-darkbg/30 hover:bg-darkbg/50 transition-colors">
-      <Icon className="h-4 w-4 text-neon-violet shrink-0" />
+    <div className="flex items-center gap-3 p-3 rounded-lg bg-[var(--bg-glass)] hover:bg-[var(--bg-glass)] transition-colors">
+      <Icon className="h-4 w-4 text-tone-violet shrink-0" />
       <div className="min-w-0 flex-1">
         <p className="text-xs text-text-muted">{label}</p>
-        {isLink ? <a href={value} target="_blank" rel="noopener noreferrer" className="text-sm text-neon-violet hover:underline truncate block">{value.replace(/^https?:\/\//, '')}</a> : <p className="text-sm text-text-primary truncate">{value}</p>}
+        {isLink ? <a href={value} target="_blank" rel="noopener noreferrer" className="text-sm text-tone-violet hover:underline truncate block">{value.replace(/^https?:\/\//, '')}</a> : <p className="text-sm text-text-primary truncate">{value}</p>}
       </div>
     </div>
   );
@@ -1018,13 +1018,13 @@ function EditField({ label, value, onChange, type, placeholder, options = [] }: 
     <div>
       <label className="block text-xs text-text-muted mb-1.5">{label}</label>
       {type === 'textarea' ? (
-        <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none" />
+        <textarea value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} rows={3} className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none resize-none" />
       ) : type === 'select' ? (
-        <select value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none">
+        <select value={value} onChange={(e) => onChange(e.target.value)} className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-3 py-2.5 text-sm text-text-primary focus:border-neon-violet/50 focus:outline-none">
           {options.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
         </select>
       ) : (
-        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full rounded-xl border border-darkborder bg-darkbg/60 px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none" />
+        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:border-neon-violet/50 focus:outline-none" />
       )}
     </div>
   );

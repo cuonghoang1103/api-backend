@@ -48,11 +48,11 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
     <div>
       {hydrated && (
         <div className="mb-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+          <div className="flex items-center justify-between text-xs text-text-secondary mb-1.5">
             <span>Mốc đã đạt</span>
             <span>{totalDone}/{IELTS_STATS.checkpoints}</span>
           </div>
-          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-2 rounded-full bg-[var(--bg-surface-active)] overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${(totalDone / IELTS_STATS.checkpoints) * 100}%` }}
@@ -75,40 +75,40 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
             <div
               key={stage.id}
               className={`rounded-2xl border overflow-hidden transition-colors ${
-                allDone ? 'border-emerald-400/30 bg-emerald-500/[0.05]' : 'border-white/10 bg-white/[0.02]'
+                allDone ? 'border-emerald-400/30 bg-emerald-500/[0.05]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
               }`}
             >
               <button
                 type="button"
                 onClick={() => setOpen(isOpen ? '' : stage.id)}
-                className="w-full text-left p-4 sm:p-5 flex items-start gap-4 hover:bg-white/[0.02] transition-colors"
+                className="w-full text-left p-4 sm:p-5 flex items-start gap-4 hover:bg-[var(--bg-surface-hover)] transition-colors"
               >
                 <span className="shrink-0 w-12 h-12 rounded-xl bg-sky-500/15 flex items-center justify-center text-2xl">
                   {stage.icon}
                 </span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-tone-sky">
                       Band {stage.from} → {stage.to}
                     </span>
-                    <span className="text-xs text-slate-500">{stage.duration}</span>
-                    <span className="text-xs text-slate-500">· Chặng {si + 1}</span>
+                    <span className="text-xs text-text-muted">{stage.duration}</span>
+                    <span className="text-xs text-text-muted">· Chặng {si + 1}</span>
                     {hasContent ? (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-tone-emerald">
                         ĐÃ CÓ NỘI DUNG HỌC
                       </span>
                     ) : (
-                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/5 text-slate-500">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-surface-hover)] text-text-muted">
                         đang soạn
                       </span>
                     )}
                   </div>
-                  <p className="font-bold text-white mt-1.5">{stage.title}</p>
-                  <p className="text-sm text-slate-400 mt-1 leading-relaxed">{stage.youAre}</p>
+                  <p className="font-bold text-text-primary mt-1.5">{stage.title}</p>
+                  <p className="text-sm text-text-secondary mt-1 leading-relaxed">{stage.youAre}</p>
                 </div>
                 <span
                   className={`shrink-0 text-xs px-2 py-1 rounded-lg ${
-                    allDone ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-slate-400'
+                    allDone ? 'bg-emerald-500/20 text-tone-emerald' : 'bg-[var(--bg-surface-hover)] text-text-secondary'
                   }`}
                 >
                   {stageDone}/{stage.checkpoints.length}
@@ -124,37 +124,37 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
                       className="w-full flex items-center justify-between gap-3 rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-left hover:bg-emerald-500/15 transition-colors"
                     >
                       <div>
-                        <p className="text-emerald-200 font-semibold text-sm">Nội dung học chặng này đã sẵn sàng</p>
-                        <p className="text-slate-300 text-xs mt-1 leading-relaxed">
+                        <p className="text-tone-emerald font-semibold text-sm">Nội dung học chặng này đã sẵn sàng</p>
+                        <p className="text-text-secondary text-xs mt-1 leading-relaxed">
                           {bundle!.stats.lessons} bài học · {bundle!.stats.words} từ vựng ·{' '}
                           {bundle!.stats.readings} bài đọc · {bundle!.stats.listenings} bài nghe ·{' '}
                           {bundle!.stats.writings} đề viết · {bundle!.stats.gradedTotal} câu chấm điểm
                           {bundle!.questionTypes ? ` · ${bundle!.questionTypes.length} dạng câu hỏi` : ''}
                         </p>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-emerald-300 shrink-0" />
+                      <ArrowRight className="w-5 h-5 text-tone-emerald shrink-0" />
                     </button>
                   )}
 
                   <div className="rounded-xl border border-amber-500/25 bg-amber-500/[0.08] p-4">
-                    <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-1.5">
+                    <p className="flex items-center gap-2 text-tone-amber text-sm font-semibold mb-1.5">
                       <Target className="w-4 h-4" />
                       Việc quan trọng nhất chặng này
                     </p>
-                    <p className="text-slate-200 text-sm leading-relaxed">{stage.keyFocus}</p>
+                    <p className="text-text-primary text-sm leading-relaxed">{stage.keyFocus}</p>
                   </div>
 
                   <div className="grid gap-3 sm:grid-cols-2">
                     {stage.skills.map((sk) => (
-                      <div key={sk.skill} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-                        <p className="font-semibold text-white flex items-center gap-2">
+                      <div key={sk.skill} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
+                        <p className="font-semibold text-text-primary flex items-center gap-2">
                           <span>{sk.icon}</span> {sk.skill}
                         </p>
-                        <p className="text-xs text-slate-500 mt-2">Mỗi ngày</p>
-                        <p className="text-slate-300 text-sm leading-relaxed">{sk.daily}</p>
-                        <p className="text-xs text-slate-500 mt-2">Đạt được</p>
-                        <p className="text-emerald-300/90 text-sm leading-relaxed">{sk.target}</p>
-                        <p className="mt-2 text-xs text-rose-300/90 bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2 flex items-start gap-1.5">
+                        <p className="text-xs text-text-muted mt-2">Mỗi ngày</p>
+                        <p className="text-text-secondary text-sm leading-relaxed">{sk.daily}</p>
+                        <p className="text-xs text-text-muted mt-2">Đạt được</p>
+                        <p className="text-tone-emerald text-sm leading-relaxed">{sk.target}</p>
+                        <p className="mt-2 text-xs text-tone-rose bg-rose-500/10 border border-rose-500/20 rounded-lg px-3 py-2 flex items-start gap-1.5">
                           <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
                           <span>{sk.trap}</span>
                         </p>
@@ -163,8 +163,8 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
                   </div>
 
                   <div>
-                    <p className="flex items-center gap-2 text-sm font-semibold text-white mb-2">
-                      <Flag className="w-4 h-4 text-sky-400" />
+                    <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
+                      <Flag className="w-4 h-4 text-tone-sky" />
                       Đủ những mốc này thì lên chặng sau
                     </p>
                     <ul className="space-y-2">
@@ -179,13 +179,13 @@ export default function RoadmapTab({ onGoToStage }: { onGoToStage: (stageIdx: nu
                               className={`w-full text-left flex items-start gap-2.5 rounded-xl border p-3 transition-all active:scale-[0.99] ${
                                 ok
                                   ? 'border-emerald-400/30 bg-emerald-500/[0.08]'
-                                  : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                                  : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] hover:border-[var(--border-light-hover)]'
                               }`}
                             >
                               {ok
-                                ? <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-400" />
-                                : <Circle className="w-5 h-5 shrink-0 text-slate-600" />}
-                              <span className={`text-sm leading-relaxed ${ok ? 'text-emerald-100' : 'text-slate-200'}`}>
+                                ? <CheckCircle2 className="w-5 h-5 shrink-0 text-tone-emerald" />
+                                : <Circle className="w-5 h-5 shrink-0 text-text-muted" />}
+                              <span className={`text-sm leading-relaxed ${ok ? 'text-tone-emerald' : 'text-text-primary'}`}>
                                 {c}
                               </span>
                             </button>

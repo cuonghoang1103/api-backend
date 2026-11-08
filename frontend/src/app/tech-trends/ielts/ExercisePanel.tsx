@@ -25,11 +25,11 @@ const KIND_LABEL: Record<Exercise['kind'], string> = {
 };
 
 const KIND_COLOR: Record<Exercise['kind'], string> = {
-  choice: 'text-sky-300 bg-sky-500/15',
-  gap: 'text-violet-300 bg-violet-500/15',
-  fix: 'text-rose-300 bg-rose-500/15',
-  order: 'text-amber-300 bg-amber-500/15',
-  translate: 'text-emerald-300 bg-emerald-500/15',
+  choice: 'text-tone-sky bg-sky-500/15',
+  gap: 'text-tone-violet bg-violet-500/15',
+  fix: 'text-tone-rose bg-rose-500/15',
+  order: 'text-tone-amber bg-amber-500/15',
+  translate: 'text-tone-emerald bg-emerald-500/15',
 };
 
 type State = { input: string; checked: boolean; firstTryOk: boolean | null };
@@ -96,22 +96,22 @@ export default function ExercisePanel({
   return (
     <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.04] p-4 sm:p-5">
       <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-        <p className="flex items-center gap-2 text-sm font-semibold text-emerald-200">
+        <p className="flex items-center gap-2 text-sm font-semibold text-tone-emerald">
           <PencilLine className="w-4 h-4" />
           {title}
-          <span className="text-xs font-normal text-slate-500">({items.length} câu)</span>
+          <span className="text-xs font-normal text-text-muted">({items.length} câu)</span>
         </p>
         <div className="flex items-center gap-2">
           {done > 0 && (
-            <span className="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-slate-300">
-              Đúng ngay lần đầu: <b className="text-emerald-300">{rightFirst}</b>/{done}
+            <span className="text-xs px-2.5 py-1 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary">
+              Đúng ngay lần đầu: <b className="text-tone-emerald">{rightFirst}</b>/{done}
             </span>
           )}
           {done > 0 && (
             <button
               type="button"
               onClick={reset}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Làm lại
@@ -132,25 +132,25 @@ export default function ExercisePanel({
                   ? ok
                     ? 'border-emerald-400/40 bg-emerald-500/[0.08]'
                     : 'border-rose-400/40 bg-rose-500/[0.08]'
-                  : 'border-white/10 bg-white/[0.03]'
+                  : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
               }`}
             >
               <div className="flex items-start gap-2">
-                <span className="shrink-0 text-xs font-bold text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">
+                <span className="shrink-0 text-xs font-bold text-text-secondary bg-[var(--bg-surface-hover)] px-1.5 py-0.5 rounded">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
                   <span className={`inline-block text-[10px] px-1.5 py-0.5 rounded mb-1.5 ${KIND_COLOR[ex.kind]}`}>
                     {KIND_LABEL[ex.kind]}
                   </span>
-                  <p className="text-slate-100 text-sm leading-relaxed">{ex.q}</p>
+                  <p className="text-text-primary text-sm leading-relaxed">{ex.q}</p>
                   {ex.hint && (
-                    <p className="text-slate-400 text-xs mt-1 italic">{ex.hint}</p>
+                    <p className="text-text-secondary text-xs mt-1 italic">{ex.hint}</p>
                   )}
                 </div>
                 {st.checked && (ok
-                  ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  : <X className="w-4 h-4 text-rose-400 shrink-0" />)}
+                  ? <Check className="w-4 h-4 text-tone-emerald shrink-0" />
+                  : <X className="w-4 h-4 text-tone-rose shrink-0" />)}
               </div>
 
               {/* Ô trả lời */}
@@ -160,13 +160,13 @@ export default function ExercisePanel({
                     {ex.options.map((opt) => {
                       const chosen = st.input === opt;
                       const isRight = isCorrect(opt, ex.answer, ex.alt);
-                      let cls = 'border-white/10 bg-white/[0.02] text-slate-300 hover:border-white/25';
+                      let cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)]';
                       if (st.checked) {
-                        if (isRight) cls = 'border-emerald-400/50 bg-emerald-500/15 text-white';
-                        else if (chosen) cls = 'border-rose-400/50 bg-rose-500/15 text-white';
-                        else cls = 'border-white/5 bg-white/[0.01] text-slate-500';
+                        if (isRight) cls = 'border-emerald-400/50 bg-emerald-500/15 text-text-primary';
+                        else if (chosen) cls = 'border-rose-400/50 bg-rose-500/15 text-text-primary';
+                        else cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted';
                       } else if (chosen) {
-                        cls = 'border-sky-400/50 bg-sky-500/15 text-white';
+                        cls = 'border-sky-400/50 bg-sky-500/15 text-text-primary';
                       }
                       return (
                         <button
@@ -193,12 +193,12 @@ export default function ExercisePanel({
                             : ex.kind === 'fix' ? 'Write the corrected sentence…'
                               : 'Fill in here…'
                       }
-                      className="flex-1 min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-emerald-400/50"
+                      className="flex-1 min-w-0 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-emerald-400/50"
                     />
                     <button
                       type="button"
                       onClick={() => check(i, ex)}
-                      className="shrink-0 px-3 py-2 rounded-lg text-sm bg-emerald-500/20 border border-emerald-400/40 text-emerald-100 hover:bg-emerald-500/30 transition-colors"
+                      className="shrink-0 px-3 py-2 rounded-lg text-sm bg-emerald-500/20 border border-emerald-400/40 text-tone-emerald hover:bg-emerald-500/30 transition-colors"
                     >
                       Kiểm
                     </button>
@@ -208,17 +208,17 @@ export default function ExercisePanel({
 
               {/* Giải thích */}
               {st.checked && (
-                <div className="mt-2.5 pt-2.5 border-t border-white/10">
+                <div className="mt-2.5 pt-2.5 border-t border-[var(--border-light)]">
                   {!ok && (
-                    <p className="text-xs text-emerald-300 mb-1">
+                    <p className="text-xs text-tone-emerald mb-1">
                       Đáp án: <b>{ex.answer}</b>
                       {ex.alt && ex.alt.length > 0 && (
-                        <span className="text-slate-500"> (chấp nhận: {ex.alt.join(' · ')})</span>
+                        <span className="text-text-muted"> (chấp nhận: {ex.alt.join(' · ')})</span>
                       )}
                     </p>
                   )}
-                  <p className="text-xs text-slate-300 leading-relaxed flex gap-1.5">
-                    <Lightbulb className="w-3.5 h-3.5 shrink-0 mt-0.5 text-amber-400" />
+                  <p className="text-xs text-text-secondary leading-relaxed flex gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 shrink-0 mt-0.5 text-tone-amber" />
                     <span>{ex.why}</span>
                   </p>
                 </div>
@@ -229,7 +229,7 @@ export default function ExercisePanel({
       </div>
 
       {done === items.length && items.length > 0 && (
-        <p className="mt-4 text-sm text-center text-slate-300">
+        <p className="mt-4 text-sm text-center text-text-secondary">
           {rightFirst === items.length
             ? '🏆 Đúng hết ngay lần đầu — chắc bài rồi, sang bài sau được.'
             : rightFirst >= items.length * 0.6

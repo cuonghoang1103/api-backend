@@ -28,9 +28,9 @@ export default function ApplyPanel() {
   return (
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <h2 className="text-lg font-bold text-white">Chuẩn bị trước khi nộp</h2>
-        <p className="mt-1 text-sm leading-relaxed text-slate-400">
-          Trong {STATS.jobs} tin, chỉ <strong className="text-slate-300">1 tin</strong> nhắc tới hỗ
+        <h2 className="text-lg font-bold text-text-primary">Chuẩn bị trước khi nộp</h2>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+          Trong {STATS.jobs} tin, chỉ <strong className="text-text-secondary">1 tin</strong> nhắc tới hỗ
           trợ visa, còn {STATS.byTier.C} tin chặn cứng theo địa lý. Nghĩa là con đường thật của một
           dev ở Việt Nam không phải &quot;nộp thật nhiều rồi hy vọng&quot;, mà là nhắm đúng nhóm nộp
           được rồi làm hồ sơ đủ mạnh cho nhóm đó.
@@ -41,29 +41,29 @@ export default function ApplyPanel() {
         {APPLY_ITEMS.map((it) => {
           const isOpen = open[it.id] ?? false;
           return (
-            <div key={it.id} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+            <div key={it.id} className="overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
               <button
                 type="button"
                 onClick={() => setOpen((o) => ({ ...o, [it.id]: !isOpen }))}
                 aria-expanded={isOpen}
-                className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-white/[0.02] sm:p-5"
+                className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-[var(--bg-surface-hover)] sm:p-5"
               >
                 <div className="min-w-0 flex-1">
-                  <h3 className="text-base font-bold text-white">{it.title}</h3>
-                  <p className="mt-1.5 text-[13px] leading-relaxed text-slate-400">{it.why}</p>
+                  <h3 className="text-base font-bold text-text-primary">{it.title}</h3>
+                  <p className="mt-1.5 text-[13px] leading-relaxed text-text-secondary">{it.why}</p>
                 </div>
                 <ChevronDown
-                  className={`mt-1 h-5 w-5 shrink-0 text-slate-500 transition-transform ${
+                  className={`mt-1 h-5 w-5 shrink-0 text-text-muted transition-transform ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
               {isOpen && (
-                <div className="space-y-4 border-t border-white/10 p-4 sm:p-5">
+                <div className="space-y-4 border-t border-[var(--border-light)] p-4 sm:p-5">
                   <ul className="space-y-2">
                     {it.todo.map((t) => (
-                      <li key={t} className="flex items-start gap-2.5 text-[13px] leading-relaxed text-slate-300">
+                      <li key={t} className="flex items-start gap-2.5 text-[13px] leading-relaxed text-text-secondary">
                         <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-400" />
                         {t}
                       </li>
@@ -87,7 +87,7 @@ export default function ApplyPanel() {
                           <span
                             className={[
                               'flex items-center gap-1.5 text-xs font-semibold',
-                              bad ? 'text-rose-300' : 'text-emerald-300',
+                              bad ? 'text-tone-rose' : 'text-tone-emerald',
                             ].join(' ')}
                           >
                             {bad ? <ThumbsDown className="h-3.5 w-3.5" /> : <ThumbsUp className="h-3.5 w-3.5" />}
@@ -97,7 +97,7 @@ export default function ApplyPanel() {
                             <button
                               type="button"
                               onClick={() => copy(key, s.text)}
-                              className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-white/15 px-2 py-1 text-[11px] text-slate-400 transition-colors hover:border-white/30 hover:text-white"
+                              className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-[var(--border-light-hover)] px-2 py-1 text-[11px] text-text-secondary transition-colors hover:border-[var(--border-light-hover)] hover:text-text-primary"
                             >
                               {copied === key ? (
                                 <>
@@ -113,7 +113,7 @@ export default function ApplyPanel() {
                             </button>
                           )}
                         </div>
-                        <p className="whitespace-pre-line text-[13px] leading-relaxed text-slate-300">
+                        <p className="whitespace-pre-line text-[13px] leading-relaxed text-text-secondary">
                           {s.text}
                         </p>
                       </div>
@@ -127,8 +127,8 @@ export default function ApplyPanel() {
       </div>
 
       <div className="flex items-start gap-2.5 rounded-2xl border border-sky-500/25 bg-sky-500/[0.07] p-4">
-        <Info className="mt-0.5 h-4 w-4 shrink-0 text-sky-400" />
-        <p className="text-[13px] leading-relaxed text-slate-300">
+        <Info className="mt-0.5 h-4 w-4 shrink-0 text-tone-sky" />
+        <p className="text-[13px] leading-relaxed text-text-secondary">
           Mẫu thư ở trên cố ý để trống chỗ điền số. Đừng gửi nguyên văn — nhà tuyển dụng đọc hàng
           trăm lá mỗi tuần và nhận ra mẫu có sẵn ngay lập tức. Thay bằng số thật của bạn và một chi
           tiết có thật lấy từ chính JD của họ.

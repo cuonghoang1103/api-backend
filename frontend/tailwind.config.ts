@@ -26,6 +26,13 @@ const config: Config = {
           reading: { bg: "var(--cat-reading-bg)", fg: "var(--cat-reading-fg)", icon: "var(--cat-reading-icon)" },
           ai: { bg: "var(--cat-ai-bg)", fg: "var(--cat-ai-fg)", icon: "var(--cat-ai-icon)" },
         },
+        // Màu nhấn dạng CHỮ tự đổi theo chủ đề (08/11/2026): sáng = tông 700, tối = tông 300 — biến `--tone-*` ở
+        // globals.css (web) và desktop styles.css (app). Thay cho `text-amber-300`/`text-neon-cyan`… vốn chỉ đọc được
+        // trên nền tối (1.5–2:1 trên trắng).
+        tone: Object.fromEntries(
+          ['amber', 'emerald', 'cyan', 'sky', 'violet', 'indigo', 'fuchsia', 'rose', 'red', 'orange', 'yellow', 'green', 'blue', 'pink', 'teal', 'lime', 'purple']
+            .map((c) => [c, `var(--tone-${c})`]),
+        ),
         // Trạng thái tiến độ (nút lộ trình, phản hồi đúng/sai).
         state: {
           done: "#58CC02",

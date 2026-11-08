@@ -73,11 +73,11 @@ export default function LessonsView({
       {/* Tiến độ chung */}
       {hydrated && (
         <div className="mb-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-1.5">
+          <div className="flex items-center justify-between text-xs text-text-secondary mb-1.5">
             <span>Bài đã học</span>
             <span>{doneCount}/{total}</span>
           </div>
-          <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+          <div className="h-2 rounded-full bg-[var(--bg-surface-active)] overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all duration-500"
               style={{ width: `${(doneCount / total) * 100}%` }}
@@ -98,13 +98,13 @@ export default function LessonsView({
               onClick={() => { setUnitId(u.id); setLessonId(u.lessons[0].id); }}
               className={`shrink-0 flex items-center gap-2 px-3 py-2 rounded-xl border text-sm transition-all active:scale-95 ${
                 active
-                  ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                  ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
               }`}
             >
               <span>{u.icon}</span>
               <span className="whitespace-nowrap">{u.title.split(' — ')[0]}</span>
-              <span className={`text-[10px] px-1.5 rounded ${uDone === u.lessons.length ? 'bg-emerald-500/25 text-emerald-300' : 'bg-white/10 text-slate-400'}`}>
+              <span className={`text-[10px] px-1.5 rounded ${uDone === u.lessons.length ? 'bg-emerald-500/25 text-tone-emerald' : 'bg-[var(--bg-surface-active)] text-text-secondary'}`}>
                 {uDone}/{u.lessons.length}
               </span>
             </button>
@@ -112,7 +112,7 @@ export default function LessonsView({
         })}
       </div>
 
-      <p className="text-sm text-slate-400 mb-4">{unit.subtitle}</p>
+      <p className="text-sm text-text-secondary mb-4">{unit.subtitle}</p>
 
       {/* Chọn bài trong chủ điểm */}
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-5 mb-6">
@@ -129,37 +129,37 @@ export default function LessonsView({
                   ? 'border-sky-400/50 bg-sky-500/10'
                   : ok
                     ? 'border-emerald-400/25 bg-emerald-500/[0.06]'
-                    : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] hover:border-[var(--border-light-hover)]'
               }`}
             >
               <div className="flex items-center gap-1.5 mb-1">
                 {ok
-                  ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                  : <Circle className="w-3.5 h-3.5 text-slate-600 shrink-0" />}
-                <span className="text-[10px] font-bold text-sky-400">Bài {l.n}</span>
+                  ? <CheckCircle2 className="w-3.5 h-3.5 text-tone-emerald shrink-0" />
+                  : <Circle className="w-3.5 h-3.5 text-text-muted shrink-0" />}
+                <span className="text-[10px] font-bold text-tone-sky">Bài {l.n}</span>
               </div>
-              <p className="text-xs text-slate-200 leading-snug">{l.title}</p>
+              <p className="text-xs text-text-primary leading-snug">{l.title}</p>
             </button>
           );
         })}
       </div>
 
       {/* Nội dung bài */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-6">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-6">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div>
-            <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">
+            <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-tone-sky">
               Bài {lesson.n}/{total}
             </span>
-            <h3 className="text-xl font-bold text-white mt-2">{lesson.title}</h3>
+            <h3 className="text-xl font-bold text-text-primary mt-2">{lesson.title}</h3>
           </div>
           <button
             type="button"
             onClick={() => toggleDone(lesson.id)}
             className={`shrink-0 inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm border transition-all active:scale-95 ${
               hydrated && done[lesson.id]
-                ? 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200'
-                : 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
+                ? 'bg-emerald-500/20 border-emerald-400/40 text-tone-emerald'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             <CheckCircle2 className="w-4 h-4" />
@@ -169,30 +169,30 @@ export default function LessonsView({
 
         {/* Mục tiêu */}
         <div className="mt-4 rounded-xl border border-violet-500/25 bg-violet-500/10 p-4">
-          <p className="flex items-center gap-2 text-violet-300 text-sm font-semibold mb-1.5">
+          <p className="flex items-center gap-2 text-tone-violet text-sm font-semibold mb-1.5">
             <Target className="w-4 h-4" />
             Học xong bài này bạn làm được gì
           </p>
-          <p className="text-slate-200 text-sm leading-relaxed">{lesson.goal}</p>
+          <p className="text-text-primary text-sm leading-relaxed">{lesson.goal}</p>
         </div>
 
         {/* Các khối giảng */}
         <div className="mt-5 space-y-5">
           {lesson.blocks.map((b, i) => (
-            <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <div key={i} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
               {b.formula && (
-                <p className="inline-block text-sm font-mono text-sky-300 bg-sky-500/10 border border-sky-500/25 rounded-lg px-3 py-1.5 mb-3">
+                <p className="inline-block text-sm font-mono text-tone-sky bg-sky-500/10 border border-sky-500/25 rounded-lg px-3 py-1.5 mb-3">
                   {b.formula}
                 </p>
               )}
-              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">{b.explain}</p>
+              <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line">{b.explain}</p>
 
               <div className="mt-3 space-y-2">
                 {b.examples.map((ex, j) => (
-                  <div key={j} className="flex items-start gap-2 rounded-lg bg-white/[0.03] px-3 py-2">
+                  <div key={j} className="flex items-start gap-2 rounded-lg bg-[var(--bg-surface-hover)] px-3 py-2">
                     <div className="flex-1 min-w-0">
-                      <p className="text-white text-sm leading-relaxed">{ex.en}</p>
-                      {ex.vi && <p className="text-slate-400 text-xs mt-0.5">{ex.vi}</p>}
+                      <p className="text-text-primary text-sm leading-relaxed">{ex.en}</p>
+                      {ex.vi && <p className="text-text-secondary text-xs mt-0.5">{ex.vi}</p>}
                     </div>
                     {supported && (
                       <button
@@ -200,7 +200,7 @@ export default function LessonsView({
                         onClick={() => speak(ex.en)}
                         aria-label={`Nghe: ${ex.en}`}
                         className={`shrink-0 p-1.5 rounded-lg transition-all active:scale-90 ${
-                          current === ex.en ? 'bg-violet-500/30 text-violet-300' : 'text-slate-500 hover:text-violet-300'
+                          current === ex.en ? 'bg-violet-500/30 text-tone-violet' : 'text-text-muted hover:text-tone-violet'
                         }`}
                       >
                         <Volume2 className="w-4 h-4" />
@@ -212,19 +212,19 @@ export default function LessonsView({
 
               {b.mistake && (
                 <div className="mt-3 rounded-xl border border-rose-500/25 bg-rose-500/[0.07] p-3">
-                  <p className="flex items-center gap-1.5 text-rose-300 text-xs font-semibold mb-2">
+                  <p className="flex items-center gap-1.5 text-tone-rose text-xs font-semibold mb-2">
                     <AlertTriangle className="w-3.5 h-3.5" />
                     Lỗi người Việt hay mắc
                   </p>
-                  <p className="text-sm text-rose-200/90">
-                    <span className="text-rose-400 font-mono text-xs mr-1.5">SAI</span>
+                  <p className="text-sm text-tone-rose">
+                    <span className="text-tone-rose font-mono text-xs mr-1.5">SAI</span>
                     {b.mistake.wrong}
                   </p>
-                  <p className="text-sm text-emerald-200/90 mt-1">
-                    <span className="text-emerald-400 font-mono text-xs mr-1.5">ĐÚNG</span>
+                  <p className="text-sm text-tone-emerald mt-1">
+                    <span className="text-tone-emerald font-mono text-xs mr-1.5">ĐÚNG</span>
                     {b.mistake.right}
                   </p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">{b.mistake.why}</p>
+                  <p className="text-xs text-text-secondary mt-2 leading-relaxed">{b.mistake.why}</p>
                 </div>
               )}
             </div>
@@ -234,24 +234,24 @@ export default function LessonsView({
         {/* Từ khoá của bài */}
         {lesson.keyWords && lesson.keyWords.length > 0 && (
           <div className="mt-5">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white mb-2">
-              <BookMarked className="w-4 h-4 text-sky-400" />
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-2">
+              <BookMarked className="w-4 h-4 text-tone-sky" />
               Từ cần thuộc ngay
             </p>
             <div className="grid gap-2 sm:grid-cols-2">
               {lesson.keyWords.map((w, i) => (
-                <div key={i} className="flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2">
+                <div key={i} className="flex items-center gap-2 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2">
                   <div className="flex-1 min-w-0">
-                    <p className="text-white text-sm font-semibold">{w.en}</p>
-                    <p className="text-violet-300/70 text-[11px] font-mono">{w.ipa}</p>
-                    <p className="text-slate-400 text-xs">{w.vi}</p>
+                    <p className="text-text-primary text-sm font-semibold">{w.en}</p>
+                    <p className="text-tone-violet text-[11px] font-mono">{w.ipa}</p>
+                    <p className="text-text-secondary text-xs">{w.vi}</p>
                   </div>
                   {supported && (
                     <button
                       type="button"
                       onClick={() => speak(w.en)}
                       aria-label={`Nghe: ${w.en}`}
-                      className="shrink-0 p-1.5 rounded-lg text-slate-500 hover:text-violet-300 transition-colors"
+                      className="shrink-0 p-1.5 rounded-lg text-text-muted hover:text-tone-violet transition-colors"
                     >
                       <Volume2 className="w-4 h-4" />
                     </button>
@@ -275,14 +275,14 @@ export default function LessonsView({
 
         {/* Tự luyện */}
         <div className="mt-5 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] p-4">
-          <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
+          <p className="flex items-center gap-2 text-tone-amber text-sm font-semibold mb-2">
             <ListChecks className="w-4 h-4" />
             Tự luyện ngoài trang này
           </p>
           <ul className="space-y-1.5">
             {lesson.practice.map((p, i) => (
-              <li key={i} className="text-slate-200 text-sm leading-relaxed flex gap-2">
-                <span className="text-amber-400 shrink-0">{i + 1}.</span>
+              <li key={i} className="text-text-primary text-sm leading-relaxed flex gap-2">
+                <span className="text-tone-amber shrink-0">{i + 1}.</span>
                 <span>{p}</span>
               </li>
             ))}

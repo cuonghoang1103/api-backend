@@ -155,7 +155,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
 
   return (
     <div>
-      <p className="text-sm text-slate-400 leading-relaxed mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+      <p className="text-sm text-text-secondary leading-relaxed mb-4 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
         Bài thi IELTS trên máy tính bắt gõ toàn bộ phần Viết trong 60 phút — gõ mổ cò là mất vài phút và mất
         cả sức chú ý lẽ ra dành cho nội dung. Ngoài ra, gõ lại một câu ĐÚNG làm câu đó dính vào tay nhanh hơn
         đọc nó năm lần, nên mọi đoạn ở đây đều là câu mẫu dùng được thật, không phải văn bản ngẫu nhiên.
@@ -170,43 +170,43 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
             onClick={() => pick(p)}
             className={`shrink-0 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               p.id === passage.id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             {p.title}
             {hydrated && best[p.id] && (
-              <span className="ml-1.5 text-[10px] text-amber-300">{best[p.id].wpm}</span>
+              <span className="ml-1.5 text-[10px] text-tone-amber">{best[p.id].wpm}</span>
             )}
           </button>
         ))}
       </div>
 
       {/* Thông tin đoạn + chỉ số */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0">
-            <h3 className="text-lg font-bold text-white">{passage.title}</h3>
-            <p className="text-slate-400 text-sm mt-1 leading-relaxed">{passage.why}</p>
+            <h3 className="text-lg font-bold text-text-primary">{passage.title}</h3>
+            <p className="text-text-secondary text-sm mt-1 leading-relaxed">{passage.why}</p>
           </div>
           <div className="shrink-0 flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-white/5 text-slate-300">
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
-              {wpm} <span className="text-slate-500">wpm</span>
+            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary">
+              <Zap className="w-3.5 h-3.5 text-tone-amber" />
+              {wpm} <span className="text-text-muted">wpm</span>
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-white/5 text-slate-300">
-              <Target className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary">
+              <Target className="w-3.5 h-3.5 text-tone-emerald" />
               {accuracy}%
             </span>
-            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-white/5 text-slate-300">
-              <Timer className="w-3.5 h-3.5 text-sky-400" />
+            <span className="inline-flex items-center gap-1.5 text-xs px-2.5 py-1.5 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary">
+              <Timer className="w-3.5 h-3.5 text-tone-sky" />
               {startedAt === null ? 0 : elapsedSec}s
             </span>
           </div>
         </div>
 
         {hydrated && record && (
-          <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-amber-300">
+          <p className="mt-3 inline-flex items-center gap-1.5 text-xs text-tone-amber">
             <Trophy className="w-3.5 h-3.5" />
             Kỷ lục của bạn: {record.wpm} wpm · {record.accuracy}% chính xác
           </p>
@@ -214,12 +214,12 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
 
         {passage.watch && passage.watch.length > 0 && (
           <div className="mt-3">
-            <p className="text-xs text-slate-500 mb-1.5">Từ hay gõ sai trong đoạn này</p>
+            <p className="text-xs text-text-muted mb-1.5">Từ hay gõ sai trong đoạn này</p>
             <div className="flex flex-wrap gap-1.5">
               {passage.watch.map((w) => (
                 <span
                   key={w}
-                  className="text-xs rounded-lg border border-amber-500/25 bg-amber-500/10 text-amber-200 px-2 py-1 font-mono"
+                  className="text-xs rounded-lg border border-amber-500/25 bg-amber-500/10 text-tone-amber px-2 py-1 font-mono"
                 >
                   {w}
                 </span>
@@ -231,16 +231,16 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
 
       {/* Đoạn văn — tô màu từng ký tự */}
       <div
-        className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5 mb-3 cursor-text"
+        className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-3 cursor-text"
         onClick={() => inputRef.current?.focus()}
       >
         <p className="font-mono text-[15px] leading-[1.9] break-words">
           {target.split('').map((ch, i) => {
-            let cls = 'text-slate-500';
+            let cls = 'text-text-muted';
             if (i < typed.length) {
-              cls = typed[i] === ch ? 'text-emerald-300' : 'text-rose-300 bg-rose-500/25 rounded-sm';
+              cls = typed[i] === ch ? 'text-tone-emerald' : 'text-tone-rose bg-rose-500/25 rounded-sm';
             } else if (i === typed.length) {
-              cls = 'text-white bg-sky-500/40 rounded-sm';
+              cls = 'text-text-primary bg-sky-500/40 rounded-sm';
             }
             // Khoảng trắng gõ sai phải nhìn thấy được, nên thay bằng ký tự gạch dưới.
             const show = ch === ' ' && i < typed.length && typed[i] !== ch ? '␣' : ch;
@@ -263,11 +263,11 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
         autoCapitalize="off"
         rows={3}
         placeholder="Click here and type the passage above…"
-        className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 font-mono leading-relaxed resize-none"
+        className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-sky-400/50 font-mono leading-relaxed resize-none"
       />
 
       <div className="flex items-center justify-between gap-3 mt-3 flex-wrap">
-        <div className="h-2 rounded-full bg-white/10 overflow-hidden flex-1 min-w-[10rem]">
+        <div className="h-2 rounded-full bg-[var(--bg-surface-active)] overflow-hidden flex-1 min-w-[10rem]">
           <div
             className="h-full bg-gradient-to-r from-sky-500 to-emerald-500 transition-all duration-200"
             style={{ width: `${(typed.length / target.length) * 100}%` }}
@@ -277,7 +277,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
           <button
             type="button"
             onClick={() => setShowVi((v) => !v)}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
           >
             {showVi ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             Sổ lỗi ({wrongs.length})
@@ -285,7 +285,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
           <button
             type="button"
             onClick={reset}
-            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Gõ lại
@@ -296,23 +296,23 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
       {/* Sổ lỗi */}
       {showVi && (
         <div className="mt-3 rounded-2xl border border-rose-500/25 bg-rose-500/[0.06] p-4">
-          <p className="flex items-center gap-2 text-rose-300 text-sm font-semibold mb-2">
+          <p className="flex items-center gap-2 text-tone-rose text-sm font-semibold mb-2">
             <AlertTriangle className="w-4 h-4" />
             Sổ lỗi — những chỗ bạn gõ sai
           </p>
           {wrongs.length === 0 ? (
-            <p className="text-slate-400 text-sm">Chưa có lỗi nào. Gõ tiếp đi.</p>
+            <p className="text-text-secondary text-sm">Chưa có lỗi nào. Gõ tiếp đi.</p>
           ) : (
             <div className="flex flex-wrap gap-2">
               {wrongs.map((w, i) => (
                 <span
                   key={i}
-                  className="text-xs rounded-lg border border-white/10 bg-white/[0.04] px-2.5 py-1.5 font-mono"
+                  className="text-xs rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2.5 py-1.5 font-mono"
                 >
-                  <span className="text-slate-500">vị trí {w.index + 1}: </span>
-                  <span className="text-rose-300">{w.typed === ' ' ? '␣' : w.typed}</span>
-                  <span className="text-slate-600"> → </span>
-                  <span className="text-emerald-300">{w.expected === ' ' ? '␣' : w.expected}</span>
+                  <span className="text-text-muted">vị trí {w.index + 1}: </span>
+                  <span className="text-tone-rose">{w.typed === ' ' ? '␣' : w.typed}</span>
+                  <span className="text-text-muted"> → </span>
+                  <span className="text-tone-emerald">{w.expected === ' ' ? '␣' : w.expected}</span>
                 </span>
               ))}
             </div>
@@ -324,10 +324,10 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
       {done && (
         <div className="mt-4 rounded-2xl border border-emerald-400/30 bg-emerald-500/[0.08] p-6 text-center">
           <p className="text-4xl mb-2">{accuracy >= 98 ? '🏆' : accuracy >= 92 ? '👍' : '💪'}</p>
-          <p className="text-2xl font-bold text-white">
+          <p className="text-2xl font-bold text-text-primary">
             {wpm} wpm · {accuracy}% chính xác
           </p>
-          <p className="text-slate-300 text-sm mt-2 leading-relaxed max-w-lg mx-auto">
+          <p className="text-text-secondary text-sm mt-2 leading-relaxed max-w-lg mx-auto">
             {accuracy >= 98
               ? 'Rất tốt. Tốc độ này gõ Writing trên máy thoải mái. Thử đoạn khó hơn.'
               : accuracy >= 92
@@ -337,7 +337,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
           <button
             type="button"
             onClick={reset}
-            className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm hover:bg-white/10 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-primary text-sm hover:bg-[var(--bg-surface-active)] transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
             Gõ lại đoạn này
@@ -345,7 +345,7 @@ export default function TypingPanel({ stageId }: { stageId: string }) {
         </div>
       )}
 
-      <p className="mt-4 text-xs text-slate-500 leading-relaxed flex gap-2">
+      <p className="mt-4 text-xs text-text-muted leading-relaxed flex gap-2">
         <Keyboard className="w-3.5 h-3.5 shrink-0 mt-0.5" />
         <span>
           Độ chính xác tính theo lần gõ ĐẦU TIÊN ở mỗi vị trí — xoá đi gõ lại vẫn tính là sai, nếu không thì

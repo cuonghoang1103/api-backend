@@ -150,14 +150,14 @@ export default function AcademyPage() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>
+    <div className="min-h-screen pt-24 pb-16" style={{ background: 'var(--bg-primary)' }}>
       <AcademyBackground />
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        <section className="rounded-3xl border border-darkborder bg-darkcard p-8 overflow-hidden relative">
+        <section className="rounded-3xl border border-[var(--border-color)] bg-[var(--bg-card)] p-8 overflow-hidden relative">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(139,92,246,0.18),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(34,211,238,0.16),transparent_30%)]" />
           <div className="relative z-10 grid gap-6 lg:grid-cols-[1.4fr_0.8fr] items-center">
             <div>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-neon-violet text-sm mb-5">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-tone-violet text-sm mb-5">
                 <GraduationCap className="w-4 h-4" /> FPT University Academy
               </div>
               <h1 className="text-4xl md:text-5xl font-heading font-bold text-text-primary leading-tight">
@@ -169,15 +169,15 @@ export default function AcademyPage() {
             </div>
 
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-darkborder bg-darkbg/80 p-5">
+              <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-5">
                 <p className="text-text-muted text-sm">Kỳ học</p>
                 <p className="text-3xl font-bold text-text-primary mt-2">{semesters.length}</p>
               </div>
-              <div className="rounded-2xl border border-darkborder bg-darkbg/80 p-5">
+              <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-5">
                 <p className="text-text-muted text-sm">{leafActive ? 'Môn ngành bạn' : 'Môn học'}</p>
                 <p className="text-3xl font-bold text-text-primary mt-2">{shownTotal}</p>
               </div>
-              <div className="rounded-2xl border border-darkborder bg-darkbg/80 p-5 col-span-2">
+              <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-5 col-span-2">
                 <p className="text-text-muted text-sm">Truy cập nhanh</p>
                 <p className="text-text-primary mt-2">Mở từng kỳ để xem danh sách môn học và vào ngay màn hình học tập.</p>
               </div>
@@ -188,7 +188,7 @@ export default function AcademyPage() {
               student AND picked a major. Someone who answered "không phải sinh
               viên" sees nothing here at all. */}
           {isStudent && major && (
-            <div className="relative z-10 mt-6 rounded-2xl border border-neon-violet/30 bg-darkbg/80 p-4 sm:p-5">
+            <div className="relative z-10 mt-6 rounded-2xl border border-neon-violet/30 bg-[var(--bg-glass)] p-4 sm:p-5">
               <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                 <span aria-hidden className="text-3xl leading-none">{combo?.icon ?? major.icon}</span>
                 <div className="min-w-0 flex-1 basis-40">
@@ -203,20 +203,20 @@ export default function AcademyPage() {
                   </p>
                 </div>
                 {leafActive && (
-                  <span className="inline-flex items-center gap-1.5 max-w-full px-3 py-1.5 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan text-sm">
+                  <span className="inline-flex items-center gap-1.5 max-w-full px-3 py-1.5 rounded-full border border-neon-cyan/30 bg-neon-cyan/10 text-tone-cyan text-sm">
                     <span className="truncate">Đang lọc {shownTotal} môn của ngành</span>
                   </span>
                 )}
                 <Link
                   href={`/academy/so-do-mon-hoc?faculty=${profile.faculty ?? ''}&major=${profile.major ?? ''}&combo=${profile.combo ?? ''}`}
-                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-neon-cyan/40 bg-neon-cyan/10 text-neon-cyan hover:border-neon-cyan/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-neon-cyan/40 bg-neon-cyan/10 text-tone-cyan hover:border-neon-cyan/70 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
                 >
                   🗺️ Sơ đồ môn học
                 </Link>
                 <button
                   type="button"
                   onClick={() => setReopenAtMajor(true)}
-                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-darkborder bg-darkcard text-text-primary hover:border-neon-violet/50 hover:text-neon-violet transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
+                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] text-text-primary hover:border-neon-violet/50 hover:text-tone-violet transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet"
                 >
                   <RefreshCw className="w-4 h-4" aria-hidden /> Đổi ngành
                 </button>
@@ -243,7 +243,7 @@ export default function AcademyPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search courses by code (e.g. CEA203, PRO192)…"
-            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+            className="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-[var(--bg-card)] border border-[var(--border-color)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
           />
           {query && (
             <button
@@ -255,7 +255,7 @@ export default function AcademyPage() {
             </button>
           )}
           {query.trim() && (
-            <div className="absolute left-0 right-0 z-30 mt-2 rounded-2xl border border-darkborder bg-darkcard shadow-2xl shadow-black/40 overflow-hidden max-h-[420px] overflow-y-auto">
+            <div className="absolute left-0 right-0 z-30 mt-2 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] shadow-2xl shadow-black/40 overflow-hidden max-h-[420px] overflow-y-auto">
               {searchResults.length === 0 ? (
                 <div className="px-4 py-6 text-center text-text-muted text-sm">Không tìm thấy môn học khớp “{query.trim()}”.</div>
               ) : (
@@ -264,17 +264,17 @@ export default function AcademyPage() {
                     key={course.id}
                     href={`/courses/${course.slug}`}
                     onClick={() => setQuery('')}
-                    className="flex items-center gap-3 px-3 py-2.5 hover:bg-neon-violet/10 transition border-b border-darkborder/50 last:border-b-0"
+                    className="flex items-center gap-3 px-3 py-2.5 hover:bg-neon-violet/10 transition border-b border-[var(--border-color)] last:border-b-0"
                   >
-                    <div className="w-16 h-10 rounded-lg overflow-hidden bg-darkbg shrink-0 flex items-center justify-center">
+                    <div className="w-16 h-10 rounded-lg overflow-hidden bg-[var(--bg-primary)] shrink-0 flex items-center justify-center">
                       {course.thumbnailUrl ? (
                         <SafeImage src={course.thumbnailUrl} alt={pickLang(course.title, locale)} label={pickLang(course.title, locale)} className="w-full h-full object-cover" />
                       ) : (
-                        <PlayCircle className="w-5 h-5 text-white/60" />
+                        <PlayCircle className="w-5 h-5 text-text-secondary" />
                       )}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-neon-violet truncate">{course.courseCode || 'COURSE'}</p>
+                      <p className="text-sm font-semibold text-tone-violet truncate">{course.courseCode || 'COURSE'}</p>
                       <p className="text-sm text-text-secondary truncate">{pickLang(course.title, locale)}</p>
                     </div>
                     <ChevronRight className="w-4 h-4 text-text-muted shrink-0" />
@@ -289,7 +289,7 @@ export default function AcademyPage() {
             không còn "section ordering" riêng nữa (trước đây hiện thêm ở trên
             rồi vẫn đổ hết môn ở dưới, gây rối). */}
         {leafActive && shownTotal === 0 && (
-          <div className="rounded-2xl border border-dashed border-darkborder px-4 py-6 text-center text-text-secondary">
+          <div className="rounded-2xl border border-dashed border-[var(--border-color)] px-4 py-6 text-center text-text-secondary">
             Ngành hẹp <span className="text-text-primary font-semibold">{combo?.nameVi ?? major?.nameVi}</span> chưa có môn nào được dựng trong Academy. Bấm “Đổi ngành” để chọn ngành khác.
           </div>
         )}
@@ -303,9 +303,9 @@ export default function AcademyPage() {
               lower semesters are unreachable. max-height + overflow-y makes
               the sidebar scroll on its own; `overscroll-contain` stops that
               scroll from chaining into the page when it hits the end. */}
-          <aside className="thin-scroll rounded-2xl border border-darkborder bg-darkcard p-4 h-fit lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto overscroll-contain">
+          <aside className="thin-scroll rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4 h-fit lg:sticky lg:top-24 lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto overscroll-contain">
             <div className="flex items-center gap-3 mb-4">
-              <Layers3 className="w-5 h-5 text-neon-violet" />
+              <Layers3 className="w-5 h-5 text-tone-violet" />
               <h2 className="text-lg font-semibold text-text-primary">Semester navigator</h2>
             </div>
             <div className="space-y-2">
@@ -314,10 +314,10 @@ export default function AcademyPage() {
                 const courses = semester.mon;
                 if (leafActive && courses.length === 0) return null;
                 return (
-                  <div key={semester.id} className="rounded-2xl border border-darkborder overflow-hidden bg-darkbg/60">
+                  <div key={semester.id} className="rounded-2xl border border-[var(--border-color)] overflow-hidden bg-[var(--bg-glass)]">
                     <button
                       onClick={() => toggleSemester(semester.id)}
-                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/5 transition text-left"
+                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-[var(--bg-surface-hover)] transition text-left"
                     >
                       <div>
                         <p className="font-semibold text-text-primary">{semester.name}</p>
@@ -326,13 +326,13 @@ export default function AcademyPage() {
                       {isOpen ? <ChevronDown className="w-4 h-4 text-text-muted" /> : <ChevronRight className="w-4 h-4 text-text-muted" />}
                     </button>
                     {isOpen && (
-                      <div className="border-t border-darkborder divide-y divide-darkborder/60">
+                      <div className="border-t border-[var(--border-color)] divide-y divide-darkborder/60">
                         {courses.map(({ course, isOld, isProject }) => (
                           <Link key={course.id} href={`/courses/${course.slug}`} className="block px-4 py-3 hover:bg-neon-violet/10 transition">
                             <p className="text-sm font-medium text-text-primary flex items-center gap-1.5">
                               {course.courseCode || 'COURSE'}
-                              {isOld && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 text-[10px] font-semibold border border-amber-500/30">OLD</span>}
-                              {isProject && <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-400 text-[10px] font-semibold border border-emerald-500/30">🚀 PROJECT</span>}
+                              {isOld && <span className="px-1.5 py-0.5 rounded bg-amber-500/15 text-tone-amber text-[10px] font-semibold border border-amber-500/30">OLD</span>}
+                              {isProject && <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-tone-emerald text-[10px] font-semibold border border-emerald-500/30">🚀 PROJECT</span>}
                             </p>
                             <p className="text-sm text-text-secondary line-clamp-2">{pickLang(course.title, locale)}</p>
                           </Link>
@@ -350,19 +350,19 @@ export default function AcademyPage() {
               const courses = semester.mon;
               if (leafActive && courses.length === 0) return null;
               return (
-                <section key={semester.id} className="rounded-2xl border border-darkborder bg-darkcard p-5">
+                <section key={semester.id} className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
                   <div className="flex items-center justify-between gap-4 mb-4">
                     <div>
                       <h3 className="text-2xl font-heading font-bold text-text-primary">{semester.name}</h3>
                       <p className="text-text-muted">{semester.description || 'Danh sách môn học theo kỳ'}</p>
                     </div>
-                    <span className="px-3 py-1 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-neon-violet text-sm">
+                    <span className="px-3 py-1 rounded-full border border-neon-violet/30 bg-neon-violet/10 text-tone-violet text-sm">
                       {courses.length} môn
                     </span>
                   </div>
 
                   {courses.length === 0 ? (
-                    <div className="rounded-2xl border border-dashed border-darkborder p-8 text-center text-text-muted">
+                    <div className="rounded-2xl border border-dashed border-[var(--border-color)] p-8 text-center text-text-muted">
                       Chưa có môn học cho kỳ này.
                     </div>
                   ) : (
@@ -371,7 +371,7 @@ export default function AcademyPage() {
                         <Link
                           key={course.id}
                           href={`/courses/${course.slug}`}
-                          className={cn('group rounded-2xl border bg-darkbg/70 hover:border-neon-violet/40 transition overflow-hidden', isProject ? 'border-emerald-500/40' : isOld ? 'border-amber-500/40' : 'border-darkborder')}
+                          className={cn('group rounded-2xl border bg-[var(--bg-glass)] hover:border-neon-violet/40 transition overflow-hidden', isProject ? 'border-emerald-500/40' : isOld ? 'border-amber-500/40' : 'border-[var(--border-color)]')}
                         >
                           <div className="aspect-video bg-gradient-to-br from-neon-indigo/20 via-neon-violet/10 to-transparent flex items-center justify-center overflow-hidden relative">
                             {course.thumbnailUrl ? (
@@ -382,7 +382,7 @@ export default function AcademyPage() {
                                 className="absolute inset-0 w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
                               />
                             ) : (
-                              <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform relative z-10" />
+                              <PlayCircle className="w-12 h-12 text-text-secondary group-hover:scale-110 transition-transform relative z-10" />
                             )}
                             {isProject && (
                               <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-emerald-500/90 text-black text-[11px] font-bold shadow" title="Dự án gợi ý cho kỳ thực tập — không phải môn trong giáo trình">
@@ -397,7 +397,7 @@ export default function AcademyPage() {
                           </div>
                           <div className="p-4 space-y-3">
                             <div className="flex items-center justify-between gap-2">
-                              <span className={cn('px-2.5 py-1 rounded-full text-xs font-semibold', isProject ? 'bg-emerald-500/15 text-emerald-400' : isOld ? 'bg-amber-500/15 text-amber-400' : 'bg-neon-violet/10 text-neon-violet')}>
+                              <span className={cn('px-2.5 py-1 rounded-full text-xs font-semibold', isProject ? 'bg-emerald-500/15 text-tone-emerald' : isOld ? 'bg-amber-500/15 text-tone-amber' : 'bg-neon-violet/10 text-tone-violet')}>
                                 {course.courseCode || semester.code}
                               </span>
                               <span className="text-xs text-text-muted">{course.totalLessons || 0} lessons</span>
@@ -406,7 +406,7 @@ export default function AcademyPage() {
                             <p className="text-sm text-text-secondary line-clamp-3">{pickLang(course.shortDescription || course.description, locale) || 'Khóa học theo cấu trúc chương và bài giảng.'}</p>
                             <div className="flex items-center justify-between text-sm text-text-muted pt-1">
                               <span className="flex items-center gap-1"><BookOpen className="w-4 h-4" /> {course.totalLessons || 0} bài</span>
-                              <span className="text-neon-violet group-hover:text-neon-indigo">Vào học</span>
+                              <span className="text-tone-violet group-hover:text-tone-indigo">Vào học</span>
                             </div>
                           </div>
                         </Link>

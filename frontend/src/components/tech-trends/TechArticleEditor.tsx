@@ -157,7 +157,7 @@ export default function TechArticleEditor({
   if (!editor) {
     return (
       <div
-        className="flex items-center justify-center rounded-xl border border-darkborder bg-darkbg/40"
+        className="flex items-center justify-center rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)]"
         style={{ minHeight }}
       >
         <Loader2 className="h-5 w-5 animate-spin text-text-muted" />
@@ -169,7 +169,7 @@ export default function TechArticleEditor({
     <div className="space-y-2">
       <Toolbar editor={editor} onPickImage={() => fileInputRef.current?.click()} />
       <div
-        className="rounded-xl border border-darkborder bg-darkbg/40 px-4 py-3"
+        className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-4 py-3"
         style={{ minHeight }}
       >
         <EditorContent editor={editor} />
@@ -192,9 +192,9 @@ export default function TechArticleEditor({
         }}
       />
       <p className="text-[11px] text-text-muted">
-        Markdown tự động lưu — gõ <code className="rounded bg-darkcard px-1">**bold**</code>,{' '}
-        <code className="rounded bg-darkcard px-1">#</code> heading,{' '}
-        <code className="rounded bg-darkcard px-1">- </code> list.
+        Markdown tự động lưu — gõ <code className="rounded bg-[var(--bg-card)] px-1">**bold**</code>,{' '}
+        <code className="rounded bg-[var(--bg-card)] px-1">#</code> heading,{' '}
+        <code className="rounded bg-[var(--bg-card)] px-1">- </code> list.
       </p>
     </div>
   );
@@ -222,7 +222,7 @@ function Toolbar({ editor, onPickImage }: ToolbarProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-1 rounded-xl border border-darkborder bg-darkcard/60 p-1">
+    <div className="flex flex-wrap items-center gap-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-1">
       <ToolButton
         label="Bold"
         active={editor.isActive('bold')}
@@ -340,8 +340,8 @@ function ToolButton({
       className={cn(
         'inline-flex h-7 w-7 items-center justify-center rounded-lg transition-colors',
         active
-          ? 'bg-neon-violet/20 text-neon-violet'
-          : 'text-text-secondary hover:bg-white/5 hover:text-text-primary',
+          ? 'bg-neon-violet/20 text-tone-violet'
+          : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
         disabled && 'opacity-40 cursor-not-allowed hover:bg-transparent',
       )}
     >

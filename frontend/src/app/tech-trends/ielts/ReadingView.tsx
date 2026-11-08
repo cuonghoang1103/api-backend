@@ -88,8 +88,8 @@ export default function ReadingView({ d }: { d: StageBundle }) {
             onClick={() => { setId(r.id); reset(); }}
             className={`shrink-0 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               r.id === id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             Bài {i + 1} · {r.titleVi}
@@ -98,12 +98,12 @@ export default function ReadingView({ d }: { d: StageBundle }) {
       </div>
 
       {/* Đầu bài + đồng hồ */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
         <div className="flex items-start justify-between gap-3 flex-wrap">
           <div className="min-w-0">
-            <h3 className="text-xl font-bold text-white">{passage.title}</h3>
-            <p className="text-slate-400 text-sm mt-0.5">{passage.titleVi}</p>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-slate-500">
+            <h3 className="text-xl font-bold text-text-primary">{passage.title}</h3>
+            <p className="text-text-secondary text-sm mt-0.5">{passage.titleVi}</p>
+            <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-text-muted">
               <span>{passage.level}</span>
               <span>{passage.words} từ</span>
               <span>{passage.questions.length} câu hỏi</span>
@@ -115,10 +115,10 @@ export default function ReadingView({ d }: { d: StageBundle }) {
               <span
                 className={`font-mono text-lg px-3 py-1.5 rounded-xl border ${
                   secondsLeft === 0
-                    ? 'border-rose-400/40 bg-rose-500/15 text-rose-300'
+                    ? 'border-rose-400/40 bg-rose-500/15 text-tone-rose'
                     : secondsLeft < 60
-                      ? 'border-amber-400/40 bg-amber-500/15 text-amber-300'
-                      : 'border-white/10 bg-white/5 text-slate-300'
+                      ? 'border-amber-400/40 bg-amber-500/15 text-tone-amber'
+                      : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary'
                 }`}
               >
                 {mmss(secondsLeft)}
@@ -127,7 +127,7 @@ export default function ReadingView({ d }: { d: StageBundle }) {
             <button
               type="button"
               onClick={startTimer}
-              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-500/15 border border-sky-400/30 text-sky-200 text-sm hover:bg-sky-500/25 transition-colors"
+              className="inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-sky-500/15 border border-sky-400/30 text-tone-sky text-sm hover:bg-sky-500/25 transition-colors"
             >
               <Timer className="w-4 h-4" />
               {secondsLeft === null ? 'Bấm giờ' : 'Bấm lại'}
@@ -138,14 +138,14 @@ export default function ReadingView({ d }: { d: StageBundle }) {
 
       {/* Mẹo làm dạng câu hỏi có trong bài */}
       <details className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] p-4 mb-4">
-        <summary className="cursor-pointer text-amber-300 text-sm font-semibold flex items-center gap-2">
+        <summary className="cursor-pointer text-tone-amber text-sm font-semibold flex items-center gap-2">
           <Lightbulb className="w-4 h-4" />
           Mẹo làm bài này ({passage.strategy.length})
         </summary>
         <ul className="mt-3 space-y-2">
           {passage.strategy.map((s, i) => (
-            <li key={i} className="text-slate-200 text-sm leading-relaxed flex gap-2">
-              <span className="text-amber-400 shrink-0">→</span>
+            <li key={i} className="text-text-primary text-sm leading-relaxed flex gap-2">
+              <span className="text-tone-amber shrink-0">→</span>
               <span>{s}</span>
             </li>
           ))}
@@ -154,34 +154,34 @@ export default function ReadingView({ d }: { d: StageBundle }) {
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Bài đọc */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-          <p className="flex items-center gap-2 text-sm font-semibold text-white mb-3">
-            <BookOpen className="w-4 h-4 text-sky-400" />
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+          <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+            <BookOpen className="w-4 h-4 text-tone-sky" />
             Bài đọc
           </p>
           <div className="space-y-3">
             {passage.paragraphs.map((p) => (
               <div key={p.label} className="flex gap-3">
-                <span className="shrink-0 w-6 h-6 rounded-lg bg-sky-500/15 text-sky-300 text-xs font-bold flex items-center justify-center">
+                <span className="shrink-0 w-6 h-6 rounded-lg bg-sky-500/15 text-tone-sky text-xs font-bold flex items-center justify-center">
                   {p.label}
                 </span>
-                <p className="text-slate-300 text-sm leading-relaxed flex-1">{p.text}</p>
+                <p className="text-text-secondary text-sm leading-relaxed flex-1">{p.text}</p>
               </div>
             ))}
           </div>
 
           {/* Từ khó */}
-          <div className="mt-5 pt-4 border-t border-white/10">
-            <p className="text-xs text-slate-500 mb-2">Từ khó trong bài</p>
+          <div className="mt-5 pt-4 border-t border-[var(--border-light)]">
+            <p className="text-xs text-text-muted mb-2">Từ khó trong bài</p>
             <div className="flex flex-wrap gap-2">
               {passage.glossary.map((g, i) => (
                 <span
                   key={i}
-                  className="text-xs rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5"
+                  className="text-xs rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2.5 py-1.5"
                 >
-                  <b className="text-white">{g.en}</b>
-                  <span className="text-violet-300/60 font-mono ml-1.5">{g.ipa}</span>
-                  <span className="text-slate-400 ml-1.5">{g.vi}</span>
+                  <b className="text-text-primary">{g.en}</b>
+                  <span className="text-tone-violet font-mono ml-1.5">{g.ipa}</span>
+                  <span className="text-text-secondary ml-1.5">{g.vi}</span>
                 </span>
               ))}
             </div>
@@ -195,15 +195,15 @@ export default function ReadingView({ d }: { d: StageBundle }) {
               onClick={() => setShowTranslation((v) => !v)}
               className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm border transition-colors ${
                 graded
-                  ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
-                  : 'bg-white/[0.02] border-white/5 text-slate-600 cursor-not-allowed'
+                  ? 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-muted cursor-not-allowed'
               }`}
             >
               {showTranslation ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               {graded ? (showTranslation ? 'Ẩn bản dịch' : 'Xem bản dịch') : 'Bản dịch mở sau khi chấm bài'}
             </button>
             {graded && showTranslation && (
-              <p className="mt-3 text-slate-400 text-sm leading-relaxed whitespace-pre-line rounded-xl border border-white/10 bg-white/[0.02] p-3">
+              <p className="mt-3 text-text-secondary text-sm leading-relaxed whitespace-pre-line rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
                 {passage.translation}
               </p>
             )}
@@ -211,15 +211,15 @@ export default function ReadingView({ d }: { d: StageBundle }) {
         </div>
 
         {/* Câu hỏi */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-white">Câu hỏi</p>
+            <p className="text-sm font-semibold text-text-primary">Câu hỏi</p>
             {graded && (
               <span
                 className={`text-sm px-3 py-1 rounded-lg ${
                   correctCount >= passage.questions.length * 0.7
-                    ? 'bg-emerald-500/20 text-emerald-300'
-                    : 'bg-amber-500/20 text-amber-300'
+                    ? 'bg-emerald-500/20 text-tone-emerald'
+                    : 'bg-amber-500/20 text-tone-amber'
                 }`}
               >
                 Đúng {correctCount}/{passage.questions.length}
@@ -239,20 +239,20 @@ export default function ReadingView({ d }: { d: StageBundle }) {
                       ? ok
                         ? 'border-emerald-400/30 bg-emerald-500/[0.07]'
                         : 'border-rose-400/30 bg-rose-500/[0.07]'
-                      : 'border-white/10 bg-white/[0.03]'
+                      : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
                   }`}
                 >
                   <div className="flex items-start gap-2">
-                    <span className="shrink-0 text-xs font-bold text-sky-400 bg-sky-500/15 px-1.5 py-0.5 rounded">
+                    <span className="shrink-0 text-xs font-bold text-tone-sky bg-sky-500/15 px-1.5 py-0.5 rounded">
                       {i + 1}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <p className="text-slate-200 text-sm leading-relaxed">{q.q}</p>
-                      <p className="text-[10px] text-slate-600 mt-1 uppercase tracking-wide">{q.kind}</p>
+                      <p className="text-text-primary text-sm leading-relaxed">{q.q}</p>
+                      <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wide">{q.kind}</p>
                     </div>
                     {graded && (ok
-                      ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                      : <X className="w-4 h-4 text-rose-400 shrink-0" />)}
+                      ? <Check className="w-4 h-4 text-tone-emerald shrink-0" />
+                      : <X className="w-4 h-4 text-tone-rose shrink-0" />)}
                   </div>
 
                   {/* Ô trả lời */}
@@ -267,8 +267,8 @@ export default function ReadingView({ d }: { d: StageBundle }) {
                             onClick={() => setAnswers((a) => ({ ...a, [i]: opt }))}
                             className={`text-left text-xs rounded-lg border px-2.5 py-1.5 transition-all ${
                               given === opt
-                                ? 'border-sky-400/50 bg-sky-500/20 text-white'
-                                : 'border-white/10 bg-white/[0.02] text-slate-300 hover:border-white/25'
+                                ? 'border-sky-400/50 bg-sky-500/20 text-text-primary'
+                                : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)]'
                             } ${graded ? 'cursor-default' : 'active:scale-95'}`}
                           >
                             {opt}
@@ -282,23 +282,23 @@ export default function ReadingView({ d }: { d: StageBundle }) {
                         disabled={graded}
                         onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
                         placeholder="Type a word from the passage…"
-                        className="w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 disabled:text-slate-400"
+                        className="w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-sky-400/50 disabled:text-text-secondary"
                       />
                     )}
                   </div>
 
                   {/* Giải thích sau khi chấm */}
                   {graded && (
-                    <div className="mt-2.5 pt-2.5 border-t border-white/10 space-y-1.5">
-                      <p className="text-xs text-emerald-300">
+                    <div className="mt-2.5 pt-2.5 border-t border-[var(--border-light)] space-y-1.5">
+                      <p className="text-xs text-tone-emerald">
                         Đáp án: <b>{q.answer}</b>
                         {q.alt && q.alt.length > 0 && (
-                          <span className="text-slate-500"> (chấp nhận: {q.alt.join(', ')})</span>
+                          <span className="text-text-muted"> (chấp nhận: {q.alt.join(', ')})</span>
                         )}
                       </p>
-                      <p className="text-xs text-slate-300 leading-relaxed">{q.why}</p>
+                      <p className="text-xs text-text-secondary leading-relaxed">{q.why}</p>
                       {q.whyNot && (
-                        <p className="text-xs text-slate-500 leading-relaxed">{q.whyNot}</p>
+                        <p className="text-xs text-text-muted leading-relaxed">{q.whyNot}</p>
                       )}
                     </div>
                   )}
@@ -312,7 +312,7 @@ export default function ReadingView({ d }: { d: StageBundle }) {
               <button
                 type="button"
                 onClick={() => { setGraded(true); stopTimer(); }}
-                className="flex-1 px-4 py-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-white text-sm hover:bg-emerald-500/30 transition-colors"
+                className="flex-1 px-4 py-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-text-primary text-sm hover:bg-emerald-500/30 transition-colors"
               >
                 Chấm bài
               </button>
@@ -320,7 +320,7 @@ export default function ReadingView({ d }: { d: StageBundle }) {
               <button
                 type="button"
                 onClick={reset}
-                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm hover:bg-white/10 transition-colors"
+                className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-primary text-sm hover:bg-[var(--bg-surface-active)] transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
                 Làm lại từ đầu
@@ -329,7 +329,7 @@ export default function ReadingView({ d }: { d: StageBundle }) {
           </div>
 
           {graded && (
-            <p className="mt-3 text-xs text-slate-500 leading-relaxed flex gap-2">
+            <p className="mt-3 text-xs text-text-muted leading-relaxed flex gap-2">
               <Languages className="w-3.5 h-3.5 shrink-0 mt-0.5" />
               <span>
                 Đọc kỹ phần giải thích của những câu SAI trước, rồi mới xem bản dịch. Xem dịch trước thì

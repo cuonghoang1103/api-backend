@@ -86,45 +86,45 @@ export default function IeltsClient() {
   const activeTab: TabId = TABS.some((t) => t.id === tab) ? tab : 'roadmap';
 
   return (
-    <div className="min-h-screen pt-24 pb-24" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen pt-24 pb-24" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <Link
           href="/tech-trends"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Tech Trends
         </Link>
 
         <header className="mb-6">
-          <p className="text-sky-400 text-sm font-medium tracking-wide uppercase mb-2">
+          <p className="text-tone-sky text-sm font-medium tracking-wide uppercase mb-2">
             Luyện thi · 4 chặng band · trọn giáo trình 0 → 7.5
           </p>
-          <h1 className="text-3xl sm:text-4xl font-bold text-white leading-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-text-primary leading-tight">
             Lộ trình IELTS 0 → 7.5
           </h1>
-          <p className="text-slate-400 mt-3 max-w-3xl leading-relaxed">
+          <p className="text-text-secondary mt-3 max-w-3xl leading-relaxed">
             Lộ trình chia bốn chặng band: mỗi chặng ghi rõ bạn đang ở đâu, mỗi ngày làm gì cho từng kỹ
-            năng, và khi nào đủ điều kiện lên chặng sau. <b className="text-slate-200">Chặng 1 (0 → 4.0)</b>{' '}
-            xây nền từ con số không · <b className="text-slate-200">chặng 2</b> vào đề thi thật với cẩm nang
-            {' '}{TOTAL_STATS.questionTypes} dạng câu hỏi · <b className="text-slate-200">chặng 3</b> phá vòng lặp
-            &quot;viết nhiều mà không lên điểm&quot; · <b className="text-slate-200">chặng 4</b> giảm lỗi để chạm 7.5.
+            năng, và khi nào đủ điều kiện lên chặng sau. <b className="text-text-primary">Chặng 1 (0 → 4.0)</b>{' '}
+            xây nền từ con số không · <b className="text-text-primary">chặng 2</b> vào đề thi thật với cẩm nang
+            {' '}{TOTAL_STATS.questionTypes} dạng câu hỏi · <b className="text-text-primary">chặng 3</b> phá vòng lặp
+            &quot;viết nhiều mà không lên điểm&quot; · <b className="text-text-primary">chặng 4</b> giảm lỗi để chạm 7.5.
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <span className="text-slate-300"><b className="text-white">{IELTS_STATS.stages}</b> chặng</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.lessons}</b> bài học</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.words}</b> từ vựng</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.readings + TOTAL_STATS.listenings}</b> bài đọc &amp; nghe</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.graded}</b> câu chấm điểm</span>
-            <span className="text-slate-300"><b className="text-white">{TOTAL_STATS.writings}</b> đề viết có bài mẫu</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{IELTS_STATS.stages}</b> chặng</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{TOTAL_STATS.lessons}</b> bài học</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{TOTAL_STATS.words}</b> từ vựng</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{TOTAL_STATS.readings + TOTAL_STATS.listenings}</b> bài đọc &amp; nghe</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{TOTAL_STATS.graded}</b> câu chấm điểm</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{TOTAL_STATS.writings}</b> đề viết có bài mẫu</span>
           </div>
         </header>
 
         {/* Bộ chuyển chặng — quyết định toàn bộ dữ liệu hiện bên dưới */}
-        <div className="mb-5 rounded-2xl border border-white/10 bg-white/[0.02] p-3">
+        <div className="mb-5 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs text-slate-500 mr-1">Đang học chặng</span>
+            <span className="text-xs text-text-muted mr-1">Đang học chặng</span>
             {STAGES.map((s, i) => (
               <button
                 key={s.id}
@@ -132,22 +132,22 @@ export default function IeltsClient() {
                 onClick={() => setStageIdx(i)}
                 className={`inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border text-sm transition-all active:scale-95 ${
                   i === stageIdx
-                    ? 'bg-sky-500/20 border-sky-400/45 text-white'
-                    : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                    ? 'bg-sky-500/20 border-sky-400/45 text-text-primary'
+                    : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
                 }`}
               >
                 <b>{s.label}</b>
-                <span className={`text-[11px] ${i === stageIdx ? 'text-sky-200' : 'text-slate-600'}`}>
+                <span className={`text-[11px] ${i === stageIdx ? 'text-tone-sky' : 'text-text-muted'}`}>
                   {s.band}
                 </span>
               </button>
             ))}
           </div>
-          <p className="text-xs text-slate-400 mt-2 leading-relaxed">{d.focus}</p>
+          <p className="text-xs text-text-secondary mt-2 leading-relaxed">{d.focus}</p>
         </div>
 
         {/* Tab */}
-        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-1 px-1 border-b border-white/10">
+        <div className="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-1 px-1 border-b border-[var(--border-light)]">
           {TABS.map((t) => {
             const Icon = t.icon;
             const active = activeTab === t.id;
@@ -158,14 +158,14 @@ export default function IeltsClient() {
                 onClick={() => setTab(t.id)}
                 className={`shrink-0 inline-flex items-center gap-2 px-3.5 py-2.5 rounded-t-xl text-sm transition-all active:scale-95 border-b-2 ${
                   active
-                    ? 'border-sky-400 text-white bg-white/[0.04]'
-                    : 'border-transparent text-slate-400 hover:text-white'
+                    ? 'border-sky-400 text-text-primary bg-[var(--bg-surface-hover)]'
+                    : 'border-transparent text-text-secondary hover:text-text-primary'
                 }`}
               >
                 <Icon className="w-4 h-4" />
                 {t.label}
                 {t.badge && (
-                  <span className={`text-[10px] px-1.5 rounded ${active ? 'bg-sky-500/25 text-sky-200' : 'bg-white/5 text-slate-500'}`}>
+                  <span className={`text-[10px] px-1.5 rounded ${active ? 'bg-sky-500/25 text-tone-sky' : 'bg-[var(--bg-surface-hover)] text-text-muted'}`}>
                     {t.badge}
                   </span>
                 )}
@@ -175,8 +175,8 @@ export default function IeltsClient() {
         </div>
 
         {activeTab !== 'roadmap' && activeTab !== 'life' && activeTab !== 'exam' && (
-          <p className="mb-5 text-xs text-slate-500 leading-relaxed rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2">
-            Nội dung dưới đây thuộc <b className="text-slate-300">{d.label} — {d.band}</b>. Bài đọc, bài
+          <p className="mb-5 text-xs text-text-muted leading-relaxed rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2">
+            Nội dung dưới đây thuộc <b className="text-text-secondary">{d.label} — {d.band}</b>. Bài đọc, bài
             nghe và đề viết đều do khoá này tự soạn theo đúng dạng đề thật (không chép đề có bản quyền), nên
             mỗi câu đều có lời giải thích vì sao đúng và vì sao sai.
           </p>
@@ -202,13 +202,13 @@ export default function IeltsClient() {
         {activeTab === 'exam' && <ExamView />}
 
         {/* Ghi chú cuối trang */}
-        <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-          <p className="text-sm text-slate-300 leading-relaxed">
-            <b className="text-white">Trọn lộ trình đã có nội dung.</b> Bài đọc, transcript bài nghe và đề viết
+        <div className="mt-10 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5">
+          <p className="text-sm text-text-secondary leading-relaxed">
+            <b className="text-text-primary">Trọn lộ trình đã có nội dung.</b> Bài đọc, transcript bài nghe và đề viết
             đều do khoá này tự soạn theo đúng dạng đề thật — không chép đề có bản quyền — nên mỗi câu đều có
             lời giải thích vì sao đúng và vì sao sai. Biểu đồ Task 1 và bản đồ Listening vẽ bằng SVG ngay
             trong trang. Phần giao tiếp hằng ngày và luyện phát âm có thêm ở{' '}
-            <Link href="/tech-trends/tieng-anh-giao-tiep" className="text-emerald-400 hover:underline">
+            <Link href="/tech-trends/tieng-anh-giao-tiep" className="text-tone-emerald hover:underline">
               khoá Tiếng Anh Giao Tiếp
             </Link>.
           </p>

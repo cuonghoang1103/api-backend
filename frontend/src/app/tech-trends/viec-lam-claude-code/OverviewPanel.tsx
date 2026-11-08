@@ -13,10 +13,10 @@ import { BY_SOURCE, SOURCE_UPDATED, STATS, TIERS, VERIFIED_ON } from './data';
 import type { TabId } from './ViecLamClient';
 
 const TONE: Record<string, { ring: string; text: string; bar: string }> = {
-  ok: { ring: 'border-emerald-500/30', text: 'text-emerald-400', bar: 'bg-emerald-500' },
-  warn: { ring: 'border-amber-500/30', text: 'text-amber-400', bar: 'bg-amber-500' },
-  bad: { ring: 'border-rose-500/30', text: 'text-rose-400', bar: 'bg-rose-500' },
-  far: { ring: 'border-slate-500/30', text: 'text-slate-400', bar: 'bg-slate-500' },
+  ok: { ring: 'border-emerald-500/30', text: 'text-tone-emerald', bar: 'bg-emerald-500' },
+  warn: { ring: 'border-amber-500/30', text: 'text-tone-amber', bar: 'bg-amber-500' },
+  bad: { ring: 'border-rose-500/30', text: 'text-tone-rose', bar: 'bg-rose-500' },
+  far: { ring: 'border-slate-500/30', text: 'text-text-secondary', bar: 'bg-slate-500' },
 };
 
 /** Kết quả kiểm chứng theo từng nguồn. */
@@ -77,17 +77,17 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
       {/* ── Phán quyết ─────────────────────────────────────── */}
       <section>
         <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.07] p-5 sm:p-6">
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-emerald-400">
+          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-tone-emerald">
             <CheckCircle2 className="h-4 w-4" />
             Phán quyết
           </div>
-          <p className="text-lg sm:text-xl font-semibold leading-snug text-white">
-            Việc làm là <span className="text-emerald-400">thật</span> — {STATS.jobs - 2}/{STATS.jobs}{' '}
+          <p className="text-lg sm:text-xl font-semibold leading-snug text-text-primary">
+            Việc làm là <span className="text-tone-emerald">thật</span> — {STATS.jobs - 2}/{STATS.jobs}{' '}
             tin xác minh còn sống, không có tin bịa. Nhưng danh sách{' '}
-            <span className="text-rose-400">bị thổi phồng</span>: {STATS.jobs - STATS.unique} tin
+            <span className="text-tone-rose">bị thổi phồng</span>: {STATS.jobs - STATS.unique} tin
             trùng, {STATS.stale90} tin quá 90 ngày, và nhãn công nghệ thì sai quá nửa.
           </p>
-          <p className="mt-3 text-sm leading-relaxed text-slate-400">
+          <p className="mt-3 text-sm leading-relaxed text-text-secondary">
             Hai tin còn lại không kết luận được vì WeWorkRemotely và HackerNews chặn tốc độ truy cập
             lúc kiểm, không phải vì link chết. Kiểm ngày {VERIFIED_ON}; dữ liệu nguồn cập nhật{' '}
             {SOURCE_UPDATED}.
@@ -97,28 +97,28 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
 
       {/* ── Đã kiểm thế nào ────────────────────────────────── */}
       <section>
-        <h2 className="mb-1 text-lg font-bold text-white">Đã kiểm thế nào</h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <h2 className="mb-1 text-lg font-bold text-text-primary">Đã kiểm thế nào</h2>
+        <p className="mb-4 text-sm text-text-secondary">
           Không tin bảng thống kê của chính trang đó. Tải tệp dữ liệu gốc{' '}
-          <code className="rounded bg-white/[0.07] px-1.5 py-0.5 text-xs text-slate-300">
+          <code className="rounded bg-[var(--bg-surface-active)] px-1.5 py-0.5 text-xs text-text-secondary">
             claude-jobs.json
           </code>{' '}
           rồi kiểm từng nguồn theo cách riêng của nó.
         </p>
         <div className="grid gap-3 sm:grid-cols-2">
           {CHECKS.map((c) => (
-            <div key={c.src} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+            <div key={c.src} className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
               <div className="mb-1.5 flex items-center justify-between gap-2">
-                <span className="text-sm font-semibold text-white">{c.src}</span>
+                <span className="text-sm font-semibold text-text-primary">{c.src}</span>
                 <span
                   className={`shrink-0 rounded-md px-2 py-0.5 text-[11px] font-semibold ${
-                    c.ok ? 'bg-emerald-500/15 text-emerald-300' : 'bg-amber-500/15 text-amber-300'
+                    c.ok ? 'bg-emerald-500/15 text-tone-emerald' : 'bg-amber-500/15 text-tone-amber'
                   }`}
                 >
                   {c.verdict}
                 </span>
               </div>
-              <p className="text-[13px] leading-relaxed text-slate-400">{c.how}</p>
+              <p className="text-[13px] leading-relaxed text-text-secondary">{c.how}</p>
             </div>
           ))}
         </div>
@@ -126,16 +126,16 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
 
       {/* ── Trang kia là gì ────────────────────────────────── */}
       <section>
-        <h2 className="mb-3 text-lg font-bold text-white">Trang app.aitmpl.com thực chất là gì</h2>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-          <p className="text-sm leading-relaxed text-slate-300">
-            Nó <strong className="text-white">không phải nhà tuyển dụng</strong>, cũng không phải sàn
+        <h2 className="mb-3 text-lg font-bold text-text-primary">Trang app.aitmpl.com thực chất là gì</h2>
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+          <p className="text-sm leading-relaxed text-text-secondary">
+            Nó <strong className="text-text-primary">không phải nhà tuyển dụng</strong>, cũng không phải sàn
             việc làm. Đây là một trang con của aitmpl.com (kho component cho Claude Code) — một con
             bot gom tin tuyển dụng có nhắc Claude Code từ 4 nơi công khai rồi bày lại. Bạn{' '}
-            <strong className="text-white">không nộp hồ sơ qua trang đó</strong>: mọi nút &quot;apply&quot;
+            <strong className="text-text-primary">không nộp hồ sơ qua trang đó</strong>: mọi nút &quot;apply&quot;
             đều bắn thẳng về HackerNews, Greenhouse, RemoteOK hoặc WeWorkRemotely. Nó bắt đăng nhập
             chỉ để xem chi tiết, nhưng dữ liệu thì nằm công khai ở{' '}
-            <code className="rounded bg-white/[0.07] px-1.5 py-0.5 text-xs text-slate-300">
+            <code className="rounded bg-[var(--bg-surface-active)] px-1.5 py-0.5 text-xs text-text-secondary">
               /claude-jobs.json
             </code>
             , không cần tài khoản.
@@ -151,9 +151,9 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
             { n: STATS.fresh7, l: 'tin trong 7 ngày' },
             { n: STATS.withSalary, l: 'tin có ghi lương' },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-              <div className="text-2xl font-bold tabular-nums text-white">{s.n}</div>
-              <div className="mt-0.5 text-[11px] leading-tight text-slate-500">{s.l}</div>
+            <div key={s.l} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+              <div className="text-2xl font-bold tabular-nums text-text-primary">{s.n}</div>
+              <div className="mt-0.5 text-[11px] leading-tight text-text-muted">{s.l}</div>
             </div>
           ))}
         </div>
@@ -161,22 +161,22 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
 
       {/* ── Cảnh báo ───────────────────────────────────────── */}
       <section>
-        <h2 className="mb-1 flex items-center gap-2 text-lg font-bold text-white">
-          <AlertTriangle className="h-5 w-5 text-amber-400" />
+        <h2 className="mb-1 flex items-center gap-2 text-lg font-bold text-text-primary">
+          <AlertTriangle className="h-5 w-5 text-tone-amber" />
           Bốn chỗ dữ liệu nguồn không đáng tin
         </h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <p className="mb-4 text-sm text-text-secondary">
           Việc thì thật, nhưng đừng đọc trang đó như đọc một sàn tuyển dụng nghiêm túc.
         </p>
-        <div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.02]">
+        <div className="divide-y divide-[var(--border-light)] rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
           {WARNINGS.map((w) => (
             <div key={w.title} className="flex gap-4 p-4">
-              <span className="w-14 shrink-0 text-xl font-bold tabular-nums text-rose-400">
+              <span className="w-14 shrink-0 text-xl font-bold tabular-nums text-tone-rose">
                 {w.n}
               </span>
               <div className="min-w-0">
-                <div className="text-sm font-semibold text-white">{w.title}</div>
-                <p className="mt-1 text-[13px] leading-relaxed text-slate-400">{w.body}</p>
+                <div className="text-sm font-semibold text-text-primary">{w.title}</div>
+                <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">{w.body}</p>
               </div>
             </div>
           ))}
@@ -185,11 +185,11 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
 
       {/* ── Bốn nhóm ───────────────────────────────────────── */}
       <section>
-        <h2 className="mb-1 flex items-center gap-2 text-lg font-bold text-white">
-          <Layers className="h-5 w-5 text-sky-400" />
+        <h2 className="mb-1 flex items-center gap-2 text-lg font-bold text-text-primary">
+          <Layers className="h-5 w-5 text-tone-sky" />
           Bạn nộp được cái nào
         </h2>
-        <p className="mb-4 text-sm text-slate-400">
+        <p className="mb-4 text-sm text-text-secondary">
           Xếp cả {STATS.jobs} tin theo góc nhìn: một dev ở Việt Nam, chưa có visa lao động Mỹ/EU,
           kinh nghiệm đi làm chính thức còn ít.
         </p>
@@ -200,22 +200,22 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
             return (
               <div
                 key={t.id}
-                className={`rounded-2xl border bg-white/[0.03] p-4 sm:p-5 ${tone.ring}`}
+                className={`rounded-2xl border bg-[var(--bg-surface-hover)] p-4 sm:p-5 ${tone.ring}`}
               >
                 <div className="flex items-start gap-4">
                   <div className="w-16 shrink-0">
                     <div className={`text-3xl font-bold tabular-nums leading-none ${tone.text}`}>
                       {n}
                     </div>
-                    <div className="mt-1 text-[10px] uppercase tracking-wider text-slate-500">
+                    <div className="mt-1 text-[10px] uppercase tracking-wider text-text-muted">
                       {t.short}
                     </div>
                   </div>
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold text-white">{t.label}</div>
-                    <p className="mt-1 text-[13px] leading-relaxed text-slate-400">{t.desc}</p>
+                    <div className="text-sm font-semibold text-text-primary">{t.label}</div>
+                    <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">{t.desc}</p>
                     {t.id === 'A' && (
-                      <p className="mt-2 text-[13px] leading-relaxed text-emerald-300/90">
+                      <p className="mt-2 text-[13px] leading-relaxed text-tone-emerald">
                         {STATS.byTier.A} tin này chỉ đến từ {STATS.tierAUnique} công ty, và chỉ{' '}
                         {STATS.tierAFresh} tin còn tươi dưới 60 ngày. Riêng We The Flywheel có hai
                         vai trò khác nhau cùng mang tên &quot;Software Engineer&quot; — một ở Sài Gòn
@@ -231,7 +231,7 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
         <button
           type="button"
           onClick={() => onGoTo('viec-lam')}
-          className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-white/15 px-3.5 py-2 text-sm text-slate-300 transition-colors hover:border-white/30 hover:text-white"
+          className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-[var(--border-light-hover)] px-3.5 py-2 text-sm text-text-secondary transition-colors hover:border-[var(--border-light-hover)] hover:text-text-primary"
         >
           Xem đủ {STATS.jobs} việc
           <ExternalLink className="h-3.5 w-3.5" />
@@ -241,12 +241,12 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
       {/* ── Bắt đầu từ đâu ─────────────────────────────────── */}
       <section>
         <div className="rounded-2xl border border-sky-500/25 bg-sky-500/[0.07] p-5">
-          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-sky-400">
+          <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-tone-sky">
             <Info className="h-4 w-4" />
             Bắt đầu từ đâu
           </div>
-          <p className="text-sm leading-relaxed text-slate-300">
-            Có một việc ở <strong className="text-white">TP.HCM</strong> khớp với bạn nhất trong cả{' '}
+          <p className="text-sm leading-relaxed text-text-secondary">
+            Có một việc ở <strong className="text-text-primary">TP.HCM</strong> khớp với bạn nhất trong cả{' '}
             {STATS.jobs} tin — hợp đồng bán thời gian, dùng đúng Claude Code, và JD ghi thẳng
             &quot;không cần nền lập trình chính quy&quot;. Nó nằm ở chặng 0 của lộ trình, nghĩa là
             nộp trước rồi học sau: cơ hội có hạn sử dụng, kỹ năng thì không.
@@ -262,7 +262,7 @@ export default function OverviewPanel({ onGoTo }: { onGoTo: (t: TabId) => void }
             <button
               type="button"
               onClick={() => onGoTo('du-an')}
-              className="rounded-xl border border-white/15 px-3.5 py-2 text-sm text-slate-300 transition-colors hover:border-white/30 hover:text-white"
+              className="rounded-xl border border-[var(--border-light-hover)] px-3.5 py-2 text-sm text-text-secondary transition-colors hover:border-[var(--border-light-hover)] hover:text-text-primary"
             >
               Xem {STATS.projects} dự án thật
             </button>

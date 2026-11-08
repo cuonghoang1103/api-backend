@@ -182,7 +182,7 @@ function CauHoi({ q, so, tong, L, chon, daCham, moAI, onChon, onKiemTra, onBatAI
       {/* Câu nhiều đáp án: chọn đủ rồi mới chấm — bấm là chấm thì không chọn nổi đáp án thứ hai. */}
       {multi && !daCham && (
         <button type="button" onClick={onKiemTra} disabled={!chon.length}
-          className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-40"
+          className="mt-3 inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-text-primary transition-opacity hover:opacity-90 disabled:opacity-40"
           style={{ background: 'var(--accent-color, #8b5cf6)' }}>
           <CheckCircle2 size={15} /> Kiểm tra đáp án
         </button>
@@ -300,7 +300,7 @@ function KetQua({ ds, onXemCau, onLamLaiSai, onLamLai, onDoi10, onLamTatCa, coun
           <div className="flex flex-wrap justify-center gap-1.5">
             {dsSai.map(({ c, i }) => (
               <button key={c.id} type="button" onClick={() => onXemCau(i)}
-                className="rounded-md px-2 py-1 text-[11px] font-bold text-white" style={{ background: 'var(--exam-bad, #ef4444)' }}>
+                className="rounded-md px-2 py-1 text-[11px] font-bold text-text-primary" style={{ background: 'var(--exam-bad, #ef4444)' }}>
                 Câu {c.soThuTu}
               </button>
             ))}
@@ -311,7 +311,7 @@ function KetQua({ ds, onXemCau, onLamLaiSai, onLamLai, onDoi10, onLamTatCa, coun
       <div className="mt-5 flex flex-wrap justify-center gap-2">
         {sai > 0 && (
           <button type="button" onClick={onLamLaiSai}
-            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+            className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold text-text-primary transition-opacity hover:opacity-90"
             style={{ background: 'var(--accent-color, #8b5cf6)' }}>
             <RotateCcw size={14} /> Làm lại {sai} câu sai
           </button>
@@ -634,7 +634,7 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, courseCode, varian
   if (!qs) {
     const nutVaoThi = (
       <button type="button" disabled={loading} onClick={() => void start('random')}
-        className={`inline-flex items-center gap-1.5 rounded-lg font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50 ${top ? 'px-4 py-2 text-sm' : 'px-3 py-1.5 text-xs'}`}
+        className={`inline-flex items-center gap-1.5 rounded-lg font-semibold text-text-primary transition-opacity hover:opacity-90 disabled:opacity-50 ${top ? 'px-4 py-2 text-sm' : 'px-3 py-1.5 text-xs'}`}
         style={{ background: 'var(--accent-color, #8b5cf6)' }}>
         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Play className="h-4 w-4" />} Vào thi ngay · {Math.min(10, count)} câu
       </button>
@@ -851,7 +851,7 @@ export function ChapterQuiz({ sectionId, sectionTitle, count, courseCode, varian
             {/* Làm hết mà đang ở giữa bộ (nhảy câu lung tung) → mời xem kết quả. */}
             {lamXetHet && !cauCuoi && (
               <button type="button" onClick={() => { setXemKetQua(true); cuonVeCau(); }}
-                className="w-full rounded-lg px-4 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                className="w-full rounded-lg px-4 py-2.5 text-sm font-semibold text-text-primary transition-opacity hover:opacity-90"
                 style={{ background: 'var(--exam-ok, #22c55e)' }}>
                 Đã làm hết {tong} câu — xem kết quả
               </button>

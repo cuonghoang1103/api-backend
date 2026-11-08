@@ -45,7 +45,7 @@ function frames(ending: 'commit' | 'rollback'): Frame[] {
 }
 
 const TONE: Record<Frame['tone'], string> = {
-  idle: 'border-white/10 bg-white/[0.03]',
+  idle: 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]',
   work: 'border-sky-400/30 bg-sky-500/[0.07]',
   commit: 'border-emerald-400/30 bg-emerald-500/[0.07]',
   rollback: 'border-amber-400/30 bg-amber-500/[0.07]',
@@ -63,17 +63,17 @@ export default function TxnSim() {
   const switchEnding = (e: 'commit' | 'rollback') => { setEnding(e); setI(0); };
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+    <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
       <div className="mb-4 flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-400">Kết thúc bằng:</span>
+        <span className="text-xs text-text-secondary">Kết thúc bằng:</span>
         <button
           type="button"
           onClick={() => switchEnding('commit')}
           className={[
             'inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 font-mono text-xs transition-all active:scale-95',
             ending === 'commit'
-              ? 'border-emerald-400/50 bg-emerald-500/20 text-white'
-              : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+              ? 'border-emerald-400/50 bg-emerald-500/20 text-text-primary'
+              : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
           ].join(' ')}
         >
           <Check className="h-3.5 w-3.5" /> COMMIT
@@ -84,46 +84,46 @@ export default function TxnSim() {
           className={[
             'inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 font-mono text-xs transition-all active:scale-95',
             ending === 'rollback'
-              ? 'border-amber-400/50 bg-amber-500/20 text-white'
-              : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+              ? 'border-amber-400/50 bg-amber-500/20 text-text-primary'
+              : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
           ].join(' ')}
         >
           <Undo2 className="h-3.5 w-3.5" /> ROLLBACK
         </button>
-        <span className="ml-auto font-mono text-[11px] text-slate-600">
+        <span className="ml-auto font-mono text-[11px] text-text-muted">
           bước {Math.min(i, list.length - 1) + 1}/{list.length}
         </span>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div className={`rounded-xl border p-3 transition-colors ${TONE[f.tone]}`}>
-          <p className="mb-2 text-xs font-semibold text-slate-300">Phiên A — người chuyển tiền</p>
-          <code className="block min-h-[42px] rounded-lg bg-black/30 px-3 py-2 font-mono text-[12px] leading-relaxed text-slate-200">
+          <p className="mb-2 text-xs font-semibold text-text-secondary">Phiên A — người chuyển tiền</p>
+          <code className="block min-h-[42px] rounded-lg bg-[var(--bg-surface)] px-3 py-2 font-mono text-[12px] leading-relaxed text-text-primary">
             {f.a}
           </code>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-xs text-slate-500">A nhìn thấy</span>
-            <span className="text-xl font-bold tabular-nums text-white">{vnd(f.seenA)}</span>
+            <span className="text-xs text-text-muted">A nhìn thấy</span>
+            <span className="text-xl font-bold tabular-nums text-text-primary">{vnd(f.seenA)}</span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <p className="mb-2 text-xs font-semibold text-slate-300">Phiên B — người khác đọc cùng lúc</p>
-          <code className="block min-h-[42px] rounded-lg bg-black/30 px-3 py-2 font-mono text-[12px] leading-relaxed text-slate-200">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+          <p className="mb-2 text-xs font-semibold text-text-secondary">Phiên B — người khác đọc cùng lúc</p>
+          <code className="block min-h-[42px] rounded-lg bg-[var(--bg-surface)] px-3 py-2 font-mono text-[12px] leading-relaxed text-text-primary">
             {f.b}
           </code>
           <div className="mt-3 flex items-baseline gap-2">
-            <span className="text-xs text-slate-500">B nhìn thấy</span>
+            <span className="text-xs text-text-muted">B nhìn thấy</span>
             <span
               className={[
                 'text-xl font-bold tabular-nums',
-                f.seenA !== f.seenB ? 'text-amber-300' : 'text-white',
+                f.seenA !== f.seenB ? 'text-tone-amber' : 'text-text-primary',
               ].join(' ')}
             >
               {vnd(f.seenB)}
             </span>
             {f.seenA !== f.seenB && (
-              <span className="rounded-md border border-amber-400/30 bg-amber-500/15 px-1.5 py-0.5 text-[10px] text-amber-300">
+              <span className="rounded-md border border-amber-400/30 bg-amber-500/15 px-1.5 py-0.5 text-[10px] text-tone-amber">
                 khác A
               </span>
             )}
@@ -131,12 +131,12 @@ export default function TxnSim() {
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 py-2">
-        <span className="text-xs text-slate-500">Đã ghi bền xuống đĩa</span>
-        <span className="font-mono text-sm font-bold text-violet-300">{vnd(f.committed)}</span>
+      <div className="mt-3 flex items-center gap-2 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3.5 py-2">
+        <span className="text-xs text-text-muted">Đã ghi bền xuống đĩa</span>
+        <span className="font-mono text-sm font-bold text-tone-violet">{vnd(f.committed)}</span>
       </div>
 
-      <p className="mt-3 rounded-xl border border-white/10 bg-white/[0.03] px-4 py-3 text-[13px] leading-relaxed text-slate-300">
+      <p className="mt-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3 text-[13px] leading-relaxed text-text-secondary">
         {f.note}
       </p>
 
@@ -145,14 +145,14 @@ export default function TxnSim() {
           type="button"
           onClick={() => setI((s) => Math.min(list.length - 1, s + 1))}
           disabled={last}
-          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-violet-400/40 bg-violet-500/20 px-3 py-2 text-sm font-medium text-white transition-all active:scale-95 disabled:opacity-30"
+          className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-violet-400/40 bg-violet-500/20 px-3 py-2 text-sm font-medium text-text-primary transition-all active:scale-95 disabled:opacity-30"
         >
           Bước tiếp <ChevronRight className="h-4 w-4" />
         </button>
         <button
           type="button"
           onClick={() => setI(0)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-slate-300 transition-all hover:border-white/20 active:scale-95"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-secondary transition-all hover:border-[var(--border-light-hover)] active:scale-95"
         >
           <RotateCcw className="h-4 w-4" />
         </button>

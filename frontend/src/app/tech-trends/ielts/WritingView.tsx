@@ -53,24 +53,24 @@ export default function WritingView({ d }: { d: StageBundle }) {
             onClick={() => { setId(w.id); setShowSample(false); setDraft(''); }}
             className={`shrink-0 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               w.id === id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
-            <span className="text-[10px] font-bold text-sky-400 mr-1.5">{w.task}</span>
+            <span className="text-[10px] font-bold text-tone-sky mr-1.5">{w.task}</span>
             Đề {i + 1}
           </button>
         ))}
       </div>
 
       {/* Đề bài */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">{task.task}</span>
-          <span className="text-xs text-slate-500">Tối thiểu {task.minWords} từ</span>
-          <span className="text-xs text-slate-500">· {task.minutes} phút</span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-tone-sky">{task.task}</span>
+          <span className="text-xs text-text-muted">Tối thiểu {task.minWords} từ</span>
+          <span className="text-xs text-text-muted">· {task.minutes} phút</span>
         </div>
-        <h3 className="text-xl font-bold text-white mt-2">{task.title}</h3>
+        <h3 className="text-xl font-bold text-text-primary mt-2">{task.title}</h3>
 
         {/* Biểu đồ của đề — Task 1 thật luôn có hình, không phải bảng chữ */}
         {task.figure && (
@@ -79,58 +79,58 @@ export default function WritingView({ d }: { d: StageBundle }) {
           </div>
         )}
 
-        <div className="mt-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
-          <p className="text-white text-sm leading-relaxed whitespace-pre-line font-mono">{task.prompt}</p>
+        <div className="mt-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
+          <p className="text-text-primary text-sm leading-relaxed whitespace-pre-line font-mono">{task.prompt}</p>
         </div>
-        <p className="text-slate-400 text-sm mt-2 leading-relaxed">{task.promptVi}</p>
+        <p className="text-text-secondary text-sm mt-2 leading-relaxed">{task.promptVi}</p>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         <div className="space-y-4">
           {/* Dàn ý */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white mb-3">
-              <ListOrdered className="w-4 h-4 text-sky-400" />
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+              <ListOrdered className="w-4 h-4 text-tone-sky" />
               Dàn ý — viết theo đúng thứ tự này
             </p>
             <div className="space-y-2">
               {task.outline.map((o, i) => (
-                <div key={i} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                  <span className="shrink-0 text-xs font-bold text-sky-300 bg-sky-500/15 rounded px-2 py-0.5 h-fit">
+                <div key={i} className="flex gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+                  <span className="shrink-0 text-xs font-bold text-tone-sky bg-sky-500/15 rounded px-2 py-0.5 h-fit">
                     {o.part}
                   </span>
-                  <p className="text-slate-300 text-sm leading-relaxed flex-1">{o.what}</p>
+                  <p className="text-text-secondary text-sm leading-relaxed flex-1">{o.what}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Cụm từ */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white mb-3">
-              <Quote className="w-4 h-4 text-violet-400" />
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+              <Quote className="w-4 h-4 text-tone-violet" />
               Cụm từ dùng được ngay
             </p>
             <div className="space-y-1.5">
               {task.phrases.map((p, i) => (
-                <div key={i} className="rounded-lg bg-white/[0.03] px-3 py-2">
-                  <p className="text-white text-sm">{p.en}</p>
-                  <p className="text-slate-500 text-xs mt-0.5">{p.vi}</p>
+                <div key={i} className="rounded-lg bg-[var(--bg-surface-hover)] px-3 py-2">
+                  <p className="text-text-primary text-sm">{p.en}</p>
+                  <p className="text-text-muted text-xs mt-0.5">{p.vi}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Ô nháp đếm từ */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
             <div className="flex items-center justify-between gap-2 mb-2">
-              <p className="flex items-center gap-2 text-sm font-semibold text-white">
-                <PenLine className="w-4 h-4 text-emerald-400" />
+              <p className="flex items-center gap-2 text-sm font-semibold text-text-primary">
+                <PenLine className="w-4 h-4 text-tone-emerald" />
                 Viết nháp tại đây
               </p>
               <div className="flex items-center gap-2">
                 <span className={`text-xs px-2 py-1 rounded-lg ${
-                  enough ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-slate-400'
+                  enough ? 'bg-emerald-500/20 text-tone-emerald' : 'bg-[var(--bg-surface-hover)] text-text-secondary'
                 }`}>
                   {words}/{task.minWords} từ
                 </span>
@@ -139,7 +139,7 @@ export default function WritingView({ d }: { d: StageBundle }) {
                     type="button"
                     onClick={() => setDraft('')}
                     aria-label="Xoá nháp"
-                    className="p-1.5 rounded-lg text-slate-500 hover:text-rose-300 transition-colors"
+                    className="p-1.5 rounded-lg text-text-muted hover:text-tone-rose transition-colors"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -151,9 +151,9 @@ export default function WritingView({ d }: { d: StageBundle }) {
               onChange={(e) => setDraft(e.target.value)}
               rows={10}
               placeholder="Write your essay here, then open the model answer to compare…"
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white placeholder:text-slate-600 outline-none focus:border-emerald-400/50 leading-relaxed resize-y"
+              className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2.5 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-emerald-400/50 leading-relaxed resize-y"
             />
-            <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+            <p className="text-xs text-text-muted mt-2 leading-relaxed">
               Nháp này chỉ nằm trong trình duyệt và mất khi tải lại trang — chép ra chỗ khác nếu muốn giữ.
               Viết xong nhớ soát theo bảng 8 điểm ở bài 39 (tab Bài học).
             </p>
@@ -164,14 +164,14 @@ export default function WritingView({ d }: { d: StageBundle }) {
           {/* Bài mẫu đạt */}
           <div className="rounded-2xl border border-emerald-500/25 bg-emerald-500/[0.05] p-4 sm:p-5">
             <div className="flex items-center justify-between gap-2 mb-3">
-              <p className="flex items-center gap-2 text-sm font-semibold text-emerald-200">
+              <p className="flex items-center gap-2 text-sm font-semibold text-tone-emerald">
                 <FileText className="w-4 h-4" />
                 Bài mẫu — {task.sample.band}
               </p>
               <button
                 type="button"
                 onClick={() => setShowSample((v) => !v)}
-                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-slate-300 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
               >
                 {showSample ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                 {showSample ? 'Ẩn' : 'Hiện bài mẫu'}
@@ -179,13 +179,13 @@ export default function WritingView({ d }: { d: StageBundle }) {
             </div>
             {showSample ? (
               <>
-                <p className="text-slate-100 text-sm leading-relaxed whitespace-pre-line">{task.sample.text}</p>
-                <p className="mt-3 pt-3 border-t border-emerald-500/20 text-emerald-200/90 text-xs leading-relaxed">
+                <p className="text-text-primary text-sm leading-relaxed whitespace-pre-line">{task.sample.text}</p>
+                <p className="mt-3 pt-3 border-t border-emerald-500/20 text-tone-emerald text-xs leading-relaxed">
                   <b>Vì sao bài này đạt:</b> {task.sample.note}
                 </p>
               </>
             ) : (
-              <p className="text-sm text-slate-400 leading-relaxed">
+              <p className="text-sm text-text-secondary leading-relaxed">
                 Hãy TỰ VIẾT trước rồi mới mở. Đọc bài mẫu trước thì bạn sẽ chép ý của nó và tưởng mình viết
                 được — đây là cách nhanh nhất để mắc kẹt ở band 5.
               </p>
@@ -195,20 +195,20 @@ export default function WritingView({ d }: { d: StageBundle }) {
           {/* Bài mẫu kém */}
           {task.weakSample && (
             <div className="rounded-2xl border border-rose-500/25 bg-rose-500/[0.05] p-4 sm:p-5">
-              <p className="flex items-center gap-2 text-sm font-semibold text-rose-200 mb-3">
+              <p className="flex items-center gap-2 text-sm font-semibold text-tone-rose mb-3">
                 <AlertTriangle className="w-4 h-4" />
                 Bài mẫu KÉM — {task.weakSample.band}
               </p>
-              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line italic">
+              <p className="text-text-secondary text-sm leading-relaxed whitespace-pre-line italic">
                 {task.weakSample.text}
               </p>
-              <p className="mt-3 pt-3 border-t border-rose-500/20 text-xs text-rose-200/90 font-semibold mb-2">
+              <p className="mt-3 pt-3 border-t border-rose-500/20 text-xs text-tone-rose font-semibold mb-2">
                 Bài này hỏng ở đâu:
               </p>
               <ul className="space-y-1.5">
                 {task.weakSample.problems.map((p, i) => (
-                  <li key={i} className="text-slate-300 text-xs leading-relaxed flex gap-2">
-                    <span className="text-rose-400 shrink-0">{i + 1}.</span>
+                  <li key={i} className="text-text-secondary text-xs leading-relaxed flex gap-2">
+                    <span className="text-tone-rose shrink-0">{i + 1}.</span>
                     <span>{p}</span>
                   </li>
                 ))}
@@ -217,23 +217,23 @@ export default function WritingView({ d }: { d: StageBundle }) {
           )}
 
           {/* Lỗi hay mắc */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white mb-3">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+              <AlertTriangle className="w-4 h-4 text-tone-amber" />
               Lỗi người Việt hay mắc ở đúng đề này
             </p>
             <div className="space-y-3">
               {task.mistakes.map((m, i) => (
-                <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                  <p className="text-sm text-rose-200/90">
-                    <span className="text-rose-400 font-mono text-xs mr-1.5">SAI</span>
+                <div key={i} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+                  <p className="text-sm text-tone-rose">
+                    <span className="text-tone-rose font-mono text-xs mr-1.5">SAI</span>
                     {m.wrong}
                   </p>
-                  <p className="text-sm text-emerald-200/90 mt-1">
-                    <span className="text-emerald-400 font-mono text-xs mr-1.5">ĐÚNG</span>
+                  <p className="text-sm text-tone-emerald mt-1">
+                    <span className="text-tone-emerald font-mono text-xs mr-1.5">ĐÚNG</span>
                     {m.right}
                   </p>
-                  <p className="text-xs text-slate-400 mt-2 leading-relaxed">{m.why}</p>
+                  <p className="text-xs text-text-secondary mt-2 leading-relaxed">{m.why}</p>
                 </div>
               ))}
             </div>

@@ -15,10 +15,10 @@ import { interviewApi } from '@/lib/interview-api';
 import type { DrillCard } from '@/types/interview';
 
 const RATINGS = [
-  { q: 1, vi: 'Quên', en: 'Forgot', cls: 'border-red-500/50 text-red-300 hover:bg-red-500/10' },
-  { q: 3, vi: 'Khó', en: 'Hard', cls: 'border-amber-500/50 text-amber-300 hover:bg-amber-500/10' },
-  { q: 4, vi: 'Được', en: 'Good', cls: 'border-lime-500/50 text-lime-300 hover:bg-lime-500/10' },
-  { q: 5, vi: 'Dễ', en: 'Easy', cls: 'border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/10' },
+  { q: 1, vi: 'Quên', en: 'Forgot', cls: 'border-red-500/50 text-tone-red hover:bg-red-500/10' },
+  { q: 3, vi: 'Khó', en: 'Hard', cls: 'border-amber-500/50 text-tone-amber hover:bg-amber-500/10' },
+  { q: 4, vi: 'Được', en: 'Good', cls: 'border-lime-500/50 text-tone-lime hover:bg-lime-500/10' },
+  { q: 5, vi: 'Dễ', en: 'Easy', cls: 'border-emerald-500/50 text-tone-emerald hover:bg-emerald-500/10' },
 ];
 
 export default function InterviewDrillPage() {
@@ -75,36 +75,36 @@ export default function InterviewDrillPage() {
   };
 
   return (
-    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-text-primary pt-16 overflow-hidden">
       <ParticleBackground density="low" followPointer={false} />
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
-          <Link href="/interview" className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-slate-100"><ArrowLeft className="w-4 h-4" /> {L('Phòng luyện', 'Practice room')}</Link>
+          <Link href="/interview" className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary"><ArrowLeft className="w-4 h-4" /> {L('Phòng luyện', 'Practice room')}</Link>
           <div className="flex items-center gap-3">
-            <div className="flex rounded-lg border border-white/10 overflow-hidden text-[11px] font-mono">
+            <div className="flex rounded-lg border border-[var(--border-light)] overflow-hidden text-[11px] font-mono">
               {(['VI', 'EN'] as const).map((lg) => (
-                <button key={lg} onClick={() => setLang(lg)} className={`px-2 py-1 transition-colors ${lang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}>{lg}</button>
+                <button key={lg} onClick={() => setLang(lg)} className={`px-2 py-1 transition-colors ${lang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-text-secondary hover:text-text-primary'}`}>{lg}</button>
               ))}
             </div>
-            {cards.length > 0 && <span className="text-xs font-mono text-slate-400">{L('Thẻ', 'Card')} {Math.min(idx + 1, cards.length)} / {cards.length} · {totalDue} {L('tới hạn', 'due')}</span>}
+            {cards.length > 0 && <span className="text-xs font-mono text-text-secondary">{L('Thẻ', 'Card')} {Math.min(idx + 1, cards.length)} / {cards.length} · {totalDue} {L('tới hạn', 'due')}</span>}
           </div>
         </div>
 
         {loading ? (
-          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> {L('Đang tải thẻ ôn…', 'Loading review cards…')}</div>
+          <div className="flex items-center gap-2 text-text-secondary"><Loader2 className="w-4 h-4 animate-spin" /> {L('Đang tải thẻ ôn…', 'Loading review cards…')}</div>
         ) : !card ? (
           <div className="text-center py-16">
-            <Sparkles className="w-10 h-10 mx-auto mb-4 text-amber-400" />
+            <Sparkles className="w-10 h-10 mx-auto mb-4 text-tone-amber" />
             <h1 className="text-xl font-bold mb-2">{done > 0 ? L(`Xong ${done} thẻ hôm nay! 🎉`, `Done ${done} cards today! 🎉`) : L('Không có thẻ nào tới hạn', 'No cards due')}</h1>
-            <p className="text-slate-400 mb-6">{L('Thẻ ôn được tạo từ những khái niệm bạn trả lời chưa tốt trong buổi phỏng vấn. Cứ luyện thêm phiên đầy đủ để có thẻ ôn.', 'Review cards come from concepts you answered poorly in interviews. Do more full sessions to build your deck.')}</p>
+            <p className="text-text-secondary mb-6">{L('Thẻ ôn được tạo từ những khái niệm bạn trả lời chưa tốt trong buổi phỏng vấn. Cứ luyện thêm phiên đầy đủ để có thẻ ôn.', 'Review cards come from concepts you answered poorly in interviews. Do more full sessions to build your deck.')}</p>
             <Link href="/interview" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold">{L('Bắt đầu một phiên', 'Start a session')}</Link>
           </div>
         ) : (
           <div>
             <div className="flex items-center gap-2 mb-3 text-xs">
-              {card.topic && <span className="px-2 py-0.5 rounded bg-white/5 text-slate-300">{card.topic}</span>}
-              {card.concept && <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-300">{card.concept}</span>}
-              {card.variantGap && <span className="px-2 py-0.5 rounded bg-white/5 text-slate-500" title={L('Chưa có biến thể khác của khái niệm này', 'No other variant of this concept yet')}>{L('1 phiên bản', '1 variant')}</span>}
+              {card.topic && <span className="px-2 py-0.5 rounded bg-[var(--bg-surface-hover)] text-text-secondary">{card.topic}</span>}
+              {card.concept && <span className="px-2 py-0.5 rounded bg-amber-500/10 text-tone-amber">{card.concept}</span>}
+              {card.variantGap && <span className="px-2 py-0.5 rounded bg-[var(--bg-surface-hover)] text-text-muted" title={L('Chưa có biến thể khác của khái niệm này', 'No other variant of this concept yet')}>{L('1 phiên bản', '1 variant')}</span>}
             </div>
 
             <div className="text-lg font-semibold leading-relaxed mb-4 markdown-body">
@@ -118,7 +118,7 @@ export default function InterviewDrillPage() {
                   onChange={(e) => setAnswer(e.target.value)}
                   rows={5}
                   placeholder={L('(Tuỳ chọn) Trả lời nhanh rồi bấm Hiện đáp án — nếu có, máy sẽ chấm khách quan.', '(Optional) Answer quickly then reveal — if you do, the grader scores it objectively.')}
-                  className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm focus:outline-none focus:border-amber-500/60 resize-y mb-3"
+                  className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 text-text-primary font-mono text-sm focus:outline-none focus:border-amber-500/60 resize-y mb-3"
                 />
                 <button onClick={() => setRevealed(true)} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold">
                   <Check className="w-4 h-4" /> {L('Hiện đáp án', 'Reveal answer')}
@@ -127,13 +127,13 @@ export default function InterviewDrillPage() {
             ) : (
               <div className="space-y-4">
                 {card.question.referenceAnswer && (
-                  <div className="rounded-xl border border-white/10 p-4 bg-white/[0.04]">
-                    <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">{L('Đáp án mẫu', 'Model answer')}</div>
+                  <div className="rounded-xl border border-[var(--border-light)] p-4 bg-[var(--bg-surface-hover)]">
+                    <div className="text-xs font-semibold uppercase tracking-wide text-text-secondary mb-2">{L('Đáp án mẫu', 'Model answer')}</div>
                     <div className="text-sm markdown-body"><Markdown mdx={card.question.referenceAnswer} openLinksInNewTab /></div>
                   </div>
                 )}
                 <div>
-                  <p className="text-sm text-slate-400 mb-2">{L('Bạn nhớ khái niệm này tới đâu?', 'How well do you recall this concept?')}</p>
+                  <p className="text-sm text-text-secondary mb-2">{L('Bạn nhớ khái niệm này tới đâu?', 'How well do you recall this concept?')}</p>
                   <div className="grid grid-cols-4 gap-2">
                     {RATINGS.map((r) => (
                       <button key={r.q} disabled={grading} onClick={() => grade(r.q)} className={`py-3 rounded-xl border font-semibold text-sm transition-all disabled:opacity-50 ${r.cls}`}>

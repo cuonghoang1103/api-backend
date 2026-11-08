@@ -20,7 +20,7 @@ function RatingBar({ label, percent }: { label: string; percent: number }) {
   return (
     <div className="flex items-center gap-3 text-sm">
       <span className="text-text-muted w-8">{label}</span>
-      <div className="flex-1 h-2 bg-darkbg rounded-full overflow-hidden">
+      <div className="flex-1 h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
         <div
           className="h-full bg-yellow-400 rounded-full transition-all duration-500"
           style={{ width: `${percent}%` }}
@@ -98,7 +98,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           onSubmit={handleSubmit}
-          className="bg-darkcard border border-darkborder rounded-2xl p-6 space-y-4"
+          className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6 space-y-4"
         >
           <h4 className="text-sm font-semibold text-text-primary">Your Rating</h4>
           <div className="flex items-center gap-1">
@@ -114,7 +114,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
                 <Star
                   className={`w-7 h-7 transition-colors ${
                     star <= (hoverRating || rating)
-                      ? 'text-yellow-400 fill-yellow-400'
+                      ? 'text-tone-yellow fill-yellow-400'
                       : 'text-text-muted'
                   }`}
                 />
@@ -132,7 +132,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Sum up your experience"
               maxLength={100}
-              className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+              className="w-full px-4 py-2.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
             />
           </div>
 
@@ -143,7 +143,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
               onChange={(e) => setContent(e.target.value)}
               placeholder="Share your experience with this course..."
               rows={4}
-              className="w-full px-4 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y"
+              className="w-full px-4 py-2.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 resize-y"
             />
           </div>
 
@@ -151,7 +151,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-5 py-2.5 bg-darkbg border border-darkborder rounded-xl text-sm text-text-primary hover:border-neon-violet/30 transition-colors"
+              className="px-5 py-2.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-xl text-sm text-text-primary hover:border-neon-violet/30 transition-colors"
             >
               Cancel
             </button>
@@ -169,20 +169,20 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
 
       {/* Rating summary */}
       <div className="flex flex-col sm:flex-row gap-6 items-start">
-        <div className="flex flex-col items-center justify-center p-6 bg-darkcard border border-darkborder rounded-2xl min-w-[160px]">
+        <div className="flex flex-col items-center justify-center p-6 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl min-w-[160px]">
           <p className="text-5xl font-bold text-text-primary font-heading">{avgRating.toFixed(1)}</p>
           <div className="flex items-center gap-1 mt-2">
             {[1, 2, 3, 4, 5].map((star) => (
               <Star
                 key={star}
-                className={`w-4 h-4 ${star <= Math.round(avgRating) ? 'text-yellow-400 fill-yellow-400' : 'text-text-muted'}`}
+                className={`w-4 h-4 ${star <= Math.round(avgRating) ? 'text-tone-yellow fill-yellow-400' : 'text-text-muted'}`}
               />
             ))}
           </div>
           <p className="text-sm text-text-muted mt-1">{totalReviews} reviews</p>
         </div>
 
-        <div className="flex-1 space-y-1.5 p-4 bg-darkcard border border-darkborder rounded-2xl">
+        <div className="flex-1 space-y-1.5 p-4 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl">
           {ratingCounts.map(({ star, percent }) => (
             <RatingBar key={star} label={String(star)} percent={percent} />
           ))}
@@ -197,7 +197,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-darkcard border border-darkborder rounded-2xl p-5"
+            className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5"
           >
             <div className="flex items-start gap-3">
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center text-white text-sm font-bold shrink-0 overflow-hidden">
@@ -214,7 +214,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
-                        className={`w-3.5 h-3.5 ${star <= review.rating ? 'text-yellow-400 fill-yellow-400' : 'text-text-muted'}`}
+                        className={`w-3.5 h-3.5 ${star <= review.rating ? 'text-tone-yellow fill-yellow-400' : 'text-text-muted'}`}
                       />
                     ))}
                   </div>
@@ -232,7 +232,7 @@ export default function Reviews({ reviews, avgRating, totalReviews, courseId, on
             </div>
           </motion.div>
         )) : (
-          <div className="text-center py-12 bg-darkcard border border-darkborder rounded-2xl">
+          <div className="text-center py-12 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl">
             <Star className="w-12 h-12 text-text-muted/30 mx-auto mb-3" />
             <p className="text-text-muted">No reviews yet. Be the first to review!</p>
           </div>

@@ -85,7 +85,7 @@ export default function ImageCarousel({
                 border: `1px solid ${c.primary}40`,
               }}
             >
-              <Play className="w-7 h-7 text-neon-violet opacity-60" />
+              <Play className="w-7 h-7 text-tone-violet opacity-60" />
             </div>
             {title && (
               <p className="text-sm font-medium text-text-muted opacity-60 text-center max-w-xs px-4">
@@ -127,7 +127,7 @@ export default function ImageCarousel({
           {videoUrl && isSafeUrl(videoUrl) && (
             <button
               onClick={() => onVideoClick?.(videoUrl)}
-              className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-white transition-all hover:scale-105"
+              className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-text-primary transition-all hover:scale-105"
               style={{
                 background: 'rgba(0,0,0,0.6)',
                 backdropFilter: 'blur(8px)',
@@ -150,14 +150,14 @@ export default function ImageCarousel({
                 className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
                 style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}
               >
-                <ChevronLeft className="w-5 h-5 text-white" />
+                <ChevronLeft className="w-5 h-5 text-text-primary" />
               </button>
               <button
                 onClick={next}
                 className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full flex items-center justify-center transition-all hover:scale-110 z-10"
                 style={{ background: 'rgba(0,0,0,0.5)', backdropFilter: 'blur(8px)' }}
               >
-                <ChevronRight className="w-5 h-5 text-white" />
+                <ChevronRight className="w-5 h-5 text-text-primary" />
               </button>
             </>
           )}

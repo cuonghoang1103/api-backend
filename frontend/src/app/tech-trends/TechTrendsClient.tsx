@@ -247,7 +247,7 @@ export default function TechTrendsClient() {
   }, [articles]);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-darkbg" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen pt-24 pb-20 bg-[var(--bg-primary)]" style={{ background: 'var(--bg-primary)' }}>
       {/* Particle grid — carried over from the old /blog page, the one
           part of it worth keeping. Canvas-based and pointer-events-none,
           so it sits behind everything without touching interaction. */}
@@ -268,7 +268,7 @@ export default function TechTrendsClient() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, ease: [0.32, 0.94, 0.6, 1] }}
-            className="inline-flex items-center gap-2 rounded-full border border-neon-violet/25 bg-neon-violet/10 px-4 py-1.5 text-xs font-medium text-neon-violet mb-4"
+            className="inline-flex items-center gap-2 rounded-full border border-neon-violet/25 bg-neon-violet/10 px-4 py-1.5 text-xs font-medium text-tone-violet mb-4"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-neon-violet animate-pulse" />
             <Sparkles className="w-3.5 h-3.5" />
@@ -310,8 +310,8 @@ export default function TechTrendsClient() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by title, tag or keyword..."
-              className="w-full pl-11 pr-4 py-3.5 bg-darkcard/80 backdrop-blur-sm
-                border border-darkborder rounded-2xl text-sm text-text-primary
+              className="w-full pl-11 pr-4 py-3.5 bg-[var(--bg-glass)] backdrop-blur-sm
+                border border-[var(--border-color)] rounded-2xl text-sm text-text-primary
                 placeholder:text-text-muted
                 focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/20
                 transition-all duration-200"
@@ -340,10 +340,10 @@ export default function TechTrendsClient() {
                     'relative flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium',
                     'transition-all duration-200 active:scale-95',
                     isActive
-                      ? 'text-white shadow-neon'
+                      ? 'text-text-primary shadow-neon'
                       : n === 0
                         ? 'text-text-muted/60 hover:text-text-secondary'
-                        : 'text-text-secondary hover:text-text-primary hover:bg-white/[0.04]',
+                        : 'text-text-secondary hover:text-text-primary hover:bg-[var(--bg-surface-hover)]',
                   ].join(' ')}
                 >
                   {isActive && (
@@ -361,7 +361,7 @@ export default function TechTrendsClient() {
                     <span
                       className={[
                         'ml-0.5 rounded-md px-1.5 py-px text-[10px] tabular-nums',
-                        isActive ? 'bg-white/20 text-white' : 'bg-white/[0.06] text-text-muted',
+                        isActive ? 'bg-[var(--bg-surface-hover)] text-text-primary' : 'bg-[var(--bg-surface-active)] text-text-muted',
                       ].join(' ')}
                     >
                       {n}
@@ -375,7 +375,7 @@ export default function TechTrendsClient() {
               {year !== null && (
                 <button
                   onClick={() => setYear(null)}
-                  className="inline-flex items-center gap-1 rounded-lg border border-neon-violet/30 bg-neon-violet/10 px-2 py-1 text-neon-violet transition-colors hover:bg-neon-violet/20"
+                  className="inline-flex items-center gap-1 rounded-lg border border-neon-violet/30 bg-neon-violet/10 px-2 py-1 text-tone-violet transition-colors hover:bg-neon-violet/20"
                 >
                   Năm {year}
                   <X className="h-3 w-3" />
@@ -402,14 +402,14 @@ export default function TechTrendsClient() {
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-amber-500 text-white">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-amber-700 text-white">
                   CHUYÊN ĐỀ
                 </span>
                 <span className="text-[11px] text-text-muted">
                   108 tin đã kiểm chứng · lộ trình 20 tuần · 8 dự án
                 </span>
               </div>
-              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-amber-400 transition-colors">
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-tone-amber transition-colors">
                 Việc làm Claude Code — học gì để apply được
               </h3>
               <p className="text-sm text-text-secondary mt-1 leading-relaxed">
@@ -418,7 +418,7 @@ export default function TechTrendsClient() {
                 dự án thật nâng cấp chính hệ thống đang chạy.
               </p>
             </div>
-            <span className="hidden sm:block text-amber-400 text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+            <span className="hidden sm:block text-tone-amber text-xl shrink-0 group-hover:translate-x-1 transition-transform">
               →
             </span>
           </div>
@@ -438,14 +438,14 @@ export default function TechTrendsClient() {
             </span>
             <div className="min-w-0 flex-1">
               <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                <span className="rounded-full bg-violet-500 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white">
+                <span className="rounded-full bg-violet-600 px-2 py-0.5 text-[10px] font-bold tracking-wide text-white">
                   CHUYÊN ĐỀ
                 </span>
                 <span className="text-[11px] text-text-muted">
                   21 chương · 210 bài tập chạy trên PostgreSQL thật
                 </span>
               </div>
-              <h3 className="font-heading text-lg font-bold text-text-primary transition-colors group-hover:text-violet-400 sm:text-xl">
+              <h3 className="font-heading text-lg font-bold text-text-primary transition-colors group-hover:text-tone-violet sm:text-xl">
                 Học SQL &amp; Database từ số 0 — kèm đối chiếu SQL Server
               </h3>
               <p className="mt-1 text-sm leading-relaxed text-text-secondary">
@@ -454,7 +454,7 @@ export default function TechTrendsClient() {
                 kiểm tra sau mỗi phần, và bảng tra cứu cho ai học SQL Server ở trường nhưng làm web bằng PostgreSQL.
               </p>
             </div>
-            <span className="hidden shrink-0 text-xl text-violet-400 transition-transform group-hover:translate-x-1 sm:block">
+            <span className="hidden shrink-0 text-xl text-tone-violet transition-transform group-hover:translate-x-1 sm:block">
               →
             </span>
           </div>
@@ -473,12 +473,12 @@ export default function TechTrendsClient() {
             </span>
             <div className="flex-1 min-w-0">
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-emerald-500 text-white">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide bg-emerald-700 text-white">
                   CHUYÊN ĐỀ
                 </span>
                 <span className="text-[11px] text-text-muted">Khoá 20 ngày · có nút nghe từng câu</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-emerald-400 transition-colors">
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-tone-emerald transition-colors">
                 Tiếng Anh Giao Tiếp — 20 ngày từ câu chào tới kể chuyện
               </h3>
               <p className="text-sm text-text-secondary mt-1 leading-relaxed">
@@ -487,7 +487,7 @@ export default function TechTrendsClient() {
                 ngữ pháp và một âm khó để luyện.
               </p>
             </div>
-            <span className="hidden sm:block text-emerald-400 text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+            <span className="hidden sm:block text-tone-emerald text-xl shrink-0 group-hover:translate-x-1 transition-transform">
               →
             </span>
           </div>
@@ -511,7 +511,7 @@ export default function TechTrendsClient() {
                 </span>
                 <span className="text-[11px] text-text-muted">Lộ trình 30 ngày có checklist từng ngày</span>
               </div>
-              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-neon-violet transition-colors">
+              <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary group-hover:text-tone-violet transition-colors">
                 Học lại JPD113 + JPD123 — lộ trình 30 ngày từ gốc
               </h3>
               <p className="text-sm text-text-secondary mt-1 leading-relaxed">
@@ -520,7 +520,7 @@ export default function TechTrendsClient() {
                 35 đề luyện có sẵn.
               </p>
             </div>
-            <span className="hidden sm:block text-neon-violet text-xl shrink-0 group-hover:translate-x-1 transition-transform">
+            <span className="hidden sm:block text-tone-violet text-xl shrink-0 group-hover:translate-x-1 transition-transform">
               →
             </span>
           </div>
@@ -600,18 +600,18 @@ export default function TechTrendsClient() {
 // ── Article Card ─────────────────────────────────────────────────
 
 const CATEGORY_STYLES: Record<Category, { bg: string; text: string; border: string; emoji: string }> = {
-  TechNews:   { bg: 'bg-neon-emerald/10',  text: 'text-neon-emerald',  border: 'border-neon-emerald/20',  emoji: '📰' },
-  FixBug:     { bg: 'bg-neon-red/10',       text: 'text-neon-red',       border: 'border-neon-red/20',       emoji: '🐛' },
-  Experience: { bg: 'bg-neon-cyan/10',      text: 'text-neon-cyan',      border: 'border-neon-cyan/20',      emoji: '💼' },
-  Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-neon-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
-  DeepDive:   { bg: 'bg-neon-orange/10',    text: 'text-neon-orange',    border: 'border-neon-orange/20',    emoji: '📖' },
+  TechNews:   { bg: 'bg-neon-emerald/10',  text: 'text-tone-emerald',  border: 'border-neon-emerald/20',  emoji: '📰' },
+  FixBug:     { bg: 'bg-neon-red/10',       text: 'text-tone-red',       border: 'border-neon-red/20',       emoji: '🐛' },
+  Experience: { bg: 'bg-neon-cyan/10',      text: 'text-tone-cyan',      border: 'border-neon-cyan/20',      emoji: '💼' },
+  Interviews: { bg: 'bg-neon-fuchsia/10',   text: 'text-tone-fuchsia',   border: 'border-neon-fuchsia/20',   emoji: '🎯' },
+  DeepDive:   { bg: 'bg-neon-orange/10',    text: 'text-tone-orange',    border: 'border-neon-orange/20',    emoji: '📖' },
 };
 
 // Runtime fallback: the backend could return a category not in the `Category`
 // union (e.g. a newly added one). Without this, `style.bg`/`style.emoji` below
 // would throw and crash the whole grid. TS thinks the lookup is always defined,
 // so we coerce through `?? DEFAULT_CATEGORY_STYLE`.
-const DEFAULT_CATEGORY_STYLE = { bg: 'bg-neon-violet/10', text: 'text-neon-violet', border: 'border-neon-violet/20', emoji: '🏷️' };
+const DEFAULT_CATEGORY_STYLE = { bg: 'bg-neon-violet/10', text: 'text-tone-violet', border: 'border-neon-violet/20', emoji: '🏷️' };
 
 const FALLBACK_GRADIENTS = [
   'from-neon-indigo to-neon-violet',
@@ -693,7 +693,7 @@ function ArticleCard({
         className={[
           'relative h-full overflow-hidden rounded-2xl',
           'bg-gradient-to-b from-darksurface/80 to-darkcard/80',
-          'backdrop-blur-sm border border-darkborder',
+          'backdrop-blur-sm border border-[var(--border-color)]',
           'transition-all duration-300',
           'hover:border-neon-violet/40',
           'hover:shadow-[0_8px_32px_-8px_rgba(139,92,246,0.4)]',
@@ -703,7 +703,7 @@ function ArticleCard({
             is set) or the gradient + emoji fallback. */}
         <div
           className={[
-            'relative w-full overflow-hidden bg-darkcard',
+            'relative w-full overflow-hidden bg-[var(--bg-card)]',
             article.isFeatured ? 'aspect-[2.4/1]' : 'aspect-[2/1]',
           ].join(' ')}
         >
@@ -742,7 +742,7 @@ function ArticleCard({
               <span>{CATEGORY_LABEL_VI[article.category] ?? article.category}</span>
             </span>
             {article.trendingScore >= 90 && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-neon-orange/10 text-neon-orange border border-neon-orange/20 backdrop-blur-md">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-neon-orange/10 text-tone-orange border border-neon-orange/20 backdrop-blur-md">
                 <TrendingUp className="w-3 h-3" />
                 <span>Hot</span>
               </span>
@@ -756,8 +756,8 @@ function ArticleCard({
               'absolute top-3 right-3 p-2 rounded-xl backdrop-blur-md',
               'border transition-all duration-200 active:scale-90',
               bookmarked
-                ? 'bg-neon-violet/20 text-neon-violet border-neon-violet/30'
-                : 'bg-black/30 text-white border-white/10 hover:bg-black/50',
+                ? 'bg-neon-violet/20 text-tone-violet border-neon-violet/30'
+                : 'bg-[var(--bg-surface)] text-white border-[var(--border-light)] hover:bg-black/50',
             ].join(' ')}
             aria-label={bookmarked ? 'Bỏ lưu bài' : 'Lưu bài'}
           >
@@ -774,7 +774,7 @@ function ArticleCard({
           ].join(' ')}>
             <Link
               href={permalink}
-              className="hover:text-neon-violet transition-colors"
+              className="hover:text-tone-violet transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               {article.title}
@@ -813,11 +813,11 @@ function ArticleCard({
               >
                 {article.bodyHtml ? (
                   <div
-                    className="tech-prose pt-3 border-t border-darkborder"
+                    className="tech-prose pt-3 border-t border-[var(--border-color)]"
                     dangerouslySetInnerHTML={{ __html: sanitizeHtml(article.bodyHtml) }}
                   />
                 ) : (
-                  <div className="pt-2 space-y-3 text-text-secondary text-sm leading-relaxed border-t border-darkborder">
+                  <div className="pt-2 space-y-3 text-text-secondary text-sm leading-relaxed border-t border-[var(--border-color)]">
                     {article.body.map((para, i) => (
                       <p key={i}>{para}</p>
                     ))}
@@ -835,7 +835,7 @@ function ArticleCard({
                   key={t}
                   type="button"
                   className="px-2 py-0.5 rounded-md text-[11px] font-medium
-                    bg-white/[0.04] text-text-muted border border-white/[0.04]
+                    bg-[var(--bg-surface-hover)] text-text-muted border border-[var(--border-light)]
                     hover:text-text-primary hover:border-neon-violet/30 transition-colors cursor-pointer"
                   onClick={(e) => { e.stopPropagation(); onSelectTag(t); }}
                 >
@@ -846,7 +846,7 @@ function ArticleCard({
           )}
 
           {/* Meta + actions */}
-          <div className="flex items-center justify-between pt-3 border-t border-darkborder">
+          <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
             <div className="flex items-center gap-2.5 min-w-0">
               {article.author?.avatarUrl ? (
                 <img
@@ -857,7 +857,7 @@ function ArticleCard({
               ) : (
                 <div
                   className={[
-                    'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white',
+                    'w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-text-primary',
                     'bg-gradient-to-br shrink-0',
                     pickGradient(article.author?.id ?? article.id),
                   ].join(' ')}
@@ -882,8 +882,8 @@ function ArticleCard({
               <button
                 onClick={(e) => { e.stopPropagation(); onToggleExpand(); }}
                 className="px-2.5 py-1 rounded-lg text-[11px] font-medium
-                  bg-white/[0.04] text-text-secondary
-                  hover:bg-neon-violet/15 hover:text-neon-violet
+                  bg-[var(--bg-surface-hover)] text-text-secondary
+                  hover:bg-neon-violet/15 hover:text-tone-violet
                   transition-colors active:scale-95"
               >
                 {isExpanded ? 'Thu gọn' : 'Đọc nhanh'}
@@ -892,8 +892,8 @@ function ArticleCard({
                 href={permalink}
                 onClick={(e) => e.stopPropagation()}
                 className="px-2.5 py-1 rounded-lg text-[11px] font-medium
-                  bg-white/[0.04] text-text-secondary
-                  hover:bg-neon-violet/15 hover:text-neon-violet
+                  bg-[var(--bg-surface-hover)] text-text-secondary
+                  hover:bg-neon-violet/15 hover:text-tone-violet
                   transition-colors active:scale-95"
               >
                 Mở
@@ -901,7 +901,7 @@ function ArticleCard({
               <button
                 onClick={handleShare}
                 className="p-1.5 rounded-lg text-text-muted hover:text-text-primary
-                  hover:bg-white/[0.04] transition-colors active:scale-95"
+                  hover:bg-[var(--bg-surface-hover)] transition-colors active:scale-95"
                 aria-label="Chia sẻ"
               >
                 <Share2 className="w-3.5 h-3.5" />
@@ -958,9 +958,9 @@ function ResourceCard({ resource, index, onSelectTag }: {
       whileHover={{ y: -4, transition: { duration: 0.2, ease: [0.32, 0.94, 0.6, 1] } }}
       className="group relative md:col-span-1"
     >
-      <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-darkborder bg-gradient-to-b from-darksurface/80 to-darkcard/80 backdrop-blur-sm transition-all duration-300 hover:border-neon-violet/40 hover:shadow-[0_8px_32px_-8px_rgba(139,92,246,0.4)]">
+      <div className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--border-color)] bg-gradient-to-b from-darksurface/80 to-darkcard/80 backdrop-blur-sm transition-all duration-300 hover:border-neon-violet/40 hover:shadow-[0_8px_32px_-8px_rgba(139,92,246,0.4)]">
         {/* Cover */}
-        <div className="relative aspect-[2/1] w-full overflow-hidden bg-darkcard">
+        <div className="relative aspect-[2/1] w-full overflow-hidden bg-[var(--bg-card)]">
           {resource.thumbnailUrl ? (
             <>
               <img
@@ -980,7 +980,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
               </div>
             </>
           )}
-          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full border border-neon-violet/20 bg-neon-violet/10 px-2.5 py-1 text-xs font-medium text-neon-violet backdrop-blur-md">
+          <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full border border-neon-violet/20 bg-neon-violet/10 px-2.5 py-1 text-xs font-medium text-tone-violet backdrop-blur-md">
             <Package className="h-3 w-3" />
             <span>{CATEGORY_LABEL_VI.Resources}</span>
           </span>
@@ -989,7 +989,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
         {/* Body */}
         <div className="flex flex-1 flex-col gap-4 p-5 sm:p-6">
           <h2 className="font-heading text-lg font-semibold leading-relaxed tracking-tight text-text-primary sm:text-xl">
-            <Link href={permalink} className="transition-colors hover:text-neon-violet">
+            <Link href={permalink} className="transition-colors hover:text-tone-violet">
               {resource.title}
             </Link>
           </h2>
@@ -1007,7 +1007,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
                   key={t}
                   type="button"
                   onClick={(e) => { e.stopPropagation(); onSelectTag(t); }}
-                  className="cursor-pointer rounded-md border border-white/[0.04] bg-white/[0.04] px-2 py-0.5 text-[11px] font-medium text-text-muted transition-colors hover:border-neon-violet/30 hover:text-text-primary"
+                  className="cursor-pointer rounded-md border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2 py-0.5 text-[11px] font-medium text-text-muted transition-colors hover:border-neon-violet/30 hover:text-text-primary"
                 >
                   #{t}
                 </button>
@@ -1017,7 +1017,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
 
           {/* Meta + actions — pinned to the bottom so cards of different
               text lengths still line their buttons up. */}
-          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-darkborder pt-3">
+          <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-color)] pt-3">
             <div className="flex items-center gap-3 text-[11px] text-text-muted">
               <span>{formatDate(resource.publishedAt || resource.createdAt)}</span>
               {resource.downloadCount > 0 && (
@@ -1037,7 +1037,7 @@ function ResourceCard({ resource, index, onSelectTag }: {
             <div className="flex items-center gap-1.5">
               <Link
                 href={permalink}
-                className="rounded-lg bg-white/[0.04] px-2.5 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:bg-neon-violet/15 hover:text-neon-violet active:scale-95"
+                className="rounded-lg bg-[var(--bg-surface-hover)] px-2.5 py-1 text-[11px] font-medium text-text-secondary transition-colors hover:bg-neon-violet/15 hover:text-tone-violet active:scale-95"
               >
                 Mở
               </Link>
@@ -1067,13 +1067,13 @@ function CodeComparison({ before, after, takeaway }: {
   takeaway: string;
 }) {
   return (
-    <div className="rounded-xl border border-darkborder overflow-hidden bg-[#0a0c14]">
+    <div className="rounded-xl border border-[var(--border-color)] overflow-hidden bg-[#0a0c14]">
       <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-darkborder">
         {/* Before — error */}
         <div>
-          <div className="flex items-center gap-1.5 px-3 py-2 border-b border-darkborder bg-red-500/5">
-            <AlertTriangle className="w-3.5 h-3.5 text-neon-red" />
-            <span className="text-[11px] font-semibold text-neon-red uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[var(--border-color)] bg-red-500/5">
+            <AlertTriangle className="w-3.5 h-3.5 text-tone-red" />
+            <span className="text-[11px] font-semibold text-tone-red uppercase tracking-wider">
               Before · Error
             </span>
             <span className="ml-auto text-[10px] font-mono text-text-muted">
@@ -1087,9 +1087,9 @@ function CodeComparison({ before, after, takeaway }: {
 
         {/* After — solution */}
         <div>
-          <div className="flex items-center gap-1.5 px-3 py-2 border-b border-darkborder bg-emerald-500/5">
-            <CheckCircle2 className="w-3.5 h-3.5 text-neon-emerald" />
-            <span className="text-[11px] font-semibold text-neon-emerald uppercase tracking-wider">
+          <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[var(--border-color)] bg-emerald-500/5">
+            <CheckCircle2 className="w-3.5 h-3.5 text-tone-emerald" />
+            <span className="text-[11px] font-semibold text-tone-emerald uppercase tracking-wider">
               After · Solution
             </span>
             <span className="ml-auto text-[10px] font-mono text-text-muted">
@@ -1103,8 +1103,8 @@ function CodeComparison({ before, after, takeaway }: {
       </div>
 
       {/* Takeaway strip */}
-      <div className="flex items-start gap-2 px-3 py-2.5 bg-neon-violet/5 border-t border-darkborder">
-        <Code2 className="w-3.5 h-3.5 text-neon-violet mt-0.5 shrink-0" />
+      <div className="flex items-start gap-2 px-3 py-2.5 bg-neon-violet/5 border-t border-[var(--border-color)]">
+        <Code2 className="w-3.5 h-3.5 text-tone-violet mt-0.5 shrink-0" />
         <p className="text-[11px] sm:text-xs text-text-secondary leading-relaxed">
           <span className="font-semibold text-text-primary">Takeaway:</span> {takeaway}
         </p>
@@ -1137,18 +1137,18 @@ function ArchiveCard({ items, activeYear, onSelect }: {
                 aria-pressed={isActive}
                 className={[
                   'group flex w-full items-center gap-3 rounded-lg px-2 py-1.5 text-left transition-colors',
-                  isActive ? 'bg-neon-violet/15' : 'hover:bg-white/[0.04]',
+                  isActive ? 'bg-neon-violet/15' : 'hover:bg-[var(--bg-surface-hover)]',
                 ].join(' ')}
               >
                 <span className={[
                   'w-11 shrink-0 text-sm font-semibold tabular-nums',
-                  isActive ? 'text-neon-violet' : 'text-text-primary',
+                  isActive ? 'text-tone-violet' : 'text-text-primary',
                 ].join(' ')}>
                   {y}
                 </span>
                 {/* Bar length is relative to the busiest year, so the
                     shape of the archive is readable at a glance. */}
-                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--bg-surface-hover)]">
                   <span
                     className={[
                       'block h-full rounded-full transition-all',
@@ -1180,8 +1180,8 @@ function TrendingTagsCard({ tags, onSelect }: { tags: TrendingTag[]; onSelect: (
               'group relative inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs',
               'border transition-all duration-200 active:scale-95',
               i < 3
-                ? 'bg-neon-violet/10 text-neon-violet border-neon-violet/20 hover:bg-neon-violet/15'
-                : 'bg-white/[0.04] text-text-secondary border-white/[0.04] hover:text-text-primary hover:border-neon-violet/30',
+                ? 'bg-neon-violet/10 text-tone-violet border-neon-violet/20 hover:bg-neon-violet/15'
+                : 'bg-[var(--bg-surface-hover)] text-text-secondary border-[var(--border-light)] hover:text-text-primary hover:border-neon-violet/30',
             ].join(' ')}
           >
             <span className="font-medium">#{tag}</span>
@@ -1199,7 +1199,7 @@ function QuickTipsCard({ tips }: { tips: typeof QUICK_TIPS }) {
       <ol className="space-y-3">
         {tips.map((tip, i) => (
           <li key={i} className="flex gap-3">
-            <span className="shrink-0 w-5 h-5 rounded-full bg-neon-violet/15 text-neon-violet text-[11px] font-bold flex items-center justify-center mt-0.5">
+            <span className="shrink-0 w-5 h-5 rounded-full bg-neon-violet/15 text-tone-violet text-[11px] font-bold flex items-center justify-center mt-0.5">
               {i + 1}
             </span>
             <div className="min-w-0">
@@ -1231,7 +1231,7 @@ function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
               />
             ) : (
               <div className={[
-                'w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0',
+                'w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold text-text-primary shrink-0',
                 'bg-gradient-to-br', pickGradient(author.id),
               ].join(' ')}>
                 {authorInitials(authorDisplayName(author))}
@@ -1260,9 +1260,9 @@ function TopAuthorsCard({ items }: { items: TopAuthor[] }) {
 
 function Widget({ title, icon, children }: { title: string; icon: ReactNode; children: ReactNode }) {
   return (
-    <div className="rounded-2xl bg-darkcard/60 backdrop-blur-sm border border-darkborder p-4 sm:p-5">
+    <div className="rounded-2xl bg-[var(--bg-glass)] backdrop-blur-sm border border-[var(--border-color)] p-4 sm:p-5">
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-neon-violet">{icon}</span>
+        <span className="text-tone-violet">{icon}</span>
         <h3 className="text-sm font-heading font-semibold text-text-primary">{title}</h3>
       </div>
       {children}
@@ -1285,7 +1285,7 @@ function LoadingState() {
       {Array.from({ length: 6 }).map((_, i) => (
         <div
           key={i}
-          className="rounded-2xl overflow-hidden border border-darkborder bg-darkcard/60 backdrop-blur-sm"
+          className="rounded-2xl overflow-hidden border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-sm"
           style={{ animationDelay: `${i * 60}ms` }}
         >
           <Skeleton className="h-40 w-full" />
@@ -1310,9 +1310,9 @@ function LoadingState() {
 
 function ErrorState({ message }: { message: string }) {
   return (
-    <div className="col-span-full rounded-2xl bg-darkcard/60 backdrop-blur-sm border border-darkborder p-12 text-center">
+    <div className="col-span-full rounded-2xl bg-[var(--bg-glass)] backdrop-blur-sm border border-[var(--border-color)] p-12 text-center">
       <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-red-500/10 flex items-center justify-center">
-        <AlertTriangle className="w-7 h-7 text-red-400" />
+        <AlertTriangle className="w-7 h-7 text-tone-red" />
       </div>
       <h3 className="text-xl font-heading font-semibold text-text-primary mb-2">
         Không tải được bài viết
@@ -1335,10 +1335,10 @@ function EmptyState({ query, category, onReset }: { query: string; category: Tab
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.3 }}
-      className="col-span-full rounded-2xl bg-darkcard/60 backdrop-blur-sm border border-darkborder p-12 text-center"
+      className="col-span-full rounded-2xl bg-[var(--bg-glass)] backdrop-blur-sm border border-[var(--border-color)] p-12 text-center"
     >
       <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-neon-violet/10 flex items-center justify-center">
-        <Search className="w-7 h-7 text-neon-violet" />
+        <Search className="w-7 h-7 text-tone-violet" />
       </div>
       <h3 className="text-xl font-heading font-semibold text-text-primary mb-2">
         Chưa có bài nào
@@ -1351,7 +1351,7 @@ function EmptyState({ query, category, onReset }: { query: string; category: Tab
       <button
         onClick={onReset}
         className="mt-5 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl
-          bg-white/[0.04] border border-darkborder text-sm text-text-secondary
+          bg-[var(--bg-surface-hover)] border border-[var(--border-color)] text-sm text-text-secondary
           hover:text-text-primary hover:border-neon-violet/30 transition-all active:scale-95"
       >
         <X className="w-3.5 h-3.5" />

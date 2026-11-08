@@ -657,7 +657,7 @@
   box-shadow: 0 10px 24px -10px var(--k);
   animation: badgeIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
-.dayKind { color: var(--k); }
+.dayKind { color: color-mix(in srgb, var(--k) 62%, var(--lh-ink)); }
 .goal { border-left-color: var(--k); background: color-mix(in srgb, var(--k) 7%, var(--lh-surface)); }
 .gbox { border-color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); animation: fadeUp 0.45s ease both; }
 .gboxTitle { border-color: color-mix(in srgb, var(--k) 70%, var(--lh-ink)); background: color-mix(in srgb, var(--k) 12%, var(--lh-bg)); }
@@ -673,7 +673,7 @@
 .letter { transition: transform 0.15s ease, border-color 0.15s ease; }
 .letter:hover { transform: translateY(-2px); border-color: var(--k); }
 .letter:active { transform: scale(0.95); }
-.tocItem .tocKind { color: var(--k); font-weight: 600; }
+.tocItem .tocKind { color: color-mix(in srgb, var(--k) 62%, var(--lh-ink)); font-weight: 600; } /* màu loại (tông 500) pha về màu chữ ⇒ ≥4.5:1 ở cả hai chủ đề (08/11/2026) */
 .tocActive { background: color-mix(in srgb, var(--k) 13%, transparent) !important; box-shadow: inset 3px 0 0 var(--k); }
 .tocItem:not(:disabled) .tocDot { border-color: color-mix(in srgb, var(--k) 55%, var(--lh-line)); }
 .tocDotDone { background: var(--lh-good) !important; border-color: var(--lh-good) !important; }

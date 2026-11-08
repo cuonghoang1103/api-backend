@@ -20,7 +20,7 @@
     --border-light-hover: rgba(0, 0, 0, 0.15);
     --text-primary: #050505;
     --text-secondary: #65676b;
-    --text-muted: #8a8d91;
+    --text-muted: #686b70; /* 08/11/2026: #8a8d91 chỉ 3.0:1 trên nền #f0f2f5 — nay 4.8:1 */
     --accent-color: #1877f2;
     --accent-hover: #166fe5;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -28,6 +28,14 @@
     --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.15);
 
+
+    /* ── Màu nhấn dạng CHỮ theo chủ đề (08/11/2026) ──
+       `text-amber-300` & co là màu viết cho NỀN TỐI: trên nền trắng chỉ 1.5–2:1. `text-tone-*` (tailwind.config)
+       đọc các biến này: sáng = tông 700 (≥ 4.5:1 trên trắng), tối = tông 300 (≥ 8:1 trên #18191a). */
+    --tone-amber: #92400e; --tone-emerald: #047857; --tone-cyan: #0e7490; --tone-sky: #0369a1;
+    --tone-violet: #6d28d9; --tone-indigo: #4338ca; --tone-fuchsia: #a21caf; --tone-rose: #be123c;
+    --tone-red: #b91c1c; --tone-orange: #c2410c; --tone-yellow: #a16207; --tone-green: #15803d;
+    --tone-blue: #1d4ed8; --tone-pink: #be185d; --tone-teal: #0f766e; --tone-lime: #4d7c0f; --tone-purple: #7e22ce;
     --font-nunito: 'Nunito';
     /* Chữ có chân của trang chủ. Tên họ do @fontsource-variable đặt, PHẢI có
        chữ "Variable" — thiếu là im lặng rơi về Georgia. Xem layout.tsx. */
@@ -98,6 +106,11 @@
     --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
     --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
 
+    --tone-amber: #fcd34d; --tone-emerald: #6ee7b7; --tone-cyan: #67e8f9; --tone-sky: #7dd3fc;
+    --tone-violet: #c4b5fd; --tone-indigo: #a5b4fc; --tone-fuchsia: #f0abfc; --tone-rose: #fda4af;
+    --tone-red: #fca5a5; --tone-orange: #fdba74; --tone-yellow: #fde047; --tone-green: #86efac;
+    --tone-blue: #93c5fd; --tone-pink: #f9a8d4; --tone-teal: #5eead4; --tone-lime: #bef264; --tone-purple: #d8b4fe;
+
     /* Bảng màu kỹ năng — bản tối. Cùng tên biến, cùng ý nghĩa, khác giá trị. */
 --cat-alphabet-bg: #313040;
     --cat-alphabet-fg: #968fe3;
@@ -137,13 +150,20 @@
     --border-light-hover: rgba(0, 0, 0, 0.15);
     --text-primary: #050505;
     --text-secondary: #65676b;
-    --text-muted: #8a8d91;
+    --text-muted: #686b70; /* 08/11/2026: #8a8d91 chỉ 3.0:1 trên nền #f0f2f5 — nay 4.8:1 */
     --accent-color: #1877f2;
     --accent-hover: #166fe5;
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 1px 3px rgba(0, 0, 0, 0.1);
     --shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.15);
+    /* ── Màu nhấn dạng CHỮ theo chủ đề (08/11/2026) ──
+       `text-amber-300` & co là màu viết cho NỀN TỐI: trên nền trắng chỉ 1.5–2:1. `text-tone-*` (tailwind.config)
+       đọc các biến này: sáng = tông 700 (≥ 4.5:1 trên trắng), tối = tông 300 (≥ 8:1 trên #18191a). */
+    --tone-amber: #92400e; --tone-emerald: #047857; --tone-cyan: #0e7490; --tone-sky: #0369a1;
+    --tone-violet: #6d28d9; --tone-indigo: #4338ca; --tone-fuchsia: #a21caf; --tone-rose: #be123c;
+    --tone-red: #b91c1c; --tone-orange: #c2410c; --tone-yellow: #a16207; --tone-green: #15803d;
+    --tone-blue: #1d4ed8; --tone-pink: #be185d; --tone-teal: #0f766e; --tone-lime: #4d7c0f; --tone-purple: #7e22ce;
   }
 
   html {
@@ -453,6 +473,10 @@
     --text-primary: #e4e6eb;
     --text-secondary: #b0b3b8;
     --text-muted: #8a8d91;
+    --tone-amber: #fcd34d; --tone-emerald: #6ee7b7; --tone-cyan: #67e8f9; --tone-sky: #7dd3fc;
+    --tone-violet: #c4b5fd; --tone-indigo: #a5b4fc; --tone-fuchsia: #f0abfc; --tone-rose: #fda4af;
+    --tone-red: #fca5a5; --tone-orange: #fdba74; --tone-yellow: #fde047; --tone-green: #86efac;
+    --tone-blue: #93c5fd; --tone-pink: #f9a8d4; --tone-teal: #5eead4; --tone-lime: #bef264; --tone-purple: #d8b4fe;
 
     /* Re-declaring the variables alone is NOT enough, and this line is why.
        `color` INHERITS. Elements with no colour class of their own inherit
@@ -821,6 +845,10 @@
   --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.6);
+  --tone-amber: #fcd34d; --tone-emerald: #6ee7b7; --tone-cyan: #67e8f9; --tone-sky: #7dd3fc;
+  --tone-violet: #c4b5fd; --tone-indigo: #a5b4fc; --tone-fuchsia: #f0abfc; --tone-rose: #fda4af;
+  --tone-red: #fca5a5; --tone-orange: #fdba74; --tone-yellow: #fde047; --tone-green: #86efac;
+  --tone-blue: #93c5fd; --tone-pink: #f9a8d4; --tone-teal: #5eead4; --tone-lime: #bef264; --tone-purple: #d8b4fe;
   background-color: #18191a;
   color: var(--text-primary);
 }

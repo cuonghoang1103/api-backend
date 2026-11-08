@@ -88,51 +88,51 @@ export default function SearchView({
   }, [query, index]);
 
   const KIND_COLOR: Record<Hit['kind'], string> = {
-    'Câu': 'bg-violet-500/15 text-violet-300',
-    'Từ vựng': 'bg-emerald-500/15 text-emerald-300',
-    'Ngữ pháp': 'bg-amber-500/15 text-amber-300',
-    'Hội thoại': 'bg-sky-500/15 text-sky-300',
+    'Câu': 'bg-violet-500/15 text-tone-violet',
+    'Từ vựng': 'bg-emerald-500/15 text-tone-emerald',
+    'Ngữ pháp': 'bg-amber-500/15 text-tone-amber',
+    'Hội thoại': 'bg-sky-500/15 text-tone-sky',
   };
 
   return (
     <div>
       <div className="relative mb-5">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
         <input
           type="search"
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder="Search in English or Vietnamese — e.g. deadline, xin lỗi, hôm nay…"
-          className="w-full rounded-xl border border-white/10 bg-white/[0.04] pl-10 pr-4 py-3 text-sm text-white placeholder:text-slate-600 outline-none focus:border-violet-400/50 transition-colors"
+          className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] pl-10 pr-4 py-3 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-violet-400/50 transition-colors"
         />
       </div>
 
       {query.trim().length < 2 ? (
-        <p className="text-slate-500 text-sm text-center py-10">
+        <p className="text-text-muted text-sm text-center py-10">
           Gõ ít nhất 2 ký tự. Tra được cả câu mẫu, từ vựng, ngữ pháp và hội thoại
           — không cần bỏ dấu tiếng Việt.
         </p>
       ) : results.length === 0 ? (
-        <p className="text-slate-500 text-sm text-center py-10">
+        <p className="text-text-muted text-sm text-center py-10">
           Không tìm thấy “{query}”. Thử từ khoá ngắn hơn.
         </p>
       ) : (
         <>
-          <p className="text-xs text-slate-500 mb-3">
+          <p className="text-xs text-text-muted mb-3">
             {results.length} kết quả{results.length === 80 && ' đầu tiên'}
           </p>
           <div className="space-y-2">
             {results.map((h, i) => (
-              <div key={i} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+              <div key={i} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
                 <div className="flex items-start gap-2">
                   <span className={`shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded ${KIND_COLOR[h.kind]}`}>
                     {h.kind}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-slate-100 text-sm leading-snug">{h.en}</p>
-                    <p className="text-slate-400 text-sm mt-0.5 leading-snug">{h.vi}</p>
+                    <p className="text-text-primary text-sm leading-snug">{h.en}</p>
+                    <p className="text-text-secondary text-sm mt-0.5 leading-snug">{h.vi}</p>
                     {h.extra && (
-                      <p className="text-violet-300/60 text-[11px] font-mono mt-1 break-words">{h.extra}</p>
+                      <p className="text-tone-violet text-[11px] font-mono mt-1 break-words">{h.extra}</p>
                     )}
                   </div>
                   <div className="shrink-0 flex items-center gap-1">
@@ -143,8 +143,8 @@ export default function SearchView({
                         aria-label={`Nghe: ${h.en}`}
                         className={`p-1.5 rounded-lg transition-all active:scale-90 ${
                           current === h.en
-                            ? 'bg-violet-500/30 text-violet-300'
-                            : 'text-slate-500 hover:text-violet-300 hover:bg-violet-500/10'
+                            ? 'bg-violet-500/30 text-tone-violet'
+                            : 'text-text-muted hover:text-tone-violet hover:bg-violet-500/10'
                         }`}
                       >
                         <Volume2 className="w-4 h-4" />
@@ -154,7 +154,7 @@ export default function SearchView({
                       <button
                         type="button"
                         onClick={() => onGoDay(h.day as number)}
-                        className="text-[11px] px-2 py-1 rounded-lg bg-white/5 text-slate-400 hover:text-white transition-colors"
+                        className="text-[11px] px-2 py-1 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary transition-colors"
                       >
                         Ngày {h.day}
                       </button>

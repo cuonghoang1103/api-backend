@@ -14,8 +14,8 @@ interface CourseCardProps {
 }
 
 function formatPrice(price: number, isFree: boolean) {
-  if (isFree || price === 0) return { label: 'Free', className: 'bg-green-500/20 text-green-400 border-green-500/30' };
-  return { label: `${price.toLocaleString('vi-VN')} VND`, className: 'bg-neon-indigo/20 text-neon-indigo border-neon-indigo/30' };
+  if (isFree || price === 0) return { label: 'Free', className: 'bg-green-500/20 text-tone-green border-green-500/30' };
+  return { label: `${price.toLocaleString('vi-VN')} VND`, className: 'bg-neon-indigo/20 text-tone-indigo border-neon-indigo/30' };
 }
 
 function formatDuration(seconds: number) {
@@ -29,8 +29,8 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
   const { locale } = useTranslation();
   const priceInfo = formatPrice(course.price, course.isFree);
   const duration = formatDuration(course.totalDurationSeconds || 0);
-  const levelColor = course.level === 'BEGINNER' ? 'text-green-400' :
-    course.level === 'INTERMEDIATE' ? 'text-yellow-400' : 'text-red-400';
+  const levelColor = course.level === 'BEGINNER' ? 'text-tone-green' :
+    course.level === 'INTERMEDIATE' ? 'text-tone-yellow' : 'text-tone-red';
 
   const levelLabel = course.level === 'BEGINNER' ? 'Beginner' :
     course.level === 'INTERMEDIATE' ? 'Intermediate' :
@@ -44,7 +44,7 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
       transition={{ duration: 0.4, delay: index * 0.08 }}
       className="group"
     >
-      <div className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden hover:border-neon-violet/40 transition-all duration-300 flex flex-col h-full">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:border-neon-violet/40 transition-all duration-300 flex flex-col h-full">
         {/* Thumbnail */}
         <Link href={`/academy/courses/${course.slug}`} className="block relative aspect-video overflow-hidden">
           {course.thumbnailUrl ? (
@@ -60,9 +60,9 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
             </div>
           )}
           {/* Overlay play button */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-              <Play className="w-6 h-6 text-white fill-white" />
+          <div className="absolute inset-0 bg-[var(--bg-surface)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="w-14 h-14 rounded-full bg-[var(--bg-surface-active)] backdrop-blur-sm flex items-center justify-center">
+              <Play className="w-6 h-6 text-text-primary fill-white" />
             </div>
           </div>
           {/* Badges */}
@@ -71,7 +71,7 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
               {priceInfo.label}
             </span>
             {course.isFeatured && (
-              <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-neon-fuchsia/20 text-neon-fuchsia border border-neon-fuchsia/30">
+              <span className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-neon-fuchsia/20 text-tone-fuchsia border border-neon-fuchsia/30">
                 Featured
               </span>
             )}
@@ -88,12 +88,12 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
         <div className="p-5 flex flex-col flex-1">
           {/* Category */}
           {course.categoryName && (
-            <span className="text-xs text-neon-violet font-medium mb-2">{course.categoryName}</span>
+            <span className="text-xs text-tone-violet font-medium mb-2">{course.categoryName}</span>
           )}
 
           {/* Title */}
           <Link href={`/academy/courses/${course.slug}`}>
-            <h3 className="text-base font-heading font-bold text-text-primary group-hover:text-neon-violet transition-colors line-clamp-2 mb-2">
+            <h3 className="text-base font-heading font-bold text-text-primary group-hover:text-tone-violet transition-colors line-clamp-2 mb-2">
               {pickLang(course.title, locale)}
             </h3>
           </Link>
@@ -107,8 +107,8 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
               (and any other course that has them set). Helps students
               know when the cohort opens/closes. */}
           {(course.startDate || course.endDate) && (
-            <div className="text-xs text-text-muted mb-3 px-3 py-2 rounded-lg bg-darkbg border border-darkborder/40">
-              <span className="text-neon-violet font-medium">Khai giảng: </span>
+            <div className="text-xs text-text-muted mb-3 px-3 py-2 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-color)]">
+              <span className="text-tone-violet font-medium">Khai giảng: </span>
               {course.startDate
                 ? new Date(course.startDate).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' })
                 : '—'}
@@ -136,15 +136,15 @@ export default function CourseCard({ course, index = 0 }: CourseCardProps) {
           </div>
 
           {/* Rating + Enroll */}
-          <div className="flex items-center justify-between pt-3 border-t border-darkborder/50">
+          <div className="flex items-center justify-between pt-3 border-t border-[var(--border-color)]">
             <div className="flex items-center gap-1">
-              <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+              <Star className="w-4 h-4 text-tone-yellow fill-yellow-400" />
               <span className="text-sm font-semibold text-text-primary">{course.avgRating?.toFixed(1) || '0.0'}</span>
               <span className="text-xs text-text-muted">({course.totalReviews || 0})</span>
             </div>
             <Link
               href={`/academy/courses/${course.slug}`}
-              className="text-sm font-medium text-neon-violet hover:text-neon-indigo transition-colors"
+              className="text-sm font-medium text-tone-violet hover:text-tone-indigo transition-colors"
             >
               View Course
             </Link>

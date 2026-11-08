@@ -257,16 +257,16 @@ export default function InterviewRoomPage() {
   const elapsed = useMemo(() => (now && startRef.current ? now - startRef.current : 0), [now]);
 
   if (loading) {
-    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('entering')}</div>;
+    return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-text-secondary"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('entering')}</div>;
   }
   // Async generation failed.
   if (session?.genError) {
     return (
-      <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center px-4">
         <div className="max-w-md text-center">
           <div className="text-4xl mb-3">⚠️</div>
-          <p className="text-slate-100 font-semibold mb-2">{displayLang === 'EN' ? "Couldn't generate the interview" : 'Không tạo được câu hỏi'}</p>
-          <p className="text-sm text-slate-400 mb-5">{displayLang === 'EN' ? 'The AI failed to read your CV/project. Please try again or shorten the file.' : 'AI chưa đọc/sinh được từ CV/project của bạn. Thử lại hoặc rút gọn file.'}</p>
+          <p className="text-text-primary font-semibold mb-2">{displayLang === 'EN' ? "Couldn't generate the interview" : 'Không tạo được câu hỏi'}</p>
+          <p className="text-sm text-text-secondary mb-5">{displayLang === 'EN' ? 'The AI failed to read your CV/project. Please try again or shorten the file.' : 'AI chưa đọc/sinh được từ CV/project của bạn. Thử lại hoặc rút gọn file.'}</p>
           <button onClick={() => router.push('/interview')} className="px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90">{displayLang === 'EN' ? 'Back to setup' : 'Về trang tạo'}</button>
         </div>
       </div>
@@ -275,23 +275,23 @@ export default function InterviewRoomPage() {
   // Async generation in progress (project/CV modes).
   if (session?.generating) {
     return (
-      <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center px-4">
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center px-4">
         <div className="max-w-md text-center">
-          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-amber-400" />
-          <p className="text-slate-100 font-semibold mb-2">{displayLang === 'EN' ? 'Preparing your interview…' : 'Đang chuẩn bị buổi phỏng vấn…'}</p>
-          <p className="text-sm text-slate-400">{displayLang === 'EN' ? 'Opus 5 is reading your CV/project and writing tailored questions. This can take a minute — no need to reload.' : 'Opus 5 đang đọc CV/project và soạn câu hỏi riêng cho bạn. Có thể mất khoảng một phút — không cần tải lại.'}</p>
+          <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-tone-amber" />
+          <p className="text-text-primary font-semibold mb-2">{displayLang === 'EN' ? 'Preparing your interview…' : 'Đang chuẩn bị buổi phỏng vấn…'}</p>
+          <p className="text-sm text-text-secondary">{displayLang === 'EN' ? 'Opus 5 is reading your CV/project and writing tailored questions. This can take a minute — no need to reload.' : 'Opus 5 đang đọc CV/project và soạn câu hỏi riêng cho bạn. Có thể mất khoảng một phút — không cần tải lại.'}</p>
         </div>
       </div>
     );
   }
   if (!session || !turn) {
-    return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">{t('sessionMissing')}</div>;
+    return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-text-secondary">{t('sessionMissing')}</div>;
   }
 
   const state: 'listening' | 'reviewing' = revealed ? 'reviewing' : 'listening';
 
   return (
-    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-text-primary pt-16 overflow-hidden">
       <ParticleBackground density="low" followPointer={false} />
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-8">
         {/* Interviewer presence + progress */}
@@ -299,28 +299,28 @@ export default function InterviewRoomPage() {
           <div className="flex items-center gap-3">
             <span className={`w-2.5 h-2.5 rounded-full ${state === 'listening' ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
             <div>
-              <div className="text-sm font-semibold text-slate-100">{t('interviewer')}</div>
-              <div className="text-xs text-slate-400">
+              <div className="text-sm font-semibold text-text-primary">{t('interviewer')}</div>
+              <div className="text-xs text-text-secondary">
                 {session.companyStyle ? `${session.companyStyle} · ` : ''}{state === 'listening' ? t('listening') : t('reviewing')}
               </div>
             </div>
           </div>
           <div className="flex items-center gap-3">
             {/* Display-language toggle (realtime). Defaults to the session language. */}
-            <div className="flex rounded-lg border border-white/10 overflow-hidden text-[11px] font-mono">
+            <div className="flex rounded-lg border border-[var(--border-light)] overflow-hidden text-[11px] font-mono">
               {(['VI', 'EN'] as const).map((lg) => (
                 <button
                   key={lg}
                   onClick={() => setDisplayLang(lg)}
-                  className={`px-2 py-1 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-2 py-1 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-text-secondary hover:text-text-primary'}`}
                 >
                   {lg}
                 </button>
               ))}
             </div>
             <div className="text-right">
-              <div className="text-xs font-mono text-slate-400">{t('questionOf', { n: order + 1, total })}</div>
-              <div className="text-xs font-mono text-slate-400 tabular-nums">{fmtTime(elapsed)}</div>
+              <div className="text-xs font-mono text-text-secondary">{t('questionOf', { n: order + 1, total })}</div>
+              <div className="text-xs font-mono text-text-secondary tabular-nums">{fmtTime(elapsed)}</div>
             </div>
           </div>
         </div>
@@ -328,36 +328,36 @@ export default function InterviewRoomPage() {
         {/* Progress rail */}
         <div className="flex gap-1 mb-8">
           {Array.from({ length: total }).map((_, i) => (
-            <div key={i} className={`h-1 flex-1 rounded-full ${i < order ? 'bg-amber-500' : i === order ? 'bg-amber-500/50' : 'bg-white/10'}`} />
+            <div key={i} className={`h-1 flex-1 rounded-full ${i < order ? 'bg-amber-500' : i === order ? 'bg-amber-500/50' : 'bg-[var(--bg-surface-active)]'}`} />
           ))}
         </div>
 
         {/* Round transition banner (Phase 8 project interview) */}
         {turn.round === 2 && session.turns[order - 1]?.round === 1 && (
-          <div className="mb-5 rounded-xl border border-sky-500/40 bg-sky-500/[0.08] px-4 py-3 text-sky-200">
+          <div className="mb-5 rounded-xl border border-sky-500/40 bg-sky-500/[0.08] px-4 py-3 text-tone-sky">
             <div className="font-semibold">🚀 {displayLang === 'EN' ? 'Round 2 — Coding & Project' : 'Vòng 2 — Code & Dự án'}</div>
-            <div className="text-xs text-sky-300/80 mt-0.5">{displayLang === 'EN' ? 'Hands-on coding and problem-solving inside your project.' : 'Code trực tiếp & xử lý bài toán trong chính dự án của bạn.'}</div>
+            <div className="text-xs text-tone-sky mt-0.5">{displayLang === 'EN' ? 'Hands-on coding and problem-solving inside your project.' : 'Code trực tiếp & xử lý bài toán trong chính dự án của bạn.'}</div>
           </div>
         )}
 
         {/* Question */}
         <div className="mb-6">
           <div className="flex items-center gap-2 mb-2">
-            <div className="text-[11px] font-mono uppercase tracking-widest text-slate-400">{turn.type}</div>
+            <div className="text-[11px] font-mono uppercase tracking-widest text-text-secondary">{turn.type}</div>
             {turn.round && (
-              <span className="text-[11px] font-mono uppercase tracking-widest text-sky-400/80">· {displayLang === 'EN' ? `Round ${turn.round}` : `Vòng ${turn.round}`}</span>
+              <span className="text-[11px] font-mono uppercase tracking-widest text-tone-sky">· {displayLang === 'EN' ? `Round ${turn.round}` : `Vòng ${turn.round}`}</span>
             )}
             {ttsSupported && (
               <button
                 onClick={readQuestion}
                 title={speaking ? t('stopReading') : t('hearQuestionTitle')}
-                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-tone-amber' : 'border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-slate-500'}`}
               >
                 {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? t('stop') : t('hearQuestion')}
               </button>
             )}
           </div>
-          <div className="text-xl md:text-2xl font-semibold text-slate-100 leading-relaxed markdown-body"><Markdown mdx={turn.questionText} openLinksInNewTab /></div>
+          <div className="text-xl md:text-2xl font-semibold text-text-primary leading-relaxed markdown-body"><Markdown mdx={turn.questionText} openLinksInNewTab /></div>
         </div>
 
         {/* Answer area */}
@@ -373,11 +373,11 @@ export default function InterviewRoomPage() {
                   onClick={() => setMcqChoice(o.id)}
                   className={`w-full text-left px-4 py-3 rounded-xl border transition-all ${
                     revealed
-                      ? isCorrect ? 'border-emerald-500/60 bg-emerald-500/10' : chosen ? 'border-red-500/50 bg-red-500/10' : 'border-white/10'
-                      : chosen ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                      ? isCorrect ? 'border-emerald-500/60 bg-emerald-500/10' : chosen ? 'border-red-500/50 bg-red-500/10' : 'border-[var(--border-light)]'
+                      : chosen ? 'border-amber-500/60 bg-amber-500/10' : 'border-[var(--border-light)] hover:border-slate-500'
                   }`}
                 >
-                  <span className="text-slate-100">{o.text}</span>
+                  <span className="text-text-primary">{o.text}</span>
                 </button>
               );
             })}
@@ -395,7 +395,7 @@ export default function InterviewRoomPage() {
               disabled={!!revealed}
               rows={8}
               placeholder={t('answerPlaceholder')}
-              className="w-full rounded-xl border border-white/10 bg-white/[0.04] p-4 text-slate-100 font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
+              className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 text-text-primary font-mono text-sm leading-relaxed focus:outline-none focus:border-amber-500/60 resize-y disabled:opacity-70"
             />
             {!revealed && (session.sttProvider === 'groq' ? recordSupported : sttSupported) && (() => {
               const active = recording || listening;
@@ -405,7 +405,7 @@ export default function InterviewRoomPage() {
                   onClick={onMic}
                   disabled={busy}
                   title={active ? t('stopRecording') : t('answerByVoice')}
-                  className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors disabled:opacity-60 ${active ? 'border-red-500/50 bg-red-500/15 text-red-300 animate-pulse' : 'border-white/10 bg-white/5 text-slate-300 hover:text-white hover:border-slate-500'}`}
+                  className={`absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs border transition-colors disabled:opacity-60 ${active ? 'border-red-500/50 bg-red-500/15 text-tone-red animate-pulse' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary hover:border-slate-500'}`}
                 >
                   {busy ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Mic className="w-3.5 h-3.5" />}
                   {busy ? t('transcribing') : active ? t('micListening') : t('speakBtn')}
@@ -416,13 +416,13 @@ export default function InterviewRoomPage() {
         )}
         {/* Transcript-check nudge after a spoken answer (prevents grading on mis-heard terms). */}
         {!isMcq && !revealed && spoke && (
-          <p className="-mt-2 mb-3 text-[11px] text-amber-300/80">{t('transcriptNudge')}</p>
+          <p className="-mt-2 mb-3 text-[11px] text-tone-amber">{t('transcriptNudge')}</p>
         )}
 
         {/* Actions / reveal */}
         {!revealed ? (
           <div className="flex items-center justify-between mt-4">
-            <span className="text-xs text-slate-400">{t('noMidScore')}</span>
+            <span className="text-xs text-text-secondary">{t('noMidScore')}</span>
             <button onClick={submit} disabled={submitting} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90 disabled:opacity-40">
               {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />} {t('submitAnswer')}
             </button>
@@ -451,7 +451,7 @@ export default function InterviewRoomPage() {
       {/* Focused-mode blur overlay */}
       {blurred && (
         <div className="fixed inset-0 z-[120] bg-black/70 backdrop-blur-sm flex items-center justify-center">
-          <div className="text-center text-white">
+          <div className="text-center text-text-primary">
             <ShieldCheck className="w-10 h-10 mx-auto mb-3 opacity-80" />
             <p className="text-lg font-semibold">{t('focusedTitle')}</p>
             <p className="text-sm opacity-70 mt-1">{t('focusedSub')}</p>
@@ -510,14 +510,14 @@ function Reveal({
   return (
     <div className="mt-6 space-y-5">
       {isMcq && (
-        <div className={`flex items-center gap-2 text-sm font-semibold ${revealed.correct ? 'text-emerald-400' : 'text-red-400'}`}>
+        <div className={`flex items-center gap-2 text-sm font-semibold ${revealed.correct ? 'text-tone-emerald' : 'text-tone-red'}`}>
           {revealed.correct ? <CheckCircle2 className="w-4 h-4" /> : <XCircle className="w-4 h-4" />}
           {revealed.correct ? t('correct') : t('incorrect')}
         </div>
       )}
 
       {revealed.injectionAttempted && (
-        <div className="flex items-start gap-2 text-xs text-amber-300 bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
+        <div className="flex items-start gap-2 text-xs text-tone-amber bg-amber-500/10 border border-amber-500/30 rounded-lg px-3 py-2">
           <AlertTriangle className="w-4 h-4 mt-0.5 shrink-0" />
           {t('injection')}
         </div>
@@ -528,12 +528,12 @@ function Reveal({
           misleading score/miss list — it grades 24/100 on a perfect answer.
           Show a short note and defer to the AI grade instead. */}
       {det && (
-        <div className="rounded-xl border border-white/10 p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">{t('objectiveGrader')}</div>
+        <div className="rounded-xl border border-[var(--border-light)] p-4">
+          <div className="text-xs font-semibold uppercase tracking-wide text-text-secondary mb-3">{t('objectiveGrader')}</div>
           {det.reliable === false ? (
-            <div className="text-sm text-slate-400">
-              {t('refScore')} <span className="font-mono text-slate-500 italic">{t('objNA')}</span>
-              <p className="mt-1.5 text-xs text-slate-500 leading-relaxed">{t('objSkipped')}</p>
+            <div className="text-sm text-text-secondary">
+              {t('refScore')} <span className="font-mono text-text-muted italic">{t('objNA')}</span>
+              <p className="mt-1.5 text-xs text-text-muted leading-relaxed">{t('objSkipped')}</p>
             </div>
           ) : (
             <>
@@ -546,7 +546,7 @@ function Reveal({
                   {det.redFlagsHit.map((k) => <Tag key={k} tone="flag">⚠ {k}</Tag>)}
                 </div>
               )}
-              <div className="text-sm text-slate-400">{t('coverage')} <span className="font-mono text-slate-100">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · {t('refScore')} <span className="font-mono text-slate-100">{det.score}/100 ({det.grade})</span></div>
+              <div className="text-sm text-text-secondary">{t('coverage')} <span className="font-mono text-text-primary">{det.mustHit.length}/{det.mustHit.length + det.mustMiss.length}</span> · {t('refScore')} <span className="font-mono text-text-primary">{det.score}/100 ({det.grade})</span></div>
             </>
           )}
         </div>
@@ -554,9 +554,9 @@ function Reveal({
 
       {/* Reference answer */}
       {revealed.referenceAnswer && (
-        <div className="rounded-xl border border-white/10 p-4 bg-white/[0.04]">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">{t('refAnswer')}</div>
-          <div className="text-sm text-slate-100 leading-relaxed markdown-body"><Markdown mdx={revealed.referenceAnswer} openLinksInNewTab /></div>
+        <div className="rounded-xl border border-[var(--border-light)] p-4 bg-[var(--bg-surface-hover)]">
+          <div className="text-xs font-semibold uppercase tracking-wide text-text-secondary mb-2">{t('refAnswer')}</div>
+          <div className="text-sm text-text-primary leading-relaxed markdown-body"><Markdown mdx={revealed.referenceAnswer} openLinksInNewTab /></div>
         </div>
       )}
 
@@ -564,60 +564,60 @@ function Reveal({
       {revealed.aiEvaluation && (
         <div className="rounded-xl border border-amber-500/30 bg-amber-500/[0.06] p-4">
           <div className="flex items-center justify-between gap-2 mb-3">
-            <div className="text-xs font-semibold uppercase tracking-wide text-amber-300">{t('aiGrading')}</div>
+            <div className="text-xs font-semibold uppercase tracking-wide text-tone-amber">{t('aiGrading')}</div>
             <div className="flex items-center gap-2 shrink-0">
               {ttsSupported && (
                 <button
                   onClick={speaking ? onStopSpeak : onSpeakGrade}
                   title={speaking ? t('stopReading') : t('hearFeedbackTitle')}
-                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-white hover:border-slate-500'}`}
+                  className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-tone-amber' : 'border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-slate-500'}`}
                 >
                   {speaking ? <Square className="w-3 h-3" /> : <Volume2 className="w-3 h-3" />} {speaking ? t('stop') : t('hearFeedback')}
                 </button>
               )}
-              <div className="text-sm font-mono text-slate-100">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
+              <div className="text-sm font-mono text-text-primary">{revealed.aiEvaluation.finalScore}/100 ({revealed.aiEvaluation.letterGrade})</div>
             </div>
           </div>
-          {revealed.aiEvaluation.summary && <p className="text-sm text-slate-300 mb-3">{revealed.aiEvaluation.summary}</p>}
+          {revealed.aiEvaluation.summary && <p className="text-sm text-text-secondary mb-3">{revealed.aiEvaluation.summary}</p>}
           <div className="space-y-2">
             {revealed.aiEvaluation.criteria.map((c) => {
               const rub = revealed.rubric?.find((r) => r.id === c.id);
               return (
-                <div key={c.id} className="text-sm border-t border-white/10 pt-2">
+                <div key={c.id} className="text-sm border-t border-[var(--border-light)] pt-2">
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-slate-100">{rub?.criterion ?? c.id}</span>
+                    <span className="text-text-primary">{rub?.criterion ?? c.id}</span>
                     <span className="font-mono text-xs shrink-0" style={{ color: c.score >= 3 ? '#84cc16' : c.score >= 2 ? '#f59e0b' : '#ef4444' }}>{c.score}/4</span>
                   </div>
                   {c.evidence ? (
-                    <p className="text-xs text-emerald-300/90 mt-0.5">“{c.evidence}”</p>
+                    <p className="text-xs text-tone-emerald mt-0.5">“{c.evidence}”</p>
                   ) : (
-                    <p className="text-xs text-slate-500 mt-0.5">{t('noEvidence')}</p>
+                    <p className="text-xs text-text-muted mt-0.5">{t('noEvidence')}</p>
                   )}
-                  {c.whatWasMissing && <p className="text-xs text-slate-400 mt-0.5">{t('missingLabel', { x: c.whatWasMissing })}</p>}
+                  {c.whatWasMissing && <p className="text-xs text-text-secondary mt-0.5">{t('missingLabel', { x: c.whatWasMissing })}</p>}
                 </div>
               );
             })}
           </div>
           {revealed.aiEvaluation.needsReview && (
-            <p className="text-[11px] text-amber-300/80 mt-3">{t('needsReview')}</p>
+            <p className="text-[11px] text-tone-amber mt-3">{t('needsReview')}</p>
           )}
         </div>
       )}
 
       {/* Self-assessment — only on STATIC turns (no AI grade) */}
       {!isMcq && !revealed.aiEvaluation && revealed.rubric && revealed.rubric.length > 0 && (
-        <div className="rounded-xl border border-white/10 p-4">
-          <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">{t('selfAssess')}</div>
-          <p className="text-xs text-slate-400 mb-3">{t('selfAssessHint')}</p>
+        <div className="rounded-xl border border-[var(--border-light)] p-4">
+          <div className="text-xs font-semibold uppercase tracking-wide text-text-secondary mb-1">{t('selfAssess')}</div>
+          <p className="text-xs text-text-secondary mb-3">{t('selfAssessHint')}</p>
           <div className="space-y-3">
             {revealed.rubric.map((c) => (
               <div key={c.id} className="flex items-center justify-between gap-3">
                 {/* Weights are stored as integers summing to ~100 (not fractions),
                     so show each as its share of the total — never weight × 100. */}
-                <span className="text-sm text-slate-100">{c.criterion} <span className="text-slate-400">({Math.round((c.weight / (revealed.rubric!.reduce((s, x) => s + (x.weight || 0), 0) || 1)) * 100)}%)</span></span>
+                <span className="text-sm text-text-primary">{c.criterion} <span className="text-text-secondary">({Math.round((c.weight / (revealed.rubric!.reduce((s, x) => s + (x.weight || 0), 0) || 1)) * 100)}%)</span></span>
                 <div className="flex gap-1 shrink-0">
                   {[0, 1, 2, 3, 4].map((v) => (
-                    <button key={v} onClick={() => setRatings({ ...ratings, [c.id]: v })} className={`w-7 h-7 rounded-md text-xs font-mono border ${ratings[c.id] === v ? 'border-amber-500/70 bg-amber-500/15 text-amber-300' : 'border-white/10 text-slate-400'}`}>{v}</button>
+                    <button key={v} onClick={() => setRatings({ ...ratings, [c.id]: v })} className={`w-7 h-7 rounded-md text-xs font-mono border ${ratings[c.id] === v ? 'border-amber-500/70 bg-amber-500/15 text-tone-amber' : 'border-[var(--border-light)] text-text-secondary'}`}>{v}</button>
                   ))}
                 </div>
               </div>
@@ -657,10 +657,10 @@ function CodeAnswer({ value, onChange, disabled, lang }: { value: string; onChan
     }
   };
   return (
-    <div className="rounded-xl border border-white/10 overflow-hidden bg-[#0d1117]">
-      <div className="flex items-center justify-between px-3 py-1.5 border-b border-white/10 bg-white/[0.03]">
-        <span className="text-xs font-mono text-slate-500">&lt;/&gt; {t('codeEditor')}</span>
-        <select value={codeLang} onChange={(e) => setCodeLang(e.target.value)} disabled={disabled} className="bg-[#0d1117] text-xs text-slate-300 focus:outline-none border border-white/10 rounded px-1.5 py-0.5">
+    <div className="rounded-xl border border-[var(--border-light)] overflow-hidden bg-[#0d1117]">
+      <div className="flex items-center justify-between px-3 py-1.5 border-b border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
+        <span className="text-xs font-mono text-text-muted">&lt;/&gt; {t('codeEditor')}</span>
+        <select value={codeLang} onChange={(e) => setCodeLang(e.target.value)} disabled={disabled} className="bg-[#0d1117] text-xs text-slate-300 focus:outline-none border border-[var(--border-light)] rounded px-1.5 py-0.5">
           {CODE_LANGS.map((l) => <option key={l} value={l}>{l}</option>)}
         </select>
       </div>
@@ -718,33 +718,33 @@ function FollowUp({ sessionId, order, lang }: { sessionId: number; order: number
 
   return (
     <div className="rounded-xl border border-sky-500/30 bg-sky-500/[0.05] p-4">
-      <div className="text-xs font-semibold uppercase tracking-wide text-sky-300 mb-1">{t('followupTitle')}</div>
-      <p className="text-xs text-slate-400 mb-3">{t('followupIntro')}</p>
+      <div className="text-xs font-semibold uppercase tracking-wide text-tone-sky mb-1">{t('followupTitle')}</div>
+      <p className="text-xs text-text-secondary mb-3">{t('followupIntro')}</p>
 
       {rounds.map((r, i) => (
         <div key={i} className="mb-3 space-y-1.5 border-l-2 border-sky-500/30 pl-3">
-          <div className="text-sm text-slate-100"><span className="text-sky-300 font-semibold">{t('interviewer')}: </span>{r.question}</div>
-          <div className="text-sm text-slate-300"><span className="text-slate-400 font-semibold">{t('youLabel')}: </span>{r.answer}</div>
-          {r.feedback && <div className="text-xs text-emerald-300/90 bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-2 whitespace-pre-wrap">{r.feedback}</div>}
+          <div className="text-sm text-text-primary"><span className="text-tone-sky font-semibold">{t('interviewer')}: </span>{r.question}</div>
+          <div className="text-sm text-text-secondary"><span className="text-text-secondary font-semibold">{t('youLabel')}: </span>{r.answer}</div>
+          {r.feedback && <div className="text-xs text-tone-emerald bg-emerald-500/5 border border-emerald-500/20 rounded-lg p-2 whitespace-pre-wrap">{r.feedback}</div>}
         </div>
       ))}
 
       {current ? (
         <div className="space-y-2">
-          <div className="text-sm text-slate-100"><span className="text-sky-300 font-semibold">{t('interviewer')}: </span>{current.question}</div>
+          <div className="text-sm text-text-primary"><span className="text-tone-sky font-semibold">{t('interviewer')}: </span>{current.question}</div>
           <textarea
             value={current.answer}
             onChange={(e) => setCurrent({ ...current, answer: e.target.value })}
             rows={3}
             placeholder={t('followupAnswerPlaceholder')}
-            className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm leading-relaxed focus:outline-none focus:border-sky-500/60 resize-y"
+            className="w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3 text-text-primary text-sm leading-relaxed focus:outline-none focus:border-sky-500/60 resize-y"
           />
           <button onClick={submit} disabled={busy || !current.answer.trim()} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-sky-500 text-slate-950 text-sm font-semibold hover:opacity-90 disabled:opacity-40">
             {busy ? <Loader2 className="w-4 h-4 animate-spin" /> : null} {busy ? t('followupThinking') : t('followupSend')}
           </button>
         </div>
       ) : (
-        <button onClick={ask} disabled={loadingQ} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-sky-500/40 text-sky-300 text-sm font-medium hover:bg-sky-500/10 disabled:opacity-50">
+        <button onClick={ask} disabled={loadingQ} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-sky-500/40 text-tone-sky text-sm font-medium hover:bg-sky-500/10 disabled:opacity-50">
           {loadingQ ? <Loader2 className="w-4 h-4 animate-spin" /> : <MessageCircle className="w-4 h-4" />}
           {loadingQ ? t('followupThinking') : rounds.length ? t('followupAnother') : t('followupAsk')}
         </button>
@@ -755,8 +755,8 @@ function FollowUp({ sessionId, order, lang }: { sessionId: number; order: number
 
 function Tag({ tone, children }: { tone: 'ok' | 'miss' | 'flag'; children: React.ReactNode }) {
   const cls =
-    tone === 'ok' ? 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30'
-    : tone === 'flag' ? 'bg-red-500/10 text-red-300 border-red-500/30'
-    : 'bg-white/[0.04] text-slate-400 border-white/10';
+    tone === 'ok' ? 'bg-emerald-500/10 text-tone-emerald border-emerald-500/30'
+    : tone === 'flag' ? 'bg-red-500/10 text-tone-red border-red-500/30'
+    : 'bg-[var(--bg-surface-hover)] text-text-secondary border-[var(--border-light)]';
   return <span className={`px-2 py-0.5 rounded-md text-xs border ${cls}`}>{children}</span>;
 }

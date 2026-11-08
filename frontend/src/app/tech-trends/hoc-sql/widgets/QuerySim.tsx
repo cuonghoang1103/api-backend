@@ -165,7 +165,7 @@ export default function QuerySim() {
   const sqlLines = useMemo(() => q.sql.split('\n'), [q.sql]);
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+    <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
       {/* Chọn câu query */}
       <div className="mb-4 flex flex-wrap gap-2">
         {QUERIES.map((item, i) => (
@@ -176,8 +176,8 @@ export default function QuerySim() {
             className={[
               'rounded-xl border px-3 py-1.5 text-xs font-medium transition-all active:scale-95',
               i === qi
-                ? 'border-violet-400/50 bg-violet-500/20 text-white'
-                : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/25 hover:text-white',
+                ? 'border-violet-400/50 bg-violet-500/20 text-text-primary'
+                : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)] hover:text-text-primary',
             ].join(' ')}
           >
             {item.label}
@@ -187,7 +187,7 @@ export default function QuerySim() {
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
         {/* Câu SQL, dòng đang chạy được tô */}
-        <div className="rounded-xl border border-white/10 bg-[#0c0c14] p-3">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[#0c0c14] p-3">
           <pre className="overflow-x-auto text-[12.5px] leading-relaxed">
             {sqlLines.map((line, i) => {
               const active = line.trim().toUpperCase().startsWith(
@@ -198,7 +198,7 @@ export default function QuerySim() {
                   key={`${line}-${i}`}
                   className={[
                     '-mx-2 rounded px-2 font-mono transition-colors',
-                    active ? 'bg-violet-500/20 text-white' : 'text-slate-500',
+                    active ? 'bg-violet-500/20 text-text-primary' : 'text-text-muted',
                   ].join(' ')}
                 >
                   {line || ' '}
@@ -206,28 +206,28 @@ export default function QuerySim() {
               );
             })}
           </pre>
-          <div className="mt-3 border-t border-white/10 pt-3">
+          <div className="mt-3 border-t border-[var(--border-light)] pt-3">
             <div className="mb-1 flex items-center gap-2">
-              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/25 text-[10px] font-bold text-violet-300">
+              <span className="flex h-5 w-5 items-center justify-center rounded-full bg-violet-500/25 text-[10px] font-bold text-tone-violet">
                 {stage.order}
               </span>
-              <span className="font-mono text-xs text-violet-300">{stage.clause}</span>
+              <span className="font-mono text-xs text-tone-violet">{stage.clause}</span>
             </div>
-            <p className="text-[12px] leading-relaxed text-slate-400">{stage.note}</p>
+            <p className="text-[12px] leading-relaxed text-text-secondary">{stage.note}</p>
           </div>
           <div className="mt-3 flex gap-2">
             <button
               type="button"
               onClick={() => setStep((s) => Math.min(q.stages.length - 1, s + 1))}
               disabled={last}
-              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-violet-400/40 bg-violet-500/20 px-3 py-2 text-sm font-medium text-white transition-all active:scale-95 disabled:opacity-30"
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-violet-400/40 bg-violet-500/20 px-3 py-2 text-sm font-medium text-text-primary transition-all active:scale-95 disabled:opacity-30"
             >
               Bước tiếp <ChevronRight className="h-4 w-4" />
             </button>
             <button
               type="button"
               onClick={() => setStep(0)}
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-sm text-slate-300 transition-all hover:border-white/20 active:scale-95"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-secondary transition-all hover:border-[var(--border-light-hover)] active:scale-95"
             >
               <RotateCcw className="h-4 w-4" />
             </button>
@@ -241,7 +241,7 @@ export default function QuerySim() {
                 aria-label={`Bước ${i + 1}: ${s.clause}`}
                 className={[
                   'h-1.5 flex-1 rounded-full transition-colors',
-                  i <= step ? 'bg-violet-400' : 'bg-white/10',
+                  i <= step ? 'bg-violet-400' : 'bg-[var(--bg-surface-active)]',
                 ].join(' ')}
               />
             ))}
@@ -251,17 +251,17 @@ export default function QuerySim() {
         {/* Bảng dữ liệu ở chặng hiện tại */}
         <div className="min-w-0">
           <div className="mb-2 flex items-baseline gap-2">
-            <span className="text-2xl font-bold tabular-nums text-white">{stage.rows.length}</span>
-            <span className="text-xs text-slate-400">
+            <span className="text-2xl font-bold tabular-nums text-text-primary">{stage.rows.length}</span>
+            <span className="text-xs text-text-secondary">
               {stage.head[0] === 'category' && stage.head.includes('COUNT(*)') ? 'nhóm' : 'dòng'} còn lại
             </span>
           </div>
-          <div className="overflow-x-auto rounded-xl border border-white/10">
+          <div className="overflow-x-auto rounded-xl border border-[var(--border-light)]">
             <table className="w-full text-left text-[12.5px]">
               <thead>
-                <tr className="bg-white/[0.05]">
+                <tr className="bg-[var(--bg-surface-hover)]">
                   {stage.head.map((h) => (
-                    <th key={h} className="whitespace-nowrap px-3 py-2 font-mono text-[11px] font-semibold text-violet-300">
+                    <th key={h} className="whitespace-nowrap px-3 py-2 font-mono text-[11px] font-semibold text-tone-violet">
                       {h}
                     </th>
                   ))}
@@ -269,16 +269,16 @@ export default function QuerySim() {
               </thead>
               <tbody>
                 {stage.rows.map((r, i) => (
-                  <tr key={`k-${i}`} className="border-t border-white/[0.07]">
+                  <tr key={`k-${i}`} className="border-t border-[var(--border-light)]">
                     {r.map((c, j) => (
-                      <td key={`k-${i}-${j}`} className="whitespace-nowrap px-3 py-1.5 text-slate-200">{c}</td>
+                      <td key={`k-${i}-${j}`} className="whitespace-nowrap px-3 py-1.5 text-text-primary">{c}</td>
                     ))}
                   </tr>
                 ))}
                 {stage.dropped?.map((r, i) => (
-                  <tr key={`d-${i}`} className="border-t border-white/[0.07] bg-rose-500/[0.05]">
+                  <tr key={`d-${i}`} className="border-t border-[var(--border-light)] bg-rose-500/[0.05]">
                     {r.map((c, j) => (
-                      <td key={`d-${i}-${j}`} className="whitespace-nowrap px-3 py-1.5 text-slate-600 line-through">{c}</td>
+                      <td key={`d-${i}-${j}`} className="whitespace-nowrap px-3 py-1.5 text-text-muted line-through">{c}</td>
                     ))}
                   </tr>
                 ))}
@@ -286,7 +286,7 @@ export default function QuerySim() {
             </table>
           </div>
           {stage.dropped && stage.dropped.length > 0 && (
-            <p className="mt-2 text-[11px] text-slate-500">
+            <p className="mt-2 text-[11px] text-text-muted">
               Dòng gạch ngang là phần vừa bị bước này loại bỏ.
             </p>
           )}

@@ -109,7 +109,7 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe, track }: {
     return (
       <button
         onClick={vao}
-        className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-neon-violet/40 px-3 py-1.5 text-xs font-medium text-neon-violet transition-colors hover:bg-neon-violet/10"
+        className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-neon-violet/40 px-3 py-1.5 text-xs font-medium text-tone-violet transition-colors hover:bg-neon-violet/10"
       >
         <Sparkles size={13} /> Học video cùng AI
         {!coPd && <span className="font-normal opacity-70">· chưa có phụ đề</span>}
@@ -157,12 +157,12 @@ export default function MoiVaoPhongVideo({ lessonId, duongDanVe, track }: {
           )}
           <div className="mt-3 flex flex-wrap gap-2">
             <button onClick={vao}
-              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="inline-flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-semibold text-text-primary transition-opacity hover:opacity-90"
               style={{ background: 'linear-gradient(135deg,#8b5cf6,#6366f1)' }}>
               Có, vào phòng học <ArrowRight size={15} />
             </button>
             <button onClick={() => { datHien(false); ghiTuChoi(lessonId); }}
-              className="rounded-lg border border-white/10 px-4 py-2 text-sm text-text-secondary transition-colors hover:border-white/20">
+              className="rounded-lg border border-[var(--border-light)] px-4 py-2 text-sm text-text-secondary transition-colors hover:border-[var(--border-light-hover)]">
               Không, học tiếp ở đây
             </button>
           </div>

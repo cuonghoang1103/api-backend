@@ -32,11 +32,11 @@ const STATUS_LABELS: Record<string, string> = {
 };
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
-  COMPLETED: { bg: 'bg-emerald-500/15', text: 'text-emerald-400' },
-  IN_PROGRESS: { bg: 'bg-yellow-500/15', text: 'text-yellow-400' },
-  PLANNING: { bg: 'bg-blue-500/15', text: 'text-blue-400' },
-  MAINTENANCE: { bg: 'bg-purple-500/15', text: 'text-purple-400' },
-  ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-gray-400' },
+  COMPLETED: { bg: 'bg-emerald-500/15', text: 'text-tone-emerald' },
+  IN_PROGRESS: { bg: 'bg-yellow-500/15', text: 'text-tone-yellow' },
+  PLANNING: { bg: 'bg-blue-500/15', text: 'text-tone-blue' },
+  MAINTENANCE: { bg: 'bg-purple-500/15', text: 'text-tone-purple' },
+  ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-text-secondary' },
 };
 
 function formatDate(dateStr?: string) {
@@ -62,7 +62,7 @@ function CopyButton({ code }: { code: string }) {
       className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-mono text-[#64748b] hover:text-[#94a3b8] transition-colors"
       title="Copy code"
     >
-      {copied ? <Check className="w-3 h-3 text-emerald-400" /> : <Copy className="w-3 h-3" />}
+      {copied ? <Check className="w-3 h-3 text-tone-emerald" /> : <Copy className="w-3 h-3" />}
       {copied ? 'Copied!' : 'Copy'}
     </button>
   );
@@ -161,7 +161,7 @@ export default function ProjectDetailDrawer({
           >
             {/* Handle bar */}
             <div className="flex justify-center pt-3 pb-1 shrink-0">
-              <div className="w-10 h-1 rounded-full bg-white/20" />
+              <div className="w-10 h-1 rounded-full bg-[var(--bg-surface-active)]" />
             </div>
 
             {/* Header */}
@@ -174,20 +174,20 @@ export default function ProjectDetailDrawer({
                   className="w-8 h-8 rounded-lg flex items-center justify-center"
                   style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                 >
-                  <Layers className="w-4 h-4 text-white" />
+                  <Layers className="w-4 h-4 text-text-primary" />
                 </div>
                 <div>
                   <p className="text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a855f7' }}>
                     Chi tiết dự án
                   </p>
-                  <h2 className="text-base font-heading font-bold text-white truncate max-w-[200px] sm:max-w-[300px]">
+                  <h2 className="text-base font-heading font-bold text-text-primary truncate max-w-[200px] sm:max-w-[300px]">
                     {project.title}
                   </h2>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors hover:bg-white/5"
+                className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors hover:bg-[var(--bg-surface-hover)]"
                 style={{ color: '#64748b' }}
               >
                 <X className="w-5 h-5" />
@@ -218,7 +218,7 @@ export default function ProjectDetailDrawer({
                     </span>
                   )}
                   {project.featured && (
-                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-400/15 text-yellow-300">
+                    <span className="px-3 py-1 rounded-full text-xs font-medium bg-yellow-400/15 text-tone-yellow">
                       Noi Bat
                     </span>
                   )}
@@ -251,7 +251,7 @@ export default function ProjectDetailDrawer({
                       {formatDate(project.startDate)}
                       {project.startDate && project.endDate && <ChevronRight className="w-3 h-3" />}
                       {project.startDate && !project.endDate
-                        ? <span className="text-neon-violet">— Hien tai</span>
+                        ? <span className="text-tone-violet">— Hien tai</span>
                         : formatDate(project.endDate)}
                     </div>
                   )}
@@ -348,7 +348,7 @@ export default function ProjectDetailDrawer({
                   {videoId && (
                     <button
                       onClick={() => setShowVideo(true)}
-                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-white transition-opacity hover:opacity-90"
+                      className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold text-text-primary transition-opacity hover:opacity-90"
                       style={{
                         background: 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)',
                         boxShadow: '0 4px 16px rgba(255,0,0,0.3)',
@@ -363,7 +363,7 @@ export default function ProjectDetailDrawer({
                       href={project.projectUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-white transition-opacity hover:opacity-90 text-center"
+                      className="flex-1 py-2.5 text-center text-sm font-medium rounded-xl text-text-primary transition-opacity hover:opacity-90 text-center"
                       style={{ background: 'linear-gradient(135deg, #6366f1, #a855f7)' }}
                     >
                       <span className="flex items-center justify-center gap-2">

@@ -73,10 +73,10 @@ export default function KanjiNumberPanel() {
     <div className="space-y-4">
       {selfTestErrors.length > 0 && (
         <div className="rounded-xl border border-neon-red/40 bg-neon-red/10 p-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-neon-red mb-1.5">
+          <div className="flex items-center gap-2 text-xs font-bold text-tone-red mb-1.5">
             <AlertTriangle className="w-4 h-4" /> Bộ chuyển đổi đang SAI — đừng học phần luyện tập
           </div>
-          <ul className="text-[12px] text-slate-300 space-y-0.5">
+          <ul className="text-[12px] text-text-secondary space-y-0.5">
             {selfTestErrors.map((e) => (
               <li key={e}>• {e}</li>
             ))}
@@ -86,46 +86,46 @@ export default function KanjiNumberPanel() {
 
       {/* ── Mở đầu: luật nhóm 4 chữ số ── */}
       <section className="rounded-2xl border border-neon-orange/30 bg-neon-orange/[0.06] p-5">
-        <h3 className="text-base font-bold text-white mb-2 flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-neon-orange" />
+        <h3 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">
+          <Sparkles className="w-4 h-4 text-tone-orange" />
           Điều khác tiếng Việt nhất — đọc kỹ 1 phút này trước
         </h3>
-        <p className="text-[13px] text-slate-300 leading-relaxed">{PLACE_RULE}</p>
+        <p className="text-[13px] text-text-secondary leading-relaxed">{PLACE_RULE}</p>
         <div className="mt-3 grid sm:grid-cols-2 gap-2">
-          <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-            <div className="text-[11px] text-slate-500 mb-1">Tiếng Việt cắt 3 chữ số</div>
-            <div className="text-lg text-white font-mono tracking-wider">83<span className="text-neon-red">.</span>000</div>
-            <div className="text-[12px] text-slate-400 mt-1">tám mươi ba <b className="text-white">nghìn</b></div>
+          <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+            <div className="text-[11px] text-text-muted mb-1">Tiếng Việt cắt 3 chữ số</div>
+            <div className="text-lg text-text-primary font-mono tracking-wider">83<span className="text-tone-red">.</span>000</div>
+            <div className="text-[12px] text-text-secondary mt-1">tám mươi ba <b className="text-text-primary">nghìn</b></div>
           </div>
           <div className="rounded-xl border border-neon-cyan/25 bg-neon-cyan/[0.05] p-3">
-            <div className="text-[11px] text-slate-500 mb-1">Tiếng Nhật cắt 4 chữ số</div>
-            <div className="text-lg text-white font-mono tracking-wider">8<span className="text-neon-cyan">|</span>3000</div>
-            <div className="text-[12px] text-neon-cyan mt-1">はちまん さんぜん = 8 <b>vạn</b> 3 nghìn</div>
+            <div className="text-[11px] text-text-muted mb-1">Tiếng Nhật cắt 4 chữ số</div>
+            <div className="text-lg text-text-primary font-mono tracking-wider">8<span className="text-tone-cyan">|</span>3000</div>
+            <div className="text-[12px] text-tone-cyan mt-1">はちまん さんぜん = 8 <b>vạn</b> 3 nghìn</div>
           </div>
         </div>
       </section>
 
       {/* ── 10 chữ số ── */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-bold text-white mb-1">Mười chữ số — bạn đã biết hết bằng Hán-Việt</h3>
-          <p className="text-[13px] text-slate-400 leading-relaxed">
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
+        <div className="p-4 border-b border-[var(--border-light)]">
+          <h3 className="text-sm font-bold text-text-primary mb-1">Mười chữ số — bạn đã biết hết bằng Hán-Việt</h3>
+          <p className="text-[13px] text-text-secondary leading-relaxed">
             NHẤT NHỊ TAM TỨ NGŨ LỤC THẤT BÁT CỬU THẬP — đọc to một lượt là xong. Ba chữ 一二三 chỉ
             là 1, 2, 3 vạch ngang, cho không.
           </p>
         </div>
-        <div className="divide-y divide-white/[0.05]">
+        <div className="divide-y divide-[var(--border-light)]">
           {DIGITS.map((d) => (
             <div key={d.n} className="p-3.5 flex items-start gap-3">
-              <span className="shrink-0 w-8 text-center text-[11px] text-slate-500 mt-2">{d.n}</span>
-              <span className="shrink-0 text-3xl text-white w-12 text-center leading-none mt-0.5">{d.kanji}</span>
+              <span className="shrink-0 w-8 text-center text-[11px] text-text-muted mt-2">{d.n}</span>
+              <span className="shrink-0 text-3xl text-text-primary w-12 text-center leading-none mt-0.5">{d.kanji}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
-                  <span className="text-base text-neon-cyan font-semibold">{d.kana}</span>
-                  <span className="text-[13px] text-neon-green font-bold tracking-wide">{d.hanviet}</span>
+                  <span className="text-base text-tone-cyan font-semibold">{d.kana}</span>
+                  <span className="text-[13px] text-tone-green font-bold tracking-wide">{d.hanviet}</span>
                 </div>
-                <div className="text-[12px] text-slate-400 mt-0.5 leading-relaxed">{d.viWord}</div>
-                {d.shape && <div className="text-[12px] text-slate-500 mt-0.5">✎ {d.shape}</div>}
+                <div className="text-[12px] text-text-secondary mt-0.5 leading-relaxed">{d.viWord}</div>
+                {d.shape && <div className="text-[12px] text-text-muted mt-0.5">✎ {d.shape}</div>}
                 {d.alt && <div className="text-[12px] text-neon-orange/90 mt-0.5">⚠ {d.alt}</div>}
               </div>
             </div>
@@ -134,22 +134,22 @@ export default function KanjiNumberPanel() {
       </section>
 
       {/* ── 4 hàng ── */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-bold text-white">Bốn hàng — THẬP · BÁCH · THIÊN · VẠN</h3>
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
+        <div className="p-4 border-b border-[var(--border-light)]">
+          <h3 className="text-sm font-bold text-text-primary">Bốn hàng — THẬP · BÁCH · THIÊN · VẠN</h3>
         </div>
-        <div className="grid sm:grid-cols-2 divide-y sm:divide-y-0 divide-white/[0.05]">
+        <div className="grid sm:grid-cols-2 divide-y sm:divide-y-0 divide-[var(--border-light)]">
           {PLACES.map((p) => (
-            <div key={p.kanji} className="p-3.5 flex items-start gap-3 sm:border-b sm:border-white/[0.05]">
-              <span className="shrink-0 text-3xl text-white w-12 text-center leading-none">{p.kanji}</span>
+            <div key={p.kanji} className="p-3.5 flex items-start gap-3 sm:border-b sm:border-[var(--border-light)]">
+              <span className="shrink-0 text-3xl text-text-primary w-12 text-center leading-none">{p.kanji}</span>
               <div className="min-w-0">
                 <div className="flex flex-wrap items-baseline gap-x-2.5">
-                  <span className="text-base text-neon-cyan font-semibold">{p.kana}</span>
-                  <span className="text-[13px] text-neon-green font-bold">{p.hanviet}</span>
-                  <span className="text-[12px] text-slate-500">= {p.n.toLocaleString('vi-VN')}</span>
+                  <span className="text-base text-tone-cyan font-semibold">{p.kana}</span>
+                  <span className="text-[13px] text-tone-green font-bold">{p.hanviet}</span>
+                  <span className="text-[12px] text-text-muted">= {p.n.toLocaleString('vi-VN')}</span>
                 </div>
-                <div className="text-[12px] text-slate-400 mt-0.5">{p.viWord}</div>
-                {p.shape && <div className="text-[12px] text-slate-500 mt-0.5">✎ {p.shape}</div>}
+                <div className="text-[12px] text-text-secondary mt-0.5">{p.viWord}</div>
+                {p.shape && <div className="text-[12px] text-text-muted mt-0.5">✎ {p.shape}</div>}
               </div>
             </div>
           ))}
@@ -157,20 +157,20 @@ export default function KanjiNumberPanel() {
       </section>
 
       {/* ── Luật ghép ── */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-bold text-white">Sáu luật ghép số</h3>
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
+        <div className="p-4 border-b border-[var(--border-light)]">
+          <h3 className="text-sm font-bold text-text-primary">Sáu luật ghép số</h3>
         </div>
-        <div className="divide-y divide-white/[0.05]">
+        <div className="divide-y divide-[var(--border-light)]">
           {COMPOSE_RULES.map((r, i) => (
             <div key={i} className="p-3.5">
-              <div className="text-[13px] text-white font-medium mb-1">
+              <div className="text-[13px] text-text-primary font-medium mb-1">
                 {i + 1}. {r.rule}
               </div>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 pl-4">
-                <span className="text-lg text-white">{r.ex}</span>
-                <span className="text-[13px] text-neon-cyan">{r.read}</span>
-                <span className="text-[12px] text-slate-500">{r.vi}</span>
+                <span className="text-lg text-text-primary">{r.ex}</span>
+                <span className="text-[13px] text-tone-cyan">{r.read}</span>
+                <span className="text-[12px] text-text-muted">{r.vi}</span>
               </div>
             </div>
           ))}
@@ -180,16 +180,16 @@ export default function KanjiNumberPanel() {
       {/* ── Biến âm ── */}
       <section className="rounded-2xl border border-neon-red/25 bg-neon-red/[0.04] overflow-hidden">
         <div className="p-4 border-b border-neon-red/15">
-          <h3 className="text-sm font-bold text-white mb-1 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-neon-red" />
+          <h3 className="text-sm font-bold text-text-primary mb-1 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 text-tone-red" />
             Sáu chỗ biến âm — học vẹt, không suy ra được
           </h3>
-          <p className="text-[13px] text-slate-300 leading-relaxed">{SOUND_MNEMONIC}</p>
+          <p className="text-[13px] text-text-secondary leading-relaxed">{SOUND_MNEMONIC}</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left text-[13px] min-w-[460px]">
             <thead>
-              <tr className="text-[11px] uppercase tracking-wide text-slate-500">
+              <tr className="text-[11px] uppercase tracking-wide text-text-muted">
                 <th className="px-3 py-2 font-semibold">Kanji</th>
                 <th className="px-3 py-2 font-semibold">Số</th>
                 <th className="px-3 py-2 font-semibold">SAI</th>
@@ -199,12 +199,12 @@ export default function KanjiNumberPanel() {
             </thead>
             <tbody>
               {SOUND_CHANGES.map((s) => (
-                <tr key={s.kanji} className="border-t border-white/[0.06]">
-                  <td className="px-3 py-2.5 text-white text-base">{s.kanji}</td>
-                  <td className="px-3 py-2.5 text-slate-400">{s.n}</td>
+                <tr key={s.kanji} className="border-t border-[var(--border-light)]">
+                  <td className="px-3 py-2.5 text-text-primary text-base">{s.kanji}</td>
+                  <td className="px-3 py-2.5 text-text-secondary">{s.n}</td>
                   <td className="px-3 py-2.5 text-neon-red/80 line-through">{s.wrong}</td>
-                  <td className="px-3 py-2.5 text-neon-green font-semibold">{s.right}</td>
-                  <td className="px-3 py-2.5 text-slate-400 text-[12px]">{s.why}</td>
+                  <td className="px-3 py-2.5 text-tone-green font-semibold">{s.right}</td>
+                  <td className="px-3 py-2.5 text-text-secondary text-[12px]">{s.why}</td>
                 </tr>
               ))}
             </tbody>
@@ -213,22 +213,22 @@ export default function KanjiNumberPanel() {
       </section>
 
       {/* ── Giải mẫu ── */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
-        <div className="p-4 border-b border-white/[0.06]">
-          <h3 className="text-sm font-bold text-white mb-1">Giải từng bước — 6 số lấy thẳng từ đề thật</h3>
-          <p className="text-[13px] text-slate-400">Bấm vào từng số để mở lời giải.</p>
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
+        <div className="p-4 border-b border-[var(--border-light)]">
+          <h3 className="text-sm font-bold text-text-primary mb-1">Giải từng bước — 6 số lấy thẳng từ đề thật</h3>
+          <p className="text-[13px] text-text-secondary">Bấm vào từng số để mở lời giải.</p>
         </div>
-        <div className="divide-y divide-white/[0.05]">
+        <div className="divide-y divide-[var(--border-light)]">
           {WORKED.map((w, i) => {
             const open = openWorked === i;
             return (
               <div key={w.kanji}>
                 <button
                   onClick={() => setOpenWorked(open ? null : i)}
-                  className="w-full p-3.5 flex items-center gap-3 text-left hover:bg-white/[0.02] transition-colors"
+                  className="w-full p-3.5 flex items-center gap-3 text-left hover:bg-[var(--bg-surface-hover)] transition-colors"
                 >
-                  <span className="text-xl text-white">{w.kanji}</span>
-                  <span className="text-[12px] text-slate-500 ml-auto shrink-0">
+                  <span className="text-xl text-text-primary">{w.kanji}</span>
+                  <span className="text-[12px] text-text-muted ml-auto shrink-0">
                     {open ? '−' : '+'}
                   </span>
                 </button>
@@ -236,17 +236,17 @@ export default function KanjiNumberPanel() {
                   <div className="px-3.5 pb-4 space-y-2">
                     <ol className="space-y-1">
                       {w.steps.map((s, j) => (
-                        <li key={j} className="text-[13px] text-slate-300 leading-relaxed flex gap-2">
-                          <span className="text-neon-violet font-bold shrink-0">{j + 1}.</span>
+                        <li key={j} className="text-[13px] text-text-secondary leading-relaxed flex gap-2">
+                          <span className="text-tone-violet font-bold shrink-0">{j + 1}.</span>
                           <span>{s}</span>
                         </li>
                       ))}
                     </ol>
                     <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1 pt-1">
-                      <span className="text-lg text-neon-cyan font-semibold">{w.read}</span>
-                      <span className="text-base text-white font-mono">{w.n.toLocaleString('vi-VN')}</span>
+                      <span className="text-lg text-tone-cyan font-semibold">{w.read}</span>
+                      <span className="text-base text-text-primary font-mono">{w.n.toLocaleString('vi-VN')}</span>
                     </div>
-                    <p className="text-[11px] text-slate-600">{w.source}</p>
+                    <p className="text-[11px] text-text-muted">{w.source}</p>
                   </div>
                 )}
               </div>
@@ -258,9 +258,9 @@ export default function KanjiNumberPanel() {
       {/* ── LUYỆN TẬP ── */}
       <section className="rounded-2xl border border-neon-violet/30 bg-neon-violet/[0.05] p-5">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-          <h3 className="text-base font-bold text-white">Luyện tập — câu sinh tự động, không bao giờ hết</h3>
+          <h3 className="text-base font-bold text-text-primary">Luyện tập — câu sinh tự động, không bao giờ hết</h3>
           <div className="flex items-center gap-3">
-            <span className="text-sm text-white font-semibold">
+            <span className="text-sm text-text-primary font-semibold">
               {score.ok}/{score.total}
             </span>
             <button
@@ -268,7 +268,7 @@ export default function KanjiNumberPanel() {
                 setScore({ ok: 0, total: 0 });
                 next();
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.05] border border-white/10 text-slate-300 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" /> Làm lại
             </button>
@@ -288,8 +288,8 @@ export default function KanjiNumberPanel() {
               }}
               className={`px-3.5 py-2 rounded-xl text-[13px] font-medium border transition-all active:scale-95 ${
                 mode === m.id
-                  ? 'bg-neon-violet/20 border-neon-violet/45 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                  ? 'bg-neon-violet/20 border-neon-violet/45 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
               }`}
             >
               {m.label}
@@ -297,18 +297,18 @@ export default function KanjiNumberPanel() {
           ))}
         </div>
 
-        <div className="rounded-2xl border border-white/12 bg-[#0a0a0f]/60 px-5 py-8 text-center">
+        <div className="rounded-2xl border border-[var(--border-light-hover)] bg-[var(--bg-surface)] px-5 py-8 text-center">
           {mode === 'read' ? (
-            <div className="text-4xl sm:text-5xl text-white tracking-wide leading-tight">{toKanji(n)}</div>
+            <div className="text-4xl sm:text-5xl text-text-primary tracking-wide leading-tight">{toKanji(n)}</div>
           ) : (
-            <div className="text-4xl sm:text-5xl text-white font-mono tracking-wide leading-tight">
+            <div className="text-4xl sm:text-5xl text-text-primary font-mono tracking-wide leading-tight">
               {n.toLocaleString('vi-VN')}
             </div>
           )}
 
           {!shown ? (
             <>
-              <p className="text-[12px] text-slate-500 mt-5">
+              <p className="text-[12px] text-text-muted mt-5">
                 {mode === 'read'
                   ? 'Đọc to thành tiếng rồi bấm để so'
                   : 'Viết ra giấy rồi bấm để so'}
@@ -324,12 +324,12 @@ export default function KanjiNumberPanel() {
                     if (e.key === 'Enter' && !e.nativeEvent.isComposing) setShown(true);
                   }}
                   placeholder="try typing the reading (optional) — Enter to check"
-                  className="mt-3 w-full max-w-sm mx-auto block px-3 py-2 rounded-lg bg-white/[0.04] border border-white/10 text-sm text-white text-center placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/50"
+                  className="mt-3 w-full max-w-sm mx-auto block px-3 py-2 rounded-lg bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-sm text-text-primary text-center placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                 />
               )}
               <button
                 onClick={() => setShown(true)}
-                className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-white/[0.06] border border-white/15 text-white hover:bg-white/[0.1] transition-colors"
+                className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-text-primary hover:bg-white/[0.1] transition-colors"
               >
                 <Eye className="w-4 h-4" /> Hiện đáp án
               </button>
@@ -339,31 +339,31 @@ export default function KanjiNumberPanel() {
               <div className="mt-5 space-y-1.5">
                 {mode === 'read' ? (
                   <>
-                    <div className="text-2xl text-neon-cyan font-semibold">{toKana(n)}</div>
-                    <div className="text-lg text-white font-mono">{n.toLocaleString('vi-VN')}</div>
+                    <div className="text-2xl text-tone-cyan font-semibold">{toKana(n)}</div>
+                    <div className="text-lg text-text-primary font-mono">{n.toLocaleString('vi-VN')}</div>
                   </>
                 ) : (
                   <>
-                    <div className="text-3xl text-white">{toKanji(n)}</div>
-                    <div className="text-xl text-neon-cyan font-semibold">{toKana(n)}</div>
+                    <div className="text-3xl text-text-primary">{toKanji(n)}</div>
+                    <div className="text-xl text-tone-cyan font-semibold">{toKana(n)}</div>
                   </>
                 )}
                 {input.trim() && (
-                  <div className="text-[12px] text-slate-500">
-                    bạn gõ: <span className="text-slate-300">{input}</span>
+                  <div className="text-[12px] text-text-muted">
+                    bạn gõ: <span className="text-text-secondary">{input}</span>
                   </div>
                 )}
               </div>
               <div className="mt-5 flex flex-wrap justify-center gap-2">
                 <button
                   onClick={() => grade(true)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-neon-green/15 border border-neon-green/40 text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-neon-green/15 border border-neon-green/40 text-text-primary hover:bg-neon-green/25 transition-colors active:scale-95"
                 >
                   <Check className="w-4 h-4" /> Tôi đúng
                 </button>
                 <button
                   onClick={() => grade(false)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-neon-red/15 border border-neon-red/40 text-white hover:bg-neon-red/25 transition-colors active:scale-95"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm bg-neon-red/15 border border-neon-red/40 text-text-primary hover:bg-neon-red/25 transition-colors active:scale-95"
                 >
                   <X className="w-4 h-4" /> Tôi sai
                 </button>
@@ -372,7 +372,7 @@ export default function KanjiNumberPanel() {
           )}
         </div>
 
-        <p className="text-[12px] text-slate-500 mt-3 leading-relaxed">
+        <p className="text-[12px] text-text-muted mt-3 leading-relaxed">
           Số được sinh nghiêng về giá tiền và mốc tròn giống đề thật (35% bốc thẳng từ danh sách số
           đã ra trong 420 câu), chứ không random đều — luyện đúng thứ sẽ gặp.
         </p>

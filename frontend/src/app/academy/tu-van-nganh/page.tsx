@@ -80,7 +80,7 @@ function timeAgo(iso: string) {
 function Avatar({ url, name, size = 36 }: { url?: string | null; name: string; size?: number }) {
   if (url) return <img src={url} alt={name} className="rounded-full object-cover shrink-0" style={{ width: size, height: size }} />;
   return (
-    <span className="rounded-full shrink-0 grid place-items-center bg-neon-violet/20 text-neon-violet font-semibold"
+    <span className="rounded-full shrink-0 grid place-items-center bg-neon-violet/20 text-tone-violet font-semibold"
       style={{ width: size, height: size, fontSize: size * 0.4 }}>{initials(name)}</span>
   );
 }
@@ -89,14 +89,14 @@ function Avatar({ url, name, size = 36 }: { url?: string | null; name: string; s
 function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
   const m = spec[market];
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard p-5 space-y-4">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5 space-y-4">
       <div className="flex items-center gap-3">
         <span aria-hidden className="text-3xl leading-none">{spec.icon}</span>
         <div className="min-w-0">
           <h3 className="text-lg font-bold text-text-primary leading-tight">{spec.nameVi}</h3>
           <div className="mt-1 flex flex-wrap gap-1">
             {spec.languages.map((l) => (
-              <span key={l} className="px-2 py-0.5 rounded-full bg-neon-violet/10 text-neon-violet text-[11px] font-medium">{l}</span>
+              <span key={l} className="px-2 py-0.5 rounded-full bg-neon-violet/10 text-tone-violet text-[11px] font-medium">{l}</span>
             ))}
           </div>
         </div>
@@ -120,7 +120,7 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
       <div>
         <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Làm ra được</p>
         <div className="flex flex-wrap gap-1.5">
-          {spec.builds.map((b) => <span key={b} className="px-2 py-0.5 rounded-lg bg-darkbg border border-darkborder text-xs text-text-secondary">{b}</span>)}
+          {spec.builds.map((b) => <span key={b} className="px-2 py-0.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-color)] text-xs text-text-secondary">{b}</span>)}
         </div>
       </div>
 
@@ -131,11 +131,11 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
 
       <div className="grid sm:grid-cols-2 gap-3">
         <div>
-          <p className="text-xs font-semibold text-neon-green mb-1">Ưu điểm</p>
+          <p className="text-xs font-semibold text-tone-green mb-1">Ưu điểm</p>
           <ul className="text-xs text-text-secondary space-y-0.5 list-disc list-inside">{spec.pros.map((p) => <li key={p}>{p}</li>)}</ul>
         </div>
         <div>
-          <p className="text-xs font-semibold text-neon-pink mb-1">Nhược điểm</p>
+          <p className="text-xs font-semibold text-tone-pink mb-1">Nhược điểm</p>
           <ul className="text-xs text-text-secondary space-y-0.5 list-disc list-inside">{spec.cons.map((c) => <li key={c}>{c}</li>)}</ul>
         </div>
       </div>
@@ -143,7 +143,7 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
       {spec.codeSample && (
         <div>
           <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Cú pháp — {spec.codeSample.label}</p>
-          <div className="rounded-xl overflow-hidden border border-darkborder text-[13px]">
+          <div className="rounded-xl overflow-hidden border border-[var(--border-color)] text-[13px]">
             <SyntaxHighlighter language={spec.codeSample.language} style={vscDarkPlus} customStyle={{ margin: 0, background: '#0b1020', padding: '12px 14px' }}>
               {spec.codeSample.code}
             </SyntaxHighlighter>
@@ -155,7 +155,7 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
         <div>
           <p className="text-xs uppercase tracking-wide text-text-muted mb-1">Môn Academy tiêu biểu</p>
           <div className="flex flex-wrap gap-1.5">
-            {spec.academyCourses.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-neon-cyan/10 text-neon-cyan text-[11px] font-mono">{c}</span>)}
+            {spec.academyCourses.map((c) => <span key={c} className="px-2 py-0.5 rounded-full bg-neon-cyan/10 text-tone-cyan text-[11px] font-mono">{c}</span>)}
           </div>
         </div>
         <div>
@@ -163,7 +163,7 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
           <div className="flex flex-wrap gap-1.5">
             {spec.hiring.map((h) => (
               <a key={h.url} href={h.url} target="_blank" rel="noopener noreferrer"
-                className="px-2 py-0.5 rounded-lg bg-darkbg border border-darkborder text-[11px] text-neon-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
+                className="px-2 py-0.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-color)] text-[11px] text-tone-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
                 {h.label} <ExternalLink className="w-2.5 h-2.5" />
               </a>
             ))}
@@ -171,12 +171,12 @@ function SpecCard({ spec, market }: { spec: AdvisorSpec; market: Market }) {
         </div>
       </div>
 
-      <div className="pt-1 border-t border-darkborder">
+      <div className="pt-1 border-t border-[var(--border-color)]">
         <p className="text-xs uppercase tracking-wide text-text-muted mb-1 mt-2">📊 Nguồn thống kê ({market === 'vietnam' ? 'Việt Nam' : 'Toàn cầu'})</p>
         <div className="flex flex-wrap gap-1.5">
           {m.sources.map((r) => (
             <a key={r.url} href={r.url} target="_blank" rel="noopener noreferrer"
-              className="px-2 py-0.5 rounded-lg bg-darkbg border border-darkborder text-[11px] text-text-secondary hover:text-neon-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
+              className="px-2 py-0.5 rounded-lg bg-[var(--bg-primary)] border border-[var(--border-color)] text-[11px] text-text-secondary hover:text-tone-cyan hover:border-neon-cyan/50 transition inline-flex items-center gap-1">
               {r.label} <ExternalLink className="w-2.5 h-2.5" />
             </a>
           ))}
@@ -198,7 +198,7 @@ function CommentView({ c, currentUserId, liked, likedIds, onLike, onReport, onDe
     <div className={`flex gap-3 ${isReply ? 'ml-10' : ''}`}>
       <Avatar url={c.user.avatarUrl} name={name} size={isReply ? 30 : 38} />
       <div className="min-w-0 flex-1">
-        <div className="rounded-2xl rounded-tl-sm bg-darkbg/70 border border-darkborder px-3.5 py-2.5">
+        <div className="rounded-2xl rounded-tl-sm bg-[var(--bg-glass)] border border-[var(--border-color)] px-3.5 py-2.5">
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-sm font-semibold text-text-primary">{name}</span>
             <span className="text-xs text-text-muted">{timeAgo(c.createdAt)}</span>
@@ -207,24 +207,24 @@ function CommentView({ c, currentUserId, liked, likedIds, onLike, onReport, onDe
           {c.content && <p className="text-sm text-text-secondary whitespace-pre-wrap mt-1 leading-relaxed break-words">{c.content}</p>}
           {c.imageUrl && (
             <a href={c.imageUrl} target="_blank" rel="noopener noreferrer" className="block mt-2">
-              <img src={c.imageUrl} alt="ảnh đính kèm" className="rounded-xl max-h-72 border border-darkborder" />
+              <img src={c.imageUrl} alt="ảnh đính kèm" className="rounded-xl max-h-72 border border-[var(--border-color)]" />
             </a>
           )}
         </div>
         <div className="flex items-center gap-4 mt-1.5 px-1 text-xs text-text-muted">
-          <button onClick={() => onLike(c.id)} className={`inline-flex items-center gap-1 transition ${liked ? 'text-neon-pink' : 'hover:text-neon-pink'}`}>
+          <button onClick={() => onLike(c.id)} className={`inline-flex items-center gap-1 transition ${liked ? 'text-tone-pink' : 'hover:text-tone-pink'}`}>
             <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-current' : ''}`} /> {c.likesCount > 0 && c.likesCount}
           </button>
           {!isReply && onReply && (
-            <button onClick={() => onReply(c)} className="inline-flex items-center gap-1 hover:text-neon-violet transition">
+            <button onClick={() => onReply(c)} className="inline-flex items-center gap-1 hover:text-tone-violet transition">
               <MessageCircle className="w-3.5 h-3.5" /> Trả lời
             </button>
           )}
-          <button onClick={() => onReport(c.id)} className="inline-flex items-center gap-1 hover:text-amber-400 transition">
+          <button onClick={() => onReport(c.id)} className="inline-flex items-center gap-1 hover:text-tone-amber transition">
             <Flag className="w-3.5 h-3.5" /> Báo cáo
           </button>
           {mine && (
-            <button onClick={() => onDelete(c.id)} className="inline-flex items-center gap-1 hover:text-red-400 transition">
+            <button onClick={() => onDelete(c.id)} className="inline-flex items-center gap-1 hover:text-tone-red transition">
               <Trash2 className="w-3.5 h-3.5" /> Xoá
             </button>
           )}
@@ -324,7 +324,7 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
   }
 
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard p-5 sm:p-6">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5 sm:p-6">
       <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2 mb-1">
         💬 Thảo luận &amp; đánh giá <span className="text-sm font-normal text-text-muted">({total})</span>
       </h2>
@@ -335,22 +335,22 @@ function DiscussionSection({ facultyId, majorId }: { facultyId: string; majorId:
         <Avatar url={user?.avatarUrl} name={user ? displayName({ username: user.username ?? 'Bạn', displayName: user.displayName, fullName: user.fullName }) : 'Bạn'} size={38} />
         <div className="flex-1 min-w-0">
           {replyTo && (
-            <div className="mb-2 text-xs text-text-muted inline-flex items-center gap-2 bg-darkbg rounded-lg px-2 py-1">
+            <div className="mb-2 text-xs text-text-muted inline-flex items-center gap-2 bg-[var(--bg-primary)] rounded-lg px-2 py-1">
               Đang trả lời <span className="text-text-secondary font-medium">{displayName(replyTo.user)}</span>
               <button onClick={() => setReplyTo(null)}><X className="w-3 h-3" /></button>
             </div>
           )}
           <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2}
             placeholder={isAuthenticated ? 'Write a comment, review or suggestion…' : 'Sign in to join the discussion…'}
-            className="w-full resize-none rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
+            className="w-full resize-none rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] px-3.5 py-2.5 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50" />
           {image && (
             <div className="relative inline-block mt-2">
-              <img src={image.preview} alt="xem trước" className="rounded-lg max-h-40 border border-darkborder" />
-              <button onClick={() => setImage(null)} className="absolute -top-2 -right-2 bg-darkbg border border-darkborder rounded-full p-1"><X className="w-3.5 h-3.5" /></button>
+              <img src={image.preview} alt="xem trước" className="rounded-lg max-h-40 border border-[var(--border-color)]" />
+              <button onClick={() => setImage(null)} className="absolute -top-2 -right-2 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-full p-1"><X className="w-3.5 h-3.5" /></button>
             </div>
           )}
           <div className="flex items-center justify-between mt-2">
-            <button onClick={() => fileRef.current?.click()} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-neon-cyan transition">
+            <button onClick={() => fileRef.current?.click()} className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-tone-cyan transition">
               <ImagePlus className="w-4 h-4" /> Ảnh
             </button>
             <input ref={fileRef} type="file" accept="image/*" hidden onChange={pickImage} />
@@ -465,7 +465,7 @@ export default function AcademyAdvisorPage() {
   const backToChoose = () => router.push(`/academy?tuvan=${facultyId ?? ''}.${majorId ?? ''}`);
 
   return (
-    <div className="min-h-screen pt-24 pb-16" style={{ background: '#050314' }}>
+    <div className="min-h-screen pt-24 pb-16" style={{ background: 'var(--bg-primary)' }}>
       <AcademyBackground />
       {/* Style riêng cho câu trả lời markdown của CuongMini — dễ đọc, hợp tông tối */}
       <style>{`
@@ -476,24 +476,24 @@ export default function AcademyAdvisorPage() {
         .academy-advisor-md li{margin:.22em 0}
         .academy-advisor-md ul li{list-style:disc}.academy-advisor-md ol li{list-style:decimal}
         .academy-advisor-md strong{color:var(--text-primary,#e7e9f3);font-weight:600}
-        .academy-advisor-md a{color:#22d3ee;text-decoration:underline;text-underline-offset:2px}
-        .academy-advisor-md code{background:#0b1020;border:1px solid #2a2f45;border-radius:6px;padding:.05em .35em;font-size:.9em}
-        .academy-advisor-md pre{background:#0b1020;border:1px solid #2a2f45;border-radius:10px;padding:10px 12px;overflow-x:auto;margin:.6em 0}
+        .academy-advisor-md a{color:var(--tone-cyan);text-decoration:underline;text-underline-offset:2px}
+        .academy-advisor-md code{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:6px;padding:.05em .35em;font-size:.9em}
+        .academy-advisor-md pre{background:var(--bg-surface);border:1px solid var(--border-color);border-radius:10px;padding:10px 12px;overflow-x:auto;margin:.6em 0}
         .academy-advisor-md pre code{background:none;border:0;padding:0}
         .academy-advisor-md blockquote{border-left:3px solid rgba(139,92,246,.5);margin:.6em 0;padding:.15em .8em;color:var(--text-muted,#9aa0b4);font-size:.95em}
-        .academy-advisor-md hr{border:0;border-top:1px solid #2a2f45;margin:.8em 0}
+        .academy-advisor-md hr{border:0;border-top:1px solid var(--border-color);margin:.8em 0}
         .academy-advisor-md>*:first-child{margin-top:0}.academy-advisor-md>*:last-child{margin-bottom:0}
       `}</style>
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
         {/* Header */}
         <div className="flex flex-wrap items-center gap-3 justify-between">
           <div className="flex items-center gap-3 min-w-0">
-            <button onClick={backToChoose} className="inline-flex items-center gap-2 min-h-[44px] px-3 rounded-xl border border-darkborder bg-darkcard text-text-primary hover:border-neon-violet/50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet">
+            <button onClick={backToChoose} className="inline-flex items-center gap-2 min-h-[44px] px-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] text-text-primary hover:border-neon-violet/50 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-violet">
               <ArrowLeft className="w-4 h-4" /> Quay lại chọn ngành hẹp
             </button>
             <div className="min-w-0">
               <h1 className="text-2xl sm:text-3xl font-heading font-bold text-text-primary flex items-center gap-2">
-                <Sparkles className="w-6 h-6 text-neon-violet shrink-0" /> Tư vấn chọn ngành hẹp
+                <Sparkles className="w-6 h-6 text-tone-violet shrink-0" /> Tư vấn chọn ngành hẹp
               </h1>
               {(faculty || major) && (
                 <p className="text-sm text-text-muted truncate">
@@ -505,12 +505,12 @@ export default function AcademyAdvisorPage() {
         </div>
 
         {/* Kỳ đang học */}
-        <div className="rounded-2xl border border-darkborder bg-darkcard p-4">
+        <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-4">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary mr-1"><GraduationCap className="w-4 h-4 text-neon-cyan" /> Bạn đang học kỳ mấy?</span>
+            <span className="inline-flex items-center gap-1.5 text-sm text-text-secondary mr-1"><GraduationCap className="w-4 h-4 text-tone-cyan" /> Bạn đang học kỳ mấy?</span>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((k) => (
               <button key={k} onClick={() => setSemester(semester === k ? 0 : k)}
-                className={`min-w-[40px] min-h-[36px] px-2 rounded-lg text-sm font-medium border transition ${semester === k ? 'bg-neon-violet text-white border-neon-violet' : 'bg-darkbg text-text-secondary border-darkborder hover:border-neon-violet/50'}`}>
+                className={`min-w-[40px] min-h-[36px] px-2 rounded-lg text-sm font-medium border transition ${semester === k ? 'bg-violet-600 text-white border-neon-violet' : 'bg-[var(--bg-primary)] text-text-secondary border-[var(--border-color)] hover:border-neon-violet/50'}`}>
                 Kỳ {k}
               </button>
             ))}
@@ -531,14 +531,14 @@ export default function AcademyAdvisorPage() {
             )}
             {hasSpecData && (<>
             {/* Tabs thị trường + biểu đồ */}
-            <div className="rounded-2xl border border-darkborder bg-darkcard p-5">
+            <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5">
               <div className="flex flex-wrap items-center justify-between gap-3 mb-1">
                 <h2 className="text-lg font-semibold text-text-primary">So sánh &amp; đánh giá</h2>
-                <div className="inline-flex rounded-xl border border-darkborder bg-darkbg p-0.5 text-sm">
-                  <button onClick={() => setMarket('vietnam')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'vietnam' ? 'bg-neon-violet text-white' : 'text-text-secondary hover:text-text-primary'}`}>
+                <div className="inline-flex rounded-xl border border-[var(--border-color)] bg-[var(--bg-primary)] p-0.5 text-sm">
+                  <button onClick={() => setMarket('vietnam')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'vietnam' ? 'bg-violet-600 text-white' : 'text-text-secondary hover:text-text-primary'}`}>
                     <MapPin className="w-4 h-4" /> Việt Nam
                   </button>
-                  <button onClick={() => setMarket('global')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'global' ? 'bg-neon-violet text-white' : 'text-text-secondary hover:text-text-primary'}`}>
+                  <button onClick={() => setMarket('global')} className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg transition ${market === 'global' ? 'bg-violet-600 text-white' : 'text-text-secondary hover:text-text-primary'}`}>
                     <Globe2 className="w-4 h-4" /> Toàn cầu
                   </button>
                 </div>
@@ -547,11 +547,11 @@ export default function AcademyAdvisorPage() {
               <div className="h-64 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={chartData} margin={{ top: 16, right: 8, left: -18, bottom: 0 }}>
-                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#9aa0b4' }} interval={0} angle={-12} textAnchor="end" height={54} />
-                    <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} tick={{ fontSize: 11, fill: '#9aa0b4' }} />
-                    <Tooltip contentStyle={{ background: '#0b1020', border: '1px solid #2a2f45', borderRadius: 12, fontSize: 12 }} />
-                    <Bar dataKey="Nhu cầu" radius={[4, 4, 0, 0]}>{chartData.map((_, i) => <Cell key={i} fill="#22d3ee" />)}<LabelList dataKey="Nhu cầu" position="top" fontSize={10} fill="#9aa0b4" /></Bar>
-                    <Bar dataKey="Lương" radius={[4, 4, 0, 0]}>{chartData.map((_, i) => <Cell key={i} fill="#a3e635" />)}<LabelList dataKey="Lương" position="top" fontSize={10} fill="#9aa0b4" /></Bar>
+                    <XAxis dataKey="name" tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} interval={0} angle={-12} textAnchor="end" height={54} />
+                    <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} tick={{ fontSize: 11, fill: 'var(--text-secondary)' }} />
+                    <Tooltip contentStyle={{ background: 'var(--bg-card)', border: '1px solid var(--border-color)', color: 'var(--text-primary)', borderRadius: 12, fontSize: 12 }} />
+                    <Bar dataKey="Nhu cầu" radius={[4, 4, 0, 0]}>{chartData.map((_, i) => <Cell key={i} fill="#22d3ee" />)}<LabelList dataKey="Nhu cầu" position="top" fontSize={10} fill="var(--text-secondary)" /></Bar>
+                    <Bar dataKey="Lương" radius={[4, 4, 0, 0]}>{chartData.map((_, i) => <Cell key={i} fill="#a3e635" />)}<LabelList dataKey="Lương" position="top" fontSize={10} fill="var(--text-secondary)" /></Bar>
                   </BarChart>
                 </ResponsiveContainer>
               </div>
@@ -566,8 +566,8 @@ export default function AcademyAdvisorPage() {
 
           {/* CỘT PHẢI: CuongMini Cố Vấn */}
           <div ref={chatRef} className="order-1 lg:order-2 lg:sticky lg:top-24 h-fit">
-            <div className="rounded-2xl border border-neon-violet/30 bg-darkcard flex flex-col max-h-[calc(100vh-7rem)] shadow-[0_0_40px_-12px_rgba(139,92,246,0.35)]">
-              <div className="px-4 py-3.5 border-b border-darkborder flex items-center gap-2.5 bg-gradient-to-r from-neon-violet/10 to-transparent rounded-t-2xl">
+            <div className="rounded-2xl border border-neon-violet/30 bg-[var(--bg-card)] flex flex-col max-h-[calc(100vh-7rem)] shadow-[0_0_40px_-12px_rgba(139,92,246,0.35)]">
+              <div className="px-4 py-3.5 border-b border-[var(--border-color)] flex items-center gap-2.5 bg-gradient-to-r from-neon-violet/10 to-transparent rounded-t-2xl">
                 <span className="text-xl leading-none">🤖</span>
                 <div>
                   <p className="font-semibold text-text-primary leading-tight">CuongMini Cố Vấn</p>
@@ -585,7 +585,7 @@ export default function AcademyAdvisorPage() {
                         <div className="space-y-1.5">
                           {g.questions.map((q) => (
                             <button key={q} onClick={() => ask(q)} disabled={busy}
-                              className="block w-full text-left px-3 py-2 rounded-xl border border-darkborder bg-darkbg/60 text-[13px] text-text-secondary hover:border-neon-violet/50 hover:text-text-primary transition disabled:opacity-50">
+                              className="block w-full text-left px-3 py-2 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] text-[13px] text-text-secondary hover:border-neon-violet/50 hover:text-text-primary transition disabled:opacity-50">
                               {q}
                             </button>
                           ))}
@@ -599,7 +599,7 @@ export default function AcademyAdvisorPage() {
                   m.role === 'user' ? (
                     <div key={i} className="ml-8 rounded-2xl rounded-br-sm bg-neon-violet/15 border border-neon-violet/30 px-3.5 py-2.5 text-[15px] text-text-primary">{m.content}</div>
                   ) : (
-                    <div key={i} className="mr-1 rounded-2xl rounded-bl-sm bg-darkbg/70 border border-darkborder px-3.5 py-2.5 text-[15px] text-text-secondary academy-advisor-md leading-relaxed">
+                    <div key={i} className="mr-1 rounded-2xl rounded-bl-sm bg-[var(--bg-glass)] border border-[var(--border-color)] px-3.5 py-2.5 text-[15px] text-text-secondary academy-advisor-md leading-relaxed">
                       <Markdown mdx={m.content} />
                     </div>
                   )
@@ -607,14 +607,14 @@ export default function AcademyAdvisorPage() {
                 {busy && <div className="mr-2 inline-flex items-center gap-2 text-sm text-text-muted"><Loader2 className="w-4 h-4 animate-spin" /> CuongMini đang suy nghĩ…</div>}
               </div>
 
-              <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="p-3 border-t border-darkborder flex items-end gap-2">
+              <form onSubmit={(e) => { e.preventDefault(); ask(input); }} className="p-3 border-t border-[var(--border-color)] flex items-end gap-2">
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); ask(input); } }}
                   rows={1}
                   placeholder="Ask CuongMini… (e.g. I’m good at math — which major fits me?)"
-                  className="flex-1 resize-none max-h-32 rounded-xl bg-darkbg border border-darkborder px-3.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+                  className="flex-1 resize-none max-h-32 rounded-xl bg-[var(--bg-primary)] border border-[var(--border-color)] px-3.5 py-2.5 text-[15px] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
                 />
                 <button type="submit" disabled={busy || !input.trim()}
                   className="min-h-[42px] w-11 shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-neon-indigo to-neon-violet text-white disabled:opacity-40 transition">
@@ -627,13 +627,13 @@ export default function AcademyAdvisorPage() {
 
         {/* Câu hỏi thường gặp */}
         {faq.length > 0 && (
-          <div className="rounded-2xl border border-darkborder bg-darkcard p-5 sm:p-6">
-            <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2 mb-1"><HelpCircle className="w-5 h-5 text-neon-cyan" /> Câu hỏi thường gặp</h2>
+          <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5 sm:p-6">
+            <h2 className="text-lg font-semibold text-text-primary flex items-center gap-2 mb-1"><HelpCircle className="w-5 h-5 text-tone-cyan" /> Câu hỏi thường gặp</h2>
             <p className="text-xs text-text-muted mb-4">Gộp từ câu các bạn đã hỏi CuongMini. Bấm để hỏi lại ngay.</p>
             <div className="grid sm:grid-cols-2 gap-2.5">
               {faq.map((f) => (
                 <button key={f.text} onClick={() => ask(f.text)} disabled={busy}
-                  className="text-left px-4 py-3 rounded-xl border border-darkborder bg-darkbg/60 hover:border-neon-violet/50 hover:bg-darkbg transition disabled:opacity-50 group">
+                  className="text-left px-4 py-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] hover:border-neon-violet/50 hover:bg-[var(--bg-primary)] transition disabled:opacity-50 group">
                   <span className="text-sm text-text-secondary group-hover:text-text-primary">{f.text}</span>
                   {f.askCount > 1 && <span className="ml-2 text-[11px] text-text-muted">· {f.askCount} lượt hỏi</span>}
                 </button>

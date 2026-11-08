@@ -43,7 +43,7 @@ export default function ProjectsEmpty({ onClearFilters, hasFilters }: ProjectsEm
  />
  {/* Inner glass disc. */}
  <div className="absolute inset-2 rounded-full glass-frost flex items-center justify-center">
- <SearchX className="w-8 h-8 text-violet-300" strokeWidth={1.5} />
+ <SearchX className="w-8 h-8 text-tone-violet" strokeWidth={1.5} />
  </div>
  {/* Subtle pulse — center glow. */}
  <div
@@ -73,7 +73,7 @@ export default function ProjectsEmpty({ onClearFilters, hasFilters }: ProjectsEm
  whileHover={{ scale: 1.04 }}
  whileTap={{ scale: 0.96 }}
  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
- className="magnetic-press inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-violet-200 glass-frost gradient-border-violet"
+ className="magnetic-press inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-tone-violet glass-frost gradient-border-violet"
  >
  <Sparkles className="w-4 h-4" />
  {L('Xoá bộ lọc', 'Clear filters')}

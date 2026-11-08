@@ -224,10 +224,13 @@ export default function ParticleBackground({
         width / 2, height / 2, Math.min(width, height) * 0.35,
         width / 2, height / 2, Math.max(width, height) * 0.75,
       );
-      vg.addColorStop(0, 'rgba(0,0,0,0)');
-      vg.addColorStop(1, 'rgba(0,0,0,0.55)');
-      ctx.fillStyle = vg;
-      ctx.fillRect(0, 0, width, height);
+      // Chủ đề sáng: không phủ viền đen (trang theo chủ đề từ 08/11/2026) — viền tối trên nền sáng thành vệt xám bẩn.
+      if (document.documentElement.classList.contains('theme-dark')) {
+        vg.addColorStop(0, 'rgba(0,0,0,0)');
+        vg.addColorStop(1, 'rgba(0,0,0,0.55)');
+        ctx.fillStyle = vg;
+        ctx.fillRect(0, 0, width, height);
+      }
 
       rafId = requestAnimationFrame(render);
     };

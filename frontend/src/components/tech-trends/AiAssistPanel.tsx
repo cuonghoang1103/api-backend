@@ -127,7 +127,7 @@ export default function AiAssistPanel({
   // Hidden entirely when the probe says AI is off — no dead controls.
   if (available === false) {
     return (
-      <div className="rounded-xl border border-darkborder bg-darkbg/40 px-4 py-3 text-xs text-text-muted flex items-center gap-2">
+      <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-4 py-3 text-xs text-text-muted flex items-center gap-2">
         <Sparkles className="w-4 h-4 text-text-muted" />
         Trợ lý AI chưa bật trên server (thiếu API key). Bạn vẫn soạn bài thủ công bình thường.
       </div>
@@ -139,9 +139,9 @@ export default function AiAssistPanel({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-text-primary hover:bg-white/[0.02] transition-colors"
+        className="w-full flex items-center gap-2 px-4 py-3 text-sm font-medium text-text-primary hover:bg-[var(--bg-surface-hover)] transition-colors"
       >
-        <Sparkles className="w-4 h-4 text-neon-violet" />
+        <Sparkles className="w-4 h-4 text-tone-violet" />
         <span>Trợ lý AI</span>
         <span className="text-xs text-text-muted font-normal">— tạo nháp, dựng #FixBug, tóm tắt & viết lại</span>
         {available === null && <Loader2 className="w-3.5 h-3.5 animate-spin text-text-muted ml-1" />}
@@ -247,7 +247,7 @@ function ModeBtn({ active, onClick, icon, label }: { active: boolean; onClick: (
       onClick={onClick}
       className={[
         'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
-        active ? 'bg-neon-violet/20 text-neon-violet' : 'text-text-secondary hover:bg-white/[0.04] hover:text-text-primary',
+        active ? 'bg-neon-violet/20 text-tone-violet' : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
       ].join(' ')}
     >
       {icon}
@@ -271,13 +271,13 @@ function AiRunBtn({ busy, onClick, label }: { busy: boolean; onClick: () => void
 }
 
 const aiInput = [
-  'w-full px-3 py-2 bg-darkcard border border-darkborder rounded-lg',
+  'w-full px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg',
   'text-sm text-text-primary placeholder:text-text-muted',
   'focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 transition-all',
 ].join(' ');
 
 const aiChip = [
   'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium',
-  'bg-white/[0.04] text-text-secondary border border-darkborder',
-  'hover:text-neon-violet hover:border-neon-violet/30 disabled:opacity-50 active:scale-95 transition-all',
+  'bg-[var(--bg-surface-hover)] text-text-secondary border border-[var(--border-color)]',
+  'hover:text-tone-violet hover:border-neon-violet/30 disabled:opacity-50 active:scale-95 transition-all',
 ].join(' ');

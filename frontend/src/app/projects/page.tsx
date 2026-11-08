@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
  return (
- <div className="min-h-screen pt-20 pb-20" style={{ background: '#0a0a0f' }}>
+ <div className="min-h-screen pt-20 pb-20" style={{ background: 'var(--bg-primary)' }}>
  {/* Layered background:
  * z=0 — legacy matrix-rain canvas (kept for continuity
  * with the rest of the site)

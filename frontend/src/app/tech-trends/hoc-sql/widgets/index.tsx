@@ -13,7 +13,7 @@ import type { WidgetName } from '../data/types';
 
 function Skeleton() {
   return (
-    <div className="my-2 h-56 animate-pulse rounded-2xl border border-white/10 bg-white/[0.03]" />
+    <div className="my-2 h-56 animate-pulse rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]" />
   );
 }
 
@@ -42,13 +42,13 @@ export default function Widget({
     <section className="my-6">
       {title && (
         <div className="mb-2 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <h4 className="text-sm font-semibold text-slate-200">{title}</h4>
-          <span className="rounded-md border border-violet-400/25 bg-violet-500/10 px-1.5 py-px text-[10px] font-medium text-violet-300">
+          <h4 className="text-sm font-semibold text-text-primary">{title}</h4>
+          <span className="rounded-md border border-violet-400/25 bg-violet-500/10 px-1.5 py-px text-[10px] font-medium text-tone-violet">
             bấm được
           </span>
         </div>
       )}
-      {hint && <p className="mb-2.5 text-xs leading-relaxed text-slate-500">{hint}</p>}
+      {hint && <p className="mb-2.5 text-xs leading-relaxed text-text-muted">{hint}</p>}
       <Cmp />
     </section>
   );

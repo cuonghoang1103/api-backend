@@ -36,9 +36,9 @@ const ROWS: Row[] = [
 
 const LABEL: Record<Row['result'], string> = { TRUE: 'true', FALSE: 'false', NULL: 'NULL' };
 const STYLE: Record<Row['result'], string> = {
-  TRUE: 'border-emerald-400/40 bg-emerald-500/15 text-emerald-300',
-  FALSE: 'border-rose-400/40 bg-rose-500/15 text-rose-300',
-  NULL: 'border-amber-400/40 bg-amber-500/15 text-amber-300',
+  TRUE: 'border-emerald-400/40 bg-emerald-500/15 text-tone-emerald',
+  FALSE: 'border-rose-400/40 bg-rose-500/15 text-tone-rose',
+  NULL: 'border-amber-400/40 bg-amber-500/15 text-tone-amber',
 };
 
 export default function NullLab() {
@@ -46,12 +46,12 @@ export default function NullLab() {
   const openedCount = Object.values(open).filter(Boolean).length;
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+    <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <p className="text-xs text-slate-400">
+        <p className="text-xs text-text-secondary">
           Tự đoán kết quả trước, rồi bấm để lật đáp án. Dòng viền vàng là bẫy thật sự.
         </p>
-        <span className="font-mono text-[11px] text-slate-600">{openedCount}/{ROWS.length}</span>
+        <span className="font-mono text-[11px] text-text-muted">{openedCount}/{ROWS.length}</span>
       </div>
 
       <div className="space-y-1.5">
@@ -62,27 +62,27 @@ export default function NullLab() {
               key={r.expr}
               className={[
                 'overflow-hidden rounded-xl border transition-colors',
-                r.trap ? 'border-amber-400/25 bg-amber-500/[0.04]' : 'border-white/10 bg-white/[0.02]',
+                r.trap ? 'border-amber-400/25 bg-amber-500/[0.04]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]',
               ].join(' ')}
             >
               <button
                 type="button"
                 onClick={() => setOpen((s) => ({ ...s, [i]: !s[i] }))}
-                className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-white/[0.03]"
+                className="flex w-full items-center gap-3 px-3.5 py-2.5 text-left transition-colors hover:bg-[var(--bg-surface-hover)]"
               >
-                <code className="min-w-0 flex-1 truncate font-mono text-[12.5px] text-slate-200">{r.expr}</code>
+                <code className="min-w-0 flex-1 truncate font-mono text-[12.5px] text-text-primary">{r.expr}</code>
                 {shown ? (
                   <span className={`shrink-0 rounded-md border px-2 py-0.5 font-mono text-[11px] font-bold ${STYLE[r.result]}`}>
                     {LABEL[r.result]}
                   </span>
                 ) : (
-                  <span className="shrink-0 rounded-md border border-white/10 bg-white/[0.04] px-2 py-0.5 font-mono text-[11px] text-slate-500">
+                  <span className="shrink-0 rounded-md border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2 py-0.5 font-mono text-[11px] text-text-muted">
                     ?
                   </span>
                 )}
               </button>
               {shown && (
-                <p className="border-t border-white/[0.07] px-3.5 py-2.5 text-[12.5px] leading-relaxed text-slate-400">
+                <p className="border-t border-[var(--border-light)] px-3.5 py-2.5 text-[12.5px] leading-relaxed text-text-secondary">
                   {r.why}
                 </p>
               )}
@@ -92,20 +92,20 @@ export default function NullLab() {
       </div>
 
       <div className="mt-4 space-y-2 rounded-xl border border-violet-400/25 bg-violet-500/10 px-4 py-3">
-        <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-200">
-          <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-violet-300" />
+        <p className="flex items-start gap-2 text-sm leading-relaxed text-text-primary">
+          <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-tone-violet" />
           <span>
-            Một câu tóm gọn cả bảng trên: <b className="text-violet-300">NULL không phải giá trị, nó là sự vắng mặt của giá trị.</b>{' '}
+            Một câu tóm gọn cả bảng trên: <b className="text-tone-violet">NULL không phải giá trị, nó là sự vắng mặt của giá trị.</b>{' '}
             Nên không so sánh được với bất cứ thứ gì — kể cả với chính nó.
           </span>
         </p>
-        <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
-          <Check className="mt-0.5 h-4 w-4 shrink-0 text-emerald-400" />
-          <span>Kiểm tra rỗng: <code className="font-mono text-emerald-300">IS NULL</code> / <code className="font-mono text-emerald-300">IS NOT NULL</code></span>
+        <p className="flex items-start gap-2 text-sm leading-relaxed text-text-secondary">
+          <Check className="mt-0.5 h-4 w-4 shrink-0 text-tone-emerald" />
+          <span>Kiểm tra rỗng: <code className="font-mono text-tone-emerald">IS NULL</code> / <code className="font-mono text-tone-emerald">IS NOT NULL</code></span>
         </p>
-        <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-300">
-          <X className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
-          <span>Không bao giờ: <code className="font-mono text-rose-300">= NULL</code>, <code className="font-mono text-rose-300">&lt;&gt; NULL</code>, hay <code className="font-mono text-rose-300">NOT IN (…có thể chứa NULL…)</code></span>
+        <p className="flex items-start gap-2 text-sm leading-relaxed text-text-secondary">
+          <X className="mt-0.5 h-4 w-4 shrink-0 text-tone-rose" />
+          <span>Không bao giờ: <code className="font-mono text-tone-rose">= NULL</code>, <code className="font-mono text-tone-rose">&lt;&gt; NULL</code>, hay <code className="font-mono text-tone-rose">NOT IN (…có thể chứa NULL…)</code></span>
         </p>
       </div>
     </div>

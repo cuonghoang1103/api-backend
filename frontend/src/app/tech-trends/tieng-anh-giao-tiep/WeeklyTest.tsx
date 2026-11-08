@@ -124,12 +124,12 @@ export default function WeeklyTest({
               onClick={() => { setWeek(w.week); setPhase('intro'); }}
               className={`inline-flex items-center gap-2 px-3 py-2 rounded-xl text-sm border transition-all active:scale-95 ${
                 week === w.week
-                  ? 'bg-amber-500/20 border-amber-400/40 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                  ? 'bg-amber-500/20 border-amber-400/40 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
               }`}
             >
               Tuần {w.week}
-              {s && <span className="text-[10px] text-emerald-300">{s.total}/16</span>}
+              {s && <span className="text-[10px] text-tone-emerald">{s.total}/16</span>}
             </button>
           );
         })}
@@ -137,34 +137,34 @@ export default function WeeklyTest({
 
       {/* Giới thiệu */}
       {phase === 'intro' && (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center">
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6 text-center">
           <p className="text-2xl mb-2">📝</p>
-          <h3 className="text-xl font-bold text-white">
+          <h3 className="text-xl font-bold text-text-primary">
             Kiểm tra tuần {block.week} — {block.title}
           </h3>
-          <p className="text-slate-400 text-sm mt-2 leading-relaxed">
+          <p className="text-text-secondary text-sm mt-2 leading-relaxed">
             Hai phần, tổng 16 câu:
           </p>
           <div className="mt-4 space-y-2 text-left text-sm">
-            <p className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-slate-300">
-              <b className="text-violet-300">Phần 1 — Tự nói (8 câu).</b> Hiện nghĩa tiếng Việt, bạn
+            <p className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3 text-text-secondary">
+              <b className="text-tone-violet">Phần 1 — Tự nói (8 câu).</b> Hiện nghĩa tiếng Việt, bạn
               nói to câu tiếng Anh rồi bấm xem đáp án và tự chấm. Nói ra miệng thật, đừng nghĩ thầm.
             </p>
-            <p className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-slate-300">
-              <b className="text-emerald-300">Phần 2 — Trắc nghiệm từ vựng (8 câu).</b> Chọn nghĩa
+            <p className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3 text-text-secondary">
+              <b className="text-tone-emerald">Phần 2 — Trắc nghiệm từ vựng (8 câu).</b> Chọn nghĩa
               đúng, chấm tự động.
             </p>
           </div>
           {saved && (
-            <p className="mt-4 text-xs text-slate-500">
-              Lần trước bạn đạt <b className="text-emerald-300">{saved.total}/16</b>
+            <p className="mt-4 text-xs text-text-muted">
+              Lần trước bạn đạt <b className="text-tone-emerald">{saved.total}/16</b>
               {' '}(nói {saved.speak}/8 · trắc nghiệm {saved.quiz}/8)
             </p>
           )}
           <button
             type="button"
             onClick={start}
-            className="mt-5 px-6 py-3 rounded-xl bg-amber-500/20 border border-amber-400/40 text-white text-sm hover:bg-amber-500/30 transition-colors"
+            className="mt-5 px-6 py-3 rounded-xl bg-amber-500/20 border border-amber-400/40 text-text-primary text-sm hover:bg-amber-500/30 transition-colors"
           >
             Bắt đầu kiểm tra
           </button>
@@ -174,19 +174,19 @@ export default function WeeklyTest({
       {/* Phần 1 — Tự nói */}
       {phase === 'speak' && speakItems[sIdx] && (
         <div>
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
+          <div className="flex items-center justify-between text-xs text-text-muted mb-3">
             <span>Phần 1 · Câu {sIdx + 1}/{speakItems.length}</span>
-            <span>Đúng: <b className="text-emerald-300">{sRight}</b></span>
+            <span>Đúng: <b className="text-tone-emerald">{sRight}</b></span>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <p className="text-xs text-slate-500 mb-2">Nói câu này bằng tiếng Anh:</p>
-            <p className="text-xl font-bold text-white leading-snug">{speakItems[sIdx].vi}</p>
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6">
+            <p className="text-xs text-text-muted mb-2">Nói câu này bằng tiếng Anh:</p>
+            <p className="text-xl font-bold text-text-primary leading-snug">{speakItems[sIdx].vi}</p>
 
             {!revealed ? (
               <button
                 type="button"
                 onClick={() => setRevealed(true)}
-                className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-violet-500/20 border border-violet-400/40 text-white text-sm hover:bg-violet-500/30 transition-colors"
+                className="mt-6 w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-violet-500/20 border border-violet-400/40 text-text-primary text-sm hover:bg-violet-500/30 transition-colors"
               >
                 <Eye className="w-4 h-4" />
                 Tôi đã nói xong — xem đáp án
@@ -195,14 +195,14 @@ export default function WeeklyTest({
               <>
                 <div className="mt-5 rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-4">
                   <div className="flex items-start gap-2">
-                    <p className="text-lg text-emerald-200 flex-1">{speakItems[sIdx].en}</p>
+                    <p className="text-lg text-tone-emerald flex-1">{speakItems[sIdx].en}</p>
                     {supported && (
                       <button
                         type="button"
                         onClick={() => speak(speakItems[sIdx].en)}
                         aria-label="Nghe"
                         className={`shrink-0 p-1.5 rounded-lg transition-all active:scale-90 ${
-                          current === speakItems[sIdx].en ? 'bg-violet-500/30 text-violet-300' : 'text-slate-400 hover:text-violet-300'
+                          current === speakItems[sIdx].en ? 'bg-violet-500/30 text-tone-violet' : 'text-text-secondary hover:text-tone-violet'
                         }`}
                       >
                         <Volume2 className="w-4 h-4" />
@@ -210,10 +210,10 @@ export default function WeeklyTest({
                     )}
                   </div>
                   {speakItems[sIdx].ipa && (
-                    <p className="text-violet-300/70 text-xs font-mono mt-1">{speakItems[sIdx].ipa}</p>
+                    <p className="text-tone-violet text-xs font-mono mt-1">{speakItems[sIdx].ipa}</p>
                   )}
                 </div>
-                <p className="text-xs text-slate-500 mt-4 text-center">Bạn nói có khớp không?</p>
+                <p className="text-xs text-text-muted mt-4 text-center">Bạn nói có khớp không?</p>
                 <div className="flex gap-2 mt-2">
                   <button
                     type="button"
@@ -222,7 +222,7 @@ export default function WeeklyTest({
                       setRevealed(false);
                       if (sIdx + 1 >= speakItems.length) setPhase('quiz'); else setSIdx((i) => i + 1);
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-emerald-300 text-sm hover:bg-emerald-500/25 transition-colors"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-500/15 border border-emerald-400/30 text-tone-emerald text-sm hover:bg-emerald-500/25 transition-colors"
                   >
                     <Check className="w-4 h-4" />
                     Khớp
@@ -233,7 +233,7 @@ export default function WeeklyTest({
                       setRevealed(false);
                       if (sIdx + 1 >= speakItems.length) setPhase('quiz'); else setSIdx((i) => i + 1);
                     }}
-                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm hover:bg-white/10 transition-colors"
+                    className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary text-sm hover:bg-[var(--bg-surface-active)] transition-colors"
                   >
                     <X className="w-4 h-4" />
                     Chưa khớp
@@ -248,36 +248,36 @@ export default function WeeklyTest({
       {/* Phần 2 — Trắc nghiệm */}
       {phase === 'quiz' && quizItems[qIdx] && (
         <div>
-          <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
+          <div className="flex items-center justify-between text-xs text-text-muted mb-3">
             <span>Phần 2 · Câu {qIdx + 1}/{quizItems.length}</span>
-            <span>Đúng: <b className="text-emerald-300">{qRight}</b></span>
+            <span>Đúng: <b className="text-tone-emerald">{qRight}</b></span>
           </div>
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <p className="text-xs text-slate-500 mb-2">Từ này nghĩa là gì?</p>
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5">
+            <p className="text-xs text-text-muted mb-2">Từ này nghĩa là gì?</p>
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold text-white">{quizItems[qIdx].en}</p>
+              <p className="text-2xl font-bold text-text-primary">{quizItems[qIdx].en}</p>
               {supported && (
                 <button
                   type="button"
                   onClick={() => speak(quizItems[qIdx].en)}
                   aria-label="Nghe"
-                  className="p-1.5 rounded-lg text-slate-500 hover:text-violet-300 transition-colors"
+                  className="p-1.5 rounded-lg text-text-muted hover:text-tone-violet transition-colors"
                 >
                   <Volume2 className="w-4 h-4" />
                 </button>
               )}
             </div>
-            <p className="text-violet-300/60 text-xs font-mono mt-1">{quizItems[qIdx].ipa}</p>
+            <p className="text-tone-violet text-xs font-mono mt-1">{quizItems[qIdx].ipa}</p>
 
             <div className="mt-4 space-y-2">
               {quizItems[qIdx].options.map((opt, i) => {
                 const isRight = opt === quizItems[qIdx].answer;
                 const chosen = picked === opt;
-                let cls = 'border-white/10 bg-white/[0.02] hover:border-violet-400/40';
+                let cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] hover:border-violet-400/40';
                 if (picked) {
                   if (isRight) cls = 'border-emerald-400/50 bg-emerald-500/15';
                   else if (chosen) cls = 'border-rose-400/50 bg-rose-500/15';
-                  else cls = 'border-white/5 bg-white/[0.01] opacity-50';
+                  else cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] opacity-50';
                 }
                 return (
                   <button
@@ -288,12 +288,12 @@ export default function WeeklyTest({
                       setPicked(opt);
                       if (isRight) setQRight((s) => s + 1);
                     }}
-                    className={`w-full text-left rounded-xl border px-4 py-3 text-sm text-slate-200 transition-all ${cls}`}
+                    className={`w-full text-left rounded-xl border px-4 py-3 text-sm text-text-primary transition-all ${cls}`}
                   >
                     <span className="flex items-center justify-between gap-2">
                       {opt}
-                      {picked && isRight && <Check className="w-4 h-4 text-emerald-400 shrink-0" />}
-                      {picked && chosen && !isRight && <X className="w-4 h-4 text-rose-400 shrink-0" />}
+                      {picked && isRight && <Check className="w-4 h-4 text-tone-emerald shrink-0" />}
+                      {picked && chosen && !isRight && <X className="w-4 h-4 text-tone-rose shrink-0" />}
                     </span>
                   </button>
                 );
@@ -311,7 +311,7 @@ export default function WeeklyTest({
                   if (qIdx + 1 >= quizItems.length) finish(qRight);
                   else setQIdx((i) => i + 1);
                 }}
-                className="mt-4 w-full px-4 py-3 rounded-xl bg-violet-500/20 border border-violet-400/40 text-white text-sm hover:bg-violet-500/30 transition-colors"
+                className="mt-4 w-full px-4 py-3 rounded-xl bg-violet-500/20 border border-violet-400/40 text-text-primary text-sm hover:bg-violet-500/30 transition-colors"
               >
                 {qIdx + 1 === quizItems.length ? 'Xem kết quả' : 'Câu tiếp theo →'}
               </button>
@@ -322,15 +322,15 @@ export default function WeeklyTest({
 
       {/* Kết quả */}
       {phase === 'done' && (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center">
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-8 text-center">
           <Trophy className={`w-12 h-12 mx-auto mb-3 ${
-            sRight + qRight >= 13 ? 'text-amber-400' : sRight + qRight >= 9 ? 'text-slate-300' : 'text-slate-600'
+            sRight + qRight >= 13 ? 'text-tone-amber' : sRight + qRight >= 9 ? 'text-text-secondary' : 'text-text-muted'
           }`} />
-          <p className="text-3xl font-bold text-white">{sRight + qRight}/{maxScore}</p>
-          <p className="text-slate-400 text-sm mt-1">
+          <p className="text-3xl font-bold text-text-primary">{sRight + qRight}/{maxScore}</p>
+          <p className="text-text-secondary text-sm mt-1">
             Tự nói {sRight}/{speakItems.length} · Trắc nghiệm {qRight}/{quizItems.length}
           </p>
-          <p className="text-slate-300 text-sm mt-4 leading-relaxed">
+          <p className="text-text-secondary text-sm mt-4 leading-relaxed">
             {sRight + qRight >= 13
               ? 'Rất tốt! Bạn đã sẵn sàng sang tuần tiếp theo.'
               : sRight + qRight >= 9
@@ -340,7 +340,7 @@ export default function WeeklyTest({
           <button
             type="button"
             onClick={start}
-            className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-white text-sm hover:bg-amber-500/30 transition-colors"
+            className="mt-5 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-text-primary text-sm hover:bg-amber-500/30 transition-colors"
           >
             <RotateCcw className="w-4 h-4" />
             Làm lại với câu khác

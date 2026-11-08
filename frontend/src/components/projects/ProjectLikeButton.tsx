@@ -52,7 +52,7 @@ export default function ProjectLikeButton({ slug, initialCount }: ProjectLikeBut
  onClick={onLike}
  disabled={pending}
  aria-label="Like this project"
- className="inline-flex items-center gap-2 px-4 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary hover:border-rose-400/40 hover:text-rose-300 transition-colors disabled:opacity-60 relative"
+ className="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl text-sm text-text-primary hover:border-rose-400/40 hover:text-tone-rose transition-colors disabled:opacity-60 relative"
  >
  <span className="relative">
  <Heart className="w-4 h-4" />
@@ -64,7 +64,7 @@ export default function ProjectLikeButton({ slug, initialCount }: ProjectLikeBut
  animate={{ scale: 2.4, opacity: 0 }}
  exit={{ opacity: 0 }}
  transition={{ duration: 0.6, ease: 'easeOut' }}
- className="absolute inset-0 text-rose-400"
+ className="absolute inset-0 text-tone-rose"
  style={{ filter: 'blur(2px)' }}
  >
  <Heart className="w-4 h-4 fill-current" />

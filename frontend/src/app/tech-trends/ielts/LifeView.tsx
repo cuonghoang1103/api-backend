@@ -29,7 +29,7 @@ export default function LifeView({
 
   return (
     <div>
-      <p className="text-sm text-slate-400 leading-relaxed mb-4 rounded-xl border border-white/10 bg-white/[0.02] p-3">
+      <p className="text-sm text-text-secondary leading-relaxed mb-4 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
         Phần lớn người học bỏ cuộc không phải vì khó, mà vì không thấy tiếng Anh dùng được vào đâu.
         Mỗi tình huống dưới đây là việc bạn có thể gặp ngay trong tháng tới — mà từ vựng thì dùng lại
         được cho kỳ thi, nên không hề học lệch.
@@ -48,8 +48,8 @@ export default function LifeView({
             }}
             className={`px-3 py-2 rounded-xl border text-sm transition-all active:scale-95 ${
               group === g
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             {g}
@@ -66,8 +66,8 @@ export default function LifeView({
             onClick={() => setId(l.id)}
             className={`shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               l.id === id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             <span>{l.icon}</span>
@@ -77,35 +77,35 @@ export default function LifeView({
       </div>
 
       {/* Đầu tình huống */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">{s.group}</span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-tone-sky">{s.group}</span>
         </div>
-        <h3 className="text-xl font-bold text-white mt-2">{s.title}</h3>
-        <p className="text-slate-400 text-sm mt-0.5">{s.titleVi}</p>
+        <h3 className="text-xl font-bold text-text-primary mt-2">{s.title}</h3>
+        <p className="text-text-secondary text-sm mt-0.5">{s.titleVi}</p>
 
         <div className="grid gap-3 sm:grid-cols-2 mt-4">
           <div className="rounded-xl border border-violet-500/25 bg-violet-500/[0.08] p-3">
-            <p className="flex items-center gap-1.5 text-violet-300 text-xs font-semibold mb-1">
+            <p className="flex items-center gap-1.5 text-tone-violet text-xs font-semibold mb-1">
               <Target className="w-3.5 h-3.5" />
               Khi nào bạn cần tới
             </p>
-            <p className="text-slate-200 text-sm leading-relaxed">{s.when}</p>
+            <p className="text-text-primary text-sm leading-relaxed">{s.when}</p>
           </div>
           <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/[0.08] p-3">
-            <p className="flex items-center gap-1.5 text-emerald-300 text-xs font-semibold mb-1">
+            <p className="flex items-center gap-1.5 text-tone-emerald text-xs font-semibold mb-1">
               <GraduationCap className="w-3.5 h-3.5" />
               Nối vào phần nào của kỳ thi
             </p>
-            <p className="text-slate-200 text-sm leading-relaxed">{s.examLink}</p>
+            <p className="text-text-primary text-sm leading-relaxed">{s.examLink}</p>
           </div>
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Hội thoại */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-          <p className="text-sm font-semibold text-white mb-3">Hội thoại mẫu</p>
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+          <p className="text-sm font-semibold text-text-primary mb-3">Hội thoại mẫu</p>
           <div className="space-y-2">
             {s.dialogue.map((d, i) => {
               const isYou = d.who === 'Bạn';
@@ -113,11 +113,11 @@ export default function LifeView({
                 <div
                   key={i}
                   className={`rounded-xl px-3 py-2.5 ${
-                    isYou ? 'bg-sky-500/10 border border-sky-500/20' : 'bg-white/[0.03] border border-white/10'
+                    isYou ? 'bg-sky-500/10 border border-sky-500/20' : 'bg-[var(--bg-surface-hover)] border border-[var(--border-light)]'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className={`text-[10px] uppercase tracking-wide ${isYou ? 'text-sky-300' : 'text-slate-500'}`}>
+                    <p className={`text-[10px] uppercase tracking-wide ${isYou ? 'text-tone-sky' : 'text-text-muted'}`}>
                       {d.who}
                     </p>
                     {supported && (
@@ -126,15 +126,15 @@ export default function LifeView({
                         onClick={() => speak(d.en)}
                         aria-label={`Nghe: ${d.en}`}
                         className={`shrink-0 p-1 rounded transition-all active:scale-90 ${
-                          current === d.en ? 'bg-violet-500/30 text-violet-300' : 'text-slate-600 hover:text-violet-300'
+                          current === d.en ? 'bg-violet-500/30 text-tone-violet' : 'text-text-muted hover:text-tone-violet'
                         }`}
                       >
                         <Volume2 className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
-                  <p className="text-slate-100 text-sm leading-relaxed mt-0.5">{d.en}</p>
-                  <p className="text-slate-500 text-xs mt-1">{d.vi}</p>
+                  <p className="text-text-primary text-sm leading-relaxed mt-0.5">{d.en}</p>
+                  <p className="text-text-muted text-xs mt-1">{d.vi}</p>
                 </div>
               );
             })}
@@ -143,32 +143,32 @@ export default function LifeView({
 
         <div className="space-y-4">
           {/* Cụm từ */}
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white mb-3">
-              <Quote className="w-4 h-4 text-violet-400" />
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary mb-3">
+              <Quote className="w-4 h-4 text-tone-violet" />
               Câu dùng được ngay
             </p>
             <div className="space-y-2">
               {s.phrases.map((p, i) => (
-                <div key={i} className="rounded-lg bg-white/[0.03] px-3 py-2">
+                <div key={i} className="rounded-lg bg-[var(--bg-surface-hover)] px-3 py-2">
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-white text-sm leading-relaxed">{p.en}</p>
+                    <p className="text-text-primary text-sm leading-relaxed">{p.en}</p>
                     {supported && (
                       <button
                         type="button"
                         onClick={() => speak(p.en)}
                         aria-label={`Nghe: ${p.en}`}
                         className={`shrink-0 p-1 rounded transition-all active:scale-90 ${
-                          current === p.en ? 'bg-violet-500/30 text-violet-300' : 'text-slate-600 hover:text-violet-300'
+                          current === p.en ? 'bg-violet-500/30 text-tone-violet' : 'text-text-muted hover:text-tone-violet'
                         }`}
                       >
                         <Volume2 className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
-                  <p className="text-slate-400 text-xs mt-0.5">{p.vi}</p>
+                  <p className="text-text-secondary text-xs mt-0.5">{p.vi}</p>
                   {p.note && (
-                    <p className="text-amber-300/80 text-xs mt-1.5 flex items-start gap-1.5">
+                    <p className="text-tone-amber text-xs mt-1.5 flex items-start gap-1.5">
                       <Lightbulb className="w-3 h-3 shrink-0 mt-0.5" />
                       <span>{p.note}</span>
                     </p>
@@ -180,14 +180,14 @@ export default function LifeView({
 
           {/* Mẹo */}
           <div className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] p-4 sm:p-5">
-            <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
+            <p className="flex items-center gap-2 text-tone-amber text-sm font-semibold mb-2">
               <Lightbulb className="w-4 h-4" />
               Mẹo dùng cho đúng
             </p>
             <ul className="space-y-2">
               {s.tips.map((t, i) => (
-                <li key={i} className="text-slate-200 text-sm leading-relaxed flex gap-2">
-                  <span className="text-amber-400 shrink-0">→</span>
+                <li key={i} className="text-text-primary text-sm leading-relaxed flex gap-2">
+                  <span className="text-tone-amber shrink-0">→</span>
                   <span>{t}</span>
                 </li>
               ))}

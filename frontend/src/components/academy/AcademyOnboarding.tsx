@@ -357,7 +357,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
           role="dialog"
           aria-modal="true"
           aria-labelledby="aco-title"
-          className="relative w-full max-w-2xl my-auto max-h-[92dvh] flex flex-col bg-darkcard border border-darkborder rounded-3xl shadow-2xl shadow-neon-violet/10 overflow-hidden"
+          className="relative w-full max-w-2xl my-auto max-h-[92dvh] flex flex-col bg-[var(--bg-card)] border border-[var(--border-color)] rounded-3xl shadow-2xl shadow-neon-violet/10 overflow-hidden"
           {...panelMotion}
         >
           {/* viền sáng trên đầu */}
@@ -367,7 +367,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
             type="button"
             onClick={dismiss}
             aria-label="Đóng, hỏi lại lần sau"
-            className="absolute top-3 right-3 z-10 w-11 h-11 inline-flex items-center justify-center rounded-full bg-darkcard/85 backdrop-blur-sm text-text-muted hover:text-text-primary hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
+            className="absolute top-3 right-3 z-10 w-11 h-11 inline-flex items-center justify-center rounded-full bg-[var(--bg-glass)] backdrop-blur-sm text-text-muted hover:text-text-primary hover:bg-[var(--bg-surface-active)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan"
           >
             <X className="w-5 h-5" />
           </button>
@@ -441,7 +441,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                       <button
                         type="button"
                         onClick={handleNotStudent}
-                        className="min-h-[56px] rounded-2xl px-4 py-3 font-semibold text-text-primary bg-darksurface border border-darkborder hover:border-neon-cyan/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-darkcard transition"
+                        className="min-h-[56px] rounded-2xl px-4 py-3 font-semibold text-text-primary bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-neon-cyan/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-darkcard transition"
                       >
                         Không, mình học tự do
                       </button>
@@ -464,13 +464,13 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                             type="button"
                             data-autofocus={i === 0 ? 'true' : undefined}
                             onClick={() => handlePickFaculty(f)}
-                            className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                            className="min-h-[64px] text-left rounded-2xl p-3 bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-neon-violet/60 hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
                           >
                             <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{f.icon}</span>
                             <span className="min-w-0">
                               <span className="block font-semibold text-text-primary">{f.nameVi}</span>
                               <span className="block text-xs text-text-muted">{f.name}</span>
-                              <span className="block mt-1 text-[11px] text-neon-cyan">
+                              <span className="block mt-1 text-[11px] text-tone-cyan">
                                 {nMajors > 1 ? `${nMajors} ngành · ` : ''}{nSpecs} chuyên ngành hẹp
                               </span>
                             </span>
@@ -482,7 +482,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                       <button
                         type="button"
                         onClick={() => setStep('ask')}
-                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
+                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
                       >
                         <ArrowLeft className="w-4 h-4" /> Quay lại
                       </button>
@@ -502,13 +502,13 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                           type="button"
                           data-autofocus={i === 0 ? 'true' : undefined}
                           onClick={() => handlePickMajor(m)}
-                          className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                          className="min-h-[64px] text-left rounded-2xl p-3 bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-neon-violet/60 hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
                         >
                           <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{m.icon}</span>
                           <span className="min-w-0">
                             <span className="block font-semibold text-text-primary">{m.nameVi}</span>
                             <span className="block text-xs text-text-muted">{m.name}</span>
-                            <span className={cn('block mt-1 text-[11px]', m.combos.length > 0 ? 'text-neon-cyan' : 'text-text-muted')}>
+                            <span className={cn('block mt-1 text-[11px]', m.combos.length > 0 ? 'text-tone-cyan' : 'text-text-muted')}>
                               {m.combos.length > 0
                                 ? `${m.combos.length} chuyên ngành hẹp · lộ trình 9 kỳ`
                                 : 'Đủ lộ trình 9 kỳ · trường chưa công bố chuyên ngành'}
@@ -521,7 +521,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                       <button
                         type="button"
                         onClick={() => setStep('faculty')}
-                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
+                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
                       >
                         <ArrowLeft className="w-4 h-4" /> Chọn khối khác
                       </button>
@@ -548,7 +548,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                           <span className="block font-semibold text-text-primary">Tôi chưa chọn ngành hẹp — gợi ý giúp tôi</span>
                           <span className="block text-[11px] text-text-secondary mt-0.5">Vào Phòng tư vấn AI: so sánh ngành, thị trường & lương, nối với môn bạn đã học.</span>
                         </span>
-                        <Sparkles className="w-5 h-5 text-neon-violet shrink-0" aria-hidden />
+                        <Sparkles className="w-5 h-5 text-tone-violet shrink-0" aria-hidden />
                       </button>
 
                       {major.combos.map((c, i) => {
@@ -559,13 +559,13 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                             type="button"
                             data-autofocus={i === 0 ? 'true' : undefined}
                             onClick={() => handlePickCombo(c.id)}
-                            className="min-h-[64px] text-left rounded-2xl p-3 bg-darksurface border border-darkborder hover:border-neon-violet/60 hover:bg-white/[0.04] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                            className="min-h-[64px] text-left rounded-2xl p-3 bg-[var(--bg-surface)] border border-[var(--border-color)] hover:border-neon-violet/60 hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
                           >
                             <span aria-hidden="true" className="text-2xl leading-none mt-0.5">{c.icon}</span>
                             <span className="min-w-0 flex-1">
                               <span className="block font-semibold text-text-primary">{c.nameVi}</span>
                               {c.name !== c.nameVi && <span className="block text-xs text-text-muted">{c.name}</span>}
-                              <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[11px] border bg-neon-cyan/10 text-neon-cyan border-neon-cyan/30">
+                              <span className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full text-[11px] border bg-neon-cyan/10 text-tone-cyan border-neon-cyan/30">
                                 <Check className="w-3 h-3" /> {nCourses > 0 ? `${nCourses} môn · lộ trình 9 kỳ` : 'Đang cập nhật khung'}
                               </span>
                             </span>
@@ -580,7 +580,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                         <button
                           type="button"
                           onClick={() => handlePickCombo(null)}
-                          className="min-h-[64px] text-left rounded-2xl p-3 bg-transparent border border-dashed border-darkborder hover:border-neon-cyan/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
+                          className="min-h-[64px] text-left rounded-2xl p-3 bg-transparent border border-dashed border-[var(--border-color)] hover:border-neon-cyan/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex gap-3 items-start"
                         >
                           <span aria-hidden="true" className="text-2xl leading-none mt-0.5">🕓</span>
                           <span className="min-w-0">
@@ -596,7 +596,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                       <button
                         type="button"
                         onClick={() => setStep('major')}
-                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-white/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
+                        className="min-h-[44px] inline-flex items-center gap-2 px-3 rounded-xl text-sm text-text-secondary hover:text-text-primary hover:bg-[var(--bg-surface-hover)] focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition"
                       >
                         <ArrowLeft className="w-4 h-4" /> Chọn ngành khác
                       </button>
@@ -608,7 +608,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                   <div className="space-y-4">
                     <div className="rounded-2xl border border-neon-violet/30 bg-neon-violet/10 p-4 text-center">
                       <p className="text-sm text-text-secondary">
-                        <Sparkles className="w-4 h-4 inline-block mr-1 text-neon-violet" aria-hidden="true" />
+                        <Sparkles className="w-4 h-4 inline-block mr-1 text-tone-violet" aria-hidden="true" />
                         Mình sẽ xếp môn của{' '}
                         <span className="font-semibold text-text-primary">{major?.nameVi ?? 'ngành bạn chọn'}</span>
                         {combo ? (
@@ -630,7 +630,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                         type="button"
                         data-autofocus="true"
                         onClick={() => { onClose(); router.push(`/academy/so-do-mon-hoc?faculty=${facultyId ?? ''}&major=${majorId ?? ''}&combo=${comboId ?? ''}`); }}
-                        className="min-h-[64px] rounded-2xl px-4 font-semibold text-text-primary bg-darksurface border border-neon-cyan/40 hover:border-neon-cyan/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex flex-col items-center justify-center gap-0.5"
+                        className="min-h-[64px] rounded-2xl px-4 font-semibold text-text-primary bg-[var(--bg-surface)] border border-neon-cyan/40 hover:border-neon-cyan/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex flex-col items-center justify-center gap-0.5"
                       >
                         <span className="inline-flex items-center gap-1.5">🗺️ Xem sơ đồ môn học</span>
                         <span className="text-[11px] font-normal text-text-muted">Hiểu học xong làm gì, từng môn để làm gì</span>
@@ -641,7 +641,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
                         className="min-h-[64px] rounded-2xl px-4 font-semibold text-white bg-gradient-to-r from-neon-indigo to-neon-violet hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-neon-cyan transition flex flex-col items-center justify-center gap-0.5"
                       >
                         <span>Vào học ngay</span>
-                        <span className="text-[11px] font-normal text-white/80">Xem lộ trình môn của tôi</span>
+                        <span className="text-[11px] font-normal text-text-secondary">Xem lộ trình môn của tôi</span>
                       </button>
                     </div>
                   </div>
@@ -651,7 +651,7 @@ export default function AcademyOnboarding({ open, onClose, initialStep = 'ask', 
 
             {/* Lưu ghi nhớ — ẩn ở màn cuối vì lúc đó đã ghi (hoặc cố ý không ghi) xong */}
             {step !== 'done' && (
-              <label className="mt-5 flex items-start gap-3 rounded-2xl border border-darkborder bg-darkbg/40 p-3 cursor-pointer">
+              <label className="mt-5 flex items-start gap-3 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] p-3 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={remember}

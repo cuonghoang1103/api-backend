@@ -30,23 +30,23 @@ export default function RoadmapView({
   return (
     <div className="space-y-6">
       {/* Tổng quan */}
-      <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-violet-500/[0.12] to-transparent p-5">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-gradient-to-br from-violet-500/[0.12] to-transparent p-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-sm text-slate-400">Chặng đường của bạn</p>
-            <p className="text-3xl font-bold text-white mt-1">
+            <p className="text-sm text-text-secondary">Chặng đường của bạn</p>
+            <p className="text-3xl font-bold text-text-primary mt-1">
               {doneCount}
-              <span className="text-lg text-slate-500 font-normal"> / {totalDays} ngày</span>
+              <span className="text-lg text-text-muted font-normal"> / {totalDays} ngày</span>
             </p>
           </div>
           <div className="text-right">
-            <p className="text-3xl font-bold text-violet-300">
+            <p className="text-3xl font-bold text-tone-violet">
               {Math.round((doneCount / totalDays) * 100)}%
             </p>
-            <p className="text-xs text-slate-500">hoàn thành</p>
+            <p className="text-xs text-text-muted">hoàn thành</p>
           </div>
         </div>
-        <div className="mt-4 h-2.5 rounded-full bg-white/10 overflow-hidden">
+        <div className="mt-4 h-2.5 rounded-full bg-[var(--bg-surface-active)] overflow-hidden">
           <div
             className="h-full bg-gradient-to-r from-violet-500 via-sky-500 to-emerald-500 transition-all duration-700"
             style={{ width: `${(doneCount / totalDays) * 100}%` }}
@@ -64,7 +64,7 @@ export default function RoadmapView({
             className={`rounded-2xl border p-4 sm:p-5 transition-colors ${
               allDone
                 ? 'border-emerald-400/30 bg-emerald-500/[0.06]'
-                : 'border-white/10 bg-white/[0.02]'
+                : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
             }`}
           >
             {/* Đầu tuần */}
@@ -73,18 +73,18 @@ export default function RoadmapView({
                 <div className="flex items-center gap-2 flex-wrap">
                   <span
                     className={`inline-flex items-center justify-center w-7 h-7 rounded-lg text-xs font-bold ${
-                      allDone ? 'bg-emerald-500 text-white' : 'bg-violet-500/20 text-violet-300'
+                      allDone ? 'bg-emerald-500 text-white' : 'bg-violet-500/20 text-tone-violet'
                     }`}
                   >
                     {allDone ? '✓' : w.week}
                   </span>
-                  <p className="font-bold text-white">Tuần {w.week} — {w.title}</p>
+                  <p className="font-bold text-text-primary">Tuần {w.week} — {w.title}</p>
                 </div>
-                <p className="text-xs text-slate-500 mt-1.5 leading-relaxed">{w.subtitle}</p>
+                <p className="text-xs text-text-muted mt-1.5 leading-relaxed">{w.subtitle}</p>
               </div>
               <span
                 className={`shrink-0 text-xs px-2 py-1 rounded-lg ${
-                  allDone ? 'bg-emerald-500/20 text-emerald-300' : 'bg-white/5 text-slate-400'
+                  allDone ? 'bg-emerald-500/20 text-tone-emerald' : 'bg-[var(--bg-surface-hover)] text-text-secondary'
                 }`}
               >
                 {weekDone}/{w.days.length}
@@ -94,7 +94,7 @@ export default function RoadmapView({
             {/* Dải mốc ngày, có đường nối chạy phía sau */}
             <div className="relative">
               {/* Đường nền chạy ngang giữa các mốc (ẩn trên mobile vì xếp dọc) */}
-              <div className="hidden sm:block absolute top-6 left-[10%] right-[10%] h-0.5 bg-white/10" />
+              <div className="hidden sm:block absolute top-6 left-[10%] right-[10%] h-0.5 bg-[var(--bg-surface-active)]" />
               <div
                 className="hidden sm:block absolute top-6 left-[10%] h-0.5 bg-gradient-to-r from-violet-500 to-emerald-500 transition-all duration-700"
                 style={{ width: `${(weekDone / w.days.length) * 80}%` }}
@@ -115,27 +115,27 @@ export default function RoadmapView({
                       <span
                         className={`relative w-12 h-12 rounded-full flex items-center justify-center text-xl border-2 transition-all group-active:scale-90 ${
                           ok
-                            ? 'bg-emerald-500/25 border-emerald-400 text-emerald-100'
+                            ? 'bg-emerald-500/25 border-emerald-400 text-tone-emerald'
                             : on
                               ? 'bg-violet-500/30 border-violet-400 scale-110'
-                              : 'bg-[#12121a] border-white/15 group-hover:border-violet-400/50'
+                              : 'bg-[#12121a] border-[var(--border-light-hover)] group-hover:border-violet-400/50'
                         }`}
                       >
-                        {ok ? <CheckCircle2 className="w-6 h-6 text-emerald-400" /> : d.icon}
+                        {ok ? <CheckCircle2 className="w-6 h-6 text-tone-emerald" /> : d.icon}
                         {on && !ok && (
                           <span className="absolute -bottom-1 w-2 h-2 rounded-full bg-violet-400" />
                         )}
                       </span>
                       <span
                         className={`mt-2 text-[11px] font-medium ${
-                          on ? 'text-violet-300' : ok ? 'text-emerald-300/80' : 'text-slate-500'
+                          on ? 'text-tone-violet' : ok ? 'text-tone-emerald' : 'text-text-muted'
                         }`}
                       >
                         Ngày {d.day}
                       </span>
                       <span
                         className={`text-[11px] leading-tight mt-0.5 ${
-                          on ? 'text-slate-200' : 'text-slate-500'
+                          on ? 'text-text-primary' : 'text-text-muted'
                         }`}
                       >
                         {d.title}
@@ -150,16 +150,16 @@ export default function RoadmapView({
       })}
 
       {/* Đích */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 text-center">
-        <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-white/5 border-2 border-white/15 text-2xl mb-2">
-          {doneCount === totalDays ? '🏆' : <Lock className="w-5 h-5 text-slate-600" />}
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 text-center">
+        <span className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[var(--bg-surface-hover)] border-2 border-[var(--border-light-hover)] text-2xl mb-2">
+          {doneCount === totalDays ? '🏆' : <Lock className="w-5 h-5 text-text-muted" />}
         </span>
-        <p className={`font-bold ${doneCount === totalDays ? 'text-amber-300' : 'text-slate-400'}`}>
+        <p className={`font-bold ${doneCount === totalDays ? 'text-tone-amber' : 'text-text-secondary'}`}>
           {doneCount === totalDays
             ? 'Xong toàn bộ lộ trình! Chuyển sang tab “Cho Dev”.'
             : `Còn ${totalDays - doneCount} ngày nữa tới đích`}
         </p>
-        <p className="text-xs text-slate-500 mt-1">
+        <p className="text-xs text-text-muted mt-1">
           Đích: nói liên tục 3 phút về bản thân, công việc và một câu chuyện theo cấu trúc STAR.
         </p>
       </div>

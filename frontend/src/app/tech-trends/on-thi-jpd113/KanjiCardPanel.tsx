@@ -88,19 +88,19 @@ export default function KanjiCardPanel() {
     <div className="rounded-xl border border-neon-violet/25 bg-neon-violet/[0.05] p-4 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3 mb-3">
         <div>
-          <div className="text-sm font-bold text-neon-violet mb-1">
+          <div className="text-sm font-bold text-tone-violet mb-1">
             🃏 Lật thẻ chữ Hán — mặt chữ → cách đọc → nghĩa
           </div>
-          <p className="text-[13px] text-slate-300 leading-relaxed max-w-2xl">
-            Bảng bên dưới để <b className="text-white">tra</b>, khu này để{' '}
-            <b className="text-white">nhớ</b>. Nhìn mặt chữ, tự đọc thành tiếng rồi mới lật —
+          <p className="text-[13px] text-text-secondary leading-relaxed max-w-2xl">
+            Bảng bên dưới để <b className="text-text-primary">tra</b>, khu này để{' '}
+            <b className="text-text-primary">nhớ</b>. Nhìn mặt chữ, tự đọc thành tiếng rồi mới lật —
             đúng thao tác bạn phải làm khi giám thị đưa bài đọc.
           </p>
         </div>
         {mounted && learned > 0 && (
           <button
             onClick={() => persist({})}
-            className="text-[11px] text-slate-500 hover:text-white transition-colors shrink-0"
+            className="text-[11px] text-text-muted hover:text-text-primary transition-colors shrink-0"
           >
             Xoá đánh dấu ({learned})
           </button>
@@ -129,7 +129,7 @@ export default function KanjiCardPanel() {
           />
         ))}
       </div>
-      <p className="text-[12px] text-slate-500 leading-relaxed mb-4">
+      <p className="text-[12px] text-text-muted leading-relaxed mb-4">
         {deck ? deck.desc : 'Gộp mọi bộ, đã bỏ các thẻ trùng nhau.'}
       </p>
 
@@ -146,8 +146,8 @@ export default function KanjiCardPanel() {
             onClick={() => setMode(m)}
             className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium border transition-colors ${
               mode === m
-                ? 'bg-neon-violet/20 border-neon-violet/50 text-white'
-                : 'bg-white/[0.04] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-neon-violet/20 border-neon-violet/50 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             <Icon className="w-3.5 h-3.5" />
@@ -185,12 +185,12 @@ function DeckChip({
       onClick={onClick}
       className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium border transition-colors ${
         active
-          ? 'bg-neon-violet/20 border-neon-violet/50 text-white'
-          : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+          ? 'bg-neon-violet/20 border-neon-violet/50 text-text-primary'
+          : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
       }`}
     >
       {icon} {label}{' '}
-      <span className={active ? 'text-neon-violet' : 'text-slate-600'}>
+      <span className={active ? 'text-tone-violet' : 'text-text-muted'}>
         {done > 0 ? `${done}/${count}` : count}
       </span>
     </button>
@@ -232,15 +232,15 @@ function FlipView({
   }, [cards, known, mounted, order]);
 
   if (!mounted) {
-    return <div className="h-40 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+    return <div className="h-40 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>;
   }
 
   if (deck.length === 0) {
     return (
       <div className="rounded-xl border border-neon-green/25 bg-neon-green/[0.06] p-8 text-center">
-        <Trophy className="w-9 h-9 text-neon-green mx-auto mb-3" />
-        <p className="text-white font-semibold mb-1">Thuộc hết bộ này rồi</p>
-        <p className="text-[13px] text-slate-400">
+        <Trophy className="w-9 h-9 text-tone-green mx-auto mb-3" />
+        <p className="text-text-primary font-semibold mb-1">Thuộc hết bộ này rồi</p>
+        <p className="text-[13px] text-text-secondary">
           Chọn bộ khác, hoặc bấm “Xoá đánh dấu” ở góc trên để ôn lại từ đầu.
         </p>
       </div>
@@ -256,8 +256,8 @@ function FlipView({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between text-[11px]">
-        <span className="text-slate-400">
-          Thẻ <b className="text-white">{Math.min(i + 1, deck.length)}</b>/{deck.length} · chưa thuộc
+        <span className="text-text-secondary">
+          Thẻ <b className="text-text-primary">{Math.min(i + 1, deck.length)}</b>/{deck.length} · chưa thuộc
         </span>
         <div className="flex items-center gap-3">
           <button
@@ -266,7 +266,7 @@ function FlipView({
               setI(0);
               setFlipped(false);
             }}
-            className="inline-flex items-center gap-1 text-slate-500 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1 text-text-muted hover:text-text-primary transition-colors"
           >
             <Shuffle className="w-3.5 h-3.5" />
             Trộn
@@ -276,7 +276,7 @@ function FlipView({
               setI(0);
               setFlipped(false);
             }}
-            className="inline-flex items-center gap-1 text-slate-500 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1 text-text-muted hover:text-text-primary transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Thẻ đầu
@@ -289,22 +289,22 @@ function FlipView({
         className={`w-full rounded-2xl border px-5 py-10 sm:py-12 text-center transition-colors ${
           card.danger
             ? 'border-neon-red/35 bg-neon-red/[0.05] hover:border-neon-red/55'
-            : 'border-white/12 bg-white/[0.03] hover:border-neon-violet/40'
+            : 'border-[var(--border-light-hover)] bg-[var(--bg-surface-hover)] hover:border-neon-violet/40'
         }`}
       >
         {!flipped ? (
           <>
-            <div className="text-5xl sm:text-6xl text-white leading-tight tracking-wide">{card.word}</div>
-            <div className="text-[11px] text-slate-600 mt-6">đọc thành tiếng rồi bấm để lật</div>
+            <div className="text-5xl sm:text-6xl text-text-primary leading-tight tracking-wide">{card.word}</div>
+            <div className="text-[11px] text-text-muted mt-6">đọc thành tiếng rồi bấm để lật</div>
           </>
         ) : (
           <>
             {card.kana !== card.word && (
-              <div className="text-3xl sm:text-4xl text-neon-cyan leading-tight mb-3">{card.kana}</div>
+              <div className="text-3xl sm:text-4xl text-tone-cyan leading-tight mb-3">{card.kana}</div>
             )}
-            <div className="text-xl sm:text-2xl text-white leading-snug">{card.meaning}</div>
+            <div className="text-xl sm:text-2xl text-text-primary leading-snug">{card.meaning}</div>
             {card.hanviet && (
-              <div className="text-[13px] text-neon-green font-semibold mt-2.5 tracking-wide">
+              <div className="text-[13px] text-tone-green font-semibold mt-2.5 tracking-wide">
                 {card.hanviet}
               </div>
             )}
@@ -316,24 +316,24 @@ function FlipView({
                 <div className="text-[10px] font-bold text-neon-green/80 uppercase tracking-wide mb-0.5">
                   Tiếng Việt bạn đã biết
                 </div>
-                <div className="text-[13px] text-white leading-relaxed">{card.viWord}</div>
+                <div className="text-[13px] text-text-primary leading-relaxed">{card.viWord}</div>
               </div>
             )}
             {card.shape && (
-              <div className="mt-2 mx-auto max-w-sm rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2">
-                <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-0.5">
+              <div className="mt-2 mx-auto max-w-sm rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3.5 py-2">
+                <div className="text-[10px] font-bold text-text-muted uppercase tracking-wide mb-0.5">
                   Mẹo nhìn hình
                 </div>
-                <div className="text-[13px] text-slate-300 leading-relaxed">{card.shape}</div>
+                <div className="text-[13px] text-text-secondary leading-relaxed">{card.shape}</div>
               </div>
             )}
             {card.note && (
-              <p className="text-[12px] text-slate-400 leading-relaxed mt-4 max-w-md mx-auto">
-                {card.danger && <AlertTriangle className="w-3.5 h-3.5 inline mr-1 -mt-0.5 text-neon-red" />}
+              <p className="text-[12px] text-text-secondary leading-relaxed mt-4 max-w-md mx-auto">
+                {card.danger && <AlertTriangle className="w-3.5 h-3.5 inline mr-1 -mt-0.5 text-tone-red" />}
                 {card.note}
               </p>
             )}
-            <div className="text-[11px] text-slate-600 mt-5">bấm để lật lại</div>
+            <div className="text-[11px] text-text-muted mt-5">bấm để lật lại</div>
           </>
         )}
       </button>
@@ -344,14 +344,14 @@ function FlipView({
             onToggle(card);
             setFlipped(false);
           }}
-          className="px-3 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-[13px] font-medium text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+          className="px-3 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-[13px] font-medium text-text-primary hover:bg-neon-green/25 transition-colors active:scale-95"
         >
           <Check className="w-4 h-4 inline mr-1.5" />
           Thuộc rồi
         </button>
         <button
           onClick={next}
-          className="px-3 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-[13px] font-medium text-white hover:border-neon-violet/40 transition-colors active:scale-95"
+          className="px-3 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-[13px] font-medium text-text-primary hover:border-neon-violet/40 transition-colors active:scale-95"
         >
           Chưa thuộc, thẻ tiếp →
         </button>
@@ -428,7 +428,7 @@ function QuizView({
   }, [mounted, dir, cards]);
 
   if (!mounted) {
-    return <div className="h-40 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+    return <div className="h-40 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>;
   }
 
   const dirPicker = (
@@ -439,8 +439,8 @@ function QuizView({
           onClick={() => setDir(d)}
           className={`px-2.5 py-1.5 rounded-lg text-[11px] font-medium border transition-colors ${
             dir === d
-              ? 'bg-neon-cyan/15 border-neon-cyan/45 text-white'
-              : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+              ? 'bg-neon-cyan/15 border-neon-cyan/45 text-text-primary'
+              : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
           }`}
         >
           {DIR_LABEL[d]}
@@ -453,7 +453,7 @@ function QuizView({
     return (
       <div className="space-y-3">
         {dirPicker}
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-8 text-center text-[13px] text-slate-400">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-8 text-center text-[13px] text-text-secondary">
           Bộ này chưa đủ 4 thẻ hỏi được theo chiều đang chọn — đổi chiều hỏi, hoặc chọn bộ
           “Tất cả”.
         </div>
@@ -467,39 +467,39 @@ function QuizView({
     const acc = Math.round((right / queue.length) * 100);
     return (
       <div className="space-y-4">
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-6">
           <div className="text-center mb-5">
             <div
               className={`w-14 h-14 mx-auto mb-3 rounded-2xl flex items-center justify-center ${
                 acc >= 80 ? 'bg-neon-green/15' : 'bg-neon-orange/15'
               }`}
             >
-              <Trophy className={`w-7 h-7 ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`} />
+              <Trophy className={`w-7 h-7 ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`} />
             </div>
-            <div className="text-3xl font-heading font-bold text-white mb-0.5">
+            <div className="text-3xl font-heading font-bold text-text-primary mb-0.5">
               {right}/{queue.length}
             </div>
-            <div className={`text-[13px] font-semibold ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`}>
+            <div className={`text-[13px] font-semibold ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`}>
               Chính xác {acc}%
             </div>
           </div>
 
           {wrong.length > 0 && (
             <div className="mb-5">
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-2">
+              <div className="text-[11px] font-bold text-text-secondary uppercase tracking-wide mb-2">
                 {wrong.length} thẻ cần học lại
               </div>
               <div className="space-y-1.5">
                 {wrong.map((c, i) => (
                   <div
                     key={`${c.word}-${i}`}
-                    className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2"
+                    className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2"
                   >
-                    <span className="text-lg text-white">{c.word}</span>
-                    {c.kana !== c.word && <span className="text-[13px] text-neon-cyan">{c.kana}</span>}
-                    <span className="text-[13px] text-slate-400">{c.meaning}</span>
+                    <span className="text-lg text-text-primary">{c.word}</span>
+                    {c.kana !== c.word && <span className="text-[13px] text-tone-cyan">{c.kana}</span>}
+                    <span className="text-[13px] text-text-secondary">{c.meaning}</span>
                     {c.hanviet && (
-                      <span className="text-[11px] text-neon-green font-semibold">{c.hanviet}</span>
+                      <span className="text-[11px] text-tone-green font-semibold">{c.hanviet}</span>
                     )}
                   </div>
                 ))}
@@ -509,7 +509,7 @@ function QuizView({
 
           <button
             onClick={build}
-            className="w-full px-4 py-2.5 rounded-xl bg-neon-violet/20 border border-neon-violet/45 text-[13px] font-medium text-white hover:bg-neon-violet/30 transition-colors"
+            className="w-full px-4 py-2.5 rounded-xl bg-neon-violet/20 border border-neon-violet/45 text-[13px] font-medium text-text-primary hover:bg-neon-violet/30 transition-colors"
           >
             <RotateCcw className="w-4 h-4 inline mr-1.5" />
             Làm lại {QUIZ_SIZE} câu khác
@@ -535,20 +535,20 @@ function QuizView({
     <div className="space-y-3">
       {dirPicker}
 
-      <div className="flex items-center justify-between text-[11px] text-slate-400">
+      <div className="flex items-center justify-between text-[11px] text-text-secondary">
         <span>
-          Câu <b className="text-white">{idx + 1}</b>/{queue.length}
+          Câu <b className="text-text-primary">{idx + 1}</b>/{queue.length}
         </span>
         <span>
-          Đúng <b className="text-neon-green">{right}</b>
+          Đúng <b className="text-tone-green">{right}</b>
         </span>
       </div>
 
-      <div className="rounded-2xl border border-white/12 bg-white/[0.03] px-5 py-8 text-center">
-        <div className={`text-white leading-tight ${dir === 'r2k' ? 'text-3xl sm:text-4xl' : 'text-5xl sm:text-6xl'}`}>
+      <div className="rounded-2xl border border-[var(--border-light-hover)] bg-[var(--bg-surface-hover)] px-5 py-8 text-center">
+        <div className={`text-text-primary leading-tight ${dir === 'r2k' ? 'text-3xl sm:text-4xl' : 'text-5xl sm:text-6xl'}`}>
           {prompt}
         </div>
-        <div className="text-[11px] text-slate-600 mt-4">
+        <div className="text-[11px] text-text-muted mt-4">
           {dir === 'k2r' ? 'đọc thế nào?' : dir === 'k2m' ? 'nghĩa là gì?' : 'viết bằng chữ nào?'}
         </div>
       </div>
@@ -565,11 +565,11 @@ function QuizView({
               className={`px-3.5 py-3 rounded-xl border text-left transition-colors ${
                 picked
                   ? isCorrect
-                    ? 'bg-neon-green/15 border-neon-green/50 text-white'
+                    ? 'bg-neon-green/15 border-neon-green/50 text-text-primary'
                     : isPicked
-                      ? 'bg-neon-red/15 border-neon-red/50 text-white'
-                      : 'bg-white/[0.02] border-white/[0.08] text-slate-500'
-                  : 'bg-white/[0.04] border-white/12 text-white hover:border-neon-violet/45'
+                      ? 'bg-neon-red/15 border-neon-red/50 text-text-primary'
+                      : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-muted'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light-hover)] text-text-primary hover:border-neon-violet/45'
               }`}
             >
               <span className={dir === 'r2k' ? 'text-xl' : 'text-[15px]'}>{c}</span>
@@ -579,26 +579,26 @@ function QuizView({
       </div>
 
       {picked && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-3.5">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3.5">
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-1">
-            <span className="text-2xl text-white">{q.card.word}</span>
+            <span className="text-2xl text-text-primary">{q.card.word}</span>
             {q.card.kana !== q.card.word && (
-              <span className="text-base text-neon-cyan">{q.card.kana}</span>
+              <span className="text-base text-tone-cyan">{q.card.kana}</span>
             )}
-            <span className="text-[13px] text-slate-300">{q.card.meaning}</span>
+            <span className="text-[13px] text-text-secondary">{q.card.meaning}</span>
             {q.card.hanviet && (
-              <span className="text-[11px] text-neon-green font-semibold">{q.card.hanviet}</span>
+              <span className="text-[11px] text-tone-green font-semibold">{q.card.hanviet}</span>
             )}
           </div>
           {q.card.note && (
-            <p className="text-[12px] text-slate-400 leading-relaxed">{q.card.note}</p>
+            <p className="text-[12px] text-text-secondary leading-relaxed">{q.card.note}</p>
           )}
           <button
             onClick={() => {
               setPicked(null);
               setIdx((v) => v + 1);
             }}
-            className="w-full mt-3 px-4 py-2.5 rounded-xl bg-neon-violet/20 border border-neon-violet/45 text-[13px] font-medium text-white hover:bg-neon-violet/30 transition-colors"
+            className="w-full mt-3 px-4 py-2.5 rounded-xl bg-neon-violet/20 border border-neon-violet/45 text-[13px] font-medium text-text-primary hover:bg-neon-violet/30 transition-colors"
           >
             {idx + 1 >= queue.length ? 'Xem kết quả' : 'Câu tiếp →'}
           </button>

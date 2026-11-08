@@ -60,7 +60,7 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  return (
  <section className="mt-12">
  <h2 className="text-lg font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
- <Cog className="w-5 h-5 text-neon-violet" />
+ <Cog className="w-5 h-5 text-tone-violet" />
  {L('Lộ trình phát triển', 'Build roadmap')}
  </h2>
  <div className="relative pl-6 sm:pl-10">
@@ -90,13 +90,13 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  className="absolute -left-[1.55rem] sm:-left-[2.30rem] top-1 w-7 h-7 rounded-full bg-gradient-to-br from-neon-indigo to-neon-violet flex items-center justify-center"
  style={{ boxShadow: '0 0 16px rgba(168,85,247,0.5)' }}
  >
- <Icon className="w-3.5 h-3.5 text-white" />
+ <Icon className="w-3.5 h-3.5 text-text-primary" />
  </div>
- <div className="bg-darkcard border border-darkborder rounded-xl p-4 sm:p-5">
+ <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl p-4 sm:p-5">
  <div className="flex items-center justify-between gap-2 mb-2 flex-wrap">
  <h3 className="font-semibold text-text-primary">{pick(m.title, m.titleEn)}</h3>
  <div className="flex items-center gap-2 text-xs text-text-muted">
- <span className="px-2 py-0.5 bg-neon-violet/10 text-neon-violet rounded-full uppercase tracking-wider">
+ <span className="px-2 py-0.5 bg-neon-violet/10 text-tone-violet rounded-full uppercase tracking-wider">
  {labelOf(PHASE_LABELS_I18N, m.phase, lang)}
  </span>
  {m.date && (
@@ -111,7 +111,7 @@ export default function MilestoneTimeline({ milestones }: MilestoneTimelineProps
  <p className="text-sm text-text-secondary leading-relaxed">{pick(m.description, m.descriptionEn)}</p>
  )}
  {m.imageUrl && (
- <div className="mt-3 rounded-lg overflow-hidden border border-darkborder">
+ <div className="mt-3 rounded-lg overflow-hidden border border-[var(--border-color)]">
  {/* eslint-disable-next-line @next/next/no-img-element */}
  <img src={m.imageUrl} alt={pick(m.title, m.titleEn)} className="w-full h-auto" />
  </div>

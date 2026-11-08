@@ -262,46 +262,46 @@ export default function OnThiJPD113Client() {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-24" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen pt-24 pb-24" style={{ background: 'var(--bg-primary)' }}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <Link
           href="/tech-trends"
-          className="inline-flex items-center gap-2 text-sm text-slate-400 hover:text-white transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors mb-6"
         >
           <ArrowLeft className="w-4 h-4" />
           Tech Trends
         </Link>
 
         {/* ═══════════════ HERO ═══════════════ */}
-        <header className="rounded-3xl border border-white/10 bg-gradient-to-br from-[#151125] via-[#12101c] to-[#0d0b14] p-6 sm:p-9 mb-8">
+        <header className="rounded-3xl border border-[var(--border-light)] bg-gradient-to-br from-violet-500/10 via-[var(--bg-card)] to-[var(--bg-card)] p-6 sm:p-9 mb-8">
           <div className="flex flex-wrap items-center gap-2 mb-4">
-            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-violet/15 text-neon-violet border border-neon-violet/25">
+            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-violet/15 text-tone-violet border border-neon-violet/25">
               JPD113 · KỲ 3
             </span>
-            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-green/15 text-neon-green border border-neon-green/25">
+            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-green/15 text-tone-green border border-neon-green/25">
               JPD123 · KỲ 4
             </span>
-            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-orange/15 text-neon-orange border border-neon-orange/25">
+            <span className="px-3 py-1 rounded-full text-[11px] font-semibold tracking-wide bg-neon-orange/15 text-tone-orange border border-neon-orange/25">
               30 NGÀY HỌC LẠI TỪ GỐC
             </span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-white tracking-tight leading-[1.1] mb-4">
+          <h1 className="text-3xl sm:text-5xl font-heading font-bold text-text-primary tracking-tight leading-[1.1] mb-4">
             Học lại tiếng Nhật —{' '}
             <span className="bg-gradient-to-r from-neon-violet via-neon-fuchsia to-neon-orange bg-clip-text text-transparent">
               một tháng xây lại nền
             </span>
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-300 leading-relaxed max-w-3xl mb-4">
-            Lộ trình <b className="text-white">30 ngày</b> chạy TRƯỚC khi vào kỳ, học song song{' '}
-            <b className="text-white">JPD113</b> (học lại cho chắc) và <b className="text-white">JPD123</b>{' '}
+          <p className="text-base sm:text-lg text-text-secondary leading-relaxed max-w-3xl mb-4">
+            Lộ trình <b className="text-text-primary">30 ngày</b> chạy TRƯỚC khi vào kỳ, học song song{' '}
+            <b className="text-text-primary">JPD113</b> (học lại cho chắc) và <b className="text-text-primary">JPD123</b>{' '}
             (đi trước một bước) — để vào lớp là đã học rồi, mỗi buổi trên trường thành một buổi ôn.
           </p>
-          <p className="text-sm text-slate-400 leading-relaxed max-w-3xl mb-7">
-            Lộ trình được viết lại từ biên bản kỳ thi trượt: <b className="text-slate-300">nghe không hiểu
-            câu hỏi giám thị</b>, <b className="text-slate-300">đọc rời từng chữ và sai chữ Hán</b>,{' '}
-            <b className="text-slate-300">không hiểu câu trắc nghiệm dịch ra gì</b>. Mỗi lỗi có một mạch
+          <p className="text-sm text-text-secondary leading-relaxed max-w-3xl mb-7">
+            Lộ trình được viết lại từ biên bản kỳ thi trượt: <b className="text-text-secondary">nghe không hiểu
+            câu hỏi giám thị</b>, <b className="text-text-secondary">đọc rời từng chữ và sai chữ Hán</b>,{' '}
+            <b className="text-text-secondary">không hiểu câu trắc nghiệm dịch ra gì</b>. Mỗi lỗi có một mạch
             luyện riêng chạy suốt 30 ngày.
           </p>
 
@@ -339,24 +339,24 @@ export default function OnThiJPD113Client() {
           {/* Thanh tiến độ */}
           <div className="mt-6">
             <div className="flex items-center justify-between text-xs mb-2">
-              <span className="text-slate-400">
+              <span className="text-text-secondary">
                 Tiến độ tổng {mounted ? `· đã học ~${Math.round(stats.minutesDone / 60)}h` : ''}
               </span>
-              <span className="font-semibold text-white">{mounted ? `${stats.pct}%` : '0%'}</span>
+              <span className="font-semibold text-text-primary">{mounted ? `${stats.pct}%` : '0%'}</span>
             </div>
-            <div className="h-2.5 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-2.5 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-fuchsia transition-all duration-500"
                 style={{ width: mounted ? `${stats.pct}%` : '0%' }}
               />
             </div>
             <div className="flex items-center justify-between text-xs mt-3 mb-2">
-              <span className="text-slate-400">Riêng phần CỐT LÕI (đủ để qua môn)</span>
-              <span className="font-semibold text-neon-green">
+              <span className="text-text-secondary">Riêng phần CỐT LÕI (đủ để qua môn)</span>
+              <span className="font-semibold text-tone-green">
                 {mounted ? `${stats.coreDone}/${stats.coreTotal}` : '—'}
               </span>
             </div>
-            <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+            <div className="h-2 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-neon-green to-neon-emerald transition-all duration-500"
                 style={{ width: mounted ? `${stats.corePct}%` : '0%' }}
@@ -370,7 +370,7 @@ export default function OnThiJPD113Client() {
             dung cuộn phía dưới vẫn lộ qua, đọc rất rối.
             Lưu ý: opacity phải là bước có sẵn của Tailwind (…/95) — `/92`
             không nằm trong scale nên class không được sinh ra chút nào. */}
-        <nav className="flex flex-wrap gap-2 mb-8 sticky top-16 z-20 py-2.5 -mx-2 px-2 rounded-b-xl bg-[#0a0a0f]/95 backdrop-blur-md">
+        <nav className="flex flex-wrap gap-2 mb-8 sticky top-16 z-20 py-2.5 -mx-2 px-2 rounded-b-xl bg-[var(--bg-glass)] backdrop-blur-md">
           {TABS.map((t) => {
             const Icon = t.icon;
             const active = tab === t.id;
@@ -380,8 +380,8 @@ export default function OnThiJPD113Client() {
                 onClick={() => setTab(t.id)}
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all active:scale-95 border ${
                   active
-                    ? 'bg-neon-violet/15 border-neon-violet/40 text-white'
-                    : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/20'
+                    ? 'bg-neon-violet/15 border-neon-violet/40 text-text-primary'
+                    : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -454,14 +454,14 @@ function PlanTab({
     <div className="space-y-8">
       {/* Vì sao trượt — và lộ trình mới chữa cái gì */}
       <section className="rounded-2xl border border-neon-orange/25 bg-neon-orange/[0.05] p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-white mb-4">
-          <Target className="w-5 h-5 text-neon-orange" />
+        <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-text-primary mb-4">
+          <Target className="w-5 h-5 text-tone-orange" />
           Lần trước hỏng ở đâu — và lộ trình này chữa bằng cách nào
         </h2>
-        <div className="space-y-4 text-sm text-slate-300 leading-relaxed">
+        <div className="space-y-4 text-sm text-text-secondary leading-relaxed">
           <p>
-            <b className="text-white">Nói thẳng: trượt không phải vì bạn kém, mà vì học dồn vào 5 ngày cuối.</b>{' '}
-            Kana, nghe hiểu và phản xạ nói là ba thứ <b className="text-white">không nhồi được</b> — chúng cần
+            <b className="text-text-primary">Nói thẳng: trượt không phải vì bạn kém, mà vì học dồn vào 5 ngày cuối.</b>{' '}
+            Kana, nghe hiểu và phản xạ nói là ba thứ <b className="text-text-primary">không nhồi được</b> — chúng cần
             thời gian ngấm. Nhồi 5 ngày thì đúng ba thứ đó sập, và đó chính xác là những gì đã xảy ra.
           </p>
           <div className="grid sm:grid-cols-3 gap-3">
@@ -482,26 +482,26 @@ function PlanTab({
             />
           </div>
           <p className="pt-1">
-            <b className="text-white">Vì sao học cả hai môn cùng lúc lại DỄ hơn:</b> JPD123 dùng lại toàn bộ
+            <b className="text-text-primary">Vì sao học cả hai môn cùng lúc lại DỄ hơn:</b> JPD123 dùng lại toàn bộ
             kana, số, giờ và trợ từ của JPD113. Học JPD113 cho chắc trong tháng này thì một nửa JPD123 coi như
             đã xong. Mỗi ngày từ Ngày 11 có một khối JPD123 ngắn, và 6 ngày cuối dành hẳn cho nó.
           </p>
-          <div className="rounded-xl border border-white/15 bg-black/25 p-4">
-            <div className="text-xs font-bold text-white mb-2">
+          <div className="rounded-xl border border-[var(--border-light-hover)] bg-[var(--bg-surface)] p-4">
+            <div className="text-xs font-bold text-text-primary mb-2">
               Mỗi ngày khoảng 2,5–3,5 giờ. Nếu hôm nào chỉ có 1 giờ thì cắt theo thứ tự này:
             </div>
-            <ol className="space-y-1.5 text-[13px] text-slate-300 leading-relaxed">
+            <ol className="space-y-1.5 text-[13px] text-text-secondary leading-relaxed">
               <li>
-                <b className="text-neon-green">1. KHÔNG BAO GIỜ BỎ</b> — 5 việc lặp hằng ngày bên dưới (55
+                <b className="text-tone-green">1. KHÔNG BAO GIỜ BỎ</b> — 5 việc lặp hằng ngày bên dưới (55
                 phút). Chúng nhỏ nhưng là thứ duy nhất chống rơi kiến thức. Bỏ chúng là quay lại đúng vết xe cũ.
               </li>
               <li>
-                <b className="text-neon-cyan">2. Giữ nếu còn sức</b> — khối 1 của ngày hôm đó (phần lõi), và
+                <b className="text-tone-cyan">2. Giữ nếu còn sức</b> — khối 1 của ngày hôm đó (phần lõi), và
                 mọi việc gắn nhãn nghe.
               </li>
               <li>
-                <b className="text-slate-400">3. Bỏ trước tiên</b> — mọi việc gắn nhãn “NÂNG ĐIỂM”. Bấm nút{' '}
-                <b className="text-white">“Chỉ hiện việc CỐT LÕI”</b> bên dưới để ẩn chúng đi.
+                <b className="text-text-secondary">3. Bỏ trước tiên</b> — mọi việc gắn nhãn “NÂNG ĐIỂM”. Bấm nút{' '}
+                <b className="text-text-primary">“Chỉ hiện việc CỐT LÕI”</b> bên dưới để ẩn chúng đi.
               </li>
             </ol>
           </div>
@@ -512,21 +512,21 @@ function PlanTab({
       <section className="rounded-2xl border border-neon-violet/25 bg-neon-violet/[0.05] p-5">
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <CalendarClock className="w-5 h-5 text-neon-violet" />
-            <span className="text-sm font-bold text-white">Ngày bắt đầu lộ trình</span>
+            <CalendarClock className="w-5 h-5 text-tone-violet" />
+            <span className="text-sm font-bold text-text-primary">Ngày bắt đầu lộ trình</span>
           </div>
           <input
             type="date"
             value={start}
             onChange={(e) => e.target.value && onStart(e.target.value)}
-            className="px-3 py-2 rounded-xl bg-black/40 border border-white/15 text-white text-sm focus:outline-none focus:border-neon-violet/60 [color-scheme:dark]"
+            className="px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-light-hover)] text-text-primary text-sm focus:outline-none focus:border-neon-violet/60 [color-scheme:dark]"
           />
-          <span className="text-[13px] text-slate-400">
+          <span className="text-[13px] text-text-secondary">
             Ngày 30 rơi vào{' '}
-            <b className="text-white">{mounted ? fmtDate(dateForDay(start, PLAN.length)) : '—'}</b>
+            <b className="text-text-primary">{mounted ? fmtDate(dateForDay(start, PLAN.length)) : '—'}</b>
           </span>
         </div>
-        <p className="text-[12px] text-slate-500 mt-2.5 leading-relaxed">
+        <p className="text-[12px] text-text-muted mt-2.5 leading-relaxed">
           Lộ trình đánh số Ngày 1..30 chứ không gắn cứng vào lịch, nên bắt đầu muộn vài hôm cũng không hỏng —
           chỉ cần đổi lại ngày ở đây. Ngày bắt đầu lưu trên máy bạn.
         </p>
@@ -534,7 +534,7 @@ function PlanTab({
 
       {/* 5 giai đoạn */}
       <section>
-        <h2 className="text-lg font-heading font-semibold text-white mb-4">Năm giai đoạn</h2>
+        <h2 className="text-lg font-heading font-semibold text-text-primary mb-4">Năm giai đoạn</h2>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {PHASES.map((p) => (
             <div
@@ -547,8 +547,8 @@ function PlanTab({
                   GĐ {p.n} · {p.range}
                 </span>
               </div>
-              <h3 className="text-base font-bold text-white mb-1.5">{p.name}</h3>
-              <p className="text-[13px] text-slate-400 leading-relaxed mb-2">{p.goal}</p>
+              <h3 className="text-base font-bold text-text-primary mb-1.5">{p.name}</h3>
+              <p className="text-[13px] text-text-secondary leading-relaxed mb-2">{p.goal}</p>
               <p className="text-[12px] leading-relaxed" style={{ color: p.color }}>
                 {p.fixes}
               </p>
@@ -558,28 +558,28 @@ function PlanTab({
       </section>
 
       {/* Việc lặp hằng ngày */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-white mb-1">
-          <RotateCcw className="w-5 h-5 text-neon-cyan" />
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6">
+        <h2 className="flex items-center gap-2 text-lg font-heading font-semibold text-text-primary mb-1">
+          <RotateCcw className="w-5 h-5 text-tone-cyan" />
           Năm việc lặp mỗi ngày ({RITUAL_MINUTES_PER_DAY} phút)
         </h2>
-        <p className="text-sm text-slate-400 mb-4">
+        <p className="text-sm text-text-secondary mb-4">
           Làm đủ cả 30 ngày, ngoài lịch của từng ngày. Đây là phần quan trọng hơn cả lịch: kiến thức rơi vì
           không lặp, chứ không phải vì học chưa đủ sâu. Ô tích dưới đây tính riêng cho{' '}
-          <b className="text-white">từng ngày</b> — sang ngày mới là tự trống lại.
+          <b className="text-text-primary">từng ngày</b> — sang ngày mới là tự trống lại.
         </p>
 
         {/* Lưới 30 ngày — ô sáng là ngày làm TRỌN cả 5 việc lặp */}
-        <div className="rounded-xl border border-white/10 bg-black/25 p-4 mb-5">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface)] p-4 mb-5">
           <div className="flex flex-wrap items-baseline justify-between gap-2 mb-3">
-            <span className="text-[13px] text-slate-300">
+            <span className="text-[13px] text-text-secondary">
               Hôm nay:{' '}
-              <b className={ritualStats.todayDone === DAILY_RITUAL.length ? 'text-neon-green' : 'text-white'}>
+              <b className={ritualStats.todayDone === DAILY_RITUAL.length ? 'text-tone-green' : 'text-text-primary'}>
                 {mounted ? ritualStats.todayDone : 0}/{DAILY_RITUAL.length}
               </b>
             </span>
-            <span className="text-[13px] text-slate-400">
-              Trọn vẹn <b className="text-neon-cyan">{mounted ? ritualStats.fullDays : 0}</b>/30 ngày
+            <span className="text-[13px] text-text-secondary">
+              Trọn vẹn <b className="text-tone-cyan">{mounted ? ritualStats.fullDays : 0}</b>/30 ngày
             </span>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -594,8 +594,8 @@ function PlanTab({
                     full
                       ? 'bg-neon-green text-black'
                       : isToday
-                        ? 'bg-neon-violet/30 text-white border border-neon-violet'
-                        : 'bg-white/[0.05] text-slate-600'
+                        ? 'bg-neon-violet/30 text-text-primary border border-neon-violet'
+                        : 'bg-[var(--bg-surface-hover)] text-text-muted'
                   }`}
                 >
                   {d.n}
@@ -623,8 +623,8 @@ function PlanTab({
           onClick={() => setCoreOnly(!coreOnly)}
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm border transition-all active:scale-95 ${
             coreOnly
-              ? 'bg-neon-green/15 border-neon-green/40 text-neon-green'
-              : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+              ? 'bg-neon-green/15 border-neon-green/40 text-tone-green'
+              : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
           }`}
         >
           <Check className="w-4 h-4" />
@@ -632,7 +632,7 @@ function PlanTab({
         </button>
         <button
           onClick={onReset}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm bg-white/[0.03] border border-white/10 text-slate-500 hover:text-neon-red hover:border-neon-red/30 transition-all active:scale-95"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-muted hover:text-tone-red hover:border-neon-red/30 transition-all active:scale-95"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Xoá tiến độ
@@ -647,7 +647,7 @@ function PlanTab({
               <h3 className="text-base font-heading font-bold" style={{ color: phase.color }}>
                 GIAI ĐOẠN {phase.n} — {phase.name}
               </h3>
-              <span className="text-[12px] text-slate-500">{phase.range}</span>
+              <span className="text-[12px] text-text-muted">{phase.range}</span>
             </div>
             <div className="space-y-4">
               {PLAN.filter((d) => d.phase === phase.n).map((day) => {
@@ -724,7 +724,7 @@ function DayCard({
           ? 'border-neon-violet/50 bg-neon-violet/[0.06]'
           : isCheck
             ? 'border-neon-red/35 bg-neon-red/[0.04]'
-            : 'border-white/10 bg-white/[0.02]'
+            : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
       }`}
     >
       <button onClick={onToggleOpen} className="w-full text-left p-5 sm:p-6 flex items-start gap-4">
@@ -732,7 +732,7 @@ function DayCard({
 
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2 mb-1.5">
-            <span className="text-[11px] font-semibold tracking-wider text-slate-500">
+            <span className="text-[11px] font-semibold tracking-wider text-text-muted">
               NGÀY {day.n}
               {mounted && dow ? ` · ${dow.toUpperCase()}` : ''}
             </span>
@@ -747,21 +747,21 @@ function DayCard({
               </span>
             )}
             {hasJpd123 && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neon-green/15 text-neon-green border border-neon-green/25">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-neon-green/15 text-tone-green border border-neon-green/25">
                 + JPD123
               </span>
             )}
             {isPast && !isToday && (
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-white/5 text-slate-500">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--bg-surface-hover)] text-text-muted">
                 đã qua
               </span>
             )}
           </div>
 
-          <h3 className="text-lg sm:text-xl font-heading font-bold text-white mb-1.5">{day.title}</h3>
-          <p className="text-sm text-slate-400 leading-relaxed line-clamp-2 sm:line-clamp-none">{day.mission}</p>
+          <h3 className="text-lg sm:text-xl font-heading font-bold text-text-primary mb-1.5">{day.title}</h3>
+          <p className="text-sm text-text-secondary leading-relaxed line-clamp-2 sm:line-clamp-none">{day.mission}</p>
 
-          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-slate-500">
+          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-text-muted">
             <span className="inline-flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" />
               {(dayMinutes(day) / 60).toFixed(1).replace('.', ',')} giờ
@@ -774,17 +774,17 @@ function DayCard({
         </div>
 
         <ChevronDown
-          className={`w-5 h-5 text-slate-500 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-text-muted shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
 
       {open && (
         <div className="px-5 sm:px-6 pb-6 space-y-5">
           <div className="rounded-xl bg-neon-green/[0.06] border border-neon-green/20 p-4">
-            <div className="text-[11px] font-bold tracking-wider text-neon-green mb-1">
+            <div className="text-[11px] font-bold tracking-wider text-tone-green mb-1">
               CUỐI NGÀY PHẢI LÀM ĐƯỢC
             </div>
-            <p className="text-sm text-slate-300 leading-relaxed">{day.outcome}</p>
+            <p className="text-sm text-text-secondary leading-relaxed">{day.outcome}</p>
           </div>
 
           {day.blocks.map((block) => {
@@ -793,8 +793,8 @@ function DayCard({
             return (
               <div key={block.id}>
                 <div className="flex flex-wrap items-baseline gap-2 mb-3">
-                  <h4 className="text-sm font-bold text-white">{block.label}</h4>
-                  <span className="text-xs text-slate-500">{block.goal}</span>
+                  <h4 className="text-sm font-bold text-text-primary">{block.label}</h4>
+                  <span className="text-xs text-text-muted">{block.goal}</span>
                 </div>
                 <div className="space-y-2.5">
                   {visible.map((t) => (
@@ -833,7 +833,7 @@ function TaskRow({
   return (
     <div
       className={`rounded-xl border p-3.5 transition-all ${
-        checked ? 'border-neon-green/25 bg-neon-green/[0.04]' : 'border-white/10 bg-white/[0.02]'
+        checked ? 'border-neon-green/25 bg-neon-green/[0.04]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
       }`}
     >
       <div className="flex items-start gap-3">
@@ -844,7 +844,7 @@ function TaskRow({
           className={`mt-0.5 w-5 h-5 shrink-0 rounded-md border-2 flex items-center justify-center transition-all active:scale-90 ${
             checked
               ? 'bg-neon-green border-neon-green'
-              : 'border-white/25 hover:border-neon-violet'
+              : 'border-[var(--border-light-hover)] hover:border-neon-violet'
           }`}
         >
           {checked && <Check className="w-3.5 h-3.5 text-black" strokeWidth={3.5} />}
@@ -854,7 +854,7 @@ function TaskRow({
           <div className="flex flex-wrap items-center gap-2 mb-1">
             <span
               className={`text-sm font-semibold leading-snug ${
-                checked ? 'text-slate-500 line-through' : 'text-white'
+                checked ? 'text-text-muted line-through' : 'text-text-primary'
               }`}
             >
               {task.title}
@@ -866,19 +866,19 @@ function TaskRow({
               {meta.label}
             </span>
             {task.course === 'JPD123' && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-green/15 text-neon-green shrink-0">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-green/15 text-tone-green shrink-0">
                 JPD123
               </span>
             )}
             {task.tier === 'plus' && (
-              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-white/[0.06] text-slate-400 shrink-0">
+              <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-[var(--bg-surface-hover)] text-text-secondary shrink-0">
                 NÂNG ĐIỂM
               </span>
             )}
-            <span className="text-[11px] text-slate-500 shrink-0">{task.minutes}′</span>
+            <span className="text-[11px] text-text-muted shrink-0">{task.minutes}′</span>
           </div>
 
-          <p className={`text-[13px] leading-relaxed ${checked ? 'text-slate-600' : 'text-slate-400'}`}>
+          <p className={`text-[13px] leading-relaxed ${checked ? 'text-text-muted' : 'text-text-secondary'}`}>
             {task.detail}
           </p>
 
@@ -889,8 +889,8 @@ function TaskRow({
                   onClick={() => setOpenLesson((v) => !v)}
                   className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold border transition-colors ${
                     openLesson
-                      ? 'bg-neon-cyan/20 border-neon-cyan/50 text-white'
-                      : 'bg-neon-cyan/10 border-neon-cyan/30 text-neon-cyan hover:bg-neon-cyan/20'
+                      ? 'bg-neon-cyan/20 border-neon-cyan/50 text-text-primary'
+                      : 'bg-neon-cyan/10 border-neon-cyan/30 text-tone-cyan hover:bg-neon-cyan/20'
                   }`}
                 >
                   <GraduationCap className="w-3.5 h-3.5" />
@@ -901,7 +901,7 @@ function TaskRow({
                 <Link
                   key={l.href + l.label}
                   href={l.href}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-neon-violet/10 text-neon-violet border border-neon-violet/20 hover:bg-neon-violet/20 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-neon-violet/10 text-tone-violet border border-neon-violet/20 hover:bg-neon-violet/20 transition-colors"
                 >
                   <ExternalLink className="w-3 h-3" />
                   {l.label}
@@ -926,7 +926,7 @@ function ProgressRing({ pct, label, accent = '#8b5cf6' }: { pct: number; label: 
           một <linearGradient id> dùng chung sẽ trùng id, còn sinh 30 id riêng thì
           thừa. Màu đặc vừa đúng ý đồ phân giai đoạn vừa nhẹ hơn. */}
       <svg viewBox="0 0 64 64" className="w-16 h-16 -rotate-90">
-        <circle cx="32" cy="32" r={r} fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="5" />
+        <circle cx="32" cy="32" r={r} fill="none" stroke="var(--bg-surface-hover)" strokeWidth="5" />
         <circle
           cx="32"
           cy="32"
@@ -940,7 +940,7 @@ function ProgressRing({ pct, label, accent = '#8b5cf6' }: { pct: number; label: 
           className="transition-all duration-500"
         />
       </svg>
-      <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-white">
+      <span className="absolute inset-0 flex items-center justify-center text-[11px] font-bold text-text-primary">
         {label}
       </span>
     </div>
@@ -961,27 +961,27 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3.5">
+    <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3.5">
       <div className="flex items-center gap-1.5 text-[11px] font-medium mb-1.5" style={{ color: accent }}>
         {icon}
         {label}
       </div>
-      <div className="text-xl font-heading font-bold text-white leading-none">{value}</div>
-      {sub && <div className="text-[11px] text-slate-500 mt-1">{sub}</div>}
+      <div className="text-xl font-heading font-bold text-text-primary leading-none">{value}</div>
+      {sub && <div className="text-[11px] text-text-muted mt-1">{sub}</div>}
     </div>
   );
 }
 
 function VerdictCard({ tone, title, body }: { tone: 'green' | 'cyan' | 'orange'; title: string; body: string }) {
   const colors = {
-    green: { border: 'border-neon-green/25', bg: 'bg-neon-green/[0.05]', text: 'text-neon-green' },
-    cyan: { border: 'border-neon-cyan/25', bg: 'bg-neon-cyan/[0.05]', text: 'text-neon-cyan' },
-    orange: { border: 'border-neon-orange/25', bg: 'bg-neon-orange/[0.05]', text: 'text-neon-orange' },
+    green: { border: 'border-neon-green/25', bg: 'bg-neon-green/[0.05]', text: 'text-tone-green' },
+    cyan: { border: 'border-neon-cyan/25', bg: 'bg-neon-cyan/[0.05]', text: 'text-tone-cyan' },
+    orange: { border: 'border-neon-orange/25', bg: 'bg-neon-orange/[0.05]', text: 'text-tone-orange' },
   }[tone];
   return (
     <div className={`rounded-xl border ${colors.border} ${colors.bg} p-4`}>
       <div className={`text-xs font-bold mb-1.5 ${colors.text}`}>{title}</div>
-      <p className="text-[13px] text-slate-400 leading-relaxed">{body}</p>
+      <p className="text-[13px] text-text-secondary leading-relaxed">{body}</p>
     </div>
   );
 }
@@ -1016,8 +1016,8 @@ function CheatTab() {
   return (
     <div className="space-y-6">
       {/* Mục lục nhanh */}
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-        <div className="text-[11px] font-bold uppercase tracking-wide text-slate-400 mb-2.5">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
+        <div className="text-[11px] font-bold uppercase tracking-wide text-text-secondary mb-2.5">
           Bảng tra cứu có {SECTIONS.length + 1} mục — bấm để nhảy tới
         </div>
         <div className="flex flex-wrap gap-2">
@@ -1025,8 +1025,8 @@ function CheatTab() {
             onClick={() => jumpTo('kana')}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
               openSection === 'kana'
-                ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
-                : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40'
+                ? 'bg-neon-violet/15 border-neon-violet/45 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-neon-violet/40'
             }`}
           >
             🔤 Bảng chữ cái
@@ -1037,8 +1037,8 @@ function CheatTab() {
               onClick={() => jumpTo(s.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${
                 openSection === s.id
-                  ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
-                  : 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-neon-violet/40'
+                  ? 'bg-neon-violet/15 border-neon-violet/45 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-neon-violet/40'
               }`}
             >
               {s.icon} {s.title}
@@ -1053,7 +1053,7 @@ function CheatTab() {
           kana và tưởng bảng tra cứu không có gì khác. */}
       <section
         id="cheat-kana"
-        className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden scroll-mt-32"
+        className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden scroll-mt-32"
       >
         <button
           onClick={() => setOpenSection(openSection === 'kana' ? null : 'kana')}
@@ -1061,14 +1061,14 @@ function CheatTab() {
         >
           <span className="text-2xl leading-none shrink-0">🔤</span>
           <div className="flex-1 min-w-0">
-            <h2 className="text-lg font-heading font-bold text-white mb-1">Bảng chữ cái</h2>
-            <p className="text-sm text-slate-400 leading-relaxed">
+            <h2 className="text-lg font-heading font-bold text-text-primary mb-1">Bảng chữ cái</h2>
+            <p className="text-sm text-text-secondary leading-relaxed">
               Hiragana &amp; katakana đầy đủ, cả âm đục và âm ghép. Tắt romaji khi đã thuộc —
               đọc thẳng kana ra âm là mục tiêu cuối cùng.
             </p>
           </div>
           <ChevronDown
-            className={`w-5 h-5 text-slate-500 shrink-0 transition-transform ${
+            className={`w-5 h-5 text-text-muted shrink-0 transition-transform ${
               openSection === 'kana' ? 'rotate-180' : ''
             }`}
           />
@@ -1079,7 +1079,7 @@ function CheatTab() {
         <div className="flex justify-end mb-4">
           <button
             onClick={() => setShowRomaji(!showRomaji)}
-            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-medium bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
           >
             {showRomaji ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             {showRomaji ? 'Ẩn romaji' : 'Hiện romaji'}
@@ -1096,10 +1096,10 @@ function CheatTab() {
         </div>
 
         <div className="mt-5 rounded-xl border border-neon-red/25 bg-neon-red/[0.05] p-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-neon-red mb-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-tone-red mb-2">
             <AlertTriangle className="w-4 h-4" />Ô viền đỏ = ký tự hay bị nhầm
           </div>
-          <p className="text-[13px] text-slate-400 leading-relaxed">
+          <p className="text-[13px] text-text-secondary leading-relaxed">
             Hiragana: は/ほ · ぬ/め · る/ろ · れ/わ. Katakana: シ/ツ (nét dài đi lên vs đi xuống) ·
             ソ/ン · ノ/メ/ヌ. Mẹo vị trí: ン gần như không bao giờ mở đầu từ, ソ thì hay mở đầu.
             Ngoài ra: っ (tsu nhỏ) là một nhịp NGHỈ — がっこう đọc &ldquo;gak-kou&rdquo;.
@@ -1116,7 +1116,7 @@ function CheatTab() {
           <section
             key={s.id}
             id={`cheat-${s.id}`}
-            className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden scroll-mt-32"
+            className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden scroll-mt-32"
           >
             <button
               onClick={() => setOpenSection(open ? null : s.id)}
@@ -1124,11 +1124,11 @@ function CheatTab() {
             >
               <span className="text-2xl leading-none shrink-0">{s.icon}</span>
               <div className="flex-1 min-w-0">
-                <h2 className="text-lg font-heading font-bold text-white mb-1">{s.title}</h2>
-                <p className="text-sm text-slate-400 leading-relaxed">{s.summary}</p>
+                <h2 className="text-lg font-heading font-bold text-text-primary mb-1">{s.title}</h2>
+                <p className="text-sm text-text-secondary leading-relaxed">{s.summary}</p>
               </div>
               <ChevronDown
-                className={`w-5 h-5 text-slate-500 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+                className={`w-5 h-5 text-text-muted shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
               />
             </button>
 
@@ -1150,23 +1150,23 @@ function CheatTab() {
                 ))}
                 {s.examples && s.examples.length > 0 && (
                   <div>
-                    <h3 className="text-sm font-bold text-white mb-2.5">
+                    <h3 className="text-sm font-bold text-text-primary mb-2.5">
                       {s.examplesTitle ?? 'Câu ví dụ'}
                     </h3>
                     <div className="space-y-2">
                       {s.examples.map((ex, i) => (
                         <div
                           key={i}
-                          className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2.5"
+                          className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2.5"
                         >
-                          <div className="text-base text-white leading-snug">{ex.jp}</div>
+                          <div className="text-base text-text-primary leading-snug">{ex.jp}</div>
                           {ex.read && ex.read !== ex.jp && (
-                            <div className="text-[13px] text-neon-cyan mt-0.5">{ex.read}</div>
+                            <div className="text-[13px] text-tone-cyan mt-0.5">{ex.read}</div>
                           )}
-                          {ex.romaji && <div className="text-[12px] text-slate-500 mt-0.5">{ex.romaji}</div>}
-                          <div className="text-[13px] text-slate-300 mt-1">{ex.vi}</div>
+                          {ex.romaji && <div className="text-[12px] text-text-muted mt-0.5">{ex.romaji}</div>}
+                          <div className="text-[13px] text-text-secondary mt-1">{ex.vi}</div>
                           {ex.note && (
-                            <div className="text-[12px] text-slate-500 leading-relaxed mt-1.5">{ex.note}</div>
+                            <div className="text-[12px] text-text-muted leading-relaxed mt-1.5">{ex.note}</div>
                           )}
                         </div>
                       ))}
@@ -1175,8 +1175,8 @@ function CheatTab() {
                 )}
                 {s.tips?.map((tip) => (
                   <div key={tip.title} className="rounded-xl border border-neon-cyan/20 bg-neon-cyan/[0.04] p-4">
-                    <div className="text-xs font-bold text-neon-cyan mb-1.5">★ {tip.title}</div>
-                    <p className="text-[13px] text-slate-300 leading-relaxed">{tip.body}</p>
+                    <div className="text-xs font-bold text-tone-cyan mb-1.5">★ {tip.title}</div>
+                    <p className="text-[13px] text-text-secondary leading-relaxed">{tip.body}</p>
                   </div>
                 ))}
               </div>
@@ -1196,23 +1196,23 @@ function CheatTab() {
 function HanVietBlock() {
   return (
     <div className="rounded-xl border border-neon-green/25 bg-neon-green/[0.05] p-4 sm:p-5">
-      <div className="text-sm font-bold text-neon-green mb-1.5">
+      <div className="text-sm font-bold text-tone-green mb-1.5">
         ★ Lợi thế của người Việt — đoán nghĩa qua từ Hán-Việt
       </div>
-      <p className="text-[13px] text-slate-300 leading-relaxed mb-4">
+      <p className="text-[13px] text-text-secondary leading-relaxed mb-4">
         Kanji vào tiếng Nhật và từ Hán-Việt vào tiếng Việt đều mượn từ cùng một gốc chữ Hán, nên
-        rất nhiều từ ghép trong môn này <b className="text-white">bạn đã biết nghĩa từ trước mà
+        rất nhiều từ ghép trong môn này <b className="text-text-primary">bạn đã biết nghĩa từ trước mà
         không nhận ra</b>. Bạn chỉ còn phải nhớ cách đọc — nhẹ hơn hẳn so với người học phương Tây
         phải học cả nghĩa lẫn âm.
       </p>
-      <div className="overflow-x-auto rounded-lg border border-white/10">
+      <div className="overflow-x-auto rounded-lg border border-[var(--border-light)]">
         <table className="w-full text-sm min-w-[420px]">
           <thead>
-            <tr className="bg-white/[0.04]">
+            <tr className="bg-[var(--bg-surface-hover)]">
               {['Chữ Hán', 'Cách đọc', 'Hán-Việt bạn đã biết', 'Nghĩa'].map((h, i) => (
                 <th
                   key={`${h}-${i}`}
-                  className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                  className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-text-secondary uppercase"
                 >
                   {h}
                 </th>
@@ -1221,21 +1221,21 @@ function HanVietBlock() {
           </thead>
           <tbody>
             {HANVIET_TABLE.map((h) => (
-              <tr key={h.kanji} className="border-t border-white/[0.06]">
-                <td className="px-3 py-2.5 text-lg text-white">{h.kanji}</td>
-                <td className="px-3 py-2.5 text-neon-cyan">{h.kana}</td>
-                <td className="px-3 py-2.5 text-neon-green font-semibold">{h.hanviet}</td>
-                <td className="px-3 py-2.5 text-slate-400">{h.meaning}</td>
+              <tr key={h.kanji} className="border-t border-[var(--border-light)]">
+                <td className="px-3 py-2.5 text-lg text-text-primary">{h.kanji}</td>
+                <td className="px-3 py-2.5 text-tone-cyan">{h.kana}</td>
+                <td className="px-3 py-2.5 text-tone-green font-semibold">{h.hanviet}</td>
+                <td className="px-3 py-2.5 text-text-secondary">{h.meaning}</td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      <p className="text-[12px] text-slate-500 leading-relaxed mt-3">
-        Vài từ lệch nghĩa so với Hán-Việt nên đừng suy bừa: <b className="text-slate-300">勉強</b>{' '}
-        (べんきょう) là “MIỄN CƯỠNG” nhưng nghĩa tiếng Nhật là <b className="text-slate-300">học
-        tập</b>, còn <b className="text-slate-300">料理</b> (りょうり) “LIỆU LÝ” nghĩa là{' '}
-        <b className="text-slate-300">món ăn</b>. Hán-Việt là mẹo đoán, không phải luật.
+      <p className="text-[12px] text-text-muted leading-relaxed mt-3">
+        Vài từ lệch nghĩa so với Hán-Việt nên đừng suy bừa: <b className="text-text-secondary">勉強</b>{' '}
+        (べんきょう) là “MIỄN CƯỠNG” nhưng nghĩa tiếng Nhật là <b className="text-text-secondary">học
+        tập</b>, còn <b className="text-text-secondary">料理</b> (りょうり) “LIỆU LÝ” nghĩa là{' '}
+        <b className="text-text-secondary">món ăn</b>. Hán-Việt là mẹo đoán, không phải luật.
       </p>
     </div>
   );
@@ -1254,7 +1254,7 @@ function KanaGrid({
 }) {
   return (
     <div>
-      <h3 className="text-sm font-bold text-white mb-2.5">{title}</h3>
+      <h3 className="text-sm font-bold text-text-primary mb-2.5">{title}</h3>
       <div
         className="grid gap-1.5"
         style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}
@@ -1264,11 +1264,11 @@ function KanaGrid({
             <div
               key={i}
               className={`rounded-lg border py-2 text-center ${
-                cell.tricky ? 'border-neon-red/40 bg-neon-red/[0.06]' : 'border-white/10 bg-white/[0.03]'
+                cell.tricky ? 'border-neon-red/40 bg-neon-red/[0.06]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
               }`}
             >
-              <div className="text-lg leading-none text-white">{cell.kana}</div>
-              {showRomaji && <div className="text-[10px] text-slate-500 mt-1">{cell.romaji}</div>}
+              <div className="text-lg leading-none text-text-primary">{cell.kana}</div>
+              {showRomaji && <div className="text-[10px] text-text-muted mt-1">{cell.romaji}</div>}
             </div>
           ) : (
             <div key={i} />
@@ -1282,18 +1282,18 @@ function KanaGrid({
 function DataTable({ table }: { table: CheatTable }) {
   return (
     <div>
-      <h3 className="text-sm font-bold text-white mb-1">{table.title}</h3>
-      {table.note && <p className="text-xs text-slate-500 mb-2.5 leading-relaxed">{table.note}</p>}
-      <div className="overflow-x-auto rounded-xl border border-white/10">
+      <h3 className="text-sm font-bold text-text-primary mb-1">{table.title}</h3>
+      {table.note && <p className="text-xs text-text-muted mb-2.5 leading-relaxed">{table.note}</p>}
+      <div className="overflow-x-auto rounded-xl border border-[var(--border-light)]">
         <table className="w-full text-sm min-w-[420px]">
           <thead>
-            <tr className="bg-white/[0.04]">
+            <tr className="bg-[var(--bg-surface-hover)]">
               {/* Bảng hai cột đôi lặp lại đúng tên cột ("Ngày", "Cách đọc"),
                   nên key phải kèm chỉ số — nếu không React báo trùng key. */}
               {table.headers.map((h, i) => (
                 <th
                   key={`${h}-${i}`}
-                  className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                  className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-text-secondary uppercase"
                 >
                   {h}
                 </th>
@@ -1306,13 +1306,13 @@ function DataTable({ table }: { table: CheatTable }) {
               return (
                 <tr
                   key={i}
-                  className={`border-t border-white/[0.06] ${danger ? 'bg-neon-red/[0.05]' : ''}`}
+                  className={`border-t border-[var(--border-light)] ${danger ? 'bg-neon-red/[0.05]' : ''}`}
                 >
                   {row.map((cell, j) => (
                     <td
                       key={j}
                       className={`px-3 py-2.5 leading-relaxed ${
-                        j === 0 ? 'text-white font-medium' : danger ? 'text-neon-orange' : 'text-slate-300'
+                        j === 0 ? 'text-text-primary font-medium' : danger ? 'text-tone-orange' : 'text-text-secondary'
                       }`}
                     >
                       {cell}
@@ -1350,8 +1350,8 @@ function SpeakTab({
     <div className="space-y-6">
       {/* Cơ cấu điểm */}
       <section className="rounded-2xl border border-neon-pink/25 bg-neon-pink/[0.05] p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-white mb-3">
-          <Mic className="w-5 h-5 text-neon-pink" />
+        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-text-primary mb-3">
+          <Mic className="w-5 h-5 text-tone-pink" />
           Thi nói — 100 điểm chia làm ba
         </h2>
         <div className="grid sm:grid-cols-3 gap-3">
@@ -1360,21 +1360,21 @@ function SpeakTab({
             { p: 'TALKING', s: '60', d: '1 câu hỏi không tranh + 3 câu hỏi về một bức tranh.' },
             { p: 'PRESENTING', s: '10', d: 'Tác phong: chào, ngồi thẳng, nhìn giám thị, cảm ơn khi ra. Điểm cho không.' },
           ].map((x) => (
-            <div key={x.p} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <div key={x.p} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
               <div className="flex items-baseline justify-between mb-1.5">
-                <span className="text-xs font-bold text-white tracking-wide">{x.p}</span>
-                <span className="text-xl font-heading font-bold text-neon-pink">{x.s}</span>
+                <span className="text-xs font-bold text-text-primary tracking-wide">{x.p}</span>
+                <span className="text-xl font-heading font-bold text-tone-pink">{x.s}</span>
               </div>
-              <p className="text-[13px] text-slate-400 leading-relaxed">{x.d}</p>
+              <p className="text-[13px] text-text-secondary leading-relaxed">{x.d}</p>
             </div>
           ))}
         </div>
         <div className="mt-4 rounded-xl border border-neon-green/25 bg-neon-green/[0.06] p-4">
-          <div className="text-xs font-bold text-neon-green mb-1.5">★ 10 điểm lấy trước khi nói tiếng Nhật</div>
-          <p className="text-[13px] text-slate-300 leading-relaxed">
+          <div className="text-xs font-bold text-tone-green mb-1.5">★ 10 điểm lấy trước khi nói tiếng Nhật</div>
+          <p className="text-[13px] text-text-secondary leading-relaxed">
             しつれいします (khi vào) → よろしくおねがいします → ngồi thẳng, nhìn giám thị →{' '}
             ありがとうございました → しつれいしました (khi ra). Không nghe rõ câu hỏi thì nói{' '}
-            <b className="text-white">もういちど おねがいします</b> — hỏi lại KHÔNG bị trừ điểm.
+            <b className="text-text-primary">もういちど おねがいします</b> — hỏi lại KHÔNG bị trừ điểm.
           </p>
         </div>
       </section>
@@ -1383,25 +1383,25 @@ function SpeakTab({
       <NameSection />
 
       {/* Hồ sơ cá nhân */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-        <h2 className="text-lg font-heading font-bold text-white mb-1">Hồ sơ thi nói của bạn</h2>
-        <p className="text-sm text-slate-400 mb-5 leading-relaxed">
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-6">
+        <h2 className="text-lg font-heading font-bold text-text-primary mb-1">Hồ sơ thi nói của bạn</h2>
+        <p className="text-sm text-text-secondary mb-5 leading-relaxed">
           Điền một lần — trang sẽ tự ghép thành câu trả lời tiếng Nhật hoàn chỉnh cho gần hết 22 câu hỏi bên dưới.
-          Học thuộc <b className="text-white">câu của chính bạn</b> luôn nhanh hơn học thuộc câu mẫu của người khác.
+          Học thuộc <b className="text-text-primary">câu của chính bạn</b> luôn nhanh hơn học thuộc câu mẫu của người khác.
           Dữ liệu chỉ lưu trên máy bạn.
         </p>
         <div className="grid sm:grid-cols-2 gap-4">
           {PROFILE_FIELDS.map((f) => (
             <div key={f.key}>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">{f.label}</label>
+              <label className="block text-xs font-semibold text-text-secondary mb-1.5">{f.label}</label>
               <input
                 type="text"
                 value={mounted ? (profile[f.key] ?? '') : ''}
                 onChange={(e) => onProfile({ ...profile, [f.key]: e.target.value })}
                 placeholder={f.fallback}
-                className="w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/50 transition-colors"
+                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
               />
-              <p className="text-[11px] text-slate-500 mt-1 leading-relaxed">{f.hint}</p>
+              <p className="text-[11px] text-text-muted mt-1 leading-relaxed">{f.hint}</p>
             </div>
           ))}
         </div>
@@ -1420,8 +1420,8 @@ function SpeakTab({
             onClick={() => setSub(s.id)}
             className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all active:scale-95 ${
               sub === s.id
-                ? 'bg-neon-pink/15 border-neon-pink/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-neon-pink/15 border-neon-pink/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             {s.label}
@@ -1432,23 +1432,23 @@ function SpeakTab({
       {/* 13 bài đọc */}
       {sub === 'read' && (
         <section className="space-y-3">
-          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-4">
-            <p className="text-[13px] text-slate-400 leading-relaxed max-w-xl">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
+            <p className="text-[13px] text-text-secondary leading-relaxed max-w-xl">
               11/13 bài dựng theo cùng một khung: tên/quốc tịch → nghề hoặc trường → lịch tuần
               (から…まで) → sở thích. Đọc trôi một bài là gần như đọc trôi cả nhóm. Hai bài ngoại lệ là{' '}
-              <b className="text-white">bài 7</b> (kính ngữ nhà hàng) và <b className="text-white">bài 9</b>{' '}
+              <b className="text-text-primary">bài 7</b> (kính ngữ nhà hàng) và <b className="text-text-primary">bài 9</b>{' '}
               (mọi số viết bằng kanji).
             </p>
             <div className="flex gap-2">
               <button
                 onClick={() => setShowRomaji(!showRomaji)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
               >
                 {showRomaji ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} Romaji
               </button>
               <button
                 onClick={() => setShowVi(!showVi)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
               >
                 {showVi ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />} Bản dịch
               </button>
@@ -1461,17 +1461,17 @@ function SpeakTab({
               r.level === 'hard' ? '#f43f5e' : r.level === 'medium' ? '#fb923c' : '#4ade80';
             const levelLabel = r.level === 'hard' ? 'KHÓ' : r.level === 'medium' ? 'TRUNG BÌNH' : 'DỄ';
             return (
-              <div key={r.n} className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
+              <div key={r.n} className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
                 <button
                   onClick={() => setOpenReading(open ? null : r.n)}
                   className="w-full text-left p-4 sm:p-5 flex items-center gap-3"
                 >
-                  <span className="w-9 h-9 shrink-0 rounded-xl bg-white/[0.05] border border-white/10 flex items-center justify-center text-sm font-bold text-white">
+                  <span className="w-9 h-9 shrink-0 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] flex items-center justify-center text-sm font-bold text-text-primary">
                     {r.n}
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="text-sm font-semibold text-white">{r.title}</span>
+                      <span className="text-sm font-semibold text-text-primary">{r.title}</span>
                       <span
                         className="px-1.5 py-0.5 rounded text-[10px] font-bold"
                         style={{ background: `${levelColor}1f`, color: levelColor }}
@@ -1481,37 +1481,37 @@ function SpeakTab({
                     </div>
                   </div>
                   <ChevronDown
-                    className={`w-4 h-4 text-slate-500 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
+                    className={`w-4 h-4 text-text-muted shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
                   />
                 </button>
 
                 {open && (
                   <div className="px-4 sm:px-5 pb-5 space-y-3">
-                    <div className="rounded-xl border border-white/10 bg-black/30 p-4">
-                      <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-2">
+                    <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface)] p-4">
+                      <div className="text-[10px] font-bold tracking-wider text-text-muted mb-2">
                         BÀI ĐỌC — đọc to, không đọc thầm
                       </div>
-                      <p className="text-[17px] leading-[2] text-white whitespace-pre-line">{r.jp}</p>
+                      <p className="text-[17px] leading-[2] text-text-primary whitespace-pre-line">{r.jp}</p>
                     </div>
                     {showRomaji && (
-                      <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-                        <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-1.5">ROMAJI</div>
-                        <p className="text-[13px] leading-relaxed text-slate-400 italic">{r.romaji}</p>
+                      <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3.5">
+                        <div className="text-[10px] font-bold tracking-wider text-text-muted mb-1.5">ROMAJI</div>
+                        <p className="text-[13px] leading-relaxed text-text-secondary italic">{r.romaji}</p>
                       </div>
                     )}
                     {showVi && (
-                      <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5">
-                        <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-1.5">
+                      <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3.5">
+                        <div className="text-[10px] font-bold tracking-wider text-text-muted mb-1.5">
                           NGHĨA (chỉ để hiểu nhịp — thi KHÔNG hỏi phần dịch)
                         </div>
-                        <p className="text-[13px] leading-relaxed text-slate-400">{r.vi}</p>
+                        <p className="text-[13px] leading-relaxed text-text-secondary">{r.vi}</p>
                       </div>
                     )}
                     <div className="rounded-xl border border-neon-orange/25 bg-neon-orange/[0.05] p-3.5">
-                      <div className="text-[10px] font-bold tracking-wider text-neon-orange mb-1.5">
+                      <div className="text-[10px] font-bold tracking-wider text-tone-orange mb-1.5">
                         CHỖ DỄ VẤP
                       </div>
-                      <p className="text-[13px] leading-relaxed text-slate-300">{r.watch}</p>
+                      <p className="text-[13px] leading-relaxed text-text-secondary">{r.watch}</p>
                     </div>
                   </div>
                 )}
@@ -1525,9 +1525,9 @@ function SpeakTab({
       {sub === 'talk' && (
         <section className="space-y-6">
           <div className="rounded-xl border border-neon-violet/25 bg-neon-violet/[0.05] p-4">
-            <p className="text-[13px] text-slate-300 leading-relaxed">
-              <b className="text-white">Chiến thuật:</b> giám thị chỉ hỏi 1 trong 4 câu, nhưng bạn không biết
-              trước là câu nào. Đừng học 22 câu trả lời rời rạc — hãy thuộc <b className="text-white">một câu
+            <p className="text-[13px] text-text-secondary leading-relaxed">
+              <b className="text-text-primary">Chiến thuật:</b> giám thị chỉ hỏi 1 trong 4 câu, nhưng bạn không biết
+              trước là câu nào. Đừng học 22 câu trả lời rời rạc — hãy thuộc <b className="text-text-primary">một câu
               thật về bản thân cho mỗi nhóm</b> rồi tái sử dụng. Tên, quốc tịch, nghề, sinh nhật, sở thích,
               giờ dậy và một hoạt động cuối tuần trả lời được gần hết ngân hàng này.
             </p>
@@ -1538,29 +1538,29 @@ function SpeakTab({
             if (!qs.length) return null;
             return (
               <div key={g}>
-                <h3 className="text-sm font-bold text-white mb-3">{g}</h3>
+                <h3 className="text-sm font-bold text-text-primary mb-3">{g}</h3>
                 <div className="space-y-2.5">
                   {qs.map((q) => (
-                    <div key={q.n} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                    <div key={q.n} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
                       <div className="flex items-start gap-3">
-                        <span className="w-6 h-6 shrink-0 rounded-lg bg-white/[0.05] flex items-center justify-center text-[11px] font-bold text-slate-400">
+                        <span className="w-6 h-6 shrink-0 rounded-lg bg-[var(--bg-surface-hover)] flex items-center justify-center text-[11px] font-bold text-text-secondary">
                           {q.n}
                         </span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[15px] text-white leading-relaxed">{q.jp}</p>
-                          <p className="text-xs text-slate-500 mt-0.5">{q.vi}</p>
+                          <p className="text-[15px] text-text-primary leading-relaxed">{q.jp}</p>
+                          <p className="text-xs text-text-muted mt-0.5">{q.vi}</p>
 
                           <div className="mt-2.5 rounded-lg border border-neon-green/25 bg-neon-green/[0.06] px-3 py-2.5">
-                            <div className="text-[10px] font-bold tracking-wider text-neon-green mb-1">
+                            <div className="text-[10px] font-bold tracking-wider text-tone-green mb-1">
                               CÂU TRẢ LỜI CỦA BẠN
                             </div>
-                            <p className="text-[15px] text-white leading-relaxed">
+                            <p className="text-[15px] text-text-primary leading-relaxed">
                               {mounted ? fillAnswer(q.answer, profile) : q.answer}
                             </p>
                           </div>
 
                           {q.note && (
-                            <p className="text-[12px] text-neon-orange mt-2 leading-relaxed">⚠ {q.note}</p>
+                            <p className="text-[12px] text-tone-orange mt-2 leading-relaxed">⚠ {q.note}</p>
                           )}
                         </div>
                       </div>
@@ -1577,26 +1577,26 @@ function SpeakTab({
       {sub === 'picture' && (
         <section className="space-y-4">
           <div className="rounded-xl border border-neon-red/25 bg-neon-red/[0.05] p-4">
-            <div className="flex items-center gap-2 text-xs font-bold text-neon-red mb-1.5">
+            <div className="flex items-center gap-2 text-xs font-bold text-tone-red mb-1.5">
               <AlertTriangle className="w-4 h-4" />
               Quy tắc quan trọng nhất phần tranh
             </div>
-            <p className="text-[13px] text-slate-300 leading-relaxed">{PICTURE_RULE}</p>
+            <p className="text-[13px] text-text-secondary leading-relaxed">{PICTURE_RULE}</p>
           </div>
 
           {PICTURE_SETS.map((p) => (
-            <div key={p.n} className="rounded-2xl border border-white/10 bg-white/[0.02] p-5">
-              <h3 className="text-base font-heading font-bold text-white mb-3">
+            <div key={p.n} className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5">
+              <h3 className="text-base font-heading font-bold text-text-primary mb-3">
                 Bộ {p.n} — {p.title}
               </h3>
 
-              <div className="rounded-xl border border-white/10 bg-black/30 p-4 mb-4">
-                <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-2">
+              <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface)] p-4 mb-4">
+                <div className="text-[10px] font-bold tracking-wider text-text-muted mb-2">
                   DỮ LIỆU TRONG TRANH
                 </div>
                 <ul className="space-y-1">
                   {p.data.map((d) => (
-                    <li key={d} className="text-[13px] text-slate-300 leading-relaxed">
+                    <li key={d} className="text-[13px] text-text-secondary leading-relaxed">
                       • {d}
                     </li>
                   ))}
@@ -1605,14 +1605,14 @@ function SpeakTab({
 
               <div className="space-y-2">
                 {p.qa.map((qa, i) => (
-                  <div key={i} className="rounded-lg border border-white/[0.08] bg-white/[0.02] p-3">
-                    <p className="text-sm text-slate-300 leading-relaxed">{qa.q}</p>
-                    <p className="text-sm text-neon-green leading-relaxed mt-1">→ {qa.a}</p>
+                  <div key={i} className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+                    <p className="text-sm text-text-secondary leading-relaxed">{qa.q}</p>
+                    <p className="text-sm text-tone-green leading-relaxed mt-1">→ {qa.a}</p>
                   </div>
                 ))}
               </div>
 
-              <p className="text-[12px] text-slate-500 mt-3 leading-relaxed border-l-2 border-white/15 pl-3">
+              <p className="text-[12px] text-text-muted mt-3 leading-relaxed border-l-2 border-[var(--border-light-hover)] pl-3">
                 {p.note}
               </p>
             </div>
@@ -1625,14 +1625,14 @@ function SpeakTab({
       <div className="flex flex-wrap gap-3">
         <Link
           href={EXAM_SPEAKING}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-neon-pink/15 border border-neon-pink/40 text-white hover:bg-neon-pink/25 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-neon-pink/15 border border-neon-pink/40 text-text-primary hover:bg-neon-pink/25 transition-colors"
         >
           <Mic className="w-4 h-4" />
           Thi thử vấn đáp trong Phòng thi
         </Link>
         <Link
           href={lesson('jpd113-speaking-cau-truc')}
-          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
         >
           <BookOpen className="w-4 h-4" />
           Chương Thi nói đầy đủ trong Academy
@@ -1667,24 +1667,24 @@ function NameSection() {
 
   return (
     <section className="rounded-2xl border border-neon-cyan/25 bg-neon-cyan/[0.05] p-5 sm:p-6">
-      <h2 className="text-lg font-heading font-bold text-white mb-1">
+      <h2 className="text-lg font-heading font-bold text-text-primary mb-1">
         Tên bạn viết bằng katakana thế nào?
       </h2>
-      <p className="text-sm text-slate-300 leading-relaxed mb-5">
-        Câu <b className="text-white">đầu tiên</b> giám thị hỏi là{' '}
-        <b className="text-white">おなまえは？</b> — nên đây là thứ phải chắc nhất.
+      <p className="text-sm text-text-secondary leading-relaxed mb-5">
+        Câu <b className="text-text-primary">đầu tiên</b> giám thị hỏi là{' '}
+        <b className="text-text-primary">おなまえは？</b> — nên đây là thứ phải chắc nhất.
         Giám thị KHÔNG chấm chính tả katakana của tên bạn, nhưng nói theo âm Nhật thì họ nghe ra
         dễ hơn nhiều.
       </p>
 
       <div className="relative mb-4">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
         <input
           type="text"
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Type your name (no diacritics needed): cuong, linh, nguyen…"
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-cyan/50 transition-colors"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-cyan/50 transition-colors"
         />
       </div>
 
@@ -1697,17 +1697,17 @@ function NameSection() {
                   key={n.vi + n.kata}
                   className="flex flex-wrap items-center gap-x-4 gap-y-1 rounded-xl border border-neon-cyan/25 bg-neon-cyan/[0.06] px-4 py-3"
                 >
-                  <span className="text-sm text-slate-300 w-28">{n.vi}</span>
-                  <span className="text-2xl text-white">{n.kata}</span>
-                  <span className="text-xs text-slate-500">{n.romaji}</span>
-                  <span className="text-[13px] text-neon-green ml-auto">
+                  <span className="text-sm text-text-secondary w-28">{n.vi}</span>
+                  <span className="text-2xl text-text-primary">{n.kata}</span>
+                  <span className="text-xs text-text-muted">{n.romaji}</span>
+                  <span className="text-[13px] text-tone-green ml-auto">
                     わたしの なまえは {n.kata} です。
                   </span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-[13px] text-slate-400 leading-relaxed rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3">
+            <p className="text-[13px] text-text-secondary leading-relaxed rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3">
               Không có trong bảng — ghép theo quy tắc bên dưới. Bỏ hết dấu thanh, đổi âm cuối
               n/ng/nh thành ン, rồi đọc từng âm một.
             </p>
@@ -1716,18 +1716,18 @@ function NameSection() {
       )}
 
       <details className="group">
-        <summary className="cursor-pointer text-sm font-semibold text-white mb-3 list-none flex items-center gap-2">
-          <ChevronDown className="w-4 h-4 text-slate-500 group-open:rotate-180 transition-transform" />
+        <summary className="cursor-pointer text-sm font-semibold text-text-primary mb-3 list-none flex items-center gap-2">
+          <ChevronDown className="w-4 h-4 text-text-muted group-open:rotate-180 transition-transform" />
           Vì sao tên bị đổi dạng — 7 quy tắc
         </summary>
-        <div className="overflow-x-auto rounded-xl border border-white/10 mb-4">
+        <div className="overflow-x-auto rounded-xl border border-[var(--border-light)] mb-4">
           <table className="w-full text-sm min-w-[520px]">
             <thead>
-              <tr className="bg-white/[0.04]">
+              <tr className="bg-[var(--bg-surface-hover)]">
                 {['Trường hợp', 'Ví dụ tiếng Việt', 'Thành', 'Vì sao'].map((h, i) => (
                   <th
                     key={`${h}-${i}`}
-                    className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                    className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-text-secondary uppercase"
                   >
                     {h}
                   </th>
@@ -1736,41 +1736,41 @@ function NameSection() {
             </thead>
             <tbody>
               {NAME_RULES.map((r) => (
-                <tr key={r.pattern} className="border-t border-white/[0.06]">
-                  <td className="px-3 py-2.5 text-white font-medium">{r.pattern}</td>
-                  <td className="px-3 py-2.5 text-slate-400">{r.vi}</td>
-                  <td className="px-3 py-2.5 text-neon-cyan text-base">{r.kata}</td>
-                  <td className="px-3 py-2.5 text-slate-400 text-[13px] leading-relaxed">{r.note}</td>
+                <tr key={r.pattern} className="border-t border-[var(--border-light)]">
+                  <td className="px-3 py-2.5 text-text-primary font-medium">{r.pattern}</td>
+                  <td className="px-3 py-2.5 text-text-secondary">{r.vi}</td>
+                  <td className="px-3 py-2.5 text-tone-cyan text-base">{r.kata}</td>
+                  <td className="px-3 py-2.5 text-text-secondary text-[13px] leading-relaxed">{r.note}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        <div className="text-sm font-semibold text-white mb-2.5">
+        <div className="text-sm font-semibold text-text-primary mb-2.5">
           Tên thường gặp ({NAME_TABLE.length})
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
           {NAME_TABLE.map((n) => (
             <div
               key={n.vi}
-              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+              className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2"
             >
-              <div className="text-[11px] text-slate-500">{n.vi}</div>
-              <div className="text-base text-white leading-tight">{n.kata}</div>
+              <div className="text-[11px] text-text-muted">{n.vi}</div>
+              <div className="text-base text-text-primary leading-tight">{n.kata}</div>
             </div>
           ))}
         </div>
 
-        <div className="text-sm font-semibold text-white mb-2.5">Họ thường gặp</div>
+        <div className="text-sm font-semibold text-text-primary mb-2.5">Họ thường gặp</div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
           {SURNAME_TABLE.map((n) => (
             <div
               key={n.vi}
-              className="rounded-lg border border-white/10 bg-white/[0.03] px-3 py-2"
+              className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2"
             >
-              <div className="text-[11px] text-slate-500">{n.vi}</div>
-              <div className="text-base text-white leading-tight">{n.kata}</div>
+              <div className="text-[11px] text-text-muted">{n.vi}</div>
+              <div className="text-base text-text-primary leading-tight">{n.kata}</div>
             </div>
           ))}
         </div>
@@ -1786,19 +1786,19 @@ function NameSection() {
 function ExamTab() {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-white mb-4">
-          <Trophy className="w-5 h-5 text-neon-orange" />
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-6">
+        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-text-primary mb-4">
+          <Trophy className="w-5 h-5 text-tone-orange" />
           Ba phần thi & cách phân bổ công sức
         </h2>
-        <div className="overflow-x-auto rounded-xl border border-white/10">
+        <div className="overflow-x-auto rounded-xl border border-[var(--border-light)]">
           <table className="w-full text-sm min-w-[540px]">
             <thead>
-              <tr className="bg-white/[0.04]">
+              <tr className="bg-[var(--bg-surface-hover)]">
                 {['Phần thi', 'Dạng', 'Có sẵn trong hệ thống', 'Mức khó', 'Ưu tiên'].map((h, i) => (
                   <th
                     key={`${h}-${i}`}
-                    className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-slate-400 uppercase"
+                    className="text-left px-3 py-2.5 text-[11px] font-bold tracking-wide text-text-secondary uppercase"
                   >
                     {h}
                   </th>
@@ -1806,37 +1806,37 @@ function ExamTab() {
               </tr>
             </thead>
             <tbody>
-              <tr className="border-t border-white/[0.06]">
-                <td className="px-3 py-3 text-white font-medium">Vấn đáp (PE)</td>
-                <td className="px-3 py-3 text-slate-300">Đọc to + trả lời 4 câu</td>
-                <td className="px-3 py-3 text-slate-300">13 bài đọc · 22 câu · 6 bộ tranh · 5 đề thử</td>
-                <td className="px-3 py-3 text-neon-green">Dễ nhất — biết trước đề</td>
-                <td className="px-3 py-3 text-neon-green font-semibold">CAO NHẤT</td>
+              <tr className="border-t border-[var(--border-light)]">
+                <td className="px-3 py-3 text-text-primary font-medium">Vấn đáp (PE)</td>
+                <td className="px-3 py-3 text-text-secondary">Đọc to + trả lời 4 câu</td>
+                <td className="px-3 py-3 text-text-secondary">13 bài đọc · 22 câu · 6 bộ tranh · 5 đề thử</td>
+                <td className="px-3 py-3 text-tone-green">Dễ nhất — biết trước đề</td>
+                <td className="px-3 py-3 text-tone-green font-semibold">CAO NHẤT</td>
               </tr>
-              <tr className="border-t border-white/[0.06]">
-                <td className="px-3 py-3 text-white font-medium">Đọc hiểu</td>
-                <td className="px-3 py-3 text-slate-300">Đoạn văn + trắc nghiệm</td>
-                <td className="px-3 py-3 text-slate-300">16 đề (6 đề gốc của giáo viên)</td>
-                <td className="px-3 py-3 text-neon-cyan">Vừa</td>
-                <td className="px-3 py-3 text-neon-cyan font-semibold">CAO</td>
+              <tr className="border-t border-[var(--border-light)]">
+                <td className="px-3 py-3 text-text-primary font-medium">Đọc hiểu</td>
+                <td className="px-3 py-3 text-text-secondary">Đoạn văn + trắc nghiệm</td>
+                <td className="px-3 py-3 text-text-secondary">16 đề (6 đề gốc của giáo viên)</td>
+                <td className="px-3 py-3 text-tone-cyan">Vừa</td>
+                <td className="px-3 py-3 text-tone-cyan font-semibold">CAO</td>
               </tr>
-              <tr className="border-t border-white/[0.06]">
-                <td className="px-3 py-3 text-white font-medium">Trắc nghiệm (FE)</td>
-                <td className="px-3 py-3 text-slate-300">30 câu / 45 phút</td>
-                <td className="px-3 py-3 text-slate-300">14 đề thật — 420 câu, có giải thích từng câu</td>
-                <td className="px-3 py-3 text-neon-orange">Khó nhất — cần vốn từ</td>
-                <td className="px-3 py-3 text-neon-orange font-semibold">CÀY ĐỀU MỖI NGÀY</td>
+              <tr className="border-t border-[var(--border-light)]">
+                <td className="px-3 py-3 text-text-primary font-medium">Trắc nghiệm (FE)</td>
+                <td className="px-3 py-3 text-text-secondary">30 câu / 45 phút</td>
+                <td className="px-3 py-3 text-text-secondary">14 đề thật — 420 câu, có giải thích từng câu</td>
+                <td className="px-3 py-3 text-tone-orange">Khó nhất — cần vốn từ</td>
+                <td className="px-3 py-3 text-tone-orange font-semibold">CÀY ĐỀU MỖI NGÀY</td>
               </tr>
             </tbody>
           </table>
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-        <h2 className="text-lg font-heading font-bold text-white mb-1">
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-6">
+        <h2 className="text-lg font-heading font-bold text-text-primary mb-1">
           Trắc nghiệm FE — đề thật ra những gì
         </h2>
-        <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+        <p className="text-sm text-text-secondary mb-4 leading-relaxed">
           Tỉ lệ dưới đây rút từ chính 420 câu trong 14 đề thật. Nhìn vào đây để biết học gì trước:
           70% số điểm nằm ở dạng điền chỗ trống, mà chỗ trống thì gần như luôn là trợ từ, từ để hỏi,
           đại từ chỉ định hoặc một từ vựng theo ngữ cảnh.
@@ -1852,10 +1852,10 @@ function ExamTab() {
           ].map((r) => (
             <div key={r.label}>
               <div className="flex items-center justify-between text-[13px] mb-1">
-                <span className="text-slate-300">{r.label}</span>
-                <span className="text-white font-semibold shrink-0 ml-3">~{r.pct}%</span>
+                <span className="text-text-secondary">{r.label}</span>
+                <span className="text-text-primary font-semibold shrink-0 ml-3">~{r.pct}%</span>
               </div>
-              <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+              <div className="h-1.5 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-fuchsia"
                   style={{ width: `${r.pct}%` }}
@@ -1866,23 +1866,23 @@ function ExamTab() {
         </div>
 
         <div className="mt-5 rounded-xl border border-neon-red/25 bg-neon-red/[0.05] p-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-neon-red mb-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-tone-red mb-2">
             <AlertTriangle className="w-4 h-4" />
             Bốn chỗ mất điểm nhiều nhất
           </div>
-          <ul className="space-y-1.5 text-[13px] text-slate-300 leading-relaxed">
+          <ul className="space-y-1.5 text-[13px] text-text-secondary leading-relaxed">
             <li>
-              • <b className="text-white">Đọc số bất quy tắc</b> — 一日 ついたち, 二十歳 はたち, 三階 さんがい,
+              • <b className="text-text-primary">Đọc số bất quy tắc</b> — 一日 ついたち, 二十歳 はたち, 三階 さんがい,
               八分 はっぷん, 八千 はっせん. Không suy ra được, phải học vẹt.
             </li>
             <li>
-              • <b className="text-white">これ/それ/あれ vs この/その/あの</b> — hỏi đi hỏi lại trong cả 14 đề.
+              • <b className="text-text-primary">これ/それ/あれ vs この/その/あの</b> — hỏi đi hỏi lại trong cả 14 đề.
             </li>
             <li>
-              • <b className="text-white">6 từ để hỏi</b> — đọc đáp án trước rồi suy ngược ra từ hỏi.
+              • <b className="text-text-primary">6 từ để hỏi</b> — đọc đáp án trước rồi suy ngược ra từ hỏi.
             </li>
             <li>
-              • <b className="text-white">Collocation từ vựng</b> — mua ở đâu, ăn bằng gì. Đây là phần lớn nhất
+              • <b className="text-text-primary">Collocation từ vựng</b> — mua ở đâu, ăn bằng gì. Đây là phần lớn nhất
               và cũng là phần khó nhồi cấp tốc nhất.
             </li>
           </ul>
@@ -1892,8 +1892,8 @@ function ExamTab() {
       <FeBankPanel />
 
       <section className="rounded-2xl border border-neon-green/25 bg-neon-green/[0.05] p-5 sm:p-6">
-        <h2 className="text-lg font-heading font-bold text-white mb-3">Mục tiêu điểm theo từng phần</h2>
-        <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+        <h2 className="text-lg font-heading font-bold text-text-primary mb-3">Mục tiêu điểm theo từng phần</h2>
+        <p className="text-sm text-text-secondary mb-4 leading-relaxed">
           Đừng nhắm 9 đều cả ba phần — hãy nhắm cao ở chỗ dễ ăn điểm và chấp nhận vừa phải ở chỗ khó.
           Đây là phân bổ thực tế để tổng kết đạt 7+ và có cơ hội chạm 9.
         </p>
@@ -1903,26 +1903,26 @@ function ExamTab() {
             { part: 'Đọc hiểu', safe: '7–8', best: '9', why: 'Bài đọc lặp khuôn. Đọc được kana + thuộc bảng số là làm được phần lớn câu.' },
             { part: 'Trắc nghiệm FE', safe: '6–7', best: '8–9', why: 'Phụ thuộc vốn từ. Cày đủ 14 đề và ghi sổ lỗi là cách kéo điểm nhanh nhất.' },
           ].map((x) => (
-            <div key={x.part} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
-              <div className="text-sm font-bold text-white mb-2">{x.part}</div>
+            <div key={x.part} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
+              <div className="text-sm font-bold text-text-primary mb-2">{x.part}</div>
               <div className="flex items-baseline gap-3 mb-2">
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wide">An toàn</div>
-                  <div className="text-xl font-heading font-bold text-neon-green">{x.safe}</div>
+                  <div className="text-[10px] text-text-muted uppercase tracking-wide">An toàn</div>
+                  <div className="text-xl font-heading font-bold text-tone-green">{x.safe}</div>
                 </div>
                 <div>
-                  <div className="text-[10px] text-slate-500 uppercase tracking-wide">Tối đa</div>
-                  <div className="text-xl font-heading font-bold text-neon-cyan">{x.best}</div>
+                  <div className="text-[10px] text-text-muted uppercase tracking-wide">Tối đa</div>
+                  <div className="text-xl font-heading font-bold text-tone-cyan">{x.best}</div>
                 </div>
               </div>
-              <p className="text-[12px] text-slate-400 leading-relaxed">{x.why}</p>
+              <p className="text-[12px] text-text-secondary leading-relaxed">{x.why}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-6">
-        <h2 className="text-lg font-heading font-bold text-white mb-4">Vào thẳng chỗ luyện</h2>
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-6">
+        <h2 className="text-lg font-heading font-bold text-text-primary mb-4">Vào thẳng chỗ luyện</h2>
         <div className="grid sm:grid-cols-2 gap-3">
           <LinkCard
             href={EXAM_FE}
@@ -1974,18 +1974,18 @@ function LinkCard({
   return (
     <Link
       href={href}
-      className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/[0.03] p-4 hover:border-neon-violet/40 hover:bg-white/[0.05] transition-all group"
+      className="flex items-start gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 hover:border-neon-violet/40 hover:bg-[var(--bg-surface-hover)] transition-all group"
     >
-      <span className="w-10 h-10 shrink-0 rounded-xl bg-neon-violet/10 text-neon-violet flex items-center justify-center">
+      <span className="w-10 h-10 shrink-0 rounded-xl bg-neon-violet/10 text-tone-violet flex items-center justify-center">
         {icon}
       </span>
       <span className="flex-1 min-w-0">
-        <span className="block text-sm font-semibold text-white group-hover:text-neon-violet transition-colors">
+        <span className="block text-sm font-semibold text-text-primary group-hover:text-tone-violet transition-colors">
           {title}
         </span>
-        <span className="block text-[12px] text-slate-500 mt-0.5 leading-relaxed">{sub}</span>
+        <span className="block text-[12px] text-text-muted mt-0.5 leading-relaxed">{sub}</span>
       </span>
-      <ExternalLink className="w-4 h-4 text-slate-600 shrink-0 mt-1" />
+      <ExternalLink className="w-4 h-4 text-text-muted shrink-0 mt-1" />
     </Link>
   );
 }

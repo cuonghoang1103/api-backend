@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useTheme } from '@/context/ThemeContext';
 
 const CHARS = '01アイウエオカキクケコ{}[]<>/\\|;:,.?!@#$%^&*~+-=▓░█▄▀◆◇●○◎◉⊕⊗∪∩∈∉∝∞√∑∏∫∂∇≡≢≣⊂⊃⊆⊇';
 
@@ -27,7 +28,16 @@ interface Spark {
   size: number;
 }
 
+/**
+ * Nền canvas này SƠN KÍN một bầu trời đêm (gần đen) — chỉ hợp chủ đề tối. Chủ đề sáng ⇒ không dựng, trang lộ nền
+ * `var(--bg-primary)` của chính nó (08/11/2026: trang theo chủ đề, không còn ép tối).
+ */
 export default function ProjectsBackground() {
+  const { resolvedTheme } = useTheme();
+  return resolvedTheme === 'dark' ? <ProjectsBackgroundToi /> : null;
+}
+
+function ProjectsBackgroundToi() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const dropsRef = useRef<RainDrop[]>([]);
   const sparksRef = useRef<Spark[]>([]);

@@ -39,6 +39,24 @@
 /* Progress Test (PT) — MCQ paper that also carries 1–2 coding questions. */
 .exam-badge-pt { background: rgba(249,115,22,.14); color: #ea580c; border-color: rgba(249,115,22,.3); }
 html.theme-dark .exam-badge-pt { color: #fb923c; }
+/* 08/11/2026: chữ huy hiệu theo chủ đề — tông 500 (#6366f1, #10b981…) chỉ 2.3–3.8:1 trên nền nhạt của chính nó.
+   Sáng = tông 700, tối = tông 300. */
+.exam-badge-fe { color: #4338ca; }
+.exam-badge-pe { color: #6d28d9; }
+.exam-badge-reading { color: #0f766e; }
+.exam-badge-speaking { color: #be185d; }
+.exam-badge-pt { color: #9a3412; }
+.exam-badge-pass { color: #047857; }
+.exam-badge-fail { color: #b91c1c; }
+.exam-badge-real { color: #b45309; }
+html.theme-dark .exam-badge-fe { color: #a5b4fc; }
+html.theme-dark .exam-badge-pe { color: #c4b5fd; }
+html.theme-dark .exam-badge-reading { color: #5eead4; }
+html.theme-dark .exam-badge-speaking { color: #f9a8d4; }
+html.theme-dark .exam-badge-pt { color: #fdba74; }
+html.theme-dark .exam-badge-pass { color: #6ee7b7; }
+html.theme-dark .exam-badge-fail { color: #fca5a5; }
+html.theme-dark .exam-badge-real { color: #fcd34d; }
 .exam-badge-pass { background: rgba(16,185,129,.14); color: var(--exam-ok); border-color: rgba(16,185,129,.3); }
 .exam-badge-fail { background: rgba(239,68,68,.14); color: var(--exam-danger); border-color: rgba(239,68,68,.3); }
 .exam-badge-real { background: rgba(245,158,11,.14); color: var(--exam-warn); border-color: rgba(245,158,11,.3); }

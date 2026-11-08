@@ -23,12 +23,12 @@ import { makeT, type ILang } from '@/lib/interview-i18n';
 import type { InterviewReport, ReportResponse, ReportTurn } from '@/types/interview';
 
 const HIRE_LABEL: Record<string, { label: string; cls: string }> = {
-  STRONG_YES: { label: 'Strong Hire', cls: 'text-emerald-400' },
-  YES: { label: 'Hire', cls: 'text-emerald-400' },
-  LEAN_YES: { label: 'Lean Hire', cls: 'text-lime-400' },
-  LEAN_NO: { label: 'Lean No-Hire', cls: 'text-amber-400' },
-  NO: { label: 'No Hire', cls: 'text-red-400' },
-  STRONG_NO: { label: 'Strong No-Hire', cls: 'text-red-400' },
+  STRONG_YES: { label: 'Strong Hire', cls: 'text-tone-emerald' },
+  YES: { label: 'Hire', cls: 'text-tone-emerald' },
+  LEAN_YES: { label: 'Lean Hire', cls: 'text-tone-lime' },
+  LEAN_NO: { label: 'Lean No-Hire', cls: 'text-tone-amber' },
+  NO: { label: 'No Hire', cls: 'text-tone-red' },
+  STRONG_NO: { label: 'Strong No-Hire', cls: 'text-tone-red' },
 };
 
 const gradeColor = (g?: string | null) =>
@@ -37,7 +37,7 @@ const gradeColor = (g?: string | null) =>
 // Colour a turn by the SCORE actually shown (AI final or deterministic), not the
 // deterministic letter grade — an AI-graded 85 was rendering red before.
 const scoreColor = (s?: number | null) =>
-  s == null ? '#94a3b8' : s >= 85 ? '#10b981' : s >= 70 ? '#84cc16' : s >= 55 ? '#f59e0b' : s >= 40 ? '#f97316' : '#ef4444';
+  s == null ? 'var(--text-secondary)' : s >= 85 ? '#10b981' : s >= 70 ? '#84cc16' : s >= 55 ? '#f59e0b' : s >= 40 ? '#f97316' : '#ef4444';
 
 // Compose the final report into a spoken script: overall verdict + strengths +
 // weaknesses + advice. markdown/list text is read as plain sentences.
@@ -122,8 +122,8 @@ export default function InterviewReportPage() {
   // Stop reading if the user leaves the report.
   useEffect(() => () => stopSpeak(), [stopSpeak]);
 
-  if (loading) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('buildingReport')}</div>;
-  if (!data) return <div className="min-h-screen bg-darkbg pt-16 flex items-center justify-center text-slate-400">{t('noReport')}</div>;
+  if (loading) return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-text-secondary"><Loader2 className="w-5 h-5 animate-spin mr-2" /> {t('buildingReport')}</div>;
+  if (!data) return <div className="min-h-screen bg-[var(--bg-primary)] pt-16 flex items-center justify-center text-text-secondary">{t('noReport')}</div>;
 
   const { report, turns } = data;
   const bd = report.scoreBreakdown;
@@ -131,7 +131,7 @@ export default function InterviewReportPage() {
   const hire = report.hireRecommendation ? HIRE_LABEL[report.hireRecommendation] : null;
 
   return (
-    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-hidden">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-text-primary pt-16 overflow-hidden">
       <ParticleBackground density="medium" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 py-10">
         {/* Verdict header */}
@@ -139,22 +139,22 @@ export default function InterviewReportPage() {
           <div className="flex items-center gap-5">
             <div className="w-24 h-24 rounded-2xl flex flex-col items-center justify-center border-2" style={{ borderColor: gradeColor(report.letterGrade) }}>
               <span className="text-4xl font-bold" style={{ color: gradeColor(report.letterGrade) }}>{report.letterGrade ?? '—'}</span>
-              <span className="text-xs font-mono text-slate-400">{report.overallScore ?? 0}/100</span>
+              <span className="text-xs font-mono text-text-secondary">{report.overallScore ?? 0}/100</span>
             </div>
             <div>
-              <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-1">{t('interviewResult')}</p>
+              <p className="text-xs font-mono uppercase tracking-[0.2em] text-text-secondary mb-1">{t('interviewResult')}</p>
               {hire && <p className={`text-2xl font-bold ${hire.cls}`}>{hire.label}</p>}
-              <p className="text-sm text-slate-400 mt-1">{t('answeredSummary', { a: bd?.answered ?? 0, total: bd?.total ?? 0, rf: bd?.redFlagTotal ?? 0 })}</p>
+              <p className="text-sm text-text-secondary mt-1">{t('answeredSummary', { a: bd?.answered ?? 0, total: bd?.total ?? 0, rf: bd?.redFlagTotal ?? 0 })}</p>
             </div>
           </div>
           <div className="md:ml-auto flex gap-2 items-center">
             {/* Display-language toggle (realtime); defaults to the session language. */}
-            <div className="flex rounded-lg border border-white/10 overflow-hidden text-[11px] font-mono">
+            <div className="flex rounded-lg border border-[var(--border-light)] overflow-hidden text-[11px] font-mono">
               {(['VI', 'EN'] as const).map((lg) => (
                 <button
                   key={lg}
                   onClick={() => setDisplayLang(lg)}
-                  className={`px-2 py-1.5 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-2 py-1.5 transition-colors ${displayLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-text-secondary hover:text-text-primary'}`}
                 >
                   {lg}
                 </button>
@@ -164,7 +164,7 @@ export default function InterviewReportPage() {
               <button
                 onClick={speaking ? stopSpeak : () => { const lang: 'VI' | 'EN' = data.language === 'EN' ? 'EN' : 'VI'; speak(buildReportSpeech(report, lang), lang); }}
                 title={speaking ? t('stopReading') : t('hearEvalTitle')}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-300 hover:text-white hover:border-slate-500'}`}
+                className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-colors ${speaking ? 'border-amber-500/50 bg-amber-500/10 text-tone-amber' : 'border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-slate-500'}`}
               >
                 {speaking ? <Square className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />} {speaking ? t('stop') : t('hearEval')}
               </button>
@@ -172,7 +172,7 @@ export default function InterviewReportPage() {
             <button
               onClick={downloadReportPdf}
               disabled={pdfBusy}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-white/10 text-slate-300 text-sm font-semibold hover:text-white hover:border-slate-500 transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-[var(--border-light)] text-text-secondary text-sm font-semibold hover:text-text-primary hover:border-slate-500 transition-colors disabled:opacity-50"
             >
               {pdfBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} PDF
             </button>
@@ -185,12 +185,12 @@ export default function InterviewReportPage() {
         <div className="grid md:grid-cols-2 gap-6 mb-8">
           {/* Radar by topic */}
           {radarData.length >= 3 && (
-            <div className="rounded-2xl border border-white/10 p-4">
-              <div className="text-sm font-semibold text-slate-100 mb-2">{t('competencyByTopic')}</div>
+            <div className="rounded-2xl border border-[var(--border-light)] p-4">
+              <div className="text-sm font-semibold text-text-primary mb-2">{t('competencyByTopic')}</div>
               <ResponsiveContainer width="100%" height={240}>
                 <RadarChart data={radarData} outerRadius="72%">
                   <PolarGrid stroke="rgba(120,120,120,0.25)" />
-                  <PolarAngleAxis dataKey="topic" tick={{ fill: '#94a3b8', fontSize: 11 }} />
+                  <PolarAngleAxis dataKey="topic" tick={{ fill: 'var(--text-secondary)', fontSize: 11 }} />
                   <Radar dataKey="score" stroke="#f59e0b" fill="#f59e0b" fillOpacity={0.3} />
                 </RadarChart>
               </ResponsiveContainer>
@@ -198,20 +198,20 @@ export default function InterviewReportPage() {
           )}
 
           {/* Self vs objective + advice */}
-          <div className="rounded-2xl border border-white/10 p-4">
-            <div className="text-sm font-semibold text-slate-100 mb-3">{t('selfVsObjective')}</div>
+          <div className="rounded-2xl border border-[var(--border-light)] p-4">
+            <div className="text-sm font-semibold text-text-primary mb-3">{t('selfVsObjective')}</div>
             <div className="flex items-end gap-6 mb-4">
               <Metric label={t('youSelfScored')} value={bd?.self ?? null} suffix="/100" />
               <Metric label={t('objectiveScore')} value={bd?.deterministic ?? 0} suffix="/100" />
               {bd?.divergence != null && (
                 <div>
-                  <div className="text-xs text-slate-400">{t('divergence')}</div>
-                  <div className={`text-2xl font-bold ${Math.abs(bd.divergence) >= 15 ? 'text-amber-500' : 'text-slate-100'}`}>{bd.divergence > 0 ? '+' : ''}{bd.divergence}</div>
+                  <div className="text-xs text-text-secondary">{t('divergence')}</div>
+                  <div className={`text-2xl font-bold ${Math.abs(bd.divergence) >= 15 ? 'text-amber-500' : 'text-text-primary'}`}>{bd.divergence > 0 ? '+' : ''}{bd.divergence}</div>
                 </div>
               )}
             </div>
             {report.actionableAdvice && (
-              <p className="text-sm text-slate-400 leading-relaxed whitespace-pre-wrap">{report.actionableAdvice.replace(/\*\*/g, '')}</p>
+              <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">{report.actionableAdvice.replace(/\*\*/g, '')}</p>
             )}
           </div>
         </div>
@@ -224,20 +224,20 @@ export default function InterviewReportPage() {
 
         {/* Study plan — resources grounded in the knowledge base (source-traceable) */}
         {Array.isArray(report.suggestedResources) && report.suggestedResources.some((r) => r.sources?.length) && (
-          <div className="rounded-2xl border border-white/10 p-4 mb-8">
-            <div className="text-sm font-semibold text-slate-100 mb-3">{t('suggestedReading')}</div>
+          <div className="rounded-2xl border border-[var(--border-light)] p-4 mb-8">
+            <div className="text-sm font-semibold text-text-primary mb-3">{t('suggestedReading')}</div>
             <div className="space-y-3">
               {report.suggestedResources.filter((r) => r.sources?.length).map((r) => (
                 <div key={r.topicId}>
-                  <div className="text-xs font-mono uppercase tracking-wide text-amber-400/90 mb-1">{r.topic}</div>
+                  <div className="text-xs font-mono uppercase tracking-wide text-tone-amber mb-1">{r.topic}</div>
                   <ul className="space-y-1">
                     {r.sources!.map((s) => {
                       const label = s.headingPath ? `${s.title} — ${s.headingPath}` : s.title;
                       return (
-                        <li key={`${r.topicId}-${s.documentId}-${s.headingPath ?? ''}`} className="text-sm text-slate-300 flex items-start gap-2">
+                        <li key={`${r.topicId}-${s.documentId}-${s.headingPath ?? ''}`} className="text-sm text-text-secondary flex items-start gap-2">
                           <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
                           {s.sourceUrl ? (
-                            <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline">{label}</a>
+                            <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" className="text-tone-sky hover:underline">{label}</a>
                           ) : (
                             <span>{label}</span>
                           )}
@@ -252,8 +252,8 @@ export default function InterviewReportPage() {
         )}
 
         {/* Per-question drill-down */}
-        <div className="rounded-2xl border border-white/10 overflow-hidden">
-          <div className="px-4 py-3 border-b border-white/10 text-sm font-semibold text-slate-100">{t('perQuestion')}</div>
+        <div className="rounded-2xl border border-[var(--border-light)] overflow-hidden">
+          <div className="px-4 py-3 border-b border-[var(--border-light)] text-sm font-semibold text-text-primary">{t('perQuestion')}</div>
           {turns.map((tn) => <TurnRow key={tn.order} turn={tn} sessionId={sessionId} lang={displayLang} />)}
         </div>
 
@@ -265,8 +265,8 @@ export default function InterviewReportPage() {
             in any page the desktop reuses (checked 22/08/2026; the rest are target="_blank",
             which Electron routes to the system browser). */}
         <Link href="/cv/intake" className="mt-4 block rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-4 hover:border-amber-500/60">
-          <div className="text-sm font-semibold text-amber-200">Vừa giải thích tốt một chủ đề?</div>
-          <div className="mt-1 text-xs text-slate-300">Nếu điều bạn vừa trình bày là từ một dự án thật mà CV chưa nhắc tới, hãy đưa nó vào — mở CV Builder để AI phỏng vấn lấy nội dung →</div>
+          <div className="text-sm font-semibold text-tone-amber">Vừa giải thích tốt một chủ đề?</div>
+          <div className="mt-1 text-xs text-text-secondary">Nếu điều bạn vừa trình bày là từ một dự án thật mà CV chưa nhắc tới, hãy đưa nó vào — mở CV Builder để AI phỏng vấn lấy nội dung →</div>
         </Link>
       </div>
     </div>
@@ -276,25 +276,25 @@ export default function InterviewReportPage() {
 function Metric({ label, value, suffix = '' }: { label: string; value: number | null; suffix?: string }) {
   return (
     <div>
-      <div className="text-xs text-slate-400">{label}</div>
-      <div className="text-2xl font-bold text-slate-100">{value ?? '—'}{value != null ? <span className="text-sm font-normal text-slate-400">{suffix}</span> : null}</div>
+      <div className="text-xs text-text-secondary">{label}</div>
+      <div className="text-2xl font-bold text-text-primary">{value ?? '—'}{value != null ? <span className="text-sm font-normal text-text-secondary">{suffix}</span> : null}</div>
     </div>
   );
 }
 
 function ListCard({ title, items, tone, empty }: { title: string; items: string[]; tone: 'ok' | 'weak'; empty: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 p-4">
-      <div className="text-sm font-semibold text-slate-100 mb-2">{title}</div>
+    <div className="rounded-2xl border border-[var(--border-light)] p-4">
+      <div className="text-sm font-semibold text-text-primary mb-2">{title}</div>
       {items.length ? (
         <ul className="space-y-1.5">
           {items.map((it) => (
-            <li key={it} className="text-sm text-slate-400 flex items-center gap-2">
+            <li key={it} className="text-sm text-text-secondary flex items-center gap-2">
               <span className={`w-1.5 h-1.5 rounded-full ${tone === 'ok' ? 'bg-emerald-500' : 'bg-amber-500'}`} /> {it}
             </li>
           ))}
         </ul>
-      ) : <p className="text-sm text-slate-400">{empty}</p>}
+      ) : <p className="text-sm text-text-secondary">{empty}</p>}
     </div>
   );
 }
@@ -318,31 +318,31 @@ function TurnRow({ turn, sessionId, lang }: { turn: ReportTurn; sessionId: numbe
     }
   };
   return (
-    <div className="border-b border-white/10 last:border-0">
-      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/[0.04]">
-        <span className="text-xs font-mono text-slate-400 w-8">#{turn.order + 1}</span>
-        <span className="flex-1 text-sm text-slate-100 line-clamp-1">{turn.questionText}</span>
+    <div className="border-b border-[var(--border-light)] last:border-0">
+      <button onClick={() => setOpen((o) => !o)} className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-[var(--bg-surface-hover)]">
+        <span className="text-xs font-mono text-text-secondary w-8">#{turn.order + 1}</span>
+        <span className="flex-1 text-sm text-text-primary line-clamp-1">{turn.questionText}</span>
         {turn.injectionAttempted && <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />}
-        {turn.topic && <span className="text-xs text-slate-400 hidden sm:inline">{turn.topic}</span>}
+        {turn.topic && <span className="text-xs text-text-secondary hidden sm:inline">{turn.topic}</span>}
         <span className="text-sm font-mono font-semibold shrink-0" style={{ color: scoreColor(score) }}>{score ?? '—'}</span>
-        <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-4 h-4 text-text-secondary transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && (
         <div className="px-4 pb-4 space-y-3">
           <Block label={t('yourAnswer')} text={turn.userAnswer || t('blank')} />
           {det && (det.reliable === false ? (
-            <p className="text-xs text-slate-500 leading-relaxed">{t('objSkipped')}</p>
+            <p className="text-xs text-text-muted leading-relaxed">{t('objSkipped')}</p>
           ) : (
             <div className="text-xs">
-              <span className="text-slate-400">{t('coverageShort')}</span>
-              {det.mustHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-300 border border-emerald-500/30">{k}</span>)}
-              {det.mustMiss.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-white/[0.04] text-slate-400 border border-white/10">{t('missingInline', { k })}</span>)}
-              {det.redFlagsHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-red-500/10 text-red-300 border border-red-500/30">⚠ {k}</span>)}
+              <span className="text-text-secondary">{t('coverageShort')}</span>
+              {det.mustHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-emerald-500/10 text-tone-emerald border border-emerald-500/30">{k}</span>)}
+              {det.mustMiss.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-[var(--bg-surface-hover)] text-text-secondary border border-[var(--border-light)]">{t('missingInline', { k })}</span>)}
+              {det.redFlagsHit.map((k) => <span key={k} className="inline-block mr-1 mb-1 px-1.5 py-0.5 rounded bg-red-500/10 text-tone-red border border-red-500/30">⚠ {k}</span>)}
             </div>
           ))}
           {turn.referenceAnswer && <Block label={t('modelAnswerShort')} text={turn.referenceAnswer} md />}
           <div className="flex justify-end">
-            <button onClick={flag} disabled={flagged} className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-amber-400 disabled:text-emerald-400">
+            <button onClick={flag} disabled={flagged} className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-tone-amber disabled:text-tone-emerald">
               <Flag className="w-3.5 h-3.5" /> {flagged ? t('flagged') : t('flagWrong')}
             </button>
           </div>
@@ -355,11 +355,11 @@ function TurnRow({ turn, sessionId, lang }: { turn: ReportTurn; sessionId: numbe
 function Block({ label, text, md }: { label: string; text: string; md?: boolean }) {
   return (
     <div>
-      <div className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-1">{label}</div>
+      <div className="text-xs font-semibold uppercase tracking-wide text-text-secondary mb-1">{label}</div>
       {md ? (
-        <div className="text-sm text-slate-100 leading-relaxed bg-white/[0.04] rounded-lg p-3 border border-white/10 markdown-body"><Markdown mdx={text} openLinksInNewTab /></div>
+        <div className="text-sm text-text-primary leading-relaxed bg-[var(--bg-surface-hover)] rounded-lg p-3 border border-[var(--border-light)] markdown-body"><Markdown mdx={text} openLinksInNewTab /></div>
       ) : (
-        <p className="text-sm text-slate-100 leading-relaxed whitespace-pre-wrap bg-white/[0.04] rounded-lg p-3 border border-white/10">{text}</p>
+        <p className="text-sm text-text-primary leading-relaxed whitespace-pre-wrap bg-[var(--bg-surface-hover)] rounded-lg p-3 border border-[var(--border-light)]">{text}</p>
       )}
     </div>
   );

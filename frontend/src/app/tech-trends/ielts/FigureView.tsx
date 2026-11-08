@@ -11,18 +11,17 @@
  * Số liệu và bài mẫu đọc chung MỘT nguồn dữ liệu, nên hình vẽ và các con số
  * trong bài mẫu không bao giờ lệch nhau.
  *
- * Màu lấy cố định theo bảng dưới thay vì theo biến CSS: trang này có nền tối
- * cố định (#0a0a0f) nên không cần theo theme, mà màu cố định thì bảo đảm tương
- * phản đủ để đọc số trên biểu đồ.
+ * Màu CHUỖI SỐ LIỆU (cột, lát bánh) cố định theo bảng dưới — là màu đồ hoạ, không phải chữ. Trục, lưới, chữ
+ * thì theo biến chủ đề (08/11/2026: trang không còn ép nền tối #0a0a0f).
  */
 import type { Figure, MapSpec } from './data/types';
 
 const PALETTE = ['#38bdf8', '#34d399', '#fbbf24', '#f472b6', '#a78bfa', '#fb923c'];
 
-const AXIS = '#64748b';
-const GRID = 'rgba(148,163,184,0.18)';
-const TEXT = '#cbd5e1';
-const TEXT_DIM = '#94a3b8';
+const AXIS = 'var(--text-muted)';
+const GRID = 'var(--border-light-hover)';
+const TEXT = 'var(--text-secondary)';
+const TEXT_DIM = 'var(--text-secondary)';
 
 /** Làm tròn để trục dọc có mốc đẹp thay vì số lẻ. */
 function niceMax(v: number): number {
@@ -222,7 +221,7 @@ function PieChart({ f }: { f: Figure }) {
             <path
               d={`M ${cx} ${cy} L ${x0} ${y0} A ${r} ${r} 0 ${large} 1 ${x1} ${y1} Z`}
               fill={color}
-              stroke="#0a0a0f"
+              stroke="var(--bg-primary)"
               strokeWidth={1.5}
             />
             {frac > 0.06 && (
@@ -269,9 +268,9 @@ function TableFigure({ f }: { f: Figure }) {
       <table className="w-full text-sm border-collapse">
         <thead>
           <tr>
-            <th className="text-left px-3 py-2 border-b border-white/15 text-slate-400 font-medium"> </th>
+            <th className="text-left px-3 py-2 border-b border-[var(--border-light-hover)] text-text-secondary font-medium"> </th>
             {cats.map((c) => (
-              <th key={c} className="text-right px-3 py-2 border-b border-white/15 text-white font-semibold">
+              <th key={c} className="text-right px-3 py-2 border-b border-[var(--border-light-hover)] text-text-primary font-semibold">
                 {c}
               </th>
             ))}
@@ -279,8 +278,8 @@ function TableFigure({ f }: { f: Figure }) {
         </thead>
         <tbody>
           {series.map((s, si) => (
-            <tr key={s.name} className={si % 2 ? 'bg-white/[0.02]' : ''}>
-              <td className="px-3 py-2 border-b border-white/10 text-slate-200">
+            <tr key={s.name} className={si % 2 ? 'bg-[var(--bg-surface-hover)]' : ''}>
+              <td className="px-3 py-2 border-b border-[var(--border-light)] text-text-primary">
                 <span
                   className="inline-block w-2.5 h-2.5 rounded-sm mr-2 align-middle"
                   style={{ background: s.color ?? PALETTE[si % PALETTE.length] }}
@@ -288,7 +287,7 @@ function TableFigure({ f }: { f: Figure }) {
                 {s.name}
               </td>
               {s.values.map((v, i) => (
-                <td key={i} className="text-right px-3 py-2 border-b border-white/10 text-slate-300 tabular-nums">
+                <td key={i} className="text-right px-3 py-2 border-b border-[var(--border-light)] text-text-secondary tabular-nums">
                   {v}
                   {unitSuffix(f.unit)}
                 </td>
@@ -310,12 +309,12 @@ function ProcessFigure({ f }: { f: Figure }) {
       {steps.map((s, i) => (
         <div key={i} className="flex items-stretch gap-2">
           <div className="rounded-xl border border-sky-500/30 bg-sky-500/10 px-3 py-2.5 min-w-[8.5rem] max-w-[13rem]">
-            <p className="text-[10px] text-sky-300 font-bold">BƯỚC {i + 1}</p>
-            <p className="text-white text-sm leading-snug mt-0.5">{s.label}</p>
-            {s.note && <p className="text-slate-400 text-xs mt-1 leading-snug">{s.note}</p>}
+            <p className="text-[10px] text-tone-sky font-bold">BƯỚC {i + 1}</p>
+            <p className="text-text-primary text-sm leading-snug mt-0.5">{s.label}</p>
+            {s.note && <p className="text-text-secondary text-xs mt-1 leading-snug">{s.note}</p>}
           </div>
           {i < steps.length - 1 && (
-            <span className="self-center text-slate-600 text-lg" aria-hidden>
+            <span className="self-center text-text-muted text-lg" aria-hidden>
               →
             </span>
           )}
@@ -334,7 +333,7 @@ function MapFigure({ m, title }: { m: MapSpec; title: string }) {
 
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label={title}>
-      <rect width={W} height={H} fill="rgba(255,255,255,0.02)" rx={8} />
+      <rect width={W} height={H} fill="var(--bg-surface-hover)" rx={8} />
 
       {/* lối đi / đường */}
       {(m.paths ?? []).map((p, i) => (
@@ -371,8 +370,8 @@ function MapFigure({ m, title }: { m: MapSpec; title: string }) {
               y={b.y * CELL + 2}
               width={b.w * CELL - 4}
               height={b.h * CELL - 4}
-              fill={isBlank ? 'rgba(56,189,248,0.12)' : 'rgba(255,255,255,0.05)'}
-              stroke={isBlank ? '#38bdf8' : 'rgba(255,255,255,0.2)'}
+              fill={isBlank ? 'rgba(56,189,248,0.12)' : 'var(--bg-surface-hover)'}
+              stroke={isBlank ? 'var(--tone-sky)' : 'var(--border-light-hover)'}
               strokeWidth={isBlank ? 2 : 1}
               strokeDasharray={isBlank ? '5 3' : undefined}
               rx={5}
@@ -383,7 +382,7 @@ function MapFigure({ m, title }: { m: MapSpec; title: string }) {
               textAnchor="middle"
               fontSize={isBlank ? 16 : 12}
               fontWeight={isBlank ? 700 : 500}
-              fill={isBlank ? '#38bdf8' : TEXT}
+              fill={isBlank ? 'var(--tone-sky)' : TEXT}
             >
               {b.blank ?? b.label}
             </text>
@@ -394,8 +393,8 @@ function MapFigure({ m, title }: { m: MapSpec; title: string }) {
       {/* mốc */}
       {(m.pins ?? []).map((p, i) => (
         <g key={`pin-${i}`}>
-          <circle cx={p.x * CELL} cy={p.y * CELL} r={6} fill="#34d399" />
-          <text x={p.x * CELL + 10} y={p.y * CELL + 4} fontSize={11} fill="#34d399" fontWeight={600}>
+          <circle cx={p.x * CELL} cy={p.y * CELL} r={6} fill="var(--tone-emerald)" />
+          <text x={p.x * CELL + 10} y={p.y * CELL + 4} fontSize={11} fill="var(--tone-emerald)" fontWeight={600}>
             {p.label}
           </text>
         </g>
@@ -411,10 +410,10 @@ export default function FigureView({ figure }: { figure: Figure }) {
     (figure.kind === 'bar' || figure.kind === 'line') && (figure.series?.length ?? 0) > 1;
 
   return (
-    <figure className="fig-dark rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+    <figure className="fig-dark rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4">
       <figcaption className="mb-3">
-        <p className="text-white text-sm font-semibold leading-snug">{figure.title}</p>
-        {figure.note && <p className="text-slate-500 text-xs mt-0.5">{figure.note}</p>}
+        <p className="text-text-primary text-sm font-semibold leading-snug">{figure.title}</p>
+        {figure.note && <p className="text-text-muted text-xs mt-0.5">{figure.note}</p>}
       </figcaption>
 
       {figure.kind === 'bar' && <BarChart f={figure} />}
@@ -427,7 +426,7 @@ export default function FigureView({ figure }: { figure: Figure }) {
       {showLegend && (
         <div className="flex flex-wrap gap-x-4 gap-y-1.5 mt-3">
           {figure.series!.map((s, i) => (
-            <span key={s.name} className="inline-flex items-center gap-1.5 text-xs text-slate-300">
+            <span key={s.name} className="inline-flex items-center gap-1.5 text-xs text-text-secondary">
               <span
                 className="w-3 h-3 rounded-sm"
                 style={{ background: s.color ?? PALETTE[i % PALETTE.length] }}

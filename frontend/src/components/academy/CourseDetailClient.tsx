@@ -141,8 +141,8 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-darkbg pt-20 flex flex-col items-center justify-center">
-        <Loader2 className="w-12 h-12 animate-spin text-neon-violet mb-4" />
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex flex-col items-center justify-center">
+        <Loader2 className="w-12 h-12 animate-spin text-tone-violet mb-4" />
         <p className="text-text-muted">Đang tải khóa học...</p>
       </div>
     );
@@ -150,9 +150,9 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
 
   if (notFound || !course) {
     return (
-      <div className="min-h-screen bg-darkbg pt-20 flex flex-col items-center justify-center">
+      <div className="min-h-screen bg-[var(--bg-primary)] pt-20 flex flex-col items-center justify-center">
         <p className="text-text-muted mb-4">Không tìm thấy khóa học</p>
-        <Link href="/academy" className="text-neon-violet hover:text-neon-indigo transition-colors">
+        <Link href="/academy" className="text-tone-violet hover:text-tone-indigo transition-colors">
           Quay lại Academy
         </Link>
       </div>
@@ -181,25 +181,25 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
         original: null,
       };
 
-  const levelColor = course.level === 'BEGINNER' ? 'text-green-400 bg-green-500/20' :
-    course.level === 'INTERMEDIATE' ? 'text-yellow-400 bg-yellow-500/20' :
-    'text-red-400 bg-red-500/20';
+  const levelColor = course.level === 'BEGINNER' ? 'text-tone-green bg-green-500/20' :
+    course.level === 'INTERMEDIATE' ? 'text-tone-yellow bg-yellow-500/20' :
+    'text-tone-red bg-red-500/20';
 
   const levelLabel = course.level === 'BEGINNER' ? 'Beginner' :
     course.level === 'INTERMEDIATE' ? 'Intermediate' :
     course.level === 'ADVANCED' ? 'Advanced' : course.level;
 
   return (
-    <div className="min-h-screen bg-darkbg pt-20">
+    <div className="min-h-screen bg-[var(--bg-primary)] pt-20">
       {/* Top bar */}
-      <div className="bg-darkcard border-b border-darkborder">
+      <div className="bg-[var(--bg-card)] border-b border-[var(--border-color)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-3">
-            <Link href="/academy" className="p-2 rounded-xl bg-darkbg hover:bg-white/5 transition-colors">
+            <Link href="/academy" className="p-2 rounded-xl bg-[var(--bg-primary)] hover:bg-[var(--bg-surface-hover)] transition-colors">
               <ArrowLeft className="w-5 h-5 text-text-secondary" />
             </Link>
             <div className="flex items-center gap-2 text-sm text-text-muted">
-              <Link href="/academy" className="hover:text-neon-violet transition-colors">Academy</Link>
+              <Link href="/academy" className="hover:text-tone-violet transition-colors">Academy</Link>
               <span>/</span>
               <span className="text-text-primary">{pickLang(course.title, locale)}</span>
             </div>
@@ -215,10 +215,10 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <div className="flex flex-wrap gap-2 mb-3">
                 <span className={`px-3 py-1 rounded-lg text-xs font-medium ${levelColor}`}>{levelLabel}</span>
-                {accessType === 'FREE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-green-400">Miễn phí</span>}
-                {accessType === 'CODE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-violet/20 text-neon-violet">Mã kích hoạt</span>}
-                {accessType === 'PAID' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">Trả phí</span>}
-                {course.categoryName && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-neon-indigo">{course.categoryName}</span>}
+                {accessType === 'FREE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-green-500/20 text-tone-green">Miễn phí</span>}
+                {accessType === 'CODE' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-violet/20 text-tone-violet">Mã kích hoạt</span>}
+                {accessType === 'PAID' && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-tone-indigo">Trả phí</span>}
+                {course.categoryName && <span className="px-3 py-1 rounded-lg text-xs font-medium bg-neon-indigo/20 text-tone-indigo">{course.categoryName}</span>}
               </div>
               <h1 className="text-3xl md:text-4xl font-heading font-bold text-text-primary mb-4">{pickLang(course.title, locale)}</h1>
               {course.shortDescription && (
@@ -228,7 +228,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
               {/* Meta row */}
               <div className="flex flex-wrap items-center gap-4 mt-4 text-sm text-text-muted">
                 <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+                  <Star className="w-4 h-4 text-tone-yellow fill-yellow-400" />
                   <span className="text-text-primary font-medium">{Number(course.avgRating || 0).toFixed(1)}</span>
                   <span>({course.totalReviews || 0} đánh giá)</span>
                 </div>
@@ -263,7 +263,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             </motion.div>
 
             {/* Tabs */}
-            <div className="flex gap-1 bg-darkcard border border-darkborder rounded-2xl p-1.5">
+            <div className="flex gap-1 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-1.5">
               {([
                 { id: 'overview', label: 'Tổng quan' },
                 { id: 'curriculum', label: 'Nội dung' },
@@ -275,7 +275,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                   className={`flex-1 px-4 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     activeTab === tab.id
                       ? 'bg-gradient-to-r from-neon-indigo to-neon-violet text-white'
-                      : 'text-text-muted hover:text-text-primary hover:bg-white/5'
+                      : 'text-text-muted hover:text-text-primary hover:bg-[var(--bg-surface-hover)]'
                   }`}
                 >
                   {tab.label}
@@ -287,7 +287,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
             {activeTab === 'overview' && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 {/* Thumbnail / Preview Video */}
-                <div className="aspect-video rounded-2xl overflow-hidden bg-darkcard border border-darkborder relative group">
+                <div className="aspect-video rounded-2xl overflow-hidden bg-[var(--bg-card)] border border-[var(--border-color)] relative group">
                   {course.previewVideoUrl ? (
                     isDirectVideoUrl(course.previewVideoUrl) ? (
                       <video src={course.previewVideoUrl} className="w-full h-full object-cover" poster={course.thumbnailUrl} controls />
@@ -308,9 +308,9 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                         label={course.title}
                         className="w-full h-full object-cover"
                       />
-                      <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                          <Play className="w-8 h-8 text-white fill-white" />
+                      <div className="absolute inset-0 bg-[var(--bg-surface)] flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-16 h-16 rounded-full bg-[var(--bg-surface-active)] backdrop-blur-sm flex items-center justify-center">
+                          <Play className="w-8 h-8 text-text-primary fill-white" />
                         </div>
                       </div>
                     </>
@@ -322,7 +322,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 </div>
 
                 {course.description && (
-                  <div className="bg-darkcard border border-darkborder rounded-2xl p-6">
+                  <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Giới thiệu khóa học</h3>
                     {/* Trước đây render {course.description} dạng TEXT ⇒ thẻ <strong>
                         của spec hiện nguyên văn ra màn hình. */}
@@ -331,7 +331,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 )}
 
                 {course.whatYouLearn && (
-                  <div className="bg-darkcard border border-darkborder rounded-2xl p-6">
+                  <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Bạn sẽ học được</h3>
                     <div
                       className={`grid gap-x-6 gap-y-3 ${
@@ -340,7 +340,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     >
                       {safeSplitLines(course.whatYouLearn).map((item, i) => (
                         <div key={i} className="flex items-start gap-3">
-                          <CheckCircle className="w-5 h-5 text-green-400 shrink-0 mt-0.5" />
+                          <CheckCircle className="w-5 h-5 text-tone-green shrink-0 mt-0.5" />
                           <span className="text-sm text-text-secondary leading-relaxed min-w-0">{item}</span>
                         </div>
                       ))}
@@ -349,12 +349,12 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 )}
 
                 {course.requirements && (
-                  <div className="bg-darkcard border border-darkborder rounded-2xl p-6">
+                  <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-6">
                     <h3 className="text-lg font-heading font-bold text-text-primary mb-4">Yêu cầu</h3>
                     <ul className="space-y-2">
                       {safeSplitLines(course.requirements).map((item, i) => (
                         <li key={i} className="flex items-start gap-3 text-sm text-text-secondary leading-relaxed">
-                          <Shield className="w-4 h-4 text-neon-indigo shrink-0 mt-0.5" />
+                          <Shield className="w-4 h-4 text-tone-indigo shrink-0 mt-0.5" />
                           <span className="min-w-0">{item}</span>
                         </li>
                       ))}
@@ -373,7 +373,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     courseSlug={course.slug}
                   />
                 ) : (
-                  <div className="bg-darkcard border border-darkborder rounded-2xl p-12 text-center">
+                  <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-12 text-center">
                     <BookOpen className="w-12 h-12 text-text-muted/30 mx-auto mb-3" />
                     <p className="text-text-muted">Nội dung khóa học đang được cập nhật</p>
                   </div>
@@ -401,7 +401,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden"
+                className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden"
               >
                 {course.thumbnailUrl && (
                   <div className="aspect-video relative overflow-hidden">
@@ -414,7 +414,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                   </div>
                 )}
 
-                <div className="p-6 border-t border-darkborder">
+                <div className="p-6 border-t border-[var(--border-color)]">
                   {/* Price always shown for paid/code courses */}
                   {!isFreeCourse && (
                     <div className="flex items-end gap-3 mb-4">
@@ -446,7 +446,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                   )}
                 </div>
 
-                <div className="p-6 space-y-3 border-t border-darkborder">
+                <div className="p-6 space-y-3 border-t border-[var(--border-color)]">
                   <h4 className="text-sm font-semibold text-text-muted uppercase tracking-wider">Khóa học bao gồm</h4>
                   {[
                     { icon: Clock, text: `${formatDuration(course.totalDurationSeconds || 0)} video on-demand` },
@@ -456,7 +456,7 @@ export default function CourseDetailClient({ slug }: CourseDetailClientProps) {
                     { icon: PlayCircle, text: 'Truy cập trọn đời' },
                   ].map((item, i) => (
                     <div key={i} className="flex items-center gap-3 text-sm text-text-secondary">
-                      <item.icon className="w-4 h-4 text-neon-violet shrink-0" />
+                      <item.icon className="w-4 h-4 text-tone-violet shrink-0" />
                       <span>{item.text}</span>
                     </div>
                   ))}
@@ -641,24 +641,24 @@ function CourseAccessOptions({
         disabled={freeLoading || isPaidCourse}
         className={`flex items-center justify-between w-full px-4 py-3 rounded-xl border transition-all disabled:opacity-50
           ${isPaidCourse
-            ? 'bg-darkbg border-darkborder cursor-not-allowed opacity-40'
+            ? 'bg-[var(--bg-primary)] border-[var(--border-color)] cursor-not-allowed opacity-40'
             : 'bg-gradient-to-r from-green-500/10 to-green-600/10 border-green-500/30 hover:from-green-500/20 hover:to-green-600/20 hover:border-green-500/50'
           }`}
       >
         <div className="flex items-center gap-3">
           {freeLoading ? (
-            <Loader2 className="w-5 h-5 text-green-400 animate-spin" />
+            <Loader2 className="w-5 h-5 text-tone-green animate-spin" />
           ) : (
-            <Award className="w-5 h-5 text-green-400" />
+            <Award className="w-5 h-5 text-tone-green" />
           )}
           <div className="text-left">
-            <p className={`text-sm font-semibold ${isPaidCourse ? 'text-text-muted' : 'text-green-400'}`}>Miễn phí</p>
-            <p className={`text-xs ${isPaidCourse ? 'text-text-muted/60' : 'text-green-400/60'}`}>
+            <p className={`text-sm font-semibold ${isPaidCourse ? 'text-text-muted' : 'text-tone-green'}`}>Miễn phí</p>
+            <p className={`text-xs ${isPaidCourse ? 'text-text-muted/60' : 'text-tone-green'}`}>
               {isPaidCourse ? 'Không áp dụng' : 'Đăng ký & học ngay'}
             </p>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-green-400/60" />
+        <ChevronRight className="w-4 h-4 text-tone-green" />
       </button>
 
       {/* ── Trả phí or Mã kích hoạt ─────────────────────────── */}
@@ -669,10 +669,10 @@ function CourseAccessOptions({
           {enrollmentExpired && (
             <div className="px-4 py-4 space-y-3">
               <div className="flex items-start gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/30">
-                <Lock className="w-4 h-4 text-red-400 mt-0.5 shrink-0" />
+                <Lock className="w-4 h-4 text-tone-red mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold text-red-400">Quyền truy cập đã hết hạn</p>
-                  <p className="text-xs text-red-400/70">
+                  <p className="text-sm font-semibold text-tone-red">Quyền truy cập đã hết hạn</p>
+                  <p className="text-xs text-tone-red">
                     {expiryDateLabel ? `Hết hạn vào ${expiryDateLabel}` : 'Thời hạn truy cập đã kết thúc'}.
                     Vui lòng gia hạn để tiếp tục học.
                   </p>
@@ -681,11 +681,11 @@ function CourseAccessOptions({
               <button
                 onClick={handlePaidAccess}
                 disabled={paidLoading}
-                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-darkbg hover:bg-neon-violet/10 transition-all disabled:opacity-50"
+                className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-[var(--bg-primary)] hover:bg-neon-violet/10 transition-all disabled:opacity-50"
               >
                 {paidLoading
-                  ? <Loader2 className="w-4 h-4 text-neon-violet animate-spin" />
-                  : <CreditCard className="w-4 h-4 text-neon-violet" />}
+                  ? <Loader2 className="w-4 h-4 text-tone-violet animate-spin" />
+                  : <CreditCard className="w-4 h-4 text-tone-violet" />}
                 <div className="text-left">
                   <p className="text-sm font-medium text-text-primary">Gia hạn qua VNPay</p>
                   <p className="text-xs text-text-muted">{priceLabel}</p>
@@ -702,9 +702,9 @@ function CourseAccessOptions({
                 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
             >
               <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-neon-violet" />
+                <CheckCircle className="w-5 h-5 text-tone-violet" />
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-neon-violet">Vào học ngay</p>
+                  <p className="text-sm font-semibold text-tone-violet">Vào học ngay</p>
                   <p className="text-xs text-neon-violet/60">
                     {expiryDateLabel ? `Hết hạn ${expiryDateLabel}` : 'Truy cập trọn đời'}
                   </p>
@@ -722,9 +722,9 @@ function CourseAccessOptions({
                 bg-gradient-to-r from-neon-indigo/10 to-neon-violet/10 hover:from-neon-indigo/20 hover:to-neon-violet/20"
             >
               <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-neon-violet" />
+                <CheckCircle className="w-5 h-5 text-tone-violet" />
                 <div className="text-left">
-                  <p className="text-sm font-semibold text-neon-violet">Tiếp tục học</p>
+                  <p className="text-sm font-semibold text-tone-violet">Tiếp tục học</p>
                   <p className="text-xs text-neon-violet/60">Mã kích hoạt hợp lệ cho phiên này</p>
                 </div>
               </div>
@@ -736,9 +736,9 @@ function CourseAccessOptions({
           {!enrollmentExpired && hasPaidAccess && isCodeEnrollment && !hasCodeSession && (
             <div className="px-4 py-4 space-y-3">
               <div className="flex items-start gap-2 p-3 rounded-lg bg-neon-violet/10 border border-neon-violet/30">
-                <KeyRound className="w-4 h-4 text-neon-violet mt-0.5 shrink-0" />
+                <KeyRound className="w-4 h-4 text-tone-violet mt-0.5 shrink-0" />
                 <div>
-                  <p className="text-sm font-semibold text-neon-violet">Nhập lại mã để tiếp tục</p>
+                  <p className="text-sm font-semibold text-tone-violet">Nhập lại mã để tiếp tục</p>
                   <p className="text-xs text-neon-violet/60">Mỗi phiên làm việc cần xác nhận mã kích hoạt</p>
                 </div>
               </div>
@@ -753,7 +753,7 @@ function CourseAccessOptions({
                   onKeyDown={e => { if (e.key === 'Enter') handleCodeActivate(); }}
                   placeholder="ABC123"
                   maxLength={10}
-                  className="flex-1 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                  className="flex-1 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
                 />
                 <button
                   onClick={handleCodeActivate}
@@ -763,7 +763,7 @@ function CourseAccessOptions({
                   {codeLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Xác nhận'}
                 </button>
               </div>
-              {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+              {codeError && <p className="text-xs text-tone-red">{codeError}</p>}
             </div>
           )}
 
@@ -771,7 +771,7 @@ function CourseAccessOptions({
           {!enrollmentExpired && !hasPaidAccess && (
             <>
               <div className="px-4 py-3 border-b border-neon-violet/20">
-                <p className="text-sm font-semibold text-neon-violet">Trả phí or Mã kích hoạt</p>
+                <p className="text-sm font-semibold text-tone-violet">Trả phí or Mã kích hoạt</p>
                 <p className="text-xs text-neon-violet/60">Chọn 1 trong 2 cách để truy cập khóa học</p>
               </div>
 
@@ -780,11 +780,11 @@ function CourseAccessOptions({
                 <button
                   onClick={handlePaidAccess}
                   disabled={paidLoading}
-                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-darkbg hover:bg-neon-violet/10 transition-all disabled:opacity-50"
+                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg border border-neon-violet/30 bg-[var(--bg-primary)] hover:bg-neon-violet/10 transition-all disabled:opacity-50"
                 >
                   {paidLoading
-                    ? <Loader2 className="w-4 h-4 text-neon-violet animate-spin" />
-                    : <CreditCard className="w-4 h-4 text-neon-violet" />}
+                    ? <Loader2 className="w-4 h-4 text-tone-violet animate-spin" />
+                    : <CreditCard className="w-4 h-4 text-tone-violet" />}
                   <div className="text-left">
                     <p className="text-sm font-medium text-text-primary">Thanh toán VNPay</p>
                     <p className="text-xs text-text-muted">Mua ngay – {priceLabel}</p>
@@ -794,7 +794,7 @@ function CourseAccessOptions({
                 {/* Mã kích hoạt */}
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2">
-                    <KeyRound className="w-4 h-4 text-neon-violet shrink-0" />
+                    <KeyRound className="w-4 h-4 text-tone-violet shrink-0" />
                     <span className="text-sm font-medium text-text-primary">Mã kích hoạt</span>
                   </div>
                   <div className="flex gap-2">
@@ -808,7 +808,7 @@ function CourseAccessOptions({
                       onKeyDown={e => { if (e.key === 'Enter') handleCodeActivate(); }}
                       placeholder="ABC123"
                       maxLength={10}
-                      className="flex-1 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
+                      className="flex-1 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary font-mono font-bold tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 uppercase text-center"
                     />
                     <button
                       onClick={handleCodeActivate}
@@ -818,7 +818,7 @@ function CourseAccessOptions({
                       {codeLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Kích hoạt'}
                     </button>
                   </div>
-                  {codeError && <p className="text-xs text-red-400">{codeError}</p>}
+                  {codeError && <p className="text-xs text-tone-red">{codeError}</p>}
                 </div>
               </div>
             </>

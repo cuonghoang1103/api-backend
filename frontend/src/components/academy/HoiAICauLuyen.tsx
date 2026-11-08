@@ -219,7 +219,7 @@ export default function HoiAICauLuyen({ cau, dsCau, idx, onChonCau, onDong, robo
           CuongMini giảng riêng từng câu: gợi ý không lộ đáp án, dịch đề sang tiếng Việt, cách làm từng bước,
           vì sao các đáp án khác sai… Đây là tính năng Pro.
         </p>
-        <Link href="/pro" className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold text-white"
+        <Link href="/pro" className="inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2 text-sm font-semibold text-text-primary"
           style={{ background: 'linear-gradient(90deg,#f59e0b,#f97316)' }}>
           <Crown size={14} /> Nâng cấp Pro để hỏi CuongMini
         </Link>
@@ -312,7 +312,7 @@ export default function HoiAICauLuyen({ cau, dsCau, idx, onChonCau, onDong, robo
         onClick={gui}
         disabled={khoa || !nhap.trim()}
         aria-label="Gửi câu hỏi cho CuongMini"
-        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-white disabled:opacity-35"
+        className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-text-primary disabled:opacity-35"
         style={{ background: robot ? 'rgba(34,211,238,0.2)' : 'var(--accent-color, #8b5cf6)', color: robot ? '#22d3ee' : '#fff' }}
       >
         {cauNayDangHoi ? <Loader2 size={15} className="animate-spin" /> : <Send size={15} />}

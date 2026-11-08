@@ -28,22 +28,22 @@ export default function MssqlView() {
     <div>
       {/* Lời dẫn: đặt kỳ vọng đúng trước khi người học lo lắng */}
       <div className="mb-5 rounded-2xl border border-orange-400/25 bg-orange-500/[0.06] p-4 sm:p-5">
-        <p className="mb-2 flex items-center gap-2 text-sm font-bold text-orange-300">
+        <p className="mb-2 flex items-center gap-2 text-sm font-bold text-tone-orange">
           <ArrowLeftRight className="h-4 w-4" />
           Trường dạy SQL Server, web chạy PostgreSQL — có phải học lại từ đầu không?
         </p>
-        <p className="text-[14.5px] leading-relaxed text-slate-300">
-          <b className="text-white">Không.</b> Phần lõi của SQL là một chuẩn chung (ANSI SQL):
-          {' '}<code className="font-mono text-violet-300">SELECT</code>,{' '}
-          <code className="font-mono text-violet-300">WHERE</code>,{' '}
-          <code className="font-mono text-violet-300">JOIN</code>,{' '}
-          <code className="font-mono text-violet-300">GROUP BY</code>,{' '}
-          <code className="font-mono text-violet-300">transaction</code> — giống nhau tới khoảng 90%.
+        <p className="text-[14.5px] leading-relaxed text-text-secondary">
+          <b className="text-text-primary">Không.</b> Phần lõi của SQL là một chuẩn chung (ANSI SQL):
+          {' '}<code className="font-mono text-tone-violet">SELECT</code>,{' '}
+          <code className="font-mono text-tone-violet">WHERE</code>,{' '}
+          <code className="font-mono text-tone-violet">JOIN</code>,{' '}
+          <code className="font-mono text-tone-violet">GROUP BY</code>,{' '}
+          <code className="font-mono text-tone-violet">transaction</code> — giống nhau tới khoảng 90%.
           Bài bạn làm ở trường vẫn dùng được gần nguyên vẹn.
         </p>
-        <p className="mt-2.5 text-[14.5px] leading-relaxed text-slate-300">
-          Khác nhau nằm ở phần rìa: <b className="text-white">kiểu dữ liệu</b>, <b className="text-white">hàm xử lý chuỗi và ngày</b>,
-          {' '}<b className="text-white">cách phân trang</b>, <b className="text-white">cách sinh số tự tăng</b>.
+        <p className="mt-2.5 text-[14.5px] leading-relaxed text-text-secondary">
+          Khác nhau nằm ở phần rìa: <b className="text-text-primary">kiểu dữ liệu</b>, <b className="text-text-primary">hàm xử lý chuỗi và ngày</b>,
+          {' '}<b className="text-text-primary">cách phân trang</b>, <b className="text-text-primary">cách sinh số tự tăng</b>.
           Đó là danh sách bên dưới — {MSSQL_ROWS.length} dòng, mỗi dòng là một thứ đã thực sự làm ai đó vấp.
         </p>
         <div className="mt-3.5 grid gap-2 sm:grid-cols-3">
@@ -52,9 +52,9 @@ export default function MssqlView() {
             { t: 'Khác biệt gặp sớm nhất', d: 'TOP 10 → LIMIT 10, và LIMIT phải đứng cuối câu.' },
             { t: 'Khác biệt tốn tiền nhất', d: 'DATETIME2 → timestamptz. Quên múi giờ là lệch giờ toàn hệ thống.' },
           ].map((x) => (
-            <div key={x.t} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-orange-300/80">{x.t}</p>
-              <p className="text-[12.5px] leading-relaxed text-slate-400">{x.d}</p>
+            <div key={x.t} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-tone-orange">{x.t}</p>
+              <p className="text-[12.5px] leading-relaxed text-text-secondary">{x.d}</p>
             </div>
           ))}
         </div>
@@ -63,19 +63,19 @@ export default function MssqlView() {
       {/* Tìm kiếm + lọc nhóm */}
       <div className="mb-4">
         <div className="relative mb-3">
-          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Quick lookup — diacritics optional: phan trang, kieu tien, noi chuoi…"
-            className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-violet-400/50 focus:outline-none"
+            className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] py-2.5 pl-10 pr-10 text-sm text-text-primary placeholder:text-text-muted focus:border-violet-400/50 focus:outline-none"
           />
           {q && (
             <button
               type="button"
               onClick={() => setQ('')}
               aria-label="Xoá từ khoá"
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition-colors hover:text-white"
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-primary"
             >
               <X className="h-4 w-4" />
             </button>
@@ -88,8 +88,8 @@ export default function MssqlView() {
             className={[
               'rounded-lg border px-2.5 py-1 text-xs transition-all active:scale-95',
               group === null
-                ? 'border-violet-400/50 bg-violet-500/20 text-white'
-                : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+                ? 'border-violet-400/50 bg-violet-500/20 text-text-primary'
+                : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
             ].join(' ')}
           >
             Tất cả
@@ -102,8 +102,8 @@ export default function MssqlView() {
               className={[
                 'rounded-lg border px-2.5 py-1 text-xs transition-all active:scale-95',
                 group === g
-                  ? 'border-violet-400/50 bg-violet-500/20 text-white'
-                  : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+                  ? 'border-violet-400/50 bg-violet-500/20 text-text-primary'
+                  : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
               ].join(' ')}
             >
               {g}
@@ -112,34 +112,34 @@ export default function MssqlView() {
         </div>
       </div>
 
-      <p className="mb-2 text-xs text-slate-500">
-        <b className="text-slate-300">{rows.length}</b> / {MSSQL_ROWS.length} dòng
+      <p className="mb-2 text-xs text-text-muted">
+        <b className="text-text-secondary">{rows.length}</b> / {MSSQL_ROWS.length} dòng
       </p>
 
       {rows.length === 0 ? (
-        <p className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-8 text-center text-sm text-slate-500">
+        <p className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-8 text-center text-sm text-text-muted">
           Không tìm thấy. Thử một từ khoá ngắn hơn.
         </p>
       ) : (
         <div className="space-y-2">
           {rows.map((r) => (
-            <div key={`${r.group}-${r.topic}`} className="overflow-hidden rounded-xl border border-white/10 bg-white/[0.02]">
-              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-b border-white/[0.07] px-3.5 py-2">
-                <span className="text-[13.5px] font-semibold text-slate-100">{r.topic}</span>
-                <span className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-px text-[10px] text-slate-500">{r.group}</span>
+            <div key={`${r.group}-${r.topic}`} className="overflow-hidden rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1 border-b border-[var(--border-light)] px-3.5 py-2">
+                <span className="text-[13.5px] font-semibold text-text-primary">{r.topic}</span>
+                <span className="rounded border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-1.5 py-px text-[10px] text-text-muted">{r.group}</span>
               </div>
-              <div className="grid gap-px bg-white/[0.06] sm:grid-cols-2">
+              <div className="grid gap-px bg-[var(--bg-surface-hover)] sm:grid-cols-2">
                 <div className="bg-[#0b0b12] px-3.5 py-2.5">
-                  <p className="mb-1 font-mono text-[10px] font-bold uppercase tracking-wide text-orange-300/80">SQL Server</p>
-                  <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-slate-300">{r.ms}</pre>
+                  <p className="mb-1 font-mono text-[10px] font-bold uppercase tracking-wide text-tone-orange">SQL Server</p>
+                  <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-text-secondary">{r.ms}</pre>
                 </div>
                 <div className="bg-[#0b0b12] px-3.5 py-2.5">
-                  <p className="mb-1 font-mono text-[10px] font-bold uppercase tracking-wide text-sky-300/80">PostgreSQL</p>
-                  <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-slate-300">{r.pg}</pre>
+                  <p className="mb-1 font-mono text-[10px] font-bold uppercase tracking-wide text-tone-sky">PostgreSQL</p>
+                  <pre className="overflow-x-auto whitespace-pre-wrap break-words font-mono text-[12px] leading-relaxed text-text-secondary">{r.pg}</pre>
                 </div>
               </div>
               {r.note && (
-                <p className="border-t border-white/[0.07] px-3.5 py-2 text-[12.5px] leading-relaxed text-slate-400">{r.note}</p>
+                <p className="border-t border-[var(--border-light)] px-3.5 py-2 text-[12.5px] leading-relaxed text-text-secondary">{r.note}</p>
               )}
             </div>
           ))}

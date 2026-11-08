@@ -115,8 +115,8 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
             onClick={() => { setId(l.id); reset(); }}
             className={`shrink-0 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               l.id === id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
             Bài {i + 1} · {l.titleVi}
@@ -125,21 +125,21 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
       </div>
 
       {!supported && (
-        <p className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-200 leading-relaxed">
+        <p className="mb-4 rounded-xl border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-tone-amber leading-relaxed">
           Trình duyệt này không có giọng đọc tiếng Anh nên phần phát tiếng sẽ không chạy. Bạn vẫn xem được
           transcript và làm được câu hỏi. Thử mở bằng Chrome hoặc Safari bản mới.
         </p>
       )}
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
-        <h3 className="text-xl font-bold text-white">{ex.title}</h3>
-        <p className="text-slate-400 text-sm mt-0.5">{ex.titleVi}</p>
-        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-slate-500">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
+        <h3 className="text-xl font-bold text-text-primary">{ex.title}</h3>
+        <p className="text-text-secondary text-sm mt-0.5">{ex.titleVi}</p>
+        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-text-muted">
           <span>{ex.kind}</span>
           <span>{ex.level}</span>
           <span>{ex.questions.length} câu</span>
         </div>
-        <p className="mt-3 text-slate-300 text-sm leading-relaxed rounded-xl border border-white/10 bg-white/[0.03] p-3">
+        <p className="mt-3 text-text-secondary text-sm leading-relaxed rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
           {ex.context}
         </p>
 
@@ -159,8 +159,8 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
             disabled={!supported}
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm border transition-colors ${
               !supported
-                ? 'bg-white/[0.02] border-white/5 text-slate-600 cursor-not-allowed'
-                : 'bg-emerald-500/20 border-emerald-400/40 text-emerald-200 hover:bg-emerald-500/30'
+                ? 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-muted cursor-not-allowed'
+                : 'bg-emerald-500/20 border-emerald-400/40 text-tone-emerald hover:bg-emerald-500/30'
             }`}
           >
             {playing ? <RotateCcw className="w-4 h-4" /> : <Play className="w-4 h-4" />}
@@ -170,13 +170,13 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
             <button
               type="button"
               onClick={stop}
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm border transition-colors bg-rose-500/20 border-rose-400/40 text-rose-200 hover:bg-rose-500/30"
+              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm border transition-colors bg-rose-500/20 border-rose-400/40 text-tone-rose hover:bg-rose-500/30"
             >
               <Square className="w-4 h-4" /> Dừng
             </button>
           )}
 
-          <span className="inline-flex items-center gap-1.5 text-xs text-slate-500">
+          <span className="inline-flex items-center gap-1.5 text-xs text-text-muted">
             <Gauge className="w-3.5 h-3.5" />
             Tốc độ
           </span>
@@ -187,8 +187,8 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
               onClick={() => { setRate(r.value); if (playing) stop(); }}
               className={`px-2.5 py-1.5 rounded-lg text-xs border transition-all active:scale-95 ${
                 rate === r.value
-                  ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                  ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
               }`}
             >
               {r.label}
@@ -197,7 +197,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
           {playing && cho && <div className="w-full"><DemDocCau het={cho} onBoQua={skipClip} /></div>}
           {playing && lineIdx >= 0 && (
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-text-muted">
               Đang đọc dòng {lineIdx + 1}/{ex.lines.length}
             </span>
           )}
@@ -205,10 +205,10 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
         {/* Từ khoá cần bắt */}
         <div className="mt-4">
-          <p className="text-xs text-slate-500 mb-1.5">Nghe kỹ những chỗ này</p>
+          <p className="text-xs text-text-muted mb-1.5">Nghe kỹ những chỗ này</p>
           <div className="flex flex-wrap gap-2">
             {ex.listenFor.map((k, i) => (
-              <span key={i} className="text-xs rounded-lg border border-violet-500/25 bg-violet-500/10 text-violet-200 px-2.5 py-1">
+              <span key={i} className="text-xs rounded-lg border border-violet-500/25 bg-violet-500/10 text-tone-violet px-2.5 py-1">
                 {k}
               </span>
             ))}
@@ -218,18 +218,18 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* Câu hỏi */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
           <div className="flex items-center justify-between mb-3">
-            <p className="flex items-center gap-2 text-sm font-semibold text-white">
-              <Headphones className="w-4 h-4 text-sky-400" />
+            <p className="flex items-center gap-2 text-sm font-semibold text-text-primary">
+              <Headphones className="w-4 h-4 text-tone-sky" />
               Điền đáp án
             </p>
             {graded && (
               <span
                 className={`text-sm px-3 py-1 rounded-lg ${
                   correctCount >= ex.questions.length * 0.75
-                    ? 'bg-emerald-500/20 text-emerald-300'
-                    : 'bg-amber-500/20 text-amber-300'
+                    ? 'bg-emerald-500/20 text-tone-emerald'
+                    : 'bg-amber-500/20 text-tone-amber'
                 }`}
               >
                 Đúng {correctCount}/{ex.questions.length}
@@ -249,17 +249,17 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
                       ? ok
                         ? 'border-emerald-400/30 bg-emerald-500/[0.07]'
                         : 'border-rose-400/30 bg-rose-500/[0.07]'
-                      : 'border-white/10 bg-white/[0.03]'
+                      : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
                   }`}
                 >
                   <div className="flex items-start gap-2">
-                    <span className="shrink-0 text-xs font-bold text-sky-400 bg-sky-500/15 px-1.5 py-0.5 rounded">
+                    <span className="shrink-0 text-xs font-bold text-tone-sky bg-sky-500/15 px-1.5 py-0.5 rounded">
                       {i + 1}
                     </span>
-                    <p className="flex-1 text-slate-200 text-sm leading-relaxed">{q.q}</p>
+                    <p className="flex-1 text-text-primary text-sm leading-relaxed">{q.q}</p>
                     {graded && (ok
-                      ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                      : <X className="w-4 h-4 text-rose-400 shrink-0" />)}
+                      ? <Check className="w-4 h-4 text-tone-emerald shrink-0" />
+                      : <X className="w-4 h-4 text-tone-rose shrink-0" />)}
                   </div>
                   <input
                     type="text"
@@ -267,17 +267,17 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
                     disabled={graded}
                     onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
                     placeholder="Listen, then type here…"
-                    className="mt-2 w-full rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-sky-400/50 disabled:text-slate-400"
+                    className="mt-2 w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-sky-400/50 disabled:text-text-secondary"
                   />
                   {graded && (
-                    <div className="mt-2 pt-2 border-t border-white/10">
-                      <p className="text-xs text-emerald-300">
+                    <div className="mt-2 pt-2 border-t border-[var(--border-light)]">
+                      <p className="text-xs text-tone-emerald">
                         Đáp án: <b>{q.answer}</b>
                         {q.alt && q.alt.length > 0 && (
-                          <span className="text-slate-500"> (chấp nhận: {q.alt.join(', ')})</span>
+                          <span className="text-text-muted"> (chấp nhận: {q.alt.join(', ')})</span>
                         )}
                       </p>
-                      <p className="text-xs text-slate-400 mt-1 leading-relaxed">{q.why}</p>
+                      <p className="text-xs text-text-secondary mt-1 leading-relaxed">{q.why}</p>
                     </div>
                   )}
                 </div>
@@ -290,7 +290,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
               <button
                 type="button"
                 onClick={() => { setGraded(true); stop(); }}
-                className="w-full px-4 py-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-white text-sm hover:bg-emerald-500/30 transition-colors"
+                className="w-full px-4 py-3 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-text-primary text-sm hover:bg-emerald-500/30 transition-colors"
               >
                 Chấm bài
               </button>
@@ -298,7 +298,7 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
               <button
                 type="button"
                 onClick={reset}
-                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm hover:bg-white/10 transition-colors"
+                className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-primary text-sm hover:bg-[var(--bg-surface-active)] transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
                 Nghe lại từ đầu
@@ -309,17 +309,17 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
         {/* Transcript + mẹo */}
         <div className="space-y-4">
-          <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+          <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
             <div className="flex items-center justify-between gap-2 mb-3">
-              <p className="text-sm font-semibold text-white">Transcript</p>
+              <p className="text-sm font-semibold text-text-primary">Transcript</p>
               <button
                 type="button"
                 disabled={!graded}
                 onClick={() => setShowScript((v) => !v)}
                 className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
                   graded
-                    ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
-                    : 'bg-white/[0.02] border-white/5 text-slate-600 cursor-not-allowed'
+                    ? 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
+                    : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-muted cursor-not-allowed'
                 }`}
               >
                 {showScript ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
@@ -333,16 +333,16 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
                   <div
                     key={i}
                     className={`rounded-lg px-3 py-2 transition-colors ${
-                      lineIdx === i ? 'bg-violet-500/20' : 'bg-white/[0.03]'
+                      lineIdx === i ? 'bg-violet-500/20' : 'bg-[var(--bg-surface-hover)]'
                     }`}
                   >
-                    <p className="text-[10px] text-slate-500 uppercase tracking-wide">{l.who}</p>
-                    <p className="text-slate-200 text-sm leading-relaxed">{l.text}</p>
+                    <p className="text-[10px] text-text-muted uppercase tracking-wide">{l.who}</p>
+                    <p className="text-text-primary text-sm leading-relaxed">{l.text}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-sm text-slate-500 leading-relaxed">
+              <p className="text-sm text-text-muted leading-relaxed">
                 {graded
                   ? 'Bấm "Hiện" để đối chiếu. Chép chính tả xong mới mở transcript mới có tác dụng — xem bài 38 ở tab Bài học.'
                   : 'Transcript mở sau khi bạn chấm bài. Nhìn chữ trong lúc nghe thì đang luyện đọc chứ không phải luyện nghe.'}
@@ -351,14 +351,14 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
           </div>
 
           <div className="rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] p-4">
-            <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
+            <p className="flex items-center gap-2 text-tone-amber text-sm font-semibold mb-2">
               <Lightbulb className="w-4 h-4" />
               Mẹo cho bài này
             </p>
             <ul className="space-y-2">
               {ex.tips.map((t, i) => (
-                <li key={i} className="text-slate-200 text-sm leading-relaxed flex gap-2">
-                  <span className="text-amber-400 shrink-0">→</span>
+                <li key={i} className="text-text-primary text-sm leading-relaxed flex gap-2">
+                  <span className="text-tone-amber shrink-0">→</span>
                   <span>{t}</span>
                 </li>
               ))}
@@ -369,18 +369,18 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
 
       {/* ── Nguồn nghe ngoài ── */}
       <div className="mt-8">
-        <h3 className="flex items-center gap-2 text-lg font-bold text-white mb-1">
-          <Youtube className="w-5 h-5 text-rose-400" />
+        <h3 className="flex items-center gap-2 text-lg font-bold text-text-primary mb-1">
+          <Youtube className="w-5 h-5 text-tone-rose" />
           Nguồn nghe uy tín ({LISTENING_SOURCES.length})
         </h3>
-        <p className="text-sm text-slate-400 mb-4 leading-relaxed">
+        <p className="text-sm text-text-secondary mb-4 leading-relaxed">
           Toàn bộ là kênh CHÍNH CHỦ của BBC Learning English, British Council và VOA — đã kiểm từng link
           trước khi đưa lên. Dùng để nghe thêm mỗi ngày; phần bài tập có chấm điểm thì dùng{' '}
           {d.listenings.length} bài ở trên.
         </p>
         <div className="grid gap-4 lg:grid-cols-2">
           {LISTENING_SOURCES.map((s) => (
-            <div key={s.ytId} className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
+            <div key={s.ytId} className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
               <div className="aspect-video bg-black">
                 <iframe
                   src={
@@ -396,14 +396,14 @@ export default function ListeningView({ d, supported }: { d: StageBundle; suppor
                 />
               </div>
               <div className="p-4">
-                <p className="font-semibold text-white text-sm">{s.name}</p>
-                <p className="text-xs text-slate-500 mt-0.5">
+                <p className="font-semibold text-text-primary text-sm">{s.name}</p>
+                <p className="text-xs text-text-muted mt-0.5">
                   {s.channel} · {s.kind === 'playlist' ? 'Playlist' : 'Video'}
                 </p>
-                <span className="inline-block mt-2 text-[11px] rounded-lg border border-sky-500/25 bg-sky-500/10 text-sky-200 px-2 py-1">
+                <span className="inline-block mt-2 text-[11px] rounded-lg border border-sky-500/25 bg-sky-500/10 text-tone-sky px-2 py-1">
                   {s.level}
                 </span>
-                <p className="text-slate-300 text-sm mt-2.5 leading-relaxed">{s.how}</p>
+                <p className="text-text-secondary text-sm mt-2.5 leading-relaxed">{s.how}</p>
               </div>
             </div>
           ))}

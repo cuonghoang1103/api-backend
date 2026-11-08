@@ -6,22 +6,22 @@
  * kéo thêm một byte JavaScript nào — trang này sẽ được mở lại rất nhiều lần
  * trên điện thoại nên đó là điều đáng giá.
  *
- * Màu lấy thẳng theo bảng màu tối của trang (nền #0a0a0f) thay vì biến CSS
- * theme, vì trang tự mang nền tối cố định giống các chuyên đề khác.
+ * Màu là biến CSS theo chủ đề (08/11/2026 — trang không còn ép nền tối): thuộc tính trình bày SVG (`fill`,
+ * `stroke`) nhận `var()` như CSS thường.
  */
 import type { FigureName } from './data/types';
 
 const C = {
-  text: '#e2e8f0',
-  dim: '#94a3b8',
-  faint: '#64748b',
-  line: 'rgba(255,255,255,0.14)',
-  fill: 'rgba(255,255,255,0.04)',
-  emerald: '#34d399',
-  sky: '#38bdf8',
-  violet: '#a78bfa',
-  amber: '#fbbf24',
-  rose: '#fb7185',
+  text: 'var(--text-primary)',
+  dim: 'var(--text-secondary)',
+  faint: 'var(--text-muted)',
+  line: 'var(--border-light-hover)',
+  fill: 'var(--bg-surface-hover)',
+  emerald: 'var(--tone-emerald)',
+  sky: 'var(--tone-sky)',
+  violet: 'var(--tone-violet)',
+  amber: 'var(--tone-amber)',
+  rose: 'var(--tone-rose)',
 };
 
 /** Mũi tên dùng chung cho mọi sơ đồ. */
@@ -409,7 +409,7 @@ function Join4Up() {
         const cy = 96;
         const r = 46;
         const on = 'rgba(167,139,250,0.55)';
-        const off = 'rgba(255,255,255,0.045)';
+        const off = 'var(--bg-surface-hover)';
         return (
           <g key={it.t}>
             <defs>
@@ -504,7 +504,7 @@ function TxnTimeline() {
 
       <text x={20} y={160} fill={C.text} fontSize="12" fontWeight="700">Phiên B — người khác đọc cùng lúc</text>
       <line x1={40} y1={200} x2={790} y2={200} stroke={C.line} strokeWidth="2" markerEnd="url(#hs-arrow)" />
-      <rect x={40} y={212} width={580} height={26} rx={6} fill="rgba(255,255,255,0.04)" stroke={C.line} />
+      <rect x={40} y={212} width={580} height={26} rx={6} fill="var(--bg-surface-hover)" stroke={C.line} />
       <text x={330} y={230} textAnchor="middle" fill={C.dim} fontSize="11">B vẫn đọc được GIÁ TRỊ CŨ, và không hề bị chặn</text>
       <rect x={620} y={212} width={170} height={26} rx={6} fill="rgba(52,211,153,0.12)" stroke={C.emerald} strokeOpacity={0.5} />
       <text x={705} y={230} textAnchor="middle" fill={C.emerald} fontSize="11">giờ B mới thấy giá trị mới</text>
@@ -602,15 +602,15 @@ export default function Figure({
   const Cmp = MAP[name];
   if (!Cmp) return null;
   return (
-    <figure className="my-6 rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
-      {title && <figcaption className="mb-3 text-sm font-semibold text-slate-200">{title}</figcaption>}
+    <figure className="my-6 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
+      {title && <figcaption className="mb-3 text-sm font-semibold text-text-primary">{title}</figcaption>}
       {/* Sơ đồ rộng: cho cuộn NGANG trong khung riêng thay vì để cả trang cuộn ngang. */}
       <div className="-mx-1 overflow-x-auto px-1">
         <div className="min-w-[620px]">
           <Cmp />
         </div>
       </div>
-      {caption && <p className="mt-3 text-xs leading-relaxed text-slate-500">{caption}</p>}
+      {caption && <p className="mt-3 text-xs leading-relaxed text-text-muted">{caption}</p>}
     </figure>
   );
 }

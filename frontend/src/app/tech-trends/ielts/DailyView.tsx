@@ -173,7 +173,7 @@ export default function DailyView() {
   }, [today, st.days]);
 
   if (!hydrated || !today) {
-    return <div className="h-40 rounded-2xl border border-white/10 bg-white/[0.02] animate-pulse" />;
+    return <div className="h-40 rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] animate-pulse" />;
   }
 
   return (
@@ -183,13 +183,13 @@ export default function DailyView() {
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-3">
             <span className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <Flame className={`w-6 h-6 ${st.streak > 0 ? 'text-amber-400' : 'text-slate-600'}`} />
+              <Flame className={`w-6 h-6 ${st.streak > 0 ? 'text-tone-amber' : 'text-text-muted'}`} />
             </span>
             <div>
-              <p className="text-2xl font-bold text-white leading-none">
-                {st.streak} <span className="text-sm font-normal text-slate-400">ngày liên tiếp</span>
+              <p className="text-2xl font-bold text-text-primary leading-none">
+                {st.streak} <span className="text-sm font-normal text-text-secondary">ngày liên tiếp</span>
               </p>
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="text-xs text-text-muted mt-1">
                 Kỷ lục: {st.best} ngày · {alreadyToday ? 'Hôm nay đã xong ✓' : 'Hôm nay chưa làm'}
               </p>
             </div>
@@ -204,14 +204,14 @@ export default function DailyView() {
                   c.done
                     ? 'bg-amber-400/80'
                     : c.isToday
-                      ? 'bg-white/20 ring-1 ring-amber-400/50'
-                      : 'bg-white/5'
+                      ? 'bg-[var(--bg-surface-active)] ring-1 ring-amber-400/50'
+                      : 'bg-[var(--bg-surface-hover)]'
                 }`}
               />
             ))}
           </div>
         </div>
-        <p className="text-xs text-slate-400 mt-3 leading-relaxed">
+        <p className="text-xs text-text-secondary mt-3 leading-relaxed">
           Mười lăm câu trộn từ ba nguồn: từ vựng (Việt → Anh), ngữ pháp trong bài học, và tiếng Anh đời
           sống. Ôn xen kẽ như vậy nhớ lâu hơn hẳn ôn dồn từng loại. Bộ câu cố định theo ngày — mở lại
           giữa chừng vẫn đúng bộ đang làm dở.
@@ -220,19 +220,19 @@ export default function DailyView() {
 
       {/* Tiến độ */}
       <div className="flex items-center justify-between gap-3 mb-3 flex-wrap">
-        <div className="flex items-center gap-2 text-sm text-slate-400">
+        <div className="flex items-center gap-2 text-sm text-text-secondary">
           <CalendarDays className="w-4 h-4" />
           Bộ câu ngày {today}
-          {variant > 0 && <span className="text-xs text-slate-600">(bộ thêm #{variant})</span>}
+          {variant > 0 && <span className="text-xs text-text-muted">(bộ thêm #{variant})</span>}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-xs px-2.5 py-1 rounded-lg bg-white/5 text-slate-300">
-            Đã làm {doneCount}/{items.length} · Đúng <b className="text-emerald-300">{score}</b>
+          <span className="text-xs px-2.5 py-1 rounded-lg bg-[var(--bg-surface-hover)] text-text-secondary">
+            Đã làm {doneCount}/{items.length} · Đúng <b className="text-tone-emerald">{score}</b>
           </span>
           <button
             type="button"
             onClick={another}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5" />
             Bộ câu khác
@@ -240,7 +240,7 @@ export default function DailyView() {
         </div>
       </div>
 
-      <div className="h-2 rounded-full bg-white/10 overflow-hidden mb-5">
+      <div className="h-2 rounded-full bg-[var(--bg-surface-active)] overflow-hidden mb-5">
         <div
           className="h-full bg-gradient-to-r from-amber-500 to-emerald-500 transition-all duration-500"
           style={{ width: `${(doneCount / (items.length || 1)) * 100}%` }}
@@ -261,20 +261,20 @@ export default function DailyView() {
                   ? ok
                     ? 'border-emerald-400/40 bg-emerald-500/[0.08]'
                     : 'border-rose-400/40 bg-rose-500/[0.08]'
-                  : 'border-white/10 bg-white/[0.03]'
+                  : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
               }`}
             >
               <div className="flex items-start gap-2">
-                <span className="shrink-0 text-xs font-bold text-slate-400 bg-white/5 px-1.5 py-0.5 rounded">
+                <span className="shrink-0 text-xs font-bold text-text-secondary bg-[var(--bg-surface-hover)] px-1.5 py-0.5 rounded">
                   {i + 1}
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="text-slate-100 text-sm leading-relaxed">{ex.q}</p>
-                  {ex.hint && <p className="text-sky-200 text-sm mt-1 font-medium">{ex.hint}</p>}
+                  <p className="text-text-primary text-sm leading-relaxed">{ex.q}</p>
+                  {ex.hint && <p className="text-tone-sky text-sm mt-1 font-medium">{ex.hint}</p>}
                 </div>
                 {isChecked && (ok
-                  ? <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  : <X className="w-4 h-4 text-rose-400 shrink-0" />)}
+                  ? <Check className="w-4 h-4 text-tone-emerald shrink-0" />
+                  : <X className="w-4 h-4 text-tone-rose shrink-0" />)}
               </div>
 
               <div className="mt-2.5">
@@ -283,13 +283,13 @@ export default function DailyView() {
                     {ex.options.map((opt) => {
                       const chosen = given === opt;
                       const isRight = isCorrect(opt, ex.answer, ex.alt);
-                      let cls = 'border-white/10 bg-white/[0.02] text-slate-300 hover:border-white/25';
+                      let cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)]';
                       if (isChecked) {
-                        if (isRight) cls = 'border-emerald-400/50 bg-emerald-500/15 text-white';
-                        else if (chosen) cls = 'border-rose-400/50 bg-rose-500/15 text-white';
-                        else cls = 'border-white/5 bg-white/[0.01] text-slate-500';
+                        if (isRight) cls = 'border-emerald-400/50 bg-emerald-500/15 text-text-primary';
+                        else if (chosen) cls = 'border-rose-400/50 bg-rose-500/15 text-text-primary';
+                        else cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted';
                       } else if (chosen) {
-                        cls = 'border-sky-400/50 bg-sky-500/15 text-white';
+                        cls = 'border-sky-400/50 bg-sky-500/15 text-text-primary';
                       }
                       return (
                         <button
@@ -314,12 +314,12 @@ export default function DailyView() {
                       onChange={(e) => setAnswers((a) => ({ ...a, [i]: e.target.value }))}
                       onKeyDown={(e) => { if (e.key === 'Enter') check(i); }}
                       placeholder="Type your answer and press Enter…"
-                      className="flex-1 min-w-0 rounded-lg border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-white placeholder:text-slate-600 outline-none focus:border-amber-400/50"
+                      className="flex-1 min-w-0 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-primary placeholder:text-text-muted outline-none focus:border-amber-400/50"
                     />
                     <button
                       type="button"
                       onClick={() => check(i)}
-                      className="shrink-0 px-3 py-2 rounded-lg text-sm bg-amber-500/20 border border-amber-400/40 text-amber-100 hover:bg-amber-500/30 transition-colors"
+                      className="shrink-0 px-3 py-2 rounded-lg text-sm bg-amber-500/20 border border-amber-400/40 text-tone-amber hover:bg-amber-500/30 transition-colors"
                     >
                       Kiểm
                     </button>
@@ -328,17 +328,17 @@ export default function DailyView() {
               </div>
 
               {isChecked && (
-                <div className="mt-2.5 pt-2.5 border-t border-white/10">
+                <div className="mt-2.5 pt-2.5 border-t border-[var(--border-light)]">
                   {!ok && (
-                    <p className="text-xs text-emerald-300 mb-1">
+                    <p className="text-xs text-tone-emerald mb-1">
                       Đáp án: <b>{ex.answer}</b>
                       {ex.alt && ex.alt.length > 0 && (
-                        <span className="text-slate-500"> (chấp nhận: {ex.alt.join(' · ')})</span>
+                        <span className="text-text-muted"> (chấp nhận: {ex.alt.join(' · ')})</span>
                       )}
                     </p>
                   )}
-                  <p className="text-xs text-slate-300 leading-relaxed flex gap-1.5">
-                    <Lightbulb className="w-3.5 h-3.5 shrink-0 mt-0.5 text-amber-400" />
+                  <p className="text-xs text-text-secondary leading-relaxed flex gap-1.5">
+                    <Lightbulb className="w-3.5 h-3.5 shrink-0 mt-0.5 text-tone-amber" />
                     <span>{ex.why}</span>
                   </p>
                 </div>
@@ -354,22 +354,22 @@ export default function DailyView() {
           finished ? (
             <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/[0.08] p-6 text-center">
               <p className="text-4xl mb-2">{score >= 13 ? '🏆' : score >= 9 ? '👍' : '💪'}</p>
-              <p className="text-2xl font-bold text-white">{score}/{items.length}</p>
-              <p className="text-slate-300 text-sm mt-2">
+              <p className="text-2xl font-bold text-text-primary">{score}/{items.length}</p>
+              <p className="text-text-secondary text-sm mt-2">
                 {score >= 13
                   ? 'Rất tốt. Giữ nhịp này là chắc chắn qua chặng 1.'
                   : score >= 9
                     ? 'Ổn. Đọc lại phần giải thích của những câu sai trước khi rời trang.'
                     : 'Còn sai nhiều — nhưng làm đều mới là thứ quan trọng. Mai quay lại nhé.'}
               </p>
-              <p className="text-amber-300 text-sm mt-3 flex items-center justify-center gap-1.5">
+              <p className="text-tone-amber text-sm mt-3 flex items-center justify-center gap-1.5">
                 <Flame className="w-4 h-4" />
                 Chuỗi hiện tại: {st.streak} ngày
               </p>
               <button
                 type="button"
                 onClick={another}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm hover:bg-white/10 transition-colors"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-primary text-sm hover:bg-[var(--bg-surface-active)] transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
                 Làm thêm một bộ nữa
@@ -379,13 +379,13 @@ export default function DailyView() {
             <button
               type="button"
               onClick={finish}
-              className="w-full px-4 py-3.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-white text-sm font-semibold hover:bg-emerald-500/30 transition-colors"
+              className="w-full px-4 py-3.5 rounded-xl bg-emerald-500/20 border border-emerald-400/40 text-text-primary text-sm font-semibold hover:bg-emerald-500/30 transition-colors"
             >
               Hoàn thành buổi luyện hôm nay {alreadyToday ? '' : '(cộng 1 ngày vào chuỗi)'}
             </button>
           )
         ) : (
-          <p className="text-center text-xs text-slate-500">
+          <p className="text-center text-xs text-text-muted">
             Làm hết {items.length} câu rồi bấm hoàn thành để cộng vào chuỗi ngày.
           </p>
         )}

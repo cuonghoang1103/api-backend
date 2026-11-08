@@ -85,22 +85,22 @@ export default function ViecLamClient() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-slate-200">
+    <div className="min-h-screen bg-[var(--bg-primary)] text-text-primary">
       {/* ── Đầu trang ─────────────────────────────────────────── */}
-      <header className="border-b border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent">
+      <header className="border-b border-[var(--border-light)] bg-gradient-to-b from-white/[0.04] to-transparent">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 sm:py-8">
           <Link
             href="/tech-trends"
-            className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Tech Trends
           </Link>
 
-          <h1 className="mt-4 text-2xl sm:text-4xl font-heading font-bold text-white leading-tight">
+          <h1 className="mt-4 text-2xl sm:text-4xl font-heading font-bold text-text-primary leading-tight">
             Việc làm Claude Code
           </h1>
-          <p className="mt-2 max-w-2xl text-sm sm:text-base text-slate-400 leading-relaxed">
+          <p className="mt-2 max-w-2xl text-sm sm:text-base text-text-secondary leading-relaxed">
             {STATS.jobs} tin tuyển dụng có nhắc Claude Code, đã bấm lại từng link để kiểm chứng.
             Kèm lộ trình {STATS.phases} chặng và {STATS.projects} dự án thật để đủ sức ứng tuyển —
             kỹ năng đo từ toàn văn mô tả công việc, không đoán.
@@ -108,10 +108,10 @@ export default function ViecLamClient() {
 
           {/* Cảnh báo quan trọng nhất, đặt ngay đầu để không ai bỏ sót */}
           <div className="mt-4 flex items-start gap-2.5 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] p-3 sm:p-3.5">
-            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-400" />
-            <p className="text-[13px] sm:text-sm text-amber-100/90 leading-relaxed">
-              Việc là <strong className="font-semibold text-amber-200">thật</strong> — nhưng chỉ{' '}
-              <strong className="font-semibold text-amber-200">{STATS.byTier.A}/{STATS.jobs}</strong>{' '}
+            <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-tone-amber" />
+            <p className="text-[13px] sm:text-sm text-tone-amber leading-relaxed">
+              Việc là <strong className="font-semibold text-tone-amber">thật</strong> — nhưng chỉ{' '}
+              <strong className="font-semibold text-tone-amber">{STATS.byTier.A}/{STATS.jobs}</strong>{' '}
               tin là người ở Việt Nam nộp được ngay, và chúng chỉ đến từ{' '}
               {STATS.tierAUnique} công ty. Đọc tab Tổng quan trước khi nộp bất cứ đâu.
             </p>
@@ -121,16 +121,16 @@ export default function ViecLamClient() {
           {ready && done.size > 0 && (
             <div className="mt-5">
               <div className="mb-1.5 flex items-center justify-between text-xs">
-                <span className="flex items-center gap-1.5 text-slate-400">
+                <span className="flex items-center gap-1.5 text-text-secondary">
                   <ClipboardList className="h-3.5 w-3.5" />
                   Tiến độ lộ trình
                 </span>
-                <span className="tabular-nums text-slate-300">
-                  <strong className="font-semibold text-emerald-400">{done.size}</strong>
+                <span className="tabular-nums text-text-secondary">
+                  <strong className="font-semibold text-tone-emerald">{done.size}</strong>
                   {' / '}{TOTAL_TASKS} việc · {pct}%
                 </span>
               </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-white/10">
+              <div className="h-1.5 overflow-hidden rounded-full bg-[var(--bg-surface-active)]">
                 <div
                   className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-sky-400 transition-all duration-500"
                   style={{ width: `${pct}%` }}
@@ -142,7 +142,7 @@ export default function ViecLamClient() {
       </header>
 
       {/* ── Thanh tab ─────────────────────────────────────────── */}
-      <nav className="sticky top-0 z-20 border-b border-white/10 bg-[#0a0a0f]/95 backdrop-blur">
+      <nav className="sticky top-0 z-20 border-b border-[var(--border-light)] bg-[var(--bg-glass)] backdrop-blur">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="flex gap-1 overflow-x-auto py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TABS.map((t) => {
@@ -157,8 +157,8 @@ export default function ViecLamClient() {
                   className={[
                     'shrink-0 inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-medium transition-colors',
                     active
-                      ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30'
-                      : 'text-slate-400 hover:bg-white/5 hover:text-slate-200',
+                      ? 'bg-emerald-500/15 text-tone-emerald ring-1 ring-emerald-500/30'
+                      : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
                   ].join(' ')}
                 >
                   <Icon className="h-4 w-4" />
@@ -167,7 +167,7 @@ export default function ViecLamClient() {
                     <span
                       className={[
                         'ml-0.5 rounded-md px-1.5 py-px text-[10px] tabular-nums',
-                        active ? 'bg-emerald-500/25 text-emerald-200' : 'bg-white/[0.06] text-slate-500',
+                        active ? 'bg-emerald-500/25 text-tone-emerald' : 'bg-[var(--bg-surface-hover)] text-text-muted',
                       ].join(' ')}
                     >
                       {t.count}

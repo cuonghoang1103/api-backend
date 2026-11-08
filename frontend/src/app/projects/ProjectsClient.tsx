@@ -48,9 +48,9 @@ type StatusValue = string;
 
 // Level badge colors
 const LEVEL_COLORS: Record<string, string> = {
-  BEGINNER: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  INTERMEDIATE: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  ADVANCED: 'bg-red-500/20 text-red-400 border-red-500/30',
+  BEGINNER: 'bg-emerald-500/20 text-tone-emerald border-emerald-500/30',
+  INTERMEDIATE: 'bg-yellow-500/20 text-tone-yellow border-yellow-500/30',
+  ADVANCED: 'bg-red-500/20 text-tone-red border-red-500/30',
 };
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -61,11 +61,11 @@ const LEVEL_LABELS: Record<string, string> = {
 
 // Status badge colors
 const STATUS_COLORS: Record<string, string> = {
-  COMPLETED: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  IN_PROGRESS: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30',
-  PLANNING: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  MAINTENANCE: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  ON_HOLD: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
+  COMPLETED: 'bg-emerald-500/20 text-tone-emerald border-emerald-500/30',
+  IN_PROGRESS: 'bg-yellow-500/20 text-tone-yellow border-yellow-500/30',
+  PLANNING: 'bg-blue-500/20 text-tone-blue border-blue-500/30',
+  MAINTENANCE: 'bg-purple-500/20 text-tone-purple border-purple-500/30',
+  ON_HOLD: 'bg-gray-500/20 text-text-secondary border-gray-500/30',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -279,7 +279,7 @@ export default function ProjectsClient() {
               placeholder={L('Tìm kiếm dự án...', 'Search projects...')}
               value={searchInput}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 rounded-xl bg-darkcard border border-darkborder text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
+              className="w-full pl-12 pr-4 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
             />
             {searchInput && (
               <button
@@ -296,7 +296,7 @@ export default function ProjectsClient() {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortValue)}
-              className="appearance-none pl-4 pr-10 py-3 rounded-xl bg-darkcard border border-darkborder text-text-secondary text-sm focus:outline-none focus:border-neon-violet/50 cursor-pointer"
+              className="appearance-none pl-4 pr-10 py-3 rounded-xl bg-[var(--bg-card)] border border-[var(--border-color)] text-text-secondary text-sm focus:outline-none focus:border-neon-violet/50 cursor-pointer"
             >
               {SORT_OPTIONS.map((opt) => (
                 <option key={opt.value} value={opt.value}>{lang === 'en' ? opt.en : opt.vi}</option>
@@ -310,8 +310,8 @@ export default function ProjectsClient() {
             onClick={() => setFilterOpen(!filterOpen)}
             className={`flex items-center gap-2 px-5 py-3 rounded-xl border text-sm font-medium transition-all ${
               filterOpen || activeFiltersCount > 0
-                ? 'bg-neon-violet/20 border-neon-violet text-neon-violet'
-                : 'bg-darkcard border-darkborder text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
+                ? 'bg-neon-violet/20 border-neon-violet text-tone-violet'
+                : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" />
@@ -326,7 +326,7 @@ export default function ProjectsClient() {
           {/* Advanced search link */}
           <Link
             href={searchInput.trim() ? `/projects/search?q=${encodeURIComponent(searchInput.trim())}` : '/projects/search'}
-            className="px-4 py-3 rounded-xl border border-darkborder text-text-secondary hover:border-neon-violet/50 hover:text-white transition-colors text-sm inline-flex items-center gap-1.5"
+            className="px-4 py-3 rounded-xl border border-[var(--border-color)] text-text-secondary hover:border-neon-violet/50 hover:text-text-primary transition-colors text-sm inline-flex items-center gap-1.5"
           >
             <FileSearch className="w-4 h-4" />
             <span className="hidden sm:inline">{L('Tìm nâng cao', 'Advanced search')}</span>
@@ -337,7 +337,7 @@ export default function ProjectsClient() {
             href="/api/v1/projects/feed.xml"
             target="_blank"
             rel="alternate"
-            className="px-3 py-3 rounded-xl border border-darkborder text-orange-400 hover:border-orange-400/50 transition-colors"
+            className="px-3 py-3 rounded-xl border border-[var(--border-color)] text-tone-orange hover:border-orange-400/50 transition-colors"
             title="RSS feed"
           >
             <Rss className="w-4 h-4" />
@@ -358,7 +358,7 @@ export default function ProjectsClient() {
               transition={{ duration: 0.2 }}
               className="overflow-hidden"
             >
-              <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-darkcard/50 border border-darkborder">
+              <div className="flex flex-wrap gap-4 p-4 rounded-xl bg-[var(--bg-glass)] border border-[var(--border-color)]">
                 {/* Category filter */}
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-wider text-text-muted font-medium">{L('Danh mục', 'Category')}</span>
@@ -369,8 +369,8 @@ export default function ProjectsClient() {
                         onClick={() => setCategoryFilter(categoryFilter === cat ? '' : cat)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                           categoryFilter === cat
-                            ? 'bg-neon-violet/20 border-neon-violet text-neon-violet'
-                            : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
+                            ? 'bg-neon-violet/20 border-neon-violet text-tone-violet'
+                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
                         {labelOf(CATEGORY_LABELS_I18N, cat, lang)}
@@ -392,8 +392,8 @@ export default function ProjectsClient() {
                         onClick={() => setTechFilter(techFilter === tech.id ? '' : tech.id)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all inline-flex items-center gap-1.5 ${
                           techFilter === tech.id
-                            ? 'bg-neon-cyan/20 border-neon-cyan text-neon-cyan'
-                            : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-cyan/30 hover:text-text-primary'
+                            ? 'bg-neon-cyan/20 border-neon-cyan text-tone-cyan'
+                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:border-neon-cyan/30 hover:text-text-primary'
                         }`}
                       >
                         {tech.label}
@@ -415,8 +415,8 @@ export default function ProjectsClient() {
                         onClick={() => setLevelFilter(level.value as LevelValue)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                           levelFilter === level.value
-                            ? 'bg-neon-violet/20 border-neon-violet text-neon-violet'
-                            : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
+                            ? 'bg-neon-violet/20 border-neon-violet text-tone-violet'
+                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
                         {lang === 'en' ? level.en : level.vi}
@@ -435,8 +435,8 @@ export default function ProjectsClient() {
                         onClick={() => setStatusFilter(statusFilter === status.value ? '' : status.value)}
                         className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all ${
                           statusFilter === status.value
-                            ? 'bg-neon-violet/20 border-neon-violet text-neon-violet'
-                            : 'bg-darkcard border-darkborder/60 text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
+                            ? 'bg-neon-violet/20 border-neon-violet text-tone-violet'
+                            : 'bg-[var(--bg-card)] border-[var(--border-color)] text-text-secondary hover:border-neon-violet/30 hover:text-text-primary'
                         }`}
                       >
                         {lang === 'en' ? status.en : status.vi}
@@ -459,7 +459,7 @@ export default function ProjectsClient() {
             </span>
             <button
               onClick={clearAllFilters}
-              className="px-2 py-1 rounded text-xs text-neon-violet hover:bg-neon-violet/10 transition-colors flex items-center gap-1"
+              className="px-2 py-1 rounded text-xs text-tone-violet hover:bg-neon-violet/10 transition-colors flex items-center gap-1"
             >
               <X className="w-3 h-3" />
               {L('Xóa bộ lọc', 'Clear filters')}
@@ -509,7 +509,7 @@ export default function ProjectsClient() {
           <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
             <button
               onClick={() => setVideoModalUrl(null)}
-              className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm font-medium"
+              className="absolute -top-10 right-0 text-text-secondary hover:text-text-primary text-sm font-medium"
             >
               {L('Đóng', 'Close')}
             </button>

@@ -64,10 +64,10 @@ export default async function NewsPage() {
     <main className="min-h-screen px-4 py-10 sm:py-14">
       <div className="max-w-5xl mx-auto">
         {/* Masthead */}
-        <header className="border-b-4 border-double border-darkborder pb-6 mb-8">
+        <header className="border-b-4 border-double border-[var(--border-color)] pb-6 mb-8">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs tracking-[0.35em] text-neon-violet font-semibold">
+              <p className="text-xs tracking-[0.35em] text-tone-violet font-semibold">
                 CUONGTHAI.COM
               </p>
               <h1 className="mt-1 font-heading text-3xl sm:text-5xl font-bold text-text-primary">
@@ -80,7 +80,7 @@ export default async function NewsPage() {
             </div>
             <Link
               href="/tech-trends"
-              className="text-sm text-neon-violet hover:underline shrink-0"
+              className="text-sm text-tone-violet hover:underline shrink-0"
             >
               ← Bài viết chuyên sâu
             </Link>
@@ -109,13 +109,13 @@ export default async function NewsPage() {
                     alt=""
                     width={1200}
                     height={630}
-                    className="w-full rounded-2xl border border-darkborder mb-5 aspect-[1200/630] object-cover"
+                    className="w-full rounded-2xl border border-[var(--border-color)] mb-5 aspect-[1200/630] object-cover"
                   />
                 )}
-                <p className="text-xs uppercase tracking-widest text-neon-violet font-semibold">
+                <p className="text-xs uppercase tracking-widest text-tone-violet font-semibold">
                   Mới nhất · {formatDateTime(latest.publishedAt)}
                 </p>
-                <h2 className="mt-2 font-heading text-2xl sm:text-4xl font-bold text-text-primary group-hover:text-neon-violet transition-colors">
+                <h2 className="mt-2 font-heading text-2xl sm:text-4xl font-bold text-text-primary group-hover:text-tone-violet transition-colors">
                   {latest.title}
                 </h2>
                 <p className="mt-3 text-base text-text-secondary leading-relaxed">
@@ -124,12 +124,12 @@ export default async function NewsPage() {
               </Link>
               <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
                 {latest.aiGenerated && (
-                  <span className="px-2 py-1 rounded-full bg-neon-violet/10 text-neon-violet border border-neon-violet/20">
+                  <span className="px-2 py-1 rounded-full bg-neon-violet/10 text-tone-violet border border-neon-violet/20">
                     AI tổng hợp · đã dẫn nguồn
                   </span>
                 )}
                 {publishersOf(latest.sources).map((p) => (
-                  <span key={p} className="px-2 py-1 rounded-full bg-darkcard text-text-secondary border border-darkborder">
+                  <span key={p} className="px-2 py-1 rounded-full bg-[var(--bg-card)] text-text-secondary border border-[var(--border-color)]">
                     {p}
                   </span>
                 ))}
@@ -139,7 +139,7 @@ export default async function NewsPage() {
             {/* Archive */}
             {rest.length > 0 && (
               <section>
-                <h3 className="text-xs uppercase tracking-widest text-text-secondary font-semibold border-t border-darkborder pt-6 mb-4">
+                <h3 className="text-xs uppercase tracking-widest text-text-secondary font-semibold border-t border-[var(--border-color)] pt-6 mb-4">
                   Các bản tin trước
                 </h3>
                 <ul className="divide-y divide-darkborder">
@@ -153,7 +153,7 @@ export default async function NewsPage() {
                             alt=""
                             width={200}
                             height={105}
-                            className="hidden sm:block w-40 shrink-0 rounded-lg border border-darkborder aspect-[1200/630] object-cover"
+                            className="hidden sm:block w-40 shrink-0 rounded-lg border border-[var(--border-color)] aspect-[1200/630] object-cover"
                           />
                         )}
                         <div className="min-w-0">
@@ -163,7 +163,7 @@ export default async function NewsPage() {
                               <span> · {a.sources.length} nguồn</span>
                             )}
                           </p>
-                          <h4 className="mt-1 font-heading text-lg font-semibold text-text-primary group-hover:text-neon-violet transition-colors">
+                          <h4 className="mt-1 font-heading text-lg font-semibold text-text-primary group-hover:text-tone-violet transition-colors">
                             {a.title}
                           </h4>
                           <p className="mt-1 text-sm text-text-secondary line-clamp-2">{a.summary}</p>

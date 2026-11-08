@@ -119,23 +119,23 @@ export default function VocabPanel() {
     <div className="space-y-6">
       {/* Giới thiệu + tiến độ */}
       <section className="rounded-2xl border border-neon-green/25 bg-neon-green/[0.05] p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-white mb-2">
-          <Layers className="w-5 h-5 text-neon-green" />
+        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-text-primary mb-2">
+          <Layers className="w-5 h-5 text-tone-green" />
           231 từ vựng — nhóm câu lớn nhất của đề trắc nghiệm
         </h2>
-        <p className="text-sm text-slate-300 leading-relaxed mb-5">
+        <p className="text-sm text-text-secondary leading-relaxed mb-5">
           ~70% câu trong đề FE là điền chỗ trống, và phần lớn kiểm tra{' '}
-          <b className="text-white">từ vựng theo ngữ cảnh</b> chứ không phải ngữ pháp. Đây là đúng bộ
+          <b className="text-text-primary">từ vựng theo ngữ cảnh</b> chứ không phải ngữ pháp. Đây là đúng bộ
           từ của môn, chia 11 chủ đề, mỗi từ kèm câu ví dụ. Đánh dấu từ đã thuộc để chế độ thẻ và
           kiểm tra tự bỏ qua nó.
         </p>
         <div className="flex items-center justify-between text-xs mb-2">
-          <span className="text-slate-400">Đã thuộc</span>
-          <span className="font-semibold text-white">
+          <span className="text-text-secondary">Đã thuộc</span>
+          <span className="font-semibold text-text-primary">
             {mounted ? `${knownCount}/${VOCAB_WORDS.length}` : '—'}
           </span>
         </div>
-        <div className="h-2 rounded-full bg-white/[0.06] overflow-hidden">
+        <div className="h-2 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
           <div
             className="h-full rounded-full bg-gradient-to-r from-neon-green to-neon-emerald transition-all duration-500"
             style={{ width: mounted ? `${pct}%` : '0%' }}
@@ -158,14 +158,14 @@ export default function VocabPanel() {
               onClick={() => setView(m.id)}
               className={`flex items-start gap-2.5 text-left px-4 py-3 rounded-xl border transition-all active:scale-95 ${
                 view === m.id
-                  ? 'bg-neon-green/15 border-neon-green/45 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                  ? 'bg-neon-green/15 border-neon-green/45 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
               }`}
             >
               <Icon className="w-4 h-4 mt-0.5 shrink-0" />
               <span>
                 <span className="block text-sm font-semibold">{m.label}</span>
-                <span className="block text-[11px] text-slate-500 mt-0.5">{m.sub}</span>
+                <span className="block text-[11px] text-text-muted mt-0.5">{m.sub}</span>
               </span>
             </button>
           );
@@ -178,13 +178,13 @@ export default function VocabPanel() {
         className={`w-full text-left rounded-xl border px-4 py-3 transition-all active:scale-[0.99] ${
           hotOnly
             ? 'bg-neon-orange/15 border-neon-orange/45'
-            : 'bg-white/[0.03] border-white/10 hover:border-white/25'
+            : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] hover:border-[var(--border-light-hover)]'
         }`}
       >
-        <span className={`block text-sm font-semibold ${hotOnly ? 'text-white' : 'text-slate-300'}`}>
+        <span className={`block text-sm font-semibold ${hotOnly ? 'text-text-primary' : 'text-text-secondary'}`}>
           🔥 {hotOnly ? 'Đang hiện: 60 từ hay ra đề nhất' : 'Chỉ học 60 từ hay ra đề nhất'}
         </span>
-        <span className="block text-[11px] text-slate-500 mt-0.5">
+        <span className="block text-[11px] text-text-muted mt-0.5">
           Xếp theo số lần xuất hiện thật trong 14 đề FE + 16 đề đọc + ngân hàng thi nói. Còn ít giờ
           thì học đúng nhóm này, bỏ 171 từ còn lại.
         </span>
@@ -247,8 +247,8 @@ function CatChip({
       onClick={onClick}
       className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all active:scale-95 ${
         active
-          ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
-          : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+          ? 'bg-neon-violet/15 border-neon-violet/45 text-text-primary'
+          : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
       }`}
     >
       {label}
@@ -281,18 +281,18 @@ function ListView({
     <div className="space-y-4">
       <div className="flex flex-wrap gap-3">
         <div className="relative flex-1 min-w-[220px]">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-text-muted" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by Japanese, kana or Vietnamese meaning…"
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/50 transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 transition-colors"
           />
         </div>
         <button
           onClick={() => setShowMeaning(!showMeaning)}
-          className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+          className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-medium bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
         >
           {showMeaning ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
           {showMeaning ? 'Che nghĩa' : 'Hiện nghĩa'}
@@ -300,13 +300,13 @@ function ListView({
       </div>
 
       {!showMeaning && (
-        <p className="text-[12px] text-slate-500 leading-relaxed">
+        <p className="text-[12px] text-text-muted leading-relaxed">
           Nghĩa đang bị che — đọc từ tiếng Nhật, tự nhớ nghĩa trong đầu rồi bấm vào dòng đó để lật ra
           kiểm chứng. Đây là cách ôn hiệu quả hơn nhiều so với đọc xuôi cả bảng.
         </p>
       )}
 
-      <div className="text-xs text-slate-500">{words.length} từ</div>
+      <div className="text-xs text-text-muted">{words.length} từ</div>
 
       <div className="space-y-2">
         {words.map((w) => (
@@ -319,7 +319,7 @@ function ListView({
           />
         ))}
         {words.length === 0 && (
-          <div className="rounded-xl border border-white/10 bg-white/[0.02] p-8 text-center text-sm text-slate-500">
+          <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-8 text-center text-sm text-text-muted">
             Không có từ nào khớp.
           </div>
         )}
@@ -345,7 +345,7 @@ function VocabRow({
   return (
     <div
       className={`rounded-xl border p-3.5 transition-all ${
-        known ? 'border-neon-green/25 bg-neon-green/[0.04]' : 'border-white/10 bg-white/[0.02]'
+        known ? 'border-neon-green/25 bg-neon-green/[0.04]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
       }`}
     >
       <div className="flex items-start gap-3">
@@ -354,7 +354,7 @@ function VocabRow({
           aria-pressed={known}
           aria-label={known ? `Bỏ đánh dấu thuộc: ${word.word}` : `Đánh dấu đã thuộc: ${word.word}`}
           className={`mt-1 w-5 h-5 shrink-0 rounded-md border-2 flex items-center justify-center transition-all active:scale-90 ${
-            known ? 'bg-neon-green border-neon-green' : 'border-white/25 hover:border-neon-green'
+            known ? 'bg-neon-green border-neon-green' : 'border-[var(--border-light-hover)] hover:border-neon-green'
           }`}
         >
           {known && <Check className="w-3.5 h-3.5 text-black" strokeWidth={3.5} />}
@@ -365,28 +365,28 @@ function VocabRow({
           className="flex-1 min-w-0 text-left"
         >
           <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <span className="text-xl text-white leading-tight">{word.word}</span>
+            <span className="text-xl text-text-primary leading-tight">{word.word}</span>
             {word.kana !== word.word && (
-              <span className="text-sm text-neon-cyan">{word.kana}</span>
+              <span className="text-sm text-tone-cyan">{word.kana}</span>
             )}
             {isHot(word.word) && (
               <span
-                className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-orange/15 text-neon-orange shrink-0"
+                className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-orange/15 text-tone-orange shrink-0"
                 title={`Xuất hiện ~${freqOf(word.word)} lần trong kho đề thi`}
               >
                 🔥 {freqOf(word.word)}
               </span>
             )}
             {visible ? (
-              <span className="text-sm text-slate-300">— {word.meaning}</span>
+              <span className="text-sm text-text-secondary">— {word.meaning}</span>
             ) : (
-              <span className="text-sm text-slate-600 italic">— bấm để xem nghĩa</span>
+              <span className="text-sm text-text-muted italic">— bấm để xem nghĩa</span>
             )}
           </div>
           {visible && word.ex && (
             <div className="mt-1.5 text-[13px] leading-relaxed">
-              <span className="text-slate-400">{word.ex}</span>
-              <span className="text-slate-600"> — {word.exVi}</span>
+              <span className="text-text-secondary">{word.ex}</span>
+              <span className="text-text-muted"> — {word.exVi}</span>
             </div>
           )}
         </button>
@@ -424,15 +424,15 @@ function CardView({
   }, [words]);
 
   if (!mounted) {
-    return <div className="h-56 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+    return <div className="h-56 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>;
   }
 
   if (deck.length === 0) {
     return (
       <div className="rounded-2xl border border-neon-green/25 bg-neon-green/[0.06] p-10 text-center">
-        <Trophy className="w-10 h-10 text-neon-green mx-auto mb-3" />
-        <p className="text-white font-semibold mb-1">Đã thuộc hết nhóm này</p>
-        <p className="text-sm text-slate-400">
+        <Trophy className="w-10 h-10 text-tone-green mx-auto mb-3" />
+        <p className="text-text-primary font-semibold mb-1">Đã thuộc hết nhóm này</p>
+        <p className="text-sm text-text-secondary">
           Chọn chủ đề khác, hoặc bỏ đánh dấu vài từ ở chế độ Tra cứu để ôn lại.
         </p>
       </div>
@@ -448,15 +448,15 @@ function CardView({
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between text-xs">
-        <span className="text-slate-400">
-          Thẻ <b className="text-white">{Math.min(i + 1, deck.length)}</b>/{deck.length} · chưa thuộc
+        <span className="text-text-secondary">
+          Thẻ <b className="text-text-primary">{Math.min(i + 1, deck.length)}</b>/{deck.length} · chưa thuộc
         </span>
         <button
           onClick={() => {
             setI(0);
             setFlipped(false);
           }}
-          className="inline-flex items-center gap-1.5 text-slate-500 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-text-muted hover:text-text-primary transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           Về thẻ đầu
@@ -465,26 +465,26 @@ function CardView({
 
       <button
         onClick={() => setFlipped((v) => !v)}
-        className="w-full rounded-2xl border border-white/12 bg-white/[0.03] px-6 py-14 text-center hover:border-neon-violet/35 transition-colors"
+        className="w-full rounded-2xl border border-[var(--border-light-hover)] bg-[var(--bg-surface-hover)] px-6 py-14 text-center hover:border-neon-violet/35 transition-colors"
       >
         {!flipped ? (
           <>
-            <div className="text-5xl sm:text-6xl text-white leading-tight mb-3">{card.word}</div>
+            <div className="text-5xl sm:text-6xl text-text-primary leading-tight mb-3">{card.word}</div>
             {card.kana !== card.word && (
-              <div className="text-lg text-neon-cyan">{card.kana}</div>
+              <div className="text-lg text-tone-cyan">{card.kana}</div>
             )}
-            <div className="text-xs text-slate-600 mt-6">bấm để lật</div>
+            <div className="text-xs text-text-muted mt-6">bấm để lật</div>
           </>
         ) : (
           <>
-            <div className="text-2xl sm:text-3xl text-white leading-snug mb-4">{card.meaning}</div>
+            <div className="text-2xl sm:text-3xl text-text-primary leading-snug mb-4">{card.meaning}</div>
             {card.ex && (
               <div className="text-[13px] leading-relaxed max-w-md mx-auto">
-                <div className="text-slate-300">{card.ex}</div>
-                <div className="text-slate-500 mt-0.5">{card.exVi}</div>
+                <div className="text-text-secondary">{card.ex}</div>
+                <div className="text-text-muted mt-0.5">{card.exVi}</div>
               </div>
             )}
-            <div className="text-xs text-slate-600 mt-6">bấm để lật lại</div>
+            <div className="text-xs text-text-muted mt-6">bấm để lật lại</div>
           </>
         )}
       </button>
@@ -495,14 +495,14 @@ function CardView({
             onToggle(card);
             setFlipped(false);
           }}
-          className="px-4 py-3 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+          className="px-4 py-3 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-text-primary hover:bg-neon-green/25 transition-colors active:scale-95"
         >
           <Check className="w-4 h-4 inline mr-1.5" />
           Đã thuộc, bỏ khỏi bộ
         </button>
         <button
           onClick={next}
-          className="px-4 py-3 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-violet/40 transition-colors active:scale-95"
+          className="px-4 py-3 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-primary hover:border-neon-violet/40 transition-colors active:scale-95"
         >
           Chưa thuộc, thẻ tiếp →
         </button>
@@ -593,11 +593,11 @@ function WriteView({
   }, [mounted, dir, words, onlyMiss]);
 
   if (!mounted) {
-    return <div className="h-56 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+    return <div className="h-56 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>;
   }
   if (queue.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center text-sm text-slate-400">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-10 text-center text-sm text-text-secondary">
         Nhóm này chưa có từ nào để kiểm tra — chọn chủ đề khác hoặc “Tất cả”.
       </div>
     );
@@ -637,26 +637,26 @@ function WriteView({
   if (finished) {
     const acc = Math.round((right / queue.length) * 100);
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6 sm:p-8">
         <div className="text-center mb-7">
           <div
             className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
               acc >= 80 ? 'bg-neon-green/15' : 'bg-neon-orange/15'
             }`}
           >
-            <Trophy className={`w-8 h-8 ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`} />
+            <Trophy className={`w-8 h-8 ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`} />
           </div>
-          <div className="text-4xl font-heading font-bold text-white mb-1">
+          <div className="text-4xl font-heading font-bold text-text-primary mb-1">
             {right}/{queue.length}
           </div>
-          <div className={`text-sm font-semibold ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`}>
+          <div className={`text-sm font-semibold ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`}>
             Chính xác {acc}% · {dir === 'jp2vi' ? 'Nhật → Việt' : 'Việt → Nhật'}
           </div>
         </div>
 
         {wrong.length > 0 && (
           <div className="mb-6">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">
+            <div className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-2.5">
               {wrong.length} từ cần học lại
             </div>
             <div className="space-y-2">
@@ -666,17 +666,17 @@ function WriteView({
                   className="rounded-xl border border-neon-red/25 bg-neon-red/[0.05] px-4 py-3"
                 >
                   <div className="flex flex-wrap items-baseline gap-x-3">
-                    <span className="text-xl text-white">{x.word.word}</span>
+                    <span className="text-xl text-text-primary">{x.word.word}</span>
                     {x.word.kana !== x.word.word && (
-                      <span className="text-sm text-neon-cyan">{x.word.kana}</span>
+                      <span className="text-sm text-tone-cyan">{x.word.kana}</span>
                     )}
-                    <span className="text-sm text-slate-300">— {x.word.meaning}</span>
+                    <span className="text-sm text-text-secondary">— {x.word.meaning}</span>
                     {x.given && (
-                      <span className="text-[11px] text-neon-red ml-auto">bạn viết: {x.given}</span>
+                      <span className="text-[11px] text-tone-red ml-auto">bạn viết: {x.given}</span>
                     )}
                   </div>
                   {x.word.ex && (
-                    <div className="text-[12px] text-slate-500 mt-1 leading-relaxed">
+                    <div className="text-[12px] text-text-muted mt-1 leading-relaxed">
                       {x.word.ex} — {x.word.exVi}
                     </div>
                   )}
@@ -689,13 +689,13 @@ function WriteView({
         <div className="flex flex-wrap gap-3 justify-center">
           <button
             onClick={build}
-            className="px-5 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+            className="px-5 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-text-primary hover:bg-neon-green/25 transition-colors active:scale-95"
           >
             Bộ mới
           </button>
           <button
             onClick={() => setDir(dir === 'jp2vi' ? 'vi2jp' : 'jp2vi')}
-            className="px-5 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-violet/40 transition-colors active:scale-95"
+            className="px-5 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-primary hover:border-neon-violet/40 transition-colors active:scale-95"
           >
             <ArrowLeftRight className="w-4 h-4 inline mr-1.5" />
             Đổi sang {dir === 'jp2vi' ? 'Việt → Nhật' : 'Nhật → Việt'}
@@ -709,17 +709,17 @@ function WriteView({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4 text-xs">
-          <span className="text-slate-400">
-            Câu <b className="text-white">{idx + 1}</b>/{queue.length}
+          <span className="text-text-secondary">
+            Câu <b className="text-text-primary">{idx + 1}</b>/{queue.length}
           </span>
-          <span className="text-slate-400">
-            Đúng <b className="text-neon-green">{right}</b>
+          <span className="text-text-secondary">
+            Đúng <b className="text-tone-green">{right}</b>
           </span>
           {missIds.length > 0 && (
             <button
               onClick={() => setOnlyMiss(!onlyMiss)}
               className={`text-xs transition-colors ${
-                onlyMiss ? 'text-neon-red font-semibold' : 'text-slate-500 hover:text-white'
+                onlyMiss ? 'text-tone-red font-semibold' : 'text-text-muted hover:text-text-primary'
               }`}
             >
               {onlyMiss ? `● chỉ ${missIds.length} từ hay sai` : `luyện ${missIds.length} từ hay sai`}
@@ -728,32 +728,32 @@ function WriteView({
         </div>
         <button
           onClick={() => setDir(dir === 'jp2vi' ? 'vi2jp' : 'jp2vi')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeftRight className="w-3.5 h-3.5" />
           {dir === 'jp2vi' ? 'Nhật → Việt' : 'Việt → Nhật'}
         </button>
       </div>
 
-      <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+      <div className="h-1.5 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
         <div
           className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-green transition-all duration-300"
           style={{ width: `${(idx / queue.length) * 100}%` }}
         />
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6 sm:p-8">
         <div className="text-center mb-6">
-          <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-3">
+          <div className="text-[10px] font-bold tracking-wider text-text-muted mb-3">
             {dir === 'jp2vi' ? 'TỪ NÀY NGHĨA LÀ GÌ?' : 'TỪ NÀY TIẾNG NHẬT VIẾT THẾ NÀO?'}
           </div>
           {dir === 'jp2vi' ? (
             <>
-              <div className="text-4xl sm:text-5xl text-white leading-tight mb-2">{q.word}</div>
-              {q.kana !== q.word && <div className="text-base text-neon-cyan">{q.kana}</div>}
+              <div className="text-4xl sm:text-5xl text-text-primary leading-tight mb-2">{q.word}</div>
+              {q.kana !== q.word && <div className="text-base text-tone-cyan">{q.kana}</div>}
             </>
           ) : (
-            <div className="text-2xl sm:text-3xl text-white leading-snug">{q.meaning}</div>
+            <div className="text-2xl sm:text-3xl text-text-primary leading-snug">{q.meaning}</div>
           )}
         </div>
 
@@ -779,17 +779,17 @@ function WriteView({
           placeholder={
             dir === 'jp2vi' ? 'Type the Vietnamese meaning, then Enter…' : 'Type kana / kanji, then Enter…'
           }
-          className={`w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border text-center text-lg text-white placeholder:text-slate-600 focus:outline-none transition-colors ${
+          className={`w-full px-4 py-3.5 rounded-xl bg-[var(--bg-surface-hover)] border text-center text-lg text-text-primary placeholder:text-text-muted focus:outline-none transition-colors ${
             result === 'right'
               ? 'border-neon-green'
               : result === 'wrong'
                 ? 'border-neon-red'
-                : 'border-white/15 focus:border-neon-violet/60'
+                : 'border-[var(--border-light-hover)] focus:border-neon-violet/60'
           }`}
         />
 
         {dir === 'vi2jp' && !result && (
-          <p className="text-center text-[11px] text-slate-500 mt-2 inline-flex items-center gap-1.5 w-full justify-center">
+          <p className="text-center text-[11px] text-text-muted mt-2 inline-flex items-center gap-1.5 w-full justify-center">
             <Keyboard className="w-3.5 h-3.5" />
             Chuyển bàn phím sang “Japanese — Romaji”. Chưa quen thì gõ romaji (watashi) cũng được tính đúng.
           </p>
@@ -799,13 +799,13 @@ function WriteView({
           <div className="grid grid-cols-2 gap-2.5 mt-4">
             <button
               onClick={submit}
-              className="px-4 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-text-primary hover:bg-neon-violet/25 transition-colors active:scale-95"
             >
               Kiểm tra (Enter)
             </button>
             <button
               onClick={giveUp}
-              className="px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/15 text-sm font-medium text-slate-400 hover:text-white transition-colors active:scale-95"
+              className="px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-secondary hover:text-text-primary transition-colors active:scale-95"
             >
               <HelpCircle className="w-4 h-4 inline mr-1.5" />
               Chưa nhớ, xem đáp án
@@ -823,31 +823,31 @@ function WriteView({
               <div className="flex items-center gap-2 mb-2">
                 {result === 'right' ? (
                   <>
-                    <Check className="w-4 h-4 text-neon-green" strokeWidth={3} />
-                    <span className="text-sm font-bold text-neon-green">Đúng</span>
+                    <Check className="w-4 h-4 text-tone-green" strokeWidth={3} />
+                    <span className="text-sm font-bold text-tone-green">Đúng</span>
                   </>
                 ) : (
                   <>
-                    <X className="w-4 h-4 text-neon-red" strokeWidth={3} />
-                    <span className="text-sm font-bold text-neon-red">Chưa đúng</span>
+                    <X className="w-4 h-4 text-tone-red" strokeWidth={3} />
+                    <span className="text-sm font-bold text-tone-red">Chưa đúng</span>
                   </>
                 )}
               </div>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="text-2xl text-white">{q.word}</span>
-                {q.kana !== q.word && <span className="text-base text-neon-cyan">{q.kana}</span>}
-                <span className="text-sm text-slate-300">— {q.meaning}</span>
+                <span className="text-2xl text-text-primary">{q.word}</span>
+                {q.kana !== q.word && <span className="text-base text-tone-cyan">{q.kana}</span>}
+                <span className="text-sm text-text-secondary">— {q.meaning}</span>
               </div>
               {q.ex && (
-                <p className="text-[13px] text-slate-400 leading-relaxed mt-2">
-                  <Volume2 className="w-3.5 h-3.5 inline mr-1 text-slate-600" />
-                  {q.ex} <span className="text-slate-600">— {q.exVi}</span>
+                <p className="text-[13px] text-text-secondary leading-relaxed mt-2">
+                  <Volume2 className="w-3.5 h-3.5 inline mr-1 text-text-muted" />
+                  {q.ex} <span className="text-text-muted">— {q.exVi}</span>
                 </p>
               )}
             </div>
             <button
               onClick={next}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-green/40 transition-colors active:scale-95"
+              className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-primary hover:border-neon-green/40 transition-colors active:scale-95"
             >
               Từ tiếp theo (Enter)
             </button>
@@ -931,12 +931,12 @@ function QuizView({
   }, [mounted, dir, words]);
 
   if (!mounted) {
-    return <div className="h-56 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>;
+    return <div className="h-56 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>;
   }
 
   if (queue.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center text-sm text-slate-400">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-10 text-center text-sm text-text-secondary">
         Nhóm này chưa đủ 4 từ để làm trắc nghiệm — chọn chủ đề rộng hơn hoặc “Tất cả”.
       </div>
     );
@@ -961,41 +961,41 @@ function QuizView({
   if (finished) {
     const acc = Math.round((right / queue.length) * 100);
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6 sm:p-8">
         <div className="text-center mb-7">
           <div
             className={`w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center ${
               acc >= 80 ? 'bg-neon-green/15' : 'bg-neon-orange/15'
             }`}
           >
-            <Trophy className={`w-8 h-8 ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`} />
+            <Trophy className={`w-8 h-8 ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`} />
           </div>
-          <div className="text-4xl font-heading font-bold text-white mb-1">
+          <div className="text-4xl font-heading font-bold text-text-primary mb-1">
             {right}/{queue.length}
           </div>
-          <div className={`text-sm font-semibold ${acc >= 80 ? 'text-neon-green' : 'text-neon-orange'}`}>
+          <div className={`text-sm font-semibold ${acc >= 80 ? 'text-tone-green' : 'text-tone-orange'}`}>
             Chính xác {acc}%
           </div>
         </div>
 
         {wrong.length > 0 && (
           <div className="mb-6">
-            <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">
+            <div className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-2.5">
               {wrong.length} từ cần học lại
             </div>
             <div className="space-y-2">
               {wrong.map((w, i) => (
                 <div
                   key={`${w.word}-${i}`}
-                  className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5"
+                  className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-2.5"
                 >
                   <div className="flex flex-wrap items-baseline gap-x-3">
-                    <span className="text-lg text-white">{w.word}</span>
-                    {w.kana !== w.word && <span className="text-sm text-neon-cyan">{w.kana}</span>}
-                    <span className="text-sm text-slate-300">— {w.meaning}</span>
+                    <span className="text-lg text-text-primary">{w.word}</span>
+                    {w.kana !== w.word && <span className="text-sm text-tone-cyan">{w.kana}</span>}
+                    <span className="text-sm text-text-secondary">— {w.meaning}</span>
                   </div>
                   {w.ex && (
-                    <div className="text-[12px] text-slate-500 mt-0.5 leading-relaxed">
+                    <div className="text-[12px] text-text-muted mt-0.5 leading-relaxed">
                       {w.ex} — {w.exVi}
                     </div>
                   )}
@@ -1008,7 +1008,7 @@ function QuizView({
         <div className="text-center">
           <button
             onClick={build}
-            className="px-5 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-white hover:bg-neon-green/25 transition-colors active:scale-95"
+            className="px-5 py-2.5 rounded-xl bg-neon-green/15 border border-neon-green/40 text-sm font-medium text-text-primary hover:bg-neon-green/25 transition-colors active:scale-95"
           >
             Làm bộ mới
           </button>
@@ -1021,40 +1021,40 @@ function QuizView({
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-4 text-xs">
-          <span className="text-slate-400">
-            Câu <b className="text-white">{idx + 1}</b>/{queue.length}
+          <span className="text-text-secondary">
+            Câu <b className="text-text-primary">{idx + 1}</b>/{queue.length}
           </span>
-          <span className="text-slate-400">
-            Đúng <b className="text-neon-green">{right}</b>
+          <span className="text-text-secondary">
+            Đúng <b className="text-tone-green">{right}</b>
           </span>
         </div>
         <button
           onClick={() => setDir(dir === 'jp2vi' ? 'vi2jp' : 'jp2vi')}
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeftRight className="w-3.5 h-3.5" />
           {dir === 'jp2vi' ? 'Nhật → Việt' : 'Việt → Nhật'}
         </button>
       </div>
 
-      <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
+      <div className="h-1.5 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden">
         <div
           className="h-full rounded-full bg-gradient-to-r from-neon-green to-neon-cyan transition-all duration-300"
           style={{ width: `${(idx / queue.length) * 100}%` }}
         />
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-8">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-6 sm:p-8">
         <div className="text-center mb-7">
           {dir === 'jp2vi' ? (
             <>
-              <div className="text-4xl sm:text-5xl text-white leading-tight mb-2">{q.word.word}</div>
+              <div className="text-4xl sm:text-5xl text-text-primary leading-tight mb-2">{q.word.word}</div>
               {q.word.kana !== q.word.word && (
-                <div className="text-base text-neon-cyan">{q.word.kana}</div>
+                <div className="text-base text-tone-cyan">{q.word.kana}</div>
               )}
             </>
           ) : (
-            <div className="text-2xl sm:text-3xl text-white leading-snug">{q.word.meaning}</div>
+            <div className="text-2xl sm:text-3xl text-text-primary leading-snug">{q.word.meaning}</div>
           )}
         </div>
 
@@ -1062,11 +1062,11 @@ function QuizView({
           {q.choices.map((c) => {
             const isRight = c === correctLabel;
             const chosen = picked === c;
-            let cls = 'border-white/12 bg-white/[0.03] text-white hover:border-neon-green/45';
+            let cls = 'border-[var(--border-light-hover)] bg-[var(--bg-surface-hover)] text-text-primary hover:border-neon-green/45';
             if (picked) {
-              if (isRight) cls = 'border-neon-green/60 bg-neon-green/10 text-neon-green';
-              else if (chosen) cls = 'border-neon-red/60 bg-neon-red/10 text-neon-red';
-              else cls = 'border-white/8 bg-white/[0.02] text-slate-600';
+              if (isRight) cls = 'border-neon-green/60 bg-neon-green/10 text-tone-green';
+              else if (chosen) cls = 'border-neon-red/60 bg-neon-red/10 text-tone-red';
+              else cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted';
             }
             return (
               <button
@@ -1095,13 +1095,13 @@ function QuizView({
               <div className="flex items-center gap-2 mb-1.5">
                 {picked === correctLabel ? (
                   <>
-                    <Check className="w-4 h-4 text-neon-green" strokeWidth={3} />
-                    <span className="text-sm font-bold text-neon-green">Đúng</span>
+                    <Check className="w-4 h-4 text-tone-green" strokeWidth={3} />
+                    <span className="text-sm font-bold text-tone-green">Đúng</span>
                   </>
                 ) : (
                   <>
-                    <X className="w-4 h-4 text-neon-red" strokeWidth={3} />
-                    <span className="text-sm font-bold text-neon-red">
+                    <X className="w-4 h-4 text-tone-red" strokeWidth={3} />
+                    <span className="text-sm font-bold text-tone-red">
                       {q.word.word}
                       {q.word.kana !== q.word.word ? ` (${q.word.kana})` : ''} — {q.word.meaning}
                     </span>
@@ -1109,15 +1109,15 @@ function QuizView({
                 )}
               </div>
               {q.word.ex && (
-                <p className="text-[13px] text-slate-300 leading-relaxed">
-                  <Volume2 className="w-3.5 h-3.5 inline mr-1 text-slate-500" />
-                  {q.word.ex} <span className="text-slate-500">— {q.word.exVi}</span>
+                <p className="text-[13px] text-text-secondary leading-relaxed">
+                  <Volume2 className="w-3.5 h-3.5 inline mr-1 text-text-muted" />
+                  {q.word.ex} <span className="text-text-muted">— {q.word.exVi}</span>
                 </p>
               )}
             </div>
             <button
               onClick={next}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-green/40 transition-colors active:scale-95"
+              className="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-primary hover:border-neon-green/40 transition-colors active:scale-95"
             >
               Câu tiếp theo
             </button>

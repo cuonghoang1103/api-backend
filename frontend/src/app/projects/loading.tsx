@@ -42,7 +42,7 @@ export default function Loading() {
                 <div className="shimmer-track h-5 w-10 rounded" />
               </div>
               <div className="flex-1" />
-              <div className="flex gap-2 pt-3 border-t border-white/[0.04]">
+              <div className="flex gap-2 pt-3 border-t border-[var(--border-light)]">
                 <div className="shimmer-track h-9 flex-1 rounded-lg" />
                 <div className="shimmer-track h-9 w-9 rounded-lg" />
                 <div className="shimmer-track h-9 w-9 rounded-lg" />

@@ -63,14 +63,14 @@ export default function DrillPanel() {
               onClick={() => setArea(a.id)}
               className={`flex items-start gap-2.5 text-left px-4 py-3.5 rounded-xl border transition-all active:scale-95 ${
                 area === a.id
-                  ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                  ? 'bg-neon-violet/15 border-neon-violet/45 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
               }`}
             >
               <Icon className="w-4 h-4 mt-0.5 shrink-0" />
               <span>
                 <span className="block text-sm font-semibold">{a.label}</span>
-                <span className="block text-[11px] text-slate-500 mt-0.5">{a.sub}</span>
+                <span className="block text-[11px] text-text-muted mt-0.5">{a.sub}</span>
               </span>
             </button>
           );
@@ -229,12 +229,12 @@ function CharDrill() {
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-neon-cyan/25 bg-neon-cyan/[0.05] p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-white mb-2">
-          <Zap className="w-5 h-5 text-neon-cyan" />
+        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-text-primary mb-2">
+          <Zap className="w-5 h-5 text-tone-cyan" />
           Luyện tới khi thành phản xạ
         </h2>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          Nhìn bảng và <b className="text-white">nhận ra</b> mặt chữ là kỹ năng dễ; đọc bật ra ngay
+        <p className="text-sm text-text-secondary leading-relaxed">
+          Nhìn bảng và <b className="text-text-primary">nhận ra</b> mặt chữ là kỹ năng dễ; đọc bật ra ngay
           không kịp nghĩ mới là thứ phòng thi cần. Mỗi vòng {ROUND_SIZE} chữ, chữ nào bạn từng sai
           sẽ quay lại thường xuyên hơn. Kết quả lưu trên máy bạn.
         </p>
@@ -242,7 +242,7 @@ function CharDrill() {
 
       {/* Chọn bộ chữ */}
       <div>
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">Chọn bộ chữ</div>
+        <div className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-2.5">Chọn bộ chữ</div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5">
           {DRILL_SETS.map((s) => (
             <button
@@ -250,12 +250,12 @@ function CharDrill() {
               onClick={() => setSetId(s.id)}
               className={`text-left px-4 py-3 rounded-xl border transition-all active:scale-95 ${
                 setId === s.id
-                  ? 'bg-neon-violet/15 border-neon-violet/45 text-white'
-                  : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                  ? 'bg-neon-violet/15 border-neon-violet/45 text-text-primary'
+                  : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
               }`}
             >
               <span className="block text-sm font-semibold">{s.label}</span>
-              <span className="block text-[11px] text-slate-500 mt-0.5">{s.sub}</span>
+              <span className="block text-[11px] text-text-muted mt-0.5">{s.sub}</span>
             </button>
           ))}
         </div>
@@ -263,7 +263,7 @@ function CharDrill() {
 
       {/* Chọn kiểu bài */}
       <div>
-        <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">Kiểu bài</div>
+        <div className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-2.5">Kiểu bài</div>
         <div className="grid sm:grid-cols-3 gap-2.5">
           {MODES.map((m) => {
             const Icon = m.icon;
@@ -273,14 +273,14 @@ function CharDrill() {
                 onClick={() => setMode(m.id)}
                 className={`flex items-start gap-2.5 text-left px-4 py-3 rounded-xl border transition-all active:scale-95 ${
                   mode === m.id
-                    ? 'bg-neon-cyan/15 border-neon-cyan/45 text-white'
-                    : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                    ? 'bg-neon-cyan/15 border-neon-cyan/45 text-text-primary'
+                    : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
                 }`}
               >
                 <Icon className="w-4 h-4 mt-0.5 shrink-0" />
                 <span>
                   <span className="block text-sm font-semibold">{m.label}</span>
-                  <span className="block text-[11px] text-slate-500 mt-0.5">{m.sub}</span>
+                  <span className="block text-[11px] text-text-muted mt-0.5">{m.sub}</span>
                 </span>
               </button>
             );
@@ -289,9 +289,9 @@ function CharDrill() {
       </div>
 
       {/* Sân luyện */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-8">
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-8">
         {!mounted ? (
-          <div className="h-64 flex items-center justify-center text-sm text-slate-500">Đang tải…</div>
+          <div className="h-64 flex items-center justify-center text-sm text-text-muted">Đang tải…</div>
         ) : finished ? (
           <RoundSummary
             total={answered.length}
@@ -307,14 +307,14 @@ function CharDrill() {
             {/* Thanh trạng thái */}
             <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
               <div className="flex items-center gap-4 text-xs">
-                <span className="text-slate-400">
-                  Câu <b className="text-white">{idx + 1}</b>/{queue.length}
+                <span className="text-text-secondary">
+                  Câu <b className="text-text-primary">{idx + 1}</b>/{queue.length}
                 </span>
-                <span className="text-slate-400">
-                  Đúng <b className="text-neon-green">{rightCount}</b>
+                <span className="text-text-secondary">
+                  Đúng <b className="text-tone-green">{rightCount}</b>
                 </span>
                 {streak >= 3 && (
-                  <span className="inline-flex items-center gap-1 text-neon-orange font-semibold">
+                  <span className="inline-flex items-center gap-1 text-tone-orange font-semibold">
                     <Zap className="w-3.5 h-3.5" />
                     {streak} liên tiếp
                   </span>
@@ -322,14 +322,14 @@ function CharDrill() {
               </div>
               <button
                 onClick={() => startRound()}
-                className="inline-flex items-center gap-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs text-text-muted hover:text-text-primary transition-colors"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 Vòng mới
               </button>
             </div>
 
-            <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden mb-8">
+            <div className="h-1.5 rounded-full bg-[var(--bg-surface-hover)] overflow-hidden mb-8">
               <div
                 className="h-full rounded-full bg-gradient-to-r from-neon-violet to-neon-cyan transition-all duration-300"
                 style={{ width: `${(idx / queue.length) * 100}%` }}
@@ -343,16 +343,16 @@ function CharDrill() {
                   mode === 'reverse' ? 'text-5xl sm:text-6xl font-mono' : 'text-7xl sm:text-8xl'
                 } ${
                   feedback === 'right'
-                    ? 'text-neon-green'
+                    ? 'text-tone-green'
                     : feedback === 'wrong'
-                      ? 'text-neon-red'
-                      : 'text-white'
+                      ? 'text-tone-red'
+                      : 'text-text-primary'
                 }`}
               >
                 {mode === 'reverse' ? current.answers[0] : current.char}
               </div>
               {mode === 'reverse' && current.reading && (
-                <div className="text-sm text-slate-500 mt-3">{current.reading}</div>
+                <div className="text-sm text-text-muted mt-3">{current.reading}</div>
               )}
             </div>
 
@@ -374,18 +374,18 @@ function CharDrill() {
                   autoCorrect="off"
                   spellCheck={false}
                   placeholder="type the reading, then Enter"
-                  className={`w-full px-4 py-3.5 rounded-xl bg-white/[0.04] border text-center text-lg text-white placeholder:text-slate-600 focus:outline-none transition-colors ${
+                  className={`w-full px-4 py-3.5 rounded-xl bg-[var(--bg-surface-hover)] border text-center text-lg text-text-primary placeholder:text-text-muted focus:outline-none transition-colors ${
                     feedback === 'right'
                       ? 'border-neon-green'
                       : feedback === 'wrong'
                         ? 'border-neon-red'
-                        : 'border-white/15 focus:border-neon-violet/60'
+                        : 'border-[var(--border-light-hover)] focus:border-neon-violet/60'
                   }`}
                 />
                 {feedback === 'none' && (
                   <button
                     onClick={submitTyped}
-                    className="w-full mt-3 px-4 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors active:scale-95"
+                    className="w-full mt-3 px-4 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-text-primary hover:bg-neon-violet/25 transition-colors active:scale-95"
                   >
                     Kiểm tra (Enter)
                   </button>
@@ -397,11 +397,11 @@ function CharDrill() {
                   const isRight =
                     mode === 'reverse' ? c === current.char : isCorrect(c, current);
                   const chosen = input === c;
-                  let cls = 'border-white/12 bg-white/[0.03] text-white hover:border-neon-violet/45';
+                  let cls = 'border-[var(--border-light-hover)] bg-[var(--bg-surface-hover)] text-text-primary hover:border-neon-violet/45';
                   if (feedback !== 'none') {
-                    if (isRight) cls = 'border-neon-green/60 bg-neon-green/10 text-neon-green';
-                    else if (chosen) cls = 'border-neon-red/60 bg-neon-red/10 text-neon-red';
-                    else cls = 'border-white/8 bg-white/[0.02] text-slate-600';
+                    if (isRight) cls = 'border-neon-green/60 bg-neon-green/10 text-tone-green';
+                    else if (chosen) cls = 'border-neon-red/60 bg-neon-red/10 text-tone-red';
+                    else cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted';
                   }
                   return (
                     <button
@@ -432,13 +432,13 @@ function CharDrill() {
                   <div className="flex items-center gap-2 mb-1.5">
                     {feedback === 'right' ? (
                       <>
-                        <Check className="w-4 h-4 text-neon-green" strokeWidth={3} />
-                        <span className="text-sm font-bold text-neon-green">Đúng</span>
+                        <Check className="w-4 h-4 text-tone-green" strokeWidth={3} />
+                        <span className="text-sm font-bold text-tone-green">Đúng</span>
                       </>
                     ) : (
                       <>
-                        <X className="w-4 h-4 text-neon-red" strokeWidth={3} />
-                        <span className="text-sm font-bold text-neon-red">
+                        <X className="w-4 h-4 text-tone-red" strokeWidth={3} />
+                        <span className="text-sm font-bold text-tone-red">
                           {current.char} = {current.answers[0]}
                           {current.reading ? ` (${current.reading})` : ''}
                         </span>
@@ -446,10 +446,10 @@ function CharDrill() {
                     )}
                   </div>
                   {current.hint && (
-                    <p className="text-[13px] text-slate-300 leading-relaxed">{current.hint}</p>
+                    <p className="text-[13px] text-text-secondary leading-relaxed">{current.hint}</p>
                   )}
                   {current.answers.length > 1 && feedback === 'wrong' && (
-                    <p className="text-[12px] text-slate-500 mt-1.5">
+                    <p className="text-[12px] text-text-muted mt-1.5">
                       Cách đọc chấp nhận: {current.answers.join(' · ')}
                     </p>
                   )}
@@ -457,7 +457,7 @@ function CharDrill() {
                 {feedback === 'wrong' && (
                   <button
                     onClick={next}
-                    className="w-full mt-3 px-4 py-2.5 rounded-xl bg-white/[0.05] border border-white/15 text-sm font-medium text-white hover:border-neon-violet/40 transition-colors active:scale-95"
+                    className="w-full mt-3 px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-sm font-medium text-text-primary hover:border-neon-violet/40 transition-colors active:scale-95"
                   >
                     Chữ tiếp theo (Enter)
                   </button>
@@ -469,7 +469,7 @@ function CharDrill() {
           <div className="text-center py-10">
             <button
               onClick={() => startRound()}
-              className="px-5 py-3 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors"
+              className="px-5 py-3 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-text-primary hover:bg-neon-violet/25 transition-colors"
             >
               Bắt đầu luyện
             </button>
@@ -480,18 +480,18 @@ function CharDrill() {
       {/* Chữ đang yếu */}
       {weakChars.length > 0 && (
         <section className="rounded-2xl border border-neon-red/25 bg-neon-red/[0.04] p-5">
-          <h3 className="text-sm font-bold text-white mb-1">Những chữ bạn hay sai nhất</h3>
-          <p className="text-xs text-slate-500 mb-4">
+          <h3 className="text-sm font-bold text-text-primary mb-1">Những chữ bạn hay sai nhất</h3>
+          <p className="text-xs text-text-muted mb-4">
             Tính trên toàn bộ lịch sử luyện. Đây chính là danh sách cần chép tay thêm.
           </p>
           <div className="flex flex-wrap gap-2">
             {weakChars.map(([char, s]) => (
               <div
                 key={char}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/[0.03]"
+                className="flex items-center gap-2 px-3 py-2 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]"
               >
-                <span className="text-xl text-white leading-none">{char}</span>
-                <span className="text-[11px] text-neon-red font-semibold">sai {s.wrong}</span>
+                <span className="text-xl text-text-primary leading-none">{char}</span>
+                <span className="text-[11px] text-tone-red font-semibold">sai {s.wrong}</span>
               </div>
             ))}
           </div>
@@ -527,15 +527,15 @@ function RoundSummary({
             pass ? 'bg-neon-green/15' : 'bg-neon-orange/15'
           }`}
         >
-          <Trophy className={`w-8 h-8 ${pass ? 'text-neon-green' : 'text-neon-orange'}`} />
+          <Trophy className={`w-8 h-8 ${pass ? 'text-tone-green' : 'text-tone-orange'}`} />
         </div>
-        <div className="text-4xl font-heading font-bold text-white mb-1">
+        <div className="text-4xl font-heading font-bold text-text-primary mb-1">
           {right}/{total}
         </div>
-        <div className={`text-sm font-semibold ${pass ? 'text-neon-green' : 'text-neon-orange'}`}>
+        <div className={`text-sm font-semibold ${pass ? 'text-tone-green' : 'text-tone-orange'}`}>
           Chính xác {accuracy}% · chuỗi dài nhất {bestStreak}
         </div>
-        <p className="text-[13px] text-slate-400 mt-3 max-w-md mx-auto leading-relaxed">
+        <p className="text-[13px] text-text-secondary mt-3 max-w-md mx-auto leading-relaxed">
           {pass
             ? 'Đạt ngưỡng. Bộ này coi như xong — chuyển sang bộ khác hoặc đổi sang kiểu bài khó hơn.'
             : 'Chưa đạt ngưỡng 90%. Luyện lại đúng những chữ vừa sai trước khi làm vòng mới — đó là cách nhanh nhất.'}
@@ -544,27 +544,27 @@ function RoundSummary({
 
       {wrong.length > 0 && (
         <div className="mb-6">
-          <div className="text-xs font-bold text-slate-400 uppercase tracking-wide mb-2.5">
+          <div className="text-xs font-bold text-text-secondary uppercase tracking-wide mb-2.5">
             {wrong.length} chữ sai trong vòng này
           </div>
           <div className="space-y-2">
             {wrong.map((w, i) => (
               <div
                 key={`${w.item.char}-${i}`}
-                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-4 py-2.5"
+                className="flex items-center gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-2.5"
               >
-                <span className="text-2xl text-white leading-none w-9">{w.item.char}</span>
+                <span className="text-2xl text-text-primary leading-none w-9">{w.item.char}</span>
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-neon-green">
+                  <div className="text-sm text-tone-green">
                     {w.item.answers.join(' · ')}
                     {w.item.reading ? ` — ${w.item.reading}` : ''}
                   </div>
                   {w.item.hint && (
-                    <div className="text-[12px] text-slate-500 leading-relaxed">{w.item.hint}</div>
+                    <div className="text-[12px] text-text-muted leading-relaxed">{w.item.hint}</div>
                   )}
                 </div>
                 {w.given && (
-                  <span className="text-[11px] text-neon-red shrink-0">bạn gõ: {w.given}</span>
+                  <span className="text-[11px] text-tone-red shrink-0">bạn gõ: {w.given}</span>
                 )}
               </div>
             ))}
@@ -576,14 +576,14 @@ function RoundSummary({
         {wrong.length > 0 && (
           <button
             onClick={onDrillWrong}
-            className="px-5 py-2.5 rounded-xl bg-neon-red/15 border border-neon-red/40 text-sm font-medium text-white hover:bg-neon-red/25 transition-colors active:scale-95"
+            className="px-5 py-2.5 rounded-xl bg-neon-red/15 border border-neon-red/40 text-sm font-medium text-text-primary hover:bg-neon-red/25 transition-colors active:scale-95"
           >
             Luyện lại {wrong.length} chữ sai
           </button>
         )}
         <button
           onClick={onAgain}
-          className="px-5 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors active:scale-95"
+          className="px-5 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-text-primary hover:bg-neon-violet/25 transition-colors active:scale-95"
         >
           Vòng mới
         </button>

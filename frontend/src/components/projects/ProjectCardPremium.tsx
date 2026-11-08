@@ -102,7 +102,7 @@ function CardCarousel({
  'linear-gradient(135deg, rgba(99, 102, 241, 0.10) 0%, rgba(18, 18, 26, 0.0) 50%, rgba(139, 92, 246, 0.10) 100%)',
  }}
  >
- <div className="text-violet-300/40 font-mono text-xs tracking-widest uppercase">
+ <div className="text-tone-violet font-mono text-xs tracking-widest uppercase">
  {pick(project.title, project.titleEn).slice(0, 18)}
  </div>
  </div>
@@ -122,7 +122,7 @@ function CardCarousel({
  e.stopPropagation();
  onVideoClick?.((project as any).videoUrl);
  }}
- className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold text-white transition-all hover:scale-105"
+ className="absolute top-3 left-3 z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold text-text-primary transition-all hover:scale-105"
  style={{
  background: 'rgba(0,0,0,0.6)',
  backdropFilter: 'blur(8px)',
@@ -184,7 +184,7 @@ function CardCarousel({
  }}
  aria-label="Previous image"
  >
- <ChevronLeft className="w-4 h-4 text-white" />
+ <ChevronLeft className="w-4 h-4 text-text-primary" />
  </button>
  <button
  type="button"
@@ -200,7 +200,7 @@ function CardCarousel({
  }}
  aria-label="Next image"
  >
- <ChevronRight className="w-4 h-4 text-white" />
+ <ChevronRight className="w-4 h-4 text-text-primary" />
  </button>
  </>
  )}
@@ -430,7 +430,7 @@ export default function ProjectCardPremium({
  {/* Title + (optional) year */}
  <div className="flex items-start justify-between gap-2 premium-tilt-child">
  <h3
- className="text-base font-heading font-bold text-text-primary line-clamp-1 group-hover:text-violet-200 transition-colors"
+ className="text-base font-heading font-bold text-text-primary line-clamp-1 group-hover:text-tone-violet transition-colors"
  style={{ letterSpacing: '-0.01em' }}
  >
  {pick(project.title, project.titleEn)}
@@ -498,13 +498,13 @@ export default function ProjectCardPremium({
  <div className="flex-1" />
 
  {/* Action row. */}
- <div className="flex items-center gap-2 pt-3 border-t border-white/[0.06]">
+ <div className="flex items-center gap-2 pt-3 border-t border-[var(--border-light)]">
  <MagneticButton
  onClick={(e) => {
  e.stopPropagation();
  router.push(`/projects/${project.slug}`);
  }}
- className="magnetic-press flex-1 h-11 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-lg text-sm font-medium text-white"
+ className="magnetic-press flex-1 h-11 sm:h-9 inline-flex items-center justify-center gap-1.5 rounded-lg text-sm font-medium text-text-primary"
  style={{
  // Inline so we can pass the gradient.
  background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
@@ -521,7 +521,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  window.open(project.projectUrl, '_blank', 'noopener,noreferrer');
  }}
- className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-emerald-300"
+ className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-text-muted hover:text-tone-emerald"
  style={{
  background: 'rgba(255,255,255,0.04)',
  border: '1px solid rgba(255,255,255,0.08)',
@@ -555,7 +555,7 @@ export default function ProjectCardPremium({
  e.stopPropagation();
  onVideoClick?.((project as any).videoUrl);
  }}
- className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-red-300"
+ className="magnetic-press w-11 h-11 sm:w-9 sm:h-9 inline-flex items-center justify-center rounded-lg text-tone-red"
  style={{
  background: 'rgba(239, 68, 68, 0.08)',
  border: '1px solid rgba(239, 68, 68, 0.25)',

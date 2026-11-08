@@ -85,11 +85,11 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
   return (
     <Link
       href={`/?post=${post.id}`}
-      className="group block overflow-hidden rounded-2xl border border-darkborder bg-darkcard/40 transition-colors hover:border-neon-violet/40"
+      className="group block overflow-hidden rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] transition-colors hover:border-neon-violet/40"
     >
       {/* Cover image */}
       {firstImage ? (
-        <div className="relative aspect-[4/5] w-full overflow-hidden bg-darkbg">
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--bg-primary)]">
           {firstImage.type === 'VIDEO' ? (
             <video
               src={firstImage.url}
@@ -110,7 +110,7 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
           )}
         </div>
       ) : (
-        <div className="flex aspect-[4/5] w-full items-center justify-center bg-darkbg/40 text-text-muted/30">
+        <div className="flex aspect-[4/5] w-full items-center justify-center bg-[var(--bg-glass)] text-text-muted/30">
           <ImageIcon className="h-12 w-12" />
         </div>
       )}
@@ -124,7 +124,7 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={post.author.avatarUrl} alt="" className="h-full w-full object-cover" />
               ) : (
-                <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-white">
+                <div className="flex h-full w-full items-center justify-center text-[10px] font-bold text-text-primary">
                   {(post.author.displayName || post.author.username).slice(0, 1).toUpperCase()}
                 </div>
               )}
@@ -150,8 +150,8 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
             className={cn(
               'inline-flex items-center gap-1 rounded-full px-2 py-1 transition-colors',
               liked
-                ? 'bg-red-500/15 text-red-400'
-                : 'hover:bg-white/5 hover:text-text-primary',
+                ? 'bg-red-500/15 text-tone-red'
+                : 'hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
             )}
             aria-label={liked ? 'Bỏ thích' : 'Thích'}
           >
@@ -168,8 +168,8 @@ export default function PostCardLite({ post, onToggleLike, onRepostChange }: Pos
             className={cn(
               'inline-flex items-center gap-1 rounded-full px-2 py-1 transition-colors',
               isShared
-                ? 'bg-green-500/15 text-green-400'
-                : 'hover:bg-white/5 hover:text-text-primary',
+                ? 'bg-green-500/15 text-tone-green'
+                : 'hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
             )}
             aria-label={isShared ? 'Huỷ đăng lại' : 'Đăng lại'}
           >

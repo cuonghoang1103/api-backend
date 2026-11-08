@@ -63,10 +63,10 @@ function LessonItem({
     <>
       <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
         lesson.isCompleted
-          ? 'bg-green-500/20 text-green-400'
+          ? 'bg-green-500/20 text-tone-green'
           : isLocked
-          ? 'bg-darkbg text-text-muted'
-          : 'bg-neon-indigo/20 text-neon-indigo'
+          ? 'bg-[var(--bg-primary)] text-text-muted'
+          : 'bg-neon-indigo/20 text-tone-indigo'
       }`}>
         {isLocked ? (
           <Lock className="w-4 h-4" />
@@ -86,7 +86,7 @@ function LessonItem({
       </div>
       <div className="flex items-center gap-3 shrink-0">
         {isFreePreview && !isLocked && (
-          <span className="px-2 py-0.5 rounded text-xs bg-blue-500/20 text-blue-400 border border-blue-500/30">
+          <span className="px-2 py-0.5 rounded text-xs bg-blue-500/20 text-tone-blue border border-blue-500/30">
             Preview
           </span>
         )}
@@ -105,7 +105,7 @@ function LessonItem({
     return (
       <Link
         href={href}
-        className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-colors"
+        className="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-[var(--bg-surface-hover)] cursor-pointer transition-colors"
       >
         {inner}
       </Link>
@@ -113,7 +113,7 @@ function LessonItem({
   }
   return (
     <div className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors ${
-      isLocked ? 'opacity-60' : 'hover:bg-white/5 cursor-pointer'
+      isLocked ? 'opacity-60' : 'hover:bg-[var(--bg-surface-hover)] cursor-pointer'
     }`}>
       {inner}
     </div>
@@ -144,13 +144,13 @@ export default function Curriculum({ sections, enrolled, completedLessonIds, cou
         {sections.map((section, si) => {
           const isOpen = openSections.has(section.id);
           return (
-            <div key={section.id} className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden">
+            <div key={section.id} className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden">
               <button
                 onClick={() => toggleSection(section.id)}
-                className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors"
+                className="w-full flex items-center justify-between px-5 py-4 hover:bg-[var(--bg-surface-hover)] transition-colors"
               >
                 <div className="flex items-center gap-3 text-left">
-                  <span className="text-neon-violet font-semibold text-sm">{si + 1}</span>
+                  <span className="text-tone-violet font-semibold text-sm">{si + 1}</span>
                   <div>
                     <p className="text-sm font-medium text-text-primary">{pickLang(section.title, locale)}</p>
                     <p className="text-xs text-text-muted mt-0.5">

@@ -90,7 +90,7 @@ export default function ProfilePage() {
     return (
       <div className="flex min-h-[60vh] items-center justify-center px-4 text-text-muted">
         <div className="flex max-w-md flex-col items-center gap-3 text-center">
-          <p className="text-sm text-red-400">{loi}</p>
+          <p className="text-sm text-tone-red">{loi}</p>
           <p className="text-xs">
             Nếu bạn vừa đăng nhập bằng Google hoặc GitHub, phiên có thể chưa được
             tạo xong ở máy chủ. Thử lại, hoặc đăng nhập lại một lần nữa.
@@ -107,7 +107,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => router.replace('/login?next=/profile')}
-              className="rounded-lg border border-white/15 px-4 py-2 text-sm"
+              className="rounded-lg border border-[var(--border-light-hover)] px-4 py-2 text-sm"
             >
               Đăng nhập lại
             </button>

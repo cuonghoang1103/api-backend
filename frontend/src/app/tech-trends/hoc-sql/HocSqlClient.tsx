@@ -43,27 +43,27 @@ function ChapterView({ ch }: { ch: Chapter }) {
   const stage = stageOf(ch.no);
   return (
     <article>
-      <header className="mb-6 border-b border-white/10 pb-5">
+      <header className="mb-6 border-b border-[var(--border-light)] pb-5">
         <div className="mb-2 flex flex-wrap items-center gap-2">
-          <span className="font-mono text-xs text-slate-500">CHƯƠNG {String(ch.no).padStart(2, '0')}</span>
-          <span className="text-xs text-slate-600">·</span>
-          <span className="text-xs text-slate-500">{stage.title}</span>
-          <span className="inline-flex items-center gap-1 rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-px text-[11px] text-slate-400">
+          <span className="font-mono text-xs text-text-muted">CHƯƠNG {String(ch.no).padStart(2, '0')}</span>
+          <span className="text-xs text-text-muted">·</span>
+          <span className="text-xs text-text-muted">{stage.title}</span>
+          <span className="inline-flex items-center gap-1 rounded-md border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-1.5 py-px text-[11px] text-text-secondary">
             <Clock className="h-3 w-3" /> {ch.minutes} phút
           </span>
         </div>
-        <h2 className="text-2xl font-bold leading-tight text-white sm:text-3xl">
+        <h2 className="text-2xl font-bold leading-tight text-text-primary sm:text-3xl">
           {ch.icon} {ch.title}
         </h2>
-        <p className="mt-2 text-[15px] leading-relaxed text-slate-400">{ch.tagline}</p>
+        <p className="mt-2 text-[15px] leading-relaxed text-text-secondary">{ch.tagline}</p>
 
         <div className="mt-4 rounded-2xl border border-violet-400/25 bg-violet-500/[0.07] p-4">
-          <p className="mb-2 flex items-center gap-2 text-sm font-bold text-violet-300">
+          <p className="mb-2 flex items-center gap-2 text-sm font-bold text-tone-violet">
             <ListChecks className="h-4 w-4" /> Học xong chương này bạn LÀM được
           </p>
           <ul className="space-y-1.5">
             {ch.goals.map((g) => (
-              <li key={g} className="flex gap-2.5 text-[14px] leading-relaxed text-slate-300">
+              <li key={g} className="flex gap-2.5 text-[14px] leading-relaxed text-text-secondary">
                 <span className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-violet-400/70" />
                 <span>{g}</span>
               </li>
@@ -76,20 +76,20 @@ function ChapterView({ ch }: { ch: Chapter }) {
         <Blocks blocks={ch.blocks} />
       ) : (
         <div className="rounded-2xl border border-amber-400/25 bg-amber-500/[0.06] p-4 sm:p-5">
-          <p className="mb-2 flex items-center gap-2 text-sm font-bold text-amber-300">
+          <p className="mb-2 flex items-center gap-2 text-sm font-bold text-tone-amber">
             <Lock className="h-4 w-4" /> Chương này mới có khung — phần chữ đang viết
           </p>
-          <p className="mb-4 text-[14.5px] leading-relaxed text-slate-300">
-            Nội dung chi tiết sẽ được bổ sung. Nhưng bạn <b className="text-white">không phải chờ</b>:{' '}
+          <p className="mb-4 text-[14.5px] leading-relaxed text-text-secondary">
+            Nội dung chi tiết sẽ được bổ sung. Nhưng bạn <b className="text-text-primary">không phải chờ</b>:{' '}
             {ch.labCount} bài tập của chương này đã sẵn sàng bên Code Lab, mỗi bài có đề bài,
             gợi ý và lời giải chạy được trên PostgreSQL thật.
           </p>
           {ch.todo && (
             <>
-              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Các đề mục sẽ viết</p>
+              <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">Các đề mục sẽ viết</p>
               <ul className="space-y-1.5">
                 {ch.todo.map((t) => (
-                  <li key={t} className="flex gap-2.5 text-[13.5px] leading-relaxed text-slate-400">
+                  <li key={t} className="flex gap-2.5 text-[13.5px] leading-relaxed text-text-secondary">
                     <span className="mt-[9px] h-1 w-1 shrink-0 rounded-full bg-amber-400/60" />
                     <span>{t}</span>
                   </li>
@@ -145,19 +145,19 @@ function SearchTab({ onOpen }: { onOpen: (no: number) => void }) {
   return (
     <div>
       <div className="relative mb-4">
-        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+        <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
         <input
           value={q}
           onChange={(e) => setQ(e.target.value)}
           placeholder="Search the whole course — diacritics optional: null, join, index, transaction…"
-          className="w-full rounded-xl border border-white/10 bg-white/[0.03] py-2.5 pl-10 pr-10 text-sm text-white placeholder:text-slate-600 focus:border-violet-400/50 focus:outline-none"
+          className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] py-2.5 pl-10 pr-10 text-sm text-text-primary placeholder:text-text-muted focus:border-violet-400/50 focus:outline-none"
         />
         {q && (
           <button
             type="button"
             onClick={() => setQ('')}
             aria-label="Xoá từ khoá"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 transition-colors hover:text-white"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-text-muted transition-colors hover:text-text-primary"
           >
             <X className="h-4 w-4" />
           </button>
@@ -165,15 +165,15 @@ function SearchTab({ onOpen }: { onOpen: (no: number) => void }) {
       </div>
 
       {q.trim().length < 2 ? (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-8 text-center">
-          <p className="mb-3 text-sm text-slate-500">Gõ ít nhất 2 ký tự. Thử vài từ hay tra:</p>
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-8 text-center">
+          <p className="mb-3 text-sm text-text-muted">Gõ ít nhất 2 ký tự. Thử vài từ hay tra:</p>
           <div className="flex flex-wrap justify-center gap-1.5">
             {['null', 'join', 'index', 'group by', 'transaction', 'phan trang', 'kieu tien', 'timestamptz', 'upsert'].map((s) => (
               <button
                 key={s}
                 type="button"
                 onClick={() => setQ(s)}
-                className="rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 font-mono text-xs text-slate-400 transition-all hover:border-violet-400/40 hover:text-white active:scale-95"
+                className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2.5 py-1 font-mono text-xs text-text-secondary transition-all hover:border-violet-400/40 hover:text-text-primary active:scale-95"
               >
                 {s}
               </button>
@@ -181,26 +181,26 @@ function SearchTab({ onOpen }: { onOpen: (no: number) => void }) {
           </div>
         </div>
       ) : hits.length === 0 ? (
-        <p className="rounded-2xl border border-white/10 bg-white/[0.02] px-4 py-8 text-center text-sm text-slate-500">
+        <p className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-8 text-center text-sm text-text-muted">
           Không tìm thấy &quot;{q}&quot;. Thử từ khoá ngắn hơn.
         </p>
       ) : (
         <>
-          <p className="mb-2 text-xs text-slate-500"><b className="text-slate-300">{hits.length}</b> kết quả</p>
+          <p className="mb-2 text-xs text-text-muted"><b className="text-text-secondary">{hits.length}</b> kết quả</p>
           <div className="space-y-1.5">
             {hits.map((h, i) => (
               <button
                 key={`${h.no}-${i}`}
                 type="button"
                 onClick={() => onOpen(h.no)}
-                className="block w-full rounded-xl border border-white/10 bg-white/[0.02] px-3.5 py-2.5 text-left transition-all hover:border-violet-400/40 hover:bg-white/[0.05] active:scale-[0.99]"
+                className="block w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3.5 py-2.5 text-left transition-all hover:border-violet-400/40 hover:bg-[var(--bg-surface-hover)] active:scale-[0.99]"
               >
                 <span className="mb-1 flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-[10px] text-slate-500">CH.{String(h.no).padStart(2, '0')}</span>
-                  <span className="text-[11px] text-slate-400">{h.icon} {h.title}</span>
-                  <span className="rounded border border-white/10 bg-white/[0.04] px-1.5 py-px text-[10px] text-slate-500">{h.kind}</span>
+                  <span className="font-mono text-[10px] text-text-muted">CH.{String(h.no).padStart(2, '0')}</span>
+                  <span className="text-[11px] text-text-secondary">{h.icon} {h.title}</span>
+                  <span className="rounded border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-1.5 py-px text-[10px] text-text-muted">{h.kind}</span>
                 </span>
-                <span className="block line-clamp-2 text-[13px] leading-relaxed text-slate-300">
+                <span className="block line-clamp-2 text-[13px] leading-relaxed text-text-secondary">
                   {h.text.replace(/\*\*/g, '').replace(/`/g, '')}
                 </span>
               </button>
@@ -251,24 +251,24 @@ export default function HocSqlClient() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f]">
+    <div className="min-h-screen bg-[var(--bg-primary)]">
       <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12">
         <Link
           href="/tech-trends"
-          className="mb-6 inline-flex items-center gap-2 text-sm text-slate-400 transition-colors hover:text-white"
+          className="mb-6 inline-flex items-center gap-2 text-sm text-text-secondary transition-colors hover:text-text-primary"
         >
           <ArrowLeft className="h-4 w-4" /> Về blog
         </Link>
 
         {/* ── Đầu trang ── */}
         <header className="mb-8">
-          <p className="mb-2 text-sm font-medium uppercase tracking-wide text-violet-400">
+          <p className="mb-2 text-sm font-medium uppercase tracking-wide text-tone-violet">
             Khoá học · {STATS.chapters} chương · PostgreSQL
           </p>
-          <h1 className="text-3xl font-bold leading-tight text-white sm:text-4xl">
+          <h1 className="text-3xl font-bold leading-tight text-text-primary sm:text-4xl">
             Học SQL &amp; Database từ số 0
           </h1>
-          <p className="mt-3 max-w-3xl leading-relaxed text-slate-400">
+          <p className="mt-3 max-w-3xl leading-relaxed text-text-secondary">
             Bắt đầu từ chỗ &quot;database là cái gì&quot; chứ không giả định bạn đã biết sẵn. Mỗi chương có sơ đồ
             giải thích, hình bấm được để tự thử, câu hỏi kiểm tra ngay sau mỗi phần, và nối thẳng sang
             bài tập chạy trên PostgreSQL thật. Học ở trường bằng SQL Server thì mọi bài đều có hộp đối chiếu
@@ -276,23 +276,23 @@ export default function HocSqlClient() {
           </p>
 
           <div className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            <span className="text-slate-300"><b className="text-white">{STATS.chapters}</b> chương</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.labExercises}</b> bài tập Code Lab</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.figures}</b> sơ đồ</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.widgets}</b> hình bấm được</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.quizzes}</b> câu hỏi</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.codeBlocks}</b> khối code</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.mssqlBoxes}</b> hộp đối chiếu SQL Server</span>
-            <span className="text-slate-300"><b className="text-white">{STATS.flashcards}</b> thẻ ôn</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.chapters}</b> chương</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.labExercises}</b> bài tập Code Lab</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.figures}</b> sơ đồ</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.widgets}</b> hình bấm được</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.quizzes}</b> câu hỏi</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.codeBlocks}</b> khối code</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.mssqlBoxes}</b> hộp đối chiếu SQL Server</span>
+            <span className="text-text-secondary"><b className="text-text-primary">{STATS.flashcards}</b> thẻ ôn</span>
           </div>
 
           {hydrated && (
             <div className="mt-4">
-              <div className="mb-1.5 flex items-center justify-between text-xs text-slate-400">
+              <div className="mb-1.5 flex items-center justify-between text-xs text-text-secondary">
                 <span>Tiến độ của bạn</span>
                 <span>{doneCount}/{STATS.chapters} chương</span>
               </div>
-              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+              <div className="h-2 overflow-hidden rounded-full bg-[var(--bg-surface-active)]">
                 <div
                   className="h-full bg-gradient-to-r from-violet-500 to-emerald-500 transition-all duration-500"
                   style={{ width: `${(doneCount / STATS.chapters) * 100}%` }}
@@ -301,7 +301,7 @@ export default function HocSqlClient() {
             </div>
           )}
 
-          <p className="mt-4 rounded-xl border border-amber-400/20 bg-amber-500/[0.07] px-3.5 py-2.5 text-xs leading-relaxed text-amber-200/90">
+          <p className="mt-4 rounded-xl border border-amber-400/20 bg-amber-500/[0.07] px-3.5 py-2.5 text-xs leading-relaxed text-tone-amber">
             <b>Trạng thái nội dung:</b> {STATS.chaptersFull}/{STATS.chapters} chương đã viết đủ phần chữ
             (chặng 1 và 2 — từ chưa biết gì tới JOIN, CTE, transaction).
             {' '}{STATS.chapters - STATS.chaptersFull} chương còn lại đang ở dạng khung: có mục tiêu, đề mục và
@@ -322,8 +322,8 @@ export default function HocSqlClient() {
                 className={[
                   'inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-medium transition-all active:scale-95',
                   on
-                    ? 'border-violet-400/40 bg-violet-500/20 text-white'
-                    : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/20 hover:text-white',
+                    ? 'border-violet-400/40 bg-violet-500/20 text-text-primary'
+                    : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)] hover:text-text-primary',
                 ].join(' ')}
               >
                 <Icon className="h-4 w-4" />
@@ -351,12 +351,12 @@ export default function HocSqlClient() {
                       className={[
                         'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border font-mono text-xs transition-all active:scale-95',
                         on
-                          ? 'border-violet-400/60 bg-violet-500/25 text-white'
+                          ? 'border-violet-400/60 bg-violet-500/25 text-text-primary'
                           : isDone
-                            ? 'border-emerald-400/30 bg-emerald-500/10 text-emerald-300'
+                            ? 'border-emerald-400/30 bg-emerald-500/10 text-tone-emerald'
                             : c.status === 'outline'
-                              ? 'border-white/[0.07] bg-white/[0.02] text-slate-600'
-                              : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+                              ? 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted'
+                              : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
                       ].join(' ')}
                     >
                       {c.no}
@@ -366,16 +366,16 @@ export default function HocSqlClient() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/[0.02] p-4 sm:p-7">
+            <div className="rounded-3xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-7">
               <ChapterView ch={ch} />
 
               {/* Đánh dấu xong + điều hướng */}
-              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-6">
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border-light)] pt-6">
                 <button
                   type="button"
                   disabled={activeNo <= 0}
                   onClick={() => setActiveNo((n) => Math.max(0, n - 1))}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-300 transition-all hover:border-white/20 disabled:opacity-30"
+                  className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-2 text-sm text-text-secondary transition-all hover:border-[var(--border-light-hover)] disabled:opacity-30"
                 >
                   ← Chương {Math.max(0, activeNo - 1)}
                 </button>
@@ -386,8 +386,8 @@ export default function HocSqlClient() {
                   className={[
                     'inline-flex items-center gap-2 rounded-xl border px-4 py-2 text-sm transition-all active:scale-95',
                     hydrated && done[ch.no]
-                      ? 'border-emerald-400/40 bg-emerald-500/20 text-emerald-300'
-                      : 'border-white/10 bg-white/[0.03] text-slate-400 hover:text-white',
+                      ? 'border-emerald-400/40 bg-emerald-500/20 text-tone-emerald'
+                      : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary',
                   ].join(' ')}
                 >
                   {hydrated && done[ch.no]
@@ -399,7 +399,7 @@ export default function HocSqlClient() {
                   type="button"
                   disabled={activeNo >= CHAPTERS.length - 1}
                   onClick={() => setActiveNo((n) => Math.min(CHAPTERS.length - 1, n + 1))}
-                  className="rounded-xl border border-white/10 bg-white/[0.03] px-4 py-2 text-sm text-slate-300 transition-all hover:border-white/20 disabled:opacity-30"
+                  className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-2 text-sm text-text-secondary transition-all hover:border-[var(--border-light-hover)] disabled:opacity-30"
                 >
                   Chương {Math.min(CHAPTERS.length - 1, activeNo + 1)} →
                 </button>
@@ -418,9 +418,9 @@ export default function HocSqlClient() {
             />
             <div className="mb-5 grid gap-2 sm:grid-cols-3">
               {STAGES.slice(0, 3).map((s) => (
-                <div key={s.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-                  <p className="mb-1 text-xs font-semibold text-slate-200">{s.title}</p>
-                  <p className="text-[12px] leading-relaxed text-slate-500">{s.subtitle}</p>
+                <div key={s.id} className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3">
+                  <p className="mb-1 text-xs font-semibold text-text-primary">{s.title}</p>
+                  <p className="text-[12px] leading-relaxed text-text-muted">{s.subtitle}</p>
                 </div>
               ))}
             </div>
@@ -433,7 +433,7 @@ export default function HocSqlClient() {
             />
             <Link
               href={labModuleHref(858)}
-              className="mt-5 inline-flex items-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-2.5 text-sm font-semibold text-emerald-200 transition-all hover:bg-emerald-500/25 active:scale-95"
+              className="mt-5 inline-flex items-center gap-2 rounded-xl border border-emerald-400/40 bg-emerald-500/15 px-4 py-2.5 text-sm font-semibold text-tone-emerald transition-all hover:bg-emerald-500/25 active:scale-95"
             >
               <Terminal className="h-4 w-4" />
               Mở track PostgreSQL bên Code Lab ({STATS.labExercises} bài)
@@ -447,14 +447,14 @@ export default function HocSqlClient() {
         {/* ── Tab: Ôn tập ── */}
         {tab === 'ontap' && (
           <div>
-            <p className="mb-4 text-sm leading-relaxed text-slate-400">
-              <b className="text-white">{allFlash.length}</b> thẻ gom từ toàn bộ các chương đã viết.
+            <p className="mb-4 text-sm leading-relaxed text-text-secondary">
+              <b className="text-text-primary">{allFlash.length}</b> thẻ gom từ toàn bộ các chương đã viết.
               Tự trả lời trong đầu trước rồi mới lật — nhìn đáp án luôn thì não không ghi lại được gì.
             </p>
             <FlashDeck cards={allFlash} />
 
-            <p className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-slate-300">
-              <Sparkles className="h-4 w-4 text-violet-400" /> Ôn theo từng chương
+            <p className="mb-3 mt-8 flex items-center gap-2 text-sm font-semibold text-text-secondary">
+              <Sparkles className="h-4 w-4 text-tone-violet" /> Ôn theo từng chương
             </p>
             <div className="grid gap-2 sm:grid-cols-2">
               {CHAPTERS.filter((c) => c.flash?.length).map((c) => (
@@ -462,12 +462,12 @@ export default function HocSqlClient() {
                   key={c.no}
                   type="button"
                   onClick={() => open(c.no)}
-                  className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] px-3.5 py-2.5 text-left transition-all hover:border-violet-400/40 hover:bg-white/[0.05] active:scale-[0.99]"
+                  className="flex items-center gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3.5 py-2.5 text-left transition-all hover:border-violet-400/40 hover:bg-[var(--bg-surface-hover)] active:scale-[0.99]"
                 >
                   <span className="text-lg">{c.icon}</span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[13.5px] font-medium text-slate-200">{c.title}</span>
-                    <span className="block text-[11px] text-slate-500">{c.flash?.length} thẻ</span>
+                    <span className="block truncate text-[13.5px] font-medium text-text-primary">{c.title}</span>
+                    <span className="block text-[11px] text-text-muted">{c.flash?.length} thẻ</span>
                   </span>
                 </button>
               ))}

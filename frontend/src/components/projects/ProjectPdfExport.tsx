@@ -331,7 +331,7 @@ export default function ProjectPdfExport({ project }: Props) {
  onClick={handleExport}
  disabled={busy}
  title={error ?? 'Tải PDF case study'}
- className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white transition hover:border-violet-500/50 hover:bg-white/10 disabled:opacity-50"
+ className="inline-flex items-center gap-2 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3 py-2 text-sm text-text-primary transition hover:border-violet-500/50 hover:bg-[var(--bg-surface-active)] disabled:opacity-50"
  >
  {busy ? (
  <>

@@ -15,9 +15,9 @@ import {
 import { PROJECTS, PROJECT_STATS, SKILL_BY_ID } from './data';
 
 const LEVEL: Record<string, string> = {
-  'nền': 'bg-emerald-500/15 text-emerald-300',
-  'giữa': 'bg-sky-500/15 text-sky-300',
-  'khó': 'bg-violet-500/15 text-violet-300',
+  'nền': 'bg-emerald-500/15 text-tone-emerald',
+  'giữa': 'bg-sky-500/15 text-tone-sky',
+  'khó': 'bg-violet-500/15 text-tone-violet',
 };
 
 export default function ProjectsPanel() {
@@ -26,14 +26,14 @@ export default function ProjectsPanel() {
   return (
     <div className="space-y-6">
       <div className="max-w-2xl">
-        <h2 className="text-lg font-bold text-white">{PROJECT_STATS.count} dự án thật</h2>
-        <p className="mt-1 text-sm leading-relaxed text-slate-400">
+        <h2 className="text-lg font-bold text-text-primary">{PROJECT_STATS.count} dự án thật</h2>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
           Bảy trong tám dự án nâng cấp chính hệ thống cuongthai.com đang chạy production, chứ không
           phải bài tập tutorial. Đó là lợi thế lớn nhất bạn có: ứng viên junior khác mang bài tập,
           bạn mang một hệ thống thật đã từng hỏng và đã được sửa. Nhà tuyển dụng phân biệt được hai
           thứ đó ngay lập tức.
         </p>
-        <p className="mt-2 text-sm text-slate-500">
+        <p className="mt-2 text-sm text-text-muted">
           Tổng {PROJECT_STATS.steps} bước có tiêu chí kiểm được · {PROJECT_STATS.acceptance} tiêu chí
           nghiệm thu · {PROJECT_STATS.pitfalls} bẫy đã biết trước.
         </p>
@@ -43,55 +43,55 @@ export default function ProjectsPanel() {
         {PROJECTS.map((p) => {
           const isOpen = open[p.id] ?? false;
           return (
-            <div key={p.id} className="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+            <div key={p.id} className="overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
               <button
                 type="button"
                 onClick={() => setOpen((o) => ({ ...o, [p.id]: !isOpen }))}
                 aria-expanded={isOpen}
-                className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-white/[0.02] sm:p-5"
+                className="flex w-full items-start gap-3 p-4 text-left transition-colors hover:bg-[var(--bg-surface-hover)] sm:p-5"
               >
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/[0.06] text-sm font-bold tabular-nums text-slate-300">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[var(--bg-surface-hover)] text-sm font-bold tabular-nums text-text-secondary">
                   {p.no}
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-base font-bold text-white sm:text-lg">{p.title}</h3>
+                    <h3 className="text-base font-bold text-text-primary sm:text-lg">{p.title}</h3>
                     <span className={`rounded-md px-2 py-0.5 text-[11px] font-medium ${LEVEL[p.level]}`}>
                       {p.level}
                     </span>
-                    <span className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[11px] text-slate-400">
+                    <span className="rounded-md bg-[var(--bg-surface-hover)] px-2 py-0.5 text-[11px] text-text-secondary">
                       {p.weeks}
                     </span>
                   </div>
-                  <p className="mt-1.5 text-sm leading-relaxed text-slate-400">{p.tagline}</p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-text-secondary">{p.tagline}</p>
                 </div>
                 <ChevronDown
-                  className={`mt-1 h-5 w-5 shrink-0 text-slate-500 transition-transform ${
+                  className={`mt-1 h-5 w-5 shrink-0 text-text-muted transition-transform ${
                     isOpen ? 'rotate-180' : ''
                   }`}
                 />
               </button>
 
               {isOpen && (
-                <div className="space-y-5 border-t border-white/10 p-4 sm:p-5">
+                <div className="space-y-5 border-t border-[var(--border-light)] p-4 sm:p-5">
                   {/* Vì sao đáng làm */}
                   <div className="rounded-xl border border-sky-500/20 bg-sky-500/[0.06] p-3.5">
-                    <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-sky-300">
+                    <div className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-tone-sky">
                       <Rocket className="h-3.5 w-3.5" />
                       Vì sao đáng làm
                     </div>
-                    <p className="text-[13px] leading-relaxed text-slate-300">{p.why}</p>
+                    <p className="text-[13px] leading-relaxed text-text-secondary">{p.why}</p>
                   </div>
 
                   {/* Mở khoá tin nào */}
                   <div>
-                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
                       <Briefcase className="h-3.5 w-3.5" />
                       Mở khoá được
                     </div>
                     <ul className="space-y-1">
                       {p.unlocks.map((u) => (
-                        <li key={u} className="flex items-start gap-2 text-[13px] text-slate-300">
+                        <li key={u} className="flex items-start gap-2 text-[13px] text-text-secondary">
                           <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-400" />
                           {u}
                         </li>
@@ -104,7 +104,7 @@ export default function ProjectsPanel() {
                     {p.stack.map((s) => (
                       <span
                         key={s}
-                        className="rounded-md bg-white/[0.06] px-2 py-0.5 text-[11px] text-slate-400"
+                        className="rounded-md bg-[var(--bg-surface-hover)] px-2 py-0.5 text-[11px] text-text-secondary"
                       >
                         {s}
                       </span>
@@ -115,7 +115,7 @@ export default function ProjectsPanel() {
                       return (
                         <span
                           key={sid}
-                          className="rounded-md bg-violet-500/15 px-2 py-0.5 text-[11px] text-violet-300"
+                          className="rounded-md bg-violet-500/15 px-2 py-0.5 text-[11px] text-tone-violet"
                         >
                           rèn: {s.name}
                         </span>
@@ -125,22 +125,22 @@ export default function ProjectsPanel() {
 
                   {/* Các bước */}
                   <div>
-                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-text-muted">
                       <Layers className="h-3.5 w-3.5" />
                       Các bước ({p.steps.length})
                     </div>
                     <ol className="space-y-3">
                       {p.steps.map((st, i) => (
                         <li key={st.title} className="flex gap-3">
-                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white/[0.06] text-[11px] font-bold tabular-nums text-slate-400">
+                          <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-[var(--bg-surface-hover)] text-[11px] font-bold tabular-nums text-text-secondary">
                             {i + 1}
                           </span>
                           <div className="min-w-0">
-                            <div className="text-sm font-semibold text-slate-100">{st.title}</div>
-                            <p className="mt-1 text-[13px] leading-relaxed text-slate-400">
+                            <div className="text-sm font-semibold text-text-primary">{st.title}</div>
+                            <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">
                               {st.detail}
                             </p>
-                            <p className="mt-1.5 flex items-start gap-1.5 text-[13px] leading-relaxed text-emerald-300/90">
+                            <p className="mt-1.5 flex items-start gap-1.5 text-[13px] leading-relaxed text-tone-emerald">
                               <CircleCheck className="mt-0.5 h-3.5 w-3.5 shrink-0" />
                               <span>
                                 <span className="font-medium">Xong khi:</span> {st.check}
@@ -154,13 +154,13 @@ export default function ProjectsPanel() {
 
                   {/* Nghiệm thu */}
                   <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.06] p-3.5">
-                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-emerald-300">
+                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-tone-emerald">
                       <ListChecks className="h-3.5 w-3.5" />
                       Nghiệm thu — đủ hết mới tính là xong
                     </div>
                     <ul className="space-y-1.5">
                       {p.acceptance.map((a) => (
-                        <li key={a} className="flex items-start gap-2 text-[13px] text-slate-300">
+                        <li key={a} className="flex items-start gap-2 text-[13px] text-text-secondary">
                           <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-emerald-400" />
                           {a}
                         </li>
@@ -170,13 +170,13 @@ export default function ProjectsPanel() {
 
                   {/* Bẫy */}
                   <div className="rounded-xl border border-amber-500/20 bg-amber-500/[0.06] p-3.5">
-                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-amber-300">
+                    <div className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-tone-amber">
                       <TriangleAlert className="h-3.5 w-3.5" />
                       Bẫy đã biết trước
                     </div>
                     <ul className="space-y-1.5">
                       {p.pitfalls.map((x) => (
-                        <li key={x} className="flex items-start gap-2 text-[13px] text-slate-300">
+                        <li key={x} className="flex items-start gap-2 text-[13px] text-text-secondary">
                           <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-amber-400" />
                           {x}
                         </li>
@@ -186,12 +186,12 @@ export default function ProjectsPanel() {
 
                   {/* Làm thêm */}
                   <div>
-                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">
+                    <div className="mb-2 text-xs font-semibold uppercase tracking-wider text-text-muted">
                       Làm thêm nếu còn sức
                     </div>
                     <ul className="space-y-1">
                       {p.stretch.map((x) => (
-                        <li key={x} className="flex items-start gap-2 text-[13px] text-slate-400">
+                        <li key={x} className="flex items-start gap-2 text-[13px] text-text-secondary">
                           <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-slate-600" />
                           {x}
                         </li>

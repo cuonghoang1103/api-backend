@@ -74,9 +74,9 @@ export default function ArticleComments({ articleId }: { articleId: number }) {
   };
 
   return (
-    <section id="comments" className="mt-16 pt-10 border-t border-darkborder">
+    <section id="comments" className="mt-16 pt-10 border-t border-[var(--border-color)]">
       <h2 className="text-xl font-heading font-semibold text-text-primary mb-5 flex items-center gap-2">
-        <MessageSquare className="w-5 h-5 text-neon-violet" /> Bình luận
+        <MessageSquare className="w-5 h-5 text-tone-violet" /> Bình luận
         {total > 0 && <span className="text-sm text-text-muted font-normal">({total})</span>}
       </h2>
 
@@ -88,7 +88,7 @@ export default function ArticleComments({ articleId }: { articleId: number }) {
             onChange={(e) => setDraft(e.target.value)}
             rows={2}
             placeholder="Write a comment…"
-            className="flex-1 px-3 py-2.5 bg-darkcard border border-darkborder rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 resize-y transition-all"
+            className="flex-1 px-3 py-2.5 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 resize-y transition-all"
           />
           <button
             onClick={() => post(draft, null, () => setDraft(''))}
@@ -100,8 +100,8 @@ export default function ArticleComments({ articleId }: { articleId: number }) {
           </button>
         </div>
       ) : (
-        <div className="mb-8 rounded-xl border border-darkborder bg-darkcard/60 px-4 py-3 text-sm text-text-secondary">
-          <Link href="/login" className="text-neon-violet hover:underline">Đăng nhập</Link> để tham gia bình luận.
+        <div className="mb-8 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] px-4 py-3 text-sm text-text-secondary">
+          <Link href="/login" className="text-tone-violet hover:underline">Đăng nhập</Link> để tham gia bình luận.
         </div>
       )}
 
@@ -189,7 +189,7 @@ function CommentItem({
         </div>
       )}
       <div className="min-w-0 flex-1">
-        <div className="rounded-2xl bg-darkcard/60 border border-darkborder px-3.5 py-2.5">
+        <div className="rounded-2xl bg-[var(--bg-glass)] border border-[var(--border-color)] px-3.5 py-2.5">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-text-primary">{name(comment.author)}</span>
             <span className="text-[11px] text-text-muted">{timeAgo(comment.createdAt)}{comment.isEdited ? ' · đã sửa' : ''}</span>
@@ -200,10 +200,10 @@ function CommentItem({
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
                 rows={2}
-                className="flex-1 px-2.5 py-1.5 bg-darkbg border border-darkborder rounded-lg text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 resize-y"
+                className="flex-1 px-2.5 py-1.5 bg-[var(--bg-primary)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary focus:outline-none focus:border-neon-violet/50 resize-y"
               />
               <div className="flex flex-col gap-1">
-                <button onClick={saveEdit} className="p-1.5 rounded-lg bg-neon-violet/20 text-neon-violet hover:bg-neon-violet/30"><Send className="w-3.5 h-3.5" /></button>
+                <button onClick={saveEdit} className="p-1.5 rounded-lg bg-neon-violet/20 text-tone-violet hover:bg-neon-violet/30"><Send className="w-3.5 h-3.5" /></button>
                 <button onClick={() => { setEditing(false); setEditText(comment.content); }} className="p-1.5 rounded-lg text-text-muted hover:text-text-primary"><X className="w-3.5 h-3.5" /></button>
               </div>
             </div>
@@ -214,16 +214,16 @@ function CommentItem({
 
         {/* actions */}
         <div className="flex items-center gap-3 mt-1.5 pl-1 text-[11px] text-text-muted">
-          <button onClick={toggleLike} className={['inline-flex items-center gap-1 hover:text-neon-red transition-colors', liked ? 'text-neon-red' : ''].join(' ')}>
+          <button onClick={toggleLike} className={['inline-flex items-center gap-1 hover:text-tone-red transition-colors', liked ? 'text-tone-red' : ''].join(' ')}>
             <Heart className={['w-3.5 h-3.5', liked ? 'fill-current' : ''].join(' ')} /> {likes > 0 ? likes : ''} Thích
           </button>
           {isAuthed && !comment.parentId && (
-            <button onClick={() => setReplying((v) => !v)} className="hover:text-neon-violet transition-colors">Trả lời</button>
+            <button onClick={() => setReplying((v) => !v)} className="hover:text-tone-violet transition-colors">Trả lời</button>
           )}
           {mine && !editing && (
             <>
               <button onClick={() => setEditing(true)} className="inline-flex items-center gap-1 hover:text-text-primary transition-colors"><Pencil className="w-3 h-3" /> Sửa</button>
-              <button onClick={remove} className="inline-flex items-center gap-1 hover:text-neon-red transition-colors"><Trash2 className="w-3 h-3" /> Xoá</button>
+              <button onClick={remove} className="inline-flex items-center gap-1 hover:text-tone-red transition-colors"><Trash2 className="w-3 h-3" /> Xoá</button>
             </>
           )}
         </div>
@@ -237,12 +237,12 @@ function CommentItem({
               // isComposing: nhường Enter cho bộ gõ CJK đang chốt chữ
               onKeyDown={(e) => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); }); }}
               placeholder={`Reply to ${name(comment.author)}…`}
-              className="flex-1 min-w-0 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
+              className="flex-1 min-w-0 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50"
             />
             <button
               onClick={() => onReply(replyText, comment.id, () => { setReplyText(''); setReplying(false); })}
               disabled={posting || !replyText.trim()}
-              className="px-3 py-2 rounded-lg bg-neon-violet/20 text-neon-violet text-xs font-semibold hover:bg-neon-violet/30 disabled:opacity-50 shrink-0"
+              className="px-3 py-2 rounded-lg bg-neon-violet/20 text-tone-violet text-xs font-semibold hover:bg-neon-violet/30 disabled:opacity-50 shrink-0"
             >
               Gửi
             </button>
@@ -251,7 +251,7 @@ function CommentItem({
 
         {/* replies */}
         {comment.replies.length > 0 && (
-          <ul className="mt-3 space-y-4 pl-2 border-l border-darkborder">
+          <ul className="mt-3 space-y-4 pl-2 border-l border-[var(--border-color)]">
             {comment.replies.map((r) => (
               <CommentItem key={r.id} comment={r} myId={myId} isAuthed={isAuthed} onChanged={onChanged} onReply={onReply} posting={posting} isReply />
             ))}

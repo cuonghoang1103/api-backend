@@ -132,7 +132,7 @@ export default function TableOfContents({
  onClick={(e) => onJump(e, it.id)}
  className={`block py-1.5 pr-2 transition-all border-l-2 leading-snug ${
  isActive
- ? 'border-neon-violet text-neon-violet font-medium bg-neon-violet/5'
+ ? 'border-neon-violet text-tone-violet font-medium bg-neon-violet/5'
  : 'border-transparent text-text-muted hover:text-text-primary hover:border-neon-violet/30'
  }`}
  style={{ paddingLeft: `${(it.level - 1) * 12 + 12}px` }}
@@ -201,12 +201,12 @@ export default function TableOfContents({
  onClick={() => setMobileOpen(false)}
  >
  <div
- className="w-full max-h-[70vh] overflow-y-auto bg-darkcard border-t border-darkborder rounded-t-3xl p-6"
+ className="w-full max-h-[70vh] overflow-y-auto bg-[var(--bg-card)] border-t border-[var(--border-color)] rounded-t-3xl p-6"
  onClick={(e) => e.stopPropagation()}
  >
  <div className="flex items-center justify-between mb-4">
  <div className="flex items-center gap-2 text-sm font-semibold text-text-primary">
- <List className="w-4 h-4 text-neon-violet" />
+ <List className="w-4 h-4 text-tone-violet" />
  Mục lục
  </div>
  <button onClick={() => setMobileOpen(false)} aria-label="Close">

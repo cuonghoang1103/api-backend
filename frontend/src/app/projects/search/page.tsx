@@ -113,14 +113,14 @@ export default function SearchPage() {
  <header className="mb-8">
  <Link
  href="/projects"
- className="mb-4 inline-flex items-center gap-2 text-sm text-gray-400 transition hover:text-white"
+ className="mb-4 inline-flex items-center gap-2 text-sm text-text-secondary transition hover:text-text-primary"
  >
  ← Quay lại danh sách dự án
  </Link>
- <h1 className="mb-2 text-3xl font-bold text-white sm:text-4xl">
+ <h1 className="mb-2 text-3xl font-bold text-text-primary sm:text-4xl">
  Tìm kiếm case study
  </h1>
- <p className="text-sm text-gray-400">
+ <p className="text-sm text-text-secondary">
  Tìm trong tiêu đề, mô tả và nội dung case study. Hỗ trợ
  multi-word search (tự động AND).
  </p>
@@ -134,7 +134,7 @@ export default function SearchPage() {
  value={input}
  onChange={(e) => setInput(e.target.value)}
  placeholder="Keywords: callout, portfolio, postgres…"
- className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-white placeholder-gray-500 outline-none transition focus:border-violet-500 focus:bg-white/10"
+ className="flex-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3 text-text-primary placeholder-gray-500 outline-none transition focus:border-violet-500 focus:bg-[var(--bg-surface-active)]"
  autoFocus
  />
  <button
@@ -148,28 +148,28 @@ export default function SearchPage() {
  {/* Filters */}
  <div className="flex flex-wrap gap-3 text-sm">
  <label className="flex items-center gap-2">
- <span className="text-gray-400">Danh mục:</span>
+ <span className="text-text-secondary">Danh mục:</span>
  <select
  value={category}
  onChange={(e) => updateUrl({ category: e.target.value })}
- className="rounded border border-white/10 bg-white/5 px-2 py-1 text-white outline-none focus:border-violet-500"
+ className="rounded border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2 py-1 text-text-primary outline-none focus:border-violet-500"
  >
  {CATEGORY_OPTIONS.map((c) => (
- <option key={c} value={c} className="bg-darkbg">
+ <option key={c} value={c} className="bg-[var(--bg-primary)]">
  {c || 'Tất cả'}
  </option>
  ))}
  </select>
  </label>
  <label className="flex items-center gap-2">
- <span className="text-gray-400">Độ khó:</span>
+ <span className="text-text-secondary">Độ khó:</span>
  <select
  value={difficulty}
  onChange={(e) => updateUrl({ difficulty: e.target.value })}
- className="rounded border border-white/10 bg-white/5 px-2 py-1 text-white outline-none focus:border-violet-500"
+ className="rounded border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2 py-1 text-text-primary outline-none focus:border-violet-500"
  >
  {DIFFICULTY_OPTIONS.map((d) => (
- <option key={d} value={d} className="bg-darkbg">
+ <option key={d} value={d} className="bg-[var(--bg-primary)]">
  {d ? labelDifficulty(d) : 'Tất cả'}
  </option>
  ))}
@@ -179,18 +179,18 @@ export default function SearchPage() {
  </form>
 
  {/* RSS link */}
- <div className="mb-6 flex items-center justify-between border-t border-white/5 pt-4 text-sm">
+ <div className="mb-6 flex items-center justify-between border-t border-[var(--border-light)] pt-4 text-sm">
  <a
  href="/api/v1/projects/feed.xml"
  target="_blank"
  rel="alternate"
- className="inline-flex items-center gap-2 text-orange-400 transition hover:text-orange-300"
+ className="inline-flex items-center gap-2 text-tone-orange transition hover:text-tone-orange"
  >
  <span className="inline-block h-2 w-2 rounded-full bg-orange-400" />
  RSS feed
  </a>
  {data && hasQuery && (
- <span className="text-gray-500">
+ <span className="text-text-muted">
  {data.total} kết quả cho &quot;{data.query}&quot;
  </span>
  )}
@@ -204,7 +204,7 @@ export default function SearchPage() {
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="py-8 text-center text-gray-400"
+ className="py-8 text-center text-text-secondary"
  >
  Đang tìm kiếm…
  </motion.div>
@@ -216,7 +216,7 @@ export default function SearchPage() {
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-red-300"
+ className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 text-tone-red"
  >
  {error}
  </motion.div>
@@ -228,7 +228,7 @@ export default function SearchPage() {
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="rounded-lg border border-white/10 bg-white/5 p-8 text-center text-gray-400"
+ className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-8 text-center text-text-secondary"
  >
  Không tìm thấy kết quả nào. Thử từ khoá khác hoặc bỏ bộ lọc.
  </motion.div>
@@ -240,7 +240,7 @@ export default function SearchPage() {
  initial={{ opacity: 0 }}
  animate={{ opacity: 1 }}
  exit={{ opacity: 0 }}
- className="rounded-lg border border-white/10 bg-white/5 p-8 text-center text-gray-500"
+ className="rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-8 text-center text-text-muted"
  >
  Nhập từ khoá để bắt đầu tìm kiếm.
  </motion.div>
@@ -258,38 +258,38 @@ export default function SearchPage() {
  >
  <Link
  href={`/projects/${hit.slug}`}
- className="block rounded-xl border border-white/10 bg-white/[0.03] p-5 transition hover:border-violet-500/50 hover:bg-white/[0.06]"
+ className="block rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 transition hover:border-violet-500/50 hover:bg-[var(--bg-surface-hover)]"
  >
  <div className="mb-2 flex items-start justify-between gap-4">
- <h3 className="text-lg font-semibold text-white">
+ <h3 className="text-lg font-semibold text-text-primary">
  {hit.title}
  </h3>
- <span className="shrink-0 text-xs text-gray-500">
+ <span className="shrink-0 text-xs text-text-muted">
  rank {hit.rank.toFixed(2)}
  </span>
  </div>
 
  {hit.description && (
- <p className="mb-3 text-sm text-gray-400">
+ <p className="mb-3 text-sm text-text-secondary">
  {hit.description}
  </p>
  )}
 
  {hit.snippet && (
  <p
- className="mb-3 text-sm leading-relaxed text-gray-300 [&_mark]:rounded-sm [&_mark]:bg-violet-500/30 [&_mark]:px-1 [&_mark]:text-violet-100"
+ className="mb-3 text-sm leading-relaxed text-text-secondary [&_mark]:rounded-sm [&_mark]:bg-violet-500/30 [&_mark]:px-1 [&_mark]:text-violet-100"
  dangerouslySetInnerHTML={{ __html: sanitizeHtml(hit.snippet) }}
  />
  )}
 
- <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+ <div className="flex flex-wrap items-center gap-3 text-xs text-text-muted">
  {hit.category && (
- <span className="rounded-full bg-white/5 px-2 py-0.5">
+ <span className="rounded-full bg-[var(--bg-surface-hover)] px-2 py-0.5">
  {hit.category}
  </span>
  )}
  {hit.difficulty && (
- <span className="rounded-full bg-white/5 px-2 py-0.5">
+ <span className="rounded-full bg-[var(--bg-surface-hover)] px-2 py-0.5">
  {labelDifficulty(hit.difficulty)}
  </span>
  )}

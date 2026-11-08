@@ -153,11 +153,11 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
   const brokenFeeds = feeds.filter((f) => f.isActive && f.lastError);
 
   return (
-    <div className="rounded-2xl border border-darkborder bg-darkcard overflow-hidden">
+    <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-darkbg transition-colors"
+        className="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-[var(--bg-primary)] transition-colors"
       >
         <span className="flex items-center gap-2">
           <span className="text-xl">📰</span>
@@ -177,14 +177,14 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
       </button>
 
       {open && (
-        <div className="px-4 pb-4 space-y-4 border-t border-darkborder pt-4">
+        <div className="px-4 pb-4 space-y-4 border-t border-[var(--border-color)] pt-4">
           {/* Actions */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               type="button"
               onClick={handleIngest}
               disabled={ingesting}
-              className="px-3 py-2 rounded-lg text-sm font-medium bg-darkbg text-text-primary hover:opacity-80 disabled:opacity-50"
+              className="px-3 py-2 rounded-lg text-sm font-medium bg-[var(--bg-primary)] text-text-primary hover:opacity-80 disabled:opacity-50"
             >
               {ingesting ? 'Đang hút tin…' : '↻ Hút tin mới'}
             </button>
@@ -192,7 +192,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
               type="button"
               onClick={() => void loadFeeds()}
               disabled={loadingFeeds}
-              className="px-3 py-2 rounded-lg text-sm bg-darkbg text-text-secondary hover:opacity-80 disabled:opacity-50"
+              className="px-3 py-2 rounded-lg text-sm bg-[var(--bg-primary)] text-text-secondary hover:opacity-80 disabled:opacity-50"
             >
               Xem tin ứng viên
             </button>
@@ -200,7 +200,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
               <button
                 type="button"
                 onClick={handleSeed}
-                className="px-3 py-2 rounded-lg text-sm bg-darkbg text-text-secondary hover:opacity-80"
+                className="px-3 py-2 rounded-lg text-sm bg-[var(--bg-primary)] text-text-secondary hover:opacity-80"
               >
                 + Thêm 19 nguồn mặc định
               </button>
@@ -231,7 +231,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
               <ul className="space-y-1.5 max-h-72 overflow-y-auto pr-1">
                 {candidates.map((c) => (
                   <li key={c.id} className="flex items-start gap-2 text-sm">
-                    <span className="mt-0.5 shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-darkbg text-text-secondary">
+                    <span className="mt-0.5 shrink-0 text-[10px] px-1.5 py-0.5 rounded bg-[var(--bg-primary)] text-text-secondary">
                       {c.score}
                     </span>
                     <span className="min-w-0">
@@ -255,7 +255,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
           </div>
 
           {/* Publish */}
-          <div className="rounded-xl bg-darkbg p-3 space-y-3">
+          <div className="rounded-xl bg-[var(--bg-primary)] p-3 space-y-3">
             <label className="flex items-center gap-2 text-sm text-text-primary">
               <input
                 type="checkbox"
@@ -270,7 +270,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
                 type="datetime-local"
                 value={schedule}
                 onChange={(e) => setSchedule(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-darkcard border border-darkborder text-text-primary text-sm"
+                className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border-color)] text-text-primary text-sm"
               />
             )}
             <button
@@ -308,7 +308,7 @@ export default function NewsBulletinPanel({ onPublished }: Props) {
                       type="button"
                       onClick={() => void toggleFeed(f)}
                       className={`mr-2 text-xs px-1.5 py-0.5 rounded ${
-                        f.isActive ? 'bg-emerald-500/15 text-emerald-500' : 'bg-darkbg text-text-secondary'
+                        f.isActive ? 'bg-emerald-500/15 text-emerald-500' : 'bg-[var(--bg-primary)] text-text-secondary'
                       }`}
                     >
                       {f.isActive ? 'bật' : 'tắt'}

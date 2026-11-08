@@ -64,12 +64,12 @@ function highlight(code: string) {
 
   while ((m = RE.exec(code)) !== null) {
     if (m.index > last) out.push(code.slice(last, m.index));
-    if (m[1]) out.push(<span key={key++} className="text-slate-500 italic">{m[1]}</span>);
-    else if (m[2]) out.push(<span key={key++} className="text-emerald-300">{m[2]}</span>);
-    else if (m[3]) out.push(<span key={key++} className="font-semibold text-violet-400">{m[3]}</span>);
-    else if (m[4]) out.push(<span key={key++} className="text-sky-300">{m[4]}</span>);
-    else if (m[5]) { out.push(<span key={key++} className="text-amber-300">{m[5]}</span>); out.push('('); }
-    else if (m[6]) out.push(<span key={key++} className="text-orange-300">{m[6]}</span>);
+    if (m[1]) out.push(<span key={key++} className="text-text-muted italic">{m[1]}</span>);
+    else if (m[2]) out.push(<span key={key++} className="text-tone-emerald">{m[2]}</span>);
+    else if (m[3]) out.push(<span key={key++} className="font-semibold text-tone-violet">{m[3]}</span>);
+    else if (m[4]) out.push(<span key={key++} className="text-tone-sky">{m[4]}</span>);
+    else if (m[5]) { out.push(<span key={key++} className="text-tone-amber">{m[5]}</span>); out.push('('); }
+    else if (m[6]) out.push(<span key={key++} className="text-tone-orange">{m[6]}</span>);
     last = m.index + m[0].length;
   }
   if (last < code.length) out.push(code.slice(last));
@@ -93,20 +93,20 @@ export default function CodeBlock({
 
   return (
     <figure className="my-5">
-      {caption && <figcaption className="mb-2 text-xs font-medium text-slate-400">{caption}</figcaption>}
-      <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-[#0c0c14]">
-        <div className="flex items-center justify-between border-b border-white/[0.07] px-3 py-1.5">
-          <span className="font-mono text-[10px] uppercase tracking-wide text-slate-600">{lang}</span>
+      {caption && <figcaption className="mb-2 text-xs font-medium text-text-secondary">{caption}</figcaption>}
+      <div className="group relative overflow-hidden rounded-2xl border border-[var(--border-light)] bg-[#0c0c14]">
+        <div className="flex items-center justify-between border-b border-[var(--border-light)] px-3 py-1.5">
+          <span className="font-mono text-[10px] uppercase tracking-wide text-text-muted">{lang}</span>
           <button
             type="button"
             onClick={copy}
-            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] text-slate-500 transition-colors hover:bg-white/[0.06] hover:text-slate-300"
+            className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-[11px] text-text-muted transition-colors hover:bg-[var(--bg-surface-hover)] hover:text-text-secondary"
           >
-            {copied ? <><Check className="h-3 w-3 text-emerald-400" /> Đã chép</> : <><Copy className="h-3 w-3" /> Chép</>}
+            {copied ? <><Check className="h-3 w-3 text-tone-emerald" /> Đã chép</> : <><Copy className="h-3 w-3" /> Chép</>}
           </button>
         </div>
         <pre className="overflow-x-auto px-4 py-3.5">
-          <code className="font-mono text-[13px] leading-[1.7] text-slate-300">
+          <code className="font-mono text-[13px] leading-[1.7] text-text-secondary">
             {lang === 'sql' ? highlight(code) : code}
           </code>
         </pre>

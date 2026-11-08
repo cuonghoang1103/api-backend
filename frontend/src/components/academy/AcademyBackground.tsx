@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { useTheme } from '@/context/ThemeContext';
 
 interface Star {
   x: number;
@@ -23,7 +24,16 @@ interface Orbit {
   opacity: number;
 }
 
+/**
+ * Nền canvas này SƠN KÍN một bầu trời đêm (gần đen) — chỉ hợp chủ đề tối. Chủ đề sáng ⇒ không dựng, trang lộ nền
+ * `var(--bg-primary)` của chính nó (08/11/2026: trang theo chủ đề, không còn ép tối).
+ */
 export default function AcademyBackground() {
+  const { resolvedTheme } = useTheme();
+  return resolvedTheme === 'dark' ? <AcademyBackgroundToi /> : null;
+}
+
+function AcademyBackgroundToi() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const starsRef = useRef<Star[]>([]);
   const orbitsRef = useRef<Orbit[]>([]);

@@ -15,10 +15,10 @@ const TYPE_META: Record<ProjectResourceType, {
  icon: typeof FileText;
  color: string;
 }> = {
- PDF: { vi: 'PDF', en: 'PDF', icon: FileText, color: 'text-rose-400' },
- DOC: { vi: 'Tài liệu', en: 'Document', icon: FileText, color: 'text-blue-400' },
+ PDF: { vi: 'PDF', en: 'PDF', icon: FileText, color: 'text-tone-rose' },
+ DOC: { vi: 'Tài liệu', en: 'Document', icon: FileText, color: 'text-tone-blue' },
  REPO: { vi: 'Mã nguồn', en: 'Repository', icon: Github, color: 'text-text-primary' },
- LINK: { vi: 'Liên kết', en: 'Link', icon: ExternalLink, color: 'text-neon-violet' },
+ LINK: { vi: 'Liên kết', en: 'Link', icon: ExternalLink, color: 'text-tone-violet' },
  OTHER: { vi: 'Khác', en: 'Other', icon: FileCode2, color: 'text-text-muted' },
 };
 
@@ -50,7 +50,7 @@ export default function ResourcesList({ resources }: ResourcesListProps) {
  return (
  <section className="mt-12">
  <h2 className="text-lg font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
- <Download className="w-5 h-5 text-neon-violet" />
+ <Download className="w-5 h-5 text-tone-violet" />
  {L('Tài nguyên tham khảo', 'Reference material')}
  </h2>
  <ul className="space-y-3">
@@ -71,16 +71,16 @@ export default function ResourcesList({ resources }: ResourcesListProps) {
  target={isExternal ? '_blank' : undefined}
  rel={isExternal ? 'noopener noreferrer' : undefined}
  download={r.type === 'PDF' || r.type === 'DOC' ? '' : undefined}
- className="group flex items-center gap-4 p-4 rounded-xl border border-darkborder bg-darkcard hover:border-neon-violet/30 transition-colors"
+ className="group flex items-center gap-4 p-4 rounded-xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-neon-violet/30 transition-colors"
  >
  <div
- className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-darkbg border border-darkborder ${meta.color}`}
+ className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center bg-[var(--bg-primary)] border border-[var(--border-color)] ${meta.color}`}
  >
  <Icon className="w-5 h-5" />
  </div>
  <div className="flex-1 min-w-0">
  <div className="flex items-center gap-2 flex-wrap">
- <span className="font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
+ <span className="font-medium text-text-primary group-hover:text-tone-violet transition-colors line-clamp-1">
  {pick(r.title, r.titleEn)}
  </span>
  <span className={`text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded ${meta.color} bg-current/10`}>
@@ -97,7 +97,7 @@ export default function ResourcesList({ resources }: ResourcesListProps) {
  </span>
  )}
  {isExternal && (
- <ExternalLink className="w-4 h-4 text-text-muted group-hover:text-neon-violet flex-shrink-0" />
+ <ExternalLink className="w-4 h-4 text-text-muted group-hover:text-tone-violet flex-shrink-0" />
  )}
  </a>
  </motion.li>

@@ -288,14 +288,14 @@ export default function TypingPassagePanel() {
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-neon-violet/25 bg-neon-violet/[0.05] p-5 sm:p-6">
-        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-white mb-2">
-          <BookOpen className="w-5 h-5 text-neon-violet" />
+        <h2 className="flex items-center gap-2 text-lg font-heading font-bold text-text-primary mb-2">
+          <BookOpen className="w-5 h-5 text-tone-violet" />
           Gõ cả đoạn văn — 20 bài từ dễ tới khó
         </h2>
-        <p className="text-sm text-slate-300 leading-relaxed">
-          Bạn gõ bằng <b className="text-white">romaji</b> (wa → わ, shi → し). Mỗi chữ đúng sẽ{' '}
-          <b className="text-neon-green">sáng xanh</b> ngay tại chỗ; gõ sai thì chữ đó{' '}
-          <b className="text-neon-red">nháy đỏ</b> và được ghi vào bảng lỗi cuối bài — nhưng bài
+        <p className="text-sm text-text-secondary leading-relaxed">
+          Bạn gõ bằng <b className="text-text-primary">romaji</b> (wa → わ, shi → し). Mỗi chữ đúng sẽ{' '}
+          <b className="text-tone-green">sáng xanh</b> ngay tại chỗ; gõ sai thì chữ đó{' '}
+          <b className="text-tone-red">nháy đỏ</b> và được ghi vào bảng lỗi cuối bài — nhưng bài
           không bị kẹt, cứ gõ lại là đi tiếp. Dấu câu 。、 tự nhảy qua, không phải gõ.
         </p>
       </section>
@@ -319,12 +319,12 @@ export default function TypingPassagePanel() {
                       onClick={() => setPassage(p)}
                       className={`text-left px-3.5 py-2.5 rounded-xl border transition-all active:scale-95 ${
                         active
-                          ? 'bg-white/[0.08] border-white/30 text-white'
-                          : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white hover:border-white/25'
+                          ? 'bg-[var(--bg-surface-active)] border-[var(--border-light-hover)] text-text-primary'
+                          : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary hover:border-[var(--border-light-hover)]'
                       }`}
                     >
                       <span className="block text-[13px] font-semibold leading-snug">{p.title}</span>
-                      <span className="block text-[10px] text-slate-500 mt-0.5">
+                      <span className="block text-[10px] text-text-muted mt-0.5">
                         {rec ? `✓ ${rec.kpm} chữ/phút · ${rec.accuracy}%` : p.source.split('·')[0].trim()}
                       </span>
                     </button>
@@ -337,23 +337,23 @@ export default function TypingPassagePanel() {
       </div>
 
       {/* Sân gõ */}
-      <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-5 sm:p-7">
+      <section className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-5 sm:p-7">
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <div>
-            <div className="text-sm font-bold text-white">{passage.title}</div>
-            <div className="text-[11px] text-slate-500">{passage.source}</div>
+            <div className="text-sm font-bold text-text-primary">{passage.title}</div>
+            <div className="text-[11px] text-text-muted">{passage.source}</div>
           </div>
           <div className="flex items-center gap-3">
             <button
               onClick={() => setShowHint(!showHint)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
             >
               {showHint ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
               Gợi ý
             </button>
             <button
               onClick={reset}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-white/[0.04] border border-white/10 text-slate-300 hover:text-white transition-colors"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-[var(--bg-surface-hover)] border border-[var(--border-light)] text-text-secondary hover:text-text-primary transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Gõ lại
@@ -362,21 +362,21 @@ export default function TypingPassagePanel() {
         </div>
 
         {/* Bản gốc có kanji */}
-        <div className="rounded-xl border border-white/[0.08] bg-black/25 px-4 py-3 mb-4">
-          <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-1.5">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface)] px-4 py-3 mb-4">
+          <div className="text-[10px] font-bold tracking-wider text-text-muted mb-1.5">
             BẢN GỐC — đúng như đề thi in ra
           </div>
-          <p className="text-[15px] leading-relaxed text-slate-300">{passage.text}</p>
+          <p className="text-[15px] leading-relaxed text-text-secondary">{passage.text}</p>
         </div>
 
         {/* Khu gõ */}
         <div
           className={`rounded-xl border px-4 py-5 mb-4 transition-colors ${
-            flash ? 'border-neon-red/60 bg-neon-red/[0.06]' : 'border-white/10 bg-white/[0.02]'
+            flash ? 'border-neon-red/60 bg-neon-red/[0.06]' : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)]'
           }`}
           onClick={() => inputRef.current?.focus()}
         >
-          <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-3">
+          <div className="text-[10px] font-bold tracking-wider text-text-muted mb-3">
             GÕ THEO CÁCH ĐỌC
           </div>
           <p className="text-2xl sm:text-3xl leading-[1.9] tracking-wide break-words">
@@ -407,26 +407,26 @@ export default function TypingPassagePanel() {
               autoCorrect="off"
               spellCheck={false}
               placeholder="Click here and type romaji…"
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/15 text-center text-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-neon-violet/60 transition-colors"
+              className="w-full px-4 py-3 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-light-hover)] text-center text-lg text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/60 transition-colors"
             />
             {buffer && (
-              <p className="text-center text-xs text-slate-500 mt-2">
-                đang gõ: <b className="text-neon-cyan font-mono text-sm">{buffer}</b>
+              <p className="text-center text-xs text-text-muted mt-2">
+                đang gõ: <b className="text-tone-cyan font-mono text-sm">{buffer}</b>
               </p>
             )}
             {showHint && tokens[pos] && (
-              <p className="text-center text-sm text-slate-500 mt-3">
-                Chữ tiếp theo: <b className="text-white text-lg">{tokens[pos].char}</b> — gõ{' '}
-                <b className="text-neon-cyan font-mono">{tokens[pos].answers[0]}</b>
+              <p className="text-center text-sm text-text-muted mt-3">
+                Chữ tiếp theo: <b className="text-text-primary text-lg">{tokens[pos].char}</b> — gõ{' '}
+                <b className="text-tone-cyan font-mono">{tokens[pos].answers[0]}</b>
                 {tokens[pos].answers.length > 1 && (
-                  <span className="text-slate-600"> (hoặc {tokens[pos].answers.slice(1).join(', ')})</span>
+                  <span className="text-text-muted"> (hoặc {tokens[pos].answers.slice(1).join(', ')})</span>
                 )}
               </p>
             )}
 
-            <div className="flex flex-wrap items-center justify-center gap-5 mt-5 text-xs text-slate-400">
+            <div className="flex flex-wrap items-center justify-center gap-5 mt-5 text-xs text-text-secondary">
               <span>
-                <b className="text-white">{typedCount}</b>/{totalCount} chữ
+                <b className="text-text-primary">{typedCount}</b>/{totalCount} chữ
               </span>
               <span className="inline-flex items-center gap-1">
                 <Timer className="w-3.5 h-3.5" />
@@ -436,7 +436,7 @@ export default function TypingPassagePanel() {
                 <Zap className="w-3.5 h-3.5" />
                 {kpm} chữ/phút
               </span>
-              <span className={errors.length ? 'text-neon-red' : ''}>
+              <span className={errors.length ? 'text-tone-red' : ''}>
                 {errors.length} lỗi
               </span>
             </div>
@@ -470,7 +470,7 @@ function TokenSpan({
   finished: boolean;
 }) {
   if (token.kind === 'skip') {
-    return <span className={index < pos ? 'text-neon-green/60' : 'text-slate-600'}>{token.char}</span>;
+    return <span className={index < pos ? 'text-neon-green/60' : 'text-text-muted'}>{token.char}</span>;
   }
   const done = index < pos;
   const current = index === pos && !finished;
@@ -478,10 +478,10 @@ function TokenSpan({
     <span
       className={
         done
-          ? 'text-neon-green'
+          ? 'text-tone-green'
           : current
-            ? 'text-white bg-neon-violet/30 rounded px-0.5 outline outline-2 outline-neon-violet/60'
-            : 'text-slate-600'
+            ? 'text-text-primary bg-neon-violet/30 rounded px-0.5 outline outline-2 outline-neon-violet/60'
+            : 'text-text-muted'
       }
     >
       {token.char}
@@ -517,21 +517,21 @@ function Summary({
             good ? 'bg-neon-green/15' : 'bg-neon-orange/15'
           }`}
         >
-          <Trophy className={`w-8 h-8 ${good ? 'text-neon-green' : 'text-neon-orange'}`} />
+          <Trophy className={`w-8 h-8 ${good ? 'text-tone-green' : 'text-tone-orange'}`} />
         </div>
-        <div className="text-3xl font-heading font-bold text-white mb-1">Xong bài</div>
+        <div className="text-3xl font-heading font-bold text-text-primary mb-1">Xong bài</div>
         <div className="flex flex-wrap items-center justify-center gap-5 text-sm mt-3">
-          <span className="text-slate-400">
-            Chính xác <b className={good ? 'text-neon-green' : 'text-neon-orange'}>{accuracy}%</b>
+          <span className="text-text-secondary">
+            Chính xác <b className={good ? 'text-tone-green' : 'text-tone-orange'}>{accuracy}%</b>
           </span>
-          <span className="text-slate-400">
-            Tốc độ <b className="text-white">{kpm}</b> chữ/phút
+          <span className="text-text-secondary">
+            Tốc độ <b className="text-text-primary">{kpm}</b> chữ/phút
           </span>
-          <span className="text-slate-400">
-            Thời gian <b className="text-white">{(elapsed / 1000).toFixed(0)}s</b>
+          <span className="text-text-secondary">
+            Thời gian <b className="text-text-primary">{(elapsed / 1000).toFixed(0)}s</b>
           </span>
-          <span className="text-slate-400">
-            Gõ được <b className="text-white">{typedCount}</b> chữ
+          <span className="text-text-secondary">
+            Gõ được <b className="text-text-primary">{typedCount}</b> chữ
           </span>
         </div>
       </div>
@@ -539,7 +539,7 @@ function Summary({
       {/* Bảng lỗi + giải thích */}
       {errorSummary.length > 0 ? (
         <div className="mb-6">
-          <div className="flex items-center gap-2 text-xs font-bold text-neon-red uppercase tracking-wide mb-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-tone-red uppercase tracking-wide mb-3">
             <AlertTriangle className="w-4 h-4" />
             {errorSummary.length} chữ gõ sai · tổng {errors.length} lần
           </div>
@@ -550,19 +550,19 @@ function Summary({
                 className="rounded-xl border border-neon-red/25 bg-neon-red/[0.05] px-4 py-3"
               >
                 <div className="flex flex-wrap items-center gap-3 mb-1">
-                  <span className="text-2xl text-white leading-none">{e.char}</span>
-                  <span className="text-sm text-neon-green font-mono">
+                  <span className="text-2xl text-text-primary leading-none">{e.char}</span>
+                  <span className="text-sm text-tone-green font-mono">
                     đúng phải gõ: {tokenAnswer(e.char)}
                   </span>
                   {e.typed.length > 0 && (
-                    <span className="text-xs text-neon-red">bạn gõ: {e.typed.join(', ')}</span>
+                    <span className="text-xs text-tone-red">bạn gõ: {e.typed.join(', ')}</span>
                   )}
                   {e.count > 1 && (
-                    <span className="text-[11px] text-slate-500 ml-auto">sai {e.count} lần</span>
+                    <span className="text-[11px] text-text-muted ml-auto">sai {e.count} lần</span>
                   )}
                 </div>
                 {KANA_TRAPS[e.char] && (
-                  <p className="text-[13px] text-slate-300 leading-relaxed">{KANA_TRAPS[e.char]}</p>
+                  <p className="text-[13px] text-text-secondary leading-relaxed">{KANA_TRAPS[e.char]}</p>
                 )}
               </div>
             ))}
@@ -570,29 +570,29 @@ function Summary({
         </div>
       ) : (
         <div className="rounded-xl border border-neon-green/25 bg-neon-green/[0.06] px-4 py-3 mb-6 text-center">
-          <Check className="w-5 h-5 text-neon-green inline mr-2" strokeWidth={3} />
-          <span className="text-sm text-white font-semibold">Không sai chữ nào. Sang bài khó hơn.</span>
+          <Check className="w-5 h-5 text-tone-green inline mr-2" strokeWidth={3} />
+          <span className="text-sm text-text-primary font-semibold">Không sai chữ nào. Sang bài khó hơn.</span>
         </div>
       )}
 
       {/* Dịch nghĩa */}
-      <div className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 mb-4">
-        <div className="text-[10px] font-bold tracking-wider text-slate-500 mb-1.5">NGHĨA CẢ ĐOẠN</div>
-        <p className="text-[14px] text-slate-300 leading-relaxed">{passage.vi}</p>
+      <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-4 py-3 mb-4">
+        <div className="text-[10px] font-bold tracking-wider text-text-muted mb-1.5">NGHĨA CẢ ĐOẠN</div>
+        <p className="text-[14px] text-text-secondary leading-relaxed">{passage.vi}</p>
       </div>
 
       {/* Note từ vựng / kanji */}
       <div className="rounded-xl border border-neon-cyan/20 bg-neon-cyan/[0.04] px-4 py-3 mb-6">
-        <div className="text-[10px] font-bold tracking-wider text-neon-cyan mb-2">
+        <div className="text-[10px] font-bold tracking-wider text-tone-cyan mb-2">
           TỪ VỰNG &amp; NGỮ PHÁP TRONG BÀI
         </div>
         <div className="space-y-2">
           {passage.notes.map((n) => (
             <div key={n.term} className="text-[13px] leading-relaxed">
-              <b className="text-white">{n.term}</b>
-              {n.reading && <span className="text-neon-cyan"> ({n.reading})</span>}
-              <span className="text-slate-400"> — {n.meaning}</span>
-              <span className="text-slate-600 text-[11px]"> · {n.ref}</span>
+              <b className="text-text-primary">{n.term}</b>
+              {n.reading && <span className="text-tone-cyan"> ({n.reading})</span>}
+              <span className="text-text-secondary"> — {n.meaning}</span>
+              <span className="text-text-muted text-[11px]"> · {n.ref}</span>
             </div>
           ))}
         </div>
@@ -601,7 +601,7 @@ function Summary({
       <div className="text-center">
         <button
           onClick={onAgain}
-          className="px-5 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-white hover:bg-neon-violet/25 transition-colors active:scale-95"
+          className="px-5 py-2.5 rounded-xl bg-neon-violet/15 border border-neon-violet/40 text-sm font-medium text-text-primary hover:bg-neon-violet/25 transition-colors active:scale-95"
         >
           <RotateCcw className="w-4 h-4 inline mr-1.5" />
           Gõ lại bài này

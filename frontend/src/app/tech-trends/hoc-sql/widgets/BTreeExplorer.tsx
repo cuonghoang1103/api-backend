@@ -80,9 +80,9 @@ export default function BTreeExplorer() {
   const rootX = W / 2 - 90;
 
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5">
+    <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5">
       <div className="mb-4">
-        <p className="mb-2 text-xs text-slate-400">Chọn một số để tìm trong cây:</p>
+        <p className="mb-2 text-xs text-text-secondary">Chọn một số để tìm trong cây:</p>
         <div className="flex flex-wrap gap-1.5">
           {ALL.map((n) => (
             <button
@@ -92,8 +92,8 @@ export default function BTreeExplorer() {
               className={[
                 'rounded-lg border px-2.5 py-1 font-mono text-xs transition-all active:scale-95',
                 target === n
-                  ? 'border-violet-400/60 bg-violet-500/25 text-white'
-                  : 'border-white/10 bg-white/[0.03] text-slate-400 hover:border-white/25 hover:text-white',
+                  ? 'border-violet-400/60 bg-violet-500/25 text-text-primary'
+                  : 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)] hover:text-text-primary',
               ].join(' ')}
             >
               {n}
@@ -105,8 +105,8 @@ export default function BTreeExplorer() {
             className={[
               'rounded-lg border px-2.5 py-1 font-mono text-xs transition-all active:scale-95',
               target === 44
-                ? 'border-rose-400/60 bg-rose-500/25 text-white'
-                : 'border-rose-400/25 bg-rose-500/[0.06] text-rose-300/80 hover:border-rose-400/50',
+                ? 'border-rose-400/60 bg-rose-500/25 text-text-primary'
+                : 'border-rose-400/25 bg-rose-500/[0.06] text-tone-rose hover:border-rose-400/50',
             ].join(' ')}
             title="Số không có trong cây — xem cây làm gì"
           >
@@ -116,7 +116,7 @@ export default function BTreeExplorer() {
             <button
               type="button"
               onClick={() => setTarget(null)}
-              className="ml-1 inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1 text-xs text-slate-400 transition-all hover:text-white active:scale-95"
+              className="ml-1 inline-flex items-center gap-1 rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2.5 py-1 text-xs text-text-secondary transition-all hover:text-text-primary active:scale-95"
             >
               <RotateCcw className="h-3 w-3" /> Xoá
             </button>
@@ -137,7 +137,7 @@ export default function BTreeExplorer() {
                   y1={rootY + 42}
                   x2={branchX(b.idx) + 70}
                   y2={branchY}
-                  stroke={on ? '#a78bfa' : 'rgba(255,255,255,0.12)'}
+                  stroke={on ? 'var(--tone-violet)' : 'var(--border-light-hover)'}
                   strokeWidth={on ? 2 : 1}
                 />
               );
@@ -153,7 +153,7 @@ export default function BTreeExplorer() {
                   y1={branchY + 42}
                   x2={leafX(i) + leafW / 2}
                   y2={leafY}
-                  stroke={on ? '#a78bfa' : 'rgba(255,255,255,0.12)'}
+                  stroke={on ? 'var(--tone-violet)' : 'var(--border-light-hover)'}
                   strokeWidth={on ? 2 : 1}
                 />
               );
@@ -168,7 +168,7 @@ export default function BTreeExplorer() {
               strokeWidth="1.2"
               strokeDasharray="4 4"
             />
-            <text x={W / 2} y={leafY + 78} textAnchor="middle" fill="#64748b" fontSize="10">
+            <text x={W / 2} y={leafY + 78} textAnchor="middle" fill="var(--text-muted)" fontSize="10">
               ← Doubly Linked List nối các lá: đây là thứ làm range query nhanh →
             </text>
 
@@ -176,13 +176,13 @@ export default function BTreeExplorer() {
             <g>
               <rect
                 x={rootX} y={rootY} width={180} height={42} rx={9}
-                fill={path ? 'rgba(167,139,250,0.22)' : 'rgba(255,255,255,0.04)'}
-                stroke={path ? '#a78bfa' : 'rgba(255,255,255,0.14)'}
+                fill={path ? 'rgba(167,139,250,0.22)' : 'var(--bg-surface-hover)'}
+                stroke={path ? 'var(--tone-violet)' : 'var(--border-light-hover)'}
               />
-              <text x={rootX + 90} y={rootY + 26} textAnchor="middle" fill="#e2e8f0" fontSize="13" fontFamily="ui-monospace, monospace">
+              <text x={rootX + 90} y={rootY + 26} textAnchor="middle" fill="var(--text-primary)" fontSize="13" fontFamily="ui-monospace, monospace">
                 {ROOT_KEYS.join('  ')}
               </text>
-              <text x={rootX - 10} y={rootY + 26} textAnchor="end" fill="#64748b" fontSize="10">Root</text>
+              <text x={rootX - 10} y={rootY + 26} textAnchor="end" fill="var(--text-muted)" fontSize="10">Root</text>
             </g>
 
             {/* Branch */}
@@ -192,16 +192,16 @@ export default function BTreeExplorer() {
                 <g key={`b-${b.idx}`}>
                   <rect
                     x={branchX(b.idx)} y={branchY} width={140} height={42} rx={9}
-                    fill={on ? 'rgba(167,139,250,0.22)' : 'rgba(255,255,255,0.04)'}
-                    stroke={on ? '#a78bfa' : 'rgba(255,255,255,0.14)'}
+                    fill={on ? 'rgba(167,139,250,0.22)' : 'var(--bg-surface-hover)'}
+                    stroke={on ? 'var(--tone-violet)' : 'var(--border-light-hover)'}
                   />
-                  <text x={branchX(b.idx) + 70} y={branchY + 26} textAnchor="middle" fill="#e2e8f0" fontSize="12" fontFamily="ui-monospace, monospace">
+                  <text x={branchX(b.idx) + 70} y={branchY + 26} textAnchor="middle" fill="var(--text-primary)" fontSize="12" fontFamily="ui-monospace, monospace">
                     {b.keys.join('  ')}
                   </text>
                 </g>
               );
             })}
-            <text x={10} y={branchY + 26} fill="#64748b" fontSize="10">Branch</text>
+            <text x={10} y={branchY + 26} fill="var(--text-muted)" fontSize="10">Branch</text>
 
             {/* Leaf */}
             {LEAVES.map((leaf, i) => {
@@ -210,15 +210,15 @@ export default function BTreeExplorer() {
                 <g key={`l-${i}`}>
                   <rect
                     x={leafX(i)} y={leafY} width={leafW} height={42} rx={9}
-                    fill={on ? 'rgba(52,211,153,0.20)' : 'rgba(255,255,255,0.04)'}
-                    stroke={on ? '#34d399' : 'rgba(255,255,255,0.14)'}
+                    fill={on ? 'rgba(52,211,153,0.20)' : 'var(--bg-surface-hover)'}
+                    stroke={on ? 'var(--tone-emerald)' : 'var(--border-light-hover)'}
                   />
                   {leaf.map((k, j) => (
                     <text
                       key={k}
                       x={leafX(i) + 14 + j * 28}
                       y={leafY + 26}
-                      fill={target === k && on ? '#34d399' : '#cbd5e1'}
+                      fill={target === k && on ? 'var(--tone-emerald)' : 'var(--text-secondary)'}
                       fontSize="12"
                       fontWeight={target === k && on ? '800' : '400'}
                       fontFamily="ui-monospace, monospace"
@@ -229,13 +229,13 @@ export default function BTreeExplorer() {
                 </g>
               );
             })}
-            <text x={10} y={leafY + 26} fill="#64748b" fontSize="10">Leaf</text>
+            <text x={10} y={leafY + 26} fill="var(--text-muted)" fontSize="10">Leaf</text>
           </svg>
         </div>
       </div>
 
       {!path && (
-        <p className="mt-3 flex items-center gap-2 text-sm text-slate-500">
+        <p className="mt-3 flex items-center gap-2 text-sm text-text-muted">
           <Search className="h-4 w-4" /> Bấm một số ở trên để xem cây đi tìm nó thế nào.
         </p>
       )}
@@ -243,30 +243,30 @@ export default function BTreeExplorer() {
       {path && (
         <div className="mt-4 space-y-2">
           {path.steps.map((s, i) => (
-            <div key={s.text} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5">
-              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-500/25 text-[10px] font-bold text-violet-300">
+            <div key={s.text} className="flex gap-3 rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-3.5 py-2.5">
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-violet-500/25 text-[10px] font-bold text-tone-violet">
                 {i + 1}
               </span>
-              <p className="text-[13px] leading-relaxed text-slate-300">{s.text}</p>
+              <p className="text-[13px] leading-relaxed text-text-secondary">{s.text}</p>
             </div>
           ))}
           <p
             className={[
               'rounded-xl px-4 py-3 text-sm leading-relaxed',
               path.found
-                ? 'border border-emerald-400/25 bg-emerald-500/10 text-slate-200'
-                : 'border border-rose-400/25 bg-rose-500/10 text-slate-200',
+                ? 'border border-emerald-400/25 bg-emerald-500/10 text-text-primary'
+                : 'border border-rose-400/25 bg-rose-500/10 text-text-primary',
             ].join(' ')}
           >
             {path.found ? (
               <>
-                Tổng cộng <b className="text-emerald-300">3 lần đọc</b> (root + branch + leaf) rồi thêm 1 lần lấy dòng thật.
+                Tổng cộng <b className="text-tone-emerald">3 lần đọc</b> (root + branch + leaf) rồi thêm 1 lần lấy dòng thật.
                 Cây này chỉ có 24 khoá, nhưng cùng độ cao đó với mỗi node chứa 500 khoá thì phủ được{' '}
-                <b className="text-white">125 triệu dòng</b>.
+                <b className="text-text-primary">125 triệu dòng</b>.
               </>
             ) : (
               <>
-                Không tìm thấy — nhưng vẫn chỉ tốn <b className="text-rose-300">3 lần đọc</b> để KẾT LUẬN là không có.
+                Không tìm thấy — nhưng vẫn chỉ tốn <b className="text-tone-rose">3 lần đọc</b> để KẾT LUẬN là không có.
                 Đó cũng là một điểm mạnh: trả lời &quot;không tồn tại&quot; nhanh y như trả lời &quot;có&quot;.
               </>
             )}

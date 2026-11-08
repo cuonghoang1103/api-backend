@@ -18,19 +18,19 @@ const STATUS_META: Record<ProjectFeatureStatus, {
  DONE: {
  vi: 'Hoàn thành',
  en: 'Done',
- pill: 'bg-emerald-500/15 text-emerald-400',
+ pill: 'bg-emerald-500/15 text-tone-emerald',
  icon: CheckCircle2,
  },
  IN_PROGRESS: {
  vi: 'Đang làm',
  en: 'In progress',
- pill: 'bg-yellow-500/15 text-yellow-400',
+ pill: 'bg-yellow-500/15 text-tone-yellow',
  icon: Hammer,
  },
  PLANNED: {
  vi: 'Kế hoạch',
  en: 'Planned',
- pill: 'bg-blue-500/15 text-blue-400',
+ pill: 'bg-blue-500/15 text-tone-blue',
  icon: CircleDashed,
  },
 };
@@ -64,7 +64,7 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  <section className="mt-12">
  <div className="flex items-baseline justify-between mb-6">
  <h2 className="text-lg font-heading font-bold text-text-primary flex items-center gap-2">
- <CheckCircle2 className="w-5 h-5 text-neon-violet" />
+ <CheckCircle2 className="w-5 h-5 text-tone-violet" />
  {L('Tính năng chính', 'Core features')}
  </h2>
  <span className="text-xs text-text-muted">{L(`${total} mục`, `${total} items`)}</span>
@@ -82,7 +82,7 @@ export default function FeatureChecklist({ features }: FeatureChecklistProps) {
  return (
  <div
  key={status}
- className="rounded-2xl border border-darkborder bg-darkcard p-5"
+ className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] p-5"
  >
  <div className="flex items-center justify-between mb-4">
  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${meta.pill}`}>

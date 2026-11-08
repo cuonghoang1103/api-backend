@@ -43,18 +43,18 @@ import {
 } from '@/lib/projectI18n';
 
 const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
- COMPLETED: { bg: 'bg-emerald-500/15', text: 'text-emerald-400' },
- IN_PROGRESS: { bg: 'bg-yellow-500/15', text: 'text-yellow-400' },
- PLANNING: { bg: 'bg-blue-500/15', text: 'text-blue-400' },
- MAINTENANCE: { bg: 'bg-purple-500/15', text: 'text-purple-400' },
- ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-gray-400' },
+ COMPLETED: { bg: 'bg-emerald-500/15', text: 'text-tone-emerald' },
+ IN_PROGRESS: { bg: 'bg-yellow-500/15', text: 'text-tone-yellow' },
+ PLANNING: { bg: 'bg-blue-500/15', text: 'text-tone-blue' },
+ MAINTENANCE: { bg: 'bg-purple-500/15', text: 'text-tone-purple' },
+ ON_HOLD: { bg: 'bg-gray-500/15', text: 'text-text-secondary' },
 };
 
 const DIFFICULTY_COLORS: Record<string, { bg: string; text: string }> = {
- BEGINNER: { bg: 'bg-emerald-500/15', text: 'text-emerald-300' },
- INTERMEDIATE: { bg: 'bg-yellow-500/15', text: 'text-yellow-300' },
- ADVANCED: { bg: 'bg-rose-500/15', text: 'text-rose-300' },
- EXPERT: { bg: 'bg-fuchsia-500/15', text: 'text-fuchsia-300' },
+ BEGINNER: { bg: 'bg-emerald-500/15', text: 'text-tone-emerald' },
+ INTERMEDIATE: { bg: 'bg-yellow-500/15', text: 'text-tone-yellow' },
+ ADVANCED: { bg: 'bg-rose-500/15', text: 'text-tone-rose' },
+ EXPERT: { bg: 'bg-fuchsia-500/15', text: 'text-tone-fuchsia' },
 };
 
 function extractYouTubeId(url: string): string | null {
@@ -109,7 +109,7 @@ const C = {
  primary: '#a855f7',
  secondary: '#ec4899',
  tertiary: '#22d3ee',
- surface: 'rgba(20,15,40,0.5)',
+ surface: 'var(--bg-card)',
  border: 'rgba(168,85,247,0.2)',
 };
 
@@ -233,7 +233,7 @@ export default function ProjectDetailPage() {
 
  if (loading) {
  return (
- <div className="min-h-screen bg-darkbg pt-24 pb-16 px-4 sm:px-6 flex items-center justify-center">
+ <div className="min-h-screen bg-[var(--bg-primary)] pt-24 pb-16 px-4 sm:px-6 flex items-center justify-center">
  <div className="text-center">
  <div className="w-12 h-12 border-2 border-neon-violet border-t-transparent rounded-full animate-spin mx-auto mb-4" />
  <p className="text-text-muted">{L('Đang tải...', 'Loading…')}</p>
@@ -256,7 +256,7 @@ export default function ProjectDetailPage() {
  const hasSchema = Boolean(activeSchemaCode && activeSchemaCode.trim());
 
  return (
- <div className="min-h-screen bg-darkbg">
+ <div className="min-h-screen bg-[var(--bg-primary)]">
  <ReadingProgressBar targetSelector="case-study-content" />
 
  <div className="pt-24 pb-16 px-4 sm:px-6">
@@ -286,7 +286,7 @@ export default function ProjectDetailPage() {
  {labelOf(STATUS_LABELS_I18N, project.status, lang)}
  </span>
  {project.featured && (
- <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-400/15 text-yellow-300">
+ <span className="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-400/15 text-tone-yellow">
  {L('Nổi bật', 'Featured')}
  </span>
  )}
@@ -347,7 +347,7 @@ export default function ProjectDetailPage() {
  {project.startDate && project.endDate && <ChevronRight className="w-3 h-3" />}
  {project.endDate
  ? formatDate(project.endDate, lang)
- : <span className="text-neon-violet">{L('— Hiện tại', '— Present')}</span>}
+ : <span className="text-tone-violet">{L('— Hiện tại', '— Present')}</span>}
  </span>
  )}
  </div>
@@ -359,7 +359,7 @@ export default function ProjectDetailPage() {
  {videoId && (
  <button
  onClick={() => setShowVideo(true)}
- className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-semibold transition-all hover:opacity-90"
+ className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-text-primary text-sm font-semibold transition-all hover:opacity-90"
  style={{ background: 'linear-gradient(135deg, #FF0000 0%, #CC0000 100%)', boxShadow: '0 4px 20px rgba(255,0,0,0.3)' }}
  >
  <PlayIcon />
@@ -383,7 +383,7 @@ export default function ProjectDetailPage() {
  href={project.githubUrl}
  target="_blank"
  rel="noopener noreferrer"
- className="inline-flex items-center gap-2 px-5 py-2.5 bg-darkcard border border-darkborder text-text-primary text-sm font-medium rounded-xl hover:border-neon-indigo/30 transition-colors"
+ className="inline-flex items-center gap-2 px-5 py-2.5 bg-[var(--bg-card)] border border-[var(--border-color)] text-text-primary text-sm font-medium rounded-xl hover:border-neon-indigo/30 transition-colors"
  >
  <Github className="w-4 h-4" />
  {L('Mã nguồn', 'Source code')}
@@ -437,7 +437,7 @@ export default function ProjectDetailPage() {
  whileInView={{ opacity: 1, scale: 1 }}
  viewport={{ once: true, margin: '-50px' }}
  transition={{ delay: i * 0.03, duration: 0.2 }}
- className="px-4 py-2 bg-darkcard border border-darkborder rounded-xl text-sm text-text-secondary hover:text-neon-violet hover:border-neon-violet/30 transition-colors"
+ className="px-4 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl text-sm text-text-secondary hover:text-tone-violet hover:border-neon-violet/30 transition-colors"
  >
  {tech}
  </motion.span>
@@ -469,7 +469,7 @@ export default function ProjectDetailPage() {
  {/* An EN reader on an untranslated project gets told why the
      text below is Vietnamese, instead of quietly wondering. */}
  {showingViFallback && (
- <span className="ml-2 px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-400/10 text-amber-300 border border-amber-400/25">
+ <span className="ml-2 px-2 py-0.5 rounded-md text-[10px] font-medium bg-amber-400/10 text-tone-amber border border-amber-400/25">
  Vietnamese only — English translation not available yet
  </span>
  )}
@@ -544,7 +544,7 @@ export default function ProjectDetailPage() {
  'The fundamentals worth having before you start building',
  )}
  icon={GraduationCap}
- accent="text-cyan-400"
+ accent="text-tone-cyan"
  items={coreKnowledge}
  lang={lang}
  countLabel={L('mục', 'items')}
@@ -556,7 +556,7 @@ export default function ProjectDetailPage() {
  'What makes this project stand out in an application or a share',
  )}
  icon={Trophy}
- accent="text-yellow-400"
+ accent="text-tone-yellow"
  items={portfolioBonus}
  lang={lang}
  countLabel={L('mục', 'items')}
@@ -568,7 +568,7 @@ export default function ProjectDetailPage() {
  'The skills you will actually own once this is running in production',
  )}
  icon={Target}
- accent="text-emerald-400"
+ accent="text-tone-emerald"
  items={completionOutcome}
  lang={lang}
  countLabel={L('mục', 'items')}
@@ -581,7 +581,7 @@ export default function ProjectDetailPage() {
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true, margin: '-50px' }}
  transition={{ duration: 0.4 }}
- className="mt-12 pt-8 border-t border-darkborder"
+ className="mt-12 pt-8 border-t border-[var(--border-color)]"
  >
  <h2 className="text-xl font-heading font-bold text-text-primary mb-6 flex items-center gap-2">
  <Sparkles className="w-5 h-5" style={{ color: C.primary }} />
@@ -592,7 +592,7 @@ export default function ProjectDetailPage() {
  <button
  key={rp.id}
  onClick={() => router.push(`/projects/${rp.slug}`)}
- className="text-left bg-darkcard border border-darkborder rounded-2xl p-5 hover:border-neon-violet/30 transition-all group"
+ className="text-left bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl p-5 hover:border-neon-violet/30 transition-all group"
  >
  {rp.thumbnailUrl && (
  <div className="relative h-32 -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-2xl">
@@ -603,7 +603,7 @@ export default function ProjectDetailPage() {
  />
  </div>
  )}
- <h3 className="font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
+ <h3 className="font-medium text-text-primary group-hover:text-tone-violet transition-colors line-clamp-1">
  {pick(rp.title, rp.titleEn)}
  </h3>
  {(rp.description || rp.descriptionEn) && (
@@ -611,7 +611,7 @@ export default function ProjectDetailPage() {
  )}
  <div className="flex flex-wrap gap-1 mt-3">
  {(Array.isArray(rp.technologies) ? rp.technologies.slice(0, 3) : []).map((t) => (
- <span key={t} className="px-2 py-0.5 bg-neon-indigo/10 text-neon-indigo rounded text-xs">
+ <span key={t} className="px-2 py-0.5 bg-neon-indigo/10 text-tone-indigo rounded text-xs">
  {t}
  </span>
  ))}
@@ -629,20 +629,20 @@ export default function ProjectDetailPage() {
  whileInView={{ opacity: 1, y: 0 }}
  viewport={{ once: true, margin: '-50px' }}
  transition={{ duration: 0.4 }}
- className="mt-10 pt-8 border-t border-darkborder"
+ className="mt-10 pt-8 border-t border-[var(--border-color)]"
  aria-label="Project pagination"
  >
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  {prevProject ? (
  <button
  onClick={() => router.push(`/projects/${prevProject.slug}`)}
- className="text-left p-5 rounded-2xl border border-darkborder bg-darkcard hover:border-neon-violet/30 transition-all group"
+ className="text-left p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-neon-violet/30 transition-all group"
  >
  <span className="text-xs text-text-muted inline-flex items-center gap-1 mb-1">
  <ArrowLeft className="w-3 h-3" />
  {L('Dự án trước', 'Previous project')}
  </span>
- <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
+ <p className="text-sm font-medium text-text-primary group-hover:text-tone-violet transition-colors line-clamp-1">
  {pick(prevProject.title, prevProject.titleEn)}
  </p>
  </button>
@@ -651,13 +651,13 @@ export default function ProjectDetailPage() {
  {nextProject && (
  <button
  onClick={() => router.push(`/projects/${nextProject.slug}`)}
- className="text-right p-5 rounded-2xl border border-darkborder bg-darkcard hover:border-neon-violet/30 transition-all group sm:col-start-2"
+ className="text-right p-5 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-card)] hover:border-neon-violet/30 transition-all group sm:col-start-2"
  >
  <span className="text-xs text-text-muted inline-flex items-center gap-1 mb-1">
  {L('Dự án tiếp theo', 'Next project')}
  <ArrowRight className="w-3 h-3" />
  </span>
- <p className="text-sm font-medium text-text-primary group-hover:text-neon-violet transition-colors line-clamp-1">
+ <p className="text-sm font-medium text-text-primary group-hover:text-tone-violet transition-colors line-clamp-1">
  {pick(nextProject.title, nextProject.titleEn)}
  </p>
  </button>
@@ -678,7 +678,7 @@ export default function ProjectDetailPage() {
  <div className="relative w-full max-w-4xl" onClick={(e) => e.stopPropagation()}>
  <button
  onClick={() => setShowVideo(false)}
- className="absolute -top-10 right-0 text-white/70 hover:text-white text-sm font-medium"
+ className="absolute -top-10 right-0 text-text-secondary hover:text-text-primary text-sm font-medium"
  >
  {L('Đóng', 'Close')}
  </button>
@@ -755,7 +755,7 @@ function ListItemsSection({
  whileInView={{ opacity: 1, x: 0 }}
  viewport={{ once: true, margin: '-30px' }}
  transition={{ duration: 0.25, delay: i * 0.03 }}
- className="flex items-start gap-2 bg-darkcard border border-darkborder rounded-xl px-4 py-3"
+ className="flex items-start gap-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-xl px-4 py-3"
  >
  <CheckCircle2 className={`w-4 h-4 mt-0.5 flex-shrink-0 ${accent}`} />
  <span className="text-sm text-text-primary leading-relaxed">

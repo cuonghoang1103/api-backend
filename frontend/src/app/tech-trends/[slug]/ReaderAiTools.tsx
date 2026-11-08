@@ -96,12 +96,12 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
     return (
       <div className="rounded-2xl border border-neon-violet/30 bg-neon-violet/[0.06] p-5 flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-neon-violet/15 flex items-center justify-center shrink-0">
-          <Lock className="w-5 h-5 text-neon-violet" />
+          <Lock className="w-5 h-5 text-tone-violet" />
         </div>
         <div className="min-w-0">
           <p className="text-sm font-semibold text-text-primary flex items-center gap-1.5">
-            <Sparkles className="w-4 h-4 text-neon-violet" /> Trợ lý AI đọc bài
-            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-violet/20 text-neon-violet">PRO</span>
+            <Sparkles className="w-4 h-4 text-tone-violet" /> Trợ lý AI đọc bài
+            <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-violet/20 text-tone-violet">PRO</span>
           </p>
           <p className="text-xs text-text-secondary mt-1 leading-relaxed">
             Tóm tắt nhanh (TL;DR), hỏi đáp dựa trên blog và giải thích code — dành cho tài khoản Pro.
@@ -121,8 +121,8 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
   return (
     <div className="rounded-2xl border border-neon-violet/30 bg-neon-violet/[0.05] p-5 space-y-4">
       <p className="text-sm font-semibold text-text-primary flex items-center gap-1.5">
-        <Sparkles className="w-4 h-4 text-neon-violet" /> Trợ lý AI
-        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-violet/20 text-neon-violet">PRO</span>
+        <Sparkles className="w-4 h-4 text-tone-violet" /> Trợ lý AI
+        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-neon-violet/20 text-tone-violet">PRO</span>
       </p>
 
       <div className="flex flex-wrap gap-2">
@@ -139,10 +139,10 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
       </div>
 
       {tldr && (
-        <ul className="space-y-1.5 rounded-xl bg-black/20 border border-darkborder p-3">
+        <ul className="space-y-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] p-3">
           {tldr.map((t, i) => (
             <li key={i} className="flex gap-2 text-sm text-text-secondary leading-relaxed">
-              <span className="text-neon-violet shrink-0">•</span>
+              <span className="text-tone-violet shrink-0">•</span>
               <span>{t}</span>
             </li>
           ))}
@@ -150,7 +150,7 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
       )}
 
       {codeExplain && (
-        <div className="rounded-xl bg-black/20 border border-darkborder p-3 text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
+        <div className="rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] p-3 text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">
           {codeExplain}
         </div>
       )}
@@ -166,7 +166,7 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
             onChange={(e) => setQuestion(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') runAsk(); }}
             placeholder="e.g. How do I handle letterboxed video in a feed?"
-            className="flex-1 min-w-0 px-3 py-2 bg-darkcard border border-darkborder rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 transition-all"
+            className="flex-1 min-w-0 px-3 py-2 bg-[var(--bg-card)] border border-[var(--border-color)] rounded-lg text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-neon-violet/50 focus:ring-2 focus:ring-neon-violet/15 transition-all"
           />
           <button onClick={runAsk} disabled={busy === 'ask'} className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-gradient-to-r from-neon-indigo to-neon-violet text-white text-xs font-semibold shadow-neon hover:opacity-90 active:scale-95 disabled:opacity-50 transition-all shrink-0">
             {busy === 'ask' ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
@@ -174,13 +174,13 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
           </button>
         </div>
         {answer && (
-          <div className="rounded-xl bg-black/20 border border-darkborder p-3 space-y-2">
+          <div className="rounded-xl bg-[var(--bg-surface)] border border-[var(--border-color)] p-3 space-y-2">
             <p className="text-sm text-text-secondary leading-relaxed whitespace-pre-wrap">{answer.text}</p>
             {answer.sources.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
                 <span className="text-[11px] text-text-muted">Nguồn:</span>
                 {answer.sources.map((s) => (
-                  <Link key={s.id} href={`/tech-trends/${s.slug}`} className="text-[11px] text-neon-violet hover:underline">
+                  <Link key={s.id} href={`/tech-trends/${s.slug}`} className="text-[11px] text-tone-violet hover:underline">
                     {s.title}
                   </Link>
                 ))}
@@ -197,6 +197,6 @@ export default function ReaderAiTools({ articleId, hasCodeBlock }: { articleId: 
 
 const chip = [
   'inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium',
-  'bg-white/[0.04] text-text-secondary border border-darkborder',
-  'hover:text-neon-violet hover:border-neon-violet/30 disabled:opacity-50 active:scale-95 transition-all',
+  'bg-[var(--bg-surface-hover)] text-text-secondary border border-[var(--border-color)]',
+  'hover:text-tone-violet hover:border-neon-violet/30 disabled:opacity-50 active:scale-95 transition-all',
 ].join(' ');

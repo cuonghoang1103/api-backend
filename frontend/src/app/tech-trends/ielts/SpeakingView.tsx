@@ -41,11 +41,11 @@ export default function SpeakingView({
       <div className="grid gap-3 sm:grid-cols-2 mb-6">
         {SPEAKING_RULES.map((r, i) => (
           <div key={i} className="rounded-xl border border-violet-500/25 bg-violet-500/[0.07] p-4">
-            <p className="flex items-start gap-2 text-violet-200 text-sm font-semibold">
+            <p className="flex items-start gap-2 text-tone-violet text-sm font-semibold">
               <Lightbulb className="w-4 h-4 shrink-0 mt-0.5" />
               {r.title}
             </p>
-            <p className="text-slate-300 text-sm mt-1.5 leading-relaxed">{r.body}</p>
+            <p className="text-text-secondary text-sm mt-1.5 leading-relaxed">{r.body}</p>
           </div>
         ))}
       </div>
@@ -59,35 +59,35 @@ export default function SpeakingView({
             onClick={() => setId(t.id)}
             className={`shrink-0 px-3 py-2 rounded-xl border text-sm whitespace-nowrap transition-all active:scale-95 ${
               t.id === id
-                ? 'bg-sky-500/20 border-sky-400/40 text-white'
-                : 'bg-white/[0.03] border-white/10 text-slate-400 hover:text-white'
+                ? 'bg-sky-500/20 border-sky-400/40 text-text-primary'
+                : 'bg-[var(--bg-surface-hover)] border-[var(--border-light)] text-text-secondary hover:text-text-primary'
             }`}
           >
-            <span className="text-[10px] font-bold text-sky-400 mr-1.5">{t.part}</span>
+            <span className="text-[10px] font-bold text-tone-sky mr-1.5">{t.part}</span>
             {t.titleVi}
           </button>
         ))}
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-4 sm:p-5 mb-4">
+      <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 sm:p-5 mb-4">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-sky-300">{topic.part}</span>
-          <span className="text-xs text-slate-500">{topic.questions.length} câu</span>
+          <span className="text-xs font-bold px-2 py-0.5 rounded bg-sky-500/20 text-tone-sky">{topic.part}</span>
+          <span className="text-xs text-text-muted">{topic.questions.length} câu</span>
         </div>
-        <h3 className="text-xl font-bold text-white mt-2">{topic.title}</h3>
-        <p className="text-slate-400 text-sm mt-0.5">{topic.titleVi}</p>
+        <h3 className="text-xl font-bold text-text-primary mt-2">{topic.title}</h3>
+        <p className="text-text-secondary text-sm mt-0.5">{topic.titleVi}</p>
 
         {topic.phrases && topic.phrases.length > 0 && (
           <div className="mt-4">
-            <p className="text-xs text-slate-500 mb-2">Cụm mở câu dùng cho cả chủ đề</p>
+            <p className="text-xs text-text-muted mb-2">Cụm mở câu dùng cho cả chủ đề</p>
             <div className="flex flex-wrap gap-2">
               {topic.phrases.map((p, i) => (
                 <span
                   key={i}
-                  className="text-xs rounded-lg border border-white/10 bg-white/[0.03] px-2.5 py-1.5"
+                  className="text-xs rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] px-2.5 py-1.5"
                 >
-                  <b className="text-white">{p.en}</b>
-                  <span className="text-slate-500 ml-1.5">{p.vi}</span>
+                  <b className="text-text-primary">{p.en}</b>
+                  <span className="text-text-muted ml-1.5">{p.vi}</span>
                 </span>
               ))}
             </div>
@@ -98,16 +98,16 @@ export default function SpeakingView({
       {/* Các câu hỏi */}
       <div className="space-y-4">
         {topic.questions.map((q, i) => (
-          <div key={i} className="rounded-2xl border border-white/10 bg-white/[0.02] overflow-hidden">
+          <div key={i} className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] overflow-hidden">
             {/* Câu hỏi */}
-            <div className="p-4 border-b border-white/10 bg-white/[0.02]">
+            <div className="p-4 border-b border-[var(--border-light)] bg-[var(--bg-surface-hover)]">
               <div className="flex items-start gap-2">
-                <span className="shrink-0 mt-0.5 text-xs font-bold text-sky-400 bg-sky-500/15 px-2 py-0.5 rounded">
+                <span className="shrink-0 mt-0.5 text-xs font-bold text-tone-sky bg-sky-500/15 px-2 py-0.5 rounded">
                   HỎI
                 </span>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-white leading-relaxed">{q.q}</p>
-                  <p className="text-slate-400 text-sm mt-1">{q.qVi}</p>
+                  <p className="font-semibold text-text-primary leading-relaxed">{q.q}</p>
+                  <p className="text-text-secondary text-sm mt-1">{q.qVi}</p>
                 </div>
                 {supported && (
                   <button
@@ -115,7 +115,7 @@ export default function SpeakingView({
                     onClick={() => speak(q.q)}
                     aria-label={`Nghe câu hỏi: ${q.q}`}
                     className={`shrink-0 p-1.5 rounded-lg transition-all active:scale-90 ${
-                      current === q.q ? 'bg-violet-500/30 text-violet-300' : 'text-slate-500 hover:text-violet-300'
+                      current === q.q ? 'bg-violet-500/30 text-tone-violet' : 'text-text-muted hover:text-tone-violet'
                     }`}
                   >
                     <Volume2 className="w-4 h-4" />
@@ -125,18 +125,18 @@ export default function SpeakingView({
             </div>
 
             {/* Câu cụt */}
-            <div className="p-4 border-b border-white/10 bg-rose-500/[0.05]">
-              <p className="flex items-center gap-1.5 text-rose-300 text-xs font-semibold mb-1.5">
+            <div className="p-4 border-b border-[var(--border-light)] bg-rose-500/[0.05]">
+              <p className="flex items-center gap-1.5 text-tone-rose text-xs font-semibold mb-1.5">
                 <ThumbsDown className="w-3.5 h-3.5" />
                 Trả lời kiểu này thì mất điểm
               </p>
-              <p className="text-slate-300 text-sm leading-relaxed italic whitespace-pre-line">{q.weak}</p>
+              <p className="text-text-secondary text-sm leading-relaxed italic whitespace-pre-line">{q.weak}</p>
             </div>
 
             {/* Câu đủ */}
             <div className="p-4 bg-emerald-500/[0.05]">
               <div className="flex items-start justify-between gap-2">
-                <p className="flex items-center gap-1.5 text-emerald-300 text-xs font-semibold mb-1.5">
+                <p className="flex items-center gap-1.5 text-tone-emerald text-xs font-semibold mb-1.5">
                   <ThumbsUp className="w-3.5 h-3.5" />
                   Trả lời như thế này
                 </p>
@@ -146,16 +146,16 @@ export default function SpeakingView({
                     onClick={() => speak(q.good)}
                     aria-label="Nghe câu trả lời mẫu"
                     className={`shrink-0 p-1.5 rounded-lg transition-all active:scale-90 ${
-                      current === q.good ? 'bg-violet-500/30 text-violet-300' : 'text-slate-500 hover:text-violet-300'
+                      current === q.good ? 'bg-violet-500/30 text-tone-violet' : 'text-text-muted hover:text-tone-violet'
                     }`}
                   >
                     <Volume2 className="w-4 h-4" />
                   </button>
                 )}
               </div>
-              <p className="text-slate-100 text-sm leading-relaxed whitespace-pre-line">{q.good}</p>
-              <p className="text-slate-500 text-xs mt-2 leading-relaxed whitespace-pre-line">{q.goodVi}</p>
-              <p className="mt-3 pt-3 border-t border-emerald-500/20 text-xs text-emerald-200/90 leading-relaxed">
+              <p className="text-text-primary text-sm leading-relaxed whitespace-pre-line">{q.good}</p>
+              <p className="text-text-muted text-xs mt-2 leading-relaxed whitespace-pre-line">{q.goodVi}</p>
+              <p className="mt-3 pt-3 border-t border-emerald-500/20 text-xs text-tone-emerald leading-relaxed">
                 <b>Vì sao câu sau ăn điểm hơn:</b> {q.why}
               </p>
             </div>
@@ -164,7 +164,7 @@ export default function SpeakingView({
       </div>
 
       <div className="mt-6 rounded-2xl border border-amber-500/25 bg-amber-500/[0.06] p-4 sm:p-5">
-        <p className="flex items-center gap-2 text-amber-300 text-sm font-semibold mb-2">
+        <p className="flex items-center gap-2 text-tone-amber text-sm font-semibold mb-2">
           <Mic className="w-4 h-4" />
           Cách luyện với những câu này
         </p>
@@ -175,8 +175,8 @@ export default function SpeakingView({
             'Viết lại câu trả lời của RIÊNG bạn (thông tin thật của bạn), đừng học thuộc câu mẫu. Giám khảo nhận ra câu học thuộc rất nhanh.',
             'Thu âm, nghe lại, đếm số lần dừng quá 3 giây. Lặp cho tới khi dừng dưới 3 lần.',
           ].map((s, i) => (
-            <li key={i} className="text-slate-200 text-sm leading-relaxed flex gap-2">
-              <span className="text-amber-400 shrink-0">{i + 1}.</span>
+            <li key={i} className="text-text-primary text-sm leading-relaxed flex gap-2">
+              <span className="text-tone-amber shrink-0">{i + 1}.</span>
               <span>{s}</span>
             </li>
           ))}

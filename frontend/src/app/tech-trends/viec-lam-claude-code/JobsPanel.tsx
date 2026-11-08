@@ -19,10 +19,10 @@ import type { Tier } from './data';
 type Filter = 'all' | Tier | 'fresh' | 'pay';
 
 const TIER_STYLE: Record<Tier, string> = {
-  A: 'bg-emerald-500/15 text-emerald-300 ring-emerald-500/30',
-  B: 'bg-amber-500/15 text-amber-300 ring-amber-500/30',
-  C: 'bg-rose-500/15 text-rose-300 ring-rose-500/30',
-  D: 'bg-slate-500/15 text-slate-300 ring-slate-500/30',
+  A: 'bg-emerald-500/15 text-tone-emerald ring-emerald-500/30',
+  B: 'bg-amber-500/15 text-tone-amber ring-amber-500/30',
+  C: 'bg-rose-500/15 text-tone-rose ring-rose-500/30',
+  D: 'bg-slate-500/15 text-text-secondary ring-slate-500/30',
 };
 
 /** "hôm qua" / "12 ngày" / "3 tháng" — gọn hơn ngày tháng đầy đủ. */
@@ -65,35 +65,35 @@ export default function JobsPanel() {
   return (
     <div className="space-y-5">
       <div className="max-w-2xl">
-        <h2 className="text-lg font-bold text-white">Đủ {STATS.jobs} việc</h2>
-        <p className="mt-1 text-sm leading-relaxed text-slate-400">
+        <h2 className="text-lg font-bold text-text-primary">Đủ {STATS.jobs} việc</h2>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
           Bấm tên công ty để mở tin gốc — link trỏ thẳng về HackerNews, Greenhouse, RemoteOK hoặc
           WeWorkRemotely, không qua aitmpl. Tìm được cả khi bỏ dấu và bằng tiếng Việt: thử{' '}
-          <span className="text-slate-300">sài gòn</span>,{' '}
-          <span className="text-slate-300">sai gon</span>,{' '}
-          <span className="text-slate-300">toàn cầu</span>,{' '}
-          <span className="text-slate-300">từ xa</span>.
+          <span className="text-text-secondary">sài gòn</span>,{' '}
+          <span className="text-text-secondary">sai gon</span>,{' '}
+          <span className="text-text-secondary">toàn cầu</span>,{' '}
+          <span className="text-text-secondary">từ xa</span>.
         </p>
       </div>
 
       {/* Tìm kiếm + lọc */}
       <div className="space-y-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" />
           <input
             type="search"
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="search company, role, location…"
             aria-label="Tìm trong danh sách việc"
-            className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-2.5 pl-9 pr-9 text-sm text-slate-100 outline-none transition-colors placeholder:text-slate-500 focus:border-emerald-500/40"
+            className="w-full rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] py-2.5 pl-9 pr-9 text-sm text-text-primary outline-none transition-colors placeholder:text-text-muted focus:border-emerald-500/40"
           />
           {q && (
             <button
               type="button"
               onClick={() => setQ('')}
               aria-label="Xoá ô tìm"
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-1 text-slate-500 transition-colors hover:text-slate-200"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-lg p-1 text-text-muted transition-colors hover:text-text-primary"
             >
               <X className="h-4 w-4" />
             </button>
@@ -110,8 +110,8 @@ export default function JobsPanel() {
               className={[
                 'rounded-xl px-3 py-1.5 text-[13px] transition-colors',
                 filter === id
-                  ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30'
-                  : 'text-slate-400 hover:bg-white/5 hover:text-slate-200',
+                  ? 'bg-emerald-500/15 text-tone-emerald ring-1 ring-emerald-500/30'
+                  : 'text-text-secondary hover:bg-[var(--bg-surface-hover)] hover:text-text-primary',
               ].join(' ')}
             >
               {label}
@@ -122,21 +122,21 @@ export default function JobsPanel() {
 
       {/* Nhắc nghĩa của nhóm đang lọc */}
       {activeTier && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.03] p-3.5">
-          <div className="text-sm font-semibold text-white">
+        <div className="rounded-xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3.5">
+          <div className="text-sm font-semibold text-text-primary">
             {activeTier.short} — {activeTier.label}
           </div>
-          <p className="mt-1 text-[13px] leading-relaxed text-slate-400">{activeTier.desc}</p>
+          <p className="mt-1 text-[13px] leading-relaxed text-text-secondary">{activeTier.desc}</p>
         </div>
       )}
 
-      <div className="text-xs tabular-nums text-slate-500">
+      <div className="text-xs tabular-nums text-text-muted">
         {list.length} / {STATS.jobs} tin
       </div>
 
       {/* Danh sách */}
       {list.length === 0 ? (
-        <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-10 text-center text-sm text-slate-500">
+        <div className="rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-10 text-center text-sm text-text-muted">
           Không có tin nào khớp.
         </div>
       ) : (
@@ -147,7 +147,7 @@ export default function JobsPanel() {
               href={j.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition-colors hover:border-white/25 hover:bg-white/[0.05]"
+              className="group block rounded-2xl border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-4 transition-colors hover:border-[var(--border-light-hover)] hover:bg-[var(--bg-surface-hover)]"
             >
               <div className="flex items-start gap-3">
                 <span
@@ -163,23 +163,23 @@ export default function JobsPanel() {
                       không hạ được chiều rộng tối thiểu của flex item nên trên màn
                       375px nó vẫn đẩy trang tràn ngang; `anywhere` thì có. */}
                   <div className="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-1">
-                    <span className="min-w-0 font-semibold text-white transition-colors [overflow-wrap:anywhere] group-hover:text-emerald-300">
+                    <span className="min-w-0 font-semibold text-text-primary transition-colors [overflow-wrap:anywhere] group-hover:text-tone-emerald">
                       {j.company}
                     </span>
-                    <span className="min-w-0 text-sm text-slate-400 [overflow-wrap:anywhere]">
+                    <span className="min-w-0 text-sm text-text-secondary [overflow-wrap:anywhere]">
                       {j.position}
                     </span>
                     {j.salary && (
-                      <span className="rounded-md bg-emerald-500/10 px-1.5 py-px text-[11px] tabular-nums text-emerald-300">
+                      <span className="rounded-md bg-emerald-500/10 px-1.5 py-px text-[11px] tabular-nums text-tone-emerald">
                         {j.salary}
                       </span>
                     )}
                   </div>
 
-                  <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-slate-500">
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-[11px] text-text-muted">
                     <span>{j.location}</span>
                     <span className="text-slate-700">·</span>
-                    <span className={j.ageDays > 90 ? 'text-rose-400/80' : ''}>
+                    <span className={j.ageDays > 90 ? 'text-tone-rose' : ''}>
                       {ageLabel(j.ageDays)}
                     </span>
                     <span className="text-slate-700">·</span>
@@ -187,7 +187,7 @@ export default function JobsPanel() {
                     {j.remote && (
                       <>
                         <span className="text-slate-700">·</span>
-                        <span className="text-sky-400/80">từ xa</span>
+                        <span className="text-tone-sky">từ xa</span>
                       </>
                     )}
                   </div>
@@ -197,7 +197,7 @@ export default function JobsPanel() {
                       không có khoảng trắng thì `line-clamp` không cứu được, và
                       trên màn 375px nó đẩy cả trang tràn ngang. */}
                   {j.excerpt && (
-                    <p className="mt-2 line-clamp-2 break-words text-[13px] leading-relaxed text-slate-500">
+                    <p className="mt-2 line-clamp-2 break-words text-[13px] leading-relaxed text-text-muted">
                       {j.excerpt}…
                     </p>
                   )}
@@ -207,7 +207,7 @@ export default function JobsPanel() {
                       {j.tags.slice(0, 6).map((t) => (
                         <span
                           key={t}
-                          className="rounded bg-white/[0.06] px-1.5 py-px text-[10px] text-slate-500"
+                          className="rounded bg-[var(--bg-surface-hover)] px-1.5 py-px text-[10px] text-text-muted"
                         >
                           {t}
                         </span>
@@ -216,16 +216,16 @@ export default function JobsPanel() {
                   )}
                 </div>
 
-                <ExternalLink className="mt-1 h-3.5 w-3.5 shrink-0 text-slate-600 transition-colors group-hover:text-slate-300" />
+                <ExternalLink className="mt-1 h-3.5 w-3.5 shrink-0 text-text-muted transition-colors group-hover:text-text-secondary" />
               </div>
             </a>
           ))}
         </div>
       )}
 
-      <p className="text-xs leading-relaxed text-slate-600">
+      <p className="text-xs leading-relaxed text-text-muted">
         Nhãn công nghệ ở cuối mỗi tin là nhãn GỐC của aitmpl và{' '}
-        <span className="text-slate-500">không đáng tin</span> — đối chiếu 20 nhãn với JD thật thì 14
+        <span className="text-text-muted">không đáng tin</span> — đối chiếu 20 nhãn với JD thật thì 14
         nhãn không hề xuất hiện. Giữ lại để bạn đối chiếu, đừng dùng để lọc. Tin tuyển dụng thay đổi
         liên tục: luôn bấm vào link gốc trước khi nộp.
       </p>

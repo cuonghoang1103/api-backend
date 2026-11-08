@@ -54,7 +54,7 @@ export default function ProjectsSkeleton({ count = 9 }: ProjectsSkeletonProps) {
  {/* Spacer pushes the footer down so card heights match. */}
  <div className="flex-1" />
  {/* Action row. */}
- <div className="flex gap-2 pt-3 border-t border-white/[0.04]">
+ <div className="flex gap-2 pt-3 border-t border-[var(--border-light)]">
  <div className="shimmer-track h-9 flex-1 rounded-lg" />
  <div className="shimmer-track h-9 w-9 rounded-lg" />
  <div className="shimmer-track h-9 w-9 rounded-lg" />

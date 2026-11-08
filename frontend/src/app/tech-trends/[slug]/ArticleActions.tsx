@@ -90,8 +90,8 @@ export default function ArticleActions({
         className={[
           'inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border transition-all active:scale-95',
           mounted && bookmarked
-            ? 'bg-neon-violet/20 text-neon-violet border-neon-violet/30'
-            : 'bg-white/[0.04] text-text-secondary border-darkborder hover:text-text-primary hover:border-neon-violet/30',
+            ? 'bg-neon-violet/20 text-tone-violet border-neon-violet/30'
+            : 'bg-[var(--bg-surface-hover)] text-text-secondary border-[var(--border-color)] hover:text-text-primary hover:border-neon-violet/30',
         ].join(' ')}
         aria-label={bookmarked ? 'Bỏ lưu' : 'Lưu bài viết'}
       >
@@ -100,10 +100,10 @@ export default function ArticleActions({
       </button>
       <button
         onClick={share}
-        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border border-darkborder bg-white/[0.04] text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-all active:scale-95"
+        className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium border border-[var(--border-color)] bg-[var(--bg-surface-hover)] text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-all active:scale-95"
         aria-label="Chia sẻ"
       >
-        {copied ? <Check className="w-4 h-4 text-neon-emerald" /> : <Share2 className="w-4 h-4" />}
+        {copied ? <Check className="w-4 h-4 text-tone-emerald" /> : <Share2 className="w-4 h-4" />}
         <span>{copied ? 'Đã sao chép' : 'Chia sẻ'}</span>
       </button>
     </div>

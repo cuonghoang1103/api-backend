@@ -137,10 +137,10 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
   // thấy" nhẹ; metadata ở trên đã gắn noindex nên Google bỏ trang này.
   if (!article) {
     return (
-      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center" style={{ background: '#0a0a0f' }}>
-        <p className="text-2xl font-bold text-white">Không tìm thấy bài viết</p>
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 px-6 text-center" style={{ background: 'var(--bg-primary)' }}>
+        <p className="text-2xl font-bold text-text-primary">Không tìm thấy bài viết</p>
         <p className="max-w-md text-text-muted">Bài viết này không tồn tại ở đây (có thể đã chuyển sang mục khác).</p>
-        <Link href="/tech-trends" className="mt-2 rounded-lg border border-darkborder px-4 py-2 text-sm text-neon-violet transition-colors hover:bg-white/5">
+        <Link href="/tech-trends" className="mt-2 rounded-lg border border-[var(--border-color)] px-4 py-2 text-sm text-tone-violet transition-colors hover:bg-[var(--bg-surface-hover)]">
           Xem tất cả bài viết
         </Link>
       </div>
@@ -169,7 +169,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-24" style={{ background: '#0a0a0f' }}>
+    <div className="min-h-screen pt-24 pb-24" style={{ background: 'var(--bg-primary)' }}>
       <ReadingProgress />
       <script
         type="application/ld+json"
@@ -185,7 +185,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
       <article className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb / back */}
         <nav className="mb-6 text-sm text-text-muted flex items-center gap-1.5">
-          <Link href="/tech-trends" className="hover:text-neon-violet transition-colors">
+          <Link href="/tech-trends" className="hover:text-tone-violet transition-colors">
             Blog
           </Link>
           <span>/</span>
@@ -193,12 +193,12 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
         </nav>
 
         {/* Cover */}
-        <div className="relative w-full overflow-hidden rounded-2xl border border-darkborder aspect-[3/1] mb-8">
+        <div className="relative w-full overflow-hidden rounded-2xl border border-[var(--border-color)] aspect-[3/1] mb-8">
           {article.coverImageUrl ? (
             <>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={anhTuyetDoi(article.coverImageUrl)} alt={article.title} className="absolute inset-0 w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0f] via-[#0a0a0f]/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent" />
             </>
           ) : (
             <>
@@ -207,7 +207,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
               <div className="absolute inset-0 flex items-center justify-center text-8xl select-none">{displayCover}</div>
             </>
           )}
-          <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-black/40 text-white border border-white/10 backdrop-blur-md">
+          <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[var(--bg-surface)] text-text-primary border border-[var(--border-light)] backdrop-blur-md">
             <span>{cat.emoji}</span>
             <span>{cat.label}</span>
           </span>
@@ -246,7 +246,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
               could mistake for original reporting. */}
           {article.kind === 'NEWS' && (
             <div className="mt-5 flex flex-wrap items-center gap-2 rounded-xl border border-neon-violet/20 bg-neon-violet/5 px-4 py-3">
-              <span className="text-sm font-semibold text-neon-violet">📰 Bản tin AI tổng hợp</span>
+              <span className="text-sm font-semibold text-tone-violet">📰 Bản tin AI tổng hợp</span>
               <span className="text-xs text-text-secondary">
                 Viết tự động từ {article.sources?.length ?? 0} thông báo chính thức. Mỗi mục đều dẫn
                 link tới bài gốc — hãy đọc nguồn khi cần chính xác tuyệt đối.
@@ -265,22 +265,22 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
 
             {/* Code comparison (FixBug) */}
             {article.codeBlock && (
-              <div className="mb-8 rounded-xl border border-darkborder overflow-hidden bg-[#0a0c14]">
+              <div className="mb-8 rounded-xl border border-[var(--border-color)] overflow-hidden bg-[#0a0c14]">
                 <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-darkborder">
                   <div>
-                    <div className="px-3 py-2 border-b border-darkborder bg-red-500/5 text-[11px] font-semibold text-neon-red uppercase tracking-wider">
+                    <div className="px-3 py-2 border-b border-[var(--border-color)] bg-red-500/5 text-[11px] font-semibold text-tone-red uppercase tracking-wider">
                       Before · Error <span className="ml-1 font-mono text-text-muted normal-case">{article.codeBlock.before.lang}</span>
                     </div>
                     <pre className="p-3 text-xs font-mono text-text-secondary overflow-x-auto"><code>{article.codeBlock.before.lines.join('\n')}</code></pre>
                   </div>
                   <div>
-                    <div className="px-3 py-2 border-b border-darkborder bg-emerald-500/5 text-[11px] font-semibold text-neon-emerald uppercase tracking-wider">
+                    <div className="px-3 py-2 border-b border-[var(--border-color)] bg-emerald-500/5 text-[11px] font-semibold text-tone-emerald uppercase tracking-wider">
                       After · Solution <span className="ml-1 font-mono text-text-muted normal-case">{article.codeBlock.after.lang}</span>
                     </div>
                     <pre className="p-3 text-xs font-mono text-text-secondary overflow-x-auto"><code>{article.codeBlock.after.lines.join('\n')}</code></pre>
                   </div>
                 </div>
-                <div className="px-3 py-2.5 bg-neon-violet/5 border-t border-darkborder text-xs text-text-secondary">
+                <div className="px-3 py-2.5 bg-neon-violet/5 border-t border-[var(--border-color)] text-xs text-text-secondary">
                   <span className="font-semibold text-text-primary">Takeaway:</span> {article.codeBlock.takeaway}
                 </div>
               </div>
@@ -295,12 +295,12 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
 
             {/* Tags */}
             {article.tags.length > 0 && (
-              <div className="mt-10 pt-6 border-t border-darkborder flex flex-wrap gap-2">
+              <div className="mt-10 pt-6 border-t border-[var(--border-color)] flex flex-wrap gap-2">
                 {article.tags.map((t) => (
                   <Link
                     key={t}
                     href={`/tech-trends?q=${encodeURIComponent(t)}`}
-                    className="px-3 py-1 rounded-lg text-xs font-medium bg-white/[0.04] text-text-secondary border border-white/[0.06] hover:text-neon-violet hover:border-neon-violet/30 transition-colors"
+                    className="px-3 py-1 rounded-lg text-xs font-medium bg-[var(--bg-surface-hover)] text-text-secondary border border-[var(--border-light)] hover:text-tone-violet hover:border-neon-violet/30 transition-colors"
                   >
                     #{t}
                   </Link>
@@ -321,13 +321,13 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
               */}
               <div className="sticky top-24 flex max-h-[calc(100vh-8rem)] flex-col">
                 <p className="text-xs font-semibold text-text-muted uppercase tracking-wider mb-3 shrink-0">Mục lục</p>
-                <nav className="space-y-1 border-l border-darkborder overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin]">
+                <nav className="space-y-1 border-l border-[var(--border-color)] overflow-y-auto overscroll-contain pr-1 [scrollbar-width:thin]">
                   {article.toc.map((item, i) => (
                     <a
                       key={`${item.id}-${i}`}
                       href={`#${item.id}`}
                       className={[
-                        'block py-1 text-sm text-text-muted hover:text-neon-violet transition-colors border-l-2 border-transparent hover:border-neon-violet -ml-px',
+                        'block py-1 text-sm text-text-muted hover:text-tone-violet transition-colors border-l-2 border-transparent hover:border-neon-violet -ml-px',
                         item.level === 1 ? 'pl-3 font-medium' : item.level === 2 ? 'pl-5' : 'pl-7 text-[13px]',
                       ].join(' ')}
                     >
@@ -342,7 +342,7 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
 
         {/* Related articles — internal links (SEO + reader retention) */}
         {related.length > 0 && (
-          <section className="mt-16 pt-10 border-t border-darkborder">
+          <section className="mt-16 pt-10 border-t border-[var(--border-color)]">
             <h2 className="text-xl font-heading font-semibold text-text-primary mb-5">Bài liên quan</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {related.map((r) => {
@@ -351,9 +351,9 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
                   <Link
                     key={r.id}
                     href={`/tech-trends/${r.slug}`}
-                    className="group flex gap-3 p-4 rounded-2xl border border-darkborder bg-darkcard/60 hover:border-neon-violet/40 transition-all"
+                    className="group flex gap-3 p-4 rounded-2xl border border-[var(--border-color)] bg-[var(--bg-glass)] hover:border-neon-violet/40 transition-all"
                   >
-                    <div className="shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-darkbg border border-darkborder flex items-center justify-center">
+                    <div className="shrink-0 w-12 h-12 rounded-xl overflow-hidden bg-[var(--bg-primary)] border border-[var(--border-color)] flex items-center justify-center">
                       {r.coverImageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={anhTuyetDoi(r.coverImageUrl)} alt="" className="w-full h-full object-cover" />
@@ -362,8 +362,8 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
                       )}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs text-neon-violet mb-0.5">{rc.label}</p>
-                      <p className="text-sm font-semibold text-text-primary leading-snug line-clamp-2 group-hover:text-neon-violet transition-colors">
+                      <p className="text-xs text-tone-violet mb-0.5">{rc.label}</p>
+                      <p className="text-sm font-semibold text-text-primary leading-snug line-clamp-2 group-hover:text-tone-violet transition-colors">
                         {r.title}
                       </p>
                       <p className="text-xs text-text-muted mt-1 line-clamp-1">{r.summary}</p>
@@ -381,10 +381,10 @@ export default async function TechTrendArticlePage({ params }: PageProps) {
         </div>
 
         {/* Back to index */}
-        <div className="mt-14 pt-8 border-t border-darkborder">
+        <div className="mt-14 pt-8 border-t border-[var(--border-color)]">
           <Link
             href="/tech-trends"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.04] border border-darkborder text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-all"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[var(--bg-surface-hover)] border border-[var(--border-color)] text-sm text-text-secondary hover:text-text-primary hover:border-neon-violet/30 transition-all"
           >
             ← Xem tất cả bài viết
           </Link>

@@ -21,18 +21,18 @@ export default function QuizBlock({
   return (
     <div className="my-6 overflow-hidden rounded-2xl border border-violet-400/25 bg-violet-500/[0.05]">
       <div className="flex items-start gap-2.5 border-b border-violet-400/20 px-4 py-3">
-        <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-violet-300" />
-        <p className="text-[14.5px] font-semibold leading-relaxed text-slate-100">{md(q)}</p>
+        <HelpCircle className="mt-0.5 h-4 w-4 shrink-0 text-tone-violet" />
+        <p className="text-[14.5px] font-semibold leading-relaxed text-text-primary">{md(q)}</p>
       </div>
 
       <div className="space-y-1.5 p-3">
         {options.map((opt, i) => {
           const isAnswer = i === answer;
           const isPicked = i === picked;
-          let cls = 'border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/25 hover:bg-white/[0.06]';
-          if (done && isAnswer) cls = 'border-emerald-400/50 bg-emerald-500/15 text-white';
-          else if (done && isPicked) cls = 'border-rose-400/50 bg-rose-500/15 text-white';
-          else if (done) cls = 'border-white/[0.07] bg-white/[0.02] text-slate-500';
+          let cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-secondary hover:border-[var(--border-light-hover)] hover:bg-[var(--bg-surface-hover)]';
+          if (done && isAnswer) cls = 'border-emerald-400/50 bg-emerald-500/15 text-text-primary';
+          else if (done && isPicked) cls = 'border-rose-400/50 bg-rose-500/15 text-text-primary';
+          else if (done) cls = 'border-[var(--border-light)] bg-[var(--bg-surface-hover)] text-text-muted';
 
           return (
             <button
@@ -47,14 +47,14 @@ export default function QuizBlock({
                   'mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-bold',
                   done && isAnswer ? 'bg-emerald-400 text-slate-900'
                     : done && isPicked ? 'bg-rose-400 text-slate-900'
-                      : 'bg-white/10 text-slate-400',
+                      : 'bg-[var(--bg-surface-active)] text-text-secondary',
                 ].join(' ')}
               >
                 {String.fromCharCode(65 + i)}
               </span>
               <span className="min-w-0 flex-1">{md(opt)}</span>
-              {done && isAnswer && <CheckCircle2 className="mt-px h-4 w-4 shrink-0 text-emerald-400" />}
-              {done && isPicked && !isAnswer && <XCircle className="mt-px h-4 w-4 shrink-0 text-rose-400" />}
+              {done && isAnswer && <CheckCircle2 className="mt-px h-4 w-4 shrink-0 text-tone-emerald" />}
+              {done && isPicked && !isAnswer && <XCircle className="mt-px h-4 w-4 shrink-0 text-tone-rose" />}
             </button>
           );
         })}
@@ -62,10 +62,10 @@ export default function QuizBlock({
 
       {done && (
         <div className="border-t border-violet-400/20 px-4 py-3.5">
-          <p className={`mb-1.5 text-sm font-bold ${correct ? 'text-emerald-300' : 'text-amber-300'}`}>
+          <p className={`mb-1.5 text-sm font-bold ${correct ? 'text-tone-emerald' : 'text-tone-amber'}`}>
             {correct ? 'Chính xác.' : 'Chưa đúng — đọc kỹ chỗ này:'}
           </p>
-          <p className="text-[14px] leading-relaxed text-slate-300">{md(explain)}</p>
+          <p className="text-[14px] leading-relaxed text-text-secondary">{md(explain)}</p>
         </div>
       )}
     </div>

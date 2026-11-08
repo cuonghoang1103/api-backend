@@ -10,7 +10,7 @@ export default function Loading() {
       <ProfileHeaderSkeleton />
 
       {/* Tabs placeholder */}
-      <div className="mt-8 flex gap-2 border-b border-white/5 pb-2">
+      <div className="mt-8 flex gap-2 border-b border-[var(--border-light)] pb-2">
         <div className="shimmer-track h-9 w-24 rounded-lg" />
         <div className="shimmer-track h-9 w-24 rounded-lg" />
         <div className="shimmer-track h-9 w-24 rounded-lg" />

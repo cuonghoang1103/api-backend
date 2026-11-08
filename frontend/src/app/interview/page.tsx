@@ -181,34 +181,34 @@ export default function InterviewSetupPage() {
     // cuộn riêng (dù nó không cuộn), và thanh "Bắt đầu" `sticky` bên dưới sẽ
     // dính vào khối KHÔNG cuộn đó — tức là không bao giờ dính. clip vẫn cắt nền
     // hạt tràn ra ngoài nhưng không tạo khung cuộn.
-    <div className="relative min-h-screen bg-darkbg text-slate-100 pt-16 overflow-clip">
+    <div className="relative min-h-screen bg-[var(--bg-primary)] text-text-primary pt-16 overflow-clip">
       <ParticleBackground density="medium" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-10">
         {/* Header */}
         <div className="flex items-start justify-between gap-4 mb-8">
           <div>
-            <p className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 mb-2">{t('setupKicker')}</p>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-100 tracking-tight">{t('setupTitle')}</h1>
-            <p className="text-slate-400 mt-2 max-w-xl">{t('setupIntro')}</p>
+            <p className="text-xs font-mono uppercase tracking-[0.2em] text-text-secondary mb-2">{t('setupKicker')}</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-text-primary tracking-tight">{t('setupTitle')}</h1>
+            <p className="text-text-secondary mt-2 max-w-xl">{t('setupIntro')}</p>
           </div>
           <div className="shrink-0 flex flex-col items-end gap-2">
             {/* UI language toggle — realtime, persisted */}
-            <div className="inline-flex rounded-lg border border-white/10 overflow-hidden" role="group" aria-label="Display language">
+            <div className="inline-flex rounded-lg border border-[var(--border-light)] overflow-hidden" role="group" aria-label="Display language">
               {(['VI', 'EN'] as const).map((lg) => (
                 <button
                   key={lg}
                   onClick={() => switchUiLang(lg)}
-                  className={`px-2.5 py-1 text-xs transition-colors ${uiLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-slate-400 hover:text-white'}`}
+                  className={`px-2.5 py-1 text-xs transition-colors ${uiLang === lg ? 'bg-amber-500 text-slate-950 font-semibold' : 'text-text-secondary hover:text-text-primary'}`}
                 >
                   {lg}
                 </button>
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <Link href="/interview/drill" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm text-amber-300 hover:bg-amber-500/15 transition-colors">
+              <Link href="/interview/drill" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-amber-500/40 bg-amber-500/10 text-sm text-tone-amber hover:bg-amber-500/15 transition-colors">
                 <Flame className="w-4 h-4" /> {t('drillBtn')}
               </Link>
-              <Link href="/interview/history" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 text-sm text-slate-400 hover:text-slate-100 transition-colors">
+              <Link href="/interview/history" className="inline-flex items-center gap-2 px-3 py-2 rounded-lg border border-[var(--border-light)] text-sm text-text-secondary hover:text-text-primary transition-colors">
                 <History className="w-4 h-4" /> {t('historyBtn')}
               </Link>
             </div>
@@ -216,23 +216,23 @@ export default function InterviewSetupPage() {
         </div>
 
         {loading ? (
-          <div className="flex items-center gap-2 text-slate-400"><Loader2 className="w-4 h-4 animate-spin" /> {t('loadingCatalog')}</div>
+          <div className="flex items-center gap-2 text-text-secondary"><Loader2 className="w-4 h-4 animate-spin" /> {t('loadingCatalog')}</div>
         ) : needLogin ? (
           <div className="rounded-2xl border border-amber-500/30 bg-amber-500/[0.06] p-8 text-center">
             <div className="text-4xl mb-3">🔒</div>
-            <h2 className="text-xl font-bold text-slate-100 mb-1">{t('loginRequired')}</h2>
-            <p className="text-sm text-slate-400 mb-5 max-w-md mx-auto">{t('loginRequiredSub')}</p>
+            <h2 className="text-xl font-bold text-text-primary mb-1">{t('loginRequired')}</h2>
+            <p className="text-sm text-text-secondary mb-5 max-w-md mx-auto">{t('loginRequiredSub')}</p>
             <div className="flex items-center justify-center gap-3">
               <Link href={`/login?redirect=${encodeURIComponent('/interview')}`} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-semibold hover:opacity-90">
                 {t('loginBtn')}
               </Link>
-              <Link href="/register" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/10 text-slate-300 hover:text-white">
+              <Link href="/register" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-[var(--border-light)] text-text-secondary hover:text-text-primary">
                 {t('registerBtn')}
               </Link>
             </div>
           </div>
         ) : !tax || !tax.domains.length ? (
-          <div className="rounded-xl border border-white/10 p-6 text-slate-400">{t('emptyBank')}</div>
+          <div className="rounded-xl border border-[var(--border-light)] p-6 text-text-secondary">{t('emptyBank')}</div>
         ) : (
           <div className="space-y-8">
             {/* Domain */}
@@ -258,24 +258,24 @@ export default function InterviewSetupPage() {
                       key={tr.id}
                       onClick={() => toggleTrack(tr)}
                       className={`text-left px-4 py-3 rounded-xl border transition-all ${
-                        on ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                        on ? 'border-amber-500/60 bg-amber-500/10' : 'border-[var(--border-light)] hover:border-slate-500'
                       }`}
                     >
-                      <div className="font-semibold text-slate-100 flex items-center gap-2">
+                      <div className="font-semibold text-text-primary flex items-center gap-2">
                         <span className={`w-4 h-4 rounded border flex items-center justify-center text-[10px] ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
                         {dn(tr)}
                       </div>
                       <div className="text-xs mt-0.5 flex items-center gap-2 pl-6">
-                        <span className="text-slate-400">{t('topicsCount', { n: tr.topics.length })}</span>
-                        {qc > 0 ? <span className="text-emerald-400">{t('qCount', { n: qc })}</span> : <span className="text-amber-400/90">{t('qNone')}</span>}
+                        <span className="text-text-secondary">{t('topicsCount', { n: tr.topics.length })}</span>
+                        {qc > 0 ? <span className="text-tone-emerald">{t('qCount', { n: qc })}</span> : <span className="text-amber-400/90">{t('qNone')}</span>}
                       </div>
                     </button>
                   );
                 })}
-                {!domain?.tracks.length && <p className="text-sm text-slate-400">{t('noTracks')}</p>}
+                {!domain?.tracks.length && <p className="text-sm text-text-secondary">{t('noTracks')}</p>}
               </div>
               {tracks.length > 0 && (
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-text-secondary mt-2">
                   <Rich s={t('tracksSelected', { n: `<b class="text-amber-300">${tracks.length}</b>`, names: esc(tracks.map((tr) => dn(tr)).join(', ')), q: `<b class="text-emerald-400">${totalQ}</b>` })} />
                 </p>
               )}
@@ -289,7 +289,7 @@ export default function InterviewSetupPage() {
               <Section step={nextStep()} title={t('stepTopics')}>
                 {projectReady
                   ? <p className="text-xs text-amber-300/80 mb-2">{t('projectModeIgnored')}</p>
-                  : <p className="text-xs text-slate-400 mb-2"><Rich s={t('topicsHint')} /></p>}
+                  : <p className="text-xs text-text-secondary mb-2"><Rich s={t('topicsHint')} /></p>}
                 <div className="grid sm:grid-cols-2 gap-1.5">
                   {availableTopics.map((tp) => {
                     const on = topicIds.includes(tp.id);
@@ -299,19 +299,19 @@ export default function InterviewSetupPage() {
                         key={tp.id}
                         onClick={() => toggleTopic(tp.id)}
                         className={`text-left px-3 py-2 rounded-lg border text-sm transition-all ${
-                          on ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                          on ? 'border-amber-500/60 bg-amber-500/10' : 'border-[var(--border-light)] hover:border-slate-500'
                         }`}
                       >
                         <span className={`inline-flex w-3.5 h-3.5 mr-2 rounded border items-center justify-center text-[9px] align-middle ${on ? 'bg-amber-500 border-amber-500 text-slate-950' : 'border-white/20'}`}>{on ? '✓' : ''}</span>
-                        <span className="text-slate-100">{dn(tp)}</span>
-                        <span className="text-slate-400"> · {dn(tp.track)}</span>
-                        <span className={qc > 0 ? 'text-emerald-400' : 'text-amber-400/80'}> {t('qShort', { n: qc })}</span>
+                        <span className="text-text-primary">{dn(tp)}</span>
+                        <span className="text-text-secondary"> · {dn(tp.track)}</span>
+                        <span className={qc > 0 ? 'text-tone-emerald' : 'text-amber-400/80'}> {t('qShort', { n: qc })}</span>
                       </button>
                     );
                   })}
                 </div>
                 {topicIds.length > 0 && (
-                  <p className="text-xs text-slate-400 mt-2">
+                  <p className="text-xs text-text-secondary mt-2">
                     <Rich s={t('topicsSelected', { n: `<b class="text-amber-300">${topicIds.length}</b>`, q: `<b class="text-emerald-400">${effectiveQ}</b>` })} />
                   </p>
                 )}
@@ -336,14 +336,14 @@ export default function InterviewSetupPage() {
                   <Chip key={c.id} active={company?.id === c.id} onClick={() => setCompany(c)}>{c.name}</Chip>
                 ))}
               </div>
-              {company && <p className="text-xs text-slate-400 mt-2 italic">{company.styleDescriptor}</p>}
+              {company && <p className="text-xs text-text-secondary mt-2 italic">{company.styleDescriptor}</p>}
             </Section>
 
             {/* Options */}
             <Section step={nextStep()} title={t('stepOptions')}>
               <div className="flex flex-wrap items-center gap-6">
                 <label className="flex items-center gap-3">
-                  <span className="text-sm text-slate-400">{t('numQuestions')}</span>
+                  <span className="text-sm text-text-secondary">{t('numQuestions')}</span>
                   {/* Project mode generates its own questions (2 parallel AI
                       rounds) — the bank-based cap is irrelevant there. */}
                   <input
@@ -354,22 +354,22 @@ export default function InterviewSetupPage() {
                     onChange={(e) => setNumQuestions(Number(e.target.value))}
                     className="accent-amber-500"
                   />
-                  <span className="text-sm font-mono text-slate-100 w-8">{numQuestions}</span>
-                  <span className="text-xs text-slate-500">
+                  <span className="text-sm font-mono text-text-primary w-8">{numQuestions}</span>
+                  <span className="text-xs text-text-muted">
                     {useProject && projectMd ? t('maxN', { n: 16 }) : effectiveQ > 0 ? t('maxN', { n: Math.min(effectiveQ, 50) }) : ''}
                   </span>
                 </label>
                 <label className="flex items-center gap-2">
-                  <span className="text-sm text-slate-400">{t('contentLangLabel')}</span>
-                  <span className="inline-flex rounded-lg border border-white/10 overflow-hidden">
+                  <span className="text-sm text-text-secondary">{t('contentLangLabel')}</span>
+                  <span className="inline-flex rounded-lg border border-[var(--border-light)] overflow-hidden">
                     {(['VI', 'EN'] as const).map((l) => (
-                      <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-amber-400' : 'text-slate-400'}`}>
+                      <button key={l} onClick={() => setLanguage(l)} className={`px-3 py-1.5 text-sm ${language === l ? 'bg-amber-500/15 text-tone-amber' : 'text-text-secondary'}`}>
                         {l === 'VI' ? 'Tiếng Việt' : 'English'}
                       </button>
                     ))}
                   </span>
                 </label>
-                <label className="flex items-center gap-2 text-sm text-slate-400 cursor-pointer">
+                <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer">
                   <input type="checkbox" checked={focusedMode} onChange={(e) => setFocusedMode(e.target.checked)} className="accent-amber-500" />
                   <ShieldCheck className="w-4 h-4" /> {t('focusedMode')}
                 </label>
@@ -391,14 +391,14 @@ export default function InterviewSetupPage() {
                         key={m.id}
                         onClick={() => { if (locked) { router.push('/pro'); return; } setEngineMode(m.id); }}
                         className={`text-left px-4 py-3 rounded-xl border transition-all ${
-                          engineMode === m.id && !locked ? 'border-amber-500/60 bg-amber-500/10' : 'border-white/10 hover:border-slate-500'
+                          engineMode === m.id && !locked ? 'border-amber-500/60 bg-amber-500/10' : 'border-[var(--border-light)] hover:border-slate-500'
                         } ${locked ? 'opacity-80' : ''}`}
                       >
-                        <div className="font-semibold text-slate-100 text-sm flex items-center gap-1.5">
+                        <div className="font-semibold text-text-primary text-sm flex items-center gap-1.5">
                           {m.label}
-                          {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-amber-300"><Crown className="w-2.5 h-2.5" /> PRO</span>}
+                          {locked && <span className="inline-flex items-center gap-0.5 rounded bg-amber-400/15 px-1 py-0.5 text-[9px] font-semibold text-tone-amber"><Crown className="w-2.5 h-2.5" /> PRO</span>}
                         </div>
-                        <div className="text-xs text-slate-400 mt-0.5">{locked ? t('engineLocked') : m.desc}</div>
+                        <div className="text-xs text-text-secondary mt-0.5">{locked ? t('engineLocked') : m.desc}</div>
                       </button>
                     );
                   })}
@@ -416,7 +416,7 @@ export default function InterviewSetupPage() {
 
             {/* From CV Builder (P9): the user's CV was pre-loaded into personalize. */}
             {fromCv && (
-              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-amber-200">
+              <div className="rounded-lg border border-amber-500/40 bg-amber-500/10 p-3 text-sm text-tone-amber">
                 {t('fromCvLoaded')}
                 {(!tax.aiAvailable || !tax.aiAllowed) && <span className="mt-1 block text-xs text-amber-300/80">{t('fromCvProNote')}</span>}
               </div>
@@ -425,20 +425,20 @@ export default function InterviewSetupPage() {
             {/* Personalize from CV/JD — Pro only */}
             {tax.aiAvailable && tax.aiAllowed && (
               <Section step={nextStep()} title={t('stepPersonalize')}>
-                <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
+                <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer mb-2">
                   <input type="checkbox" checked={personalize} onChange={(e) => setPersonalize(e.target.checked)} className="accent-amber-500" />
                   {t('personalizeToggle')}
                 </label>
                 {personalize && (
                   <div className="space-y-3">
-                    <p className="text-xs text-slate-400">{t('personalizeHint')}</p>
+                    <p className="text-xs text-text-secondary">{t('personalizeHint')}</p>
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('yourCv')}</div>
-                      <textarea value={cv} onChange={(e) => setCv(e.target.value)} rows={5} placeholder={t('cvPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-text-secondary mb-1">{t('yourCv')}</div>
+                      <textarea value={cv} onChange={(e) => setCv(e.target.value)} rows={5} placeholder={t('cvPlaceholder')} className="w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3 text-text-primary text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('jdLabel')}</div>
-                      <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={4} placeholder={t('jdPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-text-secondary mb-1">{t('jdLabel')}</div>
+                      <textarea value={jd} onChange={(e) => setJd(e.target.value)} rows={4} placeholder={t('jdPlaceholder')} className="w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3 text-text-primary text-sm focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                   </div>
                 )}
@@ -448,17 +448,17 @@ export default function InterviewSetupPage() {
             {/* Project (.md) 2-round interview — Pro only */}
             {tax.aiAvailable && tax.aiAllowed && (
               <Section step={nextStep()} title={t('stepProject')}>
-                <label className="flex items-center gap-2 text-sm text-slate-300 cursor-pointer mb-2">
+                <label className="flex items-center gap-2 text-sm text-text-secondary cursor-pointer mb-2">
                   <input type="checkbox" checked={useProject} onChange={(e) => setUseProject(e.target.checked)} className="accent-amber-500" />
                   {t('projectToggle')}
                 </label>
                 {useProject && (
                   <div className="space-y-3">
-                    <p className="text-xs text-slate-400"><Rich s={t('projectHint')} /></p>
-                    <p className="text-xs text-slate-400">{t('zipHint')}</p>
+                    <p className="text-xs text-text-secondary"><Rich s={t('projectHint')} /></p>
+                    <p className="text-xs text-text-secondary">{t('zipHint')}</p>
                     <div className="flex flex-wrap items-center gap-3">
                       {/* Real project upload (.zip) — server digests the code. */}
-                      <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/60 bg-amber-500/10 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/15 ${zipBusy ? 'opacity-60 pointer-events-none' : ''}`}>
+                      <label className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/60 bg-amber-500/10 text-tone-amber text-sm cursor-pointer hover:bg-amber-500/15 ${zipBusy ? 'opacity-60 pointer-events-none' : ''}`}>
                         <input
                           type="file"
                           accept=".zip,application/zip,application/x-zip-compressed"
@@ -484,7 +484,7 @@ export default function InterviewSetupPage() {
                         {zipBusy ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
                         {zipBusy ? t('zipReading') : t('chooseZip')}
                       </label>
-                      <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/40 text-amber-300 text-sm cursor-pointer hover:bg-amber-500/10">
+                      <label className="inline-flex items-center gap-2 px-4 py-2 rounded-lg border border-amber-500/40 text-tone-amber text-sm cursor-pointer hover:bg-amber-500/10">
                         <input
                           type="file"
                           accept=".md,.markdown,.txt,text/markdown,text/plain"
@@ -503,8 +503,8 @@ export default function InterviewSetupPage() {
                         {t('chooseMd')}
                       </label>
                       {projectName && (
-                        <span className="text-xs text-slate-300">{projectName} · {(projectMd.length / 1024).toFixed(1)} KB
-                          <button onClick={() => { setProjectMd(''); setProjectName(''); setZipStats(null); }} className="ml-2 text-red-400 hover:underline">{t('removeFile')}</button>
+                        <span className="text-xs text-text-secondary">{projectName} · {(projectMd.length / 1024).toFixed(1)} KB
+                          <button onClick={() => { setProjectMd(''); setProjectName(''); setZipStats(null); }} className="ml-2 text-tone-red hover:underline">{t('removeFile')}</button>
                         </span>
                       )}
                     </div>
@@ -515,8 +515,8 @@ export default function InterviewSetupPage() {
                       </p>
                     )}
                     <div>
-                      <div className="text-xs font-mono uppercase tracking-wide text-slate-400 mb-1">{t('pasteMd')}</div>
-                      <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName(t('pastedByHand')); }} rows={6} placeholder={t('pasteMdPlaceholder')} className="w-full rounded-lg border border-white/10 bg-white/[0.04] p-3 text-slate-100 text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
+                      <div className="text-xs font-mono uppercase tracking-wide text-text-secondary mb-1">{t('pasteMd')}</div>
+                      <textarea value={projectMd} onChange={(e) => { setProjectMd(e.target.value); if (!projectName) setProjectName(t('pastedByHand')); }} rows={6} placeholder={t('pasteMdPlaceholder')} className="w-full rounded-lg border border-[var(--border-light)] bg-[var(--bg-surface-hover)] p-3 text-text-primary text-sm font-mono focus:outline-none focus:border-amber-500/60 resize-y" />
                     </div>
                   </div>
                 )}
@@ -527,9 +527,9 @@ export default function InterviewSetupPage() {
                 bắt đầu nằm cuối cùng nên phải cuộn hết mới thấy, và không có chỗ
                 nào tóm tắt mình đã chọn gì. Thanh này luôn hiện cả hai.
                 Không làm mờ nền (backdrop-blur giật khi cuộn) — nền đặc. */}
-            <div className="sticky bottom-0 z-20 -mx-4 px-4 py-3 border-t border-white/10 bg-darkbg flex flex-wrap items-center gap-x-4 gap-y-2" data-pv-bat-dau>
-              <div className="min-w-0 flex-1 text-xs text-slate-400 leading-relaxed">
-                <span className="text-slate-200 font-medium">
+            <div className="sticky bottom-0 z-20 -mx-4 px-4 py-3 border-t border-[var(--border-light)] bg-[var(--bg-primary)] flex flex-wrap items-center gap-x-4 gap-y-2" data-pv-bat-dau>
+              <div className="min-w-0 flex-1 text-xs text-text-secondary leading-relaxed">
+                <span className="text-text-primary font-medium">
                   {projectReady
                     ? (projectName || t('pastedByHand'))
                     : tracks.length
@@ -562,8 +562,8 @@ function Section({ step, title, children }: { step: number; title: string; child
   return (
     <section>
       <div className="flex items-center gap-2 mb-3">
-        <span className="w-6 h-6 rounded-full border border-white/10 text-xs font-mono flex items-center justify-center text-slate-400">{step}</span>
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">{title}</h2>
+        <span className="w-6 h-6 rounded-full border border-[var(--border-light)] text-xs font-mono flex items-center justify-center text-text-secondary">{step}</span>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-text-secondary">{title}</h2>
       </div>
       {children}
     </section>
@@ -575,7 +575,7 @@ function Chip({ active, onClick, children }: { active: boolean; onClick: () => v
     <button
       onClick={onClick}
       className={`px-3.5 py-1.5 rounded-full text-sm border transition-all ${
-        active ? 'border-amber-500/60 bg-amber-500/10 text-amber-300' : 'border-white/10 text-slate-400 hover:text-slate-100'
+        active ? 'border-amber-500/60 bg-amber-500/10 text-tone-amber' : 'border-[var(--border-light)] text-text-secondary hover:text-text-primary'
       }`}
     >
       {children}

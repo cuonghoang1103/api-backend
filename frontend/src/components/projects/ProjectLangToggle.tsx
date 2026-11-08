@@ -33,7 +33,7 @@ export default function ProjectLangToggle({ variant = 'default', className = '' 
 
   return (
     <div
-      className={`inline-flex items-center gap-1 rounded-xl border border-darkborder bg-darkcard/80 backdrop-blur-sm ${compact ? 'p-0.5' : 'p-1'} ${className}`}
+      className={`inline-flex items-center gap-1 rounded-xl border border-[var(--border-color)] bg-[var(--bg-glass)] backdrop-blur-sm ${compact ? 'p-0.5' : 'p-1'} ${className}`}
       role="group"
       aria-label={L('Chuyển ngôn ngữ', 'Switch language')}
     >
@@ -50,7 +50,7 @@ export default function ProjectLangToggle({ variant = 'default', className = '' 
             title={opt.title}
             aria-pressed={active}
             className={`relative ${compact ? 'px-2 py-1 text-[11px]' : 'px-3 py-1.5 text-xs'} rounded-lg font-semibold tracking-wide transition-colors ${
-              active ? 'text-white' : 'text-text-muted hover:text-text-primary'
+              active ? 'text-text-primary' : 'text-text-muted hover:text-text-primary'
             }`}
           >
             {active && (

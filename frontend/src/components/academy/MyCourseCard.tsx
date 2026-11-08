@@ -22,10 +22,10 @@ export default function MyCourseCard({ enrollment, index = 0 }: MyCourseCardProp
   const isInProgress = enrollment.status === 'IN_PROGRESS' || (enrollment.progressPercent > 0 && enrollment.progressPercent < 100);
 
   const statusConfig = isCompleted
-    ? { label: 'Completed', className: 'bg-green-500/20 text-green-400 border-green-500/30', icon: CheckCircle }
+    ? { label: 'Completed', className: 'bg-green-500/20 text-tone-green border-green-500/30', icon: CheckCircle }
     : isInProgress
-    ? { label: 'In Progress', className: 'bg-yellow-500/20 text-yellow-400 border-yellow-500/30', icon: PlayCircle }
-    : { label: 'Not Started', className: 'bg-gray-500/20 text-gray-400 border-gray-500/30', icon: BookOpen };
+    ? { label: 'In Progress', className: 'bg-yellow-500/20 text-tone-yellow border-yellow-500/30', icon: PlayCircle }
+    : { label: 'Not Started', className: 'bg-gray-500/20 text-text-secondary border-gray-500/30', icon: BookOpen };
 
   return (
     <motion.div
@@ -34,7 +34,7 @@ export default function MyCourseCard({ enrollment, index = 0 }: MyCourseCardProp
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.06 }}
     >
-      <div className="bg-darkcard border border-darkborder rounded-2xl overflow-hidden hover:border-neon-violet/40 transition-all duration-300">
+      <div className="bg-[var(--bg-card)] border border-[var(--border-color)] rounded-2xl overflow-hidden hover:border-neon-violet/40 transition-all duration-300">
         <Link href={`/courses/${enrollment.courseSlug}`} className="block relative aspect-video overflow-hidden">
           {enrollment.courseThumbnail ? (
             <img
@@ -60,7 +60,7 @@ export default function MyCourseCard({ enrollment, index = 0 }: MyCourseCardProp
           {/* Header */}
           <div className="flex items-start justify-between gap-2 mb-3">
             <Link href={`/courses/${enrollment.courseSlug}`}>
-              <h3 className="text-sm font-heading font-bold text-text-primary hover:text-neon-violet transition-colors line-clamp-2">
+              <h3 className="text-sm font-heading font-bold text-text-primary hover:text-tone-violet transition-colors line-clamp-2">
                 {enrollment.courseTitle}
               </h3>
             </Link>
@@ -74,9 +74,9 @@ export default function MyCourseCard({ enrollment, index = 0 }: MyCourseCardProp
           <div className="mb-3">
             <div className="flex items-center justify-between text-xs mb-1.5">
               <span className="text-text-muted">Progress</span>
-              <span className="text-neon-violet font-semibold">{enrollment.progressPercent || 0}%</span>
+              <span className="text-tone-violet font-semibold">{enrollment.progressPercent || 0}%</span>
             </div>
-            <div className="h-2 bg-darkbg rounded-full overflow-hidden">
+            <div className="h-2 bg-[var(--bg-primary)] rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-500 ${
                   isCompleted
@@ -99,7 +99,7 @@ export default function MyCourseCard({ enrollment, index = 0 }: MyCourseCardProp
           {isCompleted && enrollment.certificateNumber ? (
             <Link
               href={`/certificates/${enrollment.certificateNumber}`}
-              className="flex items-center justify-center gap-2 w-full py-2.5 bg-green-500/20 border border-green-500/30 text-green-400 text-sm font-medium rounded-xl hover:bg-green-500/30 transition-opacity"
+              className="flex items-center justify-center gap-2 w-full py-2.5 bg-green-500/20 border border-green-500/30 text-tone-green text-sm font-medium rounded-xl hover:bg-green-500/30 transition-opacity"
             >
               <Award className="w-4 h-4" />
               Xem Chứng Chỉ

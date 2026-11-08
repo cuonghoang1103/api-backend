@@ -224,8 +224,29 @@ function StatusLine({ status, isDev }: { status: UpdateStatus; isDev: boolean })
       );
     case 'error':
       return (
-        <span style={{ color: 'var(--ct-err)' }}>
+        // Lỗi thô của electron-updater từng nhét nguyên trang HTML + header vào message và tràn
+        // ngang cả trang (08/11/2026). Câu chính đã được rút gọn ở main; chi tiết thô gấp lại,
+        // xuống dòng được ở MỌI chỗ (chuỗi URL/base64 dài không có dấu cách).
+        <span style={{ color: 'var(--ct-err)', minWidth: 0, overflowWrap: 'anywhere' }}>
           <AlertTriangle size={13} aria-hidden /> {status.message}
+          {status.chiTiet && (
+            <details style={{ marginTop: 6, color: 'var(--ct-text-muted)' }}>
+              <summary style={{ cursor: 'pointer', fontSize: 12 }}>Chi tiết lỗi</summary>
+              <pre
+                style={{
+                  marginTop: 6,
+                  maxHeight: 160,
+                  overflow: 'auto',
+                  whiteSpace: 'pre-wrap',
+                  overflowWrap: 'anywhere',
+                  fontSize: 11,
+                  userSelect: 'text',
+                }}
+              >
+                {status.chiTiet}
+              </pre>
+            </details>
+          )}
         </span>
       );
     default:

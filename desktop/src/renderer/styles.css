@@ -609,10 +609,15 @@ code:not(.work-root *) {
 
 .ct-row dt {
   color: var(--ct-text-muted);
+  flex-shrink: 0;
 }
 
+/* `min-width: 0` + `overflow-wrap`: một giá trị dài không có dấu cách (URL, lỗi thô) từng đẩy
+   cả trang Cài đặt tràn ngang — flex item mặc định không co nhỏ hơn nội dung của nó. */
 .ct-row dd {
   margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }

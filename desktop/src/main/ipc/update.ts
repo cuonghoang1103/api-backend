@@ -23,6 +23,7 @@ import { IS_DEV } from '../config';
 import { BIEN_THE, THONG_TIN_BIEN_THE } from '../../shared/bienThe';
 import { baoBanMoi } from '../robotTin';
 import { handle } from './index';
+import { fetchTepPhatHanh, loiCapNhatDeDoc, taoProviderQuaApi } from './capNhatQuaApi';
 
 /**
  * Trần thời gian cho một lần kiểm tra.
@@ -106,6 +107,9 @@ async function getUpdater() {
   const autoUpdater = mod.autoUpdater
     ?? (mod as unknown as { default?: { autoUpdater?: typeof mod.autoUpdater } }).default?.autoUpdater;
   if (!autoUpdater) throw new Error('Không nạp được electron-updater (thiếu autoUpdater).');
+  /* Lớp `Provider` của CHÍNH module này — cho đường dự phòng qua API (cùng lý do lấy qua `default`). */
+  ProviderGoc = (mod as unknown as { Provider?: unknown }).Provider
+    ?? (mod as unknown as { default?: { Provider?: unknown } }).default?.Provider;
   autoUpdater.autoDownload = false;
   autoUpdater.autoInstallOnAppQuit = true;
   autoUpdater.allowDowngrade = false;
@@ -113,6 +117,60 @@ async function getUpdater() {
 }
 
 let listenersAttached = false;
+let ProviderGoc: unknown;
+
+/**
+ * Đã chuyển sang đường dự phòng `api.github.com` chưa (xem `capNhatQuaApi.ts`). Chuyển một lần là
+ * giữ tới khi app khởi động lại: đường chính vừa hỏng thì 45 phút sau thường vẫn hỏng, và đường
+ * dự phòng tải được đủ cả ba nền tảng.
+ */
+let dangDuPhong = false;
+/**
+ * Đang trong `runCheck` — lỗi lúc này do `catch` của nó xử lý (có thể còn thử đường dự phòng), nên
+ * sự kiện `error` phát song song KHÔNG được báo đỏ ra giao diện rồi mới đổi sang "đang kiểm".
+ */
+let dangKiem = false;
+
+function baoLoi(raw: string): void {
+  broadcast({ state: 'error', ...loiCapNhatDeDoc(raw) });
+}
+
+function chuyenSangDuPhong(autoUpdater: Awaited<ReturnType<typeof getUpdater>>): boolean {
+  if (dangDuPhong || !ProviderGoc) return false;
+  try {
+    const updateProvider = taoProviderQuaApi(ProviderGoc, THONG_TIN_BIEN_THE.khoPhatHanh);
+    autoUpdater.setFeedURL({ provider: 'custom', updateProvider } as unknown as Parameters<typeof autoUpdater.setFeedURL>[0]);
+    /* Bản vá chênh lệch (blockmap) cần tệp `.blockmap` của bản CŨ — đường API không với tới
+       bản cũ, nên tải trọn gói ngay thay vì thử-hỏng-rồi-mới-tải-trọn. */
+    autoUpdater.disableDifferentialDownload = true;
+    dangDuPhong = true;
+    console.warn('[update] github.com hỏng — chuyển sang đường dự phòng api.github.com');
+    return true;
+  } catch (e) {
+    console.warn('[update] không dựng được đường dự phòng:', e);
+    return false;
+  }
+}
+
+async function kiemCoHanGio(autoUpdater: Awaited<ReturnType<typeof getUpdater>>): Promise<void> {
+  // Chạy đua với đồng hồ. `checkForUpdates()` có thể treo vô hạn khi cấu hình
+  // trỏ sai chỗ, và một lời hứa không bao giờ hoàn thành thì không có `catch`
+  // nào bắt được.
+  let hen: ReturnType<typeof setTimeout> | undefined;
+  try {
+    await Promise.race([
+      autoUpdater.checkForUpdates(),
+      new Promise((_, reject) => {
+        hen = setTimeout(
+          () => reject(new Error('Máy chủ cập nhật không phản hồi sau 30 giây.')),
+          CHECK_TIMEOUT_MS,
+        );
+      }),
+    ]);
+  } finally {
+    if (hen) clearTimeout(hen);
+  }
+}
 
 async function runCheck(): Promise<void> {
   if (IS_DEV || !app.isPackaged) {
@@ -169,31 +227,28 @@ async function runCheck(): Promise<void> {
     autoUpdater.on('error', (error) => {
       // Lỗi cập nhật KHÔNG được làm app chết. Không nối được GitHub là chuyện
       // thường (mạng công ty chặn, đang offline).
-      broadcast({
-        state: 'error',
-        message: error instanceof Error ? error.message : String(error),
-      });
+      if (dangKiem) return; // `runCheck` tự xử lý (và có thể đang thử đường dự phòng)
+      baoLoi(error instanceof Error ? error.message : String(error));
     });
   }
 
+  dangKiem = true;
   try {
-    // Chạy đua với đồng hồ. `checkForUpdates()` có thể treo vô hạn khi cấu hình
-    // trỏ sai chỗ, và một lời hứa không bao giờ hoàn thành thì không có `catch`
-    // nào bắt được.
-    await Promise.race([
-      autoUpdater.checkForUpdates(),
-      new Promise((_, reject) =>
-        setTimeout(
-          () => reject(new Error('Máy chủ cập nhật không phản hồi sau 30 giây.')),
-          CHECK_TIMEOUT_MS,
-        ),
-      ),
-    ]);
+    await kiemCoHanGio(autoUpdater);
   } catch (error) {
-    broadcast({
-      state: 'error',
-      message: error instanceof Error ? error.message : String(error),
-    });
+    const raw = error instanceof Error ? error.message : String(error);
+    if (chuyenSangDuPhong(autoUpdater)) {
+      try {
+        await kiemCoHanGio(autoUpdater);
+        return;
+      } catch (e2) {
+        baoLoi(e2 instanceof Error ? e2.message : String(e2));
+        return;
+      }
+    }
+    baoLoi(raw);
+  } finally {
+    dangKiem = false;
   }
 }
 
@@ -352,12 +407,11 @@ async function taiFileCai(): Promise<void> {
   if (tt.state !== 'manual') throw new Error('Chưa có bản mới nào để tải.');
   const { version } = tt;
   const ten = tenFileCai(version);
-  const url = `${REPO_PHAT_HANH}/download/v${version}/${ten}`;
   const dich = path.join(app.getPath('downloads'), ten);
 
   broadcast({ state: 'taiTay', version, percent: 0 });
   try {
-    const res = await fetch(url, { redirect: 'follow' });
+    const res = await fetchTepPhatHanh(THONG_TIN_BIEN_THE.khoPhatHanh, version, ten);
     if (!res.ok || !res.body) throw new Error(`Máy chủ trả về ${res.status}`);
 
     const tong = Number(res.headers.get('content-length') || 0);
@@ -387,7 +441,11 @@ async function taiFileCai(): Promise<void> {
   } catch (err) {
     // Tải hỏng KHÔNG được để người dùng cụt đường: quay về `manual` để nút "mở
     // trang tải" hiện lại, kèm lý do.
-    broadcast({ state: 'error', message: `Không tải được bản cài: ${(err as Error).message}. Mở ${REPO_PHAT_HANH}/latest để tải tay.` });
+    broadcast({
+      state: 'error',
+      message: `Không tải được bản cài (${loiCapNhatDeDoc((err as Error).message).message}). Mở ${REPO_PHAT_HANH}/latest để tải tay.`,
+      chiTiet: (err as Error).message,
+    });
   }
 }
 
@@ -517,11 +575,10 @@ let zipDaTai: { version: string; fileZip: string; thuMuc: string } | null = null
 /** Tải `.zip` của một phiên bản về thư mục tạm, có báo tiến độ. */
 async function taiZipVe(version: string): Promise<{ fileZip: string; thuMuc: string }> {
   const ten = tenFileZip(version);
-  const url = `${REPO_PHAT_HANH}/download/v${version}/${ten}`;
   const thuMuc = fs.mkdtempSync(path.join(app.getPath('temp'), 'ct-update-'));
   const fileZip = path.join(thuMuc, ten);
 
-  const res = await fetch(url, { redirect: 'follow' });
+  const res = await fetchTepPhatHanh(THONG_TIN_BIEN_THE.khoPhatHanh, version, ten);
   if (!res.ok || !res.body) throw new Error(`Máy chủ trả về ${res.status}`);
   const tong = Number(res.headers.get('content-length') || 0);
   const ra = fs.createWriteStream(fileZip);

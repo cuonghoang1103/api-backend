@@ -2721,7 +2721,7 @@ export type UpdateStatus =
   | { state: 'dangCai'; version: string }
   | { state: 'caiXong'; version: string }
   | { state: 'none' }
-  | { state: 'error'; message: string };
+  | { state: 'error'; message: string; /** Lỗi thô (đã cắt ngắn) — chỉ hiện khi người dùng mở "Chi tiết". */ chiTiet?: string };
 
 /**
  * Bề mặt API mà preload gắn lên `window.cuongthai`. Renderer chỉ thấy đúng

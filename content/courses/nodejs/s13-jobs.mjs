@@ -107,7 +107,7 @@ app.post('/register', async (req, res) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Document uploads for the AI knowledge base do exactly this split, and <code>src/services/embedQueue.service.ts</code> opens with a comment explaining the decision: the upload endpoint returns immediately while chunking and embedding happen in the background. The honest part is what it chose <em>instead</em> of BullMQ — an in-process array queue — with the trade-off written down in the file: "if the process crashes mid-job, in-flight jobs are lost", mitigated by making jobs idempotent and marking documents <code>pending | processing | ready | failed</code> so a recovery scan can find stuck ones. That is a defensible choice for one process. Lesson 13.5 measures precisely what it costs.</p>
+<p><strong>How cuongthai.com does it.</strong> Document uploads for the AI knowledge base do exactly this split, and <code>src/services/embedQueue.service.ts</code> opens with a comment explaining the decision: the upload endpoint returns immediately while chunking and embedding happen in the background. The honest part is what it chose <em>instead</em> of BullMQ — an in-process array queue — with the trade-off written down in the file: "if the process crashes mid-job, in-flight jobs are lost", mitigated — in the comment's own words — by making jobs idempotent and marking documents <code>pending | processing | ready | failed</code> so a recovery scan can find stuck ones (lesson 13.5 reads the code: that status column and that scan are still a plan). That is a defensible choice for one process. Lesson 13.5 measures precisely what it costs.</p>
 </div>
 
 <div class="link-card codelab">
@@ -116,6 +116,11 @@ app.post('/register', async (req, res) =&gt; {
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.5: a transactional outbox and a notification queue</span><span class="lc-sub">The same move on a two-instance API: email inside the booking request p50 311 ms and 5 × 500 while the provider is down; through an outbox + BullMQ p50 3.6 ms and the email retried later; a relay crash duplicated one event and still sent exactly 20 emails.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-hang-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in API Design — lesson 10.1: 202 Accepted, job resources and polling</span><span class="lc-sub">The contract side of the UX bill: what a 202 promises, a job resource the client polls, and how to tell it when to come back. This lesson ran that status endpoint from Node: active → completed after 922 ms, or failed with its reason ("no such month") after 919 ms.</span></span>
   <span class="lc-cta">OPEN LESSON →</span>
 </a>
 </div>
@@ -202,7 +207,7 @@ app.post('/register', async (req, res) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Việc tải tài liệu lên cho cơ sở tri thức AI làm đúng phép tách này, và <code>src/services/embedQueue.service.ts</code> mở đầu bằng một khối chú thích giải thích quyết định: endpoint upload trả lời ngay lập tức trong khi việc chẻ nhỏ và tính embedding diễn ra ở nền. Phần trung thực nằm ở chỗ nó chọn cái gì <em>thay cho</em> BullMQ — một hàng đợi bằng mảng ngay trong tiến trình — với sự đánh đổi được ghi thẳng vào file: "nếu tiến trình sập giữa chừng thì các job đang bay bị mất", và được giảm nhẹ bằng cách làm cho job idempotent cùng với việc đánh dấu tài liệu là <code>pending | processing | ready | failed</code> để một lượt quét phục hồi có thể tìm ra những cái bị kẹt. Đó là một lựa chọn bảo vệ được khi chỉ có một tiến trình. Bài 13.5 đo chính xác cái giá của nó.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Việc tải tài liệu lên cho cơ sở tri thức AI làm đúng phép tách này, và <code>src/services/embedQueue.service.ts</code> mở đầu bằng một khối chú thích giải thích quyết định: endpoint upload trả lời ngay lập tức trong khi việc chẻ nhỏ và tính embedding diễn ra ở nền. Phần trung thực nằm ở chỗ nó chọn cái gì <em>thay cho</em> BullMQ — một hàng đợi bằng mảng ngay trong tiến trình — với sự đánh đổi được ghi thẳng vào file: "nếu tiến trình sập giữa chừng thì các job đang bay bị mất", và — theo lời chính khối chú thích — được giảm nhẹ bằng cách làm cho job idempotent cùng với việc đánh dấu tài liệu là <code>pending | processing | ready | failed</code> để một lượt quét phục hồi có thể tìm ra những cái bị kẹt (bài 13.5 đọc code: cột trạng thái và lượt quét đó vẫn mới là kế hoạch). Đó là một lựa chọn bảo vệ được khi chỉ có một tiến trình. Bài 13.5 đo chính xác cái giá của nó.</p>
 </div>
 
 <div class="link-card codelab">
@@ -211,6 +216,11 @@ app.post('/register', async (req, res) =&gt; {
 <a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-3-mo-rong" target="_blank" rel="noopener">
   <span class="lc-ico">🔗</span>
   <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.5: transactional outbox và hàng đợi thông báo</span><span class="lc-sub">Cùng bước đó trên một API hai instance: gửi email trong request đặt chỗ p50 311 ms và 5 × 500 khi nhà cung cấp sập; qua outbox + BullMQ p50 3,6 ms và email được gửi lại sau; relay sập làm trùng một sự kiện mà vẫn đúng 20 email.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-hang-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở API Design — bài 10.1: 202 Accepted, tài nguyên công việc và hỏi lại</span><span class="lc-sub">Phía hợp đồng của hoá đơn trải nghiệm: 202 hứa gì, một tài nguyên job để client hỏi lại, và cách bảo client khi nào quay lại. Bài này chạy thật endpoint trạng thái đó từ Node: active → completed sau 922 ms, hoặc failed kèm lý do ("no such month") sau 919 ms.</span></span>
   <span class="lc-cta">MỞ BÀI →</span>
 </a>
 </div>
@@ -261,7 +271,7 @@ new Worker('email', async (job) =&gt; {
       priority     = 0
    kiểu của bull:t2:wait = list (danh sách chờ), id trong đó: ["1"]</div>
 <p>That is the entire magic trick. A job is a <strong>Redis hash</strong> holding your data plus bookkeeping, and its id sits in a <strong>list</strong> called <code>wait</code>. The worker does a blocking pop from that list, moves the id to <code>active</code>, takes a lock, runs your function, and moves it to <code>completed</code> or <code>failed</code>. Every step is one of the operations from chapter 12. There is no daemon, no broker process — <em>BullMQ is a library, not a server</em>, and the queue lives entirely in Redis.</p>
-<p>Which means the entire chapter-12 rulebook applies. In particular: <strong>never point BullMQ at a Redis configured with <code>allkeys-lru</code></strong>. Lesson 12.6 measured 162.616 keys evicted under memory pressure; if some of those are your jobs, the jobs are simply gone, and nothing will tell you. BullMQ needs a Redis with <code>maxmemory-policy noeviction</code> — the one setting that lesson called dangerous for a cache is the required setting for a queue.</p>
+<p>Which means the entire chapter-12 rulebook applies. In particular: <strong>never point BullMQ at a Redis configured with <code>allkeys-lru</code></strong>. Lesson 12.6 measured 162.616 keys evicted under memory pressure; if some of those are your jobs, the jobs are simply gone, and nothing will tell you. BullMQ needs a Redis with <code>maxmemory-policy noeviction</code> — the one setting that lesson called dangerous for a cache is the required setting for a queue. Measured for the video of this lesson: 20,000 jobs added to a 3 MB Redis set to <code>allkeys-lru</code> — BullMQ prints <code>IMPORTANT! Eviction policy is allkeys-lru. It should be "noeviction"</code>, <code>add()</code> never throws, and 18,118 of the 20,000 jobs can never run; even the id counter <code>bull:&lt;queue&gt;:id</code> was evicted, so ids restarted at 1 and new jobs overwrote old ones. This site's own Redis (<code>docker-compose.yml</code>) is a cache with <code>allkeys-lru</code> — a queue would need a second instance.</p>
 
 <h3>Cost per job</h3>
 <div class="out">   add() từng cái  : 1000 job trong 286,6ms → 3.489 job/giây
@@ -306,7 +316,7 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> The site does <em>not</em> run BullMQ, and the reason is written in <code>src/services/embedQueue.service.ts</code>: one Node process, no horizontal scaling yet, and BullMQ brings a real dependency weight — measured here at <strong>22 packages and 13 MB</strong>, of which <code>luxon</code> alone is 4,5 MB (it is there for cron parsing). Instead there is a plain in-memory array with a <code>_processing</code> flag: effectively <code>concurrency: 1</code>. Reading this lesson against that file is the exercise: the in-process queue gets the latency win from 13.1 for free, and gives up every single thing measured above — no second worker, no restart survival, no <code>addBulk</code>, no priority.</p>
+<p><strong>How cuongthai.com does it.</strong> The site does <em>not</em> run BullMQ, and the reason is written in <code>src/services/embedQueue.service.ts</code>: one Node process, no horizontal scaling yet, and BullMQ brings a real dependency weight (the file says "50MB") — a fresh <code>npm i bullmq ioredis</code> measured here (BullMQ 6.7.2, November 2026) is <strong>19 packages and 16 MB</strong>, of which <code>luxon</code> alone is 4,5 MB (it is there for cron parsing). Instead there is a plain in-memory array with a <code>_processing</code> flag: effectively <code>concurrency: 1</code>. Reading this lesson against that file is the exercise: the in-process queue gets the latency win from 13.1 for free, and gives up every single thing measured above — no second worker, no restart survival, no <code>addBulk</code>, no priority.</p>
 </div>
 
 <div class="link-card codelab">
@@ -315,6 +325,11 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">What underlies every Redis-based queue</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The mechanism underneath: Redis course 8.3 — consumer groups</span><span class="lc-sub">Competing workers done by hand on a stream: one entry to one consumer, pending lists, acknowledgements. BullMQ packages the same guarantee — measured here: two worker processes, 100 jobs, 50 + 50, zero duplicates.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -354,7 +369,7 @@ new Worker('email', async (job) =&gt; {
       priority     = 0
    kiểu của bull:t2:wait = list (danh sách chờ), id trong đó: ["1"]</div>
 <p>Đó là toàn bộ trò ảo thuật. Một job là một <strong>hash của Redis</strong> chứa dữ liệu của bạn cộng phần sổ sách, và id của nó nằm trong một <strong>list</strong> tên là <code>wait</code>. Worker thực hiện một lệnh pop có chờ trên list đó, chuyển id sang <code>active</code>, giành một khoá, chạy hàm của bạn, rồi chuyển nó sang <code>completed</code> hoặc <code>failed</code>. Mỗi bước đều là một trong các thao tác của chương 12. Không có tiến trình nền nào, không có máy chủ môi giới nào — <em>BullMQ là một thư viện, không phải một máy chủ</em>, và hàng đợi nằm trọn vẹn trong Redis.</p>
-<p>Điều đó nghĩa là toàn bộ luật lệ của chương 12 đều áp dụng. Đặc biệt: <strong>đừng bao giờ trỏ BullMQ vào một Redis cấu hình <code>allkeys-lru</code></strong>. Bài 12.6 đã đo được 162.616 khoá bị trục xuất khi bộ nhớ căng; nếu trong số đó có job của bạn thì job đơn giản là biến mất, và không có gì báo cho bạn biết. BullMQ cần một Redis đặt <code>maxmemory-policy noeviction</code> — chính cái thiết lập mà bài đó gọi là nguy hiểm cho một cache lại là thiết lập BẮT BUỘC cho một hàng đợi.</p>
+<p>Điều đó nghĩa là toàn bộ luật lệ của chương 12 đều áp dụng. Đặc biệt: <strong>đừng bao giờ trỏ BullMQ vào một Redis cấu hình <code>allkeys-lru</code></strong>. Bài 12.6 đã đo được 162.616 khoá bị trục xuất khi bộ nhớ căng; nếu trong số đó có job của bạn thì job đơn giản là biến mất, và không có gì báo cho bạn biết. BullMQ cần một Redis đặt <code>maxmemory-policy noeviction</code> — chính cái thiết lập mà bài đó gọi là nguy hiểm cho một cache lại là thiết lập BẮT BUỘC cho một hàng đợi. Đo cho video của bài này: thêm 20.000 job vào một Redis 3 MB đặt <code>allkeys-lru</code> — BullMQ in <code>IMPORTANT! Eviction policy is allkeys-lru. It should be "noeviction"</code>, <code>add()</code> không hề ném lỗi, và 18.118 trên 20.000 job không bao giờ chạy được; cả bộ đếm id <code>bull:&lt;queue&gt;:id</code> cũng bị xoá, id quay lại từ 1 và job mới ghi đè job cũ. Redis của chính trang này (<code>docker-compose.yml</code>) là một cache <code>allkeys-lru</code> — muốn chạy hàng đợi thì phải có một instance thứ hai.</p>
 
 <h3>Giá của mỗi job</h3>
 <div class="out">   add() từng cái  : 1000 job trong 286,6ms → 3.489 job/giây
@@ -399,7 +414,7 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Trang này <em>không</em> chạy BullMQ, và lý do được ghi thẳng trong <code>src/services/embedQueue.service.ts</code>: chỉ một tiến trình Node, chưa co giãn ngang, và BullMQ mang theo trọng lượng phụ thuộc thật sự — đo ở đây là <strong>22 gói và 13 MB</strong>, trong đó riêng <code>luxon</code> đã 4,5 MB (nó ở đó để phân tích biểu thức cron). Thay vào đó là một mảng trong bộ nhớ với một cờ <code>_processing</code>: thực chất là <code>concurrency: 1</code>. Bài tập ở đây là đọc bài học này song song với file đó: hàng đợi trong tiến trình lấy được cái lợi về độ trễ ở bài 13.1 miễn phí, và từ bỏ TOÀN BỘ những gì vừa đo ở trên — không có worker thứ hai, không sống sót qua lần khởi động lại, không có <code>addBulk</code>, không có mức ưu tiên.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Trang này <em>không</em> chạy BullMQ, và lý do được ghi thẳng trong <code>src/services/embedQueue.service.ts</code>: chỉ một tiến trình Node, chưa co giãn ngang, và BullMQ mang theo trọng lượng phụ thuộc thật sự (file ghi "50MB") — cài mới <code>npm i bullmq ioredis</code> đo ở đây (BullMQ 6.7.2, tháng 11/2026) là <strong>19 gói và 16 MB</strong>, trong đó riêng <code>luxon</code> đã 4,5 MB (nó ở đó để phân tích biểu thức cron). Thay vào đó là một mảng trong bộ nhớ với một cờ <code>_processing</code>: thực chất là <code>concurrency: 1</code>. Bài tập ở đây là đọc bài học này song song với file đó: hàng đợi trong tiến trình lấy được cái lợi về độ trễ ở bài 13.1 miễn phí, và từ bỏ TOÀN BỘ những gì vừa đo ở trên — không có worker thứ hai, không sống sót qua lần khởi động lại, không có <code>addBulk</code>, không có mức ưu tiên.</p>
 </div>
 
 <div class="link-card codelab">
@@ -408,6 +423,11 @@ await emailQueue.add('password-reset', { userId: 42, token });</code></pre>
 <div class="link-card codelab">
   <a href="/code-lab/redis${REF}#module-735"><span class="lc-t">Code Lab · Redis Streams and Event-Driven Architecture</span><span class="lc-d">Thứ nằm dưới mọi hàng đợi chạy trên Redis</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-3-consumer-group" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cơ chế bên dưới: khoá Redis bài 8.3 — nhóm tiêu thụ</span><span class="lc-sub">Các worker tranh việc, làm bằng tay trên stream: mỗi mục tới một consumer, danh sách pending, xác nhận. BullMQ đóng gói đúng bảo đảm đó — đo ở đây: hai tiến trình worker, 100 job, 50 + 50, trùng 0.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -527,7 +547,7 @@ new Worker('email', async (job) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> <code>embedQueue.service.ts</code> tracks <code>attempts</code> on its own job objects and marks documents <code>pending | processing | ready | failed</code>, which is a hand-rolled version of everything above — and the file says outright that its safety net is that "jobs are idempotent (re-running is safe)". That is the correct instinct: the in-process queue gives up durability, so idempotency is what makes a recovery scan safe to run. It is the same conclusion this lesson reaches from the opposite direction — whatever queue you use, the handler has to survive running twice.</p>
+<p><strong>How cuongthai.com does it.</strong> <code>embedQueue.service.ts</code> tracks <code>attempts</code> on its own in-memory job objects, marks the <em>job</em> <code>pending | processing | completed | failed</code> and re-queues a failure up to 3 attempts — immediately, with no backoff — which is a hand-rolled version of everything above — and the file says outright that its safety net is that "jobs are idempotent (re-running is safe)". That is the correct instinct: the in-process queue gives up durability, so idempotency is what makes a recovery scan safe to run. It is the same conclusion this lesson reaches from the opposite direction — whatever queue you use, the handler has to survive running twice.</p>
 </div>
 
 <div class="link-card codelab">
@@ -543,6 +563,16 @@ new Worker('email', async (job) =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Back off exponentially, with jitter</span><span class="lz-d">Constant retries against a struggling service finish it off, and identical delays synchronise every worker into one wave.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Cap the attempts and record the failure</span><span class="lz-d">An unbounded retry is a job that never completes and never alerts. After the cap, move it to a dead-letter queue where a human can see it.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-4-xclaim" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Redis — lesson 8.4: claiming, retries and dead letters</span><span class="lc-sub">The same failure policy written by hand on a stream: XPENDING, XAUTOCLAIM, delivery counts for poison messages. Here BullMQ does it for you — attempts + exponential backoff measured gap by gap (204 / 415 / 811 / 1,604 ms) and a whole failed set replayed in one loop.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-4-webhook" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 10.5: sending webhooks — signatures, retries and a delivery log</span><span class="lc-sub">The same retry rules where the "job" is an HTTP call to someone else's server: backoff, a cap, a delivery log a human can read — and a receiver that must be idempotent because you WILL deliver twice.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -647,7 +677,7 @@ new Worker('email', async (job) =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> <code>embedQueue.service.ts</code> tự theo dõi <code>attempts</code> trên các đối tượng job của riêng nó và đánh dấu tài liệu là <code>pending | processing | ready | failed</code>, tức là một phiên bản làm tay của mọi thứ ở trên — và file nói thẳng rằng lưới an toàn của nó là "job idempotent (chạy lại vẫn an toàn)". Đó là bản năng đúng: hàng đợi trong tiến trình từ bỏ tính bền vững, nên chính tính idempotent mới là thứ khiến một lượt quét phục hồi có thể chạy mà không gây hại. Cũng chính là kết luận mà bài này đi tới từ hướng ngược lại — dùng hàng đợi nào đi nữa, hàm xử lý vẫn phải sống sót khi bị chạy hai lần.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> <code>embedQueue.service.ts</code> tự theo dõi <code>attempts</code> trên các đối tượng job trong bộ nhớ của riêng nó, đánh dấu <em>job</em> là <code>pending | processing | completed | failed</code> và cho job hỏng chạy lại tới 3 lần — ngay lập tức, không có backoff — tức là một phiên bản làm tay của mọi thứ ở trên — và file nói thẳng rằng lưới an toàn của nó là "job idempotent (chạy lại vẫn an toàn)". Đó là bản năng đúng: hàng đợi trong tiến trình từ bỏ tính bền vững, nên chính tính idempotent mới là thứ khiến một lượt quét phục hồi có thể chạy mà không gây hại. Cũng chính là kết luận mà bài này đi tới từ hướng ngược lại — dùng hàng đợi nào đi nữa, hàm xử lý vẫn phải sống sót khi bị chạy hai lần.</p>
 </div>
 
 <div class="link-card codelab">
@@ -663,6 +693,16 @@ new Worker('email', async (job) =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Lùi dần theo hàm mũ, có nhiễu ngẫu nhiên</span><span class="lz-d">Thử lại đều đặn nhắm vào một dịch vụ đang ngắc ngoải là kết liễu nó, và những độ trễ giống hệt nhau đồng bộ hoá mọi worker thành một đợt sóng.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Chặn số lần thử và ghi lại cú hỏng</span><span class="lz-d">Một phép thử lại không giới hạn là một công việc chẳng bao giờ xong và chẳng bao giờ báo động. Sau khi hết số lần, hãy chuyển nó sang một hàng đợi thư chết nơi con người nhìn thấy được.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-8-4-xclaim" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Redis — bài 8.4: đòi việc, thử lại và thư chết</span><span class="lc-sub">Cùng chính sách xử lý hỏng, viết tay trên stream: XPENDING, XAUTOCLAIM, đếm số lần giao để bắt tin độc. Ở đây BullMQ làm sẵn — attempts + backoff luỹ thừa đo từng khoảng (204 / 415 / 811 / 1.604 ms) và cả tập failed chạy lại bằng một vòng lặp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-4-webhook" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 10.5: gửi webhook — chữ ký, thử lại và nhật ký giao</span><span class="lc-sub">Cùng luật thử lại khi "job" là một lời gọi HTTP tới máy chủ của người khác: backoff, giới hạn số lần, nhật ký giao người đọc được — và bên nhận phải idempotent vì bạn SẼ giao hai lần.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -760,7 +800,7 @@ new Worker('cron', async () =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> <code>src/services/cron.service.ts</code> registers <strong>eleven</strong> <code>cron.schedule()</code> calls with node-cron — nightly cleanup at 20:00 UTC (03:00 Vietnam), a weekly re-embed check, an hourly health check that pings Redis and Postgres, a 15-minute sweep, a 5-minute scheduled-publish sweep, and more. The comments even document the UTC/Vietnam conversion for each one, which is the pitfall above taken seriously. What it does <em>not</em> have is any distributed guard: the only protection is a module-level <code>let _started = false</code>, which is per-process. That is correct today because production runs exactly one backend container — and it is precisely the thing that breaks the day a second one starts, silently, by doing everything twice.</p>
+<p><strong>How cuongthai.com does it.</strong> <code>src/services/cron.service.ts</code> registers <strong>40</strong> <code>cron.schedule()</code> calls with node-cron (counted November 2026) — nightly cleanup at 20:00 UTC (03:00 Vietnam), a weekly re-embed check, an hourly health check that pings Redis and Postgres, a 15-minute sweep, a 5-minute scheduled-publish sweep, and more. The comments even document the UTC/Vietnam conversion for each one, which is the pitfall above taken seriously. What it does <em>not</em> have is any distributed guard: the only protection is a module-level <code>let _started = false</code>, which is per-process. That is correct today because production runs exactly one backend container — and it is precisely the thing that breaks the day a second one starts, silently, by doing everything twice.</p>
 </div>
 
 <div class="link-card codelab">
@@ -776,6 +816,11 @@ new Worker('cron', async () =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Throttling — match someone else's limit</span><span class="lz-d">A rate limiter on the worker, not on the producer. The queue absorbs the burst; the limiter decides how fast it drains.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Repeat — cron, with one owner</span><span class="lz-d">A repeatable job in the queue, not a <code>cron</code> line per server — otherwise three instances run the same nightly job three times.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-4-3-zset" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">The structure underneath: Redis course 4.3 — sorted sets</span><span class="lc-sub">A delayed BullMQ job is a member of a sorted set scored by its run time (measured: TYPE bull:dz:delayed = zset), which is why a 24-hour delay costs the same as a 1-second one and nothing polls in a loop.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -864,7 +909,7 @@ new Worker('cron', async () =&gt; {
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> <code>src/services/cron.service.ts</code> đăng ký <strong>mười một</strong> lệnh <code>cron.schedule()</code> bằng node-cron — dọn dẹp ban đêm lúc 20:00 UTC (03:00 giờ Việt Nam), một lượt kiểm tra embedding hằng tuần, một lượt kiểm tra sức khoẻ mỗi giờ có ping cả Redis lẫn Postgres, một lượt quét 15 phút, một lượt quét bài hẹn đăng mỗi 5 phút, và nhiều nữa. Phần chú thích còn ghi rõ phép quy đổi UTC/Việt Nam cho từng cái, tức là đã coi trọng đúng cái bẫy ở trên. Thứ nó <em>không</em> có là bất kỳ chốt chặn phân tán nào: bảo vệ duy nhất là một biến cấp module <code>let _started = false</code>, mà biến đó chỉ tính trong PHẠM VI một tiến trình. Hôm nay điều đó đúng vì production chạy đúng một container backend — và nó cũng chính là thứ sẽ vỡ vào cái ngày container thứ hai được bật lên, một cách âm thầm, bằng việc làm mọi thứ hai lần.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> <code>src/services/cron.service.ts</code> đăng ký <strong>40</strong> lệnh <code>cron.schedule()</code> bằng node-cron (đếm tháng 11/2026) — dọn dẹp ban đêm lúc 20:00 UTC (03:00 giờ Việt Nam), một lượt kiểm tra embedding hằng tuần, một lượt kiểm tra sức khoẻ mỗi giờ có ping cả Redis lẫn Postgres, một lượt quét 15 phút, một lượt quét bài hẹn đăng mỗi 5 phút, và nhiều nữa. Phần chú thích còn ghi rõ phép quy đổi UTC/Việt Nam cho từng cái, tức là đã coi trọng đúng cái bẫy ở trên. Thứ nó <em>không</em> có là bất kỳ chốt chặn phân tán nào: bảo vệ duy nhất là một biến cấp module <code>let _started = false</code>, mà biến đó chỉ tính trong PHẠM VI một tiến trình. Hôm nay điều đó đúng vì production chạy đúng một container backend — và nó cũng chính là thứ sẽ vỡ vào cái ngày container thứ hai được bật lên, một cách âm thầm, bằng việc làm mọi thứ hai lần.</p>
 </div>
 
 <div class="link-card codelab">
@@ -880,6 +925,11 @@ new Worker('cron', async () =&gt; {
   <div class="lz-step"><span class="lz-k">3</span><span class="lz-t">Điều tiết — khớp với giới hạn của người khác</span><span class="lz-d">Một bộ giới hạn tần suất đặt ở worker, không đặt ở bên sản xuất. Hàng đợi hấp thụ cơn dồn dập; bộ giới hạn quyết định nó rút cạn nhanh tới đâu.</span></div>
   <div class="lz-step"><span class="lz-k">4</span><span class="lz-t">Lặp lại — cron, với đúng MỘT chủ sở hữu</span><span class="lz-d">Một job lặp lại nằm trong hàng đợi, đừng để một dòng <code>cron</code> trên mỗi máy chủ — không thì ba thực thể sẽ chạy cùng một công việc đêm ba lần.</span></div>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/redis/learn?lessonSlug=rd-4-3-zset" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Cấu trúc bên dưới: khoá Redis bài 4.3 — sorted set</span><span class="lc-sub">Một job BullMQ hẹn giờ là một phần tử của sorted set, điểm là thời điểm chạy (đo: TYPE bull:dz:delayed = zset) — vì thế hẹn 24 giờ tốn y như hẹn 1 giây, và không ai thăm dò trong vòng lặp.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -933,7 +983,7 @@ Error: Missing lock for job 1. moveToFinished
    nhật ký worker: SAN-SANG | BATDAU 1
    thoát sau 5ms — CẮT NGANG job đang chạy
    completed=0 · active=1 (job kẹt, phải chờ cơ chế stalled cứu)</div>
-<p><strong>1296ms finishing the job, versus 5ms abandoning it.</strong> The job is not lost either way — the stalled mechanism eventually rescues it — but "eventually" is up to <code>lockDuration</code> away (30 seconds by default), during which the work has silently not happened, and then it runs a second time. Multiply by every deploy.</p>
+<p><strong>1296ms finishing the job, versus 5ms abandoning it.</strong> The job is not lost either way — the stalled mechanism eventually rescues it — but "eventually" is up to <code>lockDuration</code> + <code>stalledInterval</code> away — the lock must expire, then a check must run; with the defaults (30 s + 30 s) the same SIGKILL test measured <strong>60,070 ms</strong> — during which the work has silently not happened, and then it runs a second time. Multiply by every deploy.</p>
 <pre><code class="language-javascript">const worker = new Worker('email', handler, { connection, concurrency: 10 });
 
 const shutdown = async (signal) =&gt; {
@@ -992,11 +1042,11 @@ app.get('/health/queues', async (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>The queue is a second system, and it fails on its own schedule.</strong> When Redis is down, <code>queue.add()</code> throws — inside your HTTP route. Decide now what that means: for a welcome email, catch it and let the request succeed (the user cares about the account, not the email); for a payment job, fail the request loudly. This is the same fail-open versus fail-closed decision the rate limiter made in lesson 12.4, and the answer differs per queue. What you must not do is let an unhandled Redis error turn a working signup into a 500.</p>
+<p><strong>The queue is a second system, and it fails on its own schedule.</strong> When Redis is down, <code>queue.add()</code> does not throw — measured with BullMQ 6.7.2 it <strong>hangs</strong>, waiting for the connection to come back (no answer after 15 s, even with <code>enableOfflineQueue: false</code>), and your HTTP route hangs with it. So wrap it in a timeout (<code>Promise.race</code>, about 1 s) and decide now what that means: for a welcome email, catch it and let the request succeed (the user cares about the account, not the email); for a payment job, fail the request loudly. This is the same fail-open versus fail-closed decision the rate limiter made in lesson 12.4, and the answer differs per queue. What you must not do is let an unhandled Redis error turn a working signup into a 500.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> This is where the in-process queue's bill comes due, and the file admits it: "if the process crashes mid-job, in-flight jobs are lost". There is no lock, no stalled detection, no second worker to reclaim anything — a deploy mid-embedding loses that document's job outright. The mitigation is real but manual: documents carry <code>embeddingStatus</code>, and <code>cron.service.ts</code> calls <code>recoverPendingJobs()</code> on startup to re-queue anything stuck in <code>processing</code>. That is a hand-built version of the stalled mechanism measured above, running once per boot instead of every <code>stalledInterval</code>. It works, and the honest way to describe it is: the site rebuilt the cheapest 20% of BullMQ and skipped the rest, deliberately, because one process does not need the rest — yet.</p>
+<p><strong>How cuongthai.com does it.</strong> This is where the in-process queue's bill comes due, and the file admits it: "if the process crashes mid-job, in-flight jobs are lost". There is no lock, no stalled detection, no second worker to reclaim anything — a deploy mid-embedding loses that document's job outright. The mitigation the comment describes is not there yet: <code>cron.service.ts</code> does call <code>recoverPendingJobs()</code> on startup, but the function body only logs "no pending jobs (status column not yet migrated)" and returns 0 — there is no <code>embeddingStatus</code> column, so nothing stuck in <code>processing</code> is ever re-queued. It is the hook for a hand-built version of the stalled mechanism measured above (once per boot instead of every <code>stalledInterval</code>), not the mechanism. The honest way to describe it: the site rebuilt the cheapest part of BullMQ — attempts, in memory — and has a placeholder for recovery, deliberately, because one process can live with that — for now.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1005,6 +1055,16 @@ app.get('/health/queues', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-990"><span class="lc-t">Code Lab · Metrics &amp; Dashboards</span><span class="lc-d">Đo và cảnh báo cho hàng đợi — nối tiếp chương 15</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-worker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 10.2: queues and workers — where an asynchronous job really runs</span><span class="lc-sub">The API-contract side of the same queue: six exports with one worker vs three, every POST answered in about 60 ms either way. This lesson stays at the worker: SIGKILL rescued after 2,068 ms (60,070 ms with the defaults), a blocking job run twice, a deploy with and without SIGTERM.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in API Design — lesson 12.7: the deployment checklist</span><span class="lc-sub">Readiness, graceful shutdown, logs, backups and a smoke test for a whole API. The queue's share of that checklist is measured here: worker.close() on SIGTERM finished the job in 903 ms, no handler cut it after 2 ms, and stop_grace_period must outlast your longest job.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1050,7 +1110,7 @@ Error: Missing lock for job 1. moveToFinished
    nhật ký worker: SAN-SANG | BATDAU 1
    thoát sau 5ms — CẮT NGANG job đang chạy
    completed=0 · active=1 (job kẹt, phải chờ cơ chế stalled cứu)</div>
-<p><strong>1296ms để làm xong việc, so với 5ms để bỏ của chạy lấy người.</strong> Job không mất trong cả hai trường hợp — cơ chế job treo rồi sẽ cứu nó — nhưng "rồi sẽ" có thể là tận <code>lockDuration</code> sau đó (mặc định 30 giây), trong suốt quãng ấy công việc đã âm thầm KHÔNG diễn ra, và rồi nó chạy thêm một lần nữa. Hãy nhân con số đó với số lần bạn deploy.</p>
+<p><strong>1296ms để làm xong việc, so với 5ms để bỏ của chạy lấy người.</strong> Job không mất trong cả hai trường hợp — cơ chế job treo rồi sẽ cứu nó — nhưng "rồi sẽ" có thể là tận <code>lockDuration</code> + <code>stalledInterval</code> sau đó — khoá phải hết hạn, rồi một lượt kiểm phải chạy; với mặc định (30 giây + 30 giây) chính phép thử SIGKILL đo được <strong>60.070 ms</strong> — trong suốt quãng ấy công việc đã âm thầm KHÔNG diễn ra, và rồi nó chạy thêm một lần nữa. Hãy nhân con số đó với số lần bạn deploy.</p>
 <pre><code class="language-javascript">const worker = new Worker('email', handler, { connection, concurrency: 10 });
 
 const shutdown = async (signal) =&gt; {
@@ -1109,11 +1169,11 @@ app.get('/health/queues', async (req, res) =&gt; {
 </div>
 
 <div class="pitfall">
-<p><strong>Hàng đợi là một hệ thống thứ hai, và nó hỏng theo lịch riêng của nó.</strong> Khi Redis chết, <code>queue.add()</code> ném lỗi — ngay bên trong route HTTP của bạn. Hãy quyết định ngay bây giờ điều đó nghĩa là gì: với một email chào mừng thì hãy bắt lỗi và để request thành công (người dùng quan tâm tới cái tài khoản, không phải cái email); với một job thanh toán thì hãy cho request hỏng thật ồn ào. Đây đúng là quyết định fail-open hay fail-closed mà bộ giới hạn tần suất đã phải đưa ra ở bài 12.4, và câu trả lời khác nhau tuỳ từng hàng đợi. Thứ bạn tuyệt đối không được làm là để một lỗi Redis không ai bắt biến một lượt đăng ký đang chạy tốt thành mã 500.</p>
+<p><strong>Hàng đợi là một hệ thống thứ hai, và nó hỏng theo lịch riêng của nó.</strong> Khi Redis chết, <code>queue.add()</code> không ném lỗi — đo với BullMQ 6.7.2 nó <strong>treo</strong>, chờ kết nối quay lại (không trả lời sau 15 giây, kể cả với <code>enableOfflineQueue: false</code>), và route HTTP của bạn treo theo. Vì vậy hãy bọc nó trong một giới hạn thời gian (<code>Promise.race</code>, khoảng 1 giây) và quyết định ngay bây giờ điều đó nghĩa là gì: với một email chào mừng thì hãy bắt lỗi và để request thành công (người dùng quan tâm tới cái tài khoản, không phải cái email); với một job thanh toán thì hãy cho request hỏng thật ồn ào. Đây đúng là quyết định fail-open hay fail-closed mà bộ giới hạn tần suất đã phải đưa ra ở bài 12.4, và câu trả lời khác nhau tuỳ từng hàng đợi. Thứ bạn tuyệt đối không được làm là để một lỗi Redis không ai bắt biến một lượt đăng ký đang chạy tốt thành mã 500.</p>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Đây chính là chỗ hàng đợi trong tiến trình phải trả hoá đơn, và file cũng thừa nhận: "nếu tiến trình sập giữa chừng thì các job đang bay bị mất". Không có khoá nào, không có cơ chế phát hiện job treo, không có worker thứ hai để đòi lại bất cứ thứ gì — một lần deploy giữa lúc đang tính embedding là mất trắng job của tài liệu đó. Biện pháp giảm nhẹ thì có thật nhưng thủ công: tài liệu mang theo <code>embeddingStatus</code>, và <code>cron.service.ts</code> gọi <code>recoverPendingJobs()</code> lúc khởi động để đưa lại vào hàng đợi mọi thứ đang kẹt ở <code>processing</code>. Đó là một phiên bản làm tay của cơ chế job treo vừa đo ở trên, chạy một lần mỗi lần bật máy thay vì chạy mỗi <code>stalledInterval</code>. Nó hoạt động được, và cách mô tả trung thực nhất là: trang này đã dựng lại 20% rẻ nhất của BullMQ rồi bỏ qua phần còn lại, một cách có chủ ý, bởi vì một tiến trình thì chưa cần tới phần còn lại — chưa.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Đây chính là chỗ hàng đợi trong tiến trình phải trả hoá đơn, và file cũng thừa nhận: "nếu tiến trình sập giữa chừng thì các job đang bay bị mất". Không có khoá nào, không có cơ chế phát hiện job treo, không có worker thứ hai để đòi lại bất cứ thứ gì — một lần deploy giữa lúc đang tính embedding là mất trắng job của tài liệu đó. Biện pháp giảm nhẹ mà khối chú thích mô tả thì chưa có: <code>cron.service.ts</code> có gọi <code>recoverPendingJobs()</code> lúc khởi động, nhưng thân hàm chỉ ghi log "no pending jobs (status column not yet migrated)" rồi trả về 0 — chưa có cột <code>embeddingStatus</code> nào, nên không gì đang kẹt ở <code>processing</code> được đưa lại vào hàng đợi. Nó là cái móc chờ sẵn cho một phiên bản làm tay của cơ chế job treo vừa đo ở trên (chạy một lần mỗi lần bật máy thay vì mỗi <code>stalledInterval</code>), chưa phải chính cơ chế đó. Cách mô tả trung thực nhất: trang này đã dựng lại phần rẻ nhất của BullMQ — số lần thử, trong bộ nhớ — và để một hàm giữ chỗ cho phần phục hồi, một cách có chủ ý, vì một tiến trình còn chịu được — tạm thời.</p>
 </div>
 
 <div class="link-card codelab">
@@ -1122,6 +1182,16 @@ app.get('/health/queues', async (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-990"><span class="lc-t">Code Lab · Metrics &amp; Dashboards</span><span class="lc-d">Đo và cảnh báo cho hàng đợi — nối tiếp chương 15</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-10-1-worker" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 10.2: hàng đợi và worker — việc bất đồng bộ thật sự chạy ở đâu</span><span class="lc-sub">Phía hợp đồng API của cùng hàng đợi: sáu lượt xuất với một worker so với ba, mọi POST đều được trả lời trong khoảng 60 ms. Bài này ở lại phía worker: SIGKILL được cứu sau 2.068 ms (60.070 ms với mặc định), job chặn chạy hai lần, deploy có và không có SIGTERM.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/api-design/learn?lessonSlug=api-12-7-trien-khai" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào API Design — bài 12.7: checklist triển khai</span><span class="lc-sub">Readiness, tắt êm, log, sao lưu và kiểm khói cho cả một API. Phần của hàng đợi trong checklist đó được đo ở đây: worker.close() khi nhận SIGTERM làm xong job trong 903 ms, không có handler thì bị cắt sau 2 ms, và stop_grace_period phải dài hơn job lâu nhất.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1239,7 +1309,7 @@ app.get('/health/queues', async (req, res) =&gt; {
             question: 'On SIGTERM, a worker with a shutdown handler exited after 1296ms having finished its job; one without exited after 5ms leaving the job in "active". Since the stalled mechanism eventually rescues it anyway, why does the handler matter?|||Khi nhận SIGTERM, worker có xử lý tắt êm thoát sau 1296ms và đã làm xong job; worker không có thì thoát sau 5ms, để lại job ở trạng thái "active". Vì cơ chế job treo đằng nào cũng cứu nó, vậy việc xử lý tín hiệu quan trọng ở chỗ nào?',
             options: [
               'It does not matter much; the stalled mechanism makes it equivalent|||Không quan trọng lắm; cơ chế job treo khiến hai cách tương đương nhau',
-              '"Eventually" is up to lockDuration away (30s by default), during which the work has silently not happened — and then it runs a SECOND time, on every single deploy|||"Rồi sẽ" có thể là tận lockDuration sau đó (mặc định 30 giây), trong suốt quãng ấy công việc đã âm thầm KHÔNG diễn ra — rồi nó chạy thêm LẦN THỨ HAI, và điều đó lặp lại ở mỗi lần deploy',
+              '"Eventually" is up to lockDuration + stalledInterval away (about a minute with the defaults), during which the work has silently not happened — and then it runs a SECOND time, on every single deploy|||"Rồi sẽ" có thể là tận lockDuration + stalledInterval sau đó (khoảng một phút với mặc định), trong suốt quãng ấy công việc đã âm thầm KHÔNG diễn ra — rồi nó chạy thêm LẦN THỨ HAI, và điều đó lặp lại ở mỗi lần deploy',
               'Without a handler the job data is deleted from Redis immediately|||Nếu không xử lý thì dữ liệu job bị xoá khỏi Redis ngay lập tức',
               'The handler is needed only when running more than one worker process|||Việc xử lý tín hiệu chỉ cần khi chạy nhiều hơn một tiến trình worker',
             ],

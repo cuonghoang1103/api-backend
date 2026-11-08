@@ -802,6 +802,11 @@ redis-cli ZINTERCARD 2 s1 s2</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> A sorted set is a hash table plus a skip list, which is why <code>ZSCORE</code> is O(1) while ranks, ranges and counts are O(log N) — and why ties break on the member string, not on insertion order. <code>ZADD</code> carries six flags and two of them replace code you would otherwise write badly: <code>GT</code> makes a high-score update race-free with no transaction, and <code>CH</code> makes the return value tell you whether anything actually changed. And the score is a double: exact only to 2^53, so millisecond timestamps are safe, snowflake IDs and nanoseconds are not, and money belongs in integer cents.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.4: delayed jobs live in a sorted set</span><span class="lc-sub">BullMQ keeps every delayed job in a zset scored by its run time. Measured from Node: 20 jobs due between 100 and 2,000 ms ran late by 47.9 ms on average (911 ms at worst with a busy worker) — "not before", never "exactly at".</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 4 · Bài 4.3</span>
@@ -966,6 +971,11 @@ redis-cli ZINTERCARD 2 s1 s2</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Sorted set là một bảng băm cộng một skip list, đó là lý do <code>ZSCORE</code> là O(1) trong khi hạng, khoảng và phép đếm là O(log N) — và cũng là lý do điểm bằng nhau thì phân định theo chuỗi phần tử, không theo thứ tự chèn. <code>ZADD</code> mang sáu cờ và hai trong số đó thay cho phần mã bạn hẳn sẽ viết tệ: <code>GT</code> làm cho phép cập nhật điểm cao hết đua mà không cần giao dịch, còn <code>CH</code> làm giá trị trả về nói cho bạn biết có gì thật sự thay đổi hay không. Và điểm là một double: chỉ chính xác tới 2^53, nên mốc thời gian mili giây thì an toàn, ID snowflake và nano giây thì không, còn tiền thì phải nằm ở số xu dạng nguyên.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-4-lich-trinh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.4: job hẹn giờ nằm trong một sorted set</span><span class="lc-sub">BullMQ giữ mọi job hẹn giờ trong một zset, điểm là thời điểm chạy. Đo từ Node: 20 job hẹn từ 100 tới 2.000 ms chạy trễ trung bình 47,9 ms (tệ nhất 911 ms khi worker bận) — "không sớm hơn", không bao giờ "đúng vào lúc".</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

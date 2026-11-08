@@ -800,6 +800,11 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
   <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 12.5: Pub/Sub vs Streams</span><span class="lc-sub">Pub/Sub delivers only to whoever listens NOW (an offline subscriber loses the message, PUBLISH returns 0); a handler registered on every reconnect turns one message into three; a Stream with a consumer group loses no job when a worker dies.</span></span>
   <span class="lc-cta">OPEN NODE.JS LESSON →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.2: BullMQ, and what a job is in Redis</span><span class="lc-sub">The library most Node teams use instead of hand-built groups, opened key by key: a hash + an id in a list + a stream of events (216 bytes). addBulk 17.8× faster than add(), concurrency 86× for I/O and nothing for CPU, and 18,118 of 20,000 jobs lost on an allkeys-lru Redis.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.3</span>
@@ -986,6 +991,11 @@ redis-cli XINFO CONSUMERS orders billing</code></pre>
   <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 12.5: Pub/Sub hay Streams</span><span class="lc-sub">Pub/Sub chỉ giao cho ai đang nghe NGAY LÚC ĐÓ (thuê bao offline mất tin, PUBLISH trả 0); handler đăng ký lại mỗi lần nối lại biến một tin thành ba; Stream với consumer group không mất job nào khi worker chết.</span></span>
   <span class="lc-cta">MỞ BÀI NODE.JS →</span>
 </a>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-2-bullmq-co-ban" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.2: BullMQ, và một job thực chất là gì trong Redis</span><span class="lc-sub">Thư viện phần lớn đội Node dùng thay cho nhóm tự dựng, mở ra từng khoá: một hash + một id trong list + một stream sự kiện (216 byte). addBulk nhanh 17,8× so với add(), concurrency nhanh 86× với việc chờ I/O và không nhanh chút nào với việc CPU, và 18.118 trên 20.000 job mất trên Redis allkeys-lru.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -1147,6 +1157,11 @@ redis-cli XLEN orders:dead</code></pre>
 </a>
 
 <p class="note-ct"><strong>Three things to remember.</strong> Redis records the pending list but never acts on it — a dead consumer's entries stay pending forever unless <em>you</em> run a sweeper, so a consumer group without one is a queue that silently drops the work of every crashed worker. <code>XAUTOCLAIM</code> is the modern tool: cursor-based, one round trip, and it cleans up PEL entries whose stream entries are gone. And <code>min-idle-time</code> is the safety interlock in both directions — too long and recovery is slow, too short and you claim work from a healthy worker and run the job twice, so size it from your handler's p99 with a wide margin and heartbeat with <code>XCLAIM … JUSTID</code> on genuinely long jobs.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.3: retries, backoff and the charge that ran three times</span><span class="lc-sub">The other half of retries: the handler. One order charged 300,000 VND instead of 100,000 by three honest retries, then three idempotent fixes measured — a unique key (charged once), a one-statement claim (rendered once), an idempotency key (charged once) — and jobId at the door.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 <div class="ml-vi">
 <span class="eyebrow">Chương 8 · Bài 8.4</span>
@@ -1299,6 +1314,11 @@ redis-cli XLEN orders:dead</code></pre>
 </a>
 
 <p class="note-ct"><strong>Ba điều cần nhớ.</strong> Redis ghi lại danh sách chờ nhưng không bao giờ hành động dựa trên nó — các mục của một consumer đã chết nằm chờ mãi mãi trừ khi <em>bạn</em> chạy một tiến trình quét, nên một nhóm tiêu thụ không có tiến trình quét là một hàng đợi âm thầm vứt bỏ công việc của mọi worker từng sập. <code>XAUTOCLAIM</code> là công cụ hiện đại: dựa trên con trỏ, một vòng đi-về, và nó dọn cả những mục PEL mà mục stream tương ứng đã biến mất. Và <code>min-idle-time</code> là chốt an toàn theo cả hai chiều — quá dài thì hồi phục chậm, quá ngắn thì bạn đòi việc từ một worker khoẻ mạnh và chạy việc đó hai lần, nên hãy chọn nó từ p99 của handler kèm biên rất rộng và hãy gửi nhịp tim bằng <code>XCLAIM … JUSTID</code> cho những việc thật sự dài.</p>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-3-thu-lai-va-idempotent" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.3: thử lại, backoff và cú trừ tiền chạy ba lần</span><span class="lc-sub">Nửa còn lại của thử lại: hàm xử lý. Một đơn bị trừ 300.000 VND thay vì 100.000 bởi ba lần thử lại đúng cấu hình, rồi ba cách idempotent đo thật — khoá duy nhất (trừ 1 lần), giành quyền một câu lệnh (dựng 1 lần), khoá idempotency (trừ 1 lần) — và jobId chặn ở cửa.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

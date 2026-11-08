@@ -234,6 +234,12 @@ Location: /v2/jobs/job_1</div>
   <li><strong>“Why not just raise the timeout?”</strong> Every hop has one (CDN 125 s, nginx 60 s, mobile networks less); the server keeps working after the client is gone; retries double the work.</li>
 </ul>
 
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-1-vi-sao-hang-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 13.1: a request is not a place to do work</span><span class="lc-sub">Why the work leaves the request at all, measured: p95 308.7 ms inline vs 11.7 ms queued (50 concurrent), and an SMTP server that takes 5 connections: 5 of 100 emails sent inline vs 100 of 100 through a queue — plus a real queue.add() before COMMIT that reads NOT FOUND.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
+
 <h3>🧪 Practice (30–40 min)</h3>
 <div class="callout ok"><ol>
   <li>Run <code>perf/edge-proxy.mjs</code> with <code>EDGE_TIMEOUT_MS=60000</code> (nginx's default) and export one lab for the whole range. Does it survive? How many rows per second does the export make?</li>
@@ -463,6 +469,12 @@ Location: /v2/jobs/job_1</div>
   <li><strong>“Một endpoint mất hai phút. Bạn làm gì?”</strong> 202 + Location tới tài nguyên công việc có trạng thái, tiến độ, huỷ và hạn giữ; hàng đợi bền và worker; client hỏi lại theo Retry-After hoặc nhận webhook. Nhắc tới timeout của proxy và cú bấm thứ hai.</li>
   <li><strong>“Sao không tăng timeout?”</strong> Chặng nào cũng có timeout (CDN 125 s, nginx 60 s, mạng di động ít hơn); server vẫn làm khi client đã đi; thử lại thì công việc nhân đôi.</li>
 </ul>
+
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-1-vi-sao-hang-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 13.1: request không phải chỗ để làm việc nặng</span><span class="lc-sub">Vì sao việc phải rời request, đo thật: p95 308,7 ms làm ngay vs 11,7 ms qua hàng đợi (50 request), và một máy SMTP chỉ nhận 5 kết nối: 5 trên 100 email khi làm ngay vs 100 trên 100 qua hàng đợi — kèm queue.add() trước COMMIT đọc ra NOT FOUND.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 
 <h3>🧪 Thực hành (30–40 phút)</h3>
 <div class="callout ok"><ol>

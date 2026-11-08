@@ -2261,6 +2261,12 @@ SMOKE ĐẠT: mọi bước xanh</div>
   <li><strong>“How do you deploy without errors?”</strong> Readiness goes 503 on SIGTERM, a drain longer than the load balancer's check interval, server.close for in-flight requests — measured 622 errors ⇒ 0.</li>
 </ul>
 
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-5-worker-chet-va-van-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper: Node.js course, lesson 13.5 — when the worker dies</span><span class="lc-sub">The background-job half of graceful shutdown, measured: a SIGKILLed worker's job rescued after 2,068 ms (60,070 ms with the defaults), a blocking job run twice and still failed, SIGTERM with a handler 903 ms vs 2 ms without — plus cleanup, a queue health endpoint, and what queue.add() does when Redis is down (it hangs).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
+
 <h3>🧪 Practice (40 min)</h3>
 <div class="callout ok"><ol>
   <li>Start with <code>NODE_ENV=production</code> and nothing set; add variables one by one until it starts. Then set <code>LABFLOW_JWT_SECRET=short</code> and read the message.</li>
@@ -2447,6 +2453,12 @@ SMOKE ĐẠT: mọi bước xanh</div>
   <li><strong>“Liveness khác readiness thế nào?”</strong> Sống = đừng khởi động lại tôi; sẵn sàng = hãy gửi request cho tôi. Sự cố CSDL làm LabFlow còn sống nhưng chưa sẵn sàng — khởi động lại cũng vô ích.</li>
   <li><strong>“Triển khai mà không lỗi bằng cách nào?”</strong> Readiness thành 503 khi nhận SIGTERM, thời gian xả dài hơn chu kỳ kiểm của load balancer, server.close cho request đang dở — đo được 622 lỗi ⇒ 0.</li>
 </ul>
+
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-13-5-worker-chet-va-van-hanh" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn: khoá Node.js, bài 13.5 — khi worker chết</span><span class="lc-sub">Nửa việc nền của tắt êm, đo thật: job của worker bị SIGKILL được cứu sau 2.068 ms (60.070 ms với mặc định), job chặn chạy hai lần mà vẫn hỏng, SIGTERM có handler 903 ms so với 2 ms khi không có — cùng dọn dẹp, endpoint sức khoẻ hàng đợi, và queue.add() làm gì khi Redis sập (nó treo).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 
 <h3>🧪 Thực hành (40 phút)</h3>
 <div class="callout ok"><ol>

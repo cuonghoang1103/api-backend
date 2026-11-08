@@ -86,18 +86,18 @@ export default {
     'nodejs-10-4-phuc-vu-media-cache': { yt: 'JKxlsvZXG7c', credit: 'Fireship — NGINX Explained in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/10-upload-object-storage/10-04-phuc-vu-media-cache-tron-000a2ca4.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 11 — Realtime ───────────────────────────────────────────── */
-    'nodejs-11-1-websocket-co-ban': { yt: '1BfCnjr_Vjg', credit: 'Fireship — WebSockets in 100 Seconds & Beyond with Socket.io' },
-    'nodejs-11-2-ws-vs-socketio-rooms': { yt: 'y8oN927WIjA', credit: 'Scalable Scripts — NodeJS Websockets with Socket.io' },
+    'nodejs-11-1-websocket-co-ban': { yt: '1BfCnjr_Vjg', credit: 'Fireship — WebSockets in 100 Seconds & Beyond with Socket.io', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/11-realtime-websocket/11-01-websocket-co-ban-tron-066b8243.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-11-2-ws-vs-socketio-rooms': { yt: 'y8oN927WIjA', credit: 'Scalable Scripts — NodeJS Websockets with Socket.io', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/11-realtime-websocket/11-02-ws-vs-socketio-rooms-tron-1f29e326.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-11-3-xac-thuc-phan-quyen-socket': { yt: 'E-Oajgw-L6s', credit: 'Ganesh H — 20 - Authentication with Socket.IO - Advanced Node and Express - freeCodeCamp', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/11-realtime-websocket/11-03-xac-thuc-phan-quyen-socket-tron-26677754.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-11-4-scale-adapter-backpressure': { yt: 'gzIcGhJC8hA', credit: 'Hussein Nasser — Scaling Websockets with Redis, HAProxy and Node JS - High-availability Group Chat Application' },
+    'nodejs-11-4-scale-adapter-backpressure': { yt: 'gzIcGhJC8hA', credit: 'Hussein Nasser — Scaling Websockets with Redis, HAProxy and Node JS - High-availability Group Chat Application', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/11-realtime-websocket/11-04-scale-adapter-backpressure-tron-ee729422.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 12 — Redis ──────────────────────────────────────────────── */
-    'nodejs-12-1-redis-co-ban': { yt: 'G1rOthIU-uo', credit: 'Fireship — Redis in 100 Seconds' },
+    'nodejs-12-1-redis-co-ban': { yt: 'G1rOthIU-uo', credit: 'Fireship — Redis in 100 Seconds', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-01-redis-co-ban-667485fb.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-12-2-cache-aside': { yt: '8A6s9d0jnWI', credit: 'Software With Shawn — Caching Strategies With Redis' },
-    'nodejs-12-3-cau-truc-du-lieu': { yt: 'O_jNJ32s6x8', credit: 'Redis — Intro to Redis Data Structures and Pub/Sub vs Redis Streams - by Dave Nielsen' },
+    'nodejs-12-3-cau-truc-du-lieu': { yt: 'O_jNJ32s6x8', credit: 'Redis — Intro to Redis Data Structures and Pub/Sub vs Redis Streams - by Dave Nielsen', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-03-cau-truc-du-lieu-tron-f7494c59.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-12-4-nguyen-tu-rate-limit-lock': { yt: 'YcmU24x4KyA', credit: 'Redis — Rate Limiting with Redis' },
-    'nodejs-12-5-pubsub-streams': { yt: 'hFNnNVawHhk', credit: 'Sangam Mukherjee — Redis Full Course 2026 | Caching, Rate Limiting, Pub/Sub' },
-    'nodejs-12-6-van-hanh-production': { yt: 'cK1_csGSFFw', credit: 'Tejav Academy — Distributed Caching Explained | Redis, Cache-Aside & System Design' },
+    'nodejs-12-5-pubsub-streams': { yt: 'hFNnNVawHhk', credit: 'Sangam Mukherjee — Redis Full Course 2026 | Caching, Rate Limiting, Pub/Sub', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-05-pubsub-streams-tron-e87e949f.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-12-6-van-hanh-production': { yt: 'cK1_csGSFFw', credit: 'Tejav Academy — Distributed Caching Explained | Redis, Cache-Aside & System Design', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/12-redis/12-06-van-hanh-production-tron-6452fa5b.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 13 — Tác vụ nền & hàng đợi ──────────────────────────────── */
     'nodejs-13-1-vi-sao-hang-doi': { yt: 'yXPKB7fHxfo', credit: 'Piyush Garg — What are Message Queues? | BullMQ Queues NodeJS' },

@@ -8,8 +8,8 @@
  * Mọi link `/language/en/ielts…` trong mã web được shim đổi sang `/ielts…`
  * (`doiDuongApp` trong shims/next-navigation.tsx) nên bấm đâu cũng ở lại mục này.
  *
- * Chủ đề: CSS IELTS đổi màu theo `html.theme-dark` của WEB — `VoWeb` (TrangWeb.tsx)
- * tự đặt lớp đó cho MỌI cây web khi app tối (`useLopToiWeb`).
+ * Chủ đề: CSS IELTS đổi màu theo `html.theme-dark` của WEB
+ * — nay `app-state.tsx` đặt lớp đó lên <html> mỗi khi app tối.
  */
 import { TrangWebTheoTuyen } from '../web/TrangWeb';
 import { KhungVideo } from '../academy/KhungVideo';

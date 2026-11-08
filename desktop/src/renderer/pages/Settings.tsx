@@ -22,9 +22,10 @@
  */
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import {
-  Bell, Bot, BrainCircuit, Database, ExternalLink, Info, Keyboard, LogOut, Monitor, Moon,
+  Bell, Bot, BrainCircuit, Clock, Database, ExternalLink, Info, Keyboard, LogOut, Monitor, Moon,
   Palette, Search, Sun, Trash2, UserRound, X,
 } from 'lucide-react';
+import { GIO_SANG_MAC_DINH, GIO_TOI_MAC_DINH, docGio } from '../../shared/chuDe';
 import { useAppState } from '../app-state';
 import { useSession } from '../auth/session';
 import { SyncPanel } from '../components/SyncPanel';
@@ -280,28 +281,51 @@ function NhomGiaoDien({ theme: chuDe, sang: s }: { theme: ThemeSetting; sang: (n
   const cheDoBen = settings.sidebarMode === 'icons' || settings.sidebarMode === 'hidden' ? settings.sidebarMode : 'full';
   const zoom = typeof settings.zoomLevel === 'number' ? settings.zoomLevel : 1;
   const CHU_DE: { value: ThemeSetting; label: string; icon: ReactNode }[] = [
+    { value: 'system', label: dich('Mặc định'), icon: <Monitor size={14} aria-hidden /> },
     { value: 'light', label: dich('Sáng'), icon: <Sun size={14} aria-hidden /> },
     { value: 'dark', label: dich('Tối'), icon: <Moon size={14} aria-hidden /> },
-    { value: 'system', label: dich('Theo hệ thống'), icon: <Monitor size={14} aria-hidden /> },
+    { value: 'theo-gio', label: dich('Theo giờ'), icon: <Clock size={14} aria-hidden /> },
   ];
+  const gioSang = docGio(settings.themeGioSang, GIO_SANG_MAC_DINH);
+  const gioToi = docGio(settings.themeGioToi, GIO_TOI_MAC_DINH);
+  const GIO = Array.from({ length: 24 }, (_, h) => h);
+  const hh = (h: number) => `${String(h).padStart(2, '0')}:00`;
   return (
     <>
-      <The id="chu-de" sang={s('chu-de')} ten={dich('Chủ đề')} moTa={dich('“Theo hệ thống” sẽ đổi theo cài đặt sáng/tối của máy.')}>
-        <div className="st-chude" role="radiogroup" aria-label={dich('Chủ đề')}>
-          {CHU_DE.map((o) => (
-            <button
-              key={o.value}
-              type="button"
-              role="radio"
-              aria-checked={chuDe === o.value}
-              data-on={chuDe === o.value}
-              className="st-chude-o"
-              onClick={() => setSetting('theme', o.value)}
-            >
-              <span className="st-xem" data-kieu={o.value} aria-hidden><i /><i /><i /></span>
-              <span className="st-chude-ten">{o.icon}{o.label}</span>
-            </button>
-          ))}
+      <The id="chu-de" sang={s('chu-de')} ten={dich('Chủ đề')} moTa={dich('“Mặc định” đổi theo cài đặt sáng/tối của máy. “Theo giờ” tự sáng ban ngày, tối ban đêm.')}>
+        <div className="st-chude-khoi">
+          <div className="st-chude" role="radiogroup" aria-label={dich('Chủ đề')}>
+            {CHU_DE.map((o) => (
+              <button
+                key={o.value}
+                type="button"
+                role="radio"
+                aria-checked={chuDe === o.value}
+                data-on={chuDe === o.value}
+                className="st-chude-o"
+                onClick={() => setSetting('theme', o.value)}
+              >
+                <span className="st-xem" data-kieu={o.value} aria-hidden><i /><i /><i /></span>
+                <span className="st-chude-ten">{o.icon}{o.label}</span>
+              </button>
+            ))}
+          </div>
+          {chuDe === 'theo-gio' && (
+            <div className="st-chude-gio">
+              <label>
+                <Sun size={13} aria-hidden /> {dich('Sáng từ')}
+                <select value={gioSang} onChange={(e) => setSetting('themeGioSang', Number(e.target.value))}>
+                  {GIO.map((h) => <option key={h} value={h}>{hh(h)}</option>)}
+                </select>
+              </label>
+              <label>
+                <Moon size={13} aria-hidden /> {dich('Tối từ')}
+                <select value={gioToi} onChange={(e) => setSetting('themeGioToi', Number(e.target.value))}>
+                  {GIO.map((h) => <option key={h} value={h}>{hh(h)}</option>)}
+                </select>
+              </label>
+            </div>
+          )}
         </div>
       </The>
 

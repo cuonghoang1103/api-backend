@@ -132,6 +132,18 @@
 .st-xem[data-kieu='system'] i:nth-child(1) { background: #e2e8f2; }
 .st-xem[data-kieu='system'] i:nth-child(2) { background: linear-gradient(90deg, #5265d9 0 14px, #8b9cff 14px); }
 .st-xem[data-kieu='system'] i:nth-child(3) { background: linear-gradient(90deg, #fff 0 14px, #1d2532 14px); box-shadow: 0 0 0 1px #6b7280; }
+/* "Theo giờ": nửa trên sáng (ngày), nửa dưới tối (đêm) — khác hẳn ô "Mặc định" chia dọc. */
+.st-xem[data-kieu='theo-gio'] { background: linear-gradient(180deg, #f2f5fa 50%, #11151d 50%); }
+.st-xem[data-kieu='theo-gio'] i:nth-child(1) { background: linear-gradient(180deg, #e2e8f2 50%, #171c26 50%); }
+.st-xem[data-kieu='theo-gio'] i:nth-child(2) { background: #5265d9; }
+.st-xem[data-kieu='theo-gio'] i:nth-child(3) { background: linear-gradient(180deg, #fff 0 5px, #1d2532 5px); box-shadow: 0 0 0 1px #6b7280; }
+.st-chude-khoi { display: grid; gap: 10px; justify-items: end; }
+.st-chude-gio { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12.5px; color: var(--ct-text-muted); }
+.st-chude-gio label { display: inline-flex; align-items: center; gap: 6px; }
+.st-chude-gio select {
+  height: 28px; padding: 0 6px; border-radius: 8px; border: 1px solid var(--ct-border);
+  background: var(--ct-surface); color: var(--ct-text); font: inherit; font-variant-numeric: tabular-nums;
+}
 
 .st-switch { flex: 0 0 auto; }
 

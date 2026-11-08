@@ -36,12 +36,16 @@ export const externalUrlSchema = z
     return parsed.protocol === 'http:' || parsed.protocol === 'https:';
   }, 'Chỉ mở được http/https');
 
-export const themeSchema = z.enum(['light', 'dark', 'system']);
+/** 'system' = "Mặc định" (theo hệ điều hành) · 'theo-gio' = sáng/tối theo giờ — luật ở `shared/chuDe.ts`. */
+export const themeSchema = z.enum(['light', 'dark', 'system', 'theo-gio']);
 export type ThemeSetting = z.infer<typeof themeSchema>;
 
 /** Khoá cấu hình renderer được phép đọc/ghi. Danh sách đóng, không tự do. */
 export const settingKeySchema = z.enum([
   'theme',
+  /** Chế độ "Theo giờ": giờ bắt đầu SÁNG / bắt đầu TỐI (số nguyên 0..23, mặc định 6 / 18). Xem `shared/chuDe.ts`. */
+  'themeGioSang',
+  'themeGioToi',
   /** 'full' | 'icons' | 'hidden' — xem components/Sidebar.tsx */
   'sidebarMode',
   'robotPanelOpen',

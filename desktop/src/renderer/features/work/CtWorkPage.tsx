@@ -21,7 +21,7 @@
  *    giờ là vùng nội dung của app, và z-index của CT Work không vượt ra ngoài.
  *
  * 3. CHỦ ĐỀ TỐI. `work.css` đổi token bằng `html.theme-dark .work-root`. `VoWeb`
- *    (TrangWeb.tsx) đặt lớp đó cho mọi cây web khi app tối — xem `useLopToiWeb`.
+ *    (app-state.tsx) đặt lớp đó lên <html> mỗi khi app tối.
  *
  * 4. REALTIME. `useProjectRealtime` (components/work/hooks.ts) vào phòng
  *    `work:project:<id>` qua `connectSocket()` của `lib/socket.ts`. Ở app, cắm

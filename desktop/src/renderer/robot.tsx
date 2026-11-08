@@ -18,6 +18,7 @@
  * KHÔNG BAO GIỜ dời chỗ vì một bong bóng. Xem `main/robotViTri.ts`.
  */
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { GIO_SANG_MAC_DINH, GIO_TOI_MAC_DINH, docGio, giaiChuDe } from '../shared/chuDe';
 import { createRoot } from 'react-dom/client';
 /* ⚠️ Cửa sổ robot là một ENTRY RIÊNG — không qua `AppStateProvider`, nên tự
    gọi `datNgonNgu`, tự nghe đổi ngôn ngữ / chủ đề. */
@@ -62,10 +63,16 @@ function tomTat(chu: string, toiDa: number): string {
   return sach.length > toiDa ? `${sach.slice(0, toiDa - 1)}…` : sach;
 }
 
-/** Chủ đề sáng/tối: theo thiết đặt của app, 'system' thì theo hệ điều hành. */
+/** Giờ của chế độ "Theo giờ" — đọc lúc nạp thiết đặt (cửa sổ robot là entry riêng). */
+let gioRobot = { gioSang: GIO_SANG_MAC_DINH, gioToi: GIO_TOI_MAC_DINH };
+let cheDoRobot: unknown = 'system';
+/** Chủ đề sáng/tối: theo thiết đặt của app — luật chung ở `shared/chuDe.ts` (Mặc định/Sáng/Tối/Theo giờ). */
 function apChuDe(theme: unknown): void {
-  const toi = theme === 'dark'
-    || (theme !== 'light' && typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches);
+  cheDoRobot = theme;
+  const toi = giaiChuDe(theme, {
+    heThongToi: typeof matchMedia === 'function' && matchMedia('(prefers-color-scheme: dark)').matches,
+    ...gioRobot,
+  }) === 'dark';
   document.documentElement.dataset.theme = toi ? 'dark' : 'light';
 }
 
@@ -123,6 +130,7 @@ function Robot() {
   useEffect(() => {
     void window.cuongthai?.settings.getAll().then((t) => {
       datNgonNgu(t.ngonNgu === 'en' ? 'en' : 'vi');
+      gioRobot = { gioSang: docGio(t.themeGioSang, GIO_SANG_MAC_DINH), gioToi: docGio(t.themeGioToi, GIO_TOI_MAC_DINH) };
       apChuDe(t.theme);
       datPhanTram(phanTramTuThietDat(t));
       datTuDinhMep(t.robotBamMep === true);
@@ -133,7 +141,15 @@ function Robot() {
       void window.cuongthai?.settings.getAll().then((t) => apChuDe(t.theme));
     };
     mq?.addEventListener?.('change', doiHeThong);
-    return () => mq?.removeEventListener?.('change', doiHeThong);
+    // "Theo giờ": tính lại mỗi phút (rẻ — chỉ so giờ) và khi cửa sổ được focus lại sau lúc máy ngủ.
+    const nhip = window.setInterval(() => apChuDe(cheDoRobot), 60_000);
+    const khiFocus = () => apChuDe(cheDoRobot);
+    window.addEventListener('focus', khiFocus);
+    return () => {
+      mq?.removeEventListener?.('change', doiHeThong);
+      window.clearInterval(nhip);
+      window.removeEventListener('focus', khiFocus);
+    };
   }, []);
 
   const [, datNn] = useState(0);
@@ -145,6 +161,10 @@ function Robot() {
   useEffect(() => window.cuongthai?.on('robot:thietDat', (p) => {
     const { key, value } = p as { key?: string; value?: unknown };
     if (key === 'theme') apChuDe(value);
+    if (key === 'themeGioSang' || key === 'themeGioToi') {
+      gioRobot = { ...gioRobot, [key === 'themeGioSang' ? 'gioSang' : 'gioToi']: docGio(value, key === 'themeGioSang' ? GIO_SANG_MAC_DINH : GIO_TOI_MAC_DINH) };
+      apChuDe(cheDoRobot);
+    }
     if (key === 'robotBamMep') datTuDinhMep(value === true);
   }), []);
 

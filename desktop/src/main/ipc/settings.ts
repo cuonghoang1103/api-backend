@@ -51,7 +51,8 @@ export function registerSettingsHandlers(): void {
        robot trong app thì con nổi đổi theo (một khoá cho cả hai con). */
     // Nền cửa sổ chính theo giao diện vừa chọn (khỏi loé màu ngược khi kéo giãn) — window.ts.
     if (key === 'theme') void import('../window').then((m) => m.capNhatMauNenCuaSo(value));
-    if (key === 'theme' || key === 'robotBamMep' || key === 'robotCo') {
+    if (key === 'themeGioSang' || key === 'themeGioToi') void import('../window').then((m) => m.capNhatMauNenCuaSo(getSettings().theme));
+    if (key === 'theme' || key === 'themeGioSang' || key === 'themeGioToi' || key === 'robotBamMep' || key === 'robotCo') {
       void import('../robotNoi').then((m) => {
         if (key === 'robotCo' && typeof value === 'number') m.datPhanTram(value);
         m.baoRobot('robot:thietDat', { key, value });

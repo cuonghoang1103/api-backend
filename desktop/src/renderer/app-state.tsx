@@ -21,6 +21,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { SettingKey, SettingValue, ThemeSetting } from '../shared/ipc';
+import { GIO_SANG_MAC_DINH, GIO_TOI_MAC_DINH, docCheDo, docGio, giaiChuDe, msToiMocKe } from '../shared/chuDe';
 import { INTERNAL_ROUTES } from './routes';
 import { LA_CTWORK, THONG_TIN_BIEN_THE, thuocCtWork } from '../shared/bienThe';
 import { toast } from 'sonner';
@@ -208,13 +209,33 @@ export function AppStateProvider({
     return () => query.removeEventListener('change', onChange);
   }, []);
 
-  const theme: ThemeSetting =
-    settings.theme === 'light' || settings.theme === 'dark' || settings.theme === 'system'
-      ? settings.theme
-      : 'system';
+  const theme: ThemeSetting = docCheDo(settings.theme);
+  const gioSang = docGio(settings.themeGioSang, GIO_SANG_MAC_DINH);
+  const gioToi = docGio(settings.themeGioToi, GIO_TOI_MAC_DINH);
 
-  const resolvedTheme: 'light' | 'dark' =
-    theme === 'system' ? (systemDark ? 'dark' : 'light') : theme;
+  /*
+   * "Theo giờ": hẹn MỘT setTimeout tới mốc kế tiếp (06:00 / 18:00…) rồi tính lại. Máy ngủ qua mốc thì setTimeout
+   * chạy trễ — nên tính lại thêm lúc cửa sổ được focus / hiện lại (mở nắp máy, quay lại app), và một nhịp 60 s dự
+   * phòng cho trường hợp đồng hồ hệ thống nhảy (đổi múi giờ) mà không sự kiện nào báo.
+   */
+  const [nhipGio, datNhipGio] = useState(0);
+  useEffect(() => {
+    if (theme !== 'theo-gio') return;
+    const tinhLai = () => datNhipGio((n) => n + 1);
+    const hen = window.setTimeout(tinhLai, msToiMocKe(new Date(), gioSang, gioToi) + 500);
+    const nhip = window.setInterval(tinhLai, 60_000);
+    const khiHien = () => { if (document.visibilityState === 'visible') tinhLai(); };
+    window.addEventListener('focus', tinhLai);
+    document.addEventListener('visibilitychange', khiHien);
+    return () => {
+      window.clearTimeout(hen);
+      window.clearInterval(nhip);
+      window.removeEventListener('focus', tinhLai);
+      document.removeEventListener('visibilitychange', khiHien);
+    };
+  }, [theme, gioSang, gioToi, nhipGio]);
+
+  const resolvedTheme: 'light' | 'dark' = giaiChuDe(theme, { heThongToi: systemDark, gioSang, gioToi });
 
   /**
    * Gắn chủ đề của APP lên `<html>` bằng `data-ct-theme`.
@@ -233,7 +254,18 @@ export function AppStateProvider({
    * dùng một tên riêng thay vì tên chung.
    */
   useEffect(() => {
-    document.documentElement.setAttribute('data-ct-theme', resolvedTheme);
+    const html = document.documentElement;
+    html.setAttribute('data-ct-theme', resolvedTheme);
+    /*
+     * MỘT công tắc cho cả app + mọi cây web dùng lại (08/11/2026). CSS của web đổi màu theo `html.theme-dark`
+     * (KHÔNG BAO GIỜ `.dark` trên <html> — `dark:` của Tailwind dành cho Notes, xem CLAUDE.md). Trước đây lớp này chỉ
+     * được đặt khi có cây web đang mở (`useLopToiWeb` đếm người giữ), nên những thứ đọc nó ở ngoài cây web — Mermaid
+     * trong AI Code, menu portal ra <body> — luôn thấy "sáng" giữa vỏ tối. Nay đặt/gỡ theo đúng chủ đề đang hiện.
+     * `light` cũng đặt để `useThemeClass()` của web (đọc `.light`) trả đúng.
+     */
+    html.classList.toggle('theme-dark', resolvedTheme === 'dark');
+    html.classList.toggle('light', resolvedTheme === 'light');
+    html.style.colorScheme = resolvedTheme;
   }, [resolvedTheme]);
 
   const setSetting = useCallback(

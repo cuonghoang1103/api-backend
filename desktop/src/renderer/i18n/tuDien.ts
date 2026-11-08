@@ -155,6 +155,12 @@ export const TU_DIEN: Record<string, string> = {
   'Sáng': 'Light',
   'Tối': 'Dark',
   'Theo hệ thống': 'Match system',
+  'Mặc định': 'Default',
+  'Theo giờ': 'By time of day',
+  'Sáng từ': 'Light from',
+  'Tối từ': 'Dark from',
+  '“Mặc định” đổi theo cài đặt sáng/tối của máy. “Theo giờ” tự sáng ban ngày, tối ban đêm.':
+    '“Default” follows your computer’s light/dark setting. “By time of day” is light in the daytime and dark at night.',
   'Ngôn ngữ': 'Language',
   'Tiếng Việt': 'Vietnamese',
   'Tiếng Anh': 'English',

@@ -99,44 +99,15 @@ export function useCauNoiWeb(): boolean {
  *    CẢ SÁU cây đã chạy tốt, nên tách ra làm riêng, có đo.
  */
 /**
- * Lớp `theme-dark` của WEB trên <html> — đặt khi app tối và đang có ít nhất một
- * cây web mở (04/10/2026).
- *
- * CSS của web (module khoá học, Ngoại ngữ, CT Work, IELTS…) đổi màu theo
- * `html.theme-dark`, không theo `data-ct-theme` của app. Trước đây chỉ IELTS và CT
- * Work tự đặt lớp này, nên mọi cây web khác hiện bản SÁNG giữa vỏ app tối —
- * đúng lời người dùng: "bị mờ bởi background", "trộn màu trắng đen".
- *
- * ĐẾM người giữ chứ không bật/tắt thẳng: Học kỳ nằm trong Tổng quan, cây web
- * lồng nhau được, và cây gỡ trước không được giật lớp khỏi cây còn đang mở.
- * Lớp có sẵn từ trước (không phải ta đặt) thì không bao giờ gỡ.
+ * Lớp `theme-dark` của WEB trên <html>: từ 08/11/2026 do `app-state.tsx` đặt/gỡ theo ĐÚNG chủ đề đang hiện, luôn luôn
+ * (trước đó `useLopToiWeb` ở đây chỉ đặt khi có cây web mở, nên Mermaid của AI Code và menu portal ra <body> đọc sai).
  */
-const LOP_TOI = 'theme-dark';
-let soNguoiGiu = 0;
-let laTaDat = false;
-export function useLopToiWeb(bat: boolean) {
-  useEffect(() => {
-    if (!bat) return;
-    const html = document.documentElement;
-    if (soNguoiGiu === 0) {
-      laTaDat = !html.classList.contains(LOP_TOI);
-      if (laTaDat) html.classList.add(LOP_TOI);
-    }
-    soNguoiGiu += 1;
-    return () => {
-      soNguoiGiu -= 1;
-      if (soNguoiGiu === 0 && laTaDat) { html.classList.remove(LOP_TOI); laTaDat = false; }
-    };
-  }, [bat]);
-}
-
 export function VoWeb({ children }: { children: React.ReactNode }) {
   const { theme, resolvedTheme, setSetting } = useAppState();
-  useLopToiWeb(resolvedTheme === 'dark');
   /* 18/10/2026: nút Sáng/Tối/Tự động của CT Work (web) gọi `useTheme()` — trong app không có ThemeProvider của web,
      nên nối nó vào thiết đặt giao diện của APP (cùng ba giá trị light/dark/system). */
   return (
-    <ThemeBridgeProvider preference={theme} resolvedTheme={resolvedTheme} onChange={(p) => setSetting('theme', p)}>
+    <ThemeBridgeProvider preference={theme === 'theo-gio' ? 'system' : theme} resolvedTheme={resolvedTheme} onChange={(p) => setSetting('theme', p)}>
       <div className={`ct-web-host${resolvedTheme === 'dark' ? ' dark' : ''}`}>
         <TanStackQueryProvider>{children}</TanStackQueryProvider>
       </div>

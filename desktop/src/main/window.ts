@@ -2,6 +2,7 @@
  * Tạo và khôi phục cửa sổ chính.
  */
 import { BrowserWindow, screen, nativeTheme } from 'electron';
+import { GIO_SANG_MAC_DINH, GIO_TOI_MAC_DINH, docGio, giaiChuDe } from '../shared/chuDe';
 import path from 'node:path';
 import { APP_ORIGIN, DEV_SERVER_URL, IS_DEV, RENDERER_SOURCE } from './config';
 import { hardenWebContents } from './security';
@@ -50,7 +51,12 @@ export function layCuaSoChinh(): BrowserWindow | null {
  * kéo giãn lại loé một mảng màu ngược. 'system' (mặc định) vẫn theo nativeTheme như cũ.
  */
 export function mauNenCuaSo(theme: unknown = getSettings().theme): string {
-  const toi = theme === 'dark' ? true : theme === 'light' ? false : nativeTheme.shouldUseDarkColors;
+  const t = getSettings();
+  const toi = giaiChuDe(theme, {
+    heThongToi: nativeTheme.shouldUseDarkColors,
+    gioSang: docGio(t.themeGioSang, GIO_SANG_MAC_DINH),
+    gioToi: docGio(t.themeGioToi, GIO_TOI_MAC_DINH),
+  }) === 'dark';
   return toi ? '#0b0b12' : '#f7f7fb';
 }
 

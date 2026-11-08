@@ -106,7 +106,7 @@ export default {
     // YouTube bổ sung 31/10/2026
     'pro192-slide-pro2-1': { yt: 'fQKbV-NeY18', credit: 'Amit Thinks — Install NetBeans IDE 27 with Java JDK 24 on Windows 11 | Beginner\'s Guide (2025)', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-03-cai-moi-truong-087fe194.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-on-ch6': { yt: 'XhH93_woZIY', credit: 'Bro Code — Java custom exceptions 🛑', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/06-xu-ly-ngoai-le/06-03-thuc-hanh-tron-1ed79134.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-on-ch7': { yt: '2j64wdFNWyE', credit: 'Telusko — #32 Array of Objects in Java' },
+    'pro192-on-ch7': { yt: '2j64wdFNWyE', credit: 'Telusko — #32 Array of Objects in Java', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/07-mang-doi-tuong/07-03-thuc-hanh-tron-7ace19e0.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-lab-7-danh-sach-doi-tuong': { yt: 'lFbBI85oTnY', credit: 'Java — Write Efficient Bug-free and Simple Comparators in Java - JEP Café #17', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/07-mang-doi-tuong/07-51-lab-7-danh-sach-doi-tuong-tron-74599255.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-slide-pro14-2': { yt: 'lHFlAYaNfdo', credit: 'Alex Lee — Files In Java - Read Text File Easily #38', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/09-luong-doc-ghi-tep/09-04-slide-file-io-van-ban-tron-43c67e54.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-slide-cs1-2': { yt: 'HsOVdmmBS9E', credit: 'Geekific — Functional Interfaces and Lambda Expressions in Java with Examples | Geekific', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/11-chuyen-sau-java-hien-dai-spring/11-02-slide-cs1-2-lambda-tron-e4240c39.mp4' }, defaultVideoTrack: 'VI'},
@@ -116,8 +116,8 @@ export default {
     'pro192-dieu-kien-qua-mon': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-chuan-dau-ra': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
     'pro192-tai-lieu': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/00-gioi-thieu-huong-dan-hoc/00-02-hoc-the-nao-30665ed9.mp4' }, defaultVideoTrack: 'VI'},
-    'pro192-luyen-pe-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-03-luyen-pe-1-tron-2c85c9ac.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-luyen-pe-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-05-luyen-pe-3-tron-e5574da9.mp4' }, defaultVideoTrack: 'VI' },
-    'pro192-luyen-pe-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-06-luyen-pe-4-tron-2dc540fa.mp4' }, defaultVideoTrack: 'VI' },
+    'pro192-luyen-pe-1': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-03-luyen-pe-1-tron-2c85c9ac.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-luyen-pe-3': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-05-luyen-pe-3-tron-e5574da9.mp4' }, defaultVideoTrack: 'VI'},
+    'pro192-luyen-pe-4': { vi: { url: 'https://media.cuongthai.com/videos/bai-giang/object-oriented-programming/13-on-thi-luyen-pe/13-06-luyen-pe-4-tron-2dc540fa.mp4' }, defaultVideoTrack: 'VI'},
   },
 };

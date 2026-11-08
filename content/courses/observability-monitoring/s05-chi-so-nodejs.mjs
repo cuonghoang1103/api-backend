@@ -187,6 +187,11 @@ shows up as latency without any lag at all.</code></pre>
   <span class="lc-body"><span class="lc-title">Node.js — Don't block the event loop</span><span class="lc-sub">The official guide to the five blocking patterns above, including the regex backtracking case and how to move work off-thread.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-4-cluster-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.4: scaling out, 3.4× for CPU work, 1.07× for I/O</span><span class="lc-sub">node:cluster at 1–10 workers on two routes, why more workers got worse past 8, and the cron jobs that run N times after forking.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -356,6 +361,11 @@ hiện ra dưới dạng độ trễ mà không kèm chút trễ vòng lặp nà
   <span class="lc-body"><span class="lc-title">Node.js — Đừng chặn vòng lặp sự kiện</span><span class="lc-sub">Hướng dẫn chính thức về năm kiểu chặn ở trên, kể cả ca quay lui của regex và cách đẩy việc ra khỏi luồng chính.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-4-cluster-mo-rong" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.4: mở rộng ra nhiều nhân, 3,4× cho CPU, 1,07× cho I/O</span><span class="lc-sub">node:cluster 1–10 worker trên hai route, vì sao quá 8 worker lại tệ đi, và job cron chạy N lần sau khi rẽ nhánh.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -503,6 +513,11 @@ throughput for a process that survives.</code></pre>
   <span class="lc-body"><span class="lc-title">Heap snapshots — finding what is retained</span><span class="lc-sub">How to take a snapshot from a running Node process and read the retainer tree, which is how you find the Map from the pitfall.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.5: the cache that never forgets</span><span class="lc-sub">Three leaks and a control measured at 20k/50k/100k requests, two heap snapshots with the retainer chain computed, and Node 22 reading the container limit.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -643,6 +658,11 @@ lượng lấy một tiến trình sống sót.</code></pre>
   <span class="lc-body"><span class="lc-title">Ảnh chụp heap — tìm ra cái gì đang bị giữ lại</span><span class="lc-sub">Cách chụp một ảnh từ tiến trình Node đang chạy và đọc cây giữ tham chiếu, đó là cách bạn tìm ra cái Map ở cái bẫy trên.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.5: cái cache không bao giờ quên</span><span class="lc-sub">Ba kiểu rò và một mẫu đối chứng đo ở 20k/50k/100k request, hai ảnh chụp heap kèm chuỗi giữ tính thật, và Node 22 đọc giới hạn container.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -802,6 +822,11 @@ histogram_quantile(0.99,
   <span class="lc-body"><span class="lc-title">Node.js — GC performance entries</span><span class="lc-sub">The PerformanceObserver API used in the measurement, and the kind constants that separate minor from major.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.5: finding a leak you cannot see</span><span class="lc-sub">Two snapshots compared (+50,001 Object), the retainers walked back to the module variable, and what a snapshot costs on a live node.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -955,6 +980,11 @@ histogram_quantile(0.99,
   <span class="lc-body"><span class="lc-title">Node.js — mục hiệu năng của GC</span><span class="lc-sub">API PerformanceObserver dùng trong phép đo, và các hằng số kind phân biệt minor với major.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-5-ro-ri-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.5: tìm chỗ rò bạn không nhìn thấy</span><span class="lc-sub">So hai ảnh chụp (+50.001 Object), lần ngược chuỗi giữ tới biến module, và một ảnh chụp tốn gì trên node đang chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },
@@ -1140,6 +1170,11 @@ nodejs_active_requests_total    // in-flight libuv operations (fs, dns)
   <span class="lc-body"><span class="lc-title">PostgreSQL wiki — how many connections</span><span class="lc-sub">Why more connections reduce throughput past a point, with the formula this lesson's sizing advice comes from.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-2-nut-that-that-su" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.2: where the time really goes</span><span class="lc-sub">A real Express + pg route timed part by part (97.2% in one line), the WAIT for a connection vs the query, five pool sizes, and the pool.waitingCount gauge.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1320,6 +1355,11 @@ nodejs_active_requests_total    // thao tác libuv đang bay (fs, dns)
   <span class="lc-body"><span class="lc-title">Wiki PostgreSQL — bao nhiêu kết nối</span><span class="lc-sub">Vì sao nhiều kết nối hơn lại làm giảm thông lượng khi vượt một mức, kèm công thức mà lời khuyên chọn cỡ ở bài này rút ra từ đó.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-2-nut-that-that-su" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.2: thời gian thật sự nằm ở đâu</span><span class="lc-sub">Một route Express + pg thật bấm giờ từng phần (97,2 % ở một dòng), CHỜ kết nối và truy vấn, năm cỡ pool, và gauge pool.waitingCount.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

@@ -140,6 +140,11 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-988"><span class="lc-t">Code Lab · Performance Monitoring &amp; Tracing</span><span class="lc-d">Finding the hot path with real data</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 4.2: the average is a lie</span><span class="lc-sub">This lesson benchmarks one route four ways and reports p50 and p97.5, never the mean: 276 → 3,395 req/s, p97.5 138 → 10 ms, median of 5 runs.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -264,6 +269,11 @@ app.get('/notes', (req, res) =&gt; { res.type('json'); res.send(BODY); });</code
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-988"><span class="lc-t">Code Lab · Performance Monitoring &amp; Tracing</span><span class="lc-d">Tìm đường nóng bằng dữ liệu thật</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-4-2-trung-binh-noi-doi" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 4.2: trung bình là một lời nói dối</span><span class="lc-sub">Bài này đo một route bốn bước và báo p50, p97,5 chứ không báo trung bình: 276 → 3.395 req/s, p97,5 138 → 10 ms, trung vị 5 lần chạy.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -376,6 +386,11 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Removing queries instead of speeding them up</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-4-be-va-handle" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.4: pools and handles, what is waiting on what</span><span class="lc-sub">Measured here: EXPLAIN says 0.039 ms, the app sees 4.616 ms. Split the wait from the work: pool 1 waits 14.065 ms; pool 50 waits 0.010 ms but queries 6.5 ms.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -480,6 +495,11 @@ SELECT id, author_id, title, body, created_at FROM notes ORDER BY id DESC LIMIT 
 <div class="link-card codelab">
   <a href="/code-lab/nodejs-express${REF}#module-324"><span class="lc-t">Code Lab · Performance, Caching, and Scaling</span><span class="lc-d">Bỏ bớt truy vấn thay vì làm truy vấn nhanh hơn</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-4-be-va-handle" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.4: bể tài nguyên và handle, cái gì đang chờ cái gì</span><span class="lc-sub">Đo ở đây: EXPLAIN nói 0,039 ms, app thấy 4,616 ms. Tách chờ khỏi làm: pool 1 chờ 14,065 ms; pool 50 chờ 0,010 ms nhưng truy vấn 6,5 ms.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -513,6 +533,7 @@ GIẢI NÉN gzip      87.683 B                  0,08ms/lần   12.739 lần/giâ
 GIẢI NÉN brotli    87.683 B                  0,08ms/lần   13.052 lần/giây</div>
 
 <div class="danger">
+<p><strong>Data shape matters here — measured again for the video (08/11/2026).</strong> On <em>repetitive</em> JSON (75KB, every excerpt identical) the result above reproduces: quality 11 took 131,34ms, 984× longer than quality 4, for a file 8% larger. On <em>varied</em> JSON (145KB, 500 different notes) quality 11 produced a file 30% <em>smaller</em> (21.734 vs 31.269 bytes) — but still took 147,79ms, 148× longer, and a live server fell from 3.560 to 24 req/s. Either way it never belongs on a per-request path.</p>
 <p><strong>Look at the last compression row.</strong> Brotli at maximum quality took <strong>151,99ms</strong> — 490× longer than quality 4 — and produced a file that is <strong>13% larger</strong> (1.918 against 1.691 bytes). Not a smaller improvement: an actual regression, at 490× the cost. At quality 11 brotli switches to a much larger window and a far more aggressive search, and on small repetitive data that search settles on a worse partition than the cheap heuristic finds. "Higher is better" is not a property of compression settings; it is an assumption, and here it is false in both dimensions at once.</p>
 </div>
 
@@ -580,7 +601,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 </div>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Compression happens at nginx, not in Node — the right layer, as argued above. The media subdomain adds the other half of this lesson: R2 objects are served with <code>cache-control: public, max-age=31536000, immutable</code> behind a Cloudflare cache rule, verified by GET as <code>cf-cache-status: HIT</code> with an <code>age</code> of several hours. A cached response is compression taken to its limit — zero bytes from origin, zero CPU, zero database. The general rule this chapter keeps arriving at from different directions: <strong>the fastest work is the work that does not happen.</strong></p>
+<p><strong>How cuongthai.com does it.</strong> Honestly: compression happens <strong>in Node</strong>, not at nginx. <code>src/index.ts</code> mounts the <code>compression</code> middleware with <code>level: 6</code>; the library (1.8.1) answers browsers with brotli at its default quality 4 and gzip-only clients with gzip level 6. nginx does have <code>gzip on</code>, but it passes through any response that already carries <code>Content-Encoding</code>, so it never touches API JSON. Measured with a public GET of <code>/api/v1/courses?size=12</code> on 08/11/2026: 1.608.415 bytes uncompressed, 205.753 with gzip, 183.673 with brotli (<code>content-encoding: br</code>, <code>server: nginx</code>). Brotli 4 is a reasonable setting; gzip level 6 is the expensive one on varied JSON (−69,5% throughput in the video's live test, against −28,5% for level 1). The bigger lesson is the 1,6MB payload itself — compression hides a size problem rather than fixing it. The media subdomain adds the other half of this lesson: R2 objects are served with <code>cache-control: public, max-age=31536000, immutable</code> behind a Cloudflare cache rule, verified by GET as <code>cf-cache-status: HIT</code> with an <code>age</code> of several hours. A cached response is compression taken to its limit — zero bytes from origin, zero CPU, zero database. The general rule this chapter keeps arriving at from different directions: <strong>the fastest work is the work that does not happen.</strong></p>
 </div>
 
 <div class="link-card codelab">
@@ -614,6 +635,7 @@ GIẢI NÉN gzip      87.683 B                  0,08ms/lần   12.739 lần/giâ
 GIẢI NÉN brotli    87.683 B                  0,08ms/lần   13.052 lần/giây</div>
 
 <div class="danger">
+<p><strong>Hình dạng dữ liệu quyết định ở đây — đo lại cho video (08/11/2026).</strong> Với JSON <em>lặp</em> (75KB, mọi đoạn trích giống hệt) kết quả trên lặp lại: mức 11 mất 131,34ms, lâu gấp 984 lần mức 4, cho file to hơn 8%. Với JSON <em>đa dạng</em> (145KB, 500 ghi chú khác nhau) mức 11 cho file <em>nhỏ hơn</em> 30% (21.734 so với 31.269 byte) — nhưng vẫn mất 147,79ms, lâu gấp 148 lần, và một server đang sống tụt từ 3.560 xuống 24 req/giây. Kiểu nào thì nó cũng không bao giờ thuộc về đường xử lý từng request.</p>
 <p><strong>Nhìn dòng nén cuối cùng.</strong> Brotli ở mức chất lượng cao nhất mất <strong>151,99ms</strong> — lâu gấp 490 lần mức 4 — và cho ra một file <strong>to hơn 13%</strong> (1.918 so với 1.691 byte). Không phải cải thiện ít đi: đó là một bước <em>lùi</em> thật sự, với cái giá gấp 490 lần. Ở mức 11 brotli chuyển sang một cửa sổ lớn hơn nhiều và một phép tìm kiếm hung hãn hơn hẳn, và trên dữ liệu ngắn lặp lại nhiều thì phép tìm kiếm ấy dừng ở một cách phân mảnh tệ hơn cả cái mà heuristic rẻ tiền tìm ra. "Cao hơn thì tốt hơn" không phải một tính chất của các mức nén; nó là một giả định, và ở đây nó sai ở cả hai chiều cùng lúc.</p>
 </div>
 
@@ -681,7 +703,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 </div>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Việc nén diễn ra ở nginx chứ không ở Node — đúng tầng, như đã lập luận ở trên. Tên miền phụ chứa media bổ sung nốt nửa còn lại của bài học này: các object trên R2 được phục vụ kèm <code>cache-control: public, max-age=31536000, immutable</code> sau một cache rule của Cloudflare, đã verify bằng GET ra <code>cf-cache-status: HIT</code> với <code>age</code> vài tiếng. Một phản hồi đã nằm trong cache chính là phép nén đẩy tới giới hạn — không byte nào từ máy gốc, không CPU, không cơ sở dữ liệu. Quy tắc chung mà chương này cứ đi tới từ nhiều hướng khác nhau: <strong>công việc nhanh nhất là công việc không xảy ra.</strong></p>
+<p><strong>cuongthai.com làm thế nào.</strong> Nói thật: việc nén diễn ra <strong>trong Node</strong>, không phải ở nginx. <code>src/index.ts</code> gắn middleware <code>compression</code> với <code>level: 6</code>; thư viện (1.8.1) trả brotli ở mức mặc định 4 cho trình duyệt và gzip mức 6 cho client chỉ nhận gzip. nginx có bật <code>gzip on</code>, nhưng response đã có <code>Content-Encoding</code> thì nó cho đi qua, nên nó không bao giờ đụng tới JSON của API. Đo bằng một GET công khai <code>/api/v1/courses?size=12</code> ngày 08/11/2026: 1.608.415 byte khi không nén, 205.753 với gzip, 183.673 với brotli (<code>content-encoding: br</code>, <code>server: nginx</code>). Brotli 4 là mức hợp lý; gzip mức 6 mới là mức đắt với JSON đa dạng (−69,5% thông lượng trong phép đo sống của video, so với −28,5% ở mức 1). Bài học lớn hơn là chính payload 1,6MB — nén che vấn đề kích thước chứ không sửa nó. Tên miền phụ chứa media bổ sung nốt nửa còn lại của bài học này: các object trên R2 được phục vụ kèm <code>cache-control: public, max-age=31536000, immutable</code> sau một cache rule của Cloudflare, đã verify bằng GET ra <code>cf-cache-status: HIT</code> với <code>age</code> vài tiếng. Một phản hồi đã nằm trong cache chính là phép nén đẩy tới giới hạn — không byte nào từ máy gốc, không CPU, không cơ sở dữ liệu. Quy tắc chung mà chương này cứ đi tới từ nhiều hướng khác nhau: <strong>công việc nhanh nhất là công việc không xảy ra.</strong></p>
 </div>
 
 <div class="link-card codelab">
@@ -781,7 +803,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <p>For a containerised deployment the third option is almost always right: <strong>one process per container, scale by running more containers.</strong> It keeps the container as the unit of everything — restart, health check, rollout, resource limit — instead of hiding a process manager inside one.</p>
 
 <div class="note-ct">
-<p><strong>How cuongthai.com does it.</strong> Production runs a <strong>single</strong> backend process in a single container. Given the measurements above that is the correct choice, and the reason is visible in this course's own numbers: this is an I/O-bound application. Chapter 16.2 measured 97,8% of request time inside a database call, and the <code>/io</code> row above says forking gains 5,7% on exactly that shape of work. What forking <em>would</em> break is already documented here — <code>cron.service.ts</code> holds eleven <code>cron.schedule()</code> calls guarded only by an in-process flag, and <code>embedQueue.service.ts</code> is an in-memory array queue with a <code>_processing</code> flag. Both are correct today and both break the day a second process appears. That is the real cost of clustering this app, and it is why the honest scaling path here is chapter 12's cache and chapter 13's queue, not more workers.</p>
+<p><strong>How cuongthai.com does it.</strong> Production runs a <strong>single</strong> backend process in a single container. Given the measurements above that is the correct choice, and the reason is visible in this course's own numbers: this is an I/O-bound application. Chapter 16.2 measured 97,8% of request time inside a database call, and the <code>/io</code> row above says forking gains 5,7% on exactly that shape of work. What forking <em>would</em> break is already documented here — <code>cron.service.ts</code> holds forty (counted 08/11/2026) <code>cron.schedule()</code> calls guarded only by an in-process flag, and <code>embedQueue.service.ts</code> is an in-memory array queue with a <code>_processing</code> flag. Both are correct today and both break the day a second process appears. That is the real cost of clustering this app, and it is why the honest scaling path here is chapter 12's cache and chapter 13's queue, not more workers.</p>
 </div>
 
 <div class="link-card codelab">
@@ -790,6 +812,11 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-942"><span class="lc-t">Code Lab · Redis adapter for Socket.IO</span><span class="lc-d">Making realtime survive multiple processes</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-1-tre-vong-lap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.1: event loop lag, the metric that means "stuck"</span><span class="lc-sub">Lag (and a CPU profile's idle line) tells you whether you are CPU-bound — the only case where cluster helps: 3.4× on a CPU route, +6.7% on an I/O route.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -866,7 +893,7 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <p>Với một triển khai dùng container thì lựa chọn thứ ba gần như luôn đúng: <strong>một tiến trình mỗi container, mở rộng bằng cách chạy thêm container.</strong> Nó giữ container làm đơn vị của mọi thứ — khởi động lại, health check, triển khai dần, giới hạn tài nguyên — thay vì giấu một trình quản lý tiến trình bên trong một cái.</p>
 
 <div class="note-ct">
-<p><strong>cuongthai.com làm thế nào.</strong> Production chạy <strong>một</strong> tiến trình backend duy nhất trong một container duy nhất. Với những phép đo ở trên thì đó là lựa chọn đúng, và lý do nhìn thấy được ngay trong số liệu của chính khoá học này: đây là một ứng dụng nghẽn ở I/O. Bài 16.2 đo được 97,8% thời gian request nằm trong một lời gọi cơ sở dữ liệu, còn dòng <code>/io</code> ở trên nói rằng rẽ nhánh được thêm 5,7% với đúng dạng công việc ấy. Còn cái mà việc rẽ nhánh <em>sẽ</em> phá vỡ thì đã được ghi lại sẵn ở đây — <code>cron.service.ts</code> giữ mười một lời gọi <code>cron.schedule()</code> chỉ được canh bằng một cờ trong tiến trình, và <code>embedQueue.service.ts</code> là một hàng đợi bằng mảng trong bộ nhớ với cờ <code>_processing</code>. Cả hai đều đúng ở hiện tại và cả hai đều vỡ vào ngày có tiến trình thứ hai. Đó là cái giá thật của việc cluster ứng dụng này, và là lý do con đường mở rộng trung thực ở đây là cache của chương 12 và hàng đợi của chương 13, chứ không phải thêm worker.</p>
+<p><strong>cuongthai.com làm thế nào.</strong> Production chạy <strong>một</strong> tiến trình backend duy nhất trong một container duy nhất. Với những phép đo ở trên thì đó là lựa chọn đúng, và lý do nhìn thấy được ngay trong số liệu của chính khoá học này: đây là một ứng dụng nghẽn ở I/O. Bài 16.2 đo được 97,8% thời gian request nằm trong một lời gọi cơ sở dữ liệu, còn dòng <code>/io</code> ở trên nói rằng rẽ nhánh được thêm 5,7% với đúng dạng công việc ấy. Còn cái mà việc rẽ nhánh <em>sẽ</em> phá vỡ thì đã được ghi lại sẵn ở đây — <code>cron.service.ts</code> giữ bốn mươi (đếm ngày 08/11/2026) lời gọi <code>cron.schedule()</code> chỉ được canh bằng một cờ trong tiến trình, và <code>embedQueue.service.ts</code> là một hàng đợi bằng mảng trong bộ nhớ với cờ <code>_processing</code>. Cả hai đều đúng ở hiện tại và cả hai đều vỡ vào ngày có tiến trình thứ hai. Đó là cái giá thật của việc cluster ứng dụng này, và là lý do con đường mở rộng trung thực ở đây là cache của chương 12 và hàng đợi của chương 13, chứ không phải thêm worker.</p>
 </div>
 
 <div class="link-card codelab">
@@ -875,6 +902,11 @@ keepAlive maxSockets:2 (quá chật)          46ms   10.814/giây</div>
 <div class="link-card codelab">
   <a href="/code-lab/socket-io${REF}#module-942"><span class="lc-t">Code Lab · Redis adapter cho Socket.IO</span><span class="lc-d">Giúp realtime sống sót qua nhiều tiến trình</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-1-tre-vong-lap" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.1: độ trễ vòng lặp, chỉ số nghĩa là "đang đơ"</span><span class="lc-sub">Độ trễ vòng lặp (và dòng idle của CPU profile) cho biết bạn có bị giới hạn bởi CPU — trường hợp duy nhất cluster giúp: 3,4× ở route CPU, +6,7 % ở route I/O.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -927,7 +959,7 @@ cache.set(key, value);</code></pre>
 <div class="out">leak: 351,5MB, 100.000 phần tử, vẫn đang tăng
 lru:  125,7MB,   1.000 phần tử, PHẲNG — không phân biệt được với app không cache</div>
 
-<p><code>Map</code> in JavaScript preserves insertion order, so <code>keys().next().value</code> is the oldest entry and this is a five-word LRU. It kept the entire benefit of caching at 2,3MB of memory instead of 295MB and unbounded.</p>
+<p><code>Map</code> in JavaScript preserves insertion order, so <code>keys().next().value</code> is the oldest <em>inserted</em> entry — strictly a bounded FIFO, not an LRU, because a hit does not move the entry (a true LRU adds <code>cache.delete(k); cache.set(k, v)</code> on every hit). It kept the entire benefit of caching at 2,3MB of memory instead of 295MB and unbounded.</p>
 
 <div class="callout">
 <p><strong>The bounded-cache rule.</strong> Every in-memory cache needs a limit on entries, a TTL, or both — decided when you write it, not when it breaks. If a natural limit is hard to name, that is a signal the data belongs in Redis (chapter 12), where eviction is somebody else's job and <code>allkeys-lru</code> already handles it.</p>
@@ -974,9 +1006,9 @@ app.get('/__heap', (req, res) =&gt; {
 
 <h3>Heap limits and the OOM kill</h3>
 <div class="kv-grid">
-  <div class="kv"><span>The default heap ceiling</span><b>4,144MB on this machine; Node picks it from total RAM. Inside a container you must declare it BY HAND</b></div>
+  <div class="kv"><span>The default heap ceiling</span><b>4,144MB on this machine. Node 22 also reads the CONTAINER limit: measured in node:22-alpine, --memory=512m gives a 259MB heap and --memory=2g gives 1.048MB — about half</b></div>
   <div class="kv"><span>--max-old-space-size=512</span><b>Hitting the ceiling → Node throws and prints a stack trace. YOU KNOW why</b></div>
-  <div class="kv"><span>Unset, with a 512MB container limit</span><b>Node believes it has more RAM than it does → the kernel kills it with SIGKILL, exit 137, and NO log at all</b></div>
+  <div class="kv"><span>Memory OUTSIDE the heap fills the container</span><b>Buffers, native modules, or a heap flag set above the container limit → the kernel kills it with SIGKILL, exit 137, and NO log at all (measured: 128m container, RSS 161MB, heapUsed 4MB, exit 137)</b></div>
   <div class="kv"><span>The rule</span><b>Set the heap to ≈75% of the container limit. Leave room for Buffers, sockets and stacks — they live OUTSIDE the heap</b></div>
 </div>
 
@@ -994,6 +1026,16 @@ app.get('/__heap', (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Reading a heap snapshot under pressure</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-2-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.2: RSS, heap, external — which number is the leak</span><span class="lc-sub">Measured here: 30 Buffers of 8 MB = RSS 282 MB with a 4 MB heap; in a 128 MB container that ends in exit 137 with no message, while a heap leak prints FATAL and exits 134.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-3-thu-gom-rac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 5.3: the GC pauses you did not write</span><span class="lc-sub">A heap snapshot is one of them: here 93 ms for a 6.2 MB heap and 1,027 ms for 56.4 MB, with the event loop blocked throughout.</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1031,7 +1073,7 @@ cache.set(key, value);</code></pre>
 <div class="out">leak: 351,5MB, 100.000 phần tử, vẫn đang tăng
 lru:  125,7MB,   1.000 phần tử, PHẲNG — không phân biệt được với app không cache</div>
 
-<p><code>Map</code> trong JavaScript giữ nguyên thứ tự chèn, nên <code>keys().next().value</code> chính là phần tử cũ nhất và đây là một cái LRU dài năm từ. Nó giữ nguyên toàn bộ lợi ích của việc cache với 2,3MB bộ nhớ thay vì 295MB và không có trần.</p>
+<p><code>Map</code> trong JavaScript giữ nguyên thứ tự chèn, nên <code>keys().next().value</code> chính là phần tử <em>chèn</em> sớm nhất — nói chính xác đây là FIFO có trần chứ không phải LRU, vì trúng cache không đưa phần tử lên đầu (LRU thật thêm <code>cache.delete(k); cache.set(k, v)</code> mỗi lần trúng). Nó giữ nguyên toàn bộ lợi ích của việc cache với 2,3MB bộ nhớ thay vì 295MB và không có trần.</p>
 
 <div class="callout">
 <p><strong>Quy tắc cache có trần.</strong> Mọi cache trong bộ nhớ đều cần một giới hạn số phần tử, một TTL, hoặc cả hai — quyết định lúc bạn viết nó, chứ không phải lúc nó hỏng. Nếu khó nói ra một giới hạn tự nhiên thì đó là tín hiệu dữ liệu ấy thuộc về Redis (chương 12), nơi việc thu hồi là việc của người khác và <code>allkeys-lru</code> đã lo sẵn.</p>
@@ -1078,9 +1120,9 @@ app.get('/__heap', (req, res) =&gt; {
 
 <h3>Trần heap và cú giết vì hết bộ nhớ</h3>
 <div class="kv-grid">
-  <div class="kv"><span>Trần heap mặc định</span><b>4.144MB trên máy này; Node tự chọn theo RAM tổng. Trong container phải khai TAY</b></div>
+  <div class="kv"><span>Trần heap mặc định</span><b>4.144MB trên máy này. Node 22 còn đọc giới hạn CONTAINER: đo trong node:22-alpine, --memory=512m cho heap 259MB, --memory=2g cho 1.048MB — khoảng một nửa</b></div>
   <div class="kv"><span>--max-old-space-size=512</span><b>Chạm trần → Node ném lỗi và in stack trace. BẠN BIẾT vì sao</b></div>
-  <div class="kv"><span>Không đặt, container limit 512MB</span><b>Node tưởng mình có nhiều RAM hơn thực tế → kernel giết bằng SIGKILL, exit 137, KHÔNG có log gì</b></div>
+  <div class="kv"><span>Bộ nhớ NGOÀI heap làm đầy container</span><b>Buffer, module native, hoặc cờ heap đặt cao hơn giới hạn container → kernel giết bằng SIGKILL, exit 137, KHÔNG có log gì (đo: container 128m, RSS 161MB, heapUsed 4MB, exit 137)</b></div>
   <div class="kv"><span>Quy tắc</span><b>Đặt heap ≈ 75% giới hạn container. Chừa chỗ cho Buffer, socket, stack — chúng nằm NGOÀI heap</b></div>
 </div>
 
@@ -1098,6 +1140,16 @@ app.get('/__heap', (req, res) =&gt; {
 <div class="link-card codelab">
   <a href="/code-lab/observability-monitoring${REF}#module-992"><span class="lc-t">Code Lab · Debugging Production Incidents</span><span class="lc-d">Đọc ảnh chụp heap trong lúc căng thẳng</span></a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-2-bo-nho" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.2: RSS, heap, external — con số nào là chỗ rò</span><span class="lc-sub">Đo ở đây: 30 Buffer 8 MB = RSS 282 MB với heap 4 MB; trong container 128 MB nó kết thúc bằng exit 137 không lời, còn rò heap in FATAL và exit 134.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-5-3-thu-gom-rac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 5.3: những lần dừng GC bạn không hề viết</span><span class="lc-sub">Ảnh chụp heap cũng là một lần dừng như thế: ở đây 93 ms cho heap 6,2 MB và 1.027 ms cho 56,4 MB, event loop bị chặn suốt.</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },
@@ -1125,7 +1177,7 @@ chuỗi tính SẴN (không làm gì)     0,000ms/lần   85.080.750/giây
 JSON.stringify 1 object nhỏ       2.862.251/giây   218 B
 fast-json-stringify 1 object nhỏ  2.968.513/giây   218 B</div>
 
-<p><strong>1,39× on a large payload, and nothing at all on a small one</strong> (2,86M against 2,97M per second is noise). Now put that against lesson 16.2's breakdown, where <code>JSON.stringify</code> was 0,8% of request time:</p>
+<p><strong>1,39× on a large payload, and nothing at all on a small one</strong> (2,86M against 2,97M per second is noise). Re-measured for the video (08/11/2026) the answer depended on the data: 1,35× on the 21KB responses of the 16.2 route, but <strong>0,96× — slower</strong> on 340KB of varied notes, and 1,85× on one small object. Swapped into the real 16.2 route it was 2,2% of the handler, a ceiling of 0,6%; the measured +3,5% req/s was noise (the five rounds overlapped). Now put that against lesson 16.2's breakdown, where <code>JSON.stringify</code> was 0,8% of request time:</p>
 
 <div class="out">JSON.stringify hiện tại:  0,043ms  = 0,8% thời gian mỗi request
 nhanh hơn 1,39 lần:       0,031ms  → tiết kiệm 0,012ms
@@ -1201,6 +1253,11 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <div class="pitfall">
 <p><strong>Trap — optimising the part of the request you can see, not the part that takes the time.</strong> The serialiser is in your code, so it is where attention goes; the 40 ms database round trip is behind a library call and reads as one line. That is how a 1.39× faster JSON encoder buys 0.3% of a request — the thing you improved was 2% of the total. Amdahl&#39;s law is the whole lesson, and it is measurable before you start: profile, find what fraction the candidate actually occupies, and compute the ceiling. If the ceiling is under a few percent, the honest answer is to not do the work — and to write down the number, so the next person does not re-propose it.</p>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Go deeper in Observability — lesson 6.4: reading a waterfall</span><span class="lc-sub">A waterfall shows each part's share before you optimise it. Here: a serialiser 1.35× faster was 2.2% of the request — a ceiling of 0.6% (Amdahl).</span></span>
+  <span class="lc-cta">OPEN LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1220,7 +1277,7 @@ chuỗi tính SẴN (không làm gì)     0,000ms/lần   85.080.750/giây
 JSON.stringify 1 object nhỏ       2.862.251/giây   218 B
 fast-json-stringify 1 object nhỏ  2.968.513/giây   218 B</div>
 
-<p><strong>Nhanh gấp 1,39 lần với payload lớn, và không hơn gì với object nhỏ</strong> (2,86 triệu so với 2,97 triệu mỗi giây là nhiễu). Giờ đặt con số đó cạnh bảng phân rã của bài 16.2, nơi <code>JSON.stringify</code> chiếm 0,8% thời gian request:</p>
+<p><strong>Nhanh gấp 1,39 lần với payload lớn, và không hơn gì với object nhỏ</strong> (2,86 triệu so với 2,97 triệu mỗi giây là nhiễu). Đo lại cho video (08/11/2026) thì kết quả tuỳ dữ liệu: 1,35 lần với response 21KB của route 16.2, nhưng <strong>0,96 lần — chậm hơn</strong> với 340KB ghi chú đa dạng, và 1,85 lần với một object nhỏ. Đổi thật trong route 16.2 thì nó chiếm 2,2% handler, trần 0,6%; con số +3,5% req/giây đo được là nhiễu (năm vòng chồng lên nhau). Giờ đặt con số đó cạnh bảng phân rã của bài 16.2, nơi <code>JSON.stringify</code> chiếm 0,8% thời gian request:</p>
 
 <div class="out">JSON.stringify hiện tại:  0,043ms  = 0,8% thời gian mỗi request
 nhanh hơn 1,39 lần:       0,031ms  → tiết kiệm 0,012ms
@@ -1296,6 +1353,11 @@ viết lại regex                                   1,005× LÀM NHANH HƠN</di
 <div class="pitfall">
 <p><strong>Bẫy — tối ưu cái phần của request mà bạn NHÌN THẤY, chứ không phải cái phần tốn thời gian.</strong> Bộ tuần tự hoá nằm trong mã của bạn, nên sự chú ý dồn vào đó; còn 40 ms đi về cơ sở dữ liệu thì nằm sau một lời gọi thư viện và đọc lên chỉ là một dòng. Đó là cách một bộ mã hoá JSON nhanh hơn 1,39 lần mua được 0,3% của một request — thứ bạn cải thiện chiếm có 2% tổng số. Định luật Amdahl chính là toàn bộ bài học, và nó đo được TRƯỚC khi bắt đầu: hãy chạy profiler, tìm xem ứng viên đó thật sự chiếm bao nhiêu phần, rồi tính ra cái trần. Nếu cái trần dưới vài phần trăm thì câu trả lời thành thật là ĐỪNG làm — và hãy ghi con số đó lại, để người sau không đề xuất lại nó.</p>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/observability-monitoring/learn?lessonSlug=obs-6-4-doc-bieu-do-thac" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Học sâu hơn ở Observability — bài 6.4: đọc biểu đồ thác</span><span class="lc-sub">Biểu đồ thác cho thấy tỉ lệ của từng phần trước khi tối ưu. Ở đây: bộ tuần tự hoá nhanh hơn 1,35× chỉ là 2,2 % request — trần 0,6 % (Amdahl).</span></span>
+  <span class="lc-cta">MỞ BÀI →</span>
+</a>
 </div>
 `,
     },

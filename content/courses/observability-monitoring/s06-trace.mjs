@@ -1225,6 +1225,11 @@ which is a question the trace put in front of you.</code></pre>
   <span class="lc-body"><span class="lc-title">Prisma — relation queries and include</span><span class="lc-sub">The fix for shape 1: how include and select collapse a staircase of queries into one.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-6-toi-uu-vo-ich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.6: optimisations that are not</span><span class="lc-sub">A "faster" library measured alone and inside a real request, the rest of the list with numbers, and where the real wins came from (657×, 143.5×, 6.3×).</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -1392,6 +1397,11 @@ nhất", một câu hỏi mà cái trace đặt sẵn trước mặt bạn.</cod
   <span class="lc-body"><span class="lc-title">Prisma — truy vấn quan hệ và include</span><span class="lc-sub">Cách chữa cho hình 1: include và select gộp một cái bậc thang truy vấn thành một truy vấn duy nhất thế nào.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-6-toi-uu-vo-ich" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.6: những phép tối ưu vô ích</span><span class="lc-sub">Thư viện "nhanh hơn" đo riêng và trong request thật, phần còn lại của danh sách kèm số, và thắng thật đến từ đâu (657×, 143,5×, 6,3×).</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

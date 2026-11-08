@@ -433,6 +433,11 @@ Neither number means anything without the other.</code></pre>
   <span class="lc-body"><span class="lc-title">Prometheus — histograms and quantiles in practice</span><span class="lc-sub">Why the quantile is computed last, the error bounds it carries, and the aggregation rule from the pitfall above.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Applied in Node.js — lesson 16.1: measure before you guess</span><span class="lc-sub">A CPU profile under load (renderNote 21.7%, crypto 20.5%, the suspected regexes 3.2%), four fixes measured one at a time, and benchmarking without fooling yourself.</span></span>
+  <span class="lc-cta">OPEN NODE.JS LESSON →</span>
+</a>
 </div>
 
 <div class="ml-vi">
@@ -570,6 +575,11 @@ Không con số nào có nghĩa nếu thiếu con số kia.</code></pre>
   <span class="lc-body"><span class="lc-title">Prometheus — histogram và phân vị trong thực tế</span><span class="lc-sub">Vì sao phân vị được tính sau cùng, sai số nó mang theo, và luật gộp ở cái bẫy trên.</span></span>
 </a>
 </div>
+<a class="link-card lien-ket-cheo" href="/courses/nodejs/learn?lessonSlug=nodejs-16-1-do-truoc-khi-doan" target="_blank" rel="noopener">
+  <span class="lc-ico">🔗</span>
+  <span class="lc-body"><span class="lc-title">Áp vào Node.js — bài 16.1: đo trước khi đoán</span><span class="lc-sub">CPU profile khi có tải (renderNote 21,7 %, crypto 20,5 %, hai regex bị nghi chỉ 3,2 %), bốn phép sửa đo từng cái, và đo tải không tự lừa mình.</span></span>
+  <span class="lc-cta">MỞ BÀI NODE.JS →</span>
+</a>
 </div>
 `,
     },

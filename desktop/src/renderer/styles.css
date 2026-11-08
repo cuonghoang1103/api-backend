@@ -15823,7 +15823,7 @@ select {
 .ct-dong-ctw:hover { color: var(--text-primary, #e6e6f0); background: var(--surface-2, rgba(127,127,127,.08)); }
 .ct-the-chon { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
 .ct-the-chon .ct-btn { display: inline-flex; align-items: center; gap: 6px; }
-.ct-the-chon kbd { font: 600 10.5px/1 ui-monospace, Menlo, monospace; padding: 2px 5px; border-radius: 4px; background: rgba(127,127,127,.18); }
+.ct-the-chon kbd { font: 600 10.5px/1 ui-monospace, Menlo, monospace; padding: 2px 5px; border-radius: 4px; background: rgba(127,127,127,.18); color: inherit; /* trên nút nhấn đặc: theo chữ của nút (kbd toàn cục mang chữ mờ ⇒ 1.5:1) */ }
 .ct-the-chon-mo { opacity: .65; font-weight: 400; }
 .ct-chip-ctw { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
 .ct-chip-ctw .ct-chip { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: color-mix(in srgb, var(--ct-sky) 14%, transparent); color: var(--ct-sky); }

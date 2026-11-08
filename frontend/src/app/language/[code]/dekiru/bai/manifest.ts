@@ -3574,6 +3574,7 @@ export const MANIFEST: CourseManifest = {
     lessons: [
       {"id":"b14-hoi-thoai","kind":"conversation","title":"Hội thoại — 国の習慣 Đồ lạ, luật lệ, ý kiến của tôi","goal":"Giải thích ngắn cách dùng một cái máy / đồ vật lạ, hỏi \"cái này tiếng … nói thế nào\", nhắc bạn luật lệ – phép lịch sự (không được / phải / không cần), và nói ý kiến của mình về chuyện quanh mình rồi hỏi ý kiến người khác.","minutes":40,"ready":true},
       {"id":"b14-tu-vung","kind":"vocab","title":"Từ vựng — 65 từ của trang ことば Bài 14 (+ 9 từ bài đọc)","goal":"Thuộc đủ 65 từ của Bài 14 (đồ vật Nhật, máy móc, luật lệ, ý kiến) cùng 9 từ của bài đọc, và dùng được mỗi từ trong một câu giải thích cách dùng, nhắc luật lệ hoặc nói ý kiến.","minutes":45,"ready":true},
+      {"id":"b14-hinh-tu","kind":"vocab","title":"🖼️ Từ vựng bằng hình — Bài 14 国の習慣","goal":"Nhìn hình là nói ra được từ: đồ vật Nhật lần đầu thấy, máy móc, biển báo – luật lệ, đề tài nói ý kiến và từ của bài đọc Bài 14.","minutes":25,"ready":true},
       {"id":"b14-ngu-phap","kind":"grammar","title":"Ngữ pháp — ポイント 113–118: と (hễ … thì), てはいけません, なければなりません, なくてもいいです, と思います, と言います","goal":"Giải thích \"làm V thì (tự nhiên) có kết quả\", nói \"không được / phải / không cần\" làm gì và trả lời các câu hỏi đó, đổi câu sang thể thường để nói \"tôi nghĩ là …\", hỏi ý kiến, và hỏi – trả lời \"… tiếng … nói thế nào\".","minutes":90,"ready":true},
       {"id":"b14-kanji","kind":"kanji","title":"Chữ Hán — trong từ vựng Bài 14","goal":"Nhận mặt và đọc đúng mọi từ chữ Hán trong 65 từ của Bài 14 và 9 từ của bài đọc (đồ vật Nhật, máy móc, luật lệ, ý kiến), đọc được câu không furigana như đề thi, và viết tay được các chữ ✍ hay gặp.","minutes":35,"ready":true},
       {"id":"b14-han-lop","kind":"kanji","title":"Chữ Hán của lớp · Bài 14 — dự kiến","goal":"Nhận mặt, đọc, hiểu nghĩa và viết đúng thứ tự nét 12 chữ 空 字 思 便 利 不 同 笑 経 験 化 手 — so sánh quê và phố, nêu ý kiến (không khí, chữ, nghĩ, tiện lợi, bất tiện, giống nhau) và kể trải nghiệm phong tục (cười, kinh nghiệm, văn hoá) — cùng các từ đi chung với chúng.","minutes":35,"ready":true},
@@ -3582,6 +3583,9 @@ export const MANIFEST: CourseManifest = {
       {"id":"b14-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 14 (có đáp án)","goal":"Tự dịch, đổi dạng câu (と／てはいけません／なければなりません／なくてもいいです／と思います), chọn trợ từ – từ vựng – câu đáp và ghép câu Bài 14 không cần nhìn bài học.","minutes":50,"ready":true},
       {"id":"b14-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 14 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 14: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
       {"id":"b14-sach","kind":"review","title":"Theo sách — Bài 14 (trang 237–252)","goal":"Nhìn tranh máy bán phiếu ăn, đồ vật mùa đông – mùa hè, biển báo, tờ tuyển làm thêm trong sách là nói được: bấm … thì …, đây là đồ dùng khi …, \"…\" tiếng … nói thế nào, không được / phải / không cần …, và ý kiến của mình (～と思います).","minutes":60,"ready":true},
+      {"id":"b14-buoi-slide-1","kind":"review","title":"📽️ Slide bài giảng Bài 14 (phần 1) — 初めて見た！初めて聞いた！: bấm cái này thì …, tiếng … nói thế nào","goal":"Theo slide, giải thích ngắn cách dùng một cái máy / đồ vật lạ bằng V辞書形と、～ (ポイント 113), giới thiệu đồ vật bằng ～ものです, và hỏi – đáp \"cái này tiếng … nói thế nào\" bằng ～と言います (118).","minutes":30,"ready":true},
+      {"id":"b14-buoi-slide-2","kind":"review","title":"📽️ Slide bài giảng Bài 14 (phần 2) — ルール・マナー: không được, phải, không cần + chữ Hán Bài 14","goal":"Theo slide, nhắc luật lệ bằng ～てはいけません (ポイント 114), ～なければなりません (115), ～なくてもいいです (116); hỏi \"có phải … không?\" và trả lời đúng; đọc 12 chữ Hán Bài 14.","minutes":35,"ready":true},
+      {"id":"b14-buoi-slide-3","kind":"review","title":"📽️ Slide bài giảng Bài 14 (phần 3) — 私の意見: tôi nghĩ là …, bạn nghĩ sao về … + bài nói","goal":"Theo slide, nói ý kiến bằng 普通形 + と思います với đủ bốn loại từ (ポイント 117), hỏi ý kiến bằng ～について どう思いますか, đồng ý / phản đối nhẹ, so sánh hai thứ; trình bày phong tục – luật lệ nước mình.","minutes":35,"ready":true},
     ],
     grammar: [
       "ポイント 113 — V{辞書形|じしょけい} と、___ (Hễ V thì … — kết quả tự nhiên)",
@@ -3669,6 +3673,7 @@ export const MANIFEST: CourseManifest = {
       {"w":"びっくり（します）","pos":"phó từ / động từ nhóm 3","ipa":"bikkuri (shimasu)","vi":"giật mình, ngạc nhiên (Nにびっくりします)"},
     ],
     quizzes: [
+      {"id":"b14-hinh-tu-chon","title":"Nhìn hình chọn từ — Bài 14","lessonId":"b14-hinh-tu","count":17},
       {"id":"b14-np-ghep","title":"Ghép câu — dùng đủ 6 điểm ngữ pháp","lessonId":"b14-ngu-phap","count":12},
       {"id":"b14-np-kiem","title":"Kiểm tra nhanh ngữ pháp Bài 14","lessonId":"b14-ngu-phap","count":14},
       {"id":"b14-kj-doc","title":"Đọc chữ Hán — chọn cách đọc đúng","lessonId":"b14-kanji","count":28},
@@ -3688,12 +3693,13 @@ export const MANIFEST: CourseManifest = {
       {"id":"b14-bt-ghep","title":"Ghép câu — một ngày của người mới đến Nhật","lessonId":"b14-bai-tap","count":10},
       {"id":"b14-sach-ghep","title":"Nghe câu hỏi (tiếng Việt) → ghép câu trả lời tiếng Nhật","lessonId":"b14-sach","count":10},
     ],
-    minutes: 465,
+    minutes: 590,
   },
   15: {
     lessons: [
       {"id":"b15-hoi-thoai","kind":"conversation","title":"Hội thoại — テレビ・雑誌から Kể tin nghe được, rủ bạn đi, nói chuyện ngoài phố","goal":"Kể lại cho bạn tin xem trên ti vi / tạp chí (\"nghe nói …\") rồi rủ bạn đi, bày tỏ cảm tưởng khi nghe tin; bàn kế hoạch với điều kiện \"nếu … thì …\", \"dù … vẫn …\", đoán \"chắc là …\"; ra phố thì tả được những gì đang thấy (tàu đang dừng, quán đóng cửa, người xếp hàng) và đề nghị cách khác.","minutes":45,"ready":true},
       {"id":"b15-tu-vung","kind":"vocab","title":"Từ vựng — 48 từ của trang ことば Bài 15 (+10 từ bài đọc, bài nghe)","goal":"Thuộc đủ 48 từ của Bài 15 (tin tức, thời tiết, sự kiện, điều kiện, cảnh ngoài phố) cùng 10 từ của bài đọc – bài nghe, và dùng được mỗi từ trong một câu kể tin, rủ bạn hoặc tả cảnh.","minutes":45,"ready":true},
+      {"id":"b15-hinh-tu","kind":"vocab","title":"🖼️ Từ vựng bằng hình — Bài 15 テレビ・雑誌から","goal":"Nhìn hình là nói ra được từ: thời tiết, tin tức, sự kiện trên tạp chí, cảnh ngoài phố (tự động từ) và từ của bài đọc Bài 15.","minutes":25,"ready":true},
       {"id":"b15-ngu-phap","kind":"grammar","title":"Ngữ pháp — ポイント 119–124: ～そうです, N で, ～たら, ～ても, ～と思います (đoán), ～ています (trạng thái)","goal":"Kể lại tin nghe được bằng thể thường + そうです, nói nguyên nhân bằng N で, đặt điều kiện \"nếu … thì …\" (～たら) và \"dù … vẫn …\" (～ても) với đủ 4 loại từ, đoán \"chắc chắn / có lẽ …\" bằng きっと／たぶん～と思います, và tả trạng thái trước mắt (電車が止まっています) — đủ để kể tin, bàn kế hoạch và tả cảnh ngoài phố.","minutes":85,"ready":true},
       {"id":"b15-kanji","kind":"kanji","title":"Chữ Hán — trong từ vựng Bài 15","goal":"Nhận mặt và đọc đúng mọi chữ Hán trong 58 từ của Bài 15 (tin tức, thời tiết, kế hoạch, cảnh ngoài phố), đọc được câu và đoạn văn không furigana như đề thi, và viết tay được các chữ ✍ hay gặp.","minutes":35,"ready":true},
       {"id":"b15-han-lop","kind":"kanji","title":"Chữ Hán của lớp · Bài 15 — dự kiến","goal":"Nhận mặt, đọc, hiểu nghĩa và viết đúng thứ tự nét 12 chữ 天 気 晴 雨 曇 降 台 震 事 故 急 心 — thời tiết và tin tức (trời, khí, nắng, mưa, mây, rơi, bão, động đất, tai nạn, vội, lo lắng) — cùng các từ đi chung với chúng.","minutes":35,"ready":true},
@@ -3702,6 +3708,9 @@ export const MANIFEST: CourseManifest = {
       {"id":"b15-bai-tap","kind":"homework","title":"Bài tập về nhà — Bài 15 (có đáp án) + Ôn tập cả sách","goal":"Tự chia thể たら / ても / thể thường, dịch, đổi dạng câu, chọn trợ từ – từ vựng – câu đáp và ghép câu Bài 15 không cần nhìn bài học; rồi biết mỗi hình thái động từ của cả sách học ở bài nào để ôn.","minutes":55,"ready":true},
       {"id":"b15-luyen-nho","kind":"review","title":"🃏 Luyện nhớ Bài 15 — từ vựng · chữ Hán · ngữ pháp (thẻ lật, học, trắc nghiệm, gõ, nghe, ghép cặp, kiểm tra)","goal":"Thuộc chắc toàn bộ từ vựng, chữ Hán của lớp và mẫu ngữ pháp Bài 15: lật thẻ → học → tự kiểm tra, từ sai được đưa vào hộp ôn lại.","minutes":25,"ready":true},
       {"id":"b15-sach","kind":"review","title":"Theo sách — Bài 15 (trang 253–269)","goal":"Nhìn tranh ti vi, tạp chí, ký túc xá, quán cà phê, con phố trong sách là nói được: kể tin nghe được (～そうです), nguyên nhân (N で), rủ bạn với điều kiện (～たら), \"dù … vẫn\" (～ても), đoán (きっと／たぶん～と思います), tả cảnh trước mắt (～ています) — và biết sách kết thúc ở đâu để ôn cả cuốn.","minutes":60,"ready":true},
+      {"id":"b15-buoi-slide-1","kind":"review","title":"📽️ Slide bài giảng Bài 15 (phần 1) — これ、知ってる？: nghe nói …, vì … nên …","goal":"Theo slide, kể lại tin nghe / xem được bằng 普通形 + そうです với đủ bốn loại từ (ポイント 119), nói nguyên nhân bằng N で (124), và phản ứng đúng khi nghe tin vui, tin buồn.","minutes":30,"ready":true},
+      {"id":"b15-buoi-slide-2","kind":"review","title":"📽️ Slide bài giảng Bài 15 (phần 2) — 雑誌を見て町へ: nếu … thì, dù … vẫn, chắc là … + chữ Hán Bài 15","goal":"Theo slide, lập thể たら／ても cho bốn loại từ, nói điều kiện bằng ～たら (ポイント 120), nhượng bộ bằng ～ても (121), đoán bằng きっと／たぶん ～と思います (123); rủ bạn đi sự kiện xem trên tạp chí; đọc 12 chữ Hán Bài 15.","minutes":35,"ready":true},
+      {"id":"b15-buoi-slide-3","kind":"review","title":"📽️ Slide bài giảng Bài 15 (phần 3) — 町を歩いて: tàu đang dừng, quán đóng cửa, cốc bị bẩn + bài nói","goal":"Theo slide, phân biệt tự động từ ↔ tha động từ, tả cảnh trước mắt bằng N が V(tự động từ)て います (ポイント 122), nói tình trạng với nhân viên rồi đề nghị cách khác; kể \"tin của tôi\" (私のニュース).","minutes":35,"ready":true},
     ],
     grammar: [
       "Trước tiên — Thể thường (普通形) đứng trước そうです／と思います (ôn Bài 11–14)",
@@ -3774,6 +3783,7 @@ export const MANIFEST: CourseManifest = {
       {"w":"{会場|かいじょう}","pos":"danh từ","ipa":"kaijou","vi":"địa điểm tổ chức, hội trường (chân bài nghe p.268)"},
     ],
     quizzes: [
+      {"id":"b15-hinh-tu-chon","title":"Nhìn hình chọn từ — Bài 15","lessonId":"b15-hinh-tu","count":18},
       {"id":"b15-np-ghep","title":"Ghép câu — dùng đủ 6 điểm ngữ pháp","lessonId":"b15-ngu-phap","count":13},
       {"id":"b15-np-kiem","title":"Kiểm tra nhanh ngữ pháp Bài 15","lessonId":"b15-ngu-phap","count":15},
       {"id":"b15-kj-doc","title":"Đọc chữ Hán — chọn cách đọc đúng","lessonId":"b15-kanji","count":32},
@@ -3793,7 +3803,7 @@ export const MANIFEST: CourseManifest = {
       {"id":"b15-bt-ghep","title":"Ghép câu — từ tin trên ti vi đến lúc ra phố","lessonId":"b15-bai-tap","count":10},
       {"id":"b15-sach-ghep","title":"Nghe câu hỏi (tiếng Việt) → ghép câu trả lời tiếng Nhật","lessonId":"b15-sach","count":10},
     ],
-    minutes: 470,
+    minutes: 595,
   },
   16: {
     lessons: [

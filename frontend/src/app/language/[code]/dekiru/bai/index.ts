@@ -20,11 +20,12 @@ import { chenLuyenNho, chenHinh } from './luyenNho';
 export function loadBai(n: number): Promise<Lesson[]> | null {
   const p = loadGoc(n);
   // + mục 🃏 Luyện nhớ / 🎌 Luyện bảng chữ của bài (luyenNho.ts) — manifest gọi cùng hàm.
-  // + 🖼️ thẻ hình & 📽️ slide (hinhB14.ts — Bài 1–4, hinhB57.ts — Bài 5–7, hinhB810.ts — Bài 8–10, hinhB1113.ts — Bài 11–13) — manifest gọi cùng các hàm.
+  // + 🖼️ thẻ hình & 📽️ slide (hinhB14.ts — Bài 1–4, hinhB57.ts — Bài 5–7, hinhB810.ts — Bài 8–10, hinhB1113.ts — Bài 11–13, hinhB1415.ts — Bài 14–15) — manifest gọi cùng các hàm.
   const hinh = n >= 1 && n <= 4 ? import('./hinhB14').then((m) => ({ 1: m.HINH_B1, 2: m.HINH_B2, 3: m.HINH_B3, 4: m.HINH_B4 })[n])
     : n >= 5 && n <= 7 ? import('./hinhB57').then((m) => ({ 5: m.HINH_B5, 6: m.HINH_B6, 7: m.HINH_B7 })[n])
     : n >= 8 && n <= 10 ? import('./hinhB810').then((m) => ({ 8: m.HINH_B8, 9: m.HINH_B9, 10: m.HINH_B10 })[n])
     : n >= 11 && n <= 13 ? import('./hinhB1113').then((m) => ({ 11: m.HINH_B11, 12: m.HINH_B12, 13: m.HINH_B13 })[n])
+    : n >= 14 && n <= 15 ? import('./hinhB1415').then((m) => ({ 14: m.HINH_B14, 15: m.HINH_B15 })[n])
     : Promise.resolve(undefined);
   // + 🎙️ đọc to kiểu đề (docTo14 — Bài 1–4) và đề thi thử JPD113 (thiThu113 — cuối Bài 3).
   const them = Promise.all([

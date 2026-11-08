@@ -109,9 +109,9 @@ export default {
     /* ── Chương 14 — Kiểm thử ───────────────────────────────────────────── */
     'nodejs-14-1-vi-sao-test': { yt: 'Z_U6M1hMC6s', credit: 'Codevolution — React Testing Tutorial - 3 - Types of Tests', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-01-vi-sao-test-a3c8872d.mp4' }, defaultVideoTrack: 'VI'},
     'nodejs-14-2-unit-test': { yt: '0yScewOhjmU', credit: 'Alex Rusin — The ULTIMATE Guide to Testing TypeScript Node.js with Jest.', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-02-unit-test-tron-e9dc059f.mp4' }, defaultVideoTrack: 'VI'},
-    'nodejs-14-3-supertest': { yt: 'LEYuxsGIeGo', credit: 'Alex Rusin — Node.js API Integration Testing: The Ultimate Guide with Jest and Supertest' },
-    'nodejs-14-4-db-that': { yt: 'eRPkNd40n94', credit: 'Florian Ludewig — The Easiest Way to Run Integration Tests with Docker and Testcontainers' },
-    'nodejs-14-5-do-phu-flaky-ci': { yt: 'W-dc5fpxUVs', credit: 'Codevolution — React Testing Tutorial - 14 - Code Coverage' },
+    'nodejs-14-3-supertest': { yt: 'LEYuxsGIeGo', credit: 'Alex Rusin — Node.js API Integration Testing: The Ultimate Guide with Jest and Supertest', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-03-supertest-a88bbc85.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-14-4-db-that': { yt: 'eRPkNd40n94', credit: 'Florian Ludewig — The Easiest Way to Run Integration Tests with Docker and Testcontainers', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-04-db-that-tron-82f2f30b.mp4' }, defaultVideoTrack: 'VI'},
+    'nodejs-14-5-do-phu-flaky-ci': { yt: 'W-dc5fpxUVs', credit: 'Codevolution — React Testing Tutorial - 14 - Code Coverage', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/14-kiem-thu/14-05-do-phu-tron-e3c9e33f.mp4' }, defaultVideoTrack: 'VI'},
 
     /* ── Chương 15 — Log & quan sát hệ thống ────────────────────────────── */
     'nodejs-15-1-log-co-cau-truc': { yt: 'umm-MyCl3Q4', credit: 'System Design Lab — Observability Crash Course: Logs, Metrics, Traces Explained', vi: { url: 'https://media.cuongthai.com/videos/bai-giang/nodejs/15-log-quan-sat/15-01-log-co-cau-truc-tron-2ae8a3b5.mp4' }, defaultVideoTrack: 'VI'},

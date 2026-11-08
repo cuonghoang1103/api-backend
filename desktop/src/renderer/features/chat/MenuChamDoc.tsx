@@ -104,7 +104,7 @@ export function MenuChamDoc({ muc, nhan }: { muc: MucMenu[]; nhan?: string }) {
 
       {mo && oViTri && createPortal(
         <div
-          className="ct-cham-menu"
+          className="ct-cham-menu ct-ai-term" /* portal ra <body> ⇒ mang lại bảng màu AI (sáng/tối) */
           role="menu"
           style={{ left: oViTri.trai, top: oViTri.tren, width: RONG }}
           onPointerDown={(e) => e.stopPropagation()}

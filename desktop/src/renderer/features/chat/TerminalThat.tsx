@@ -26,14 +26,15 @@ import { FitAddon } from '@xterm/addon-fit';
 import '@xterm/xterm/css/xterm.css';
 import type { PhienPty } from '@shared/ipc';
 import { useDich } from '../../i18n';
+import { useAppState } from '../../app-state';
 
 const CAO_MIN = 140;
 const CAO_MAX = 720;
 const CAO_MAC_DINH = 280;
 const KHOA_CAO = 'ct-terminal-cao';
 
-/** Bảng màu khớp giao diện terminal của trang AI (`.ct-ai-term`). */
-const THEME = {
+/** Bảng màu khớp giao diện terminal của trang AI (`.ct-ai-term`) — bản TỐI. */
+const THEME_TOI = {
   background: '#070a09',
   foreground: '#d5e3dc',
   cursor: '#4ade80',
@@ -41,14 +42,34 @@ const THEME = {
   selectionBackground: 'rgba(74, 222, 128, 0.3)',
   black: '#0f1413', red: '#f87171', green: '#4ade80', yellow: '#facc15',
   blue: '#60a5fa', magenta: '#c084fc', cyan: '#22d3ee', white: '#d5e3dc',
-  brightBlack: '#5f766b', brightRed: '#fca5a5', brightGreen: '#86efac', brightYellow: '#fde047',
+  brightBlack: '#7d9488', brightRed: '#fca5a5', brightGreen: '#86efac', brightYellow: '#fde047',
   brightBlue: '#93c5fd', brightMagenta: '#d8b4fe', brightCyan: '#67e8f9', brightWhite: '#ffffff',
 };
+/**
+ * Bản SÁNG (08/11/2026 — người dùng: chủ đề sáng mà AI Code vẫn tối). Mọi màu chữ ≥ 4.5:1 trên nền `#fbfcfb`
+ * (tông 700 của Tailwind); `white`/`brightWhite` là màu CHỮ của chương trình chạy trong terminal, nên chúng thành
+ * xám đậm thay vì trắng (trắng trên nền sáng = không thấy gì — lỗi kinh điển của terminal theme sáng).
+ */
+const THEME_SANG = {
+  background: '#fbfcfb',
+  foreground: '#1b2620',
+  cursor: '#15803d',
+  cursorAccent: '#fbfcfb',
+  selectionBackground: 'rgba(21, 128, 61, 0.22)',
+  black: '#1b2620', red: '#b91c1c', green: '#15803d', yellow: '#a16207',
+  blue: '#1d4ed8', magenta: '#7e22ce', cyan: '#0e7490', white: '#4b5563',
+  brightBlack: '#5b6b62', brightRed: '#991b1b', brightGreen: '#166534', brightYellow: '#854d0e',
+  brightBlue: '#1e40af', brightMagenta: '#6b21a8', brightCyan: '#155e75', brightWhite: '#111827',
+};
+const themeCho = (chuDe: 'light' | 'dark') => (chuDe === 'dark' ? THEME_TOI : THEME_SANG);
 
 type PhienUi = PhienPty & { choNhap?: 'matKhau' | 'xacNhan' | null };
 
 /** Một ô xterm gắn với một phiên PTY. */
 function OTerminal({ phien, hien, focusLan }: { phien: PhienUi; hien: boolean; focusLan: number }) {
+  const { resolvedTheme } = useAppState();
+  const chuDeRef = useRef(resolvedTheme);
+  chuDeRef.current = resolvedTheme;
   const hopRef = useRef<HTMLDivElement | null>(null);
   const xtRef = useRef<{ t: Terminal; fit: FitAddon } | null>(null);
 
@@ -57,7 +78,7 @@ function OTerminal({ phien, hien, focusLan }: { phien: PhienUi; hien: boolean; f
     const b = window.cuongthai?.pty;
     if (!hop || !b) return;
     const t = new Terminal({
-      theme: THEME,
+      theme: themeCho(chuDeRef.current),
       fontFamily: "'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace",
       fontSize: 12.5,
       lineHeight: 1.15,
@@ -117,6 +138,11 @@ function OTerminal({ phien, hien, focusLan }: { phien: PhienUi; hien: boolean; f
       xtRef.current = null;
     };
   }, [phien.id]);
+
+  // Đổi chủ đề ⇒ đổi bảng màu NGAY trên terminal đang mở (không dựng lại, không mất lịch sử cuộn).
+  useEffect(() => {
+    if (xtRef.current) xtRef.current.t.options.theme = themeCho(resolvedTheme);
+  }, [resolvedTheme]);
 
   useEffect(() => {
     if (!hien || !xtRef.current) return;

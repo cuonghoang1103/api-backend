@@ -178,7 +178,7 @@ export function ChonCheDo({
 
       {mo && viTri && createPortal(
         <div
-          className="ct-chedo-menu"
+          className="ct-chedo-menu ct-ai-term" /* portal ra <body> ⇒ mang lại bảng màu AI (sáng/tối) */
           role="menu"
           style={{ left: viTri.trai, top: viTri.tren, width: RONG }}
           onPointerDown={(e) => e.stopPropagation()}

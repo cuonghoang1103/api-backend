@@ -34,8 +34,9 @@
 
   /* Màu — chữ */
   --ct-text: #14141c;
-  --ct-text-muted: #61616f;
-  --ct-text-faint: #8b8b99;
+  --ct-text-muted: #55555f;
+  /* 08/11/2026: #8b8b99 chỉ ≈ 3.2:1 trên nền #f4f4f8 — chữ phụ "mờ, xấu" người dùng báo. Nay ≈ 4.9:1. */
+  --ct-text-faint: #6c6c7a;
 
   /* Màu — nhấn và trạng thái */
   --ct-accent: #4f46e5;
@@ -53,6 +54,33 @@
   --ct-ok: #15803d;
   --ct-warn: #b45309;
   --ct-err: #b91c1c;
+  --ct-info: #1d4ed8;
+  /* Nền nhạt cho huy hiệu/ô trạng thái — chữ trên đó dùng --ct-ok/--ct-warn/… (≥ 4.5:1 ở cả hai chủ đề). */
+  --ct-ok-bg: color-mix(in srgb, var(--ct-ok) 12%, transparent);
+  --ct-warn-bg: color-mix(in srgb, var(--ct-warn) 12%, transparent);
+  --ct-err-bg: color-mix(in srgb, var(--ct-err) 12%, transparent);
+  --ct-info-bg: color-mix(in srgb, var(--ct-info) 12%, transparent);
+  /* Màu nhấn phụ dạng CHỮ (thay các literal "pastel" #c4b5fd/#93c5fd… vốn chỉ đọc được trên nền tối).
+     Sáng = tông 700, tối = tông 300 — cùng giá trị với `--tone-*` của web. */
+  --ct-violet: #6d28d9;
+  --ct-pink: #be185d;
+  --ct-cyan: #0e7490;
+  --ct-teal: #0f766e;
+  --ct-sky: #0369a1;
+  --ct-amber: #b45309;
+  --ct-orange: #c2410c;
+  --ct-gold: #a16207;
+  /* Chữ trên nền màu nhấn ĐẶC (nút chính). */
+  --ct-on-accent: #ffffff;
+
+  /* Màu cú pháp (highlight.js, diff). Sáng: ≥ 5:1 trên trắng. */
+  --ct-syn-keyword: #8b1a9e;
+  --ct-syn-string: #1a7f37;
+  --ct-syn-number: #9a4a00;
+  --ct-syn-func: #0550ae;
+  --ct-syn-attr: #b4232c;
+  --ct-syn-type: #855400;
+  --ct-syn-builtin: #0b6a83;
 
   /* Hình khối — bo góc kiểu iOS: mềm, và càng khối lớn càng bo nhiều. */
   --ct-radius: 14px;
@@ -148,14 +176,33 @@
   --ct-active: rgba(129, 140, 248, 0.18);
 
   --ct-text: #e8e8f0;
-  --ct-text-muted: #a8a8ba;
-  --ct-text-faint: #7e7e90;
+  --ct-text-muted: #b0b0c2;
+  /* 08/11/2026: #7e7e90 ≈ 4.1:1 trên #16161d, < 3.5:1 trên thẻ #2a2a36 — nay #9090a6. */
+  --ct-text-faint: #9090a6;
 
   --ct-accent: #818cf8;
   --ct-accent-text: #a5b4fc;
   --ct-ok: #4ade80;
   --ct-warn: #fbbf24;
   --ct-err: #f87171;
+  --ct-info: #93c5fd;
+  --ct-violet: #c4b5fd;
+  --ct-pink: #f9a8d4;
+  --ct-cyan: #67e8f9;
+  --ct-teal: #5eead4;
+  --ct-sky: #7dd3fc;
+  --ct-amber: #fcd34d;
+  --ct-orange: #fdba74;
+  --ct-gold: #fde047;
+  --ct-on-accent: #0b0b18;
+
+  --ct-syn-keyword: #c678dd;
+  --ct-syn-string: #98c379;
+  --ct-syn-number: #d19a66;
+  --ct-syn-func: #61afef;
+  --ct-syn-attr: #e06c75;
+  --ct-syn-type: #e5c07b;
+  --ct-syn-builtin: #56b6c2;
 
   --ct-shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
 
@@ -2722,8 +2769,17 @@ code:not(.work-root *) {
   --cat-speaking-bg: #E6F1FB; --cat-speaking-fg: #042C53; --cat-speaking-icon: #378ADD;
   --cat-reading-bg: #FAEEDA; --cat-reading-fg: #412402; --cat-reading-icon: #ba7c1e;
   --cat-ai-bg: #F3EAFD; --cat-ai-fg: #2E0A4F; --cat-ai-icon: #9333EA;
+  /* Màu nhấn dạng chữ của web (`text-tone-*`, 08/11/2026) — chép đúng globals.css. */
+  --tone-amber: #b45309; --tone-emerald: #047857; --tone-cyan: #0e7490; --tone-sky: #0369a1;
+  --tone-violet: #6d28d9; --tone-indigo: #4338ca; --tone-fuchsia: #a21caf; --tone-rose: #be123c;
+  --tone-red: #b91c1c; --tone-orange: #c2410c; --tone-yellow: #a16207; --tone-green: #15803d;
+  --tone-blue: #1d4ed8; --tone-pink: #be185d; --tone-teal: #0f766e; --tone-lime: #4d7c0f; --tone-purple: #7e22ce;
 }
 :root[data-ct-theme='dark'] {
+  --tone-amber: #fcd34d; --tone-emerald: #6ee7b7; --tone-cyan: #67e8f9; --tone-sky: #7dd3fc;
+  --tone-violet: #c4b5fd; --tone-indigo: #a5b4fc; --tone-fuchsia: #f0abfc; --tone-rose: #fda4af;
+  --tone-red: #fca5a5; --tone-orange: #fdba74; --tone-yellow: #fde047; --tone-green: #86efac;
+  --tone-blue: #93c5fd; --tone-pink: #f9a8d4; --tone-teal: #5eead4; --tone-lime: #bef264; --tone-purple: #d8b4fe;
   --cat-alphabet-bg: #313040; --cat-alphabet-fg: #968fe3; --cat-alphabet-icon: #968fe3;
   --cat-vocab-bg: #233631; --cat-vocab-fg: #3dac88; --cat-vocab-icon: #3dac88;
   --cat-grammar-bg: #3d2c27; --cat-grammar-fg: #e07b59; --cat-grammar-icon: #e07b59;
@@ -2731,6 +2787,89 @@ code:not(.work-root *) {
   --cat-speaking-bg: #273340; --cat-speaking-fg: #5b9fe3; --cat-speaking-icon: #5b9fe3;
   --cat-reading-bg: #403626; --cat-reading-fg: #ef9f27; --cat-reading-icon: #ef9f27;
   --cat-ai-bg: #342741; --cat-ai-fg: #b878f1; --cat-ai-icon: #b878f1;
+}
+
+/*
+ * LƯỚI AN TOÀN "đảo nền tối" cho cây web (08/11/2026) — chép luật bất biến của web (globals.css, khối
+ * "Dark-surface islands"): phần tử nào ÉP nền tối bất kể chủ đề thì bảng chữ bên trong cũng phải là bảng tối.
+ * Trước đây app không có luật này ⇒ ở chủ đề sáng, mọi `bg-darkbg`/`bg-[#0d1117]` còn sót trong trang web dùng lại
+ * hiện chữ `--text-primary` gần đen trên nền gần đen. Các trang chính đã được đổi sang token theo chủ đề; luật này
+ * chỉ đỡ những chỗ cố ý tối (khối mã, khung terminal, ảnh) và chỗ chưa đổi.
+ */
+.ct-web-host .dark-surface,
+.ct-web-host .bg-darkbg,
+.ct-web-host .bg-darkcard,
+.ct-web-host .bg-darksurface,
+.ct-web-host .bg-\[\#020110\],
+.ct-web-host .bg-\[\#02020a\],
+.ct-web-host .bg-\[\#04050a\],
+.ct-web-host .bg-\[\#05060c\],
+.ct-web-host .bg-\[\#070b16\],
+.ct-web-host .bg-\[\#08160f\],
+.ct-web-host .bg-\[\#0a0a0a\],
+.ct-web-host .bg-\[\#0a0a0f\],
+.ct-web-host .bg-\[\#0a0a14\],
+.ct-web-host .bg-\[\#0a0c14\],
+.ct-web-host .bg-\[\#0a0e14\],
+.ct-web-host .bg-\[\#0a0f1e\],
+.ct-web-host .bg-\[\#0b0b12\],
+.ct-web-host .bg-\[\#0c0c14\],
+.ct-web-host .bg-\[\#0c0f14\],
+.ct-web-host .bg-\[\#0c2318\],
+.ct-web-host .bg-\[\#0d0d1a\],
+.ct-web-host .bg-\[\#0d0f18\],
+.ct-web-host .bg-\[\#0d1117\],
+.ct-web-host .bg-\[\#0d1424\],
+.ct-web-host .bg-\[\#0d1426\],
+.ct-web-host .bg-\[\#0d1a2e\],
+.ct-web-host .bg-\[\#0e1218\],
+.ct-web-host .bg-\[\#0f0a1e\],
+.ct-web-host .bg-\[\#0f0f16\],
+.ct-web-host .bg-\[\#0f1019\],
+.ct-web-host .bg-\[\#0f111a\],
+.ct-web-host .bg-\[\#0f1a30\],
+.ct-web-host .bg-\[\#100f1a\],
+.ct-web-host .bg-\[\#10151c\],
+.ct-web-host .bg-\[\#101c33\],
+.ct-web-host .bg-\[\#12121a\],
+.ct-web-host .bg-\[\#12161d\],
+.ct-web-host .bg-\[\#131a2e\],
+.ct-web-host .bg-\[\#131c2e\],
+.ct-web-host .bg-\[\#131f38\],
+.ct-web-host .bg-\[\#141522\],
+.ct-web-host .bg-\[\#161b22\],
+.ct-web-host .bg-\[\#1a1503\],
+.ct-web-host .bg-\[\#1a1a24\],
+.ct-web-host .bg-\[\#1a1b26\],
+.ct-web-host .bg-\[\#1a1f27\],
+.ct-web-host .bg-\[\#1b1030\],
+.ct-web-host .bg-\[\#1b2440\],
+.ct-web-host .bg-\[\#1c2f52\],
+.ct-web-host .bg-\[\#1d0c0c\],
+.ct-web-host .bg-\[\#1e1e1e\],
+.ct-web-host .bg-\[\#1e2530\],
+.ct-web-host .bg-\[\#20212e\],
+.ct-web-host .bg-\[\#252526\],
+.ct-web-host .bg-\[\#2a0d0d\] {
+  color-scheme: dark;
+  --bg-primary: #18191a;
+  --bg-card: #242526;
+  --bg-surface: #303031;
+  --bg-surface-hover: rgba(255, 255, 255, 0.08);
+  --bg-surface-active: rgba(255, 255, 255, 0.12);
+  --bg-overlay: rgba(36, 37, 38, 0.98);
+  --bg-glass: rgba(36, 37, 38, 0.95);
+  --border-color: #3e4042;
+  --border-light: rgba(255, 255, 255, 0.1);
+  --border-light-hover: rgba(255, 255, 255, 0.15);
+  --text-primary: #e4e6eb;
+  --text-secondary: #b0b3b8;
+  --text-muted: #8a8d91;
+  --tone-amber: #fcd34d; --tone-emerald: #6ee7b7; --tone-cyan: #67e8f9; --tone-sky: #7dd3fc;
+  --tone-violet: #c4b5fd; --tone-indigo: #a5b4fc; --tone-fuchsia: #f0abfc; --tone-rose: #fda4af;
+  --tone-red: #fca5a5; --tone-orange: #fdba74; --tone-yellow: #fde047; --tone-green: #86efac;
+  --tone-blue: #93c5fd; --tone-pink: #f9a8d4; --tone-teal: #5eead4; --tone-lime: #bef264; --tone-purple: #d8b4fe;
+  color: var(--text-primary);
 }
 
 .ct-web-host {
@@ -4394,35 +4533,23 @@ select {
    Giữ TÔNG NHẠT: nền dòng đã mang màu đỏ/xanh rồi, chữ mà cũng rực thì hai
    lớp màu đánh nhau và không đọc được cái nào. */
 .ct-diff .hljs-keyword,
-.ct-diff .hljs-built_in { color: #c792ea; }
+.ct-diff .hljs-built_in { color: var(--ct-syn-keyword); }
 .ct-diff .hljs-string,
-.ct-diff .hljs-regexp { color: #c3e88d; }
+.ct-diff .hljs-regexp { color: var(--ct-syn-string); }
 .ct-diff .hljs-number,
-.ct-diff .hljs-literal { color: #f78c6c; }
+.ct-diff .hljs-literal { color: var(--ct-syn-number); }
 .ct-diff .hljs-comment { color: var(--ct-text-faint); font-style: italic; }
 .ct-diff .hljs-type,
 .ct-diff .hljs-title,
-.ct-diff .hljs-class { color: #ffcb6b; }
+.ct-diff .hljs-class { color: var(--ct-syn-type); }
 .ct-diff .hljs-variable,
 .ct-diff .hljs-attr,
-.ct-diff .hljs-property { color: #82aaff; }
+.ct-diff .hljs-property { color: var(--ct-syn-func); }
 .ct-diff .hljs-operator,
 .ct-diff .hljs-punctuation { color: var(--ct-text-muted); }
-
-/* Chủ đề SÁNG: bảng trên là bảng cho nền tối. Trên nền sáng nó nhạt tới mức
-   mất chữ — đúng họ lỗi "nền cố định gặp chữ theo chủ đề". */
-html[data-ct-theme='light'] .ct-diff .hljs-keyword,
-html[data-ct-theme='light'] .ct-diff .hljs-built_in { color: #8b1a9e; }
-html[data-ct-theme='light'] .ct-diff .hljs-string,
-html[data-ct-theme='light'] .ct-diff .hljs-regexp { color: #1a7f37; }
-html[data-ct-theme='light'] .ct-diff .hljs-number,
-html[data-ct-theme='light'] .ct-diff .hljs-literal { color: #b35000; }
-html[data-ct-theme='light'] .ct-diff .hljs-type,
-html[data-ct-theme='light'] .ct-diff .hljs-title,
-html[data-ct-theme='light'] .ct-diff .hljs-class { color: #8a6d00; }
-html[data-ct-theme='light'] .ct-diff .hljs-variable,
-html[data-ct-theme='light'] .ct-diff .hljs-attr,
-html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
+/* (08/11/2026) Bảng sáng/tối nay là token `--ct-syn-*` khai ở đầu tệp — trước đây là
+   một khối `html[data-ct-theme='light']` riêng, và trang AI (ép tối) nhận nhầm bảng
+   sáng lên nền đen. */
 
 /* Số dòng KHÔNG được bôi đen theo khi người dùng bôi để chép đoạn mã. */
 .ct-diff-so {
@@ -5050,14 +5177,12 @@ html[data-ct-theme='light'] .ct-diff .hljs-property { color: #0a4fa8; }
   padding: 0; border: none; background: none;
   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: 12.5px; line-height: 1.5;
-  color: #56b6c2;
+  color: var(--ct-syn-builtin);
   white-space: pre-wrap; word-break: break-all;
 }
-html[data-ct-theme='light'] .ct-lenh-chu { color: #0184bc; }
 
 /* Lệnh ĐÃ CHẠY thu về một dòng — vẫn phải khác màu văn xuôi. */
-.ct-agent-tool .ct-agent-tool-dong > code { color: #56b6c2; }
-html[data-ct-theme='light'] .ct-agent-tool .ct-agent-tool-dong > code { color: #0184bc; }
+.ct-agent-tool .ct-agent-tool-dong > code { color: var(--ct-syn-builtin); }
 
 /* ── Chữ ĐẬM phải NỔI HẲN ──
    Bản trước `strong` chỉ đậm hơn một chút, cùng màu chữ thường, nên "phân
@@ -5069,26 +5194,15 @@ html[data-ct-theme='light'] .ct-agent-tool .ct-agent-tool-dong > code { color: #
 .ct-md, .ct-agent-may { color: var(--ct-text-muted); }
 .ct-md em { color: var(--ct-text); font-style: italic; }
 
-.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section { color: #c678dd; }
-.hljs-string, .hljs-regexp, .hljs-addition { color: #98c379; }
-.hljs-number, .hljs-symbol, .hljs-bullet { color: #d19a66; }
-.hljs-title, .hljs-name, .hljs-title\.function\.{ color: #61afef; }
-.hljs-attr, .hljs-attribute, .hljs-variable, .hljs-template-variable { color: #e06c75; }
+.hljs-keyword, .hljs-selector-tag, .hljs-literal, .hljs-section { color: var(--ct-syn-keyword); }
+.hljs-string, .hljs-regexp, .hljs-addition { color: var(--ct-syn-string); }
+.hljs-number, .hljs-symbol, .hljs-bullet { color: var(--ct-syn-number); }
+.hljs-title, .hljs-name, .hljs-title\.function\.{ color: var(--ct-syn-func); }
+.hljs-attr, .hljs-attribute, .hljs-variable, .hljs-template-variable { color: var(--ct-syn-attr); }
 .hljs-comment, .hljs-quote { color: var(--ct-text-faint); font-style: italic; }
-.hljs-type, .hljs-class .hljs-title, .hljs-title\.class\. { color: #e5c07b; }
-.hljs-built_in, .hljs-meta { color: #56b6c2; }
+.hljs-type, .hljs-class .hljs-title, .hljs-title\.class\. { color: var(--ct-syn-type); }
+.hljs-built_in, .hljs-meta { color: var(--ct-syn-builtin); }
 .hljs-deletion { color: var(--ct-err); }
-
-html[data-ct-theme='light'] .hljs-keyword,
-html[data-ct-theme='light'] .hljs-selector-tag,
-html[data-ct-theme='light'] .hljs-literal { color: #a626a4; }
-html[data-ct-theme='light'] .hljs-string { color: #50a14f; }
-html[data-ct-theme='light'] .hljs-number { color: #986801; }
-html[data-ct-theme='light'] .hljs-title,
-html[data-ct-theme='light'] .hljs-name { color: #4078f2; }
-html[data-ct-theme='light'] .hljs-attr { color: #e45649; }
-html[data-ct-theme='light'] .hljs-type { color: #c18401; }
-html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* ════════════════════════════════════════════════════════════
    NÂNG CẤP GIAO DIỆN AGENT (17/08)
@@ -13712,14 +13826,67 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
  *
  * CÁCH LÀM: đổi GIÁ TRỊ biến `--ct-*` trong phạm vi `.ct-ai-term`, không đổi
  * lớp trên từng thành phần. Mọi thứ trong trang vốn đã vẽ bằng biến, nên chúng
- * tự sang màu terminal — kể cả thành phần thêm về sau. Áp cả khi app đang ở
- * chủ đề SÁNG: người dùng muốn trang AI luôn là một cái terminal.
+ * tự sang màu terminal — kể cả thành phần thêm về sau.
  *
- * Bảng màu: đen xanh rêu (không đen tuyệt đối — đọc hàng giờ mỏi mắt, xem
- * chú thích "Nền tối: DỊU" ở đầu tệp), nhấn xanh lục phốt-pho của terminal cổ,
- * phụ xanh ngọc cho liên kết/mã. Chữ thân `#d5e3dc` trên nền `#0a0e0d` ≈ 14:1.
+ * ⚠️ 08/11/2026 — HAI bảng, theo chủ đề app. Bản cũ ép bảng tối "kể cả khi app
+ * đang SÁNG", và người dùng báo: chuyển sang sáng thì chỉ khung/viền trắng ra,
+ * ruột AI Code vẫn đen — trông như lỗi. Nay: sáng = "terminal giấy" (nền trắng
+ * ngà xanh, chữ gần đen, nhấn xanh lục 700 — mọi chữ ≥ 4.5:1), tối = đen xanh
+ * rêu như cũ. Màu nào trước đây viết thẳng (link, mã, ô soạn, nút) giờ là biến
+ * `--ct-term-*` khai ở hai bảng dưới, nên terminal xterm (`TerminalThat.tsx`),
+ * khối mã và menu portal ra <body> đổi cùng một lúc.
+ *
+ * Bảng tối: chữ thân `#d5e3dc` trên nền `#0a0e0d` ≈ 14:1.
+ * Bảng sáng: chữ thân `#14201a` trên nền `#f6f8f6` ≈ 16:1; mờ `#5a6c62` ≈ 5.4:1.
  */
+:root {
+  /* Token terminal dùng được cả NGOÀI `.ct-ai-term` (ô terminal, menu portal). */
+  --ct-term-bg: #fbfcfb;
+  --ct-term-pre: #f1f5f2;
+  --ct-term-input: #ffffff;
+  --ct-term-link: #0f766e;
+  --ct-term-code: #065f46;
+  --ct-term-on-accent: #ffffff;
+  --ct-term-accent-hover: #166534;
+}
+:root[data-ct-theme='dark'] {
+  --ct-term-bg: #070a09;
+  --ct-term-pre: #060908;
+  --ct-term-input: #070a09;
+  --ct-term-link: #5eead4;
+  --ct-term-code: #a7f3d0;
+  --ct-term-on-accent: #04130a;
+  --ct-term-accent-hover: #6ee7a0;
+}
 .ct-ai-term {
+  --ct-bg: #f6f8f6;
+  --ct-surface: #ffffff;
+  --ct-surface-2: #eef3ef;
+  --ct-sidebar: #f0f4f1;
+  --ct-border: #d3ded7;
+  --ct-hover: rgba(21, 128, 61, 0.06);
+  --ct-active: rgba(21, 128, 61, 0.11);
+
+  --ct-text: #14201a;
+  --ct-text-muted: #45584d;
+  --ct-text-faint: #5a6c62;
+
+  --ct-accent: #15803d;
+  --ct-accent-text: #166534;
+  --ct-ok: #15803d;
+  --ct-warn: #a16207;
+  --ct-err: #b91c1c;
+
+  --ct-shadow: 0 10px 34px rgba(16, 40, 28, 0.14);
+  --ct-shadow-sm: 0 2px 10px rgba(16, 40, 28, 0.07);
+
+  --ct-term-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
+  --ct-term-glow: 0 0 0 1px color-mix(in srgb, var(--ct-accent) 35%, transparent), 0 0 18px color-mix(in srgb, var(--ct-accent) 12%, transparent);
+
+  color-scheme: light;
+  color: var(--ct-text);
+}
+:root[data-ct-theme='dark'] .ct-ai-term {
   --ct-bg: #0a0e0d;
   --ct-surface: #0f1413;
   --ct-surface-2: #141b19;
@@ -13729,8 +13896,9 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   --ct-active: rgba(74, 222, 128, 0.13);
 
   --ct-text: #d5e3dc;
-  --ct-text-muted: #8fa89c;
-  --ct-text-faint: #5f766b;
+  --ct-text-muted: #9bb3a7;
+  /* #5f766b cũ chỉ ≈ 3.9:1 trên nền — lên #7d9488 (≈ 5.6:1). */
+  --ct-text-faint: #7d9488;
 
   --ct-accent: #4ade80;
   --ct-accent-text: #86efac;
@@ -13741,20 +13909,16 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   --ct-shadow: 0 10px 34px rgba(0, 0, 0, 0.6);
   --ct-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.45);
 
-  --ct-term-mono: 'JetBrains Mono', 'SF Mono', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
-  --ct-term-glow: 0 0 0 1px rgba(74, 222, 128, 0.35), 0 0 18px rgba(74, 222, 128, 0.12);
-
   color-scheme: dark;
-  color: var(--ct-text);
 }
 
 /* Nền: lưới mờ + quầng sáng xanh ở góc — gợi màn hình CRT mà không làm rối
    chữ. Đặt trên khung panel, không trên từng khối, nên chỉ vẽ một lần. */
 .ct-ai-term .ct-panel {
   background:
-    radial-gradient(900px 420px at 100% -10%, rgba(74, 222, 128, 0.07), transparent 60%),
+    radial-gradient(900px 420px at 100% -10%, color-mix(in srgb, var(--ct-accent) 7%, transparent), transparent 60%),
     radial-gradient(700px 380px at -10% 110%, rgba(34, 211, 238, 0.05), transparent 60%),
-    linear-gradient(rgba(74, 222, 128, 0.025) 1px, transparent 1px) 0 0 / 100% 28px,
+    linear-gradient(color-mix(in srgb, var(--ct-accent) 2.5%, transparent) 1px, transparent 1px) 0 0 / 100% 28px,
     var(--ct-bg);
   border-color: var(--ct-border);
 }
@@ -13815,7 +13979,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 .ct-ai-term .ct-segment-nut[data-chon='true'] {
   background: var(--ct-active);
   color: var(--ct-accent-text);
-  box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.35);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ct-accent) 35%, transparent);
 }
 
 /* ── Tin nhắn người dùng: một DÒNG LỆNH, không phải bong bóng tím ── */
@@ -13836,15 +14000,15 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* Câu trả lời: chữ sáng dịu, mã và liên kết xanh ngọc. */
 .ct-ai-term .ct-agent-may { color: var(--ct-text); }
-.ct-ai-term .ct-md a { color: #5eead4; }
+.ct-ai-term .ct-md a { color: var(--ct-term-link); }
 .ct-ai-term .ct-md :not(pre) > code {
-  background: rgba(74, 222, 128, 0.08);
-  color: #a7f3d0;
-  border-color: rgba(74, 222, 128, 0.18);
+  background: color-mix(in srgb, var(--ct-accent) 8%, transparent);
+  color: var(--ct-term-code);
+  border-color: color-mix(in srgb, var(--ct-accent) 18%, transparent);
 }
 .ct-ai-term .ct-md pre,
 .ct-ai-term .ct-md-ma {
-  background: #060908;
+  background: var(--ct-term-pre);
   border-color: var(--ct-border);
 }
 
@@ -13854,26 +14018,26 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 
 /* ── Ô soạn: dấu nhắc lệnh + viền phát sáng khi gõ ── */
 .ct-ai-term .ct-agent-o {
-  background: #070a09;
+  background: var(--ct-term-input);
   border-color: var(--ct-border);
   caret-color: var(--ct-accent);
   font-size: 13px;
 }
 .ct-ai-term .ct-agent-o::placeholder { color: var(--ct-text-faint); }
 .ct-ai-term .ct-agent-o:focus {
-  border-color: rgba(74, 222, 128, 0.6);
+  border-color: color-mix(in srgb, var(--ct-accent) 60%, transparent);
   box-shadow: var(--ct-term-glow);
 }
 
-/* Nút chính (Gửi…): chữ đen trên nền xanh lục — trắng trên xanh lục sáng
-   chỉ đạt ~1,9:1, không đọc nổi. */
+/* Nút chính (Gửi…): tối = chữ đen trên xanh lục sáng (trắng chỉ ~1,9:1);
+   sáng = chữ trắng trên xanh lục 700 (≈ 5:1). */
 .ct-ai-term .ct-btn:not(.ct-btn-ghost):not(.ct-agent-dung) {
   background: var(--ct-accent);
-  color: #04130a;
+  color: var(--ct-term-on-accent);
   border-color: transparent;
 }
 .ct-ai-term .ct-btn:not(.ct-btn-ghost):not(.ct-agent-dung):hover:not(:disabled) {
-  background: #6ee7a0;
+  background: var(--ct-term-accent-hover);
   box-shadow: var(--ct-term-glow);
 }
 .ct-ai-term .ct-btn-ghost {
@@ -13882,16 +14046,16 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 .ct-ai-term .ct-btn-ghost:hover:not(:disabled) {
   color: var(--ct-accent-text);
-  border-color: rgba(74, 222, 128, 0.4);
+  border-color: color-mix(in srgb, var(--ct-accent) 40%, transparent);
 }
 
 /* Thanh cuộn mảnh, xanh mờ. */
 .ct-ai-term ::-webkit-scrollbar { width: 8px; height: 8px; }
-.ct-ai-term ::-webkit-scrollbar-thumb { background: rgba(74, 222, 128, 0.14); border-radius: 4px; }
-.ct-ai-term ::-webkit-scrollbar-thumb:hover { background: rgba(74, 222, 128, 0.28); }
+.ct-ai-term ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ct-accent) 18%, transparent); border-radius: 4px; }
+.ct-ai-term ::-webkit-scrollbar-thumb:hover { background: color-mix(in srgb, var(--ct-accent) 32%, transparent); }
 .ct-ai-term ::-webkit-scrollbar-track { background: transparent; }
 
-.ct-ai-term ::selection { background: rgba(74, 222, 128, 0.3); color: #fff; }
+.ct-ai-term ::selection { background: color-mix(in srgb, var(--ct-accent) 28%, transparent); color: var(--ct-text); }
 
 @media (prefers-reduced-motion: reduce) {
   .ct-ai-term .ct-panel-full > .ct-page-head h1:not(.ct-an-chu)::after { animation: none; }
@@ -14250,9 +14414,10 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
 }
 
 /* ══ TERMINAL THẬT (xterm + PTY) — 26/09/2026 ═════════════════════════════
-   Thay "Bảng lệnh". Nền đen cố định (khớp THEME trong `TerminalThat.tsx`) dù
-   app đang sáng hay tối: một terminal nền trắng làm lệch màu ANSI của mọi
-   chương trình. Viền và tab dùng biến `--ct-*` để hợp phần còn lại. */
+   Thay "Bảng lệnh". Nền theo chủ đề (08/11/2026: `--ct-term-bg`, khớp
+   THEME_SANG / THEME_TOI trong `TerminalThat.tsx` — bảng sáng đã đổi cả màu
+   ANSI `white`/`brightWhite` thành xám đậm để chương trình in "chữ trắng"
+   vẫn đọc được). Viền và tab dùng biến `--ct-*` để hợp phần còn lại. */
 .ct-tt {
   position: relative;
   display: flex;
@@ -14262,7 +14427,7 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   margin: 8px var(--ct-le-doc, 16px) 0;
   border: 1px solid var(--ct-border);
   border-radius: 10px;
-  background: #070a09;
+  background: var(--ct-term-bg);
   overflow: hidden;
 }
 .ct-tt-keo {
@@ -14307,17 +14472,17 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   display: flex; align-items: center; gap: 7px;
   padding: 6px 10px;
   font-size: 11.5px;
-  color: #04130a;
+  color: #1c1400; /* chữ tối trên nền vàng đặc — đúng ở cả hai chủ đề */
   background: #facc15;
 }
 .ct-tt-nhac[data-loai='canh'] { color: var(--ct-text); background: color-mix(in srgb, var(--ct-warn) 18%, transparent); }
-.ct-tt-nhac[data-loai='loi'] { color: #fff; background: color-mix(in srgb, var(--ct-err) 70%, transparent); }
+.ct-tt-nhac[data-loai='loi'] { color: #fff; background: #b91c1c; }
 .ct-tt-than { position: relative; flex: 1; min-height: 0; padding: 4px 0 0 6px; }
 .ct-tt-o { position: absolute; inset: 4px 0 0 6px; }
 .ct-tt-o[data-hien='false'] { visibility: hidden; pointer-events: none; }
 .ct-tt-o .xterm { height: 100%; }
 .ct-tt-o .xterm-viewport { background: transparent !important; }
-.ct-tt-trong { margin: 12px; color: #5f766b; font-size: 12px; }
+.ct-tt-trong { margin: 12px; color: var(--ct-text-faint); font-size: 12px; }
 
 /* ══ BỘ NHỚ CỦA AGENT (26/09/2026) — xem `BangBoNho.tsx` ════════════════ */
 .ct-bn-bang { width: min(460px, 86vw); }
@@ -14720,10 +14885,14 @@ html[data-ct-theme='light'] .hljs-built_in { color: #0184bc; }
   min-width: 0;
 }
 
-/* Trang AI luôn nền terminal tối — kể cả khi app ở chủ đề SÁNG. Bản màu sáng
-   của dải ngoại tuyến (#0f766e trên nền #0a0e0d ≈ 2,4:1) vì thế không đọc
-   được; dùng bản tối ở MỌI chủ đề trong phạm vi `.ct-ai-term`. */
+/* Dải ngoại tuyến: nhấn xanh ngọc thay xanh lục, theo chủ đề (08/11/2026 —
+   trang AI không còn luôn tối). Sáng: teal 700 (≈ 5,4:1 trên trắng). */
 .ct-ai-term .ct-agent[data-ngoai-tuyen='1'] {
+  --ct-accent: #0f766e;
+  --ct-accent-text: #115e59;
+  --ct-active: rgba(15, 118, 110, 0.12);
+}
+:root[data-ct-theme='dark'] .ct-ai-term .ct-agent[data-ngoai-tuyen='1'] {
   --ct-accent: #2dd4bf;
   --ct-accent-text: #5eead4;
   --ct-active: rgba(45, 212, 191, 0.16);

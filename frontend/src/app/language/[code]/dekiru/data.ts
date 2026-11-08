@@ -117,7 +117,7 @@ const OUTLINE: { n: number; title: string }[] = [
   { n: 19, title: '失敗 — Sự cố · N4: 〜てしまう, 〜てみる, 〜ところ, 〜のに' },
   { n: 20, title: 'うわさ — Tin đồn · N4: 〜そう, 〜ようだ・みたい・らしい, 〜かもしれない, 〜はず' },
   { n: 21, title: '目標 — Mục tiêu · N4: 〜ために, 〜ように, 〜ようになる・する, 〜ことにする・なる' },
-  { n: 22, title: '困ったこと — Chuyện phiền · N4: thể bị động, 〜ばかり' },
+  { n: 22, title: '困ったこと — Chuyện phiền · N4: thể bị động, 〜ばかり (Nばかり · Vてばかり · Vたばかり)' },
   { n: 23, title: '子どもの頃 — Thời thơ ấu · N4: thể sai khiến, mệnh lệnh, 〜ように言う' },
   { n: 24, title: '会社訪問 — Thăm công ty · N4: kính ngữ, khiêm nhường ngữ, 〜かどうか' },
   { n: 25, title: 'N4 総復習 — Ôn tập & thi thử N4' },
